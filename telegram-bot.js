@@ -6,6 +6,7 @@ import path from 'path';
 import sqlite3 from 'sqlite3';
 import { generateReport } from './vortex-report.js';
 import { logConversation, getProfileContext } from './universal-memory.js';
+import { searchVectorStore, formatVectorContext } from './vector-search.js';
 
 
 import { addToConversation, formatHistoryForPrompt, formatSessionMemoryForPrompt, formatPaulProfileForPrompt } from './memory-system.js';
@@ -195,8 +196,13 @@ async function cascadeAsk(sageName, question) {
   const sage = loadSage(sageName);
   if (!sage) return `⚠️ Sage ${sageName} not found.`;
 
+  // Search for relevant nuggets in the vector store
+  console.log(`🔍 Vector search for: "${question}"`);
+  const vectorResults = await searchVectorStore(question);
+  const vectorContext = formatVectorContext(vectorResults);
+  
   const kbContent = getKnowledgebaseContent();
-  const systemPrompt = `${sage.system_prompt}\n\nPaul's knowledge vault:\n${kbContent}`;
+  const systemPrompt = `${sage.system_prompt}\n\nPaul's knowledge vault:\n${kbContent}${vectorContext}`;
 
   let localResult = null;
   let localScore = 0;
@@ -259,8 +265,12 @@ async function cascadeAsk(sageName, question) {
 }
 
 async function askManager(question) {
+  // Search for relevant nuggets in the vector store
+  const vectorResults = await searchVectorStore(question);
+  const vectorContext = formatVectorContext(vectorResults);
+  
   const kbContent = getKnowledgebaseContent();
-  const systemPrompt = `You are the Cathedral AI Manager — Paul's personal intelligence system in Hong Kong. Knowledgebase:\n${kbContent}\n\nBe concise and direct.`;
+  const systemPrompt = `You are the Cathedral AI Manager — Paul's personal intelligence system in Hong Kong. Knowledgebase:\n${kbContent}${vectorContext}\n\nBe concise and direct.`;
   const result = await callCloud(systemPrompt, question);
   return result.response;
 }
