@@ -1,3 +1,6 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 import TelegramBot from 'node-telegram-bot-api';
 import https from 'https';
 import http from 'http';
@@ -6,11 +9,9 @@ import path from 'path';
 import sqlite3 from 'sqlite3';
 import { generateReport } from './vortex-report.js';
 import { logConversation, getProfileContext } from './universal-memory.js';
-import { createRequire } from 'module';
 
-const require = createRequire(import.meta.url);
-const vectorSearch = require('./vector-search.cjs');
-const { searchVectorStore, formatVectorContext } = vectorSearch;
+
+const { searchVectorStore, formatVectorContext, embedQuery } = require("./vector-search.cjs");
 
 
 import { addToConversation, formatHistoryForPrompt, formatSessionMemoryForPrompt, formatPaulProfileForPrompt } from './memory-system.js';
@@ -461,6 +462,29 @@ bot.on('message', async (msg) => {
   } catch (error) {
     console.error('Error:', error.message);
     bot.sendMessage(chatId, '⚠️ Cathedral momentarily offline.');
+    }
+  });
+
+  bot.onText(/\/vault (.+)/, async (msg, match) => {
+  try {
+    const text = match[1];
+
+    const embedding = await embedQuery(text);
+
+    const db = await connect(VECTORS_DIR);
+    const table = await db.openTable("nuggets");
+
+    await table.add([
+      {
+        text: text,
+        vector: embedding
+      }
+    ]);
+
+    bot.sendMessage(msg.chat.id, "📜 Stored in the Cathedral Vault.");
+  } catch (err) {
+    console.error("Vault error:", err);
+    bot.sendMessage(msg.chat.id, "⚠️ Could not store message.");
   }
 });
 
