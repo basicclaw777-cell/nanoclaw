@@ -6,7 +6,7 @@ import path from 'path';
 import sqlite3 from 'sqlite3';
 import { generateReport } from './vortex-report.js';
 import { logConversation, getProfileContext } from './universal-memory.js';
-import { searchVectorStore, formatVectorContext } from './vector-search.js';
+import { searchVectorStore, formatVectorContext } from './vector-search.cjs';
 
 
 import { addToConversation, formatHistoryForPrompt, formatSessionMemoryForPrompt, formatPaulProfileForPrompt } from './memory-system.js';
