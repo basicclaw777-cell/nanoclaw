@@ -77,5 +77,6 @@ function formatVectorContext(results) {
 
 module.exports = {
   searchVectorStore,
-  formatVectorContext
+  formatVectorContext,
+  embedQuery
 };
