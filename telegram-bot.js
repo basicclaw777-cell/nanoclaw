@@ -1,6 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import TelegramBot from 'node-telegram-bot-api';
 
+const token = process.env.TELEGRAM_TOKEN;
+
+const bot = new TelegramBot(token, {
+  polling: true
+});
 // Add these imports at the top of the file
 const SOCIAL_CONTENT_PATH = path.join(process.env.HOME, 'cathedral-vault', '07_Social_Content');
 
@@ -48,39 +54,6 @@ Generate visual direction for an Instagram post about ${topic}:
 }
 
 // Add this to the existing bot commands
-bot.onText(/\/post(?:\s+(.+))?/, async (msg, match) => {
-  const chatId = msg.chat.id;
-  const topic = match[1] ? match[1].trim() : null;
-
-  if (!topic) {
-    bot.sendMessage(chatId, 
-      `🎬 *Post Generator*\n\n` +
-      `Generate social media content for Basic Reflex.\n\n` +
-      `*Usage:* /post [topic]\n\n` +
-      `_Example: /post vortex training_`,
-      { parse_mode: 'Markdown' }
-    );
-    return;
-  }
-
-  bot.sendMessage(chatId, `🌀 _Generating post for "${topic}"..._`, { parse_mode: 'Markdown' });
-  bot.sendChatAction(chatId, 'typing');
-
-  try {
-    const captions = await generatePostCaptions(topic);
-    const visualDirection = await generateVisualDirection(topic);
-
-    // Store state for this chat
-    postGenerationState[chatId] = {
-      topic,
-      captions,
-      visualDirection
-    };
-
-    let message = `--- CAPTION OPTIONS ---\n`;
-    captions.forEach((caption, index) => {
-      message += `${index + 1}️⃣ ${caption}\n`;
-    });
 
     message += `\n--- VISUAL DIRECTION ---\n${visualDirection}`;
 
