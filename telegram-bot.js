@@ -9,7 +9,7 @@ import path from 'path';
 import sqlite3 from 'sqlite3';
 import { generateReport } from './vortex-report.js';
 import { logConversation, getProfileContext } from './universal-memory.js';
-
+import { connect } from "@lancedb/lancedb";
 
 const { searchVectorStore, formatVectorContext, embedQuery } = require("./vector-search.cjs");
 
@@ -24,7 +24,7 @@ const OPENROUTER_KEY = 'sk-or-v1-1e9bf6fa57dcde1d089c21cdd66ff4dcf355e764006444c
 const KNOWLEDGEBASE_PATH = path.join(process.env.HOME, 'nanoclaw-data', 'knowledgebase');
 const SAGES_PATH = path.join(process.env.HOME, 'nanoclaw', 'sages');
 const DB_PATH = path.join(process.env.HOME, 'nanoclaw', 'vortex_data', 'metrics.db');
-
+const VECTORS_DIR = "./vectors";
 const MODELS = {
   fast: 'gemma3:4b',
   balanced: 'llama3.1',
@@ -444,6 +444,45 @@ bot.onText(/\/help/, (msg) => {
 });
 
 // ============================================
+// VAULT RECALL
+// ============================================
+
+bot.onText(/\/recall (.+)/, async (msg, match) => {
+
+  const chatId = msg.chat.id;
+  const query = match[1];
+
+  try {
+
+    const embedding = await embed(query);
+
+    const table = await db.openTable("nuggets");
+
+    const results = await table
+      .search(embedding)
+      .limit(5)
+      .toArray();
+
+    if (results.length === 0) {
+      bot.sendMessage(chatId, "🏛️ The Cathedral Vault is silent.");
+      return;
+    }
+
+    let reply = "🧠 *Cathedral Vault Recall*\n\n";
+
+    results.forEach(r => {
+      reply += "• " + r.text + "\n";
+    });
+
+    bot.sendMessage(chatId, reply, { parse_mode: "Markdown" });
+
+  } catch (err) {
+    console.error(err);
+    bot.sendMessage(chatId, "⚠️ Vault recall error.");
+  }
+
+});
+// ============================================
 // MAIN MESSAGE HANDLER
 // ============================================
 bot.on('message', async (msg) => {
@@ -472,12 +511,25 @@ bot.on('message', async (msg) => {
     const embedding = await embedQuery(text);
 
     const db = await connect(VECTORS_DIR);
-    const table = await db.openTable("nuggets");
+
+let table;
+try {
+  table = await db.openTable("nuggets");
+} catch {
+  table = await db.createTable("nuggets", [
+    {
+      id: "init",
+      text: "initial memory",
+      embedding: new Array(768).fill(0)
+    }
+  ]);
+}
+    
 
     await table.add([
       {
         text: text,
-        vector: embedding
+        embedding: embedding
       }
     ]);
 
