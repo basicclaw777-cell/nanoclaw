@@ -4,10 +4,19 @@ import TelegramBot from 'node-telegram-bot-api';
 
 const token = process.env.TELEGRAM_TOKEN;
 
-const bot = new TelegramBot(token, {
-  polling: true
-});
-// Add these imports at the top of the file
+// Placeholder functions - these should be implemented with actual logic
+async function searchVectorStore(topic) {
+  return []; // Placeholder
+}
+
+function formatVectorContext(vectorResults) {
+  return vectorResults.join('\n'); // Placeholder
+}
+
+async function callCloud(systemPrompt, description) {
+  return { response: 'Placeholder response' }; // Placeholder
+}
+
 const SOCIAL_CONTENT_PATH = path.join(process.env.HOME, 'cathedral-vault', '07_Social_Content');
 
 // Ensure the directory exists
@@ -15,10 +24,15 @@ if (!fs.existsSync(SOCIAL_CONTENT_PATH)) {
   fs.mkdirSync(SOCIAL_CONTENT_PATH, { recursive: true });
 }
 
-// Add this to track post generation state
+// Initialize bot
+const bot = new TelegramBot(token, {
+  polling: true
+});
+
+// Track post generation state
 const postGenerationState = {};
 
-// New function to generate captions
+// Generate captions
 async function generatePostCaptions(topic) {
   const vectorResults = await searchVectorStore(topic);
   const vectorContext = formatVectorContext(vectorResults);
@@ -41,7 +55,7 @@ Your captions must:
   return captions;
 }
 
-// New function to generate visual direction
+// Generate visual direction
 async function generateVisualDirection(topic) {
   const systemPrompt = `You are Paul's creative director. 
 Generate visual direction for an Instagram post about ${topic}:
@@ -53,7 +67,28 @@ Generate visual direction for an Instagram post about ${topic}:
   return result.response;
 }
 
-// Add this to the existing bot commands
+// Post command handler
+bot.onText(/\/post (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const topic = match[1];
+
+  try {
+    // Generate captions and visual direction
+    const captions = await generatePostCaptions(topic);
+    const visualDirection = await generateVisualDirection(topic);
+
+    // Store state for this chat
+    postGenerationState[chatId] = {
+      topic,
+      captions,
+      visualDirection
+    };
+
+    // Construct message with captions
+    let message = `📝 Post Captions for "${topic}":\n\n`;
+    captions.forEach((caption, index) => {
+      message += `${index + 1}. ${caption}\n\n`;
+    });
 
     message += `\n--- VISUAL DIRECTION ---\n${visualDirection}`;
 
@@ -72,7 +107,7 @@ Generate visual direction for an Instagram post about ${topic}:
   }
 });
 
-// Modify the existing message handler to capture post caption selection
+// Caption selection handler
 bot.on('message', async (msg) => {
   if (!msg.text) return;
   const chatId = msg.chat.id;
@@ -111,6 +146,4 @@ bot.on('message', async (msg) => {
 
     return;
   }
-
-  // Rest of the existing message handler...
 });
