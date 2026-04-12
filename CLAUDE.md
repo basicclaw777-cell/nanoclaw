@@ -356,3 +356,21 @@ Rule 3: Closing question every session:
 
 ### Handoff Protocol
 - ~/cathedral-vault/06_Methods/orchestrator-handoff-protocol.md — read vault before speaking, state what you know, ask one question
+
+## Session Update — 2026-04-13
+
+### Session Closer Skill — LIVE
+- Skill: ~/.claude/skills/session-closer/SKILL.md
+- Trigger: Paul types "end session" or /end-session
+- Five steps: three-pass harvest → CLAUDE.md diff → memory diff → Paul approves → write, commit, push
+- No new services, no databases — a prompt, not infrastructure
+
+### Standing Instructions Added
+16. Never use sed on CLAUDE.md — Use Edit tool only. sed -i '' on macOS silently empties files.
+17. Commit CLAUDE.md to git after every update — sed wipe was unrecoverable because working copy was uncommitted.
+18. Authored docs must state their provenance — unlabeled authored content becomes false memory in the vault.
+
+### Architecture Decision
+- Kuzu knowledge graph deferred indefinitely — flat markdown + grep works at current scale (4 harvests)
+- Cathy Orchestrator mode deferred — needs 2-3 weeks of harvest data first
+- The continuity gap was not missing infrastructure — it was missing discipline. Session Closer automates the discipline.
