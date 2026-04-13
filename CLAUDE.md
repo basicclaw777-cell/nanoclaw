@@ -114,6 +114,8 @@ All six processes must be running. Check with `pm2 list`.
 | the-archivist | ~/Cathedral/the-archivist.js | — | Watches muse-findings, enriches with cross-links. Fixed 2026-04-12: usePolling:true |
 | the-muse | ~/Cathedral/the-muse.js | — | Cron: 3am daily. Walks vault + graph, sends finding to Telegram |
 | sentinel | ~/Cathedral/sandbox/sentinel-watchdog.sh | — | Monitors writes, safety limits |
+| the-timekeeper | ~/Cathedral/the-timekeeper.js | — | Cron: */15 min. Rhythm pulse, critical alerts, daily report 07:15 HKT |
+| morning-briefing | ~/Cathedral/morning-briefing.py | — | Cron: 07:30 HKT daily. Voice + text briefing to Telegram |
 
 If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
 
@@ -412,10 +414,10 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 - Pipeline: harvests + muse + project cards → Claude API text → Chatterbox TTS → OGG → Telegram voice + text backup
 - Falls back to simple text when Claude API has no credits
 - Duration: ~22s spoken, ~200KB OGG, ~150s total runtime
-- TRIGGER: UNASSIGNED — needs PM2 cron daily 07:30 HKT (build incomplete per standing instruction 19)
+- TRIGGER: PM2 cron daily 07:30 HKT (cron-restart "30 23 * * *" UTC). Interpreter: cathedral-venv python3
 
 ### Trigger Audit — 2026-04-13
-- 4 untriggered builds identified: morning-briefing.py, photo-editor.js --watch, vibevoice_transcribe.py, harvester.py
+- 3 untriggered builds remaining: photo-editor.js --watch, vibevoice_transcribe.py, harvester.py
 - 2 stopped processes: vault-backup (should be running), skills-scout (needs review)
 - Standing instruction 19 applies retroactively
 
@@ -425,6 +427,34 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 - Retry: original → resized 1500px → fallback model
 - Output auto-filed to ~/cathedral-vault/09_Artifacts/branding/basic-reflex/nano-banana-outputs/
 - Telegram caption: "Nano Banana Pro — graphic novel grade"
+
+### The Cartographer — LIVE 2026-04-13
+- Script: ~/Cathedral/the-cartographer.js
+- PM2: the-cartographer (id 13), persistent, polling mode
+- Trigger: fires on new session-harvest-*.md in 00_Staging/cathedral/
+- Writes: ~/cathedral-vault/06_Methods/operational-map.md (four zones: Done/Now/Planned/Parked)
+- Log: ~/cathedral-vault/00_Staging/cathedral/cartographer-log.md
+- Model: qwen3:14b via Ollama (local, free)
+- Court member 14 — trigger assigned, build complete per standing instruction 19
+
+### BR CRM — BUILT 2026-04-13
+- Location: ~/Cathedral/br-crm/
+- Import: node import-members.js [csv-path]
+- 565 lapsed members imported from PunchPass (2026-04-13)
+- Data: ~/Cathedral/br-crm/data/members.json + vault copy at 08_Project_Orchestrator/projects/br-crm/
+- Campaign targets: 40 members within 6 months (immediate), 484 at 12+ months (different strategy)
+- TRIGGER: UNASSIGNED — needs campaign send pipeline
+
+### The Timekeeper — Court Member #15 (2026-04-13 evening)
+- Script: ~/Cathedral/the-timekeeper.js (PM2 cron */15 min, no-autorestart)
+- Schedule file: ~/Cathedral/cathedral-schedule.json (shared state with Orchestrator)
+- State file: ~/Cathedral/timekeeper-state.json (auto-created)
+- Behavior: silent pulse every 15 min. Checks PM2 states against schedule.
+- Critical alerts: immediate Telegram if cathedral-bot, vault-watcher, or cath-bridge go down (max 1/hr)
+- Daily rhythm report: 07:15 HKT to Telegram (before morning briefing at 07:30)
+- Telegram command: /rhythm — on-demand full schedule status
+- Downtime walks: stubbed (enabled: false), future hook for court member background tasks
+- No LLM calls — pure schedule parsing
 
 ### Anthropic API
 - Key valid, zero credits — same as OpenRouter. Both need top-up.
