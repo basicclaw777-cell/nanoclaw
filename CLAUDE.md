@@ -374,3 +374,18 @@ Rule 3: Closing question every session:
 - Kuzu knowledge graph deferred indefinitely — flat markdown + grep works at current scale (4 harvests)
 - Cathy Orchestrator mode deferred — needs 2-3 weeks of harvest data first
 - The continuity gap was not missing infrastructure — it was missing discipline. Session Closer automates the discipline.
+
+### Logan Pipeline — PROVEN 2026-04-13
+- Two-pass: Gemini 2.5-flash-image (face reference) → Nano Banana (brand refinement)
+- Face reference: ~/cathedral-vault/09_Artifacts/logan/source-references/paul-havana-face-ref.jpg
+- Outfit spec locked: ~/cathedral-vault/09_Artifacts/logan/logan-character-spec.md
+- Engineer queue: add --reference and --refine flags to illustrator.js
+
+### API Inventory
+- ~/cathedral-vault/06_Methods/api-inventory.md — 10 keys, check weekly
+- Gemini working models: gemini-2.5-flash-image, gemini-3-pro-image-preview, gemini-3.1-flash-image-preview (old gemini-2.0-flash-exp is gone)
+
+### nanoclaw GitHub Backup
+- Remote `paul` added: https://github.com/basicclaw777-cell/nanoclaw.git
+- Origin remains upstream: qwibitai/nanoclaw.git
+- Push CLAUDE.md updates to `paul` not `origin`
