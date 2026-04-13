@@ -389,3 +389,36 @@ Rule 3: Closing question every session:
 - Remote `paul` added: https://github.com/basicclaw777-cell/nanoclaw.git
 - Origin remains upstream: qwibitai/nanoclaw.git
 - Push CLAUDE.md updates to `paul` not `origin`
+
+## Standing Instruction — No Build Is Complete Without a Trigger
+
+Every tool, agent, or pipeline built must be assigned an automated role before the build is considered complete.
+
+A build without a trigger goes stale. A trigger gives it a job.
+
+Definition of complete:
+- Tool exists ✓
+- Tool has a trigger (cron, PM2, webhook, voice command, file watcher) ✓
+- Trigger is documented ✓
+- Trigger is tested ✓
+
+If a build session ends without a trigger assigned — the build is unfinished.
+Flag it. Schedule the trigger as the immediate next Engineers task.
+
+Apply retroactively to existing tools — audit for untriggered builds quarterly.
+
+### Morning Briefing — BUILT 2026-04-13
+- Script: ~/Cathedral/morning-briefing.py (runs in cathedral-venv)
+- Pipeline: harvests + muse + project cards → Claude API text → Chatterbox TTS → OGG → Telegram voice + text backup
+- Falls back to simple text when Claude API has no credits
+- Duration: ~22s spoken, ~200KB OGG, ~150s total runtime
+- TRIGGER: UNASSIGNED — needs PM2 cron daily 07:30 HKT (build incomplete per standing instruction 19)
+
+### Trigger Audit — 2026-04-13
+- 4 untriggered builds identified: morning-briefing.py, photo-editor.js --watch, vibevoice_transcribe.py, harvester.py
+- 2 stopped processes: vault-backup (should be running), skills-scout (needs review)
+- Standing instruction 19 applies retroactively
+
+### Anthropic API
+- Key valid, zero credits — same as OpenRouter. Both need top-up.
+- Blocks Claude-written conversational briefings (falls back to simple text)
