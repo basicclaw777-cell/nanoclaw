@@ -419,6 +419,13 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 - 2 stopped processes: vault-backup (should be running), skills-scout (needs review)
 - Standing instruction 19 applies retroactively
 
+### Photo Editor — Nano Banana Pro Engine (2026-04-13)
+- Flag: node photo-editor.js <image> --engine nanabananapro
+- Model: gemini-3.1-flash-image-preview (primary), gemini-2.5-flash-image (fallback, same prompt)
+- Retry: original → resized 1500px → fallback model
+- Output auto-filed to ~/cathedral-vault/09_Artifacts/branding/basic-reflex/nano-banana-outputs/
+- Telegram caption: "Nano Banana Pro — graphic novel grade"
+
 ### Anthropic API
 - Key valid, zero credits — same as OpenRouter. Both need top-up.
 - Blocks Claude-written conversational briefings (falls back to simple text)
