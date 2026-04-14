@@ -116,6 +116,7 @@ All six processes must be running. Check with `pm2 list`.
 | sentinel | ~/Cathedral/sandbox/sentinel-watchdog.sh | — | Monitors writes, safety limits |
 | the-timekeeper | ~/Cathedral/the-timekeeper.js | — | Cron: */15 min. Rhythm pulse, critical alerts, daily report 07:15 HKT |
 | morning-briefing | ~/Cathedral/morning-briefing.py | — | Cron: 07:30 HKT daily. Voice + text briefing to Telegram |
+| vault-state-refresh | ~/nanoclaw/vault-state-generator.js | — | Cron: 06:00 HKT daily. Regenerates vault state for DeepSeek seed prompt |
 
 If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
 
@@ -459,3 +460,48 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 ### Anthropic API
 - Key valid, zero credits — same as OpenRouter. Both need top-up.
 - Blocks Claude-written conversational briefings (falls back to simple text)
+
+## Session Update — 2026-04-14
+
+### DeepSeek Research Pipeline — LIVE
+- **API:** DeepSeek key valid, credits available. Model: deepseek-chat
+- **Seed prompt v1.1:** ~/nanoclaw/prompts/deepseek-research-seed.txt (runtime) + ~/cathedral-vault/06_Methods/deepseek-research-seed.md (versioned)
+  - 12 thinking tools, four-level taxonomy, failure modes, operator profile, vault state injection
+- **Research protocol:** ~/cathedral-vault/06_Methods/deepseek-research-protocol.md — The Four Moves
+- **Terrain map:** ~/cathedral-vault/06_Methods/deepseek-terrain-map-2026-04-14.md — 6 regions, 6 dark zones
+- **Suppression topology:** ~/cathedral-vault/06_Methods/suppression-topology-map-2026-04-14.md — 3 axes
+
+### DeepSeek Session Harvester — BUILT 2026-04-14
+- Script: ~/nanoclaw/deepseek-harvester.js
+- Intake: ~/raw-chats/deepseek/ (drop .md/.txt transcripts here)
+- Uses Ollama qwen3:14b for extraction, vault-embedder for wikilink suggestions
+- Deposits to ~/cathedral-vault/00_Staging/{domain}/ with full frontmatter
+- Telegram: /harvest-deepseek
+- CLI: node deepseek-harvester.js [file] or --watch
+- TRIGGER: file watcher on intake folder + Telegram command
+
+### Vault State Injector — BUILT 2026-04-14
+- Script: ~/nanoclaw/vault-state-generator.js
+- Scans staging domains, counts nuggets, extracts researchers, reads paul-profile open threads
+- Updates seed prompt between VAULT STATE markers (idempotent)
+- Writes standalone ~/nanoclaw/prompts/vault-state-latest.txt
+- Telegram: /vault-state
+- TRIGGER: PM2 cron vault-state-refresh at 06:00 HKT daily
+
+### Experiment Queue — CREATED 2026-04-14
+- File: ~/cathedral-vault/08_Project_Orchestrator/projects/experiment-queue.md
+- Experiment #8: Crop circle × Schumann resonance correlation (proposed, data acquisition pending)
+
+### KTH Inverse Cascade — VERIFIED 2026-04-14
+- DOI: 10.1038/s41598-026-41372-y — confirmed via CrossRef API
+- Authors: Joel Kronborg & Johan Hoffman, KTH Royal Institute of Technology
+- First peer-reviewed "negentropy door" in mainstream fluid dynamics
+- Nugget: ~/cathedral-vault/00_Staging/universe/inverse-cascade-kth-2026.md
+
+### 96 Cosmology Nuggets Deposited
+- Source: cosmology-nuggets-FINAL-96.zip
+- 407 total .md files in staging, 15+ research domains
+
+### Icon Systems — SEEDED 2026-04-14
+- Cathedral: ~/cathedral-vault/09_Artifacts/icons/cathedral/ICON_SYSTEM.md (25 icons, 36x36 grid)
+- Basic Reflex: ~/cathedral-vault/09_Artifacts/icons/basic-reflex/ICON_SYSTEM_BR.md (stick figure boxing, 72x80 grid)
