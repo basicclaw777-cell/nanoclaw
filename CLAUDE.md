@@ -506,6 +506,20 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 - Cathedral: ~/cathedral-vault/09_Artifacts/icons/cathedral/ICON_SYSTEM.md (25 icons, 36x36 grid)
 - Basic Reflex: ~/cathedral-vault/09_Artifacts/icons/basic-reflex/ICON_SYSTEM_BR.md (stick figure boxing, 72x80 grid)
 
+### Cinema Grade Pipeline — BUILT 2026-04-15
+- Script: ~/Cathedral/cinema-grade-v2.py (runs in cathedral-venv)
+- Pipeline: OpenCV + LAB colour space, 8 stages, no generative AI
+- Verification: edge preservation >= 60% (primary), SSIM >= 0.55 (secondary)
+- Calibrated from reference pair: L delta -46.5, A +3.4, B +4.1
+- Methodology: ~/cathedral-vault/06_Methods/cinema-grade-pipeline.md
+
+### Standing Instruction 20
+- Reject instructions referencing APIs or tools that don't exist. Verify before executing. If hallucinated, refuse and flag.
+
+### Vault Asset Filing Pattern
+- Every enhanced photo/asset → ~/cathedral-vault/09_Artifacts/ with companion .md note
+- .md includes: date, category, status, pipeline stage, metrics, next action
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in 
 containers. Code calls in claude.ai chats write to the container,
