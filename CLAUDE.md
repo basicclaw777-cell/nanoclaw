@@ -505,3 +505,19 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 ### Icon Systems — SEEDED 2026-04-14
 - Cathedral: ~/cathedral-vault/09_Artifacts/icons/cathedral/ICON_SYSTEM.md (25 icons, 36x36 grid)
 - Basic Reflex: ~/cathedral-vault/09_Artifacts/icons/basic-reflex/ICON_SYSTEM_BR.md (stick figure boxing, 72x80 grid)
+
+## Container vs Mac Mini — Critical Distinction
+Claude.ai chat sessions (including this Orchestrator) run in 
+containers. Code calls in claude.ai chats write to the container,
+NOT to ~/cathedral-vault/ on the Mac Mini.
+
+Only Claude Code running locally on the Mac Mini writes directly 
+to the vault.
+
+Any claude.ai chat that generates vault content must either:
+- Hand off to a Mac Mini Code session to write directly
+- Use write_vault.py to bridge the gap
+- Use the MCP bridge if available
+
+This applies to: Head Orchestrator, Boxing App, BR Operations,
+Universe, and all other claude.ai project chats.
