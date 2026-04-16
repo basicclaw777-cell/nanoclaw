@@ -502,11 +502,12 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 - Source: cosmology-nuggets-FINAL-96.zip
 - 407 total .md files in staging, 15+ research domains
 
-### Icon Systems — SEEDED 2026-04-14
-- Cathedral: ~/cathedral-vault/09_Artifacts/icons/cathedral/ICON_SYSTEM.md (25 icons, 36x36 grid)
-- Basic Reflex: ~/cathedral-vault/09_Artifacts/icons/basic-reflex/ICON_SYSTEM_BR.md (stick figure boxing, 72x80 grid)
+### Icon Systems — BUILT 2026-04-15
+- Cathedral: 25 SVGs at ~/cathedral-vault/09_Artifacts/icons/cathedral/svg/ (36x36, 1.5px stroke, currentColor)
+- Basic Reflex: 12 boxing SVGs at ~/cathedral-vault/09_Artifacts/icons/basic-reflex/svg/ (72x80, stick figure)
+- Plus 12 pre-existing footwork grid icons in BR set
 
-### Cinema Grade Pipeline — BUILT 2026-04-15
+### Cinema Grade v1 (OpenCV) — BUILT 2026-04-15
 - Script: ~/Cathedral/cinema-grade-v2.py (runs in cathedral-venv)
 - Pipeline: OpenCV + LAB colour space, 8 stages, no generative AI
 - Verification: edge preservation >= 60% (primary), SSIM >= 0.55 (secondary)
@@ -516,9 +517,60 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 ### Standing Instruction 20
 - Reject instructions referencing APIs or tools that don't exist. Verify before executing. If hallucinated, refuse and flag.
 
+### Cinema Grade v2 (Gemini) — BUILT 2026-04-15
+- Flag: node photo-editor.js <image> --engine cinemagrade
+- Stage 1: ~/Cathedral/depth-extractor.py — Intel DPT-Large depth map (MPS GPU)
+- Stage 2: Gemini reconstruction — property-based prompt (lighting, texture, chiaroscuro)
+- Stage 3: ~/Cathedral/ssim-verify.py — SSIM verification (threshold 0.65)
+- SSIM >= 0.65: auto-file to cinema-grade-outputs/, Telegram "Cinema grade ✓"
+- SSIM < 0.65: Telegram "review needed", not auto-filed
+- No headline or logo overlay — clean image output only
+- Output: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/cinema-grade-outputs/
+
+### Photo Editor Logo Fix — 2026-04-15
+- Clean wordmark PNGs extracted: br-wordmark-{variant}-clean.png (768x119)
+- compositeOverlays() updated to use clean versions, padding 40px
+
 ### Vault Asset Filing Pattern
 - Every enhanced photo/asset → ~/cathedral-vault/09_Artifacts/ with companion .md note
 - .md includes: date, category, status, pipeline stage, metrics, next action
+
+## Session Update — 2026-04-16 (evening)
+
+### Cognitive Signature Graph — BUILT 2026-04-16
+- Interactive HTML: ~/cathedral-vault/09_Artifacts/paul-cognitive-graph.html
+- Two views: Pattern Map (node graph) + Confidence Timeline (date scatter)
+- 16 observations, 6 confirmed cross-domain patterns, 4 generative skills, 5 project sources
+- BR aesthetic, living document — OBSERVATIONS array accepts new data
+
+### Cognitive Scanner — BUILT 2026-04-16
+- Script: ~/nanoclaw/cognitive-scanner.js
+- PM2: cognitive-scanner (id 16), persistent
+- TRIGGER: chokidar file watcher on session-harvest-*.md in 00_Staging/cathedral/
+- Scans for 12 known cognitive patterns via Ollama qwen3:14b
+- On pattern found: appends to pauls-investigator-profile.md, updates graph HTML, sends Telegram
+- Cathedral Sense: Reflection — the Cathedral watching the architect
+
+### /test Command Upgraded — 2026-04-16
+- System prompt extracted to ~/cathedral-vault/06_Methods/head-orc-prompt.md (vault-editable)
+- Claude API (claude-sonnet-4-20250514) primary, Ollama qwen3:14b fallback
+
+### Cathedral Senses — Documented 2026-04-16
+- Doc: ~/cathedral-vault/06_Methods/cathedral-senses.md
+- 5 active: Sight, Smell, Proprioception, Transmission, Reflection
+- 1 planned: Hearing (ambient input without command trigger)
+- Reflection icon: ~/cathedral-vault/09_Artifacts/icons/cathedral/svg/reflection.svg (27 total Cathedral icons)
+
+### Map Room Field Session 001 — Filed 2026-04-16
+- Field session harvest: 00_Staging/map-room/field-session-001-cathedral-acoustics-pyramids.md (Grade A)
+- Eiren seed prompt v1.0: 06_Methods/eiren-seed-prompt-v1.md (proven, 5 persona family)
+- Claim A/B framework: 06_Methods/claim-ab-framework.md (validated across 2 domains)
+- Paul's Investigator Profile: 06_Methods/pauls-investigator-profile.md (compounding, 16 observations)
+
+### Court Character Cards Brief — Filed 2026-04-16
+- Brief: ~/cathedral-vault/09_Artifacts/cathedral/court-character-cards-brief.md
+- 11 characters briefed for Illustrator chat (Gemini generation)
+- Style ref: The Muse + Cathy (confirmed ink-outline cartoon)
 
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in 
