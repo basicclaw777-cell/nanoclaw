@@ -572,6 +572,38 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 - 11 characters briefed for Illustrator chat (Gemini generation)
 - Style ref: The Muse + Cathy (confirmed ink-outline cartoon)
 
+### Cathedral Villa Phase 1 — LIVE 2026-04-16
+- Path: ~/Cathedral/control-panel/index.html (replaced 89KB legacy panel with 32KB villa)
+- Port: 8888 via PM2 `cathedral-panel` (now Node server, no-cache headers — python3 swapped out)
+- Aesthetic: deep water and night sky. Primary #378ADD (blue), secondary #1D9E75 (green), red #ef4444 reserved for critical only. Purple #534AB7 for Muse, amber #EF9F27 for warnings.
+- Views live: Morning, Senses, Board, Vault, PM2 · Phase 2/3 stubs: Projects, Visual, Scout, Test Queue, Gemini CLI
+- Cathy avatar: existing toroidal vortex (cathy-avatar.html) embedded in topbar iframe — do not replace
+- Keyboard shortcuts: 1-8 tab switching, Cmd+K reserved, Esc reserved
+- Stale banner appears when cath-bridge unreachable — last-known state preserved
+- Mobile: 4 bottom tabs (today/projects/visual/system), responsive grid collapse
+
+### /villa/snapshot endpoint — BUILT 2026-04-16
+- cath-bridge endpoint at http://localhost:8080/villa/snapshot
+- Single consolidated poll returning: pm2 state, vault counts, sense states, board states, latest muse finding, project count, recent 10 files
+- 30s polling interval from villa
+- Replaces multiple parallel fetches
+
+### Cathedral Control Repo — Backup Tier 3 2026-04-16
+- New private repo: basicclaw777-cell/cathedral-control
+- ~/Cathedral initialized as git repo
+- Initial commit: 255 files, 37,940 lines, 1.7MB (59c60f0)
+- .gitignore excludes: models/ (1.9GB), vault/ (redundant), photo-inbox/outbox/, tmp_interview/, raw audio, logs, pids, .env
+- Three tiers operational: vault (tier 1) · nanoclaw (tier 2) · cathedral-control (tier 3)
+
+### Standing Instruction 21 — Speak Freely Before Building
+When asked for input before a build, give real technical concerns (gaps, risks, alternatives), not caveats. 4-8 concerns + 2-4 improvements + recommended path. Name ambiguities, require resolution.
+
+### Standing Instruction 22 — Phased Builds Over Maximalist
+For any brief with >5 features, propose phase split. Phase 1 = usable today. Stubs for later phases labelled in-UI.
+
+### Standing Instruction 23 — Flag Git State Before Committing
+Before commits: check untracked status for core infra files, refuse pushes of files >100MB, surface anomalies. Backup tier 3 required expanded .gitignore beyond user's listed exclusions to prevent 1.9GB push failure.
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in 
 containers. Code calls in claude.ai chats write to the container,
