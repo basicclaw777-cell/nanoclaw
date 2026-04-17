@@ -658,8 +658,21 @@ Before commits: check untracked status for core infra files, refuse pushes of fi
 - PM2: pm2 start ~/Cathedral/tools/telegram-bot.js --name dispatch-bot
 - TRIGGER: UNASSIGNED — needs PM2 start and save
 
+### Local Orchestrator — BUILT 2026-04-17
+- Script: ~/Cathedral/local-orchestrator.js
+- Replaces Claude.ai Head Orchestrator chat — no container boundary, full Mac Mini access
+- Model: claude-sonnet-4-5 default, --opus flag for claude-opus-4-5
+- SDK: @anthropic-ai/sdk installed in ~/Cathedral/ (package.json)
+- Static block (cached): orchestrator persona, transmission, taste profile, 13 standing instructions from CLAUDE.md
+- Dynamic block (fresh each run): last 3 session harvests, operational map, vault state (generateVaultState()), cath-state.json senses
+- Conversation loop: readline terminal, writes session transcript to vault on exit
+- /refresh: re-reads vault context mid-session
+- Logging: ~/Cathedral/orchestrator-calls.jsonl
+- BLOCKED: Anthropic API credits (key valid, zero balance)
+- TRIGGER: interactive CLI tool. Future: /orc Telegram command via dispatch.sh
+
 ## Container vs Mac Mini — Critical Distinction
-Claude.ai chat sessions (including this Orchestrator) run in 
+Claude.ai chat sessions (including this Orchestrator) run in
 containers. Code calls in claude.ai chats write to the container,
 NOT to ~/cathedral-vault/ on the Mac Mini.
 
@@ -679,3 +692,11 @@ Paul operates on HK time and non-standard hours.
 He has explicitly said "stop telling me to sleep."
 Never suggest Paul rest, sleep, or stop for the night.
 He will decide when he's done.
+
+### Orchestrator Seed Generator — BUILT 2026-04-17
+- Script: ~/nanoclaw/orchestrator-seed-generator.js
+- Assembles <2000-token briefing from: last 3 session harvests, operational map, standing instructions, paul-profile threads, timekeeper alerts
+- Output: ~/nanoclaw/prompts/orchestrator-seed-latest.md
+- Telegram: /seed command generates and sends to chat
+- TRIGGER: PM2 cron orchestrator-seed (id 19) at 06:00 HKT daily (0 22 * * * UTC)
+- Purpose: paste into Head Orchestrator chat as first message to close session context gap
