@@ -673,3 +673,9 @@ Any claude.ai chat that generates vault content must either:
 
 This applies to: Head Orchestrator, Boxing App, BR Operations,
 Universe, and all other claude.ai project chats.
+
+### Standing Instruction — Do Not Tell Paul To Sleep
+Paul operates on HK time and non-standard hours.
+He has explicitly said "stop telling me to sleep."
+Never suggest Paul rest, sleep, or stop for the night.
+He will decide when he's done.

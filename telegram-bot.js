@@ -682,6 +682,21 @@ bot.onText(/^\/vault-state(?:@\w+)?$/, async (msg) => {
   }
 });
 
+// /seed — generate orchestrator context seed for Head Orchestrator sessions
+bot.onText(/^\/seed(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+
+  try {
+    await safeSend(chatId, 'Generating orchestrator seed...');
+    const { writeSeed } = await import('./orchestrator-seed-generator.js');
+    const seedText = writeSeed();
+    await safeSend(chatId, seedText);
+  } catch (err) {
+    console.error('Seed generator error:', err);
+    await safeSend(chatId, `⚠️ Seed generation failed: ${err.message}`);
+  }
+});
+
 // /proprioception — identity drift scan via proprioception.py
 bot.onText(/^\/proprioception(?:@\w+)?$/, async (msg) => {
   const chatId = msg.chat.id;
