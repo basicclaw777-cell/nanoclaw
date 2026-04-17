@@ -671,6 +671,17 @@ Before commits: check untracked status for core infra files, refuse pushes of fi
 - BLOCKED: Anthropic API credits (key valid, zero balance)
 - TRIGGER: interactive CLI tool. Future: /orc Telegram command via dispatch.sh
 
+### Opus Orientation Protocol — Filed 2026-04-18
+- ~/cathedral-vault/06_Methods/opus-orientation-protocol.md
+- Audit of cath_api.py + vault-state-generator.js, architecture rationale for local orchestrator
+- Provenance: authored by Opus, not sourced from vault
+
+### Muse Summon — Dedup Added 2026-04-18
+- Script: ~/Cathedral/tools/muse-summon.js
+- Deduplicates by content_hash before returning results
+- Same nugget in multiple vault locations (00_Staging and 02_Refined_Gold) appears once
+- Priority: more backlinks wins; tie-break prefers 02_Refined_Gold
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in
 containers. Code calls in claude.ai chats write to the container,
