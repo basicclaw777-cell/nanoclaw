@@ -604,6 +604,42 @@ For any brief with >5 features, propose phase split. Phase 1 = usable today. Stu
 ### Standing Instruction 23 — Flag Git State Before Committing
 Before commits: check untracked status for core infra files, refuse pushes of files >100MB, surface anomalies. Backup tier 3 required expanded .gitignore beyond user's listed exclusions to prevent 1.9GB push failure.
 
+### Resonance Filter — Phase 1 LIVE 2026-04-17
+- Library module: ~/nanoclaw/resonance-filter.js (imported by cath-bridge, no PM2 process)
+- Endpoint: POST /resonance/check on cath-bridge (8080)
+- Wired into /test command (Step 0 before evaluation)
+- Three detectors: AESTHETIC (advisory), PRINCIPLE (warning), PRIORITY (block)
+- Reads: cognitive signature, design signature, senses, CLAUDE.md standing instructions, projects/*.md frontmatter
+- OVERRIDE: Paul types OVERRIDE → 5-min token → next /test bypasses resonance check
+- Phase 2 queued: LLM reasoning replaces pattern matching
+
+### Paul's Taste Profile — Created 2026-04-17
+- ~/cathedral-vault/06_Methods/pauls-taste-profile.md (governing field — every agent reads)
+- Three modes: Fine Dining / Burger / Chef's Choice — read from Paul's language, never ask
+- Scout feed: Emerging / Classics / Cross-Domain
+- Update protocol: every creative session adds data points
+
+### Creative Studio Brief — Created 2026-04-17
+- ~/cathedral-vault/06_Methods/creative-studio-brief.md
+- Personal chef model for Illustrator agent
+- Character development: 4-round workflow (concept → style → sheet → scene)
+- Weekly Visual Scout: Sunday night Gemini CLI job
+
+### HK Pulse — Sense 7 Concept 2026-04-17
+- ~/cathedral-vault/00_Staging/cathedral/hk-pulse-concept.md
+- The Cathedral watching outward — live HK sentiment feeding General Quarter
+- Data feeds: LIHKG, HSI, MTR counts, retail, weather, fitness, cross-border
+- Government signal layer: 9 sources, 3 signal types, project intersections
+- 4-phase build: scraper → structured scores → cross-signal → Cathy morning briefing
+- Villa integration: morning view shows Muse finding + city pulse together
+
+### Grant Hunter — Spec Filed 2026-04-17
+- Build spec: ~/cathedral-vault/00_Staging/grants/grant-hunter-spec.md
+- Landscape: ~/cathedral-vault/00_Staging/grants/hk-grants-landscape-2026.md
+- URGENT: EMF Special Measures expire June 30 2026 (~10 weeks)
+- Phase 1: weekly Gemini CLI scan + qualification check, Sunday 03:00 HKT
+- Key grants: TVP (HK$600k), BUD Fund (HK$7m), D-Biz (HK$100k), EMF (expiring)
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in 
 containers. Code calls in claude.ai chats write to the container,
