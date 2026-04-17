@@ -1169,6 +1169,33 @@ bot.on('message', async (msg) => {
     return;
   }
 
+  // ── /think command — Cathy-with-hands tool router ────────────────────────────
+  if (msg.text.match(/^\/think\s+(.+)/)) {
+    const message = msg.text.replace(/^\/think\s+/, '').trim();
+    const chatId = msg.chat.id;
+
+    try {
+      const { selectTool, route } = await import('./cathy-router.js');
+      const selection = selectTool(message);
+
+      const toolEmoji = { claude: '🔧', gemini: '🔍', ollama: '🏠', cathy: '💬' };
+      const toolLabel = { claude: 'Claude Code', gemini: 'Gemini CLI', ollama: 'Ollama (local)', cathy: 'Cathy (direct)' };
+      await safeSend(chatId, `${toolEmoji[selection.tool] || '🤔'} Routing to ${toolLabel[selection.tool] || selection.tool}...\n${selection.reason}`);
+
+      const result = await route(message, callCath);
+
+      const duration = result.durationMs ? ` · ${Math.round(result.durationMs / 1000)}s` : '';
+      const header = `${toolEmoji[result.tool] || '📋'} *${toolLabel[result.tool] || result.tool}*${duration}`;
+
+      await safeSend(chatId, `${header}\n\n${result.response}`);
+
+    } catch (err) {
+      console.error('[/think] Error:', err.message);
+      await safeSend(chatId, `⚠️ Think failed: ${err.message}`);
+    }
+    return;
+  }
+
   // ── /test command — evaluate technology fit + trigger Code execution ────────
   if (msg.text.match(/^\/test\s+(.+)/)) {
     const idea = msg.text.replace(/^\/test\s+/, '').trim();
@@ -1176,6 +1203,52 @@ bot.on('message', async (msg) => {
     await safeSend(chatId, `🔬 Evaluating: "${idea}"...`);
 
     try {
+      // Step 0: Resonance check — flag contradictions with governing field
+      try {
+        // Check for valid override token (<5 min old)
+        const tokenPath = path.join(process.env.HOME, 'nanoclaw', 'resonance-override-token.json');
+        let overrideActive = false;
+        if (fs.existsSync(tokenPath)) {
+          try {
+            const tok = JSON.parse(fs.readFileSync(tokenPath, 'utf8'));
+            const age = Date.now() - new Date(tok.timestamp).getTime();
+            if (age < 5 * 60 * 1000) {
+              overrideActive = true;
+              fs.unlinkSync(tokenPath);
+              await safeSend(chatId, `↪️ Resonance override active — skipping check.`);
+            } else {
+              fs.unlinkSync(tokenPath);
+            }
+          } catch { /* ignore */ }
+        }
+
+        const { checkResonance } = overrideActive ? { checkResonance: () => ({ resonant: true }) } : await import('./resonance-filter.js');
+        const resonance = checkResonance(idea);
+        if (!resonance.resonant) {
+          const typeEmoji = { AESTHETIC: '🎨', PRINCIPLE: '⚖️', PRIORITY: '🛑' };
+          const sevEmoji  = { advisory: 'ℹ️', warning: '⚠️', block: '🛑' };
+          const flag = `${sevEmoji[resonance.severity] || '⚠️'} *RESONANCE FLAG* ${typeEmoji[resonance.contradiction_type] || ''}\n` +
+            `*Type:* ${resonance.contradiction_type} · *Severity:* ${resonance.severity}\n` +
+            `*Contradiction:* ${resonance.contradiction}\n` +
+            `*Reference:* ${resonance.governing_field_reference}\n` +
+            `*Suggestion:* ${resonance.suggestion}`;
+          await safeSend(chatId, flag);
+
+          if (resonance.severity === 'block') {
+            await safeSend(chatId, `🛑 Build blocked — reply "OVERRIDE" within 5 min to force proceed, or send a revised /test brief.`);
+            const overridePath = path.join(process.env.HOME, 'nanoclaw', 'pending-override.json');
+            fs.writeFileSync(overridePath, JSON.stringify({ idea, resonance, chatId, timestamp: new Date().toISOString() }, null, 2));
+            return;
+          }
+          if (resonance.severity === 'warning') {
+            await safeSend(chatId, `⚠️ Proceeding with evaluation — flag noted for your review.`);
+          }
+          // advisory: just flag and continue
+        }
+      } catch (rErr) {
+        console.warn('[/test] Resonance check failed (non-fatal):', rErr.message);
+      }
+
       // Step 1: Read active projects for context
       const projectsDir = path.join(process.env.HOME, 'cathedral-vault', '08_Project_Orchestrator', 'projects');
       let projectContext = '';
@@ -1289,6 +1362,28 @@ bot.on('message', async (msg) => {
       await safeSend(chatId, `⚠️ Evaluation failed: ${err.message}`);
     }
     return;
+  }
+
+  // ── OVERRIDE handler for resonance-blocked /test briefs ───────────────────
+  if (msg.text && /^OVERRIDE$/i.test(msg.text.trim())) {
+    const chatId = msg.chat.id;
+    const overridePath = path.join(process.env.HOME, 'nanoclaw', 'pending-override.json');
+    if (fs.existsSync(overridePath)) {
+      const pending = JSON.parse(fs.readFileSync(overridePath, 'utf8'));
+      const age = Date.now() - new Date(pending.timestamp).getTime();
+      if (age > 5 * 60 * 1000) {
+        fs.unlinkSync(overridePath);
+        await safeSend(chatId, `⏰ Override expired (>5 min). Send /test again if still needed.`);
+      } else {
+        // Store override token — next /test within 5 min will skip resonance
+        const tokenPath = path.join(process.env.HOME, 'nanoclaw', 'resonance-override-token.json');
+        fs.writeFileSync(tokenPath, JSON.stringify({ timestamp: new Date().toISOString(), contradiction_type: pending.resonance.contradiction_type }));
+        fs.unlinkSync(overridePath);
+        await safeSend(chatId, `✅ Override accepted for ${pending.resonance.contradiction_type} flag. Resend \`/test ${pending.idea}\` within 5 minutes — resonance check will be bypassed.`);
+      }
+      return;
+    }
+    // No pending override — fall through
   }
 
   // ── YES/NO handler for /test confirmation ─────────────────────────────────

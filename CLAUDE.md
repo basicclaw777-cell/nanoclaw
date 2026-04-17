@@ -640,6 +640,24 @@ Before commits: check untracked status for core infra files, refuse pushes of fi
 - Phase 1: weekly Gemini CLI scan + qualification check, Sunday 03:00 HKT
 - Key grants: TVP (HK$600k), BUD Fund (HK$7m), D-Biz (HK$100k), EMF (expiring)
 
+### Cathy-with-hands /think Command — LIVE 2026-04-17
+- Library module: ~/nanoclaw/cathy-router.js (imported by telegram-bot.js, no PM2 process)
+- Command: /think [message] on Telegram
+- Tool selection: Claude Code (builds/code) · Gemini CLI (research/scan) · Ollama (private/local) · Cathy direct (conversational)
+- Dispatch: via ~/Cathedral/tools/dispatch.sh (run-claude.sh, run-gemini.sh, run-ollama.sh)
+- Synthesis: tool output + vault context from /vault/search → one clean response
+- Phase 1: pattern-matching selection. Phase 2 queued: LLM-powered selection + multi-tool orchestration
+
+### Cathy-with-hands Dispatch Bot — BUILT 2026-04-17
+- Script: ~/Cathedral/tools/telegram-bot.js (long-polling, standalone)
+- Commands: /dispatch <tool> <prompt>, /tools, /status
+- Routes to dispatch.sh → run-claude.sh / run-gemini.sh / run-ollama.sh
+- Output: ~/Cathedral/tools/output/{tool}-{timestamp}.md
+- Max 4000 chars to Telegram, truncated with file path for full output
+- Ollama output cleaned: ANSI escapes, braille spinners, qwen3 thinking blocks stripped
+- PM2: pm2 start ~/Cathedral/tools/telegram-bot.js --name dispatch-bot
+- TRIGGER: UNASSIGNED — needs PM2 start and save
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in 
 containers. Code calls in claude.ai chats write to the container,
