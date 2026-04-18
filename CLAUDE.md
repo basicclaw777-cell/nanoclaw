@@ -682,6 +682,37 @@ Before commits: check untracked status for core infra files, refuse pushes of fi
 - Same nugget in multiple vault locations (00_Staging and 02_Refined_Gold) appears once
 - Priority: more backlinks wins; tie-break prefers 02_Refined_Gold
 
+### Behaviour Library — BUILT 2026-04-18
+- Directory: ~/cathedral-vault/06_Methods/behaviour-library/
+- Two indexes: behaviour-library-paul.md (Paul patterns), behaviour-library-llm.md (LLM patterns)
+- First entry: behaviour-opus-discernment-mode.md — mode-aware friction, drops critique when orientation is the ask
+- Protocol: each behaviour gets its own file with trigger, signature, confidence level
+- Not a personality profile — a calibration instrument. Agents read this to match tempo.
+
+### Muse Dispatch — BUILT 2026-04-18
+- Script: ~/Cathedral/tools/muse-summon.js (ESM, in tools/ with own package.json)
+- Targeted vault orphan search: semantic distance × orphan factor, <1s response
+- Route: /dispatch muse <query> via dispatch-bot
+- Shell: ~/Cathedral/tools/run-muse.sh → dispatch.sh muse route
+- No LLM call — pure embedding search + surprise scoring
+- TRIGGER: /dispatch muse <query> on Telegram
+
+### The Groundskeeper — Court Member (2026-04-18)
+- Script: ~/Cathedral/the-groundskeeper.js (CJS)
+- One true observation about vault soil each morning
+- Reads: domain activity, recent nuggets (3d), dormant zones (7d+), latest Muse finding
+- Output: ~/cathedral-vault/00_Staging/cathedral/groundskeeper-note-{date}.md
+- Telegram: sends note daily
+- TRIGGER: PM2 cron groundskeeper at 06:30 HKT (30 22 * * * UTC)
+- Morning sequence: 06:00 vault-state + seed → 06:30 groundskeeper → 07:15 timekeeper → 07:30 briefing
+
+### Villa Phase 2 — Projects + Visual (2026-04-18)
+- Projects view: /villa/projects endpoint parses YAML frontmatter from 08_Project_Orchestrator/projects/
+- Visual view: /villa/artifacts endpoint scans 09_Artifacts/ for .html/.png/.jpg/.svg (149 assets)
+- /villa/artifact-file?path= serves files directly (query param, not wildcard — Express 5 compat)
+- Morning view: projects placeholder replaced with top 5 active + next-actions
+- Keyboard: 2=Projects, 3=Visual
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in
 containers. Code calls in claude.ai chats write to the container,

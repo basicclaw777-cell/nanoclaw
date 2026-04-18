@@ -693,6 +693,31 @@ async function readPm2State() {
   }
 }
 
+// ── Resonance Filter ───────────────────────────────────────────────────────────
+// Library module imported via dynamic import (filter is ES module, bridge is CJS).
+// Checks incoming briefs against the Cathedral's governing field.
+
+let _resonanceMod = null;
+async function getResonance() {
+  if (_resonanceMod) return _resonanceMod;
+  _resonanceMod = await import(path.join(__dirname, 'resonance-filter.js'));
+  return _resonanceMod;
+}
+
+app.post('/resonance/check', async (req, res) => {
+  const { brief, context } = req.body || {};
+  if (!brief || typeof brief !== 'string') {
+    return res.status(400).json({ error: 'brief (string) required' });
+  }
+  try {
+    const { checkResonance } = await getResonance();
+    const result = checkResonance(brief, context || '');
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/villa/snapshot', async (req, res) => {
   try {
     const pm2State = await readPm2State();
@@ -734,6 +759,110 @@ app.get('/villa/snapshot', async (req, res) => {
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
   }
+});
+
+// ── Villa Phase 2: Projects endpoint ──────────────────────────────────────────
+
+function readProjectCards() {
+  const dir = path.join(VAULT, '08_Project_Orchestrator', 'projects');
+  const cards = [];
+  try {
+    for (const file of fs.readdirSync(dir)) {
+      if (!file.endsWith('.md')) continue;
+      const full = path.join(dir, file);
+      const stat = fs.statSync(full);
+      const raw = fs.readFileSync(full, 'utf8');
+      // Parse YAML frontmatter
+      if (!raw.startsWith('---')) continue;
+      const fmEnd = raw.indexOf('\n---', 3);
+      if (fmEnd === -1) continue;
+      const fm = raw.slice(3, fmEnd);
+      const card = { file: file.replace('.md', ''), updated: stat.mtimeMs };
+      for (const line of fm.split('\n')) {
+        const m = line.match(/^([\w-]+):\s*"?([^"]*)"?\s*$/);
+        if (!m) continue;
+        const key = m[1].trim();
+        const val = m[2].trim();
+        if (key === 'title') card.title = val;
+        else if (key === 'project-status') card.status = val;
+        else if (key === 'project-priority') card.priority = val;
+        else if (key === 'project-next-action') card.nextAction = val;
+        else if (key === 'project-domain') card.domain = val;
+        else if (key === 'project-target') card.target = val;
+      }
+      // Body excerpt (first non-frontmatter paragraph)
+      const body = raw.slice(fmEnd + 4).trim();
+      card.excerpt = body.split('\n\n')[0]?.slice(0, 200) || '';
+      cards.push(card);
+    }
+  } catch (_) { /* ignore */ }
+  // Sort: active first, then by priority (critical > high > medium > low), then by updated
+  const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+  return cards.sort((a, b) => {
+    if (a.status === 'active' && b.status !== 'active') return -1;
+    if (b.status === 'active' && a.status !== 'active') return 1;
+    const pa = priorityOrder[a.priority] ?? 9;
+    const pb = priorityOrder[b.priority] ?? 9;
+    if (pa !== pb) return pa - pb;
+    return b.updated - a.updated;
+  });
+}
+
+app.get('/villa/projects', (req, res) => {
+  try {
+    res.json({ ok: true, projects: readProjectCards() });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── Villa Phase 2: Artifacts endpoint ─────────────────────────────────────────
+
+function scanArtifacts() {
+  const base = path.join(VAULT, '09_Artifacts');
+  const exts = new Set(['.html', '.png', '.jpg', '.jpeg', '.svg']);
+  const assets = [];
+  function walk(dir, depth) {
+    if (depth > 5) return;
+    try {
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        if (entry.name.startsWith('.')) continue;
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) { walk(full, depth + 1); continue; }
+        const ext = path.extname(entry.name).toLowerCase();
+        if (!exts.has(ext)) continue;
+        try {
+          const stat = fs.statSync(full);
+          assets.push({
+            path: full.replace(base, '').replace(/^\//, ''),
+            name: entry.name,
+            type: ext.replace('.', ''),
+            size: stat.size,
+            mtime: stat.mtimeMs,
+          });
+        } catch (_) {}
+      }
+    } catch (_) {}
+  }
+  walk(base, 0);
+  return assets.sort((a, b) => b.mtime - a.mtime);
+}
+
+app.get('/villa/artifacts', (req, res) => {
+  try {
+    res.json({ ok: true, artifacts: scanArtifacts() });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Serve artifact files directly (images, HTML, SVG)
+app.get('/villa/artifact-file', (req, res) => {
+  const relPath = req.query.path;
+  if (!relPath || relPath.includes('..')) return res.status(400).send('invalid path');
+  const full = path.join(VAULT, '09_Artifacts', relPath);
+  if (!fs.existsSync(full)) return res.status(404).send('not found');
+  res.sendFile(full);
 });
 
 // ── Villa static serve ─────────────────────────────────────────────────────────
