@@ -179,15 +179,16 @@ app.post('/vault/write', requireApiKey, (req, res) => {
 // ── GET /vault/search ─────────────────────────────────────────────────────────
 
 app.get('/vault/search', requireApiKey, async (req, res) => {
-  const { q, top_k = '10' } = req.query;
+  const { q, top_k = '10', limit } = req.query;
+  const k = limit || top_k;
   if (!q) return res.status(400).json({ error: 'q query param required' });
   try {
     const output = await run('python3', [
       path.join(NANOCLAW, 'vault_reader.py'),
-      '--search', q,
-      '--top_k',  top_k,
+      'search', q, '--top_k', String(k), '--json',
     ], 30_000);
-    res.json({ query: q, results: output });
+    const results = JSON.parse(output);
+    res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -789,6 +790,8 @@ function readProjectCards() {
         else if (key === 'project-next-action') card.nextAction = val;
         else if (key === 'project-domain') card.domain = val;
         else if (key === 'project-target') card.target = val;
+        else if (key === 'project-blocked-by') card.blockedBy = val;
+        else if (key === 'project-last-updated') card.lastUpdated = val;
       }
       // Body excerpt (first non-frontmatter paragraph)
       const body = raw.slice(fmEnd + 4).trim();
@@ -856,6 +859,54 @@ app.get('/villa/artifacts', (req, res) => {
   }
 });
 
+// ── GET /technique-library — scan technique-library folder structure ──────────
+app.get('/technique-library', (req, res) => {
+  const libDir = path.join(VAULT, '09_Artifacts', 'branding', 'basic-reflex', 'technique-library');
+  try {
+    const techniques = [];
+    for (const entry of fs.readdirSync(libDir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const folder = entry.name;
+      const folderPath = path.join(libDir, folder);
+      if (folder === 'defence') {
+        // Recurse one level into defence subfolders
+        for (const sub of fs.readdirSync(folderPath, { withFileTypes: true })) {
+          if (!sub.isDirectory()) continue;
+          const subPath = path.join(folderPath, sub.name);
+          const images = fs.readdirSync(subPath).filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f));
+          techniques.push({
+            id: `defence/${sub.name}`,
+            folder: `defence/${sub.name}`,
+            domain: 'defence',
+            images: images.map(f => `branding/basic-reflex/technique-library/defence/${sub.name}/${f}`),
+          });
+        }
+      } else {
+        const images = fs.readdirSync(folderPath).filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f));
+        techniques.push({
+          id: folder,
+          folder,
+          domain: 'offence',
+          images: images.map(f => `branding/basic-reflex/technique-library/${folder}/${f}`),
+        });
+      }
+    }
+    // Also pick up root-level images (guard-front.jpg etc)
+    const rootImages = fs.readdirSync(libDir).filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f));
+    if (rootImages.length) {
+      techniques.push({
+        id: '_root',
+        folder: '',
+        domain: 'root',
+        images: rootImages.map(f => `branding/basic-reflex/technique-library/${f}`),
+      });
+    }
+    res.json({ ok: true, techniques });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // Serve artifact files directly (images, HTML, SVG)
 app.get('/villa/artifact-file', (req, res) => {
   const relPath = req.query.path;
@@ -868,6 +919,17 @@ app.get('/villa/artifact-file', (req, res) => {
 // ── Villa static serve ─────────────────────────────────────────────────────────
 // Serve the villa HTML directly from cath-bridge with no-cache headers.
 // This replaces the python3 http.server that has aggressive caching.
+
+app.get('/techniques', (req, res) => {
+  const galleryPath = path.join(HOME, 'Cathedral', 'control-panel', 'technique-gallery.html');
+  try {
+    const html = fs.readFileSync(galleryPath, 'utf8');
+    res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`technique gallery not found: ${err.message}`);
+  }
+});
 
 app.get('/villa', (req, res) => {
   const villaPath = path.join(HOME, 'Cathedral', 'control-panel', 'index.html');
