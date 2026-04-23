@@ -713,6 +713,13 @@ Before commits: check untracked status for core infra files, refuse pushes of fi
 - Morning view: projects placeholder replaced with top 5 active + next-actions
 - Keyboard: 2=Projects, 3=Visual
 
+### Morning Briefing Redesign — 2026-04-23
+- Text backup reformatted: emoji status board replaces prose paragraph
+- Format: one line per project with status emoji (🟢/🟡/🔴/💤), top 5 by default
+- Voice briefing unchanged (still conversational TTS)
+- New Telegram commands: /projects (full list), /project [name] (drill-down)
+- Status logic reads vault project card frontmatter directly
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in
 containers. Code calls in claude.ai chats write to the container,
