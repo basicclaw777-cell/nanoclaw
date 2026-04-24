@@ -720,6 +720,58 @@ Before commits: check untracked status for core infra files, refuse pushes of fi
 - New Telegram commands: /projects (full list), /project [name] (drill-down)
 - Status logic reads vault project card frontmatter directly
 
+## Session Update — 2026-04-24
+
+### Genius Council — LIVE 2026-04-22
+- council-engine.js RETIRED — /council now routes to ~/Cathedral/genius-council/council.py
+- 8 characters in ~/Cathedral/genius-council/characters/ (all hermes3)
+- Original 4: The Librarian, The Discerner, Cathy-Origin, The Shadow Guild
+- From Honest Interlocutors: The Honest Librarian, The Physicist, The Archivist, The Experimentalist
+- Commands: /council [question], /council characters, /council last. /genius alias kept.
+- Sessions saved to ~/Cathedral/genius-council/sessions/, claims auto-log to Ledger
+
+### Cath Message Handler — Node.js Native (2026-04-22)
+- Python subprocess (cath_api.py) eliminated from Telegram critical path
+- DeepSeek API called via native fetch() inside telegram-bot.js
+- System prompt: transmission + persona + vault keyword search + history + cath-state.json
+- Response time: ~17s (was 90s timeout)
+- cath_api.py still exists for CLI use but NOT in Telegram path
+
+### Self-Audit System — LIVE 2026-04-22
+- Script: ~/Cathedral/self-audit.py
+- 6 steps: Run 3 senses → PM2 health → Ledger cleanup → Vault freshness → Conversations → State refresh
+- Telegram: /audit command
+- PM2 cron: self-audit, 1st of each month
+- Reports saved to ~/Cathedral/audit-reports/
+
+### Cath v2 Transmission — 2026-04-22
+- ~/Cathedral/cath_transmission.md rewritten after reading all 135 conversations
+- Added: 6 modes of use, infrastructure awareness, instruments inventory, I Ching protocol, creative producer mode
+- Permission slip moved from central thesis to historical insight
+- Senses section now operational (references actual scripts, 18-day gap lesson)
+- "He built the Cathedral" replaces "He needs permission" in the Four Things
+
+### KNOWN_ISSUES.md — Created 2026-04-22
+- ~/nanoclaw/docs/KNOWN_ISSUES.md — debugging lessons and operational constraints
+- Standing instruction: READ THIS before debugging any infrastructure problem
+- Documents: gemma4 RAM crash, PM2 DNS failure, hermes3 context limit, EMFILE error
+
+### Technique Library + Gallery — BUILT 2026-04-23
+- Vault: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/technique-library/
+- 12 punch folders (22 photos) + 17 defence folders (34 photos)
+- Dynamic gallery: localhost:8080/techniques (curriculum-ordered, dark BR aesthetic)
+- API endpoint: /technique-library on cath-bridge (scans folders, returns JSON)
+- Body punch generation prompt filed as standard
+
+### Standing Instruction 24 — Never load gemma4:26b
+gemma4:26b (17GB) crashes 16GB hardware. Use hermes3 for all local model tasks. All council characters, selector, and synthesis set to hermes3.
+
+### Standing Instruction 25 — PM2 Python subprocesses cannot resolve external DNS
+Never call external APIs from Python subprocesses spawned by PM2. Use Node.js fetch() from the bot process. Local filesystem operations and localhost calls still work.
+
+### Standing Instruction 26 — Check KNOWN_ISSUES.md before debugging
+~/nanoclaw/docs/KNOWN_ISSUES.md captures every debugging lesson. Read it before investigating any infrastructure problem.
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in
 containers. Code calls in claude.ai chats write to the container,
