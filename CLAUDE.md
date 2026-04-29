@@ -772,6 +772,22 @@ Never call external APIs from Python subprocesses spawned by PM2. Use Node.js fe
 ### Standing Instruction 26 — Check KNOWN_ISSUES.md before debugging
 ~/nanoclaw/docs/KNOWN_ISSUES.md captures every debugging lesson. Read it before investigating any infrastructure problem.
 
+### Browser Automation — ChatGPT/Gemini (2026-04-28, UNSOLVED)
+- Scripts: ~/Cathedral/logan-browser-gen.js (Playwright), ~/Cathedral/logan-gen.py (undetected-chromedriver)
+- Neither production-ready — ChatGPT detects automation and kills sessions
+- One image successfully generated (left-uppercut-logan-chatgpt.png) before session killed
+- Web app quality confirmed better than any API — the gap is real
+- Documented in KNOWN_ISSUES.md
+- Paul's manual workflow: 1-2 character sheets + technique photo + "keep pose, redraw in graphic novel style"
+
+### Home Matters — Project Card (2026-04-24)
+- ~/cathedral-vault/08_Project_Orchestrator/projects/home-matters.md
+- Kennedy Town flat, building management liability case (roof leak 2019-2020)
+- Blocked on: building name, flat number, leak start date, timestamped photos
+
+### Standing Instruction 27 — Don't cycle through broken variants
+When an approach hits a fundamental blocker, stop. Document the blocker in KNOWN_ISSUES.md. Don't iterate through variant fixes that each fail differently — that wastes Paul's time. Verify fixes work before involving Paul.
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in
 containers. Code calls in claude.ai chats write to the container,
