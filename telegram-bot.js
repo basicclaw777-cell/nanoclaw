@@ -6,7 +6,7 @@ import { spawn } from 'child_process';
 import lancedb from '@lancedb/lancedb';
 import { semanticSearch, startFileWatcher } from './vault-embedder.js';
 import { triageClaim, formatTriageResult } from './epistemic-triage.js';
-import { runCouncil, formatCouncilResult } from './council-engine.js';
+// council-engine.js retired — Genius Council (council.py) handles all /council commands
 import { runObliteratus, formatObliteratusHeader } from './obliteratus-engine.js';
 import { getOrRunGold, runGoldExtraction, startGoldCron } from './gold-extractor.js';
 import { runMetabolism, getMetabolismSummary, startMetabolismCron } from './vault-metabolism.js';
@@ -15,6 +15,7 @@ import { runNegativeSpaceScan } from './negative-space.js';
 import { buildAtlas, getOrBuildAtlas } from './convergence-atlas.js';
 import { runOracle, getOracleOutputs, formatOracleResult } from './oracle.js';
 import { addToConversation, getConversationHistory, updateMemoryAfterConversation } from './memory-system.js';
+import { registerBoxingCommands } from './boxing-commands.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -105,6 +106,42 @@ if (!fs.existsSync(SOCIAL_CONTENT_PATH)) {
 
 const bot = new TelegramBot(token, { polling: false });
 
+// ── Boxing commands (Basic Reflex) ──────────────────────────────────────────
+registerBoxingCommands(bot);
+
+// ── Telegram health state (written to cath-state.json) ──────────────────────
+const telegramHealth = {
+  lastUpdateAt: null,        // ISO timestamp of last successfully received update
+  lastPollOkAt: null,        // ISO timestamp of last successful poll cycle
+  pollErrorCount: 0,         // consecutive errors (resets on success)
+  totalErrors: 0,            // lifetime error count this process
+  status: 'starting',        // 'green' | 'red' | 'starting'
+};
+
+function updateTelegramHealth(key, value) {
+  telegramHealth[key] = value;
+  // Derive status: green if last update within 5 minutes
+  const lastOk = telegramHealth.lastUpdateAt || telegramHealth.lastPollOkAt;
+  if (lastOk && (Date.now() - new Date(lastOk).getTime()) < 5 * 60 * 1000) {
+    telegramHealth.status = 'green';
+  } else {
+    telegramHealth.status = telegramHealth.lastUpdateAt ? 'red' : 'starting';
+  }
+  writeTelegramHealthToState();
+}
+
+function writeTelegramHealthToState() {
+  try {
+    const statePath = path.join(process.env.HOME, 'Cathedral', 'cath-state.json');
+    const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+    state.telegram_health = { ...telegramHealth };
+    fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
+  } catch { /* non-fatal */ }
+}
+
+// Export bot instance + health for cath-bridge webhook route
+export { bot, telegramHealth };
+
 // ── Telegram 4096-char limit: safe send with auto-split ─────────────────────
 const TG_MAX = 4000; // leave margin below 4096
 
@@ -185,15 +222,167 @@ async function safeSendPhoto(chatId, imagePath, caption = '') {
   }
 }
 
+// ── Polling error handler: quiet logging, count errors, log recovery ────────
+let _lastPollingErrorLogged = 0;
+
 bot.on('polling_error', (err) => {
-  console.error('Polling error:', err.code, err.message);
+  telegramHealth.pollErrorCount++;
+  telegramHealth.totalErrors++;
+  // Log every 10th error, or the first one after recovery
+  if (telegramHealth.pollErrorCount === 1 || telegramHealth.pollErrorCount % 10 === 0) {
+    console.error(`Polling error #${telegramHealth.totalErrors} (consecutive: ${telegramHealth.pollErrorCount}): ${err.code} ${err.message}`);
+  }
+  updateTelegramHealth('status', 'red');
+
+  // Fast restart: if 2+ consecutive failures, force restart polling
+  if (telegramHealth.pollErrorCount >= 2) {
+    console.log('[telegram] Double failure detected — forcing immediate polling restart');
+    try { bot.stopPolling(); } catch {}
+    setTimeout(() => {
+      bot.startPolling({ restart: true, params: { timeout: 3 } })
+        .then(() => {
+          console.log('[telegram] Polling restarted after double failure');
+          telegramHealth.pollErrorCount = 0;
+          updateTelegramHealth('lastPollOkAt', new Date().toISOString());
+        })
+        .catch(e => console.error('[telegram] Restart failed:', e.message));
+    }, 1000);
+  }
 });
+
+// Log when polling recovers after errors
+bot.on('message', () => {
+  if (telegramHealth.pollErrorCount > 0) {
+    console.log(`[telegram] Connection recovered after ${telegramHealth.pollErrorCount} consecutive errors`);
+  }
+  telegramHealth.pollErrorCount = 0;
+  updateTelegramHealth('lastUpdateAt', new Date().toISOString());
+});
+
+// ── Heartbeat: getMe every 60s, detect dead connections ─────────────────────
+let _heartbeatInterval;
+function startHeartbeat() {
+  _heartbeatInterval = setInterval(async () => {
+    try {
+      await bot.getMe();
+      updateTelegramHealth('lastPollOkAt', new Date().toISOString());
+    } catch (err) {
+      console.error(`[heartbeat] getMe failed: ${err.message}`);
+      telegramHealth.pollErrorCount++;
+      updateTelegramHealth('status', 'red');
+      // Double failure on heartbeat — force restart
+      if (telegramHealth.pollErrorCount >= 2) {
+        console.log('[heartbeat] Double failure — restarting polling');
+        try { bot.stopPolling(); } catch {}
+        setTimeout(() => {
+          bot.startPolling({ restart: true, params: { timeout: 3 } })
+            .then(() => {
+              console.log('[heartbeat] Polling restarted');
+              telegramHealth.pollErrorCount = 0;
+              updateTelegramHealth('lastPollOkAt', new Date().toISOString());
+            })
+            .catch(e => console.error('[heartbeat] Restart failed:', e.message));
+        }, 1000);
+      }
+    }
+  }, 60_000);
+}
+
+// ── Internal webhook listener (port 8443) — receives updates from cath-bridge
+import http from 'http';
+
+function startWebhookListener() {
+  const server = http.createServer((req, res) => {
+    if (req.method === 'POST' && req.url === '/webhook') {
+      let body = '';
+      req.on('data', chunk => { body += chunk; });
+      req.on('end', () => {
+        try {
+          const update = JSON.parse(body);
+          bot.processUpdate(update);
+          updateTelegramHealth('lastUpdateAt', new Date().toISOString());
+
+          // If we're still polling when webhooks arrive, stop polling
+          if (telegramHealth.mode === 'polling' && bot.isPolling()) {
+            console.log('[webhook] Received webhook update while polling — switching to webhook mode');
+            bot.stopPolling();
+            telegramHealth.mode = 'webhook';
+            writeTelegramHealthToState();
+          }
+
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ ok: true }));
+        } catch (err) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+    } else if (req.method === 'POST' && req.url === '/switch-to-polling') {
+      // Called when tunnel goes down — resume polling
+      console.log('[webhook] Switching back to polling mode');
+      bot.deleteWebHook().then(() => {
+        return bot.startPolling({ restart: true, params: { timeout: 3 } });
+      }).then(() => {
+        telegramHealth.mode = 'polling';
+        writeTelegramHealthToState();
+        console.log('[webhook] Polling resumed');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true, mode: 'polling' }));
+      }).catch(err => {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      });
+    } else {
+      res.writeHead(404);
+      res.end();
+    }
+  });
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log('[webhook] Port 8443 in use — killing stale listener and retrying');
+      setTimeout(() => server.listen(8443, '127.0.0.1'), 2000);
+    } else {
+      console.error('[webhook] Server error:', err.message);
+    }
+  });
+  server.listen(8443, '127.0.0.1', () => {
+    console.log('[webhook] Internal listener on 127.0.0.1:8443');
+  });
+}
+
+// ── Bot startup ─────────────────────────────────────────────────────────────
+const WEBHOOK_MODE = process.env.TELEGRAM_WEBHOOK_URL;
 
 async function startBot(retries = 5) {
   try {
-    await bot.deleteWebHook({ drop_pending_updates: true });
-    await bot.startPolling({ restart: true });
-    console.log('🤖 Bot polling started.');
+    // Always start the internal webhook listener for cath-bridge forwarding
+    startWebhookListener();
+
+    // Check if tunnel script has set a webhook (tunnel writes URL to .tunnel-url)
+    const tunnelUrlFile = path.join(process.env.HOME, 'nanoclaw', '.tunnel-url');
+    const tunnelActive = fs.existsSync(tunnelUrlFile);
+
+    if (WEBHOOK_MODE) {
+      // Explicit webhook mode via env var
+      await bot.setWebHook(WEBHOOK_MODE);
+      telegramHealth.mode = 'webhook';
+      console.log(`🤖 Bot webhook set: ${WEBHOOK_MODE}`);
+    } else if (tunnelActive) {
+      // Tunnel is running — don't delete webhook, don't poll
+      // The tunnel script handles webhook registration
+      // Bot receives updates via internal webhook listener (port 8443)
+      telegramHealth.mode = 'webhook';
+      const tunnelUrl = fs.readFileSync(tunnelUrlFile, 'utf8').trim();
+      console.log(`🤖 Tunnel detected (${tunnelUrl}) — webhook mode, no polling.`);
+    } else {
+      // No tunnel, no webhook env — use polling
+      await bot.deleteWebHook();
+      await bot.startPolling({ restart: true, params: { timeout: 3 } });
+      telegramHealth.mode = 'polling';
+      console.log('🤖 Bot polling started (3s interval).');
+    }
+    updateTelegramHealth('lastPollOkAt', new Date().toISOString());
+    startHeartbeat();
     startFileWatcher();
   } catch (err) {
     console.error(`❌ Startup error: ${err.message}`);
@@ -352,32 +541,79 @@ bot.onText(/\/triage (.+)/, async (msg, match) => {
   }
 });
 
-// /council [claim] — all four interlocutors assess the same claim
-bot.onText(/\/council (.+)/, async (msg, match) => {
+// /council — Genius Council (unified: replaces old interlocutors + /genius)
+// /council characters — list available characters
+bot.onText(/^\/council(?:@\w+)?\s+characters\s*$/, async (msg) => {
   const chatId = msg.chat.id;
-  const topic  = match[1].trim();
+  try {
+    const output = await new Promise((resolve, reject) => {
+      const proc = spawn(
+        'python3',
+        [path.join(process.env.HOME, 'Cathedral', 'genius-council', 'council.py'), '--characters'],
+        { env: process.env }
+      );
+      let stdout = '';
+      proc.stdout.on('data', d => { stdout += d.toString(); });
+      proc.on('close', code => resolve(stdout.trim() || 'No characters found.'));
+      proc.on('error', reject);
+    });
+    await safeSend(chatId, output);
+  } catch (err) {
+    await safeSend(chatId, `Failed: ${err.message}`);
+  }
+});
+
+// /council last — show last session summary
+bot.onText(/^\/council(?:@\w+)?\s+last\s*$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const output = await new Promise((resolve, reject) => {
+      const proc = spawn(
+        'python3',
+        [path.join(process.env.HOME, 'Cathedral', 'genius-council', 'council.py'), '--last'],
+        { env: process.env }
+      );
+      let stdout = '';
+      proc.stdout.on('data', d => { stdout += d.toString(); });
+      proc.on('close', code => resolve(stdout.trim() || 'No sessions yet.'));
+      proc.on('error', reject);
+    });
+    await safeSend(chatId, output);
+  } catch (err) {
+    await safeSend(chatId, `Failed: ${err.message}`);
+  }
+});
+
+// /council [question] — convene the Genius Council
+bot.onText(/^\/council(?:@\w+)?\s+(?!characters\s*$|last\s*$)(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const question = match[1].trim();
 
   try {
-    await safeSend(chatId, `🏛️ Convening Council on:\n\n_"${topic.slice(0, 100)}${topic.length > 100 ? '...' : ''}"_\n\nQuerying 4 interlocutors — this takes ~2 minutes...`, { parse_mode: 'Markdown' });
+    await safeSend(chatId, `Convening Genius Council...\n\n"${question.slice(0, 100)}"\n\nSelecting characters and querying — this takes 3-8 minutes.`);
 
-    const result = await runCouncil(topic);
-    const formatted = formatCouncilResult(result);
+    const output = await new Promise((resolve, reject) => {
+      const proc = spawn(
+        'python3',
+        [path.join(process.env.HOME, 'Cathedral', 'genius-council', 'council.py'), question],
+        { env: process.env }
+      );
+      let stdout = '';
+      let stderr = '';
+      proc.stdout.on('data', d => { stdout += d.toString(); });
+      proc.stderr.on('data', d => { stderr += d.toString(); });
+      proc.on('close', code => {
+        if (code !== 0) reject(new Error(stderr.trim().split('\n').pop() || `exit code ${code}`));
+        else resolve(stdout.trim());
+      });
+      proc.on('error', reject);
+      setTimeout(() => { try { proc.kill(); } catch {} reject(new Error('Timeout (10 min)')); }, 600000);
+    });
 
-    // Telegram has a 4096 char limit — split if needed
-    if (formatted.length <= 4000) {
-      await safeSend(chatId, formatted, { parse_mode: 'Markdown' });
-    } else {
-      // Send each section separately
-      const sections = formatted.split('\n\n─────────────────────\n\n');
-      for (const section of sections) {
-        if (section.trim()) {
-          await safeSend(chatId, section, { parse_mode: 'Markdown' });
-        }
-      }
-    }
+    await safeSend(chatId, output);
   } catch (err) {
-    console.error('Council error:', err);
-    await safeSend(chatId, `⚠️ Council failed: ${err.message}`);
+    console.error('Genius Council error:', err);
+    await safeSend(chatId, `Genius Council failed: ${err.message}`);
   }
 });
 
@@ -626,12 +862,269 @@ bot.onText(/^\/rhythm(?:@\w+)?$/, async (msg) => {
   const chatId = msg.chat.id;
 
   try {
-    const { getRhythmReport } = await import(path.join(process.env.HOME, 'Cathedral', 'the-timekeeper.js'));
+    const { getRhythmReport } = await import(path.join(process.env.HOME, 'Cathedral', 'the-timekeeper.mjs'));
     const report = getRhythmReport();
     await safeSend(chatId, `\`\`\`\n${report.text}\n\`\`\``, { parse_mode: 'Markdown' });
   } catch (err) {
     console.error('Rhythm report error:', err);
     await safeSend(chatId, `⚠️ Rhythm report failed: ${err.message}`);
+  }
+});
+
+// /ledger — Falsifiable claims tracker
+bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const args = (match[1] || '').trim();
+
+  try {
+    let cmd, cmdArgs;
+
+    if (!args || args === 'stats') {
+      cmd = ['stats'];
+    } else if (args === 'pending') {
+      cmd = ['pending'];
+    } else if (args === 'all') {
+      cmd = ['all'];
+    } else if (args.startsWith('log ')) {
+      // /ledger log "claim text" 30
+      const logMatch = args.match(/^log\s+(.+?)(?:\s+(\d+))?$/);
+      if (!logMatch) {
+        await safeSend(chatId, 'Usage: /ledger log [claim text] [days]\nDefault: 90 days');
+        return;
+      }
+      cmd = ['log', logMatch[1].replace(/^["']|["']$/g, ''), '--days', logMatch[2] || '90'];
+    } else if (args.startsWith('verify ')) {
+      // /ledger verify 3 held Reason text here
+      const verMatch = args.match(/^verify\s+(\d+)\s+(held|failed|unclear)\s*(.*)$/i);
+      if (!verMatch) {
+        await safeSend(chatId, 'Usage: /ledger verify [id] [held|failed|unclear] [reason]');
+        return;
+      }
+      cmd = ['verify', verMatch[1], verMatch[2].toLowerCase()];
+      if (verMatch[3]) cmd.push(verMatch[3]);
+    } else {
+      await safeSend(chatId, 'Usage:\n/ledger stats\n/ledger pending\n/ledger log [claim] [days]\n/ledger verify [id] [held|failed|unclear] [reason]');
+      return;
+    }
+
+    const output = await new Promise((resolve, reject) => {
+      const proc = spawn(
+        'python3',
+        [path.join(process.env.HOME, 'Cathedral', 'ledger.py'), ...cmd],
+        { env: process.env }
+      );
+      let stdout = '';
+      let stderr = '';
+      proc.stdout.on('data', d => { stdout += d.toString(); });
+      proc.stderr.on('data', d => { stderr += d.toString(); });
+      proc.on('close', code => {
+        if (code !== 0) reject(new Error(stderr.trim() || `exit code ${code}`));
+        else resolve(stdout.trim());
+      });
+      proc.on('error', reject);
+    });
+
+    await safeSend(chatId, output);
+  } catch (err) {
+    console.error('Ledger error:', err);
+    await safeSend(chatId, `Ledger failed: ${err.message}`);
+  }
+});
+
+// /genius — alias for /council (backwards compat)
+bot.onText(/^\/genius(?:@\w+)?\s+(.+)$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = match[1].trim();
+  // Rewrite as /council and let existing handlers process
+  if (arg === 'characters' || arg === 'last') {
+    const proc = spawn(
+      'python3',
+      [path.join(process.env.HOME, 'Cathedral', 'genius-council', 'council.py'), arg === 'characters' ? '--characters' : '--last'],
+      { env: process.env }
+    );
+    let stdout = '';
+    proc.stdout.on('data', d => { stdout += d.toString(); });
+    proc.on('close', () => safeSend(chatId, stdout.trim() || 'No data.'));
+    proc.on('error', err => safeSend(chatId, `Failed: ${err.message}`));
+  } else {
+    await safeSend(chatId, `Convening Genius Council...\n\n"${arg.slice(0, 100)}"\n\nSelecting characters and querying — this takes 3-8 minutes.`);
+    try {
+      const output = await new Promise((resolve, reject) => {
+        const proc = spawn(
+          'python3',
+          [path.join(process.env.HOME, 'Cathedral', 'genius-council', 'council.py'), arg],
+          { env: process.env }
+        );
+        let stdout = '';
+        let stderr = '';
+        proc.stdout.on('data', d => { stdout += d.toString(); });
+        proc.stderr.on('data', d => { stderr += d.toString(); });
+        proc.on('close', code => {
+          if (code !== 0) reject(new Error(stderr.trim().split('\n').pop() || `exit code ${code}`));
+          else resolve(stdout.trim());
+        });
+        proc.on('error', reject);
+        setTimeout(() => { try { proc.kill(); } catch {} reject(new Error('Timeout (10 min)')); }, 600000);
+      });
+      await safeSend(chatId, output);
+    } catch (err) {
+      console.error('Genius Council error:', err);
+      await safeSend(chatId, `Genius Council failed: ${err.message}`);
+    }
+  }
+});
+
+// /genius (no args) — show last session
+bot.onText(/^\/genius(?:@\w+)?\s*$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const output = await new Promise((resolve, reject) => {
+      const proc = spawn(
+        'python3',
+        [path.join(process.env.HOME, 'Cathedral', 'genius-council', 'council.py'), '--last'],
+        { env: process.env }
+      );
+      let stdout = '';
+      proc.stdout.on('data', d => { stdout += d.toString(); });
+      proc.on('close', code => resolve(stdout.trim() || 'No sessions yet.'));
+      proc.on('error', reject);
+    });
+    await safeSend(chatId, output);
+  } catch (err) {
+    await safeSend(chatId, `Failed: ${err.message}`);
+  }
+});
+
+// /audit — Cathedral self-audit
+bot.onText(/^\/audit(?:@\w+)?\s*$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    await safeSend(chatId, 'Running Cathedral self-audit...');
+    const output = await new Promise((resolve, reject) => {
+      const proc = spawn('python3', [
+        path.join(process.env.HOME, 'Cathedral', 'self-audit.py'), '--telegram'
+      ], { env: process.env, cwd: path.join(process.env.HOME, 'Cathedral') });
+      let stdout = '';
+      let stderr = '';
+      proc.stdout.on('data', d => { stdout += d; });
+      proc.stderr.on('data', d => { stderr += d; });
+      proc.on('close', code => {
+        if (code !== 0 && !stdout.trim()) reject(new Error(stderr.trim().split('\n').pop() || `exit ${code}`));
+        else resolve(stdout.trim());
+      });
+      proc.on('error', reject);
+      setTimeout(() => { try { proc.kill(); } catch {} reject(new Error('Audit timeout (2 min)')); }, 120000);
+    });
+    await safeSend(chatId, output || 'Audit complete — no output.');
+  } catch (err) {
+    console.error('Audit error:', err);
+    await safeSend(chatId, `Audit failed: ${err.message}`);
+  }
+});
+
+// /scratchpad — Paul's raw thinking capture
+// Send /scratchpad [text] — captured to vault as raw_thinking/ with #unreflected
+// No structure. No response. Just capture.
+bot.onText(/^\/scratchpad(?:@\w+)?\s+(.+)/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const text = match[1].trim();
+  if (!text) return;
+
+  try {
+    const fs = await import('fs');
+    const date = new Date().toISOString().slice(0, 10);
+    const time = new Date().toISOString().slice(11, 16).replace(':', '');
+    const dir = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', 'raw_thinking');
+    fs.mkdirSync(dir, { recursive: true });
+
+    const filepath = path.join(dir, `${date}-${time}-thinking.md`);
+    const content = `---\ndate: ${date}\ntags: [unreflected]\n---\n\n${text}\n`;
+    fs.writeFileSync(filepath, content, 'utf8');
+
+    await safeSend(chatId, `Captured. #unreflected`);
+  } catch (err) {
+    console.error('Scratchpad error:', err);
+    await safeSend(chatId, `Scratchpad failed: ${err.message}`);
+  }
+});
+
+// /researcher — The Researcher: autonomous research intelligence
+// /researcher         → status (what would it research tonight?)
+// /researcher run     → force a research cycle now
+// /researcher last    → explain last run's reasoning
+// /researcher [topic] → redirect tonight's research to this topic
+bot.onText(/^\/researcher(?:@\w+)?(?:\s+(.*))?$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = (match[1] || '').trim();
+
+  try {
+    if (arg === 'run') {
+      await safeSend(chatId, 'The Researcher is starting a research cycle. This takes 10-20 minutes...');
+      const proc = spawn('node', [
+        path.join(process.env.HOME, 'Cathedral', 'the-researcher.cjs'),
+      ], { env: process.env, cwd: path.join(process.env.HOME, 'Cathedral'), timeout: 1200000 });
+      let stdout = '';
+      proc.stdout.on('data', d => { stdout += d; });
+      proc.stderr.on('data', d => {
+        const lines = d.toString().split('\n').filter(l => l.includes('[researcher]'));
+        for (const line of lines) console.log(line.trim());
+      });
+      proc.on('close', async (code) => {
+        if (code === 0) {
+          await safeSend(chatId, 'Research cycle complete. Check Telegram for the summary.');
+        } else {
+          await safeSend(chatId, `Research cycle failed (code ${code}).`);
+        }
+      });
+      proc.on('error', async (err) => {
+        await safeSend(chatId, `Researcher error: ${err.message}`);
+      });
+    } else if (arg === 'last') {
+      const output = spawn('node', [
+        path.join(process.env.HOME, 'Cathedral', 'the-researcher.cjs'), '--last',
+      ], { env: process.env, timeout: 10000 });
+      let out = '';
+      output.stdout.on('data', d => { out += d; });
+      output.on('close', async () => {
+        await safeSend(chatId, out.trim() || 'No research history yet.');
+      });
+    } else if (arg === '' || arg === 'status') {
+      const output = spawn('node', [
+        path.join(process.env.HOME, 'Cathedral', 'the-researcher.cjs'), '--status',
+      ], { env: process.env, timeout: 10000 });
+      let out = '';
+      output.stdout.on('data', d => { out += d; });
+      output.on('close', async () => {
+        await safeSend(chatId, out.trim() || 'Researcher status unavailable.');
+      });
+    } else {
+      // Treat as a topic redirection
+      const output = spawn('node', [
+        path.join(process.env.HOME, 'Cathedral', 'the-researcher.cjs'),
+        '--redirect', arg,
+      ], { env: process.env, timeout: 10000 });
+      let out = '';
+      output.stdout.on('data', d => { out += d; });
+      output.on('close', async () => {
+        await safeSend(chatId, out.trim() || `Queued: "${arg}" for tonight's research.`);
+      });
+    }
+  } catch (err) {
+    console.error('Researcher error:', err);
+    await safeSend(chatId, `Researcher failed: ${err.message}`);
+  }
+});
+
+// /moon — Moon phase report
+bot.onText(/^\/moon(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { formatMoonReport } = await import('./moon-phase.js');
+    const report = formatMoonReport();
+    await safeSend(chatId, report);
+  } catch (err) {
+    console.error('Moon phase error:', err);
+    await safeSend(chatId, `Moon phase failed: ${err.message}`);
   }
 });
 
@@ -679,6 +1172,137 @@ bot.onText(/^\/vault-state(?:@\w+)?$/, async (msg) => {
   } catch (err) {
     console.error('Vault state error:', err);
     await safeSend(chatId, `⚠️ Vault state failed: ${err.message}`);
+  }
+});
+
+// /scout-design — on-demand design scout run
+bot.onText(/^\/scout-design(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+
+  try {
+    await safeSend(chatId, 'Running design scout (Gemini web search)...');
+    const { execFile } = await import('child_process');
+    const { promisify } = await import('util');
+    const exec = promisify(execFile);
+    const scoutPath = `${process.env.HOME}/Cathedral/skills-scout.js`;
+    const { stdout, stderr } = await exec('node', [scoutPath, '--design', '--force'], { timeout: 180000 });
+    // Scout sends its own Telegram digest, but confirm completion
+    await safeSend(chatId, 'Design scout complete. Check digest above.');
+  } catch (err) {
+    console.error('Scout-design error:', err);
+    await safeSend(chatId, `⚠️ Design scout failed: ${err.message}`);
+  }
+});
+
+// ── Scout commands ───────────────────────────────────────────────────────────
+
+// /scout accept <id> — promote finding to vault staging
+bot.onText(/^\/scout\s+accept\s+(.+)/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const id = match[1].trim();
+  try {
+    const { promoteFinding } = await import('./scout-engine.js');
+    const dest = promoteFinding(id);
+    await safeSend(chatId, `✓ ${id} promoted to vault staging`);
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /scout park <id> — extend revalidation by 30 days
+bot.onText(/^\/scout\s+park\s+(.+)/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const id = match[1].trim();
+  try {
+    const { parkFinding } = await import('./scout-engine.js');
+    const newDate = parkFinding(id);
+    await safeSend(chatId, `⏸ ${id} parked — revalidation extended to ${newDate}`);
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /scout discard <id> — move finding to archive
+bot.onText(/^\/scout\s+discard\s+(.+)/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const id = match[1].trim();
+  try {
+    const { discardFinding } = await import('./scout-engine.js');
+    discardFinding(id);
+    await safeSend(chatId, `✗ ${id} discarded — moved to archive`);
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /scout candidates — list active findings
+bot.onText(/^\/scout\s+candidates\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { getCandidatesList } = await import('./scout-engine.js');
+    await safeSend(chatId, getCandidatesList());
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /scout weather — show current weather report
+bot.onText(/^\/scout\s+weather\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { readWeatherReport } = await import('./scout-engine.js');
+    await safeSend(chatId, readWeatherReport());
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /scout crack — show current curated crack
+bot.onText(/^\/scout\s+crack\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { getTopCrack, formatCrack } = await import('./scout-engine.js');
+    await safeSend(chatId, formatCrack(getTopCrack()));
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /scout missions — show active missions
+bot.onText(/^\/scout\s+missions\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { readMissionsFormatted } = await import('./scout-engine.js');
+    await safeSend(chatId, readMissionsFormatted());
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /missions <text> — Universe Orc dispatches missions to Scout
+bot.onText(/^\/missions\s+(.+)/is, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const text = match[1].trim();
+  try {
+    const { writeMissions } = await import('./scout-engine.js');
+    writeMissions(text);
+    await safeSend(chatId, '✓ Mission list updated — Scout will prioritise on next scan');
+  } catch (err) {
+    await safeSend(chatId, `⚠️ ${err.message}`);
+  }
+});
+
+// /scout <topic> — on-demand probe (must be LAST scout regex to avoid matching subcommands)
+bot.onText(/^\/scout\s+(?!accept|park|discard|candidates|weather|crack|missions)(.+)/is, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const input = match[1].trim();
+  try {
+    await safeSend(chatId, `Scout probing: "${input}"...`);
+    const { runProbe } = await import('./scout-engine.js');
+    await runProbe(input);
+  } catch (err) {
+    console.error('Scout probe error:', err);
+    await safeSend(chatId, `⚠️ Scout probe failed: ${err.message}`);
   }
 });
 
@@ -942,6 +1566,310 @@ bot.onText(/\/oracle(.*)/, async (msg, match) => {
   }
 });
 
+// ── /projects and /project [name] — Project status board ─────────────────────
+
+const PROJECTS_DIR = path.join(process.env.HOME, 'cathedral-vault', '08_Project_Orchestrator', 'projects');
+const STALE_DAYS = 7;
+
+function readProjectCardsLocal() {
+  const cards = [];
+  try {
+    for (const file of fs.readdirSync(PROJECTS_DIR)) {
+      if (!file.endsWith('.md')) continue;
+      const full = path.join(PROJECTS_DIR, file);
+      const stat = fs.statSync(full);
+      const raw = fs.readFileSync(full, 'utf8');
+      if (!raw.startsWith('---')) continue;
+      const fmEnd = raw.indexOf('\n---', 3);
+      if (fmEnd === -1) continue;
+      const fm = raw.slice(3, fmEnd);
+      const card = { file: file.replace('.md', ''), updated: stat.mtimeMs };
+      for (const line of fm.split('\n')) {
+        const m = line.match(/^([\w-]+):\s*"?([^"]*)"?\s*$/);
+        if (!m) continue;
+        const key = m[1].trim(), val = m[2].trim();
+        if (key === 'title') card.title = val;
+        else if (key === 'project-status') card.status = val;
+        else if (key === 'project-priority') card.priority = val;
+        else if (key === 'project-next-action') card.nextAction = val;
+        else if (key === 'project-domain') card.domain = val;
+        else if (key === 'project-target') card.target = val;
+        else if (key === 'project-blocked-by') card.blockedBy = val;
+        else if (key === 'project-last-updated') card.lastUpdated = val;
+      }
+      // Full body for drill-down
+      card.body = raw.slice(fmEnd + 4).trim();
+      cards.push(card);
+    }
+  } catch (_) { /* ignore */ }
+  const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+  return cards.sort((a, b) => {
+    if (a.status === 'active' && b.status !== 'active') return -1;
+    if (b.status === 'active' && a.status !== 'active') return 1;
+    const pa = priorityOrder[a.priority] ?? 9;
+    const pb = priorityOrder[b.priority] ?? 9;
+    if (pa !== pb) return pa - pb;
+    return b.updated - a.updated;
+  });
+}
+
+function projectStatusEmoji(card) {
+  // Blocked
+  if (card.blockedBy) return '🔴';
+  const status = (card.status || '').toLowerCase();
+  // Paused or complete
+  if (status === 'paused' || status === 'complete' || status === 'parked') return '💤';
+  // Stale check for active projects
+  if (status === 'active' || status === 'in-progress') {
+    let lastDate;
+    if (card.lastUpdated) {
+      lastDate = new Date(card.lastUpdated);
+    } else {
+      lastDate = new Date(card.updated);
+    }
+    const daysSince = Math.floor((Date.now() - lastDate.getTime()) / 86400000);
+    if (daysSince >= STALE_DAYS) return '🟡';
+    return '🟢';
+  }
+  // Not started, planned, etc.
+  if (status === 'not-started' || status === 'planned') return '💤';
+  return '🟡';
+}
+
+function formatProjectLine(card) {
+  const emoji = projectStatusEmoji(card);
+  const title = card.title || card.file;
+  return `${emoji} *${title}*`;
+}
+
+function formatProjectBoard(cards, limit) {
+  const shown = limit ? cards.slice(0, limit) : cards;
+  const lines = shown.map(c => {
+    const emoji = projectStatusEmoji(c);
+    const title = c.title || c.file;
+    const next = c.nextAction ? `\n     ↳ ${c.nextAction.slice(0, 80)}` : '';
+    return `${emoji} *${title}*${next}`;
+  });
+  return lines.join('\n');
+}
+
+bot.onText(/^\/projects(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const cards = readProjectCardsLocal();
+    if (cards.length === 0) {
+      await safeSend(chatId, 'No project cards found.');
+      return;
+    }
+    const board = formatProjectBoard(cards);
+    const legend = '\n\n🟢 Active · 🟡 Attention · 🔴 Blocked · 💤 Stalled';
+    await safeSend(chatId, `📋 *All Projects* (${cards.length})\n\n${board}${legend}`, { parse_mode: 'Markdown' });
+  } catch (err) {
+    console.error('Projects error:', err);
+    await safeSend(chatId, `⚠️ Projects failed: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/project(?:@\w+)?\s+(.+)$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const query = match[1].trim().toLowerCase();
+  try {
+    const cards = readProjectCardsLocal();
+    const card = cards.find(c =>
+      (c.title || '').toLowerCase().includes(query) ||
+      c.file.toLowerCase().includes(query)
+    );
+    if (!card) {
+      await safeSend(chatId, `No project matching "${match[1].trim()}".`);
+      return;
+    }
+    const emoji = projectStatusEmoji(card);
+    const title = card.title || card.file;
+    const parts = [`${emoji} *${title}*`];
+    if (card.status) parts.push(`Status: ${card.status}`);
+    if (card.priority) parts.push(`Priority: ${card.priority}`);
+    if (card.domain) parts.push(`Domain: ${card.domain}`);
+    if (card.target) parts.push(`Target: ${card.target}`);
+    if (card.blockedBy) parts.push(`Blocked by: ${card.blockedBy}`);
+    if (card.nextAction) parts.push(`Next: ${card.nextAction}`);
+    // Body excerpt — first 600 chars
+    if (card.body) {
+      const excerpt = card.body.slice(0, 600);
+      parts.push(`\n${excerpt}${card.body.length > 600 ? '...' : ''}`);
+    }
+    await safeSend(chatId, parts.join('\n'), { parse_mode: 'Markdown' });
+  } catch (err) {
+    console.error('Project detail error:', err);
+    await safeSend(chatId, `⚠️ Project detail failed: ${err.message}`);
+  }
+});
+
+// ── /morning — link to Morning View constellation ────────────────────────────
+
+bot.onText(/^\/morning(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  await safeSend(chatId, 'Morning View\nhttp://localhost:8889\n\nOpen on any device on your local network.');
+});
+
+// ── Kit (GM Agent) — /kit commands ──────────────────────────────────────────
+// /kit              → morning briefing summary
+// /kit morning      → regenerate and push full morning briefing
+// /kit churn        → run churn check
+// /kit pipeline     → show corporate pipeline
+// /kit schedule     → Paul's schedule guard
+// /kit [message]    → talk to Kit (pass through to Kit's workspace)
+
+bot.onText(/^\/kit(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = (match[1] || '').trim();
+
+  try {
+    if (arg === '' || arg === 'status') {
+      // Run morning briefing and send
+      const proc = spawn('python3', [
+        path.join(process.env.HOME, 'br-gm-agent', 'scripts', 'kit-morning-briefing.py'),
+      ], { env: process.env, timeout: 15000 });
+      let out = '';
+      proc.stdout.on('data', d => { out += d; });
+      proc.on('close', async () => {
+        // Read the generated file
+        try {
+          const briefing = fs.readFileSync(
+            path.join(process.env.HOME, 'br-gm-agent', 'reports', 'morning-briefing.md'), 'utf8'
+          );
+          await safeSend(chatId, briefing.slice(0, 4000));
+        } catch {
+          await safeSend(chatId, out.trim() || 'Kit morning briefing unavailable.');
+        }
+      });
+      proc.on('error', async () => {
+        await safeSend(chatId, 'Kit briefing script failed.');
+      });
+
+    } else if (arg === 'morning') {
+      await safeSend(chatId, 'Regenerating Kit morning briefing...');
+      const proc = spawn('python3', [
+        path.join(process.env.HOME, 'br-gm-agent', 'scripts', 'kit-morning-briefing.py'),
+      ], { env: process.env, timeout: 15000 });
+      proc.on('close', async () => {
+        try {
+          const briefing = fs.readFileSync(
+            path.join(process.env.HOME, 'br-gm-agent', 'reports', 'morning-briefing.md'), 'utf8'
+          );
+          await safeSend(chatId, briefing.slice(0, 4000));
+        } catch {
+          await safeSend(chatId, 'Morning briefing generation failed.');
+        }
+      });
+
+    } else if (arg === 'churn') {
+      const proc = spawn('python3', [
+        path.join(process.env.HOME, 'br-gm-agent', 'scripts', 'churn-detector.py'),
+      ], { env: process.env, timeout: 15000 });
+      let out = '';
+      proc.stdout.on('data', d => { out += d; });
+      proc.on('close', async () => {
+        if (out.trim()) {
+          await safeSend(chatId, out.trim().slice(0, 4000));
+        } else {
+          // Try reading the output file
+          try {
+            const report = fs.readFileSync(
+              path.join(process.env.HOME, 'br-gm-agent', 'reports', 'churn-flags.md'), 'utf8'
+            );
+            await safeSend(chatId, report.slice(0, 4000));
+          } catch {
+            await safeSend(chatId, 'Churn detector: no data yet. Connect PunchPass CSVs first.');
+          }
+        }
+      });
+
+    } else if (arg === 'pipeline') {
+      try {
+        const pipeline = fs.readFileSync(
+          path.join(process.env.HOME, 'cathedral-vault', '10_Agents', 'kit', 'market-intel', 'corporate-pipeline.md'), 'utf8'
+        );
+        await safeSend(chatId, pipeline.slice(0, 4000));
+      } catch {
+        await safeSend(chatId, 'Corporate pipeline file not found.');
+      }
+
+    } else if (arg === 'schedule') {
+      const proc = spawn('python3', [
+        path.join(process.env.HOME, 'br-gm-agent', 'scripts', 'paul-schedule-guard.py'),
+      ], { env: process.env, timeout: 15000 });
+      proc.on('close', async () => {
+        try {
+          const guard = fs.readFileSync(
+            path.join(process.env.HOME, 'br-gm-agent', 'reports', 'schedule-guard.md'), 'utf8'
+          );
+          await safeSend(chatId, guard.slice(0, 4000));
+        } catch {
+          await safeSend(chatId, 'Schedule guard report unavailable.');
+        }
+      });
+
+    } else if (arg === 'feed') {
+      await safeSend(chatId, 'Generating weekly content feed for Social Media...');
+      const proc = spawn('python3', [
+        path.join(process.env.HOME, 'br-gm-agent', 'scripts', 'content-feed.py'),
+      ], { env: process.env, timeout: 15000 });
+      proc.on('close', async () => {
+        try {
+          const feed = fs.readFileSync(
+            path.join(process.env.HOME, 'br-gm-agent', 'reports', 'content-feed.md'), 'utf8'
+          );
+          await safeSend(chatId, feed.slice(0, 4000));
+        } catch {
+          await safeSend(chatId, 'Content feed generation failed.');
+        }
+      });
+
+    } else {
+      // Treat as a message to Kit — save to vault as a note for now
+      // Future: route through Kit's OS prompt via DeepSeek/Ollama
+      const date = new Date().toISOString().slice(0, 10);
+      const time = new Date().toISOString().slice(11, 16).replace(':', '');
+      const notePath = path.join(
+        process.env.HOME, 'cathedral-vault', '10_Agents', 'kit', 'decisions',
+        `${date}-${time}-paul-directive.md`
+      );
+      const content = `---\ndate: ${date}\ntype: directive\nfrom: paul\nstatus: #active\n---\n\n${arg}\n`;
+      fs.mkdirSync(path.dirname(notePath), { recursive: true });
+      fs.writeFileSync(notePath, content, 'utf8');
+      await safeSend(chatId, `Noted for Kit: "${arg.slice(0, 80)}${arg.length > 80 ? '...' : ''}"\nFiled to vault. Kit will see this in the next briefing.`);
+    }
+  } catch (err) {
+    console.error('Kit error:', err);
+    await safeSend(chatId, `Kit error: ${err.message}`);
+  }
+});
+
+// /signal — Cathy's signal drop for Kit
+// Cathy sees something in the room, pings it here, Kit picks it up in morning briefing
+bot.onText(/^\/signal(?:@\w+)?\s+(.+)/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const text = match[1].trim();
+  if (!text) return;
+
+  try {
+    const date = new Date().toISOString().slice(0, 10);
+    const time = new Date().toISOString().slice(11, 16).replace(':', '');
+    const slug = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40);
+    const dir = path.join(process.env.HOME, 'cathedral-vault', '10_Agents', 'kit', 'cathy', 'signals');
+    fs.mkdirSync(dir, { recursive: true });
+
+    const filepath = path.join(dir, `${date}-${time}-${slug}.md`);
+    const content = `---\ndate: ${date}\ntype: signal\nfrom: cathy\nstatus: #active\n---\n\n${text}\n`;
+    fs.writeFileSync(filepath, content, 'utf8');
+
+    await safeSend(chatId, `Signal received. Kit will see this in the morning briefing.`);
+  } catch (err) {
+    console.error('Signal error:', err);
+    await safeSend(chatId, `Signal failed: ${err.message}`);
+  }
+});
+
 // ── State writer bridge ───────────────────────────────────────────────────────
 
 function recordExchange(paulMsg, cathReply) {
@@ -957,41 +1885,95 @@ function recordExchange(paulMsg, cathReply) {
   // fire-and-forget — do not await
 }
 
-// ── Cath API bridge ───────────────────────────────────────────────────────────
+// ── Cath API bridge (Node.js native — no Python subprocess) ──────────────────
 
-function callCath(query, history = []) {
-  const pyArgs = [path.join(process.env.HOME, 'nanoclaw', 'cath_api.py'), '--query', query];
-  if (history.length > 0) {
-    pyArgs.push('--history', JSON.stringify(history));
+const CATH_TRANSMISSION = path.join(process.env.HOME, 'Cathedral', 'cath_transmission.md');
+const CATH_PERSONA = path.join(process.env.HOME, 'cathedral-vault', '.cache', 'system-prompt.txt');
+const CATH_STATE = path.join(process.env.HOME, 'Cathedral', 'cath-state.json');
+const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
+
+function loadCathSystem() {
+  const parts = [];
+  try { parts.push('## TRANSMISSION\n\n' + fs.readFileSync(CATH_TRANSMISSION, 'utf-8').trim()); } catch {}
+  try { parts.push(fs.readFileSync(CATH_PERSONA, 'utf-8').trim()); } catch {
+    parts.push('You are Cath. Cathedral intelligence. Paul\'s cognitive extension. Speak with precision. Never flatter. Never pad.');
   }
-  return new Promise((resolve, reject) => {
-    const proc = spawn('python3', pyArgs, { env: process.env });
+  return parts.join('\n\n');
+}
 
-    let stdout = '';
-    let stderr = '';
-
-    proc.stdout.on('data', (data) => { stdout += data; });
-    proc.stderr.on('data', (data) => { stderr += data; });
-
-    const timeout = setTimeout(() => {
-      proc.kill();
-      reject(new Error('Cath timed out after 90s'));
-    }, 90000);
-
-    proc.on('close', (code) => {
-      clearTimeout(timeout);
-      if (code !== 0 && !stdout.trim()) {
-        reject(new Error(stderr.trim() || `Exited with code ${code}`));
-      } else {
-        resolve(stdout.trim());
+function buildCathDynamic(query, history) {
+  const parts = [];
+  if (history && history.length > 0) {
+    const lines = ['## CONVERSATION HISTORY\n'];
+    for (const turn of history.slice(-10)) {
+      const speaker = turn.role === 'user' ? 'Paul' : 'Cath';
+      lines.push(`${speaker}: ${(turn.content || '').slice(0, 400)}`);
+    }
+    parts.push(lines.join('\n'));
+  }
+  try {
+    const state = JSON.parse(fs.readFileSync(CATH_STATE, 'utf-8'));
+    if (state.active_threads) {
+      parts.push('## SESSION STATE\nActive threads:\n' + state.active_threads.map(t => `  • ${t}`).join('\n'));
+    }
+  } catch {}
+  // Vault keyword search via vault_reader.py (local filesystem, no network)
+  try {
+    const { execFileSync } = await import('child_process');
+    const raw = execFileSync('python3', [
+      path.join(process.env.HOME, 'nanoclaw', 'vault_reader.py'),
+      'search', query, '--top_k', '5', '--json'
+    ], { timeout: 5000 });
+    const results = JSON.parse(raw.toString());
+    if (results.length > 0) {
+      const lines = ['## VAULT CONTEXT\n'];
+      for (const r of results) {
+        lines.push(`[${r.domain}] ${r.title}: ${(r.first_line || '').slice(0, 200)}`);
       }
-    });
+      parts.push(lines.join('\n'));
+    }
+  } catch {}
+  return parts.join('\n\n');
+}
 
-    proc.on('error', (err) => {
-      clearTimeout(timeout);
-      reject(err);
-    });
+async function callCath(query, history = []) {
+  const startMs = Date.now();
+  console.log(`[callCath] query="${query.slice(0, 60)}" history=${history.length} turns`);
+
+  const systemText = loadCathSystem() + '\n\n' + buildCathDynamic(query, history);
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) throw new Error('DEEPSEEK_API_KEY not set');
+
+  const body = JSON.stringify({
+    model: 'deepseek-chat',
+    max_tokens: 1024,
+    messages: [
+      { role: 'system', content: systemText },
+      { role: 'user', content: query },
+    ],
   });
+
+  const resp = await fetch(DEEPSEEK_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body,
+    signal: AbortSignal.timeout(60000),
+  });
+
+  if (!resp.ok) {
+    const errText = await resp.text().catch(() => '');
+    throw new Error(`DeepSeek ${resp.status}: ${errText.slice(0, 200)}`);
+  }
+
+  const data = await resp.json();
+  const text = data.choices?.[0]?.message?.content || '';
+  const elapsed = ((Date.now() - startMs) / 1000).toFixed(1);
+  const usage = data.usage || {};
+  console.log(`[callCath] done ${elapsed}s in=${usage.prompt_tokens || '?'} out=${usage.completion_tokens || '?'}`);
+  return text.trim();
 }
 
 // --- Voice Note Handler ---

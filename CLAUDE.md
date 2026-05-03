@@ -817,3 +817,28 @@ He will decide when he's done.
 - Telegram: /seed command generates and sends to chat
 - TRIGGER: PM2 cron orchestrator-seed (id 19) at 06:00 HKT daily (0 22 * * * UTC)
 - Purpose: paste into Head Orchestrator chat as first message to close session context gap
+
+## Basic Reflex Boxing Engine (built 2026-05-03)
+- combination-validator.js — weight-state relay, defense axis, footwork rhythm. ESM.
+- rhythm-engine.js — 10 rudiment→combination mappings, click track generator. ESM.
+- boxing-commands.js — /combo, /defense, /counter, /rudiment, /punches wired into telegram-bot.js
+- Canonical curriculum: ~/cathedral-vault/10_Agents/kit/decisions/canonical-curriculum-2026-05-03.md
+- Visual hub: ~/basic-reflex/visuals/index.html (4 interactive HTML tools)
+- Roadmap: ~/basic-reflex/roadmap/index.html
+
+## Kit GM Agent (operational since 2026-04-28)
+- Vault: ~/cathedral-vault/10_Agents/kit/
+- Workspace: ~/br-gm-agent/ (6 Python scripts, CLAUDE.md)
+- Morning briefing with vault discovery feed (Mondays)
+
+## Constellation (built 2026-04-28)
+- localhost:8889 — 22 projects, live data
+- Supersedes cathedral-pressure-gauge HTML
+
+## Standing Instruction — ESM/CJS Module Standard
+All new files in ~/nanoclaw/ use ESM (import/export syntax).
+.js extension = ESM. Always.
+.cjs extension = legacy CommonJS only when required for compatibility.
+Never mix module systems in the same file.
+This rule exists because ESM crashes caused the-muse and 
+the-timekeeper to go offline. Don't repeat it.
