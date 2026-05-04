@@ -19,6 +19,7 @@ import { registerBoxingCommands } from './boxing-commands.js';
 import { scanForPromotions, generateReport, executePromotions } from './vault-promoter.js';
 import { getScheduleReport, formatScheduleReport } from './gcal-reader.js';
 import { startComboWatcher } from './combo-watcher.js';
+import { runTarget, runAll, getDashboardData, formatTelegramSummary } from './scraper/scraper-engine.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -1968,6 +1969,42 @@ bot.onText(/^\/health(?:@\w+)?$/i, async (msg) => {
     }
     await safeSend(chatId, response);
   } catch (err) { await safeSend(chatId, `Health error: ${err.message}`); }
+});
+
+// ── /intel — Intelligence Hub scraper commands ─────────────────────────────
+// /intel           → dashboard summary
+// /intel run all   → run all scrapers
+// /intel run <name> → run one scraper
+bot.onText(/^\/intel(?:@\w+)?(?:\s+(.*))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = (match[1] || '').trim();
+
+  try {
+    if (arg === 'run all') {
+      await safeSend(chatId, 'Running all intelligence scrapers...');
+      const results = await runAll();
+      await safeSend(chatId, formatTelegramSummary(results));
+    } else if (arg.startsWith('run ')) {
+      const target = arg.slice(4).trim();
+      await safeSend(chatId, `Running ${target}...`);
+      const result = await runTarget(target);
+      if (result.success) {
+        await safeSend(chatId, `${target}: OK (${(result.duration / 1000).toFixed(1)}s)\n${result.output.split('\n').pop()}`);
+      } else {
+        await safeSend(chatId, `${target}: FAILED\n${result.error?.slice(0, 500)}`);
+      }
+    } else {
+      const data = getDashboardData();
+      let response = 'Intelligence Hub\n\n';
+      for (const [name, info] of Object.entries(data.targets)) {
+        const status = info.hasData ? 'OK' : '--';
+        const age = info.lastModified ? `${Math.round((Date.now() - new Date(info.lastModified).getTime()) / 3600000)}h ago` : 'never';
+        response += `${status === 'OK' ? '✅' : '⬜'} ${name}: ${info.summary || 'no data'} (${age})\n`;
+      }
+      response += '\nRun: /intel run all\nHub: localhost:8080/scraper/hub';
+      await safeSend(chatId, response);
+    }
+  } catch (err) { await safeSend(chatId, `Intel error: ${err.message}`); }
 });
 
 // ── Start combo file watcher in background ──────────────────────────────────

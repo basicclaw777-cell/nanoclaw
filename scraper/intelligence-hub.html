@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligence Hub — Basic Reflex</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --border: #252525;
+    --text: #e0e0e0;
+    --muted: #777;
+    --accent: #8B2020;
+    --green: #22c55e;
+    --amber: #EF9F27;
+    --red: #ef4444;
+    --blue: #378ADD;
+    --purple: #534AB7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 16px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .status-bar {
+    display: flex;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .status-bar .live { color: var(--green); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--accent); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon { font-size: 16px; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .badge.live { background: var(--green); color: #000; }
+  .badge.stale { background: var(--amber); color: #000; }
+  .badge.none { background: var(--border); color: var(--muted); }
+  .badge.error { background: var(--red); color: #fff; }
+
+  .card-stat {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 8px 0;
+  }
+
+  .card-detail {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .card-list {
+    margin-top: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .card-list-item {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  .card-list-item:last-child { border-bottom: none; }
+  .card-list-item a { color: var(--blue); text-decoration: none; }
+  .card-list-item a:hover { text-decoration: underline; }
+
+  .bar-chart {
+    margin-top: 8px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 3px 0;
+    font-size: 11px;
+  }
+
+  .bar-label { width: 100px; text-align: right; color: var(--muted); }
+
+  .bar {
+    height: 14px;
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+
+  .bar.green { background: var(--green); }
+  .bar.amber { background: var(--amber); }
+  .bar.red { background: var(--red); }
+  .bar.blue { background: var(--blue); }
+  .bar.purple { background: var(--purple); }
+
+  .myth-item {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .myth-claim {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .myth-evidence {
+    font-size: 11px;
+    color: var(--green);
+    margin-top: 2px;
+  }
+
+  .run-btn {
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .run-btn:hover { opacity: 0.8; }
+  .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .section-title {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+    grid-column: 1 / -1;
+  }
+
+  .loading { color: var(--muted); text-align: center; padding: 40px; }
+
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>INTELLIGENCE HUB</h1>
+  <div class="status-bar">
+    <span id="lastUpdate">Loading...</span>
+    <span class="live" id="statusDot">●</span>
+  </div>
+</header>
+
+<div class="grid" id="dashboard">
+  <div class="loading">Loading intelligence data...</div>
+</div>
+
+<script>
+const DATA_URL = 'http://localhost:8080/scraper/dashboard';
+const OUTPUTS_BASE = '/Users/basicclaw777/nanoclaw/scraper/outputs/';
+
+const CARD_DEFS = {
+  hk_sentiment: { icon: '🎯', title: 'HK Sentiment', color: 'blue', section: 'market' },
+  competitor_gyms: { icon: '🥊', title: 'Competitor Watch', color: 'red', section: 'market' },
+  reviews: { icon: '⭐', title: 'BR Reviews', color: 'amber', section: 'market' },
+  corporate_leads: { icon: '🏢', title: 'Corporate Leads', color: 'green', section: 'revenue' },
+  grants: { icon: '💰', title: 'Grant Watch', color: 'amber', section: 'revenue' },
+  pubmed_science: { icon: '🔬', title: 'Science Papers', color: 'purple', section: 'research' },
+  myth_watch: { icon: '🔍', title: 'Myth Buster', color: 'red', section: 'research' },
+  cross_sport: { icon: '🌐', title: 'Cross-Sport', color: 'purple', section: 'research' },
+  fight_data: { icon: '🏟️', title: 'Fight Data', color: 'blue', section: 'content' },
+  content_gaps: { icon: '📊', title: 'Content Gaps', color: 'green', section: 'content' },
+};
+
+const SECTIONS = {
+  market: 'Market Intelligence',
+  revenue: 'Revenue Streams',
+  research: 'Research Engine',
+  content: 'Content Pipeline',
+};
+
+async function loadData() {
+  // Try bridge endpoint first, fall back to local files
+  let dashboardData = null;
+
+  try {
+    const res = await fetch(DATA_URL);
+    if (res.ok) dashboardData = await res.json();
+  } catch(e) {}
+
+  // Load output files directly if bridge unavailable
+  const outputs = {};
+  const files = {
+    hk_sentiment: 'sentiment-latest.json',
+    competitor_gyms: 'competitors-latest.json',
+    pubmed_science: 'science-latest.json',
+    myth_watch: 'myths-latest.json',
+    fight_data: 'fight-content-latest.json',
+    corporate_leads: 'leads-grants-latest.json',
+    reviews: 'reviews-sport-latest.json',
+    cross_sport: 'reviews-sport-latest.json',
+  };
+
+  for (const [key, file] of Object.entries(files)) {
+    try {
+      const res = await fetch(`http://localhost:8080/scraper/output/${file}`);
+      if (res.ok) outputs[key] = await res.json();
+    } catch(e) {}
+  }
+
+  return { dashboard: dashboardData, outputs };
+}
+
+function badge(data) {
+  if (!data || !data.hasData) return '<span class="badge none">NO DATA</span>';
+  const lastRun = data.lastRun || data.lastModified;
+  if (!lastRun) return '<span class="badge none">NO DATA</span>';
+
+  const age = (Date.now() - new Date(lastRun).getTime()) / (1000 * 60 * 60);
+  if (age < 24) return '<span class="badge live">FRESH</span>';
+  if (age < 168) return '<span class="badge stale">THIS WEEK</span>';
+  return '<span class="badge stale">STALE</span>';
+}
+
+function renderCard(name, def, dashData, output) {
+  const d = dashData?.targets?.[name] || {};
+  const stat = d.summary || summarizeOutput(name, output);
+
+  let content = '';
+
+  // Target-specific detail rendering
+  if (name === 'hk_sentiment' && output?.results) {
+    const fears = output.results.filter(r => {
+      const t = (r.title + ' ' + (r.text||'')).toLowerCase();
+      return ['afraid','scared','intimidat','too unfit'].some(f => t.includes(f));
+    });
+    content = `<div class="card-detail">Fears: ${fears.length} | Total: ${output.results.length}</div>`;
+    if (output.results.length > 0) {
+      content += '<div class="card-list">';
+      for (const r of output.results.slice(0, 5)) {
+        content += `<div class="card-list-item"><a href="${r.url}" target="_blank">${r.title?.slice(0,60)}</a><br><span style="color:var(--muted)">${r.source} · ${r.score||0}↑</span></div>`;
+      }
+      content += '</div>';
+    }
+  }
+
+  else if (name === 'competitor_gyms' && output?.results) {
+    content = '<div class="card-list">';
+    for (const g of output.results) {
+      const rating = g.google_rating ? `${g.google_rating}★` : '—';
+      const classes = (g.classes || []).slice(0, 3).join(', ') || '—';
+      content += `<div class="card-list-item"><strong>${g.name}</strong> ${rating}<br><span style="color:var(--muted)">${classes}</span></div>`;
+    }
+    content += '</div>';
+  }
+
+  else if (name === 'myth_watch' && output?.claims) {
+    content = '<div class="card-list">';
+    for (const c of output.claims.slice(0, 5)) {
+      content += `<div class="myth-item"><div class="myth-claim">"${(c.extracted_claim || c.title || '').slice(0, 80)}"</div>`;
+      content += `<span style="color:var(--muted)">${c.source} · ${c.views ? c.views.toLocaleString() + ' views' : c.score + '↑'}</span></div>`;
+    }
+    content += '</div>';
+  }
+
+  else if (name === 'pubmed_science' && output) {
+    const papers = output.pubmed || [];
+    content = `<div class="card-detail">Papers: ${papers.length} | Citations tracked: ${(output.citations||[]).length}</div>`;
+    content += '<div class="card-list">';
+    for (const p of papers.slice(0, 4)) {
+      content += `<div class="card-list-item"><a href="${p.url}" target="_blank">${p.title?.slice(0,70)}</a><br><span style="color:var(--muted)">${p.journal} · ${p.pub_date}</span></div>`;
+    }
+    content += '</div>';
+  }
+
+  else if (name === 'fight_data' && output) {
+    const gaps = output.gaps || [];
+    if (gaps.length > 0) {
+      content = `<div class="card-detail" style="color:var(--green)">Curriculum gaps found: ${gaps.length} blocks</div>`;
+      content += '<div class="bar-chart">';
+      const coverage = output.coverage || {};
+      for (const [block, count] of Object.entries(coverage)) {
+        const pct = Math.min(count * 5, 100);
+        const color = count <= 2 ? 'green' : count <= 5 ? 'amber' : 'red';
+        content += `<div class="bar-row"><span class="bar-label">${block}</span><div class="bar ${color}" style="width:${pct}%"></div><span>${count}</span></div>`;
+      }
+      content += '</div>';
+    }
+  }
+
+  else if (name === 'corporate_leads' && output?.leads) {
+    const unique = [...new Set(output.leads.map(l => l.company))];
+    content = `<div class="card-detail">${unique.length} unique companies hiring wellness/HR roles</div>`;
+    content += '<div class="card-list">';
+    for (const l of output.leads.slice(0, 5)) {
+      content += `<div class="card-list-item"><strong>${l.company}</strong><br><span style="color:var(--muted)">${l.title?.slice(0,50)} · ${l.keyword}</span></div>`;
+    }
+    content += '</div>';
+  }
+
+  else if (name === 'reviews' && output?.reviews) {
+    const r = output.reviews;
+    if (r.rating) {
+      content = `<div class="card-stat">${r.rating}<span style="font-size:14px;color:var(--muted)">/5</span></div>`;
+      content += `<div class="card-detail">${r.review_count || '?'} Google reviews</div>`;
+      if (r.keywords?.length) {
+        content += '<div class="bar-chart">';
+        for (const kw of r.keywords.slice(0, 6)) {
+          const pct = Math.min(kw.count * 20, 100);
+          content += `<div class="bar-row"><span class="bar-label">${kw.word}</span><div class="bar blue" style="width:${pct}%"></div><span>${kw.count}</span></div>`;
+        }
+        content += '</div>';
+      }
+    }
+  }
+
+  else if (name === 'cross_sport' && output?.cross_sport) {
+    content = `<div class="card-detail">${output.cross_sport.length} papers across combat sports</div>`;
+    content += '<div class="card-list">';
+    for (const p of output.cross_sport.slice(0, 4)) {
+      content += `<div class="card-list-item"><a href="${p.url}" target="_blank">${p.title?.slice(0,60)}</a><br><span style="color:var(--muted)">${p.search_term}</span></div>`;
+    }
+    content += '</div>';
+  }
+
+  else if (name === 'grants' && output?.grants) {
+    content = '<div class="card-list">';
+    for (const g of output.grants) {
+      const status = g.error ? '❌' : '✅';
+      const amounts = (g.amounts_found || []).join(', ') || '—';
+      content += `<div class="card-list-item">${status} <strong>${g.portal}</strong><br><span style="color:var(--muted)">${amounts}</span></div>`;
+    }
+    content += '</div>';
+    content += '<div class="card-detail" style="color:var(--red);margin-top:8px">EMF deadline: June 30 2026</div>';
+  }
+
+  if (!content) {
+    content = `<div class="card-detail">${stat}</div>`;
+  }
+
+  return `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">${def.icon}</span> ${def.title}</div>
+        ${badge(d)}
+      </div>
+      ${content}
+      <div class="card-detail" style="margin-top:8px">Schedule: ${d.cron || '—'}</div>
+    </div>
+  `;
+}
+
+function summarizeOutput(name, output) {
+  if (!output) return 'No data';
+  if (name === 'hk_sentiment') return `${output.results?.length || 0} posts`;
+  if (name === 'competitor_gyms') return `${output.results?.length || 0} gyms`;
+  if (name === 'myth_watch') return `${output.claims?.length || 0} claims`;
+  return 'Data available';
+}
+
+async function render() {
+  const { dashboard, outputs } = await loadData();
+  const grid = document.getElementById('dashboard');
+
+  let html = '';
+  for (const [sectionKey, sectionTitle] of Object.entries(SECTIONS)) {
+    html += `<div class="section-title">${sectionTitle}</div>`;
+    for (const [name, def] of Object.entries(CARD_DEFS)) {
+      if (def.section !== sectionKey) continue;
+      html += renderCard(name, def, dashboard, outputs[name]);
+    }
+  }
+
+  grid.innerHTML = html;
+  document.getElementById('lastUpdate').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+}
+
+render();
+setInterval(render, 60000);
+</script>
+</body>
+</html>

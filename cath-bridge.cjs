@@ -17,10 +17,15 @@ const VAULT    = path.join(HOME, 'cathedral-vault');
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, x-api-key');
-  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  const origin = req.headers.origin;
+  if (origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 });
 
@@ -234,6 +239,53 @@ app.get('/status', async (req, res) => {
     }));
     res.json({ processes: procs });
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── GET /health/telegram ──────────────────────────────────────────────────────
+
+app.get('/health/telegram', (req, res) => {
+  try {
+    const statePath = path.join(HOME, 'Cathedral', 'cath-state.json');
+    const state = JSON.parse(require('fs').readFileSync(statePath, 'utf8'));
+    const health = state.telegram_health || {};
+    const lastOk = health.lastUpdateAt || health.lastPollOkAt;
+    const ageMs = lastOk ? Date.now() - new Date(lastOk).getTime() : Infinity;
+    const status = ageMs < 5 * 60 * 1000 ? 'green' : 'red';
+    res.json({
+      status,
+      lastUpdateAt: health.lastUpdateAt || null,
+      lastPollOkAt: health.lastPollOkAt || null,
+      pollErrorCount: health.pollErrorCount || 0,
+      totalErrors: health.totalErrors || 0,
+      ageSeconds: lastOk ? Math.round(ageMs / 1000) : null,
+      mode: health.mode || (process.env.TELEGRAM_WEBHOOK_URL ? 'webhook' : 'polling'),
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── POST /telegram/webhook — receives Telegram updates from cloudflared ──────
+// Forwards to telegram-bot.js internal webhook listener on port 8443
+
+app.post('/telegram/webhook', async (req, res) => {
+  try {
+    const update = req.body;
+    if (!update || !update.update_id) {
+      return res.status(400).json({ error: 'invalid update' });
+    }
+    // Forward to bot's internal webhook listener
+    const resp = await fetch('http://127.0.0.1:8443/webhook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(update),
+    });
+    const result = await resp.json();
+    res.json(result);
+  } catch (err) {
+    console.error('[webhook] Error forwarding update:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
@@ -945,6 +997,312 @@ app.get('/villa', (req, res) => {
   } catch (err) {
     res.status(500).send(`villa not found: ${err.message}`);
   }
+});
+
+// ── GET /constellation ────────────────────────────────────────────────────────
+// Returns enriched project registry for the Morning View constellation.
+// Reads registry.json, merges PM2 state, vault card frontmatter, activity scores.
+
+const os = require('os');
+
+app.get('/constellation', async (req, res) => {
+  try {
+    const registryPath = path.join(HOME, 'Cathedral', 'projects', 'registry.json');
+    const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+
+    // Get PM2 data
+    let pm2Data = [];
+    try {
+      const { execSync } = require('child_process');
+      const pm2Result = execSync('pm2 jlist', { encoding: 'utf8', timeout: 5000 });
+      pm2Data = JSON.parse(pm2Result);
+    } catch (e) { /* pm2 not available */ }
+
+    // Get cath-state.json
+    let cathState = {};
+    try {
+      const statePath = path.join(HOME, 'Cathedral', 'cath-state.json');
+      cathState = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+    } catch (e) {}
+
+    const vaultBase = VAULT;
+
+    // Read project memory.jsonl — last 24h events
+    const MEMORY_DIR = path.join(HOME, 'Cathedral', 'projects', 'memory');
+    function readProjectMemory(projectId) {
+      try {
+        const logPath = path.join(MEMORY_DIR, `${projectId}.jsonl`);
+        if (!fs.existsSync(logPath)) return [];
+        const lines = fs.readFileSync(logPath, 'utf8').trim().split('\n').filter(Boolean);
+        const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+        const events = [];
+        // Read from end for efficiency — stop when we pass cutoff
+        for (let i = lines.length - 1; i >= 0; i--) {
+          try {
+            const entry = JSON.parse(lines[i]);
+            if (entry.ts < cutoff) break;
+            events.push(entry);
+          } catch (e) {}
+        }
+        return events;
+      } catch (e) { return []; }
+    }
+
+    // Read project card frontmatter
+    function readProjectCard(cardName) {
+      if (!cardName) return null;
+      try {
+        const cardPath = path.join(vaultBase, '08_Project_Orchestrator', 'projects', cardName);
+        const content = fs.readFileSync(cardPath, 'utf8');
+        const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
+        if (!fmMatch) return { raw: content.slice(0, 200) };
+        const fm = {};
+        fmMatch[1].split('\n').forEach(line => {
+          const m = line.match(/^(\w[\w-]*)\s*:\s*"?(.+?)"?\s*$/);
+          if (m) fm[m[1]] = m[2];
+        });
+        const body = content.slice(fmMatch[0].length).trim().split('\n').filter(l => l.trim() && !l.startsWith('#'))[0] || '';
+        return { ...fm, body };
+      } catch (e) { return null; }
+    }
+
+    // Compute activity score: PM2 health + vault activity + memory events + status
+    function computeActivity(project) {
+      let score = 0;
+
+      // PM2 process health contributes up to 0.3
+      if (project.pm2_processes && project.pm2_processes.length > 0) {
+        const procs = project.pm2_processes.map(name => pm2Data.find(p => p.name === name)).filter(Boolean);
+        if (procs.length > 0) {
+          const onlineCount = procs.filter(p => p.pm2_env.status === 'online').length;
+          score += (onlineCount / procs.length) * 0.3;
+        }
+      }
+
+      // Vault domain activity contributes up to 0.25
+      if (project.vault_domain) {
+        try {
+          const now = Date.now();
+          const sevenDays = 7 * 24 * 60 * 60 * 1000;
+          const stagingPath = path.join(vaultBase, '00_Staging', project.vault_domain);
+          if (fs.existsSync(stagingPath)) {
+            const files = fs.readdirSync(stagingPath).filter(f => f.endsWith('.md'));
+            let recentCount = 0;
+            for (const f of files.slice(-20)) {
+              try {
+                const stat = fs.statSync(path.join(stagingPath, f));
+                if (now - stat.mtimeMs < sevenDays) recentCount++;
+              } catch (e) {}
+            }
+            score += Math.min(0.25, (recentCount / 10) * 0.25);
+          }
+        } catch (e) {}
+      }
+
+      // Memory events (last 24h) contribute up to 0.3
+      const memEvents = readProjectMemory(project.id);
+      if (memEvents.length > 0) {
+        // 1 event = 0.1, 3+ events = 0.2, 6+ events = 0.3
+        score += Math.min(0.3, memEvents.length * 0.05);
+      }
+
+      // Project card status contributes up to 0.15
+      if (project.status === 'active') score += 0.15;
+      else if (project.status === 'concept') score += 0.08;
+
+      return Math.max(0.05, Math.min(1.0, score));
+    }
+
+    // Build live status string
+    function buildLiveStatus(project) {
+      const parts = [];
+
+      if (project.pm2_processes && project.pm2_processes.length > 0) {
+        const procs = project.pm2_processes.map(name => pm2Data.find(p => p.name === name)).filter(Boolean);
+        if (procs.length > 0) {
+          const online = procs.filter(p => p.pm2_env.status === 'online').length;
+          const errored = procs.filter(p => p.pm2_env.status === 'errored').length;
+          const stopped = procs.filter(p => p.pm2_env.status === 'stopped').length;
+          const statusParts = [];
+          if (online > 0) statusParts.push(`${online} online`);
+          if (errored > 0) statusParts.push(`${errored} errored`);
+          if (stopped > 0) statusParts.push(`${stopped} stopped`);
+          parts.push(statusParts.join(' \u00B7 '));
+
+          const crashLooping = procs.filter(p => p.pm2_env.restart_time > 100);
+          if (crashLooping.length > 0) {
+            parts.push(crashLooping.map(p => `${p.name} crash-looping`).join(', '));
+          }
+        }
+      }
+
+      const card = readProjectCard(project.vault_card);
+      if (card) {
+        if (card['project-status']) parts.push(card['project-status']);
+        else if (card.status) parts.push(card.status);
+        if (card.phase) parts.push(card.phase);
+      }
+
+      if (project.status === 'uncharted') parts.push('uncharted');
+      if (project.status === 'concept') parts.push('concept stage');
+
+      return parts.join(' \u00B7 ') || project.status;
+    }
+
+    // Build briefing for each project
+    function buildBriefing(project) {
+      const card = readProjectCard(project.vault_card);
+      const briefing = { lede: '', body: '', stats: [], action: '' };
+
+      if (project.center) briefing.lede = 'You are here.';
+      else if (project.status === 'uncharted') briefing.lede = 'Not yet mapped.';
+      else if (project.status === 'concept') briefing.lede = 'Concept stage.';
+      else briefing.lede = card?.title || project.name;
+
+      if (card?.body) briefing.body = card.body;
+      else if (project.status === 'uncharted') briefing.body = 'This project exists but has no vault card yet.';
+      else briefing.body = '';
+
+      if (project.pm2_processes && project.pm2_processes.length > 0) {
+        const procs = project.pm2_processes.map(name => pm2Data.find(p => p.name === name)).filter(Boolean);
+        const online = procs.filter(p => p.pm2_env.status === 'online').length;
+        briefing.stats.push(['PROCESSES', `${online}/${procs.length}`]);
+
+        const firstOnline = procs.find(p => p.pm2_env.status === 'online');
+        if (firstOnline) {
+          const uptimeMs = Date.now() - firstOnline.pm2_env.pm_uptime;
+          const days = Math.floor(uptimeMs / (24 * 60 * 60 * 1000));
+          const hours = Math.floor((uptimeMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+          briefing.stats.push(['UPTIME', `${days}d ${hours}h`]);
+        }
+
+        const totalRestarts = procs.reduce((sum, p) => sum + (p.pm2_env.restart_time || 0), 0);
+        if (totalRestarts > 0) briefing.stats.push(['RESTARTS', String(totalRestarts)]);
+      }
+
+      if (card?.['project-status']) briefing.stats.push(['STATUS', card['project-status']]);
+      if (card?.priority) briefing.stats.push(['PRIORITY', card.priority]);
+
+      return briefing;
+    }
+
+    // System-wide stats
+    const pm2Online = pm2Data.filter(p => p.pm2_env.status === 'online').length;
+    const pm2Errored = pm2Data.filter(p => p.pm2_env.status === 'errored').length;
+    const pm2Total = pm2Data.length;
+
+    // Enrich each project
+    const enriched = registry.projects.map(project => {
+      const memEvents = readProjectMemory(project.id);
+      const briefing = buildBriefing(project);
+
+      // Add recent memory events to briefing stats
+      if (memEvents.length > 0) {
+        briefing.stats.push(['EVENTS/24H', String(memEvents.length)]);
+        // Use most recent event as live body if no card body
+        if (!briefing.body && memEvents[0]) {
+          briefing.body = `Last: ${memEvents[0].event}` + (memEvents[0].bridge ? ` — ${memEvents[0].bridge.slice(0, 100)}` : '');
+        }
+      }
+
+      return {
+        id: project.id,
+        code: project.code,
+        name: project.name,
+        kind: project.kind,
+        status: project.status,
+        center: project.center || false,
+        x: project.x,
+        y: project.y,
+        r: project.r,
+        connections: project.connections || [],
+        active: computeActivity(project),
+        live: buildLiveStatus(project),
+        briefing,
+        recentEvents: memEvents.slice(0, 5).map(e => ({ ts: e.ts, event: e.event })),
+      };
+    });
+
+    res.json({
+      ok: true,
+      timestamp: Date.now(),
+      projects: enriched,
+      system: {
+        pm2_online: pm2Online,
+        pm2_errored: pm2Errored,
+        pm2_total: pm2Total,
+        vault_total: cathState?.sight?.total_nuggets || 0,
+        ledger_density: cathState?.ledger?.quality_density || 0,
+        drift_score: cathState?.proprioception?.drift_score || 0,
+        waste_score: cathState?.smell?.waste_score || 0,
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── Intelligence Hub: Scraper endpoints ──────────────────────────────────────
+
+const SCRAPER_OUTPUTS = path.join(NANOCLAW, 'scraper', 'outputs');
+
+app.get('/scraper/dashboard', (req, res) => {
+  try {
+    const configPath = path.join(NANOCLAW, 'scraper', 'config.json');
+    const config = JSON.parse(require('fs').readFileSync(configPath, 'utf8'));
+    const data = { generated: new Date().toISOString(), targets: {} };
+
+    const outputMap = {
+      hk_sentiment: 'sentiment-latest.json',
+      competitor_gyms: 'competitors-latest.json',
+      pubmed_science: 'science-latest.json',
+      myth_watch: 'myths-latest.json',
+      fight_data: 'fight-content-latest.json',
+      content_gaps: 'fight-content-latest.json',
+      corporate_leads: 'leads-grants-latest.json',
+      grants: 'leads-grants-latest.json',
+      reviews: 'reviews-sport-latest.json',
+      cross_sport: 'reviews-sport-latest.json',
+    };
+
+    for (const [name, target] of Object.entries(config.targets)) {
+      const file = outputMap[name];
+      const filepath = file ? path.join(SCRAPER_OUTPUTS, file) : null;
+      let output = null;
+      let stat = null;
+      if (filepath && require('fs').existsSync(filepath)) {
+        try {
+          output = JSON.parse(require('fs').readFileSync(filepath, 'utf8'));
+          stat = require('fs').statSync(filepath);
+        } catch {}
+      }
+      data.targets[name] = {
+        enabled: target.enabled,
+        cron: target.cron_hkt,
+        lastRun: output?.date || null,
+        lastModified: stat?.mtime?.toISOString() || null,
+        hasData: !!output,
+      };
+    }
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/scraper/output/:filename', (req, res) => {
+  const filepath = path.join(SCRAPER_OUTPUTS, req.params.filename);
+  if (!require('fs').existsSync(filepath)) return res.status(404).json({ error: 'Not found' });
+  try {
+    res.json(JSON.parse(require('fs').readFileSync(filepath, 'utf8')));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/scraper/hub', (req, res) => {
+  const hubPath = path.join(NANOCLAW, 'scraper', 'intelligence-hub.html');
+  res.sendFile(hubPath);
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

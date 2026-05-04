@@ -889,6 +889,19 @@ He will decide when he's done.
 - CSVs at ~/Desktop/punchpass/various/ (exported 2026-03-30, 35 days stale)
 - /health Telegram command reads member-data.json for gym dashboard
 
+## Intelligence Hub — Built 2026-05-04
+- Directory: ~/nanoclaw/scraper/ (config.json, scraper-engine.js, 7 Python targets, intelligence-hub.html)
+- Python: Scrapling + urllib in cathedral-venv. Node.js: orchestrator + Telegram wiring.
+- Targets: hk_sentiment, competitor_gyms, pubmed_science, myth_watch, fight_data, corporate_leads, reviews + cross_sport
+- Dashboard: localhost:8080/scraper/hub (10 cards, 4 sections, auto-refresh)
+- Bridge endpoints: /scraper/dashboard, /scraper/output/:file, /scraper/hub
+- Telegram: /intel (status), /intel run all, /intel run <target>
+- Vault deposits: ~/cathedral-vault/00_Staging/scraper-intel/{domain}/
+- First run: 107 PubMed papers deposited
+- Cron schedules defined in config.json but NOT yet wired to PM2 — manual /intel run for now
+- Scrapling note: use urllib for clean JSON APIs (PubMed, Reddit). Scrapling Fetcher for anti-bot sites only.
+- Basic Reflex home page: Intelligence Hub link added
+
 ## Kit GM Agent (operational since 2026-04-28)
 - Vault: ~/cathedral-vault/10_Agents/kit/
 - Workspace: ~/br-gm-agent/ (6 Python scripts, CLAUDE.md)

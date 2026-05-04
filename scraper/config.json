@@ -1,0 +1,112 @@
+{
+  "vault_staging": "~/cathedral-vault/00_Staging/scraper-intel",
+  "telegram_notify": true,
+  "targets": {
+    "hk_sentiment": {
+      "script": "targets/hk_sentiment.py",
+      "cron": "0 21 * * *",
+      "cron_hkt": "5am daily",
+      "enabled": true,
+      "keywords": ["boxing", "gym", "fitness", "martial arts", "fight", "workout", "muay thai", "kickboxing", "self defence", "hong kong gym"],
+      "sources": {
+        "reddit": ["HongKong", "hongkong", "HongKongExpats"],
+        "forums": ["geoexpat.com", "asiaexpat.com"]
+      }
+    },
+    "competitor_gyms": {
+      "script": "targets/competitor_gyms.py",
+      "cron": "0 20 * * 0",
+      "cron_hkt": "4am Sunday",
+      "enabled": true,
+      "gyms": [
+        {"name": "Impakt MMA", "url": "https://www.impaktmma.com"},
+        {"name": "Warrior Muay Thai", "url": "https://www.warriormuaythai.com"},
+        {"name": "Fight Factory HK", "url": "https://www.fightfactoryhk.com"},
+        {"name": "Krudar Muay Thai", "url": "https://www.krudar.com"},
+        {"name": "BoxFit HK", "url": "https://www.boxfithk.com"},
+        {"name": "UFC Gym HK", "url": "https://www.ufcgym.com.hk"},
+        {"name": "Trinity MMA", "url": "https://www.trinitymma.com.hk"}
+      ]
+    },
+    "pubmed_science": {
+      "script": "targets/pubmed_science.py",
+      "cron": "0 20 * * 1",
+      "cron_hkt": "4am Monday",
+      "enabled": true,
+      "search_terms": [
+        "boxing biomechanics",
+        "punch force generation",
+        "boxing footwork",
+        "combat sport conditioning",
+        "heavy bag training injury",
+        "boxing defensive movement",
+        "weight transfer striking"
+      ],
+      "track_citations_for": [
+        "boxing punch biomechanics",
+        "combat sport weight transfer",
+        "defensive movement combat sport"
+      ]
+    },
+    "myth_watch": {
+      "script": "targets/myth_watch.py",
+      "cron": "0 21 * * 3",
+      "cron_hkt": "5am Wednesday",
+      "enabled": true,
+      "hashtags": ["boxingtips", "boxingtechnique", "boxingtraining", "learnboxing", "boxingcoach", "boxingdrills"],
+      "platforms": ["youtube", "reddit"]
+    },
+    "fight_data": {
+      "script": "targets/fight_data.py",
+      "cron": "0 20 * * 5",
+      "cron_hkt": "4am Friday",
+      "enabled": true
+    },
+    "content_gaps": {
+      "script": "targets/content_gaps.py",
+      "cron": "0 20 1 * *",
+      "cron_hkt": "4am 1st of month",
+      "enabled": true,
+      "channels": [
+        "TonyJeffriesBoxing", "FranSisto", "PrecisionStriking",
+        "JTVanV", "ShaneBoxing", "CoachAnthony"
+      ]
+    },
+    "corporate_leads": {
+      "script": "targets/corporate_leads.py",
+      "cron": "0 20 * * 1",
+      "cron_hkt": "4am Monday",
+      "enabled": true,
+      "job_keywords": ["wellness coordinator", "team building", "employee wellness", "HR manager", "corporate fitness"],
+      "region": "Hong Kong"
+    },
+    "grants": {
+      "script": "targets/grants.py",
+      "cron": "0 20 * * 0",
+      "cron_hkt": "4am Sunday",
+      "enabled": true,
+      "portals": [
+        {"name": "InvestHK", "url": "https://www.investhk.gov.hk"},
+        {"name": "HKPC", "url": "https://www.hkpc.org"},
+        {"name": "BUD Fund", "url": "https://www.bud.hkpc.org"},
+        {"name": "TVP", "url": "https://www.itf.gov.hk/en/funding-programmes/nurturing-talent/tvp/"}
+      ]
+    },
+    "reviews": {
+      "script": "targets/reviews.py",
+      "cron": "0 21 * * *",
+      "cron_hkt": "5am daily",
+      "enabled": true,
+      "google_place_id": "BASIC_REFLEX_PLACE_ID",
+      "facebook_page": "basicreflexhk"
+    },
+    "cross_sport": {
+      "script": "targets/cross_sport.py",
+      "cron": "0 20 15 * *",
+      "cron_hkt": "4am 15th of month",
+      "enabled": true,
+      "sports": ["muay thai conditioning", "wrestling footwork", "judo grip strength", "fencing timing"],
+      "search_terms": ["combat sport periodization", "striking biomechanics cross-training"]
+    }
+  }
+}
