@@ -16,6 +16,9 @@ import { buildAtlas, getOrBuildAtlas } from './convergence-atlas.js';
 import { runOracle, getOracleOutputs, formatOracleResult } from './oracle.js';
 import { addToConversation, getConversationHistory, updateMemoryAfterConversation } from './memory-system.js';
 import { registerBoxingCommands } from './boxing-commands.js';
+import { scanForPromotions, generateReport, executePromotions } from './vault-promoter.js';
+import { getScheduleReport, formatScheduleReport } from './gcal-reader.js';
+import { startComboWatcher } from './combo-watcher.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -97,7 +100,48 @@ async function callCloud(systemPrompt, description) {
   }
 }
 
-const SOCIAL_CONTENT_PATH = path.join(process.env.HOME, 'cathedral-vault', '07_Social_Content');
+const VAULT_ROOT = path.join(process.env.HOME, 'cathedral-vault');
+const SOCIAL_CONTENT_PATH = path.join(VAULT_ROOT, '07_Social_Content');
+
+// ── Vault write helpers ─────────────────────────────────────────────────────
+function deduplicatePath(filePath) {
+  if (!fs.existsSync(filePath)) return filePath;
+  const dir = path.dirname(filePath);
+  const ext = path.extname(filePath);
+  const base = path.basename(filePath, ext);
+  let version = 2;
+  let candidate;
+  do {
+    candidate = path.join(dir, `${base}-v${version}${ext}`);
+    version++;
+  } while (fs.existsSync(candidate));
+  return candidate;
+}
+
+function writeToVault(chatId, vaultPath, content) {
+  try {
+    // Resolve path relative to vault root
+    let fullPath;
+    if (vaultPath.endsWith('.md')) {
+      fullPath = path.join(VAULT_ROOT, vaultPath);
+    } else {
+      // Treat as directory, generate filename
+      const today = new Date().toISOString().split('T')[0];
+      const slug = content.slice(0, 30).replace(/[^a-zA-Z0-9]+/g, '-').replace(/-+$/, '').toLowerCase();
+      fullPath = path.join(VAULT_ROOT, vaultPath, `${today}_${slug}.md`);
+    }
+    // Ensure parent dir exists
+    const dir = path.dirname(fullPath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    // Deduplicate
+    fullPath = deduplicatePath(fullPath);
+    fs.writeFileSync(fullPath, content);
+    const rel = path.relative(VAULT_ROOT, fullPath);
+    safeSend(chatId, `📥 Written to vault:\n\`${rel}\``);
+  } catch (err) {
+    safeSend(chatId, `⚠️ Vault write error: ${err.message}`);
+  }
+}
 
 // Ensure the directory exists
 if (!fs.existsSync(SOCIAL_CONTENT_PATH)) {
@@ -1870,6 +1914,69 @@ bot.onText(/^\/signal(?:@\w+)?\s+(.+)/s, async (msg, match) => {
   }
 });
 
+// ── /promote — Vault promotion ──────────────────────────────────────────────
+bot.onText(/^\/promote(?:@\w+)?(?:\s+(.*))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = (match[1] || '').trim();
+
+  try {
+    if (arg.startsWith('go')) {
+      const grade = arg.split(/\s+/)[1] || 'B';
+      const candidates = scanForPromotions({ minGrade: grade });
+      if (candidates.length === 0) { await safeSend(chatId, 'No nuggets eligible for promotion.'); return; }
+      const results = executePromotions(candidates);
+      let response = `Vault Promotion Complete\nPromoted: ${results.promoted.length} | Errors: ${results.errors.length}\n\n`;
+      for (const p of results.promoted.slice(0, 15)) response += `[${p.grade}] ${p.domain}/${p.file}\n`;
+      if (results.promoted.length > 15) response += `... and ${results.promoted.length - 15} more\n`;
+      for (const e of results.errors) response += `ERR: ${e.file} — ${e.reason}\n`;
+      await safeSend(chatId, response);
+    } else {
+      const candidates = scanForPromotions({ minGrade: 'B' });
+      await safeSend(chatId, generateReport(candidates).slice(0, 4000));
+    }
+  } catch (err) { await safeSend(chatId, `Promote error: ${err.message}`); }
+});
+
+// ── /schedule — Google Calendar schedule guard ──────────────────────────────
+bot.onText(/^\/schedule(?:@\w+)?(?:\s+(.*))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const offset = (match[1] || '').trim() === 'next' ? 1 : 0;
+    const report = await getScheduleReport(offset);
+    await safeSend(chatId, formatScheduleReport(report));
+  } catch (err) { await safeSend(chatId, `Schedule error: ${err.message}`); }
+});
+
+// ── /health — Combined PunchPass health dashboard ──────────────────────────
+bot.onText(/^\/health(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const memberDataPath = path.join(process.env.HOME, 'br-gm-agent', 'reports', 'member-data.json');
+    if (!fs.existsSync(memberDataPath)) {
+      await safeSend(chatId, 'No member data. Run: python3 ~/br-gm-agent/scripts/punchpass-export.py');
+      return;
+    }
+    const data = JSON.parse(fs.readFileSync(memberDataPath, 'utf8'));
+    const s = data.summary;
+    let response = `Gym Health Dashboard\n\nData: ${data.export_date} (${data.data_staleness_days}d stale)\nActive: ${data.total_active_members}\n\n`;
+    response += `Churn 14-29d: ${s.churn_risk_medium}\nChurn 30+d: ${s.churn_risk_high}\nSuspended: ${s.suspended}\nExpiring: ${s.expiring_soon}\n`;
+    if (data.data_staleness_days > 7) response += `\nData ${data.data_staleness_days}d stale — drop fresh CSVs in ~/Desktop/punchpass/`;
+    const highChurn = data.members.filter(m => m.churn_severity === 'high').slice(0, 5);
+    if (highChurn.length > 0) {
+      response += `\n\nTop churn risks:\n`;
+      for (const m of highChurn) response += `  ${m.name} — ${m.days_absent}d absent (${m.pass_type})\n`;
+    }
+    await safeSend(chatId, response);
+  } catch (err) { await safeSend(chatId, `Health error: ${err.message}`); }
+});
+
+// ── Start combo file watcher in background ──────────────────────────────────
+try {
+  startComboWatcher((report) => {
+    console.log(`[combo-watcher] ${report.source}: ${report.summary.passRate} pass rate`);
+  });
+} catch (e) { console.error('[combo-watcher] Failed to start:', e.message); }
+
 // ── State writer bridge ───────────────────────────────────────────────────────
 
 function recordExchange(paulMsg, cathReply) {
@@ -2050,6 +2157,51 @@ bot.on('voice', async (msg) => {
   }
 });
 
+// ── Document handler — .md files → vault ──────────���─────────────────────────
+bot.on('document', async (msg) => {
+  const chatId = msg.chat.id;
+  const doc = msg.document;
+  if (!doc || !doc.file_name) return;
+
+  // Only handle .md files
+  if (!doc.file_name.endsWith('.md')) return;
+
+  try {
+    const fileLink = await bot.getFileLink(doc.file_id);
+    const axios = (await import('axios')).default;
+    const response = await axios({ url: fileLink, responseType: 'text' });
+    const content = response.data;
+
+    // Determine destination: caption can specify path, default is 00_Staging/cathedral/
+    const caption = (msg.caption || '').trim();
+    let destDir, filename;
+
+    if (caption.startsWith('/vault ')) {
+      // /vault <path> in caption overrides destination
+      const vaultPath = caption.slice('/vault '.length).trim();
+      if (vaultPath.endsWith('.md')) {
+        destDir = path.dirname(path.join(VAULT_ROOT, vaultPath));
+        filename = path.basename(vaultPath);
+      } else {
+        destDir = path.join(VAULT_ROOT, vaultPath);
+        filename = doc.file_name;
+      }
+    } else {
+      destDir = path.join(VAULT_ROOT, '00_Staging', 'cathedral');
+      filename = doc.file_name;
+    }
+
+    if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+    const fullPath = deduplicatePath(path.join(destDir, filename));
+    fs.writeFileSync(fullPath, content);
+    const rel = path.relative(VAULT_ROOT, fullPath);
+    await safeSend(chatId, `📄 Document received and filed:\n\`${rel}\``);
+  } catch (err) {
+    console.error('Document handler error:', err);
+    await safeSend(chatId, `���️ Document error: ${err.message}`);
+  }
+});
+
 // Caption selection handler
 bot.on('message', async (msg) => {
   if (!msg.text) return;
@@ -2088,6 +2240,18 @@ bot.on('message', async (msg) => {
       }
     );
 
+    return;
+  }
+
+  // /densify — trigger vault densifier batch
+  if (msg.text === '/densify') {
+    safeSend(chatId, '🔗 Running Vault Densifier...');
+    try {
+      const { execSync } = require('child_process');
+      execSync(`python3 ${path.join(process.env.HOME, 'Cathedral', 'vault-densifier.py')}`, { timeout: 60000 });
+    } catch (err) {
+      safeSend(chatId, `⚠️ Densifier error: ${err.message}`);
+    }
     return;
   }
 
@@ -2162,7 +2326,41 @@ bot.on('message', async (msg) => {
       return;
     }
 
-    safeSend(chatId, 'Usage: /vault search|read|list [arg]');
+    // /vault write <path> [content] — or reply to a message
+    if (subCmd === 'write') {
+      if (!arg) { safeSend(chatId, 'Usage: /vault write <path> <content>\nOr reply to a message with: /vault write <path>'); return; }
+      const firstSpace = arg.indexOf(' ');
+      let vaultPath, content;
+      if (msg.reply_to_message && msg.reply_to_message.text) {
+        vaultPath = arg.trim();
+        content = msg.reply_to_message.text;
+      } else if (firstSpace > 0) {
+        vaultPath = arg.slice(0, firstSpace);
+        content = arg.slice(firstSpace + 1);
+      } else {
+        safeSend(chatId, 'Provide content after the path, or reply to a message.');
+        return;
+      }
+      writeToVault(chatId, vaultPath, content);
+      return;
+    }
+
+    // /vault <plain text> — deposit to telegram-deposit/
+    if (subCmd && !['search', 'read', 'list', 'write'].includes(subCmd)) {
+      const fullText = msg.text.slice('/vault '.length).trim();
+      const today = new Date().toISOString().split('T')[0];
+      const slug = fullText.slice(0, 40).replace(/[^a-zA-Z0-9]+/g, '-').replace(/-+$/, '').toLowerCase();
+      const filename = `${today}_telegram-deposit_${slug}.md`;
+      const depositDir = path.join(VAULT_ROOT, '00_Staging', 'telegram-deposit');
+      if (!fs.existsSync(depositDir)) fs.mkdirSync(depositDir, { recursive: true });
+      const destPath = deduplicatePath(path.join(depositDir, filename));
+      const content = `---\ntitle: ${slug}\nsource: telegram-deposit\ndate: ${today}\n---\n\n${fullText}\n`;
+      fs.writeFileSync(destPath, content);
+      safeSend(chatId, `📥 Deposited:\n\`${path.relative(VAULT_ROOT, destPath)}\``);
+      return;
+    }
+
+    safeSend(chatId, 'Usage: /vault search|read|list|write [arg]\nOr: /vault <text> to quick-deposit');
     return;
   }
 
@@ -2486,5 +2684,35 @@ bot.on('message', async (msg) => {
   } catch (error) {
     console.error('Cath error:', error);
     await safeSend(chatId, `⚠️ Cath error: ${error.message}`);
+  }
+});
+
+// ── Inline keyboard callback handler (Densifier, Decay Detector) ────────────
+bot.on('callback_query', async (query) => {
+  const data = query.data;
+  const chatId = query.message.chat.id;
+  const msgId = query.message.message_id;
+
+  try {
+    if (data.startsWith('dense_approve:') || data.startsWith('dense_skip:')) {
+      const action = data.startsWith('dense_approve:') ? '--apply' : '--skip';
+      const { execSync } = require('child_process');
+      const result = execSync(
+        `python3 ${path.join(process.env.HOME, 'Cathedral', 'vault-densifier.py')} ${action} "${data}"`,
+        { timeout: 15000, encoding: 'utf8' }
+      ).trim();
+      await bot.answerCallbackQuery(query.id, { text: result.slice(0, 200) });
+      await bot.editMessageReplyMarkup(
+        { inline_keyboard: [[{ text: data.startsWith('dense_approve:') ? '✅ Linked' : '⏭ Skipped', callback_data: 'noop' }]] },
+        { chat_id: chatId, message_id: msgId }
+      );
+    } else if (data.startsWith('decay_')) {
+      await bot.answerCallbackQuery(query.id, { text: 'Noted' });
+    } else if (data === 'noop') {
+      await bot.answerCallbackQuery(query.id);
+    }
+  } catch (err) {
+    console.error('Callback error:', err.message);
+    await bot.answerCallbackQuery(query.id, { text: `Error: ${err.message.slice(0, 150)}` });
   }
 });

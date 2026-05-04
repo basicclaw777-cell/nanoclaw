@@ -818,6 +818,43 @@ He will decide when he's done.
 - TRIGGER: PM2 cron orchestrator-seed (id 19) at 06:00 HKT daily (0 22 * * * UTC)
 - Purpose: paste into Head Orchestrator chat as first message to close session context gap
 
+## Process Health Resurrector — BUILT 2026-05-04
+- Script: ~/Cathedral/resurrector.mjs
+- PM2: resurrector (id 27), cron hourly (0 * * * *)
+- Reads cathedral-schedule.json always_on section, restarts any stopped process, Telegram alert on resurrection
+- Fixes applied this session:
+  - Timekeeper: pm2 jlist timeout 10s→30s (ETIMEDOUT under load). Not crashing — cron behavior is correct.
+  - Morning briefing: added 180s SIGALRM timeout to TTS generation (hung Metal GPU was blocking forever)
+  - Muse: restarted (was stopped after last cron run — confirmed healthy, findings May 1-2)
+  - vault-backup: restarted (was stopped, Tier 1 backup was dark)
+
+## Vault Promoter — SCHEDULED 2026-05-04
+- Script: ~/nanoclaw/vault-promoter.js (already existed, now has cron trigger)
+- PM2: vault-promoter (id 28), cron weekly Sunday 4am UTC (0 4 * * 0)
+- Promotes Grade A/B nuggets from 00_Staging → 02_Refined_Gold
+- First run: 45 nuggets promoted (27 boxing, 6 cathedral, 4 epistemology, 4 resonance, 4 paul-directed)
+- Telegram: /promote command still works for manual runs
+- Standing: vault now has automated throughput. Staging → Gold pipeline is live.
+
+## Boxing Session Delta — BUILT 2026-05-04
+- Script: ~/Cathedral/boxing-delta.py
+- Compares two movement JSONs: punch rate, velocity, guard drops, by-type breakdown
+- Usage: python boxing-delta.py padwork/noodles1 padwork/noodles2 --telegram
+- Baseline mode: python boxing-delta.py padwork/noodles1 --self
+- Baseline established: 1008 punches (17.8/min), mean vel 157.9, 138 guard drops, 20 high severity
+- TRIGGER: manual CLI. Auto-trigger queued: wire into boxing-pipeline.sh to compare latest vs previous.
+
+## Boxing Clip Assembler — BUILT 2026-05-04
+- Script: ~/Cathedral/assemble.py (runs in cathedral-venv, uses ffmpeg)
+- Reads: ~/boxing-corpus/movement/{category}/{filename}.json
+- Source video: ~/boxing-corpus/{category}/{filename}.MOV
+- Output: ~/boxing-corpus/compilations/{category}/{filename}_{filter}.mp4
+- Filters: --filter punches|guard_drops|combo|all
+- Combo mode: --combo-window 2.0 groups punches within N seconds into single clips (requires 2+ punches)
+- Options: --min-confidence, --min-velocity, --severity, --punch-type, --padding, --reencode, --thumbnail, --timestamps
+- Tested: guard_drops high = 20 clips / 215s; combo = 188 clips / 662s (noodles1, 57-min pad session)
+- TRIGGER: manual CLI. Future: wire into boxing-pipeline.sh as post-processing step
+
 ## Basic Reflex Boxing Engine (built 2026-05-03)
 - combination-validator.js — weight-state relay, defense axis, footwork rhythm. ESM.
 - rhythm-engine.js — 10 rudiment→combination mappings, click track generator. ESM.
@@ -825,6 +862,32 @@ He will decide when he's done.
 - Canonical curriculum: ~/cathedral-vault/10_Agents/kit/decisions/canonical-curriculum-2026-05-03.md
 - Visual hub: ~/basic-reflex/visuals/index.html (4 interactive HTML tools)
 - Roadmap: ~/basic-reflex/roadmap/index.html
+
+## Tier 1 Expansion — Built 2026-05-04
+- combo-logger.js — SQLite logging for all validations. combo_log table in metrics.db.
+- audio-generator.js — Pure PCM WAV click tracks. 44100 Hz 16-bit mono. ~/nanoclaw/click-tracks/
+- combo-watcher.js — chokidar file watcher on ~/nanoclaw/combo-inbox/. Auto-validates .txt/.csv, reports to combo-results/
+- combination-validator.test.js — 39 vitest tests for full validator coverage
+- cathedral-mcp-server.js v2 — 13 tools (was 4): vault + combo validator + rhythm engine
+- New Telegram commands: /audio, /combostats, /promote, /schedule, /health
+- boxing-commands.js updated: all validations log to SQLite, /audio sends WAV inline
+
+## Obsidian Combo Validator Plugin — Built 2026-05-04
+- Plugin: cathedral-vault/.obsidian/plugins/combo-validator/
+- Code blocks: ```combo and ```counter render validation inline in reading view
+- Weight trace, per-transition verdicts, suggestions. Cuban codex + number aliases.
+- Restart Obsidian to activate.
+
+## Google Calendar Integration — Built 2026-05-04
+- Script: ~/nanoclaw/gcal-reader.js
+- Lightweight OAuth, no googleapis dep. Enforces Paul's schedule limits.
+- SETUP REQUIRED: gcal-credentials.json from Google Cloud Console, then node gcal-reader.js --setup
+- Outputs to ~/br-gm-agent/reports/paul-schedule.json for Kit morning briefing
+
+## PunchPass Pipeline — Verified 2026-05-04
+- Export: python3 ~/br-gm-agent/scripts/punchpass-export.py (72 members, 5 high churn, 26 expiring)
+- CSVs at ~/Desktop/punchpass/various/ (exported 2026-03-30, 35 days stale)
+- /health Telegram command reads member-data.json for gym dashboard
 
 ## Kit GM Agent (operational since 2026-04-28)
 - Vault: ~/cathedral-vault/10_Agents/kit/

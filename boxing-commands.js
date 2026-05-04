@@ -22,6 +22,9 @@ import {
   SUBDIVISIONS,
 } from './rhythm-engine.js';
 
+import { logPunchCombo, logDefenseChain, logFootworkChain, logIntegratedSequence, getComboStats, getRecentValidations } from './combo-logger.js';
+import { generateWavBuffer } from './audio-generator.js';
+
 // Cuban codex aliases
 const CUBAN_CODEX = {
   rac: 'jab', raa: 'jab_body',
@@ -50,6 +53,7 @@ export function registerBoxingCommands(bot) {
     const punches = input.split(/[\s,→\-]+/).map(resolveAlias);
 
     const result = validatePunchCombo(punches);
+    try { logPunchCombo(result, 'telegram'); } catch {}
 
     let response = `🥊 *Combo Validator*\n`;
     response += `Sequence: ${punches.join(' → ')}\n`;
@@ -83,6 +87,7 @@ export function registerBoxingCommands(bot) {
     const defenses = match[1].trim().split(/[\s,→\-]+/);
 
     const result = validateDefenseChain(defenses);
+    try { logDefenseChain(result, 'telegram'); } catch {}
 
     let response = `🛡 *Defense Chain Validator*\n`;
     response += `Sequence: ${defenses.join(' → ')}\n\n`;
@@ -112,6 +117,7 @@ export function registerBoxingCommands(bot) {
     const counterCombo = match[2].trim().split(/[\s,→\-]+/).map(resolveAlias);
 
     const result = validateIntegratedSequence(defense, counterCombo);
+    try { logIntegratedSequence(result, 'telegram'); } catch {}
 
     let response = `🥊🛡 *Integrated Sequence*\n`;
     response += `Defense: ${defense}\n`;
@@ -178,6 +184,65 @@ export function registerBoxingCommands(bot) {
     if (track.track.length > 8) response += `  ... (${track.track.length - 8} more events)\n`;
 
     bot.sendMessage(chatId, response, { parse_mode: 'Markdown' });
+  });
+
+  // ── /audio — Generate and send WAV click track ────────────────────────────
+  bot.onText(/^\/audio(?:@\w+)?(?:\s+(\S+))?(?:\s+(\d+))?(?:\s+(\d+))?$/i, async (msg, match) => {
+    const chatId = msg.chat.id;
+    const name = match?.[1]?.toLowerCase() || 'paradiddle';
+    const bpm = parseInt(match?.[2]) || 80;
+    const repeats = parseInt(match?.[3]) || 4;
+
+    bot.sendMessage(chatId, `Generating ${name} @ ${bpm} BPM x ${repeats}...`);
+
+    try {
+      const result = generateWavBuffer(name, { bpm, repeats });
+      if (result.error) {
+        bot.sendMessage(chatId, `Error: ${result.error}`);
+        return;
+      }
+
+      await bot.sendAudio(chatId, result.buffer, {
+        caption: `${result.rudiment} @ ${result.bpm} BPM x ${result.repeats} (${(result.durationMs / 1000).toFixed(1)}s)`,
+        title: `${name}_${bpm}bpm`,
+      }, { filename: `${name}_${bpm}bpm_x${repeats}.wav`, contentType: 'audio/wav' });
+    } catch (e) {
+      bot.sendMessage(chatId, `Audio generation failed: ${e.message}`);
+    }
+  });
+
+  // ── /combostats — Show validation analytics ───────────────────────────────
+  bot.onText(/^\/combostats(?:@\w+)?$/i, async (msg) => {
+    const chatId = msg.chat.id;
+
+    try {
+      const stats = getComboStats(30);
+      const recent = getRecentValidations(5);
+
+      let response = `📊 *Combo Validation Stats (30 days)*\n\n`;
+
+      if (stats.length === 0) {
+        response += `No validations logged yet. Use /combo, /defense, or /counter to start building data.`;
+      } else {
+        for (const s of stats) {
+          response += `*${s.type}*: ${s.total} tested, ${s.pass_rate}% pass rate\n`;
+        }
+
+        if (recent.length > 0) {
+          response += `\n*Recent:*\n`;
+          for (const r of recent) {
+            const icon = r.valid ? '✅' : '❌';
+            const seq = JSON.parse(r.sequence);
+            const display = Array.isArray(seq) ? seq.join('→') : `${seq.defense}→combo`;
+            response += `${icon} ${r.type}: ${display}\n`;
+          }
+        }
+      }
+
+      bot.sendMessage(chatId, response, { parse_mode: 'Markdown' });
+    } catch (e) {
+      bot.sendMessage(chatId, `Stats error: ${e.message}`);
+    }
   });
 
   // ── /punches — List valid punches ─────────────────────────────────────────
