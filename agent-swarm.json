@@ -1,0 +1,33 @@
+{
+  "swarm_name": "NanoClaw_Analysis",
+  "agents": [
+    {
+      "name": "RESEARCHER",
+      "role": "data_reader",
+      "permissions": {
+        "mounts": ["/home/user/nanoclaw-data/knowledgebase"],
+        "access": "read_only",
+        "can_communicate_with": ["ANALYST"]
+      }
+    },
+    {
+      "name": "ANALYST", 
+      "role": "data_processor",
+      "permissions": {
+        "can_communicate_with": ["RESEARCHER", "MANAGER"],
+        "data_processing": true,
+        "pattern_analysis": true
+      }
+    },
+    {
+      "name": "MANAGER",
+      "role": "coordinator",
+      "permissions": {
+        "user_interface": true,
+        "task_delegation": true,
+        "output_formatting": true,
+        "can_communicate_with": ["ANALYST"]
+      }
+    }
+  ]
+}

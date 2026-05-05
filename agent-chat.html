@@ -914,8 +914,8 @@ async function sendBroadcast() {
   // Gather all responses
   const responseTexts = selected.map(a => {
     const card = document.getElementById(`bc-${a.id}`);
-    const text = card ? card.querySelector('.broadcast-response-text').textContent : '';
-    return `${a.name}: ${text.slice(0, 300)}`;
+    const respText = card ? card.querySelector('.broadcast-response-text').textContent : '';
+    return `${a.name}: ${respText.slice(0, 300)}`;
   }).join('\n\n');
 
   try {

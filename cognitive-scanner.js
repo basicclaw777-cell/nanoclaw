@@ -8,6 +8,7 @@ import { join, basename } from 'path';
 import { createRequire } from 'module';
 const _require = createRequire(join(process.env.HOME, 'nanoclaw', 'package.json'));
 const chokidar = _require('chokidar');
+const { appendProjectLog } = _require('./project-log.cjs');
 import dotenv from 'dotenv';
 dotenv.config({ path: join(process.env.HOME, 'nanoclaw', '.env') });
 
@@ -337,6 +338,11 @@ async function processHarvest(filepath) {
     await sendTelegram(
       `🧠 *PATTERN LOGGED*\n${finding.pattern_name} · ${finding.project || 'unknown'} · ${finding.confidence}\n${firstSentence}\nProfile: \`06_Methods/pauls-investigator-profile.md\``
     );
+    appendProjectLog('cathedral', 'pattern_detected', { pattern: finding.pattern_name, project: finding.project, confidence: finding.confidence });
+    // Also log to the project's own log
+    if (finding.project && finding.project !== 'cathedral' && finding.project !== 'unknown') {
+      appendProjectLog(finding.project, 'cognitive_pattern', { pattern: finding.pattern_name, confidence: finding.confidence, source: 'cognitive-scanner' });
+    }
   }
 
   console.log(`[cognitive-scanner] Processed ${validFindings.length} pattern(s) from ${filename}`);

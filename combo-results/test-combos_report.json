@@ -1,0 +1,95 @@
+{
+  "source": "test-combos.txt",
+  "processedAt": "2026-05-03T15:48:35.112Z",
+  "summary": {
+    "total": 4,
+    "valid": 3,
+    "invalid": 1,
+    "passRate": "75.0%"
+  },
+  "results": [
+    {
+      "name": "jab-cross-lead_hook",
+      "punches": [
+        "jab",
+        "cross",
+        "lead_hook"
+      ],
+      "valid": true,
+      "weightTrace": [
+        "neutral",
+        "neutral",
+        "forward",
+        "rear"
+      ],
+      "comboType": "loaded",
+      "failures": [],
+      "suggestions": []
+    },
+    {
+      "name": "cross-cross",
+      "punches": [
+        "cross",
+        "cross"
+      ],
+      "valid": false,
+      "weightTrace": [
+        "neutral",
+        "forward",
+        "forward"
+      ],
+      "comboType": "loaded",
+      "failures": [
+        {
+          "position": 2,
+          "reason": "Weight is forward — rear hand has no base to fire from",
+          "suggestion": "From forward weight, valid punches: jab, lead_hook, lead_uppercut, lead_body, jab_body"
+        }
+      ],
+      "suggestions": [
+        {
+          "position": 2,
+          "warning": "Two consecutive heavy same-hand punches (cross → cross). Consider alternating hands or inserting a jab."
+        }
+      ]
+    },
+    {
+      "name": "jab-jab-cross-lead_hook-cross",
+      "punches": [
+        "jab",
+        "jab",
+        "cross",
+        "lead_hook",
+        "cross"
+      ],
+      "valid": true,
+      "weightTrace": [
+        "neutral",
+        "neutral",
+        "neutral",
+        "forward",
+        "rear",
+        "forward"
+      ],
+      "comboType": "loaded",
+      "failures": [],
+      "suggestions": []
+    },
+    {
+      "name": "jab-overhand",
+      "punches": [
+        "jab",
+        "overhand"
+      ],
+      "valid": true,
+      "weightTrace": [
+        "neutral",
+        "neutral",
+        "forward"
+      ],
+      "comboType": "loaded",
+      "failures": [],
+      "suggestions": []
+    }
+  ]
+}

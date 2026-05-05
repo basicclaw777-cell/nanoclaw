@@ -1,0 +1,28 @@
+COMBO VALIDATION REPORT
+Source: test-combos.txt
+Date: 2026-05-03T15:48:35.112Z
+Pass rate: 75.0% (3/4)
+============================================================
+
+[VALID] jab-cross-lead_hook
+  Punches: jab → cross → lead_hook
+  Weight:  neutral → neutral → forward → rear
+  Type:    loaded
+
+[INVALID] cross-cross
+  Punches: cross → cross
+  Weight:  neutral → forward → forward
+  Type:    loaded
+  FAIL at #2: Weight is forward — rear hand has no base to fire from
+    Fix: From forward weight, valid punches: jab, lead_hook, lead_uppercut, lead_body, jab_body
+
+[VALID] jab-jab-cross-lead_hook-cross
+  Punches: jab → jab → cross → lead_hook → cross
+  Weight:  neutral → neutral → neutral → forward → rear → forward
+  Type:    loaded
+
+[VALID] jab-overhand
+  Punches: jab → overhand
+  Weight:  neutral → neutral → forward
+  Type:    loaded
+
