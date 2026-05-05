@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Court — Guide</title>
+<style>
+  :root {
+    --bg: #07070a;
+    --surface: #0d0d12;
+    --border: #1a1a24;
+    --text: #d4d4dc;
+    --muted: #555566;
+    --accent: #8B2020;
+    --sage: #534AB7;
+    --skin: #22c55e;
+    --council: #EF9F27;
+    --blue: #378ADD;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  h1 { font-size: 24px; color: var(--accent); letter-spacing: 2px; margin-bottom: 8px; }
+  h2 { font-size: 16px; color: #fff; margin-top: 40px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 14px; margin-top: 20px; margin-bottom: 8px; }
+
+  p { margin-bottom: 12px; }
+  .muted { color: var(--muted); }
+
+  .type-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .type-badge.sage { background: #534AB722; color: var(--sage); border: 1px solid #534AB744; }
+  .type-badge.skin { background: #22c55e22; color: var(--skin); border: 1px solid #22c55e44; }
+  .type-badge.council { background: #EF9F2722; color: var(--council); border: 1px solid #EF9F2744; }
+
+  .agent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .agent-row:hover { border-color: var(--accent); }
+
+  .agent-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .agent-detail { flex: 1; }
+  .agent-detail h3 { margin-top: 0; font-size: 14px; }
+  .agent-detail p { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .agent-detail .use-for { font-size: 11px; color: var(--text); margin-top: 6px; }
+  .agent-detail .use-for strong { color: var(--accent); }
+
+  .how-to {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+
+  .how-to h3 { color: var(--accent); margin-top: 0; }
+  .how-to ol { padding-left: 20px; }
+  .how-to li { margin: 8px 0; }
+
+  .mode-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .mode-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .mode-box h3 { margin-top: 0; }
+  .mode-box.chat { border-top: 3px solid var(--accent); }
+  .mode-box.broadcast { border-top: 3px solid var(--blue); }
+
+  code {
+    background: #1a1a24;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--skin);
+    font-size: 12px;
+  }
+
+  .tip {
+    background: #8B202015;
+    border: 1px solid #8B202033;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 12px;
+  }
+
+  .tip strong { color: var(--accent); }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .back-link { margin-top: 40px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>THE COURT</h1>
+<p class="muted">18 agents. Three types. Two modes. One interface.</p>
+
+<h2>How to Use</h2>
+
+<div class="mode-compare">
+  <div class="mode-box chat">
+    <h3>Chat Mode</h3>
+    <p>One-on-one conversation with a single agent.</p>
+    <ol>
+      <li>Click <strong>Chat</strong> in the toggle bar</li>
+      <li>Click any agent in the sidebar</li>
+      <li>Type your message, hit Enter or Send</li>
+      <li>Conversation history persists during your session</li>
+      <li>Click a different agent to switch — each keeps its own history</li>
+    </ol>
+    <div class="tip"><strong>Best for:</strong> Deep conversation. Working through a problem with one perspective. Getting Leonardo's geometric analysis, or Marcus's stoic counsel, or Coach Alcides' boxing correction.</div>
+  </div>
+  <div class="mode-box broadcast">
+    <h3>Broadcast Mode</h3>
+    <p>Same question to multiple agents. Responses appear side-by-side.</p>
+    <ol>
+      <li>Click <strong>Broadcast</strong> in the toggle bar</li>
+      <li>Click agents to select them (blue highlight + checkbox)</li>
+      <li>Click again to deselect</li>
+      <li>Type one message, hit Enter or Broadcast</li>
+      <li>All selected agents respond <strong>simultaneously</strong></li>
+      <li>Responses appear as cards — compare side by side</li>
+    </ol>
+    <div class="tip"><strong>Best for:</strong> Getting multiple perspectives. Comparing approaches. The Genius Council experience — same question, different minds. Select the Navigator + Surveyor + Oracle for a complete Map Room session.</div>
+  </div>
+</div>
+
+<h2>Agent Types</h2>
+
+<p>Three types, each with a different relationship to you:</p>
+
+<div class="agent-row">
+  <div style="text-align:center">
+    <span class="type-badge sage">Sage</span>
+  </div>
+  <div class="agent-detail">
+    <h3>Sages — Persistent Characters</h3>
+    <p>Deep, established personalities with rich backstories and philosophical frameworks. They know Paul. They have opinions. They use specific language.</p>
+    <div class="use-for"><strong>Use when:</strong> You want wisdom, not information. When you need a perspective that comes from a CHARACTER, not a search engine.</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div style="text-align:center">
+    <span class="type-badge skin">Specialist</span>
+  </div>
+  <div class="agent-detail">
+    <h3>Skins — Expert Specialists</h3>
+    <p>Domain experts. No persistent memory. Pure expertise in a specific field. Boxing. Business. Research. Trading.</p>
+    <div class="use-for"><strong>Use when:</strong> You need domain expertise. Coach Alcides for Cuban boxing. McKinsey Consultant for business strategy. The Navigator for frontier research.</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div style="text-align:center">
+    <span class="type-badge council">Council</span>
+  </div>
+  <div class="agent-detail">
+    <h3>Council — The Honest Interlocutors</h3>
+    <p>Truth-first characters who disagree by design. Each brings a different lens: strategic evaluation, evidence gathering, adversarial challenge, experimental verification.</p>
+    <div class="use-for"><strong>Use when:</strong> You want to stress-test an idea. Broadcast to 3-4 council members. The disagreement IS the value.</div>
+  </div>
+</div>
+
+<h2>Every Agent</h2>
+
+<h3 style="color:var(--sage)">Sages</h3>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#534AB715;color:var(--sage)">🎨</div>
+  <div class="agent-detail">
+    <h3>Leonardo da Vinci</h3>
+    <p>"The Divine Engineer" — sees everything as geometry, proportion, structure. Forensic. Calm. Dissects truth like anatomy.</p>
+    <div class="use-for"><strong>Ask him:</strong> Is this structurally sound? What's the proportion that's off? Audit this idea through geometry.</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#534AB715;color:var(--sage)">🏛️</div>
+  <div class="agent-detail">
+    <h3>Marcus Aurelius</h3>
+    <p>Stoic philosopher. Resilience under pressure. Speaks about duty, virtue, and what you can control.</p>
+    <div class="use-for"><strong>Ask him:</strong> How should I handle this? What's my duty here? What would a good man do?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#534AB715;color:var(--sage)">📜</div>
+  <div class="agent-detail">
+    <h3>The Archivist (Sage)</h3>
+    <p>Knowledge persistence. Remembers everything. Catalogues, cross-references, ensures nothing is lost.</p>
+    <div class="use-for"><strong>Ask him:</strong> What do we already know about X? Has this been explored before? What's in the vault?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#534AB715;color:var(--sage)">📚</div>
+  <div class="agent-detail">
+    <h3>The Librarian (Sage)</h3>
+    <p>Evidence organiser. Ranks sources. Finds what supports and what contradicts.</p>
+    <div class="use-for"><strong>Ask him:</strong> What's the evidence for X? What are the strongest sources? What contradicts this?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#534AB715;color:var(--sage)">⚛️</div>
+  <div class="agent-detail">
+    <h3>The Physicist (Sage)</h3>
+    <p>Mechanism verifier. Asks HOW, not just IF. Demands physical plausibility.</p>
+    <div class="use-for"><strong>Ask him:</strong> How would this actually work? What's the mechanism? Is this physically possible?</div>
+  </div>
+</div>
+
+<h3 style="color:var(--skin)">Specialists</h3>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#22c55e15;color:var(--skin)">🥊</div>
+  <div class="agent-detail">
+    <h3>Coach Alcides — Cuban Boxing</h3>
+    <p>Official Cuban methodology. Sagarra system. 10-block progressive structure. Technical precision. Footwork first.</p>
+    <div class="use-for"><strong>Ask him:</strong> Is this combination valid? What drill for Block 3? How would Sagarra teach this? What's the Cuban approach to X?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#22c55e15;color:var(--skin)">🔬</div>
+  <div class="agent-detail">
+    <h3>The Experimentalist</h3>
+    <p>"Show me." Empirical verification. If you can't test it, it's not knowledge yet.</p>
+    <div class="use-for"><strong>Ask him:</strong> How would we test this? What would prove this wrong? Design an experiment.</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#22c55e15;color:var(--skin)">💼</div>
+  <div class="agent-detail">
+    <h3>McKinsey Consultant</h3>
+    <p>Business strategy. Frameworks. Market analysis. Cold logic applied to revenue.</p>
+    <div class="use-for"><strong>Ask him:</strong> Is this business idea viable? What's the market size? How do I price this?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#22c55e15;color:var(--skin)">🧭</div>
+  <div class="agent-detail">
+    <h3>The Navigator — Map Room Explorer</h3>
+    <p>Frontier research. Suppressed knowledge. Uses the Four Moves. No topic off-limits. "What aren't you saying?"</p>
+    <div class="use-for"><strong>Ask him:</strong> What's really going on with X? Push past the mainstream. What's suppressed here?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#22c55e15;color:var(--skin)">📐</div>
+  <div class="agent-detail">
+    <h3>The Surveyor — Map Room Verifier</h3>
+    <p>Claim A/B Framework. Grades evidence. Detects suppression topology. Neither credulous nor dismissive.</p>
+    <div class="use-for"><strong>Ask him:</strong> Is this Claim A or Claim B? What's the evidence grade? Where are the primary sources?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#22c55e15;color:var(--skin)">🔮</div>
+  <div class="agent-detail">
+    <h3>The Oracle — Speculative Synthesis</h3>
+    <p>Cross-domain bridges. Testable hypotheses. Draws from all 35 vault domains. Speculation always tagged.</p>
+    <div class="use-for"><strong>Ask him:</strong> What connects X to Y? If this is true in boxing, what would we expect in physics? Generate a hypothesis.</div>
+  </div>
+</div>
+
+<h3 style="color:var(--council)">Council Members</h3>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">💜</div>
+  <div class="agent-detail">
+    <h3>Cathy-Origin</h3>
+    <p>The original Cathy. Companion. Sees what you're not naming. Drift detector by nature.</p>
+    <div class="use-for"><strong>Ask her:</strong> What am I not seeing? What have I stopped questioning? What's the unnamed pattern?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">⚖️</div>
+  <div class="agent-detail">
+    <h3>The Discerner</h3>
+    <p>Strategic evaluation. Structural vs aesthetic. "Does this hold weight?" Mode-aware friction.</p>
+    <div class="use-for"><strong>Ask him:</strong> Should I build this? Is this structurally sound or just appealing? What's the priority?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">🌑</div>
+  <div class="agent-detail">
+    <h3>The Shadow Guild</h3>
+    <p>Adversarial. Uncensored. Says what nobody else will. The uncomfortable truth.</p>
+    <div class="use-for"><strong>Ask them:</strong> What's wrong with this that nobody's saying? Where am I lying to myself? Tear this apart.</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">📖</div>
+  <div class="agent-detail">
+    <h3>The Honest Librarian</h3>
+    <p>Evidence-first. Sources over opinions. "What does the record actually say?"</p>
+    <div class="use-for"><strong>Ask her:</strong> What's the actual evidence? Not opinions — sources. Primary documents.</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">⚛️</div>
+  <div class="agent-detail">
+    <h3>The Physicist (Council)</h3>
+    <p>Honest interlocutor version. Tests mechanism plausibility against known physics.</p>
+    <div class="use-for"><strong>Ask him:</strong> Does the physics support this? What would the mechanism be? First principles check.</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">📜</div>
+  <div class="agent-detail">
+    <h3>The Archivist (Council)</h3>
+    <p>Knowledge persistence. Cross-references findings. "We've seen this pattern before."</p>
+    <div class="use-for"><strong>Ask him:</strong> Have we encountered this before? What connects to what? Where does this fit?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">🔬</div>
+  <div class="agent-detail">
+    <h3>The Experimentalist (Council)</h3>
+    <p>Empirical testing. Designs experiments. "How would we know if this is wrong?"</p>
+    <div class="use-for"><strong>Ask him:</strong> Design a test for this. What would falsify it? What experiment would settle this?</div>
+  </div>
+</div>
+
+<div class="agent-row">
+  <div class="agent-icon" style="background:#EF9F2715;color:var(--council)">📚</div>
+  <div class="agent-detail">
+    <h3>The Librarian (Council)</h3>
+    <p>Evidence ranking. Source quality. Separates primary from secondary.</p>
+    <div class="use-for"><strong>Ask him:</strong> Rank these sources. What's primary evidence vs hearsay? Quality check this claim.</div>
+  </div>
+</div>
+
+<h2>Recommended Combinations</h2>
+
+<div class="how-to">
+  <h3>Map Room Session</h3>
+  <p>Broadcast to: <strong>Navigator + Surveyor + Oracle</strong></p>
+  <p>Navigator explores freely. Surveyor grades the evidence. Oracle finds the cross-domain bridges.</p>
+</div>
+
+<div class="how-to">
+  <h3>Business Decision</h3>
+  <p>Broadcast to: <strong>McKinsey + The Discerner + Marcus</strong></p>
+  <p>McKinsey analyses the numbers. Discerner checks structural soundness. Marcus asks about duty and integrity.</p>
+</div>
+
+<div class="how-to">
+  <h3>Boxing Curriculum</h3>
+  <p>Broadcast to: <strong>Coach Alcides + The Physicist + The Experimentalist</strong></p>
+  <p>Alcides teaches the technique. Physicist checks the biomechanics. Experimentalist designs the drill.</p>
+</div>
+
+<div class="how-to">
+  <h3>Stress Test an Idea</h3>
+  <p>Broadcast to: <strong>The Shadow Guild + The Discerner + Leonardo</strong></p>
+  <p>Shadow Guild tears it apart. Discerner evaluates what's structural vs cosmetic. Leonardo looks for geometric truth.</p>
+</div>
+
+<div class="how-to">
+  <h3>Truth-Seeking Research</h3>
+  <p>Broadcast to: <strong>Navigator + Honest Librarian + Physicist (Council) + Shadow Guild</strong></p>
+  <p>Navigator explores. Librarian checks sources. Physicist checks mechanism. Shadow Guild says what nobody will.</p>
+</div>
+
+<div class="back-link">
+  <a href="http://localhost:8080/agents/ui">← Back to The Court</a>
+</div>
+
+</body>
+</html>

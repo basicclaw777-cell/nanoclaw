@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Court — Cathedral</title>
+<style>
+  :root {
+    --bg: #07070a;
+    --surface: #0d0d12;
+    --surface2: #13131a;
+    --border: #1a1a24;
+    --text: #d4d4dc;
+    --muted: #555566;
+    --accent: #8B2020;
+    --accent-glow: #8B202033;
+    --green: #22c55e;
+    --blue: #378ADD;
+    --purple: #534AB7;
+    --amber: #EF9F27;
+    --sage-color: #534AB7;
+    --skin-color: #22c55e;
+    --council-color: #EF9F27;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; height: 100vh; display: flex; overflow: hidden; }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle at 1px 1px, #ffffff06 1px, transparent 0);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    z-index: 1;
+  }
+
+  .sidebar-header {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  }
+
+  .mode-toggle {
+    display: flex;
+    margin: 8px 12px;
+    background: var(--bg);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .mode-btn {
+    flex: 1;
+    padding: 6px;
+    text-align: center;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .mode-btn.active { background: var(--accent); color: #fff; }
+
+  .presets {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    display: none;
+  }
+
+  .broadcast-mode .presets { display: block; }
+
+  .preset-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 10px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    transition: all 0.15s;
+  }
+
+  .preset-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .preset-btn .preset-name { font-weight: 600; }
+  .preset-btn .preset-agents { color: var(--muted); font-size: 9px; }
+
+  .agent-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  .agent-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    position: relative;
+  }
+
+  .agent-card:hover { background: var(--surface2); border-color: var(--border); }
+  .agent-card.selected { background: var(--surface2); border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent), 0 0 12px var(--accent-glow); }
+  .agent-card.broadcast-selected { background: var(--surface2); border-color: var(--blue); box-shadow: inset 3px 0 0 var(--blue); }
+
+  .agent-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .agent-card.selected .agent-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    border: 1px solid var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  .agent-info { flex: 1; min-width: 0; }
+  .agent-name { font-weight: 600; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.3px; }
+  .agent-role { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+
+  .agent-type-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+
+  .agent-check {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: none;
+  }
+
+  .broadcast-mode .agent-check { display: block; }
+  .agent-card.broadcast-selected .agent-check { background: var(--blue); border-color: var(--blue); }
+
+  /* Main chat area */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    z-index: 1;
+  }
+
+  .chat-header {
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  }
+
+  .chat-header .agent-name { font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
+  .chat-header .agent-role { font-size: 11px; color: var(--muted); }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px;
+    scroll-behavior: smooth;
+  }
+
+  .message {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .message.user { margin-left: auto; flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .msg-bubble {
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 12.5px;
+  }
+
+  .message.user .msg-bubble {
+    background: linear-gradient(135deg, var(--accent), #6b1818);
+    border-color: var(--accent);
+    color: #f0e0e0;
+  }
+
+  .msg-name { font-size: 10px; color: var(--muted); margin-bottom: 2px; font-weight: 600; }
+
+  .msg-bubble.thinking {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Broadcast responses */
+  .broadcast-responses {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 14px;
+    align-content: start;
+  }
+
+  .broadcast-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    max-height: 450px;
+    overflow-y: auto;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .broadcast-card:hover { border-color: var(--muted); }
+  .broadcast-card.done { box-shadow: 0 0 20px #22c55e08; border-color: #22c55e22; }
+
+  .broadcast-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .broadcast-card-header .agent-name { font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+
+  .broadcast-response-text {
+    font-size: 12px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* Input area */
+  .input-area {
+    padding: 14px 24px;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(0deg, var(--surface) 0%, var(--bg) 100%);
+    display: flex;
+    gap: 10px;
+  }
+
+  .input-area textarea {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 12px 16px;
+    resize: none;
+    outline: none;
+    min-height: 48px;
+    max-height: 120px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .input-area textarea:focus { border-color: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+
+  .send-btn {
+    background: linear-gradient(135deg, var(--accent), #6b1818);
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: all 0.2s;
+  }
+
+  .send-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px var(--accent-glow); }
+  .send-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .welcome {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .welcome p { max-width: 420px; line-height: 1.8; }
+
+  .welcome-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .welcome-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .typing { color: var(--muted); font-style: italic; font-size: 11px; padding: 4px 0; }
+
+  /* Phone a Friend */
+  .msg-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .message:hover .msg-actions { opacity: 1; }
+
+  .phone-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 9px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .phone-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+  .phone-menu {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px;
+    z-index: 200;
+    max-height: 300px;
+    overflow-y: auto;
+    min-width: 200px;
+    box-shadow: 0 8px 24px #00000066;
+  }
+
+  .phone-menu-item {
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .phone-menu-item:hover { background: var(--surface2); }
+
+  .phone-response {
+    margin-top: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    font-size: 12px;
+    line-height: 1.7;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .phone-response .phone-label {
+    font-size: 9px;
+    color: var(--amber);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  /* Steward card */
+  .steward-card {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 14px;
+    grid-column: 1 / -1;
+    box-shadow: 0 0 20px var(--accent-glow);
+    animation: fadeIn 0.5s ease;
+  }
+
+  .steward-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .steward-header .agent-name { font-size: 14px; font-weight: 700; color: var(--accent); }
+
+  .steward-section { margin-bottom: 10px; }
+  .steward-section-title { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .steward-section-body { font-size: 12px; line-height: 1.7; }
+
+  .steward-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .steward-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .steward-btn:hover { border-color: var(--accent); }
+  .steward-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  @media (max-width: 800px) {
+    .sidebar { width: 200px; }
+    .broadcast-responses { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">THE COURT <a href="/agents/guide" style="float:right;font-size:10px;color:var(--muted);text-decoration:none;font-weight:400;letter-spacing:0" target="_blank">Guide</a></div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="setMode('chat')">Chat</button>
+    <button class="mode-btn" onclick="setMode('broadcast')">Broadcast</button>
+  </div>
+  <div class="presets" id="presets"></div>
+  <div class="agent-list" id="agentList">
+    <div style="padding:20px;color:var(--muted)">Loading agents...</div>
+  </div>
+</div>
+
+<div class="main" id="main">
+  <div class="welcome">
+    <div class="welcome-title">The Court</div>
+    <div class="welcome-sub">18 agents · sages · council · specialists</div>
+    <p>Select an agent to begin a conversation.<br>Switch to Broadcast to query multiple minds simultaneously.</p>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8080';
+let agents = [];
+let mode = 'chat';
+let selectedAgent = null;
+let broadcastSelected = new Set();
+let chatHistories = {};
+
+const PRESETS = [
+  { name: 'Map Room', desc: 'Explore → Verify → Connect', agents: ['map-room-explorer', 'map-room-verifier', 'map-room-oracle'] },
+  { name: 'Business Decision', desc: 'Strategy → Structure → Integrity', agents: ['mckinsey-consultant-skin', 'the-discerner', 'marcus'] },
+  { name: 'Boxing Curriculum', desc: 'Teach → Physics → Test', agents: ['cuban-coach-skin', 'physicist', 'experimentalist'] },
+  { name: 'Stress Test', desc: 'Tear apart → Evaluate → Geometry', agents: ['the-shadow-guild', 'the-discerner', 'leonardo'] },
+  { name: 'Truth Seeking', desc: 'Explore → Sources → Physics → Shadow', agents: ['map-room-explorer', 'the-honest-librarian', 'the-physicist', 'the-shadow-guild'] },
+  { name: 'Weekly Priority', desc: 'Head Orc → Revenue → Discerner', agents: ['head-orchestrator', 'revenue-strategist', 'the-discerner'] },
+  { name: 'Full Council', desc: 'All 8 council members', agents: ['cathy-origin', 'the-archivist', 'the-discerner', 'the-experimentalist', 'the-honest-librarian', 'the-librarian', 'the-physicist', 'the-shadow-guild'] },
+];
+
+// Agent colors by type
+const TYPE_COLORS = {
+  sage: '#534AB7',
+  skin: '#22c55e',
+  council: '#EF9F27',
+  companion: '#8B2020',
+  trader: '#378ADD',
+};
+
+const AGENT_ICONS = {
+  'Leonardo da Vinci': '🎨',
+  'Marcus Aurelius': '🏛️',
+  'The Archivist': '📜',
+  'The Librarian': '📚',
+  'The Physicist': '⚛️',
+  'The Experimentalist': '🔬',
+  'The Discerner': '⚖️',
+  'The Shadow Guild': '🌑',
+  'Cathy-Origin': '💜',
+  'The Honest Librarian': '📖',
+  'Freddie Roach': '🥊',
+  'McKinsey Consultant': '💼',
+  'Bull Analyst': '📈',
+  'Bear Analyst': '📉',
+  'default': '🤖',
+};
+
+function getIcon(name) {
+  for (const [key, icon] of Object.entries(AGENT_ICONS)) {
+    if (name.includes(key)) return icon;
+  }
+  return AGENT_ICONS.default;
+}
+
+function getColor(type) {
+  return TYPE_COLORS[type] || '#666';
+}
+
+async function loadAgents() {
+  try {
+    const res = await fetch(`${API}/agents/list`);
+    agents = await res.json();
+    renderAgentList();
+    renderPresets();
+  } catch(e) {
+    document.getElementById('agentList').innerHTML = '<div style="padding:20px;color:#ef4444">Failed to load agents. Is cath-bridge running?</div>';
+  }
+}
+
+function renderAgentList() {
+  const list = document.getElementById('agentList');
+  list.innerHTML = agents.map(a => {
+    const icon = getIcon(a.name);
+    const color = getColor(a.type);
+    const selected = mode === 'chat' && selectedAgent?.id === a.id;
+    const bSelected = mode === 'broadcast' && broadcastSelected.has(a.id);
+    const cls = selected ? 'selected' : bSelected ? 'broadcast-selected' : '';
+
+    return `<div class="agent-card ${cls}" onclick="selectAgent('${a.id}')" data-id="${a.id}">
+      <div class="agent-avatar" style="background:${color}15;color:${color};border:1px solid ${color}33">${icon}</div>
+      <div class="agent-info">
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-role">${a.role || a.type}</div>
+      </div>
+      <div class="agent-type-dot" style="background:${color}"></div>
+      <div class="agent-check"></div>
+    </div>`;
+  }).join('');
+}
+
+function renderPresets() {
+  const el = document.getElementById('presets');
+  el.innerHTML = PRESETS.map(p =>
+    `<button class="preset-btn" onclick="applyPreset('${p.name}')">
+      <span class="preset-name">${p.name}</span><br>
+      <span class="preset-agents">${p.desc}</span>
+    </button>`
+  ).join('');
+}
+
+function applyPreset(name) {
+  const preset = PRESETS.find(p => p.name === name);
+  if (!preset) return;
+  broadcastSelected.clear();
+  for (const id of preset.agents) {
+    if (agents.some(a => a.id === id)) broadcastSelected.add(id);
+  }
+  renderAgentList();
+  renderBroadcastView();
+}
+
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mode-btn')[m === 'chat' ? 0 : 1].classList.add('active');
+  document.getElementById('sidebar').classList.toggle('broadcast-mode', m === 'broadcast');
+
+  if (m === 'broadcast') {
+    selectedAgent = null;
+    renderBroadcastView();
+  } else {
+    broadcastSelected.clear();
+    if (selectedAgent) renderChatView(selectedAgent);
+    else document.getElementById('main').innerHTML = '<div class="welcome"><p>Select an agent to chat.</p></div>';
+  }
+  renderAgentList();
+}
+
+function selectAgent(id) {
+  const agent = agents.find(a => a.id === id);
+  if (!agent) return;
+
+  if (mode === 'chat') {
+    selectedAgent = agent;
+    renderChatView(agent);
+  } else {
+    if (broadcastSelected.has(id)) broadcastSelected.delete(id);
+    else broadcastSelected.add(id);
+    renderBroadcastView();
+  }
+  renderAgentList();
+}
+
+function renderChatView(agent) {
+  const history = chatHistories[agent.id] || [];
+  const icon = getIcon(agent.name);
+  const color = getColor(agent.type);
+
+  document.getElementById('main').innerHTML = `
+    <div class="chat-header">
+      <div class="agent-avatar" style="background:${color}22;color:${color}">${icon}</div>
+      <div>
+        <div class="agent-name">${agent.name}</div>
+        <div class="agent-role">${agent.role || agent.type} · ${agent.model}</div>
+      </div>
+    </div>
+    <div class="messages" id="messages">
+      ${history.map((m, i) => renderMessage(m, agent, i)).join('')}
+    </div>
+    <div class="input-area">
+      <textarea id="chatInput" placeholder="Message ${agent.name}..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+      <button class="send-btn" onclick="sendChat()">Send</button>
+    </div>
+  `;
+
+  const msgs = document.getElementById('messages');
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('chatInput').focus();
+}
+
+function renderMessage(msg, agent, msgIdx) {
+  if (msg.role === 'user') {
+    return `<div class="message user">
+      <div class="msg-bubble">${escapeHtml(msg.content)}</div>
+    </div>`;
+  }
+  const icon = getIcon(agent.name);
+  const color = getColor(agent.type);
+  const phoneId = `phone-${agent.id}-${msgIdx || 0}`;
+  return `<div class="message" style="position:relative">
+    <div class="msg-avatar" style="background:${color}15;color:${color};border:1px solid ${color}33">${icon}</div>
+    <div style="flex:1">
+      <div class="msg-name">${agent.name}</div>
+      <div class="msg-bubble">${escapeHtml(msg.content)}</div>
+      <div class="msg-actions">
+        <button class="phone-btn" onclick="phoneAFriend('${phoneId}', '${escapeAttr(msg.content)}', '${agent.name}', event)">📞 Phone a Friend</button>
+      </div>
+      <div id="${phoneId}-response"></div>
+    </div>
+  </div>`;
+}
+
+function escapeAttr(s) {
+  return s.replace(/'/g, "\\'").replace(/\n/g, ' ').slice(0, 500);
+}
+
+let phoneMenuEl = null;
+
+function phoneAFriend(phoneId, originalText, fromAgent, event) {
+  // Close existing menu
+  if (phoneMenuEl) { phoneMenuEl.remove(); phoneMenuEl = null; return; }
+
+  const menu = document.createElement('div');
+  menu.className = 'phone-menu';
+  menu.style.left = event.clientX + 'px';
+  menu.style.top = (event.clientY - 10) + 'px';
+
+  // Show all agents except the one who said it
+  for (const a of agents) {
+    if (a.name === fromAgent) continue;
+    const icon = getIcon(a.name);
+    const item = document.createElement('div');
+    item.className = 'phone-menu-item';
+    item.innerHTML = `<span>${icon}</span> ${a.name}`;
+    item.onclick = async () => {
+      menu.remove();
+      phoneMenuEl = null;
+
+      // Show thinking
+      const respDiv = document.getElementById(phoneId + '-response');
+      respDiv.innerHTML = '<div class="phone-response"><div class="phone-label">📞 Calling ' + a.name + '...</div><span style="color:var(--muted);font-style:italic">thinking...</span></div>';
+
+      // Call the friend with context
+      try {
+        const res = await fetch(API + '/agents/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            agent_id: a.id,
+            message: fromAgent + ' said: "' + originalText.slice(0, 300) + '"\n\nWhat is YOUR response to this? Do you agree, disagree, or see something they missed?',
+            history: [],
+          }),
+        });
+        const data = await res.json();
+        respDiv.innerHTML = '<div class="phone-response"><div class="phone-label">📞 ' + a.name + ' responds</div>' + escapeHtml(data.response) + '</div>';
+      } catch(e) {
+        respDiv.innerHTML = '<div class="phone-response" style="border-color:var(--red)"><div class="phone-label" style="color:var(--red)">Call failed</div>' + e.message + '</div>';
+      }
+    };
+    menu.appendChild(item);
+  }
+
+  document.body.appendChild(menu);
+  phoneMenuEl = menu;
+
+  // Close on click outside
+  setTimeout(() => {
+    document.addEventListener('click', function closer(e) {
+      if (!menu.contains(e.target)) { menu.remove(); phoneMenuEl = null; document.removeEventListener('click', closer); }
+    });
+  }, 100);
+}
+
+function renderBroadcastView() {
+  const selected = agents.filter(a => broadcastSelected.has(a.id));
+  const label = selected.length > 0
+    ? `Broadcasting to: ${selected.map(a => a.name).join(', ')}`
+    : 'Select agents from the sidebar, then type a message.';
+
+  document.getElementById('main').innerHTML = `
+    <div class="chat-header">
+      <div class="agent-avatar" style="background:var(--blue)22;color:var(--blue)">📡</div>
+      <div>
+        <div class="agent-name">Broadcast</div>
+        <div class="agent-role">${label}</div>
+      </div>
+    </div>
+    <div class="broadcast-responses" id="broadcastResponses"></div>
+    <div class="input-area">
+      <textarea id="chatInput" placeholder="Broadcast to ${selected.length} agent${selected.length !== 1 ? 's' : ''}..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendBroadcast()}" ${selected.length === 0 ? 'disabled' : ''}></textarea>
+      <button class="send-btn" onclick="sendBroadcast()" ${selected.length === 0 ? 'disabled' : ''}>Broadcast</button>
+    </div>
+  `;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || !selectedAgent) return;
+
+  input.value = '';
+  input.disabled = true;
+
+  if (!chatHistories[selectedAgent.id]) chatHistories[selectedAgent.id] = [];
+  chatHistories[selectedAgent.id].push({ role: 'user', content: text });
+  renderChatView(selectedAgent);
+
+  // Show typing indicator
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML += '<div class="typing" id="typing">thinking...</div>';
+  msgs.scrollTop = msgs.scrollHeight;
+
+  try {
+    const res = await fetch(`${API}/agents/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agent_id: selectedAgent.id,
+        message: text,
+        history: chatHistories[selectedAgent.id].slice(-10),
+      }),
+    });
+    const data = await res.json();
+
+    chatHistories[selectedAgent.id].push({ role: 'assistant', content: data.response });
+  } catch(e) {
+    chatHistories[selectedAgent.id].push({ role: 'assistant', content: `Error: ${e.message}` });
+  }
+
+  renderChatView(selectedAgent);
+  document.getElementById('chatInput').disabled = false;
+  document.getElementById('chatInput').focus();
+}
+
+async function sendBroadcast() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || broadcastSelected.size === 0) return;
+
+  input.value = '';
+  input.disabled = true;
+  document.querySelector('.send-btn').disabled = true;
+
+  const panel = document.getElementById('broadcastResponses');
+  const selected = agents.filter(a => broadcastSelected.has(a.id));
+
+  // Show all cards with thinking state
+  panel.innerHTML = selected.map(a => {
+    const icon = getIcon(a.name);
+    const color = getColor(a.type);
+    return `<div class="broadcast-card" id="bc-${a.id}">
+      <div class="broadcast-card-header">
+        <div class="agent-avatar" style="background:${color}22;color:${color};width:28px;height:28px;font-size:14px">${icon}</div>
+        <div class="agent-name">${a.name}</div>
+      </div>
+      <div class="broadcast-response-text" style="color:var(--muted);font-style:italic">thinking...</div>
+    </div>`;
+  }).join('');
+
+  // Fire all requests in parallel
+  const promises = selected.map(async (agent) => {
+    try {
+      const res = await fetch(`${API}/agents/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agent_id: agent.id,
+          message: text,
+          history: [],
+        }),
+      });
+      const data = await res.json();
+      const card = document.getElementById(`bc-${agent.id}`);
+      if (card) card.querySelector('.broadcast-response-text').textContent = data.response;
+      if (card) card.querySelector('.broadcast-response-text').style = '';
+    } catch(e) {
+      const card = document.getElementById(`bc-${agent.id}`);
+      if (card) {
+        card.querySelector('.broadcast-response-text').textContent = `Error: ${e.message}`;
+        card.querySelector('.broadcast-response-text').style.color = 'var(--red)';
+      }
+    }
+  });
+
+  await Promise.all(promises);
+
+  // Mark cards as done
+  for (const a of selected) {
+    const card = document.getElementById(`bc-${a.id}`);
+    if (card) card.classList.add('done');
+  }
+
+  // The Steward: synthesise all responses
+  const stewardPanel = document.getElementById('broadcastResponses');
+  const stewardCard = document.createElement('div');
+  stewardCard.className = 'steward-card';
+  stewardCard.innerHTML = `
+    <div class="steward-header">
+      <div class="agent-avatar" style="background:var(--accent)22;color:var(--accent);width:32px;height:32px;border-radius:10px;font-size:14px">🏛️</div>
+      <div class="agent-name">The Steward</div>
+    </div>
+    <div style="color:var(--muted);font-style:italic">Synthesising ${selected.length} responses...</div>
+  `;
+  stewardPanel.appendChild(stewardCard);
+
+  // Gather all responses
+  const responseTexts = selected.map(a => {
+    const card = document.getElementById(`bc-${a.id}`);
+    const text = card ? card.querySelector('.broadcast-response-text').textContent : '';
+    return `${a.name}: ${text.slice(0, 300)}`;
+  }).join('\n\n');
+
+  try {
+    const stewardRes = await fetch(API + '/agents/steward', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: text, responses: responseTexts }),
+    });
+    const stewardData = await stewardRes.json();
+
+    stewardCard.innerHTML = `
+      <div class="steward-header">
+        <div class="agent-avatar" style="background:var(--accent)22;color:var(--accent);width:32px;height:32px;border-radius:10px;font-size:14px">🏛️</div>
+        <div class="agent-name">The Steward</div>
+      </div>
+      <div class="steward-section"><div class="steward-section-title">Consensus</div><div class="steward-section-body">${escapeHtml(stewardData.consensus || 'No clear consensus')}</div></div>
+      <div class="steward-section"><div class="steward-section-title">Tension</div><div class="steward-section-body">${escapeHtml(stewardData.tension || 'No disagreements')}</div></div>
+      <div class="steward-section"><div class="steward-section-title">Principle</div><div class="steward-section-body">${escapeHtml(stewardData.principle || 'No new principle emerged')}</div></div>
+      <div class="steward-section"><div class="steward-section-title">Action</div><div class="steward-section-body">${escapeHtml(stewardData.action || 'No immediate action')}</div></div>
+    `;
+  } catch(e) {
+    stewardCard.innerHTML += '<div style="color:var(--red)">Steward synthesis failed: ' + e.message + '</div>';
+  }
+
+  input.disabled = false;
+  document.querySelector('.send-btn').disabled = false;
+  input.focus();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+loadAgents();
+</script>
+</body>
+</html>

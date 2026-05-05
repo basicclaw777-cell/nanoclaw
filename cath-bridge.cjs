@@ -1242,6 +1242,205 @@ app.get('/constellation', async (req, res) => {
   }
 });
 
+// ── Agent Chat: Multi-agent chat system ──────────────────────────────────────
+
+const AGENTS_DIRS = [
+  { dir: path.join(NANOCLAW, 'sages'), type: 'sage', format: 'json' },
+  { dir: path.join(NANOCLAW, 'skins'), type: 'skin', format: 'json' },
+  { dir: path.join(NANOCLAW, 'skins', 'general'), type: 'skin', format: 'json' },
+  { dir: path.join(NANOCLAW, 'skins', 'boxing'), type: 'skin', format: 'json' },
+  { dir: path.join(NANOCLAW, 'skins', 'business'), type: 'skin', format: 'json' },
+  { dir: path.join(HOME, 'Cathedral', 'genius-council', 'characters'), type: 'council', format: 'md' },
+];
+
+function loadAllAgents() {
+  const agents = [];
+  const fs = require('fs');
+
+  for (const src of AGENTS_DIRS) {
+    if (!fs.existsSync(src.dir)) continue;
+    const files = fs.readdirSync(src.dir).filter(f => f.endsWith(src.format === 'json' ? '.json' : '.md'));
+
+    for (const file of files) {
+      try {
+        const content = fs.readFileSync(path.join(src.dir, file), 'utf8');
+
+        if (src.format === 'json') {
+          const data = JSON.parse(content);
+          const sage = data.sage || data;
+          agents.push({
+            id: file.replace(/\.(json|md)$/, ''),
+            name: sage.name || file.replace(/\.(json|md)$/, '').replace(/-/g, ' '),
+            type: src.type,
+            role: sage.designation || sage.lens || sage.type || src.type,
+            model: sage.model || 'hermes3',
+            systemPrompt: sage.voice ? `You are ${sage.name}. ${sage.voice}\n\nCore lens: ${sage.core_lens || sage.lens || ''}` : content,
+            file: path.join(src.dir, file),
+          });
+        } else {
+          // Markdown with frontmatter
+          const fmMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+          let name = file.replace('.md', '').replace(/-/g, ' ');
+          let model = 'hermes3';
+          let role = 'council member';
+
+          if (fmMatch) {
+            const fm = fmMatch[1];
+            const nameMatch = fm.match(/name:\s*(.+)/);
+            const modelMatch = fm.match(/model:\s*(.+)/);
+            const registerMatch = fm.match(/register:\s*(.+)/);
+            if (nameMatch) name = nameMatch[1].trim();
+            if (modelMatch) model = modelMatch[1].trim();
+            if (registerMatch) role = registerMatch[1].trim();
+          }
+
+          const bodyText = fmMatch ? fmMatch[2] : content;
+          agents.push({
+            id: file.replace('.md', ''),
+            name,
+            type: src.type,
+            role,
+            model,
+            systemPrompt: bodyText.trim(),
+            file: path.join(src.dir, file),
+          });
+        }
+      } catch(e) {
+        console.error(`[agents] Error loading ${file}:`, e.message);
+      }
+    }
+  }
+
+  return agents;
+}
+
+app.get('/agents/list', (req, res) => {
+  try {
+    const agents = loadAllAgents();
+    res.json(agents.map(a => ({ id: a.id, name: a.name, type: a.type, role: a.role, model: a.model })));
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Load Paul Kernel for agent context injection
+let paulKernel = '';
+try {
+  const kernelPath = path.join(HOME, 'cathedral-vault', '06_Methods', 'paul-kernel.md');
+  if (require('fs').existsSync(kernelPath)) {
+    const raw = require('fs').readFileSync(kernelPath, 'utf8');
+    // Strip frontmatter, keep content
+    paulKernel = raw.replace(/^---[\s\S]*?---\n/, '').trim();
+  }
+} catch(e) { console.error('[agents] Failed to load Paul Kernel:', e.message); }
+
+// Vault search for query context
+async function getVaultContext(query) {
+  try {
+    const searchUrl = `http://localhost:8080/vault/search?q=${encodeURIComponent(query.slice(0, 100))}&top_k=3`;
+    const res = await fetch(searchUrl, { headers: { 'x-api-key': 'cathedral-mcp-2026' }, signal: AbortSignal.timeout(5000) });
+    if (!res.ok) return '';
+    const results = await res.json();
+    if (Array.isArray(results) && results.length > 0) {
+      return '\n\n## VAULT CONTEXT\n' + results.map(r => `[${r.domain || 'vault'}] ${r.title || ''}: ${(r.text || r.first_line || '').slice(0, 200)}`).join('\n');
+    }
+  } catch(e) {}
+  return '';
+}
+
+app.post('/agents/chat', async (req, res) => {
+  const { agent_id, message, history } = req.body;
+  if (!agent_id || !message) return res.status(400).json({ error: 'agent_id and message required' });
+
+  const agents = loadAllAgents();
+  const agent = agents.find(a => a.id === agent_id);
+  if (!agent) return res.status(404).json({ error: `Agent not found: ${agent_id}` });
+
+  try {
+    // Fetch vault context for the question
+    const vaultContext = await getVaultContext(message);
+
+    // Build system prompt: agent character + Paul Kernel + vault context
+    const fullSystemPrompt = agent.systemPrompt +
+      '\n\n---\n\n## WHO YOU ARE SPEAKING TO\n' + paulKernel +
+      vaultContext;
+
+    const messages = [{ role: 'system', content: fullSystemPrompt }];
+    if (history) {
+      for (const h of history.slice(-10)) {
+        messages.push({ role: h.role, content: h.content });
+      }
+    }
+    messages.push({ role: 'user', content: message });
+
+    // Normalize model — anything not locally available falls back to hermes3
+    const localModels = ['hermes3', 'hermes3:latest', 'qwen3:14b', 'nomic-embed-text', 'dolphin3', 'llava'];
+    const model = localModels.some(m => agent.model.includes(m)) ? agent.model : 'hermes3';
+
+    const ollamaRes = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages, stream: false, options: { temperature: 0.7, num_predict: 500 } }),
+    });
+
+    const data = await ollamaRes.json();
+    const response = data.message?.content || 'No response';
+
+    res.json({ agent: agent.name, response });
+  } catch(e) {
+    res.status(500).json({ error: `Ollama error: ${e.message}` });
+  }
+});
+
+app.post('/agents/steward', async (req, res) => {
+  const { question, responses } = req.body;
+  if (!question || !responses) return res.status(400).json({ error: 'question and responses required' });
+
+  try {
+    const stewardPrompt = `You are The Steward of the Cathedral Court. Multiple agents just responded to the same question. Your job is to synthesise their responses into four sections.
+
+QUESTION: ${question}
+
+AGENT RESPONSES:
+${responses}
+
+Respond in EXACTLY this JSON format:
+{"consensus": "What most agents agreed on (1-2 sentences)", "tension": "Where they disagreed or saw differently — this is the VALUABLE part (1-2 sentences)", "principle": "If a new principle emerged from the debate, name it in one sentence. If none, say 'None emerged'", "action": "What can be built, done, or decided based on this debate (1 sentence)"}`;
+
+    const ollamaRes = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'hermes3',
+        messages: [{ role: 'user', content: stewardPrompt }],
+        stream: false,
+        options: { temperature: 0.3, num_predict: 300 },
+      }),
+    });
+
+    const data = await ollamaRes.json();
+    const raw = data.message?.content || '';
+
+    // Extract JSON from response
+    const jsonMatch = raw.match(/\{[\s\S]*"consensus"[\s\S]*\}/);
+    if (jsonMatch) {
+      res.json(JSON.parse(jsonMatch[0]));
+    } else {
+      res.json({ consensus: raw.slice(0, 200), tension: '', principle: '', action: '' });
+    }
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/agents/ui', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'agent-chat.html'));
+});
+
+app.get('/agents/guide', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'agent-guide.html'));
+});
+
 // ── Trading Hub ──────────────────────────────────────────────────────────────
 
 app.get('/trader/hub', (req, res) => {
