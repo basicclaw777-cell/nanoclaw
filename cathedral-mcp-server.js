@@ -238,8 +238,74 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
       },
     },
+    // ── Memory (Mem0) tools ────────────────���───────────────────────────────
+    {
+      name: 'memory_search',
+      description: 'Search working memory for relevant context. Use before suggesting ideas to check what Paul has already rejected or decided.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: 'Semantic search query against memory' },
+          limit: { type: 'number', description: 'Max results (default: 5)' },
+        },
+        required: ['query'],
+      },
+    },
+    {
+      name: 'memory_add',
+      description: 'Add a memory. Types: "rejected" (Paul said no), "rationale" (why something was built this way), "pattern" (working style/session insight).',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          text:  { type: 'string', description: 'The memory to store' },
+          type:  { type: 'string', enum: ['rejected', 'rationale', 'pattern', 'general'], description: 'Memory type' },
+        },
+        required: ['text'],
+      },
+    },
+    {
+      name: 'memory_context',
+      description: 'Get pre-session context: recent memories, standing rejections, key rationale, working patterns. Call at session start.',
+      inputSchema: { type: 'object', properties: {} },
+    },
+    {
+      name: 'memory_forget',
+      description: 'Delete a memory by ID. Sovereignty = deletion rights.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          memory_id: { type: 'string', description: 'Memory ID to delete' },
+        },
+        required: ['memory_id'],
+      },
+    },
+    {
+      name: 'memory_list',
+      description: 'List all stored memories.',
+      inputSchema: { type: 'object', properties: {} },
+    },
   ],
 }));
+
+// -- Mem0 helper (calls Python bridge) ----------------------------------------
+
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+const execFileAsync = promisify(execFile);
+
+const MEM0_PYTHON = path.join(process.env.HOME, 'cathedral-venv', 'bin', 'python3');
+const MEM0_SCRIPT = path.join(process.env.HOME, 'nanoclaw', 'mem0-bridge.py');
+
+async function mem0(cmd, ...args) {
+  try {
+    const { stdout } = await execFileAsync(MEM0_PYTHON, [MEM0_SCRIPT, cmd, ...args], { timeout: 60000 });
+    // Filter out spaCy/fastembed warnings
+    const cleaned = stdout.split('\n').filter(l => !l.includes('spaCy') && !l.includes('fastembed') && !l.includes('Failed to load')).join('\n');
+    return cleaned.trim();
+  } catch (e) {
+    return JSON.stringify({ error: e.message });
+  }
+}
 
 // -- Tool dispatch ------------------------------------------------------------
 
@@ -302,6 +368,33 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'list_rudiments':
         return ok(listRudiments(args.level));
+
+      // ── Memory (Mem0) ──────────────────────────────────────────────────────
+      case 'memory_search': {
+        const result = await mem0('search', args.query);
+        return ok(result);
+      }
+
+      case 'memory_add': {
+        const memType = args.type || 'general';
+        const result = await mem0('add', args.text, memType);
+        return ok(result);
+      }
+
+      case 'memory_context': {
+        const result = await mem0('context');
+        try { return ok(JSON.parse(result)); } catch { return ok(result); }
+      }
+
+      case 'memory_forget': {
+        const result = await mem0('forget', args.memory_id);
+        return ok(result);
+      }
+
+      case 'memory_list': {
+        const result = await mem0('list');
+        return ok(result);
+      }
 
       default:
         return err(`Unknown tool: ${name}`);
