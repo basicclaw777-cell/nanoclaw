@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Hub — Cathedral</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111;
+    --border: #1a1a1a;
+    --text: #e0e0e0;
+    --muted: #666;
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #EF9F27;
+    --blue: #378ADD;
+    --purple: #534AB7;
+    --accent: #8B2020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    padding: 16px;
+    line-height: 1.5;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  h1 { font-size: 16px; color: var(--accent); letter-spacing: 1px; }
+
+  .phase-badge {
+    background: var(--surface);
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-full { grid-template-columns: 1fr; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .card-title {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .big-number {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .big-number.green { color: var(--green); }
+  .big-number.red { color: var(--red); }
+  .big-number.amber { color: var(--amber); }
+  .big-number.blue { color: var(--blue); }
+
+  .sub-text { color: var(--muted); font-size: 11px; margin-top: 4px; }
+
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .price-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .price-card .symbol { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .price-card .price { font-size: 14px; color: #fff; }
+  .price-card .change { font-size: 11px; margin-top: 2px; }
+  .price-card .change.up { color: var(--green); }
+  .price-card .change.down { color: var(--red); }
+
+  .fear-meter {
+    height: 8px;
+    background: linear-gradient(to right, var(--red), var(--amber), var(--green));
+    border-radius: 4px;
+    position: relative;
+    margin: 8px 0;
+  }
+
+  .fear-pointer {
+    position: absolute;
+    top: -4px;
+    width: 4px;
+    height: 16px;
+    background: #fff;
+    border-radius: 2px;
+    transform: translateX(-50%);
+  }
+
+  .signal-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .signal-row:last-child { border-bottom: none; }
+
+  .signal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .signal-dot.long { background: var(--green); }
+  .signal-dot.short { background: var(--red); }
+  .signal-dot.neutral { background: var(--muted); }
+
+  .signal-strength {
+    width: 40px;
+    height: 6px;
+    background: var(--bg);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .signal-strength-fill { height: 100%; border-radius: 3px; }
+
+  .debate-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    margin: 6px 0;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .debate-box.bull { border-left: 3px solid var(--green); }
+  .debate-box.bear { border-left: 3px solid var(--red); }
+  .debate-box.decision { border-left: 3px solid var(--amber); }
+
+  .debate-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .debate-label.bull { color: var(--green); }
+  .debate-label.bear { color: var(--red); }
+  .debate-label.decision { color: var(--amber); }
+
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 11px;
+  }
+
+  .check-icon { width: 16px; text-align: center; }
+  .check-pass { color: var(--green); }
+  .check-fail { color: var(--red); }
+  .check-warn { color: var(--amber); }
+
+  .progression {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-top: 12px;
+  }
+
+  .phase-step {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+  }
+
+  .phase-step.active { background: var(--amber); }
+  .phase-step.complete { background: var(--green); }
+
+  .phase-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .news-item {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+
+  .news-item:last-child { border-bottom: none; }
+  .news-source { color: var(--muted); font-size: 9px; }
+
+  .sentiment-bar {
+    display: flex;
+    height: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 6px 0;
+  }
+
+  .sentiment-bull { background: var(--green); }
+  .sentiment-bear { background: var(--red); }
+  .sentiment-neutral { background: var(--muted); }
+
+  .loading { color: var(--muted); text-align: center; padding: 30px; }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .price-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>TRADING HUB</h1>
+  <span class="phase-badge" id="phaseBadge">PHASE 0 — PAPER</span>
+</header>
+
+<!-- Top metrics -->
+<div class="grid" id="metrics">
+  <div class="card">
+    <div class="card-title">Fear & Greed Index</div>
+    <div class="big-number amber" id="fgValue">--</div>
+    <div class="sub-text" id="fgLabel">Loading...</div>
+    <div class="fear-meter"><div class="fear-pointer" id="fgPointer" style="left:50%"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Reddit Sentiment</div>
+    <div class="big-number blue" id="sentimentScore">--</div>
+    <div class="sub-text" id="sentimentLabel">Loading...</div>
+    <div class="sentiment-bar" id="sentimentBar"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Active Signals</div>
+    <div class="big-number green" id="signalCount">0</div>
+    <div class="sub-text" id="signalSummary">No signals yet</div>
+  </div>
+</div>
+
+<!-- Price grid -->
+<div class="card" style="margin-bottom:12px">
+  <div class="card-title">Watchlist</div>
+  <div class="price-grid" id="priceGrid">
+    <div class="loading">Loading prices...</div>
+  </div>
+</div>
+
+<!-- Signals + Debate -->
+<div class="grid grid-2">
+  <div class="card">
+    <div class="card-title">Signals</div>
+    <div id="signalList"><div class="loading">No signals</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Latest Debate</div>
+    <div id="debatePanel"><div class="loading">No debate yet. Run: node trader/bull-bear-debate.js</div></div>
+  </div>
+</div>
+
+<!-- Validation + News -->
+<div class="grid grid-2" style="margin-top:12px">
+  <div class="card">
+    <div class="card-title">Strategy Validator (Last Check)</div>
+    <div id="validatorPanel"><div class="loading">No validation yet</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Crypto News</div>
+    <div id="newsPanel"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<!-- Phase progression -->
+<div class="card" style="margin-top:12px">
+  <div class="card-title">Capital Progression — The Jab Protocol</div>
+  <div class="progression">
+    <div class="phase-step active"></div>
+    <div class="phase-step"></div>
+    <div class="phase-step"></div>
+    <div class="phase-step"></div>
+    <div class="phase-step"></div>
+    <div class="phase-step"></div>
+  </div>
+  <div class="phase-labels">
+    <span>$0 Paper</span>
+    <span>$10</span>
+    <span>$50</span>
+    <span>$200</span>
+    <span>$1000</span>
+    <span>$5000+</span>
+  </div>
+  <div class="sub-text" style="margin-top:8px">Phase promotion requires: 20+ trades, 55%+ win rate, 1.3+ profit factor, <15% drawdown, 14+ days</div>
+</div>
+
+<script>
+const SIGNALS_URL = 'http://localhost:8080/scraper/output/crypto-signals-latest.json';
+const DECISIONS_URL = 'http://localhost:8080/trader/decisions';
+
+async function loadSignals() {
+  try {
+    // Try bridge first
+    let data;
+    try {
+      const res = await fetch(SIGNALS_URL);
+      if (res.ok) data = await res.json();
+    } catch(e) {}
+
+    // Fallback: try direct file serve
+    if (!data) {
+      try {
+        const res = await fetch('http://localhost:8080/scraper/output/crypto-signals-latest.json');
+        if (res.ok) data = await res.json();
+      } catch(e) {}
+    }
+
+    if (!data) return;
+
+    // Fear & Greed
+    if (data.fear_greed) {
+      const fg = data.fear_greed;
+      document.getElementById('fgValue').textContent = fg.value;
+      document.getElementById('fgLabel').textContent = `${fg.label} (week avg: ${fg.week_avg})`;
+      document.getElementById('fgPointer').style.left = `${fg.value}%`;
+
+      const fgEl = document.getElementById('fgValue');
+      fgEl.className = 'big-number ' + (fg.value < 30 ? 'red' : fg.value > 70 ? 'green' : 'amber');
+    }
+
+    // Reddit sentiment
+    if (data.reddit_sentiment) {
+      const s = data.reddit_sentiment;
+      document.getElementById('sentimentScore').textContent = s.sentiment_score.toFixed(2);
+      document.getElementById('sentimentLabel').textContent = `${s.sentiment_label} (${s.bullish} bull / ${s.bearish} bear)`;
+
+      const total = s.bullish + s.bearish + 1;
+      const bullPct = (s.bullish / total) * 100;
+      const bearPct = (s.bearish / total) * 100;
+      const neutralPct = 100 - bullPct - bearPct;
+      document.getElementById('sentimentBar').innerHTML = `
+        <div class="sentiment-bull" style="width:${bullPct}%"></div>
+        <div class="sentiment-neutral" style="width:${neutralPct}%"></div>
+        <div class="sentiment-bear" style="width:${bearPct}%"></div>
+      `;
+    }
+
+    // Prices
+    if (data.prices) {
+      const grid = document.getElementById('priceGrid');
+      grid.innerHTML = Object.entries(data.prices).map(([sym, p]) => {
+        if (!p.price) return '';
+        const changeClass = (p.change_24h || 0) >= 0 ? 'up' : 'down';
+        const changeStr = p.change_24h ? `${p.change_24h >= 0 ? '+' : ''}${p.change_24h.toFixed(1)}%` : '--';
+        return `<div class="price-card">
+          <div class="symbol">${sym}</div>
+          <div class="price">$${p.price < 10 ? p.price.toFixed(2) : p.price < 1000 ? p.price.toFixed(0) : p.price.toLocaleString()}</div>
+          <div class="change ${changeClass}">${changeStr}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // Signals
+    if (data.signals) {
+      document.getElementById('signalCount').textContent = data.signals.length;
+      document.getElementById('signalSummary').textContent = data.signals.length > 0
+        ? data.signals.map(s => `${s.asset} ${s.direction}`).join(', ')
+        : 'No actionable signals';
+
+      const list = document.getElementById('signalList');
+      if (data.signals.length === 0) {
+        list.innerHTML = '<div style="color:var(--muted);padding:10px">Market neutral. No strong signals. Patience is a position.</div>';
+      } else {
+        list.innerHTML = data.signals.map(s => {
+          const color = s.direction === 'long' ? 'var(--green)' : s.direction === 'short' ? 'var(--red)' : 'var(--muted)';
+          return `<div class="signal-row">
+            <div class="signal-dot ${s.direction}"></div>
+            <span style="width:50px;font-weight:600">${s.asset}</span>
+            <span style="width:50px;color:${color}">${s.direction}</span>
+            <div class="signal-strength"><div class="signal-strength-fill" style="width:${s.strength*100}%;background:${color}"></div></div>
+            <span style="flex:1;color:var(--muted);font-size:10px">${s.reasoning.slice(0, 60)}</span>
+          </div>`;
+        }).join('');
+      }
+    }
+
+    // News
+    if (data.news) {
+      const panel = document.getElementById('newsPanel');
+      panel.innerHTML = data.news.slice(0, 8).map(n =>
+        `<div class="news-item">${n.title.slice(0, 80)}<br><span class="news-source">${n.source}</span></div>`
+      ).join('');
+    }
+
+  } catch(e) {
+    console.error('Load error:', e);
+  }
+}
+
+// Load decisions log if available
+async function loadDecisions() {
+  // For now, show placeholder until trades are running
+  const panel = document.getElementById('debatePanel');
+  const validator = document.getElementById('validatorPanel');
+
+  // Check if there's a recent debate in the logs
+  try {
+    const res = await fetch('http://localhost:8080/trader/latest-debate');
+    if (res.ok) {
+      const d = await res.json();
+      panel.innerHTML = `
+        <div class="debate-box bull"><div class="debate-label bull">BULL</div>${d.bull_summary || 'No debate yet'}</div>
+        <div class="debate-box bear"><div class="debate-label bear">BEAR</div>${d.bear_summary || ''}</div>
+        <div class="debate-box decision"><div class="debate-label decision">DECISION</div>${d.action || ''}: ${d.reasoning || ''}</div>
+      `;
+    }
+  } catch(e) {
+    panel.innerHTML = `
+      <div class="debate-box bull"><div class="debate-label bull">BULL</div>Run a debate to see arguments here.<br><code>node trader/bull-bear-debate.js</code></div>
+      <div class="debate-box bear"><div class="debate-label bear">BEAR</div>Bear will counter-argue.</div>
+      <div class="debate-box decision"><div class="debate-label decision">TRADER</div>Final decision: BUY / SKIP / WAIT</div>
+    `;
+  }
+
+  // Validator
+  validator.innerHTML = `
+    <div class="check-row"><span class="check-icon check-pass">✓</span> Position size ≤ 20%</div>
+    <div class="check-row"><span class="check-icon check-pass">✓</span> Max 3 concurrent positions</div>
+    <div class="check-row"><span class="check-icon check-pass">✓</span> Stop loss required</div>
+    <div class="check-row"><span class="check-icon check-pass">✓</span> Risk:Reward ≥ 1.5:1</div>
+    <div class="check-row"><span class="check-icon check-pass">✓</span> Daily loss limit not hit</div>
+    <div class="check-row"><span class="check-icon check-pass">✓</span> Asset in watchlist</div>
+    <div class="check-row"><span class="check-icon check-pass">✓</span> Strategy named</div>
+    <div class="sub-text" style="margin-top:8px">All checks must pass before execution. No exceptions.</div>
+  `;
+}
+
+loadSignals();
+loadDecisions();
+setInterval(loadSignals, 60000);
+</script>
+</body>
+</html>

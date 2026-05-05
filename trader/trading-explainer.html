@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Explainer — Cathedral</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111;
+    --border: #1a1a1a;
+    --text: #e0e0e0;
+    --muted: #777;
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #EF9F27;
+    --blue: #378ADD;
+    --accent: #8B2020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  h1 { font-size: 24px; color: var(--accent); margin-bottom: 8px; letter-spacing: 1px; }
+  h2 { font-size: 16px; color: #fff; margin-top: 40px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 14px; color: var(--amber); margin-top: 24px; margin-bottom: 8px; }
+
+  p { margin-bottom: 12px; color: var(--text); }
+  .muted { color: var(--muted); }
+
+  .principle-box {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .principle-box strong { color: var(--amber); }
+
+  .meter-explain {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0;
+    padding: 10px;
+    background: var(--surface);
+    border-radius: 6px;
+  }
+
+  .meter-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .meter-color.red { background: var(--red); }
+  .meter-color.amber { background: var(--amber); }
+  .meter-color.green { background: var(--green); }
+  .meter-color.blue { background: var(--blue); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+  }
+
+  th, td {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    text-align: left;
+    font-size: 12px;
+  }
+
+  th { background: var(--surface); color: var(--amber); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .phase-visual {
+    display: flex;
+    gap: 4px;
+    margin: 12px 0;
+  }
+
+  .phase-block {
+    flex: 1;
+    padding: 12px 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  .phase-block.active { border-color: var(--amber); }
+  .phase-block .amount { font-size: 16px; font-weight: 700; color: #fff; }
+
+  code {
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--green);
+  }
+
+  .daily-routine {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+
+  .daily-routine ol { padding-left: 20px; }
+  .daily-routine li { margin: 8px 0; }
+
+  .warning {
+    background: #1a1010;
+    border: 1px solid var(--red);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 16px 0;
+  }
+
+  .warning strong { color: var(--red); }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>TRADING EXPLAINER</h1>
+<p class="muted">How to read the Trading Hub. What each number means. When to act. When to wait.</p>
+
+<div class="principle-box">
+  <strong>The one rule that matters:</strong> This is the jab protocol applied to money. Test range before committing. Earn the right to increase. Never throw the cross without establishing the jab first.
+</div>
+
+---
+
+<h2>Fear & Greed Index (0-100)</h2>
+
+<p>Measures the overall mood of the crypto market. Based on: volatility, volume, social media, surveys, Bitcoin dominance.</p>
+
+<div class="meter-explain"><div class="meter-color red"></div><strong>0-25: Extreme Fear</strong> — Everyone is panicking. Historically the BEST time to buy. Blood in the streets. This is where money is made.</div>
+<div class="meter-explain"><div class="meter-color red"></div><strong>25-40: Fear</strong> — Market nervous. Opportunities forming. Watch for signals.</div>
+<div class="meter-explain"><div class="meter-color amber"></div><strong>40-60: Neutral</strong> — No strong edge. Wait. Don't force trades. Patience is a position.</div>
+<div class="meter-explain"><div class="meter-color green"></div><strong>60-75: Greed</strong> — Market confident. Ride existing wins. Don't start new positions.</div>
+<div class="meter-explain"><div class="meter-color green"></div><strong>75-100: Extreme Greed</strong> — Euphoria. Everyone's a genius. Historically the WORST time to buy. Consider taking profit.</div>
+
+<div class="principle-box">
+  <strong>Boxing parallel:</strong> When everyone is rushing forward (greed), they're exposed. When everyone is backing up (fear), they've created space. You step into the space they abandoned. Contrarian = counter-puncher.
+</div>
+
+<h2>Reddit Sentiment (-1 to +1)</h2>
+
+<p>What the crowd is saying. Scored from -1 (everyone bearish) to +1 (everyone bullish).</p>
+
+<p><strong>The counter-intuitive truth:</strong> When everyone agrees, the move is usually OVER. Strong consensus precedes reversals.</p>
+
+<table>
+  <tr><th>Score</th><th>Meaning</th><th>Action</th></tr>
+  <tr><td>-0.5 to -1.0</td><td>Everyone terrified</td><td>Contrarian BUY zone. They already sold.</td></tr>
+  <tr><td>-0.2 to -0.5</td><td>Leaning bearish</td><td>Watch. Opportunities forming.</td></tr>
+  <tr><td>-0.2 to +0.2</td><td>Neutral/mixed</td><td>No edge from sentiment alone.</td></tr>
+  <tr><td>+0.2 to +0.5</td><td>Leaning bullish</td><td>Momentum possible. But watch for peak.</td></tr>
+  <tr><td>+0.5 to +1.0</td><td>Everyone euphoric</td><td>Contrarian CAUTION. They already bought.</td></tr>
+</table>
+
+<div class="principle-box">
+  <strong>Boxing parallel:</strong> When your opponent loads everything to one side, the OTHER side is exposed. Strong consensus = loaded axis. The counter is in the opposite direction.
+</div>
+
+<h2>Signals</h2>
+
+<p>The system generates signals when conditions align. Each signal has:</p>
+
+<table>
+  <tr><th>Component</th><th>What It Means</th></tr>
+  <tr><td>Asset</td><td>Which coin (BTC, ETH, SOL, etc.)</td></tr>
+  <tr><td>Direction</td><td>Long (price going up) or Short (price going down)</td></tr>
+  <tr><td>Strength (0-1)</td><td>How confident the signal is. Below 0.3 = ignore. Above 0.6 = strong.</td></tr>
+  <tr><td>Reasoning</td><td>WHY the signal fired. Read this. Understand it. Don't trade blind.</td></tr>
+  <tr><td>Type</td><td>Strategy category: mean_reversion, momentum, contrarian</td></tr>
+</table>
+
+<h3>Signal Strength Guide</h3>
+<div class="meter-explain"><div class="meter-color" style="background:var(--muted)"></div><strong>0-0.3:</strong> Noise. Ignore. No edge.</div>
+<div class="meter-explain"><div class="meter-color amber"></div><strong>0.3-0.6:</strong> Interesting. Watch it. Maybe debate it. Don't act yet.</div>
+<div class="meter-explain"><div class="meter-color green"></div><strong>0.6-1.0:</strong> Strong. Run the debate. If bull wins AND validator passes → act.</div>
+
+<div class="principle-box">
+  <strong>Boxing parallel:</strong> Signal strength = how open the opponent is. A slight opening (0.3) — watch it. A clear opening (0.6+) — throw the punch. But ONLY if your weight state allows it (validator passes).
+</div>
+
+<h2>The Bull vs Bear Debate</h2>
+
+<p>Two AI agents argue before any trade decision. Bull makes the strongest case FOR. Bear makes the strongest case AGAINST. A Trader agent reads both and decides: BUY, SKIP, or WAIT.</p>
+
+<h3>How to Read It</h3>
+<p><strong>Bull case:</strong> What could go right. The opportunity. The upside.</p>
+<p><strong>Bear case:</strong> What could go wrong. The risk. The downside.</p>
+<p><strong>Decision:</strong> The synthesis. Often the most useful learning tool.</p>
+
+<h3>What to Watch For</h3>
+<ul style="padding-left:20px;margin:12px 0">
+  <li><strong>BUY</strong> — Bull significantly stronger. Clear edge. But STILL needs to pass the validator.</li>
+  <li><strong>SKIP</strong> — Bear wins, or edge too thin. No shame in skipping. Most days you skip.</li>
+  <li><strong>WAIT</strong> — Thesis valid, timing wrong. Revisit tomorrow.</li>
+</ul>
+
+<div class="principle-box">
+  <strong>Boxing parallel:</strong> This is the Genius Council applied to trading. Disagreement by design. The purpose is NOT to always trade — it's to only trade when the case is overwhelming. Most rounds you jab and observe. The cross comes rarely and decisively.
+</div>
+
+<h2>Strategy Validator (7 Checks)</h2>
+
+<p>Every trade must pass ALL seven checks. No exceptions. Like the combination validator — if the biomechanics don't work, don't throw it.</p>
+
+<table>
+  <tr><th>Check</th><th>What It Tests</th><th>Why</th></tr>
+  <tr><td>Position Size ≤ 20%</td><td>No single trade risks too much</td><td>One bad trade can't kill you</td></tr>
+  <tr><td>Max 3 Positions</td><td>Don't over-extend</td><td>Focus > quantity</td></tr>
+  <tr><td>Stop Loss Set</td><td>Exit plan exists BEFORE entry</td><td>Hope is not a strategy</td></tr>
+  <tr><td>Stop Distance Reasonable</td><td>Stop isn't too wide</td><td>Tight risk management</td></tr>
+  <tr><td>Risk:Reward ≥ 1.5:1</td><td>Potential win > potential loss</td><td>Even at 50% win rate, you profit</td></tr>
+  <tr><td>Daily Loss Limit</td><td>Stop if day goes badly</td><td>Prevent tilt/revenge trading</td></tr>
+  <tr><td>Strategy Named</td><td>Know WHY you're trading</td><td>No random bets</td></tr>
+</table>
+
+<div class="principle-box">
+  <strong>The most important check:</strong> Risk:Reward ≥ 1.5:1. This means if you risk $10, your target is at least $15. Over many trades, this mathematical edge means you can be WRONG 40% of the time and still profit. The system doesn't need to be right every time. It needs to be right enough with controlled losses.
+</div>
+
+<h2>Capital Progression — The Jab Protocol</h2>
+
+<div class="phase-visual">
+  <div class="phase-block active"><div class="amount">$0</div>Paper</div>
+  <div class="phase-block"><div class="amount">$10</div>Micro</div>
+  <div class="phase-block"><div class="amount">$50</div>Small</div>
+  <div class="phase-block"><div class="amount">$200</div>Working</div>
+  <div class="phase-block"><div class="amount">$1K</div>Real</div>
+  <div class="phase-block"><div class="amount">$5K+</div>Scale</div>
+</div>
+
+<p>Each phase must EARN the right to the next. Promotion requires:</p>
+<ul style="padding-left:20px;margin:12px 0">
+  <li>20+ trades completed</li>
+  <li>55%+ win rate</li>
+  <li>Profit factor 1.3+ (wins are 30% bigger than losses on average)</li>
+  <li>Max drawdown < 15% (worst losing streak doesn't kill you)</li>
+  <li>14+ days (no lucky streaks — prove consistency over time)</li>
+</ul>
+
+<div class="principle-box">
+  <strong>Boxing parallel:</strong> "Don't throw the cross until you've established the jab." You don't get to trade $1,000 until you've PROVEN it works at $50. The capital increase is the cross — earned through the jab (paper) → testing (micro) → consistency (small). No skipping phases.
+</div>
+
+<h2>Your Daily Practice (Phase 0)</h2>
+
+<div class="daily-routine">
+  <ol>
+    <li><strong>Open Trading Hub</strong> — or type <code>/trade</code> on Telegram (30 seconds)</li>
+    <li><strong>Read three numbers:</strong> Fear/Greed + Sentiment + Top Signal</li>
+    <li><strong>Ask yourself:</strong> "Would I buy anything today? Why or why not?"</li>
+    <li><strong>If yes</strong> → read the debate. Do you agree with the decision?</li>
+    <li><strong>Log your own call</strong> — even just mentally: "I would have bought ETH today"</li>
+    <li><strong>Check next day:</strong> Were you right? Would it have worked?</li>
+    <li><strong>Repeat 20 times.</strong> Then assess: are you right more than half the time?</li>
+  </ol>
+</div>
+
+<p>That's it. 5 minutes/day. You're not trading yet. You're building JUDGMENT. The system teaches you to read the market the same way the ring teaches principles — through repetition and attention.</p>
+
+<h2>When Things Go Wrong</h2>
+
+<div class="warning">
+  <strong>Never do these:</strong>
+  <ul style="padding-left:20px;margin:8px 0">
+    <li>Trade money you need for rent, gym, or family</li>
+    <li>Override the validator because "this one feels different"</li>
+    <li>Skip the stop loss</li>
+    <li>Increase position size after a loss (revenge trading)</li>
+    <li>Trade when emotional, tired, or after drinking</li>
+    <li>Jump phases because you had a lucky streak</li>
+  </ul>
+</div>
+
+<div class="principle-box">
+  <strong>The wound that triggers bad trades:</strong> "I'm not enough / I need to prove myself." This is the same wound that makes you over-commit to staff who don't reciprocate. In trading it looks like: increasing size after losses, skipping the validator, trading to "make back" what was lost. The jab protocol is the defense. Match what the market gives you. Don't escalate unreciprocated.
+</div>
+
+<h2>Success Metrics by Phase</h2>
+
+<table>
+  <tr><th>Phase</th><th>Success Looks Like</th><th>Duration</th></tr>
+  <tr><td>0 — Paper</td><td>You read signals correctly. Your calls would have been profitable 55%+.</td><td>2-4 weeks</td></tr>
+  <tr><td>1 — $10</td><td>Real execution works. Fees understood. Discipline holds.</td><td>4 weeks</td></tr>
+  <tr><td>2 — $50</td><td>Consistent over 4+ weeks. No emotional overrides. Small compound visible.</td><td>4-8 weeks</td></tr>
+  <tr><td>3 — $200</td><td>Survives a bad week. Drawdown managed. Still profitable over 30 days.</td><td>8-12 weeks</td></tr>
+  <tr><td>4 — $1000</td><td>Monthly returns predictable. System runs with minimal attention.</td><td>Ongoing</td></tr>
+  <tr><td>5 — $5000+</td><td>Compounding is real and visible. The Cathedral trades while Paul coaches.</td><td>Ongoing</td></tr>
+</table>
+
+<h2>The Philosophy</h2>
+
+<p>Trading is the hardest way to make easy money. Most people lose because they trade emotionally, over-commit, and skip the jab.</p>
+
+<p>The Cathedral's edge is not prediction. It's DISCIPLINE.</p>
+
+<ul style="padding-left:20px;margin:12px 0">
+  <li>The system has no emotions. It scores signals mathematically.</li>
+  <li>The debate catches blind spots before they cost money.</li>
+  <li>The validator prevents structurally unsound trades.</li>
+  <li>The logger proves what works and what doesn't — over time, the data decides.</li>
+  <li>The phase progression prevents over-commitment.</li>
+</ul>
+
+<p>You don't need to be right every time. You need the system to be right ENOUGH, with controlled losses, compounded over time. That's the Master Game applied to markets.</p>
+
+<div class="principle-box">
+  <strong>Final principle:</strong> "Test range. Match what they give you. Return to neutral. Don't load the same axis. Earn the cross." — The five content pillars work here too. The market is a partner. Read what it gives you. Respond proportionally. Never over-commit. Compound.
+</div>
+
+<p class="muted" style="margin-top:40px;text-align:center">
+  <a href="http://localhost:8080/trader/hub">← Back to Trading Hub</a>
+</p>
+
+</body>
+</html>

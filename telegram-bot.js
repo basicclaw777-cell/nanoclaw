@@ -20,6 +20,7 @@ import { scanForPromotions, generateReport, executePromotions } from './vault-pr
 import { getScheduleReport, formatScheduleReport } from './gcal-reader.js';
 import { startComboWatcher } from './combo-watcher.js';
 import { runTarget, runAll, getDashboardData, formatTelegramSummary } from './scraper/scraper-engine.js';
+import { debate } from './trader/bull-bear-debate.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -1969,6 +1970,68 @@ bot.onText(/^\/health(?:@\w+)?$/i, async (msg) => {
     }
     await safeSend(chatId, response);
   } catch (err) { await safeSend(chatId, `Health error: ${err.message}`); }
+});
+
+// ── /trade — Trading signal scan + debate ───────────────────────────────────
+bot.onText(/^\/trade(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  await safeSend(chatId, 'Scanning market...');
+
+  try {
+    // Run signal scraper
+    const { spawn: sp } = await import('child_process');
+    const proc = sp(path.join(process.env.HOME, 'cathedral-venv', 'bin', 'python3'),
+      [path.join(process.env.HOME, 'nanoclaw', 'trader', 'signals', 'crypto-signals.py')],
+      { env: process.env, timeout: 30000 });
+
+    let out = '';
+    proc.stdout.on('data', d => { out += d; });
+    proc.on('close', async () => {
+      try {
+        const dataPath = path.join(process.env.HOME, 'nanoclaw', 'trader', 'signals', 'crypto-signals-latest.json');
+        const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+        // Line 1: Fear & Greed
+        const fg = data.fear_greed;
+        const fgLine = fg ? `Fear/Greed: ${fg.value} (${fg.label})` : 'Fear/Greed: unavailable';
+
+        // Line 2: Top signal
+        let signalLine = 'Top signal: none — market neutral';
+        if (data.signals && data.signals.length > 0) {
+          const top = data.signals.sort((a, b) => b.strength - a.strength)[0];
+          signalLine = `Top signal: ${top.asset} ${top.direction} (strength ${top.strength.toFixed(2)}) — ${top.reasoning.slice(0, 60)}`;
+        }
+
+        // Line 3: Run debate on top signal if exists
+        let debateLine = 'Debate: no signal to debate. Patience is a position.';
+        if (data.signals && data.signals.length > 0) {
+          const top = data.signals[0];
+          if (top.asset !== 'MARKET' && top.strength > 0.3) {
+            const price = data.prices[top.asset]?.price || 0;
+            const result = await debate({
+              asset: top.asset,
+              direction: top.direction,
+              entryPrice: price,
+              signals: data.signals.filter(s => s.asset === top.asset || s.asset === 'MARKET'),
+              context: `Fear/Greed: ${fg?.value}. Reddit: ${data.reddit_sentiment?.sentiment_label}.`,
+            });
+            debateLine = `Debate: ${result.decision} — ${result.reasoning.slice(0, 80)}`;
+          } else if (top.asset === 'MARKET') {
+            debateLine = `Debate: MARKET-wide signal (${top.direction}). No specific asset to debate.`;
+          }
+        }
+
+        const response = `${fgLine}\n${signalLine}\n${debateLine}`;
+        await safeSend(chatId, response);
+
+        // Copy to scraper outputs for dashboard
+        fs.copyFileSync(dataPath, path.join(process.env.HOME, 'nanoclaw', 'scraper', 'outputs', 'crypto-signals-latest.json'));
+      } catch (e) {
+        await safeSend(chatId, `Trade scan failed: ${e.message}`);
+      }
+    });
+    proc.on('error', async () => { await safeSend(chatId, 'Signal scraper failed to start.'); });
+  } catch (err) { await safeSend(chatId, `Trade error: ${err.message}`); }
 });
 
 // ── /intel — Intelligence Hub scraper commands ─────────────────────────────

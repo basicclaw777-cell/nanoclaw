@@ -1242,6 +1242,35 @@ app.get('/constellation', async (req, res) => {
   }
 });
 
+// ── Trading Hub ──────────────────────────────────────────────────────────────
+
+app.get('/trader/hub', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'trader', 'trading-hub.html'));
+});
+
+app.get('/trader/explainer', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'trader', 'trading-explainer.html'));
+});
+
+app.get('/trader/signals', (req, res) => {
+  const fp = path.join(NANOCLAW, 'trader', 'signals', 'crypto-signals-latest.json');
+  if (!require('fs').existsSync(fp)) return res.status(404).json({ error: 'No signals yet' });
+  res.json(JSON.parse(require('fs').readFileSync(fp, 'utf8')));
+});
+
+app.get('/trader/latest-debate', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const row = db.prepare('SELECT * FROM decisions ORDER BY id DESC LIMIT 1').get();
+    db.close();
+    if (row) return res.json(row);
+    res.status(404).json({ error: 'No decisions yet' });
+  } catch(e) {
+    res.status(404).json({ error: 'No trades database yet' });
+  }
+});
+
 // ── Intelligence Hub: Scraper endpoints ──────────────────────────────────────
 
 const SCRAPER_OUTPUTS = path.join(NANOCLAW, 'scraper', 'outputs');
