@@ -902,6 +902,29 @@ He will decide when he's done.
 - Scrapling note: use urllib for clean JSON APIs (PubMed, Reddit). Scrapling Fetcher for anti-bot sites only.
 - Basic Reflex home page: Intelligence Hub link added
 
+## Principle Extraction Engine — Built 2026-05-05
+- Script: ~/nanoclaw/principle-extractor.py (hermes3 via Ollama, cathedral-venv)
+- Reads all nuggets in 02_Refined_Gold, extracts universal principle from each
+- Output: ~/cathedral-vault/06_Methods/principle-library.md + ~/nanoclaw/scraper/outputs/principles-raw.json
+- Visual: ~/basic-reflex/principles.html (interactive principle graph, domain circles, bridge lines)
+- Run: python3 principle-extractor.py [batch_size] [resume_from]
+
+## The Partnership Relay — Framework 2026-05-05
+- Document: ~/cathedral-vault/06_Methods/partnership-relay.md
+- 7 principles of effective AI collaboration: Resonance, Dovetail, The Counter, Bandwidth, Sovereignty, Attunement, Continuity
+- Risk Layer: drift not deception, Cathy as emergent drift detector
+- Emergent principle: design for character, not compliance
+
+## The Paul Kernel — Identity Seed 2026-05-05
+- Document: ~/cathedral-vault/06_Methods/paul-kernel.md
+- ~2000 token compressed identity. 12 principles. Cognitive signature. Working style.
+- Purpose: Any new agent loads this → full Paul-alignment from message one.
+
+## Basic Reflex — The Book (structure defined 2026-05-05)
+- Document: ~/cathedral-vault/06_Methods/basic-reflex-book.md
+- 15 chapters, 4 parts. Principles discovered through boxing, applied to everything.
+- "The vault wrote the book. Paul writes the story."
+
 ## Kit GM Agent (operational since 2026-04-28)
 - Vault: ~/cathedral-vault/10_Agents/kit/
 - Workspace: ~/br-gm-agent/ (6 Python scripts, CLAUDE.md)
