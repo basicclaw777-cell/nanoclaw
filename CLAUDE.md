@@ -902,6 +902,20 @@ He will decide when he's done.
 - Scrapling note: use urllib for clean JSON APIs (PubMed, Reddit). Scrapling Fetcher for anti-bot sites only.
 - Basic Reflex home page: Intelligence Hub link added
 
+## Higgsfield Visual Production System — Built 2026-05-06
+- **CLI:** `@higgsfield/cli` installed globally, authenticated via `higgsfield auth login`
+- **Skills:** 4 skills symlinked to Claude Code at `~/.claude/skills/`:
+  - higgsfield-generate, higgsfield-soul-id, higgsfield-marketplace-cards, higgsfield-product-photoshoot
+- **Soul ID:** "Cloud Whisperer" (ref: 2a825762-9d13-4d93-9324-32fe5d5db803), trained on 36 photos
+  - Key: must specify "long dreadlocks" in every prompt — Soul ID doesn't capture hair
+- **Pro Photo Pipeline:** ~/nanoclaw/pro-photo.js (CLI + watch mode), ~/nanoclaw/pro-photo-dashboard.html
+  - Nano Banana Pro + preservation prompt → cinematic 16:9 grade from any photo
+  - Inbox: ~/nanoclaw/pro-photo-inbox/ → Outbox: ~/nanoclaw/pro-photo-outbox/
+  - Auto-sends to Telegram
+- **Generation Hierarchy:** Pro Photo (preservation) > Soul ID (new scenes) > Character sheet transfer > Dual-reference > LoRA (legacy)
+- **Vault docs updated:** LOGAN_GENERATION_PLAYBOOK.md + LOGAN_IP_SYSTEM.md
+- **Next:** Reed Visual Director sage (Telegram + Code), harvest image gen tips from raw chats
+
 ## Principle Extraction Engine — Built 2026-05-05
 - Script: ~/nanoclaw/principle-extractor.py (hermes3 via Ollama, cathedral-venv)
 - Reads all nuggets in 02_Refined_Gold, extracts universal principle from each
