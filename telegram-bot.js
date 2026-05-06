@@ -2204,12 +2204,22 @@ bot.on('photo', async (msg) => {
     fs.writeFileSync(localPath, response.data);
     console.log(`[reed-photo] Downloaded ${localPath} (${(response.data.length / 1024).toFixed(0)}KB)`);
 
+    // Upscale small images — Nano Banana fails below ~700px
+    const dimInfo = execSync(`sips -g pixelWidth -g pixelHeight "${localPath}"`, { encoding: 'utf-8' });
+    const pw = parseInt(dimInfo.match(/pixelWidth:\s*(\d+)/)?.[1] || '0');
+    const ph = parseInt(dimInfo.match(/pixelHeight:\s*(\d+)/)?.[1] || '0');
+    if (Math.max(pw, ph) < 700) {
+      const scale = Math.ceil(1400 / Math.max(pw, ph));
+      execSync(`sips --resampleWidth ${pw * scale} "${localPath}"`, { timeout: 10000 });
+      console.log(`[reed-photo] Upscaled ${pw}x${ph} → ${pw * scale}px wide`);
+    }
+
     if (!instruction) {
       // No text — auto pro-photo pipeline
       await safeSend(chatId, '🎬 Reed: Pro photo upgrade running...');
 
       const result = execSync(
-        `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch to the attached image. Maintain 100% exact preservation of subject identity, poses, clothing, and all background elements. Strictly 16:9 cinematic aspect ratio. Camera Profile: Sony A7R V with 70mm lens; zero background blur; deep, crisp focus throughout. Lighting: Add a soft, directional key light from camera-left; diminish harsh overhead ceiling lights. Aesthetic: Premium sports documentary color grade with neutral-to-warm tones and natural skin tones. Enhance micro-contrast on leather textures and skin without smoothing. No hallucinations; do not add or remove objects. Final output must look like a professional Lightroom/Capture One grade of the original raw file." --image "${localPath}" --aspect_ratio 16:9 --resolution 2k --wait`,
+        `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. 16:9 cinematic. Sony A7R V, 70mm lens, deep crisp focus throughout. Soft directional key light from camera-left, diminish harsh overhead fluorescents. Warm golden sports documentary color grade. Saturate wall posters and artwork. Enhance wood floor grain and leather bag textures with age patina. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people. Professional Lightroom grade of original raw file." --image "${localPath}" --aspect_ratio 16:9 --resolution 2k --wait`,
         { encoding: 'utf-8', timeout: 600000 }
       ).trim();
 
@@ -2229,28 +2239,44 @@ bot.on('photo', async (msg) => {
       const lower = instruction.toLowerCase();
       let cmd, mode, aspect;
 
-      if (lower.includes('manga') || lower.includes('anime') || lower.includes('comic')) {
-        mode = 'Manga/anime conversion';
+      if (lower.includes('ippo') || lower.includes('shonen')) {
+        mode = 'Ippo shonen manga';
         aspect = '3:4';
-        const style = lower.includes('anime') ? 'anime' : lower.includes('comic') ? 'graphic novel comic' : 'manga';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "${style} character illustration of a boxing coach with long dreadlocks and beard. ${style} art style, clean linework, dramatic lighting. Professional ${style} quality. Maintain subject identity from reference image." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
-      } else if (lower.includes('cinematic') || lower.includes('cinema') || lower.includes('movie')) {
-        mode = 'Soul Cinematic';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Japanese boxing manga panel in the style of Hajime no Ippo. Dynamic action lines radiating from the punch impact. Speed lines, motion blur on fists. Bold ink outlines, screentone shading. Dramatic low angle. Sweat droplets frozen mid-air. Japanese sound effect text near impact. Professional weekly shonen manga quality. Preserve exact poses and gym environment." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      } else if (lower.includes('manga') || lower.includes('anime') || lower.includes('comic') || lower.includes('graphic novel')) {
+        mode = 'Manga/graphic novel';
+        aspect = lower.includes('wide') ? '16:9' : '3:4';
+        const style = lower.includes('anime') ? 'anime illustration' : lower.includes('comic') ? 'graphic novel comic' : 'manga';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Convert this photograph into a detailed ${style} illustration. Warm sepia and earth tones with golden light rays through windows. Ink-style cross-hatching and clean linework. Preserve all architectural details, equipment placement, brand text (Lonsdale, Basic Reflex), and wall posters exactly. Enhance foreground detail: gym bags, gloves, rope, floor texture. Professional ${style} environment art quality. Do not add or remove any people. Convert only what exists in the photo." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      } else if (lower.includes('noir') || lower.includes('black and white') || lower.includes('bw')) {
+        mode = 'Film noir';
         aspect = '16:9';
-        cmd = `higgsfield generate create soul_cinematic --prompt "Cinematic sports documentary still, dramatic lighting, shallow depth of field, boxing gym atmosphere, professional cinematography, warm tones. Man with long dreadlocks." --image "${localPath}" --aspect_ratio ${aspect} --wait`;
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Film noir boxing photograph. Pure black and white with deep inky shadows. 1940s fight night atmosphere. Single harsh overhead light creating dramatic pools of light and shadow. Film grain, slight motion blur on the punch. Smoky atmosphere. Preserve subject identity and pose exactly. Classic noir cinematography, high contrast, no midtones." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      } else if (lower.includes('neon') || lower.includes('cyberpunk') || lower.includes('blade runner')) {
+        mode = 'HK Neon cyberpunk';
+        aspect = '16:9';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Hong Kong cyberpunk boxing gym. Neon signs reflecting off rain-slicked floors in pink, blue, and amber. Chinese characters glowing on walls. Atmospheric fog catching neon light. Dark moody shadows with electric color pops. Blade Runner meets boxing gym. Preserve subject identity and pose. Cinematic 2.39:1 anamorphic feel." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      } else if (lower.includes('oil') || lower.includes('painting') || lower.includes('rembrandt')) {
+        mode = 'Oil painting';
+        aspect = '16:9';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Oil painting on canvas. Heavy impasto brushstrokes visible throughout. Dramatic Rembrandt side-lighting from upper left. Deep rich shadows. Color palette: deep browns, warm whites, muted reds, charcoal blacks — NOT orange or amber monochrome. Canvas weave texture visible. Glint of light on leather gloves and bag chains. Preserve subject poses and gym environment. Classical fine art treatment of modern boxing. Gallery quality." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      } else if (lower.includes('dramatic') || lower.includes('cinematic') || lower.includes('cinema') || lower.includes('movie')) {
+        mode = 'Dramatic cinema';
+        aspect = '16:9';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Dramatic cinematic reimagining. Volumetric haze and atmospheric fog filling the gym. Golden god rays streaming through windows. Heavy chiaroscuro lighting with deep shadows. Film grain texture. Preserve subject identity and pose but add dramatic atmosphere: backlit silhouette depth, warm amber tones, dust particles in light beams. Boxing gym atmosphere. Sports documentary cinematography at golden hour." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
       } else if (lower.includes('video') || lower.includes('animate') || lower.includes('motion')) {
         mode = 'Video generation';
         aspect = '16:9';
         cmd = `higgsfield generate create seedance_2_0 --prompt "Subtle cinematic motion, camera slowly pushes in, atmospheric lighting shifts, documentary feel" --start-image "${localPath}" --duration 5 --aspect_ratio ${aspect} --wait`;
-      } else if (lower.includes('poster') || lower.includes('print') || lower.includes('wall')) {
-        mode = 'Print poster';
+      } else if (lower.includes('poster') || lower.includes('fight poster') || lower.includes('70s')) {
+        mode = '70s fight poster';
         aspect = '3:4';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Professional sports poster design, bold typography space at top, dramatic cinematic lighting, boxing gym atmosphere, editorial quality, high contrast. Maintain 100% subject identity preservation from reference." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Vintage 1970s boxing fight poster. Aged yellowed paper texture with fold creases. Bold sans-serif typography at top: BASIC REFLEX. Halftone dot printing effect. Red, black, and cream color palette. Retro sports illustration style inspired by Muhammad Ali era fight posters. Border frame with decorative corners. Preserve subject identity and action pose." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
       } else {
         // Default: pro photo with custom instruction baked in
         mode = 'Pro photo + custom';
         aspect = '16:9';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch. ${instruction}. Maintain exact preservation of subject identity, poses, clothing. Camera Profile: Sony A7R V, 70mm lens. Premium sports documentary color grade, natural skin tones. No hallucinations." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch. ${instruction}. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. Warm golden sports documentary color grade. Saturate wall posters. Enhance textures. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
       }
 
       await safeSend(chatId, `🎬 Reed: Running ${mode}...`);
@@ -2894,7 +2920,23 @@ bot.onText(/^\/reed(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
   const chatId = msg.chat.id;
   const query = match?.[1]?.trim();
   if (!query) {
-    return safeSend(chatId, '🎬 *Reed — Visual Director*\n\nUsage: `/reed <request>`\n\nExamples:\n• `/reed pro photo upgrade this gym shot`\n• `/reed generate logan in victoria peak at sunset`\n• `/reed manga character sheet for kael`\n• `/reed what model should I use for technique cards?`', { parse_mode: 'Markdown' });
+    return safeSend(chatId, `🎬 *Reed — Visual Director*
+
+*Photo styles* (send photo with /reed caption):
+\`/reed\` — Pro photo v2
+\`/reed manga\` — Graphic novel environment
+\`/reed ippo\` — Shonen manga (speed lines)
+\`/reed noir\` — B&W 1940s fight night
+\`/reed neon\` — HK cyberpunk
+\`/reed dramatic\` — Volumetric cinema
+\`/reed oil\` — Oil painting
+\`/reed poster\` — 70s fight poster
+\`/reed video\` — 5s motion
+
+*Commands:*
+\`/shots\` — Today's photo assignments
+\`/lab\` — Run Daily Lab now
+\`/reed <question>\` — Ask Reed anything`, { parse_mode: 'Markdown' });
   }
 
   await safeSend(chatId, '🎬 Reed reviewing...');
@@ -2922,8 +2964,10 @@ ${Object.entries(reedDef.capabilities.models).map(([k, v]) => `- ${k}: ${v}`).jo
 SOUL ID: ${reedDef.capabilities.soul_id.name} (${reedDef.capabilities.soul_id.ref_id})
 Note: ${reedDef.capabilities.soul_id.note}
 
-PRESERVATION PROMPT (for pro photo upgrades):
-${reedDef.preservation_prompt}
+PROVEN PROMPTS:
+Pro Photo: ${reedDef.prompts?.pro_photo || 'see bot code'}
+Manga: ${reedDef.prompts?.manga || 'see bot code'}
+Dramatic: ${reedDef.prompts?.dramatic_cinema || 'see bot code'}
 
 STANDING RULES:
 ${reedDef.standing_rules.map((r, i) => `${i + 1}. ${r}`).join('\n')}
@@ -2974,6 +3018,157 @@ Keep responses short and direct. You're a creative director, not a copywriter.`;
   } catch (err) {
     console.error('[reed]', err.message);
     await safeSend(chatId, `⚠️ Reed error: ${err.message}`);
+  }
+});
+
+// ── Reed Shot List — /shots ──────────────────────────────────────────────────
+bot.onText(/^\/shots(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    execSync('cd ~/nanoclaw && node reed-lab/daily-lab.js --shots', { encoding: 'utf-8', timeout: 30000 });
+    await safeSend(chatId, '🎬 Reed: Shot list sent.');
+  } catch (err) {
+    await safeSend(chatId, `⚠️ Shot list error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── Reed Daily Lab — /lab ───────────────────────────────────────────────────
+bot.onText(/^\/lab(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '🎬 Reed Lab starting... This will take a few minutes.');
+  try {
+    execSync('cd ~/nanoclaw && node reed-lab/daily-lab.js', { encoding: 'utf-8', timeout: 900000 });
+  } catch (err) {
+    await safeSend(chatId, `⚠️ Lab error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── Roundtable — /roundtable ─────────────────────────────────────────────────
+bot.onText(/^\/roundtable(?:@\w+)?(?:\s+(.*))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const topic = match?.[1]?.trim();
+  await safeSend(chatId, '🏛️ Roundtable assembling...');
+  try {
+    if (topic) {
+      execSync(`cd ~/nanoclaw && node reed-lab/roundtable.js --custom "${topic.replace(/"/g, '\\"')}"`, { encoding: 'utf-8', timeout: 600000 });
+    } else {
+      execSync('cd ~/nanoclaw && node reed-lab/roundtable.js --weekly', { encoding: 'utf-8', timeout: 600000 });
+    }
+  } catch (err) {
+    await safeSend(chatId, `⚠️ Roundtable error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── Roundtable Digest — /digest ──────────────────────────────────────────────
+bot.onText(/^\/digest(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '🏛️ Generating roundtable digest...');
+  try {
+    execSync('cd ~/nanoclaw && node reed-lab/roundtable-digest.js --all', { encoding: 'utf-8', timeout: 300000 });
+  } catch (err) {
+    await safeSend(chatId, `⚠️ Digest error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── /predict — Predictive Intelligence completion engine ─────────────────────
+bot.onText(/^\/predict(?:@\w+)?\s+(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const seed = match[1].trim();
+  if (!seed) return safeSend(chatId, 'Usage: /predict <seed text>');
+
+  safeSend(chatId, `🔮 Running prediction on: "${seed.slice(0, 80)}..."`);
+
+  try {
+    const { execSync } = require('child_process');
+    const result = execSync(
+      `source ~/cathedral-venv/bin/activate && python3 ~/Cathedral/predictive-complete.py "${seed.replace(/"/g, '\\"')}"`,
+      { shell: '/bin/zsh', timeout: 180000, maxBuffer: 1024 * 1024, encoding: 'utf8' }
+    );
+
+    // Extract the completion section from output
+    const completionMatch = result.match(/COMPLETION \(Grade .+?\)\n={60}\n([\s\S]+?)\n={60}/);
+    const gradeMatch = result.match(/Grade (\w) — (\d+)\/100/);
+
+    if (completionMatch) {
+      const grade = gradeMatch ? gradeMatch[1] : '?';
+      const score = gradeMatch ? gradeMatch[2] : '?';
+      const emoji = { A: '🟢', B: '🔵', C: '🟡', D: '🟠', F: '🔴' }[grade] || '⚪';
+      safeSend(chatId, `${emoji} *Prediction — Grade ${grade} (${score}/100)*\n\n${completionMatch[1]}`, { parse_mode: 'Markdown' });
+    } else {
+      // Fallback: send last 3000 chars of output
+      safeSend(chatId, result.slice(-3000));
+    }
+  } catch (err) {
+    console.error('[predict]', err.message);
+    safeSend(chatId, `❌ Prediction failed: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── /gaps — Predictive Intelligence structural holes + seeds ─────────────────
+bot.onText(/^\/gaps(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+
+  try {
+    const seedsPath = path.join(process.env.HOME, 'Cathedral', 'predictive-intelligence', 'autonomous-seeds.json');
+    const graphPath = path.join(process.env.HOME, 'Cathedral', 'predictive-intelligence', 'knowledge-graph.json');
+
+    if (!fs.existsSync(seedsPath) || !fs.existsSync(graphPath)) {
+      return safeSend(chatId, '⚠️ Predictive intelligence not built yet. Run: python3 ~/Cathedral/predictive-graph.py --all');
+    }
+
+    const seeds = JSON.parse(fs.readFileSync(seedsPath, 'utf8'));
+    const graph = JSON.parse(fs.readFileSync(graphPath, 'utf8'));
+    const stats = graph.stats || {};
+
+    let msg_text = `🧠 *Predictive Intelligence*\n`;
+    msg_text += `Nodes: ${stats.nodes || '?'} | Edges: ${stats.edges || '?'} | Communities: ${stats.communities || '?'}\n`;
+    msg_text += `Predicted edges: ${stats.predicted_edges || 0} | Contradictions: ${stats.contradictions || 0}\n\n`;
+
+    msg_text += `*Top Bridge Nodes:*\n`;
+    (stats.top_bridge_nodes || []).slice(0, 5).forEach(b => {
+      msg_text += `  • [${b.domain}] ${b.title.slice(0, 50)}\n`;
+    });
+
+    msg_text += `\n*Autonomous Seeds (questions to investigate):*\n`;
+    seeds.slice(0, 8).forEach((s, i) => {
+      const pct = Math.round(s.priority * 100);
+      const emoji = s.type === 'structural_hole' ? '🕳️' : s.type === 'predicted_bridge' ? '🌉' : '💎';
+      msg_text += `\n${emoji} *(${pct}%)* ${s.question.slice(0, 120)}\n`;
+    });
+
+    msg_text += `\n🗺️ Interactive map: localhost:8080/predictive/map`;
+
+    safeSend(chatId, msg_text, { parse_mode: 'Markdown' });
+  } catch (err) {
+    console.error('[gaps]', err.message);
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── /predict-rebuild — Regenerate predictive intelligence graph ──────────────
+bot.onText(/^\/predict-rebuild(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  safeSend(chatId, '🔄 Rebuilding predictive intelligence graph...');
+  try {
+    const { exec } = require('child_process');
+    exec(
+      'source ~/cathedral-venv/bin/activate && python3 ~/Cathedral/predictive-graph.py --all',
+      { shell: '/bin/zsh', timeout: 600000, maxBuffer: 2 * 1024 * 1024 },
+      (err, stdout, stderr) => {
+        if (err) {
+          safeSend(chatId, `❌ Rebuild failed: ${err.message.slice(0, 200)}`);
+          return;
+        }
+        const summaryMatch = stdout.match(/PREDICTIVE INTELLIGENCE — SUMMARY\n={60}\n([\s\S]+?)$/);
+        if (summaryMatch) {
+          safeSend(chatId, `✅ *Predictive Intelligence rebuilt*\n\`\`\`\n${summaryMatch[1].slice(0, 1500)}\n\`\`\``, { parse_mode: 'Markdown' });
+        } else {
+          safeSend(chatId, '✅ Rebuild complete.');
+        }
+      }
+    );
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
   }
 });
 

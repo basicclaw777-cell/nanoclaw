@@ -623,6 +623,64 @@ app.get('/graph/rebuild/status', requireApiKey, (req, res) => {
   res.json({ running: graphRebuildRunning });
 });
 
+// ── Predictive Intelligence ────────────────────────────────────────────────────
+
+const PRED_DIR = path.join(HOME, 'Cathedral', 'predictive-intelligence');
+
+app.get('/predictive/map', (req, res) => {
+  const key = process.env.CATH_API_KEY;
+  if (key && req.headers['x-api-key'] !== key && req.query['x-api-key'] !== key) {
+    return res.status(401).json({ error: 'unauthorized' });
+  }
+  const htmlPath = path.join(PRED_DIR, 'predictive-map.html');
+  if (!require('fs').existsSync(htmlPath)) return res.status(404).json({ error: 'predictive-map.html not found — run predictive-graph.py first' });
+  res.setHeader('Content-Type', 'text/html');
+  require('fs').createReadStream(htmlPath).pipe(res);
+});
+
+app.get('/predictive/stats', requireApiKey, (req, res) => {
+  const jsonPath = path.join(PRED_DIR, 'knowledge-graph.json');
+  if (!require('fs').existsSync(jsonPath)) return res.json({ exists: false });
+  try {
+    const data = JSON.parse(require('fs').readFileSync(jsonPath, 'utf8'));
+    res.json({ exists: true, ...data.stats, generated: data.generated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/predictive/seeds', requireApiKey, (req, res) => {
+  const seedsPath = path.join(PRED_DIR, 'autonomous-seeds.json');
+  if (!require('fs').existsSync(seedsPath)) return res.json([]);
+  try {
+    res.json(JSON.parse(require('fs').readFileSync(seedsPath, 'utf8')));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/predictive/predictions', requireApiKey, (req, res) => {
+  const predPath = path.join(PRED_DIR, 'predictions.json');
+  if (!require('fs').existsSync(predPath)) return res.json({});
+  try {
+    res.json(JSON.parse(require('fs').readFileSync(predPath, 'utf8')));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+let predRebuildRunning = false;
+app.post('/predictive/rebuild', requireApiKey, (req, res) => {
+  if (predRebuildRunning) return res.status(409).json({ error: 'rebuild already running' });
+  predRebuildRunning = true;
+  res.json({ status: 'started' });
+  const proc = spawn('python3', ['predictive-graph.py', '--all'], {
+    cwd: path.join(HOME, 'Cathedral'),
+    env: { ...process.env, PATH: `${HOME}/cathedral-venv/bin:${process.env.PATH}` },
+  });
+  proc.on('close', () => { predRebuildRunning = false; });
+});
+
 // ── Villa snapshot ─────────────────────────────────────────────────────────────
 // Single consolidated endpoint powering the Cathedral Villa panel.
 // Returns everything the panel needs in one call: pm2 state, vault counts,
@@ -1531,6 +1589,39 @@ app.get('/scraper/output/:filename', (req, res) => {
 app.get('/scraper/hub', (req, res) => {
   const hubPath = path.join(NANOCLAW, 'scraper', 'intelligence-hub.html');
   res.sendFile(hubPath);
+});
+
+// ── Reed's Studio ────────────────────────────────────────────────────────────
+app.get('/reed-studio', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'studio.html'));
+});
+app.get('/reed-lab/catalogue', (req, res) => {
+  const catPath = path.join(NANOCLAW, 'reed-lab', 'catalogue.json');
+  if (fs.existsSync(catPath)) return res.json(JSON.parse(fs.readFileSync(catPath, 'utf8')));
+  res.json({ photos: [], generations: [], stats: { total_generated: 0, by_style: {} } });
+});
+app.get('/reed-lab/shots', (req, res) => {
+  const shotPath = path.join(NANOCLAW, 'reed-lab', 'shot-list.json');
+  if (fs.existsSync(shotPath)) return res.json(JSON.parse(fs.readFileSync(shotPath, 'utf8')));
+  res.json({ assignments: [], full_list: [] });
+});
+app.get('/reed-lab/image', (req, res) => {
+  const imgPath = req.query.path;
+  if (!imgPath || !imgPath.startsWith(path.join(process.env.HOME))) return res.status(400).send('Bad path');
+  if (!fs.existsSync(imgPath)) return res.status(404).send('Not found');
+  res.sendFile(imgPath);
+});
+
+app.get('/reed-lab/digest', (req, res) => {
+  const today = new Date().toISOString().slice(0, 10);
+  const digestPath = path.join(NANOCLAW, 'reed-lab', `roundtable-digest-${today}.html`);
+  // Try today, else find latest
+  if (fs.existsSync(digestPath)) return res.sendFile(digestPath);
+  const files = fs.readdirSync(path.join(NANOCLAW, 'reed-lab'))
+    .filter(f => f.startsWith('roundtable-digest-') && f.endsWith('.html'))
+    .sort().reverse();
+  if (files.length > 0) return res.sendFile(path.join(NANOCLAW, 'reed-lab', files[0]));
+  res.status(404).send('No digest yet. Run /digest on Telegram.');
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

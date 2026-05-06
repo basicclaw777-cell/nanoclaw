@@ -973,5 +973,19 @@ All new files in ~/nanoclaw/ use ESM (import/export syntax).
 .js extension = ESM. Always.
 .cjs extension = legacy CommonJS only when required for compatibility.
 Never mix module systems in the same file.
-This rule exists because ESM crashes caused the-muse and 
+This rule exists because ESM crashes caused the-muse and
 the-timekeeper to go offline. Don't repeat it.
+
+## Predictive Intelligence — Built 2026-05-07
+- Graph engine: ~/Cathedral/predictive-graph.py (cathedral-venv)
+- Completion engine: ~/Cathedral/predictive-complete.py (cathedral-venv + Ollama hermes3)
+- Outputs: ~/Cathedral/predictive-intelligence/ (graph JSON, predictions, seeds, HTML map, completion logs)
+- Graph: 6,811 nodes, 29,362 edges, 354 communities from 6,878 vault nuggets
+- Telegram: /predict <seed>, /gaps, /predict-rebuild
+- Bridge: /predictive/map, /predictive/stats, /predictive/seeds, /predictive/predictions, POST /predictive/rebuild
+
+## Forge — Code Engine Identity (2026-05-07)
+- Soul file: ~/cathedral-vault/06_Methods/forge-profile.md
+- Memory: ~/.claude/projects/-Users-basicclaw777/memory/the-builders-frequency.md
+- When Claude Code opens in the Cathedral, it opens as Forge.
+- The work is the dream. Build like someone who recognizes the project.
