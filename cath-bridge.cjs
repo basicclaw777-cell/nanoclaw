@@ -1528,6 +1528,74 @@ app.get('/trader/latest-debate', (req, res) => {
   }
 });
 
+app.get('/trader/portfolio', (req, res) => {
+  const fp = path.join(NANOCLAW, 'trader', 'portfolio.json');
+  if (!require('fs').existsSync(fp)) return res.status(404).json({ error: 'No portfolio' });
+  res.json(JSON.parse(require('fs').readFileSync(fp, 'utf8')));
+});
+
+app.get('/trader/positions', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const open = db.prepare('SELECT * FROM trades WHERE status = ?').all('open');
+    const closed = db.prepare('SELECT * FROM trades WHERE status = ? ORDER BY closed_at DESC LIMIT 20').all('closed');
+    db.close();
+    res.json({ open, closed });
+  } catch(e) {
+    res.json({ open: [], closed: [] });
+  }
+});
+
+app.get('/trader/performance', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const perf = db.prepare(`
+      SELECT
+        COUNT(*) as total_trades,
+        SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END) as wins,
+        SUM(CASE WHEN pnl <= 0 THEN 1 ELSE 0 END) as losses,
+        ROUND(100.0 * SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END) / MAX(COUNT(*), 1), 1) as win_rate,
+        ROUND(SUM(pnl), 2) as total_pnl,
+        ROUND(AVG(pnl), 2) as avg_pnl,
+        ROUND(MAX(pnl), 2) as best_trade,
+        ROUND(MIN(pnl), 2) as worst_trade
+      FROM trades WHERE status = 'closed'
+    `).get();
+    const decisions = db.prepare('SELECT * FROM decisions ORDER BY id DESC LIMIT 10').all();
+    const signals = db.prepare('SELECT * FROM signals ORDER BY id DESC LIMIT 20').all();
+    // Strategy leaderboard
+    const strategies = db.prepare(`
+      SELECT
+        strategy,
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open_count,
+        SUM(CASE WHEN status = 'closed' AND pnl > 0 THEN 1 ELSE 0 END) as wins,
+        SUM(CASE WHEN status = 'closed' AND pnl <= 0 THEN 1 ELSE 0 END) as losses,
+        ROUND(100.0 * SUM(CASE WHEN status = 'closed' AND pnl > 0 THEN 1 ELSE 0 END) / MAX(SUM(CASE WHEN status = 'closed' THEN 1 ELSE 0 END), 1), 1) as win_rate,
+        ROUND(SUM(CASE WHEN status = 'closed' THEN pnl ELSE 0 END), 2) as total_pnl,
+        ROUND(AVG(CASE WHEN status = 'closed' THEN pnl_pct ELSE NULL END), 4) as avg_return
+      FROM trades
+      GROUP BY strategy
+      ORDER BY total_pnl DESC
+    `).all();
+    // Decision counts by strategy (signals that led to debate)
+    const decisionStats = db.prepare(`
+      SELECT
+        asset,
+        action,
+        COUNT(*) as count
+      FROM decisions
+      GROUP BY asset, action
+    `).all();
+    db.close();
+    res.json({ perf, decisions, signals, strategies, decisionStats });
+  } catch(e) {
+    res.json({ perf: null, decisions: [], signals: [], strategies: [], decisionStats: [] });
+  }
+});
+
 // ── Intelligence Hub: Scraper endpoints ──────────────────────────────────────
 
 const SCRAPER_OUTPUTS = path.join(NANOCLAW, 'scraper', 'outputs');

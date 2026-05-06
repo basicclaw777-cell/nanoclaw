@@ -164,61 +164,103 @@ def get_crypto_news():
 
 
 def generate_signals(prices, fear_greed, sentiment, news):
-    """Process raw data into actionable signals."""
+    """Process raw data into actionable signals.
+
+    Phase 0 thresholds — lower than production to generate paper trade data.
+    Will tighten as we learn which strategies actually work.
+    """
     signals = []
 
-    # Price-based signals
+    # Price-based signals (per-asset)
     for symbol, data in prices.items():
         change = data.get("change_24h", 0)
+        if not change:
+            continue
 
-        # Oversold bounce signal
-        if change and change < -10:
+        # Oversold bounce — lowered to -3% for paper trading data
+        if change < -3:
             signals.append({
                 "source": "technical",
                 "asset": symbol,
                 "direction": "long",
-                "strength": min(abs(change) / 20, 1.0),
+                "strength": min(abs(change) / 10, 1.0),
                 "reasoning": f"{symbol} down {change:.1f}% in 24h — potential oversold bounce",
                 "type": "mean_reversion",
             })
 
-        # Momentum signal
-        if change and change > 8:
+        # Momentum — lowered to +3% for paper trading data
+        if change > 3:
             signals.append({
                 "source": "technical",
                 "asset": symbol,
                 "direction": "long",
-                "strength": min(change / 15, 1.0),
+                "strength": min(change / 8, 1.0),
                 "reasoning": f"{symbol} up {change:.1f}% in 24h — momentum continuation",
                 "type": "momentum",
             })
 
-    # Fear & Greed signal
+        # Relative strength — top mover in watchlist gets a signal
+        # (handled below after all prices processed)
+
+    # Top mover signal: best performer gets momentum signal if >1.5%
+    if prices:
+        sorted_coins = sorted(
+            [(s, d) for s, d in prices.items() if d.get("change_24h")],
+            key=lambda x: x[1]["change_24h"],
+            reverse=True
+        )
+        if sorted_coins and sorted_coins[0][1]["change_24h"] > 1.5:
+            top = sorted_coins[0]
+            signals.append({
+                "source": "technical",
+                "asset": top[0],
+                "direction": "long",
+                "strength": min(top[1]["change_24h"] / 5, 0.9),
+                "reasoning": f"{top[0]} is top performer (+{top[1]['change_24h']:.1f}%) — relative strength leader",
+                "type": "relative_strength",
+            })
+
+    # Fear & Greed — widened bands for paper trading
     if fear_greed:
-        if fear_greed["value"] < 25:  # Extreme fear
+        fng = fear_greed["value"]
+        if fng < 35:
             signals.append({
                 "source": "sentiment",
                 "asset": "MARKET",
                 "direction": "long",
-                "strength": (25 - fear_greed["value"]) / 25,
-                "reasoning": f"Fear & Greed at {fear_greed['value']} ({fear_greed['label']}) — contrarian buy zone",
+                "strength": (35 - fng) / 35,
+                "reasoning": f"Fear & Greed at {fng} ({fear_greed['label']}) — fear zone, contrarian buy",
                 "type": "contrarian",
             })
-        elif fear_greed["value"] > 75:  # Extreme greed
+        elif fng > 65:
             signals.append({
                 "source": "sentiment",
                 "asset": "MARKET",
                 "direction": "short",
-                "strength": (fear_greed["value"] - 75) / 25,
-                "reasoning": f"Fear & Greed at {fear_greed['value']} ({fear_greed['label']}) — contrarian caution zone",
+                "strength": (fng - 65) / 35,
+                "reasoning": f"Fear & Greed at {fng} ({fear_greed['label']}) — greed zone, contrarian caution",
                 "type": "contrarian",
             })
 
-    # Reddit sentiment signal
-    if sentiment and sentiment.get("sentiment_score"):
-        score = sentiment["sentiment_score"]
+    # Reddit sentiment — per-asset signals from coin mentions
+    if sentiment:
+        mentions = sentiment.get("coin_mentions", {})
+        score = sentiment.get("sentiment_score", 0)
+        for symbol, count in mentions.items():
+            if count >= 3 and symbol in COIN_IDS:
+                direction = "long" if score > 0.2 else "short" if score < -0.2 else "neutral"
+                if direction != "neutral":
+                    signals.append({
+                        "source": "sentiment",
+                        "asset": symbol,
+                        "direction": direction,
+                        "strength": min(count / 8, 0.8),
+                        "reasoning": f"{symbol} mentioned {count}x on Reddit, sentiment {sentiment['sentiment_label']} ({score:.2f})",
+                        "type": "social_momentum",
+                    })
+
+        # Market-wide sentiment signal (kept)
         if abs(score) > 0.3:
-            # Strong consensus = contrarian signal (when everyone agrees, be careful)
             signals.append({
                 "source": "sentiment",
                 "asset": "MARKET",

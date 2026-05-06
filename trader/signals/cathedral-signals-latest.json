@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-05-07T03:41:06.833384",
+  "strategy_count": 9,
+  "total_signals": 14,
+  "signals": [
+    {
+      "source": "gann_geometry",
+      "asset": "BTC",
+      "direction": "short",
+      "strength": 0.55,
+      "reasoning": "BTC approaching Gann ordinal level $81247 from above (-0.2% away) \u2014 geometric resistance",
+      "type": "gann_geometry"
+    },
+    {
+      "source": "gann_geometry",
+      "asset": "ETH",
+      "direction": "short",
+      "strength": 0.55,
+      "reasoning": "ETH approaching Gann ordinal level $2321 from above (-1.0% away) \u2014 geometric resistance",
+      "type": "gann_geometry"
+    },
+    {
+      "source": "fibonacci_time",
+      "asset": "ETH",
+      "direction": "long",
+      "strength": 0.55,
+      "reasoning": "ETH at 0.236 Fib retracement ($2347) in uptrend \u2014 golden ratio bounce zone",
+      "type": "fibonacci_time"
+    },
+    {
+      "source": "fibonacci_time",
+      "asset": "ETH",
+      "direction": "long",
+      "strength": 0.6,
+      "reasoning": "ETH at Fibonacci time zone (11 * 1.618 = day 18) \u2014 phi timing suggests turning point",
+      "type": "fibonacci_time"
+    },
+    {
+      "source": "fibonacci_time",
+      "asset": "AVAX",
+      "direction": "long",
+      "strength": 0.55,
+      "reasoning": "AVAX at 0.236 Fib retracement ($10) in uptrend \u2014 golden ratio bounce zone",
+      "type": "fibonacci_time"
+    },
+    {
+      "source": "fibonacci_time",
+      "asset": "AVAX",
+      "direction": "long",
+      "strength": 0.6,
+      "reasoning": "AVAX at Fibonacci time zone (11 * 1.618 = day 18) \u2014 phi timing suggests turning point",
+      "type": "fibonacci_time"
+    },
+    {
+      "source": "historical_cycles",
+      "asset": "BTC",
+      "direction": "short",
+      "strength": 0.6,
+      "reasoning": "BTC halving cycle: 25 months post-halving. Post-peak zone. Previous cycles entered bear market by now.",
+      "type": "historical_cycles"
+    },
+    {
+      "source": "historical_cycles",
+      "asset": "BTC",
+      "direction": "short",
+      "strength": 0.5,
+      "reasoning": "Benner's Cycle: 2026 is a predicted panic year (16-18-20yr cycle from 2007). Benner predicted panics in 1819-2026 \u2014 200+ year pattern.",
+      "type": "historical_cycles"
+    },
+    {
+      "source": "historical_cycles",
+      "asset": "ETH",
+      "direction": "long",
+      "strength": 0.5,
+      "reasoning": "Benner's Cycle: 2026 panic year = buying opportunity for those who survive. Alts recover harder than BTC post-panic.",
+      "type": "historical_cycles"
+    },
+    {
+      "source": "vortex_flow",
+      "asset": "ETH",
+      "direction": "long",
+      "strength": 0.65,
+      "reasoning": "ETH in COMPRESSION phase (vol ratio 0.34). Toroidal coil \u2014 energy accumulating. Breakout up expected. Schauberger: implosion precedes creation.",
+      "type": "vortex_flow"
+    },
+    {
+      "source": "vortex_flow",
+      "asset": "AVAX",
+      "direction": "long",
+      "strength": 0.65,
+      "reasoning": "AVAX in COMPRESSION phase (vol ratio 0.50). Toroidal coil \u2014 energy accumulating. Breakout up expected. Schauberger: implosion precedes creation.",
+      "type": "vortex_flow"
+    },
+    {
+      "source": "cymatics_schumann",
+      "asset": "BTC",
+      "direction": "long",
+      "strength": 0.7,
+      "reasoning": "BTC oscillation period 6.9 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 6.7%.",
+      "type": "cymatics_schumann"
+    },
+    {
+      "source": "cymatics_schumann",
+      "asset": "ETH",
+      "direction": "long",
+      "strength": 0.7,
+      "reasoning": "ETH oscillation period 7.8 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 4.0%.",
+      "type": "cymatics_schumann"
+    },
+    {
+      "source": "cymatics_schumann",
+      "asset": "LINK",
+      "direction": "long",
+      "strength": 0.7,
+      "reasoning": "LINK oscillation period 6.9 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 9.4%.",
+      "type": "cymatics_schumann"
+    }
+  ]
+}

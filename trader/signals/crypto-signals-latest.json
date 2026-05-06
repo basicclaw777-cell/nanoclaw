@@ -1,41 +1,41 @@
 {
-  "timestamp": "2026-05-05T16:27:18.724025",
+  "timestamp": "2026-05-07T03:41:02.505706",
   "prices": {
     "BTC": {
-      "price": 80858,
-      "change_24h": 1.4429572878514756,
-      "volume_24h": 47878956209.64285,
-      "market_cap": 1619060867331.6401
+      "price": 81390,
+      "change_24h": -0.26361774108969904,
+      "volume_24h": 46192517247.50256,
+      "market_cap": 1628393320457.2422
     },
     "ETH": {
-      "price": 2381.34,
-      "change_24h": 0.8950633437308682,
-      "volume_24h": 20481269878.36869,
-      "market_cap": 287347192589.3554
+      "price": 2345.25,
+      "change_24h": -1.1506556157092043,
+      "volume_24h": 22293440864.54893,
+      "market_cap": 282717995141.3645
     },
     "SOL": {
-      "price": 84.81,
-      "change_24h": 0.13509844169854018,
-      "volume_24h": 3638167763.522315,
-      "market_cap": 48879935737.23808
+      "price": 89.0,
+      "change_24h": 2.991548785282445,
+      "volume_24h": 5050577684.708478,
+      "market_cap": 51290636566.09603
     },
     "AVAX": {
-      "price": 9.35,
-      "change_24h": 1.4138111941329627,
-      "volume_24h": 259848388.16550162,
-      "market_cap": 4034617246.3703113
+      "price": 9.58,
+      "change_24h": 1.835825920077082,
+      "volume_24h": 330465906.4628873,
+      "market_cap": 4136767632.3462033
     },
     "LINK": {
-      "price": 9.61,
-      "change_24h": 2.8047393254363953,
-      "volume_24h": 580134650.0950458,
-      "market_cap": 6983443336.662821
+      "price": 9.97,
+      "change_24h": 2.4275923661888994,
+      "volume_24h": 571325674.0080965,
+      "market_cap": 7243186836.041413
     },
     "DOT": {
-      "price": 1.26,
-      "change_24h": 1.4920560067294606,
-      "volume_24h": 129148510.82493988,
-      "market_cap": 2114138370.0346043
+      "price": 1.3,
+      "change_24h": 2.42952594655506,
+      "volume_24h": 185325054.3087392,
+      "market_cap": 2192872486.5941067
     },
     "MATIC": {
       "price": null,
@@ -44,34 +44,25 @@
       "market_cap": null
     },
     "ARB": {
-      "price": 0.118269,
-      "change_24h": 0.46979274197625637,
-      "volume_24h": 80438768.09335227,
-      "market_cap": 727364697.4460984
+      "price": 0.123543,
+      "change_24h": 3.38692001113293,
+      "volume_24h": 90959575.9365194,
+      "market_cap": 759719129.1830539
     }
   },
   "fear_greed": {
-    "value": 50,
-    "label": "Neutral",
-    "week_avg": 36.7,
+    "value": 46,
+    "label": "Fear",
+    "week_avg": 39.6,
     "trend": "rising"
   },
-  "reddit_sentiment": {
-    "subreddit": "cryptocurrency",
-    "posts_analysed": 30,
-    "bullish": 3,
-    "bearish": 1,
-    "sentiment_score": 0.5,
-    "sentiment_label": "bullish",
-    "total_engagement": 6045,
-    "coin_mentions": {
-      "ETH": 6,
-      "SOL": 4,
-      "BTC": 3,
-      "LINK": 1
-    }
-  },
+  "reddit_sentiment": null,
   "news": [
+    {
+      "source": "coindesk",
+      "title": "CoinDesk Live at Consensus Miami 2026 | Day 2",
+      "url": "https://www.coindesk.com/"
+    },
     {
       "source": "coindesk",
       "title": "CoinW Expands Global Presence at Blockchain Forum 2026, Strengthening User Engagement",
@@ -89,48 +80,51 @@
     },
     {
       "source": "coindesk",
-      "title": "Bitcoin crosses $81,000, ETH, SOL, DOGE steady as options desks bid on further price jump",
+      "title": "Eric Trump takes shot at JPMorgan rethinking bitcoin after &#x27;crapping&#x27; on asset",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Bitcoin crosses $81,000, ETH, SOL, DOGE steady as options desks bid on further price jump",
+      "title": "Eric Trump takes shot at JPMorgan rethinking bitcoin after &#x27;crapping&#x27; on asset",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Bitcoin used to hate inflation. Now it might be the opposite",
+      "title": "Bullish\u2019s Equiniti deal could remake it into a tokenization powerhouse, Clear Street says",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Ripple to share North Korean threat intelligence with crypto firms",
+      "title": "Bitcoin moves above $82,000 while ZEC and DASH post double-digit rallies",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "U.S. voters don&#x27;t trust Trump administration to oversee crypto sector, CoinDesk poll finds",
+      "title": "Morgan Stanley brings crypto trading with lower fees than rivals",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
       "title": "More Featured Stories",
       "url": "https://www.coindesk.com/"
-    },
-    {
-      "source": "coindesk",
-      "title": "TP ICAP Fuels the Emergence of a Wholesale Crypto Market",
-      "url": "https://www.coindesk.com/"
     }
   ],
   "signals": [
     {
-      "source": "sentiment",
-      "asset": "MARKET",
-      "direction": "neutral",
-      "strength": 0.5,
-      "reasoning": "Reddit consensus bullish (0.50) \u2014 strong consensus often precedes reversal",
-      "type": "contrarian"
+      "source": "technical",
+      "asset": "ARB",
+      "direction": "long",
+      "strength": 0.42336500139161626,
+      "reasoning": "ARB up 3.4% in 24h \u2014 momentum continuation",
+      "type": "momentum"
+    },
+    {
+      "source": "technical",
+      "asset": "ARB",
+      "direction": "long",
+      "strength": 0.677384002226586,
+      "reasoning": "ARB is top performer (+3.4%) \u2014 relative strength leader",
+      "type": "relative_strength"
     }
   ]
 }

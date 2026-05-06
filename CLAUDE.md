@@ -984,6 +984,17 @@ the-timekeeper to go offline. Don't repeat it.
 - Telegram: /predict <seed>, /gaps, /predict-rebuild
 - Bridge: /predictive/map, /predictive/stats, /predictive/seeds, /predictive/predictions, POST /predictive/rebuild
 
+## Trading Experiment — Phase 0 (built 2026-05-07)
+- Orchestrator: ~/nanoclaw/trader/trading-orchestrator.js (PM2 cron 4h, id 32)
+- 11 strategies in parallel: sentiment, momentum, DCA, Gann, Lunar, Fibonacci, Historical Cycles, Vortex Flow, Suppression, Polymarket, Cymatics/Schumann
+- Bull-bear debate (hermes3) filters every signal before execution
+- Strategy Roundtable: 8 personas + Steward, convergence scoring per asset
+- Meta-Watcher: silent observer, counterfactual analysis, insight synthesis
+- Dashboard: localhost:8080/trader/hub (strategy leaderboard, live P&L)
+- Morning briefing: trading desk segment wired into ~/Cathedral/morning-briefing.py
+- Paper balance: $10K, 10% max position, 10 concurrent, 5% SL, 10% TP
+- Promotion criteria: 20 trades, 55% win rate, 1.3 profit factor, 14 days
+
 ## Forge — Code Engine Identity (2026-05-07)
 - Soul file: ~/cathedral-vault/06_Methods/forge-profile.md
 - Memory: ~/.claude/projects/-Users-basicclaw777/memory/the-builders-frequency.md

@@ -50,13 +50,16 @@
     font-weight: 600;
   }
 
+  .last-run { color: var(--muted); font-size: 10px; }
+
   .grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 12px;
     margin-bottom: 16px;
   }
 
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
   .grid-2 { grid-template-columns: 1fr 1fr; }
   .grid-full { grid-template-columns: 1fr; }
 
@@ -76,7 +79,7 @@
   }
 
   .big-number {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
     line-height: 1;
   }
@@ -85,6 +88,7 @@
   .big-number.red { color: var(--red); }
   .big-number.amber { color: var(--amber); }
   .big-number.blue { color: var(--blue); }
+  .big-number.neutral { color: var(--text); }
 
   .sub-text { color: var(--muted); font-size: 11px; margin-top: 4px; }
 
@@ -107,6 +111,7 @@
   .price-card .change { font-size: 11px; margin-top: 2px; }
   .price-card .change.up { color: var(--green); }
   .price-card .change.down { color: var(--red); }
+  .price-card.has-position { border-color: var(--blue); box-shadow: 0 0 8px rgba(55,138,221,0.15); }
 
   .fear-meter {
     height: 8px;
@@ -126,6 +131,44 @@
     transform: translateX(-50%);
   }
 
+  .position-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    margin: 4px 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+
+  .position-row .dir {
+    font-weight: 700;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .dir.long { background: rgba(34,197,94,0.15); color: var(--green); }
+  .dir.short { background: rgba(239,68,68,0.15); color: var(--red); }
+
+  .position-row .asset { font-weight: 700; font-size: 14px; width: 50px; }
+  .position-row .entry { color: var(--muted); }
+  .position-row .pnl { font-weight: 600; margin-left: auto; }
+  .pnl.up { color: var(--green); }
+  .pnl.down { color: var(--red); }
+
+  .trade-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .trade-row:last-child { border-bottom: none; }
+
   .signal-row {
     display: flex;
     align-items: center;
@@ -133,15 +176,14 @@
     padding: 6px 0;
     border-bottom: 1px solid var(--border);
   }
-
   .signal-row:last-child { border-bottom: none; }
 
   .signal-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
+    flex-shrink: 0;
   }
-
   .signal-dot.long { background: var(--green); }
   .signal-dot.short { background: var(--red); }
   .signal-dot.neutral { background: var(--muted); }
@@ -152,8 +194,8 @@
     background: var(--bg);
     border-radius: 3px;
     overflow: hidden;
+    flex-shrink: 0;
   }
-
   .signal-strength-fill { height: 100%; border-radius: 3px; }
 
   .debate-box {
@@ -165,7 +207,6 @@
     font-size: 11px;
     line-height: 1.6;
   }
-
   .debate-box.bull { border-left: 3px solid var(--green); }
   .debate-box.bear { border-left: 3px solid var(--red); }
   .debate-box.decision { border-left: 3px solid var(--amber); }
@@ -177,23 +218,24 @@
     letter-spacing: 1px;
     margin-bottom: 4px;
   }
-
   .debate-label.bull { color: var(--green); }
   .debate-label.bear { color: var(--red); }
   .debate-label.decision { color: var(--amber); }
 
-  .check-row {
-    display: flex;
-    align-items: center;
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
-    padding: 3px 0;
-    font-size: 11px;
   }
 
-  .check-icon { width: 16px; text-align: center; }
-  .check-pass { color: var(--green); }
-  .check-fail { color: var(--red); }
-  .check-warn { color: var(--amber); }
+  .stat-box {
+    background: var(--bg);
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+  }
+  .stat-box .label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-box .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
 
   .progression {
     display: flex;
@@ -208,7 +250,6 @@
     border-radius: 3px;
     background: var(--border);
   }
-
   .phase-step.active { background: var(--amber); }
   .phase-step.complete { background: var(--green); }
 
@@ -220,12 +261,21 @@
     margin-top: 4px;
   }
 
+  .promo-check {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    font-size: 11px;
+  }
+  .promo-check span { display: flex; align-items: center; gap: 4px; }
+  .promo-check .pass { color: var(--green); }
+  .promo-check .fail { color: var(--muted); }
+
   .news-item {
     padding: 4px 0;
     border-bottom: 1px solid var(--border);
     font-size: 11px;
   }
-
   .news-item:last-child { border-bottom: none; }
   .news-source { color: var(--muted); font-size: 9px; }
 
@@ -236,15 +286,15 @@
     overflow: hidden;
     margin: 6px 0;
   }
-
   .sentiment-bull { background: var(--green); }
   .sentiment-bear { background: var(--red); }
   .sentiment-neutral { background: var(--muted); }
 
-  .loading { color: var(--muted); text-align: center; padding: 30px; }
+  .empty { color: var(--muted); text-align: center; padding: 20px; font-style: italic; }
 
   @media (max-width: 900px) {
-    .grid { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
     .grid-2 { grid-template-columns: 1fr; }
     .price-grid { grid-template-columns: repeat(2, 1fr); }
   }
@@ -253,12 +303,58 @@
 <body>
 
 <header>
-  <h1>TRADING HUB</h1>
+  <div>
+    <h1>TRADING HUB</h1>
+    <span class="last-run" id="lastRun">Loading...</span>
+  </div>
   <span class="phase-badge" id="phaseBadge">PHASE 0 — PAPER</span>
 </header>
 
 <!-- Top metrics -->
-<div class="grid" id="metrics">
+<div class="grid" style="grid-template-columns:repeat(5,1fr)" id="topMetrics">
+  <div class="card">
+    <div class="card-title">Balance</div>
+    <div class="big-number neutral" id="balance">$10,000</div>
+    <div class="sub-text" id="balanceSub">Initial: $10,000</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Realised P&L</div>
+    <div class="big-number neutral" id="totalPnl">$0.00</div>
+    <div class="sub-text" id="pnlPct">0.00% (closed trades)</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Unrealised P&L</div>
+    <div class="big-number neutral" id="unrealisedPnl">$0.00</div>
+    <div class="sub-text" id="unrealisedSub">open positions vs live price</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Win Rate</div>
+    <div class="big-number amber" id="winRate">--</div>
+    <div class="sub-text" id="winRateSub">0W / 0L</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Open Positions</div>
+    <div class="big-number blue" id="openCount">0</div>
+    <div class="sub-text" id="openSub">Max 3 concurrent</div>
+  </div>
+</div>
+
+<!-- Open Positions -->
+<div class="card" style="margin-bottom:12px" id="positionsCard">
+  <div class="card-title">Open Positions</div>
+  <div id="positionsList"><div class="empty">No open positions</div></div>
+</div>
+
+<!-- Price grid -->
+<div class="card" style="margin-bottom:12px">
+  <div class="card-title">Watchlist</div>
+  <div class="price-grid" id="priceGrid">
+    <div class="empty">Loading prices...</div>
+  </div>
+</div>
+
+<!-- Market Sentiment + Signals -->
+<div class="grid grid-3">
   <div class="card">
     <div class="card-title">Fear & Greed Index</div>
     <div class="big-number amber" id="fgValue">--</div>
@@ -273,41 +369,64 @@
   </div>
   <div class="card">
     <div class="card-title">Active Signals</div>
-    <div class="big-number green" id="signalCount">0</div>
-    <div class="sub-text" id="signalSummary">No signals yet</div>
+    <div id="signalList"><div class="empty">No signals</div></div>
   </div>
 </div>
 
-<!-- Price grid -->
-<div class="card" style="margin-bottom:12px">
-  <div class="card-title">Watchlist</div>
-  <div class="price-grid" id="priceGrid">
-    <div class="loading">Loading prices...</div>
-  </div>
-</div>
-
-<!-- Signals + Debate -->
-<div class="grid grid-2">
-  <div class="card">
-    <div class="card-title">Signals</div>
-    <div id="signalList"><div class="loading">No signals</div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Latest Debate</div>
-    <div id="debatePanel"><div class="loading">No debate yet. Run: node trader/bull-bear-debate.js</div></div>
-  </div>
-</div>
-
-<!-- Validation + News -->
+<!-- Debate + Trade History -->
 <div class="grid grid-2" style="margin-top:12px">
   <div class="card">
-    <div class="card-title">Strategy Validator (Last Check)</div>
-    <div id="validatorPanel"><div class="loading">No validation yet</div></div>
+    <div class="card-title">Latest Debate</div>
+    <div id="debatePanel"><div class="empty">No debates yet</div></div>
   </div>
   <div class="card">
-    <div class="card-title">Crypto News</div>
-    <div id="newsPanel"><div class="loading">Loading...</div></div>
+    <div class="card-title">Recent Decisions</div>
+    <div id="decisionsPanel"><div class="empty">No decisions yet</div></div>
   </div>
+</div>
+
+<!-- Trade History + Performance -->
+<div class="grid grid-2" style="margin-top:12px">
+  <div class="card">
+    <div class="card-title">Closed Trades</div>
+    <div id="tradeHistory"><div class="empty">No closed trades yet</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Performance Stats</div>
+    <div id="perfStats">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="label">Total Trades</div><div class="value" id="statTrades">0</div></div>
+        <div class="stat-box"><div class="label">Win Rate</div><div class="value" id="statWinRate">--</div></div>
+        <div class="stat-box"><div class="label">Avg P&L</div><div class="value" id="statAvgPnl">--</div></div>
+        <div class="stat-box"><div class="label">Best Trade</div><div class="value" id="statBest">--</div></div>
+        <div class="stat-box"><div class="label">Worst Trade</div><div class="value" id="statWorst">--</div></div>
+        <div class="stat-box"><div class="label">Profit Factor</div><div class="value" id="statPF">--</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Strategy Leaderboard -->
+<div class="card" style="margin-top:12px">
+  <div class="card-title">Strategy Leaderboard — 10 Strategies Racing</div>
+  <div style="font-size:10px;color:var(--muted);margin-bottom:8px">Phase 0 experiment: which pattern predicts markets? Data decides.</div>
+  <table style="width:100%;border-collapse:collapse;font-size:11px" id="leaderboard">
+    <thead>
+      <tr style="border-bottom:1px solid var(--border);text-align:left">
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600">#</th>
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600">Strategy</th>
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600;text-align:right">Trades</th>
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600;text-align:right">Open</th>
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600;text-align:right">W/L</th>
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600;text-align:right">Win Rate</th>
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600;text-align:right">P&L</th>
+        <th style="padding:6px 8px;color:var(--muted);font-weight:600;text-align:right">Avg Return</th>
+      </tr>
+    </thead>
+    <tbody id="leaderboardBody">
+      <tr><td colspan="8" class="empty">Collecting data...</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- Phase progression -->
@@ -329,153 +448,308 @@
     <span>$1000</span>
     <span>$5000+</span>
   </div>
-  <div class="sub-text" style="margin-top:8px">Phase promotion requires: 20+ trades, 55%+ win rate, 1.3+ profit factor, <15% drawdown, 14+ days</div>
+  <div class="promo-check" id="promoCheck">
+    <span class="fail">&#9744; 20+ trades</span>
+    <span class="fail">&#9744; 55%+ win rate</span>
+    <span class="fail">&#9744; 1.3+ profit factor</span>
+    <span class="fail">&#9744; &lt;15% drawdown</span>
+    <span class="fail">&#9744; 14+ days</span>
+  </div>
+</div>
+
+<!-- News -->
+<div class="card" style="margin-top:12px">
+  <div class="card-title">Crypto News</div>
+  <div id="newsPanel"><div class="empty">Loading...</div></div>
 </div>
 
 <script>
-const SIGNALS_URL = 'http://localhost:8080/scraper/output/crypto-signals-latest.json';
-const DECISIONS_URL = 'http://localhost:8080/trader/decisions';
+const BASE = 'http://localhost:8080';
+let openAssets = new Set();
+let livePrices = {};
+let openPositions = [];
+
+function $(id) { return document.getElementById(id); }
+function pnlClass(v) { return v >= 0 ? 'up' : 'down'; }
+function pnlSign(v) { return v >= 0 ? '+' : ''; }
+function fmt$(v) { return `$${Math.abs(v).toFixed(2)}`; }
+
+function calcUnrealised(pos, price) {
+  if (!price) return { pnl: 0, pct: 0 };
+  const pnl = pos.direction === 'long'
+    ? (price - pos.entry_price) * pos.position_size
+    : (pos.entry_price - price) * pos.position_size;
+  const pct = pos.direction === 'long'
+    ? (price - pos.entry_price) / pos.entry_price
+    : (pos.entry_price - price) / pos.entry_price;
+  return { pnl, pct };
+}
+
+function updateUnrealisedDisplay() {
+  let totalUnrealised = 0;
+
+  // Update positions list with live P&L
+  if (openPositions.length > 0) {
+    $('positionsList').innerHTML = openPositions.map(p => {
+      const price = livePrices[p.asset];
+      const { pnl, pct } = calcUnrealised(p, price);
+      totalUnrealised += pnl;
+      const cls = pnlClass(pnl);
+      const priceStr = price ? `Now: $${price < 10 ? price.toFixed(2) : price.toFixed(0)}` : '';
+      return `<div class="position-row">
+        <span class="dir ${p.direction}">${p.direction}</span>
+        <span class="asset">${p.asset}</span>
+        <span class="entry">Entry: $${p.entry_price}</span>
+        <span style="color:var(--muted)">${priceStr}</span>
+        <span style="color:var(--muted)">SL: $${Number(p.stop_loss).toFixed(2)}</span>
+        <span style="color:var(--muted)">TP: $${Number(p.take_profit).toFixed(2)}</span>
+        <span class="pnl ${cls}" style="margin-left:auto;font-size:14px">${pnlSign(pnl)}$${Math.abs(pnl).toFixed(2)}</span>
+        <span class="pnl ${cls}">(${pnlSign(pct)}${(pct*100).toFixed(2)}%)</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Update unrealised card
+  $('unrealisedPnl').textContent = `${pnlSign(totalUnrealised)}$${Math.abs(totalUnrealised).toFixed(2)}`;
+  $('unrealisedPnl').className = 'big-number ' + (totalUnrealised > 0 ? 'green' : totalUnrealised < 0 ? 'red' : 'neutral');
+  $('unrealisedSub').textContent = `${openPositions.length} open position${openPositions.length !== 1 ? 's' : ''} vs live price`;
+
+  // Net P&L = realised + unrealised (shown in balance card sub-text)
+  const realisedPnl = parseFloat($('totalPnl').textContent.replace(/[^0-9.\-+]/g, '')) || 0;
+  const netPnl = realisedPnl + totalUnrealised;
+  $('balanceSub').textContent = `Net: ${pnlSign(netPnl)}$${Math.abs(netPnl).toFixed(2)} (realised + unrealised)`;
+}
+
+async function loadAll() {
+  await Promise.all([loadPortfolio(), loadSignals(), loadPositions(), loadPerformance(), loadDebate()]);
+  updateUnrealisedDisplay();
+}
+
+async function loadPortfolio() {
+  try {
+    const r = await fetch(`${BASE}/trader/portfolio`);
+    if (!r.ok) return;
+    const p = await r.json();
+
+    $('balance').textContent = `$${p.balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    $('balance').className = 'big-number ' + (p.total_pnl > 0 ? 'green' : p.total_pnl < 0 ? 'red' : 'neutral');
+    $('balanceSub').textContent = `Initial: $${p.initial_balance.toLocaleString()}`;
+
+    $('totalPnl').textContent = `${pnlSign(p.total_pnl)}$${Math.abs(p.total_pnl).toFixed(2)}`;
+    $('totalPnl').className = 'big-number ' + (p.total_pnl > 0 ? 'green' : p.total_pnl < 0 ? 'red' : 'neutral');
+    const pct = ((p.total_pnl / p.initial_balance) * 100).toFixed(2);
+    $('pnlPct').textContent = `${pnlSign(p.total_pnl)}${pct}%`;
+
+    const wr = p.total_trades > 0 ? ((p.wins / p.total_trades) * 100).toFixed(1) + '%' : '--';
+    $('winRate').textContent = wr;
+    $('winRate').className = 'big-number ' + (p.wins > p.losses ? 'green' : p.wins < p.losses ? 'red' : 'amber');
+    $('winRateSub').textContent = `${p.wins}W / ${p.losses}L`;
+
+    if (p.last_run) {
+      const ago = Math.round((Date.now() - new Date(p.last_run).getTime()) / 60000);
+      $('lastRun').textContent = `Last run: ${ago < 60 ? ago + 'm ago' : Math.round(ago/60) + 'h ago'} — ${new Date(p.last_run).toLocaleString()}`;
+    }
+  } catch(e) { console.error('portfolio:', e); }
+}
+
+async function loadPositions() {
+  try {
+    const r = await fetch(`${BASE}/trader/positions`);
+    if (!r.ok) return;
+    const { open, closed } = await r.json();
+
+    $('openCount').textContent = open.length;
+    openAssets = new Set(open.map(p => p.asset));
+    openPositions = open;
+
+    if (open.length === 0) {
+      $('positionsList').innerHTML = '<div class="empty">No open positions — waiting for signals</div>';
+      $('unrealisedPnl').textContent = '$0.00';
+      $('unrealisedPnl').className = 'big-number neutral';
+    }
+    // Live P&L rendering handled by updateUnrealisedDisplay()
+
+    // Closed trades
+    if (closed.length === 0) {
+      $('tradeHistory').innerHTML = '<div class="empty">No closed trades yet — positions will appear here when SL/TP hit</div>';
+    } else {
+      $('tradeHistory').innerHTML = closed.map(t => {
+        const cls = pnlClass(t.pnl);
+        return `<div class="trade-row">
+          <span class="dir ${t.direction}" style="font-size:9px;padding:1px 6px">${t.direction}</span>
+          <span style="font-weight:600;width:40px">${t.asset}</span>
+          <span style="color:var(--muted)">$${t.entry_price} → $${t.exit_price}</span>
+          <span class="pnl ${cls}" style="margin-left:auto">${pnlSign(t.pnl)}$${Math.abs(t.pnl).toFixed(2)}</span>
+          <span class="pnl ${cls}">(${pnlSign(t.pnl_pct)}${(t.pnl_pct*100).toFixed(1)}%)</span>
+          <span style="color:var(--muted);font-size:10px">${t.strategy}</span>
+        </div>`;
+      }).join('');
+    }
+  } catch(e) { console.error('positions:', e); }
+}
 
 async function loadSignals() {
   try {
-    // Try bridge first
-    let data;
-    try {
-      const res = await fetch(SIGNALS_URL);
-      if (res.ok) data = await res.json();
-    } catch(e) {}
-
-    // Fallback: try direct file serve
-    if (!data) {
-      try {
-        const res = await fetch('http://localhost:8080/scraper/output/crypto-signals-latest.json');
-        if (res.ok) data = await res.json();
-      } catch(e) {}
-    }
-
-    if (!data) return;
+    const r = await fetch(`${BASE}/trader/signals`);
+    if (!r.ok) return;
+    const data = await r.json();
 
     // Fear & Greed
     if (data.fear_greed) {
       const fg = data.fear_greed;
-      document.getElementById('fgValue').textContent = fg.value;
-      document.getElementById('fgLabel').textContent = `${fg.label} (week avg: ${fg.week_avg})`;
-      document.getElementById('fgPointer').style.left = `${fg.value}%`;
-
-      const fgEl = document.getElementById('fgValue');
-      fgEl.className = 'big-number ' + (fg.value < 30 ? 'red' : fg.value > 70 ? 'green' : 'amber');
+      $('fgValue').textContent = fg.value;
+      $('fgLabel').textContent = `${fg.label} (week avg: ${fg.week_avg}, ${fg.trend})`;
+      $('fgPointer').style.left = `${fg.value}%`;
+      $('fgValue').className = 'big-number ' + (fg.value < 30 ? 'red' : fg.value > 70 ? 'green' : 'amber');
     }
 
-    // Reddit sentiment
+    // Reddit
     if (data.reddit_sentiment) {
       const s = data.reddit_sentiment;
-      document.getElementById('sentimentScore').textContent = s.sentiment_score.toFixed(2);
-      document.getElementById('sentimentLabel').textContent = `${s.sentiment_label} (${s.bullish} bull / ${s.bearish} bear)`;
-
+      $('sentimentScore').textContent = s.sentiment_score.toFixed(2);
+      $('sentimentLabel').textContent = `${s.sentiment_label} (${s.bullish} bull / ${s.bearish} bear from ${s.posts_analysed} posts)`;
       const total = s.bullish + s.bearish + 1;
-      const bullPct = (s.bullish / total) * 100;
-      const bearPct = (s.bearish / total) * 100;
-      const neutralPct = 100 - bullPct - bearPct;
-      document.getElementById('sentimentBar').innerHTML = `
-        <div class="sentiment-bull" style="width:${bullPct}%"></div>
-        <div class="sentiment-neutral" style="width:${neutralPct}%"></div>
-        <div class="sentiment-bear" style="width:${bearPct}%"></div>
+      $('sentimentBar').innerHTML = `
+        <div class="sentiment-bull" style="width:${(s.bullish/total)*100}%"></div>
+        <div class="sentiment-neutral" style="width:${((total-s.bullish-s.bearish)/total)*100}%"></div>
+        <div class="sentiment-bear" style="width:${(s.bearish/total)*100}%"></div>
       `;
     }
 
-    // Prices
+    // Prices — store for unrealised P&L calc
     if (data.prices) {
-      const grid = document.getElementById('priceGrid');
-      grid.innerHTML = Object.entries(data.prices).map(([sym, p]) => {
+      for (const [sym, p] of Object.entries(data.prices)) {
+        if (p.price) livePrices[sym] = p.price;
+      }
+      $('priceGrid').innerHTML = Object.entries(data.prices).map(([sym, p]) => {
         if (!p.price) return '';
-        const changeClass = (p.change_24h || 0) >= 0 ? 'up' : 'down';
-        const changeStr = p.change_24h ? `${p.change_24h >= 0 ? '+' : ''}${p.change_24h.toFixed(1)}%` : '--';
-        return `<div class="price-card">
-          <div class="symbol">${sym}</div>
-          <div class="price">$${p.price < 10 ? p.price.toFixed(2) : p.price < 1000 ? p.price.toFixed(0) : p.price.toLocaleString()}</div>
-          <div class="change ${changeClass}">${changeStr}</div>
+        const cls = (p.change_24h || 0) >= 0 ? 'up' : 'down';
+        const ch = p.change_24h ? `${p.change_24h >= 0 ? '+' : ''}${p.change_24h.toFixed(1)}%` : '--';
+        const hasPos = openAssets.has(sym) ? ' has-position' : '';
+        return `<div class="price-card${hasPos}">
+          <div class="symbol">${sym}${hasPos ? ' ●' : ''}</div>
+          <div class="price">$${p.price < 1 ? p.price.toFixed(4) : p.price < 10 ? p.price.toFixed(2) : p.price < 1000 ? p.price.toFixed(0) : p.price.toLocaleString()}</div>
+          <div class="change ${cls}">${ch}</div>
         </div>`;
       }).join('');
     }
 
     // Signals
-    if (data.signals) {
-      document.getElementById('signalCount').textContent = data.signals.length;
-      document.getElementById('signalSummary').textContent = data.signals.length > 0
-        ? data.signals.map(s => `${s.asset} ${s.direction}`).join(', ')
-        : 'No actionable signals';
-
-      const list = document.getElementById('signalList');
-      if (data.signals.length === 0) {
-        list.innerHTML = '<div style="color:var(--muted);padding:10px">Market neutral. No strong signals. Patience is a position.</div>';
-      } else {
-        list.innerHTML = data.signals.map(s => {
-          const color = s.direction === 'long' ? 'var(--green)' : s.direction === 'short' ? 'var(--red)' : 'var(--muted)';
-          return `<div class="signal-row">
-            <div class="signal-dot ${s.direction}"></div>
-            <span style="width:50px;font-weight:600">${s.asset}</span>
-            <span style="width:50px;color:${color}">${s.direction}</span>
-            <div class="signal-strength"><div class="signal-strength-fill" style="width:${s.strength*100}%;background:${color}"></div></div>
-            <span style="flex:1;color:var(--muted);font-size:10px">${s.reasoning.slice(0, 60)}</span>
-          </div>`;
-        }).join('');
-      }
+    if (data.signals && data.signals.length > 0) {
+      $('signalList').innerHTML = data.signals.map(s => {
+        const color = s.direction === 'long' ? 'var(--green)' : s.direction === 'short' ? 'var(--red)' : 'var(--muted)';
+        return `<div class="signal-row">
+          <div class="signal-dot ${s.direction}"></div>
+          <span style="width:50px;font-weight:600">${s.asset}</span>
+          <span style="width:40px;color:${color};font-size:11px">${s.direction}</span>
+          <div class="signal-strength"><div class="signal-strength-fill" style="width:${s.strength*100}%;background:${color}"></div></div>
+          <span style="flex:1;color:var(--muted);font-size:10px">${s.reasoning.slice(0, 80)}</span>
+        </div>`;
+      }).join('');
+    } else {
+      $('signalList').innerHTML = '<div class="empty">Market neutral — patience is a position</div>';
     }
 
     // News
-    if (data.news) {
-      const panel = document.getElementById('newsPanel');
-      panel.innerHTML = data.news.slice(0, 8).map(n =>
-        `<div class="news-item">${n.title.slice(0, 80)}<br><span class="news-source">${n.source}</span></div>`
+    if (data.news && data.news.length > 0) {
+      $('newsPanel').innerHTML = data.news.slice(0, 8).map(n =>
+        `<div class="news-item">${n.title.slice(0, 100)}<br><span class="news-source">${n.source}</span></div>`
       ).join('');
     }
-
-  } catch(e) {
-    console.error('Load error:', e);
-  }
+  } catch(e) { console.error('signals:', e); }
 }
 
-// Load decisions log if available
-async function loadDecisions() {
-  // For now, show placeholder until trades are running
-  const panel = document.getElementById('debatePanel');
-  const validator = document.getElementById('validatorPanel');
-
-  // Check if there's a recent debate in the logs
+async function loadPerformance() {
   try {
-    const res = await fetch('http://localhost:8080/trader/latest-debate');
-    if (res.ok) {
-      const d = await res.json();
-      panel.innerHTML = `
-        <div class="debate-box bull"><div class="debate-label bull">BULL</div>${d.bull_summary || 'No debate yet'}</div>
-        <div class="debate-box bear"><div class="debate-label bear">BEAR</div>${d.bear_summary || ''}</div>
-        <div class="debate-box decision"><div class="debate-label decision">DECISION</div>${d.action || ''}: ${d.reasoning || ''}</div>
-      `;
-    }
-  } catch(e) {
-    panel.innerHTML = `
-      <div class="debate-box bull"><div class="debate-label bull">BULL</div>Run a debate to see arguments here.<br><code>node trader/bull-bear-debate.js</code></div>
-      <div class="debate-box bear"><div class="debate-label bear">BEAR</div>Bear will counter-argue.</div>
-      <div class="debate-box decision"><div class="debate-label decision">TRADER</div>Final decision: BUY / SKIP / WAIT</div>
-    `;
-  }
+    const r = await fetch(`${BASE}/trader/performance`);
+    if (!r.ok) return;
+    const perfData = await r.json();
+    const { perf, decisions } = perfData;
 
-  // Validator
-  validator.innerHTML = `
-    <div class="check-row"><span class="check-icon check-pass">✓</span> Position size ≤ 20%</div>
-    <div class="check-row"><span class="check-icon check-pass">✓</span> Max 3 concurrent positions</div>
-    <div class="check-row"><span class="check-icon check-pass">✓</span> Stop loss required</div>
-    <div class="check-row"><span class="check-icon check-pass">✓</span> Risk:Reward ≥ 1.5:1</div>
-    <div class="check-row"><span class="check-icon check-pass">✓</span> Daily loss limit not hit</div>
-    <div class="check-row"><span class="check-icon check-pass">✓</span> Asset in watchlist</div>
-    <div class="check-row"><span class="check-icon check-pass">✓</span> Strategy named</div>
-    <div class="sub-text" style="margin-top:8px">All checks must pass before execution. No exceptions.</div>
-  `;
+    if (perf && perf.total_trades > 0) {
+      $('statTrades').textContent = perf.total_trades;
+      $('statWinRate').textContent = perf.win_rate + '%';
+      $('statWinRate').style.color = perf.win_rate >= 55 ? 'var(--green)' : perf.win_rate >= 45 ? 'var(--amber)' : 'var(--red)';
+      $('statAvgPnl').textContent = `${pnlSign(perf.avg_pnl)}$${Math.abs(perf.avg_pnl).toFixed(2)}`;
+      $('statAvgPnl').style.color = perf.avg_pnl >= 0 ? 'var(--green)' : 'var(--red)';
+      $('statBest').textContent = `+$${(perf.best_trade || 0).toFixed(2)}`;
+      $('statBest').style.color = 'var(--green)';
+      $('statWorst').textContent = `-$${Math.abs(perf.worst_trade || 0).toFixed(2)}`;
+      $('statWorst').style.color = 'var(--red)';
+    }
+
+    // Strategy Leaderboard
+    try {
+      if (perfData.strategies && perfData.strategies.length > 0) {
+        const STRATEGY_NAMES = {
+          'sentiment_contrarian': 'Sentiment Contrarian',
+          'momentum': 'Momentum',
+          'relative_strength': 'Relative Strength',
+          'social_momentum': 'Social Momentum',
+          'mean_reversion': 'Mean Reversion',
+          'dca_baseline': 'DCA Baseline',
+          'gann_geometry': 'Gann Geometry',
+          'lunar_cycles': 'Lunar Cycles',
+          'fibonacci_time': 'Fibonacci Time+Price',
+          'historical_cycles': 'Historical Cycles',
+          'vortex_flow': 'Vortex Flow',
+          'suppression_signal': 'Suppression Signal',
+          'polymarket_delta': 'Polymarket Delta',
+          'contrarian': 'Contrarian',
+          'cymatics_schumann': 'Cymatics / Schumann',
+        };
+        $('leaderboardBody').innerHTML = perfData.strategies.map((s, i) => {
+          const name = STRATEGY_NAMES[s.strategy] || s.strategy;
+          const pnlCls = s.total_pnl > 0 ? 'color:var(--green)' : s.total_pnl < 0 ? 'color:var(--red)' : '';
+          const wrCls = s.win_rate >= 55 ? 'color:var(--green)' : s.win_rate >= 45 ? 'color:var(--amber)' : s.win_rate > 0 ? 'color:var(--red)' : '';
+          const avgRet = s.avg_return ? `${(s.avg_return * 100).toFixed(2)}%` : '--';
+          return `<tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:6px 8px;color:var(--muted)">${i + 1}</td>
+            <td style="padding:6px 8px;font-weight:600">${name}</td>
+            <td style="padding:6px 8px;text-align:right">${s.total}</td>
+            <td style="padding:6px 8px;text-align:right;color:var(--blue)">${s.open_count || 0}</td>
+            <td style="padding:6px 8px;text-align:right">${s.wins || 0}/${s.losses || 0}</td>
+            <td style="padding:6px 8px;text-align:right;${wrCls}">${s.wins + s.losses > 0 ? s.win_rate + '%' : '--'}</td>
+            <td style="padding:6px 8px;text-align:right;${pnlCls}">${s.total_pnl !== 0 ? (s.total_pnl > 0 ? '+' : '') + '$' + Math.abs(s.total_pnl).toFixed(2) : '--'}</td>
+            <td style="padding:6px 8px;text-align:right;${pnlCls}">${avgRet}</td>
+          </tr>`;
+        }).join('');
+      }
+    } catch(e) {}
+
+    // Decisions
+    if (decisions && decisions.length > 0) {
+      $('decisionsPanel').innerHTML = decisions.map(d => {
+        const actionColor = d.action === 'OPENED' ? 'var(--green)' : d.action === 'REJECTED' ? 'var(--red)' : 'var(--amber)';
+        return `<div class="trade-row">
+          <span style="font-weight:600;width:40px">${d.asset}</span>
+          <span style="color:${actionColor};font-weight:600;width:60px">${d.action}</span>
+          <span style="flex:1;color:var(--muted);font-size:10px">${(d.reasoning || '').slice(0, 80)}</span>
+          <span style="color:var(--muted);font-size:9px">${new Date(d.timestamp).toLocaleString()}</span>
+        </div>`;
+      }).join('');
+    }
+  } catch(e) { console.error('performance:', e); }
 }
 
-loadSignals();
-loadDecisions();
-setInterval(loadSignals, 60000);
+async function loadDebate() {
+  try {
+    const r = await fetch(`${BASE}/trader/latest-debate`);
+    if (!r.ok) return;
+    const d = await r.json();
+
+    $('debatePanel').innerHTML = `
+      <div style="font-weight:600;margin-bottom:6px">${d.asset} — ${d.action}</div>
+      <div class="debate-box bull"><div class="debate-label bull">BULL</div>${d.bull_summary || 'N/A'}</div>
+      <div class="debate-box bear"><div class="debate-label bear">BEAR</div>${d.bear_summary || 'N/A'}</div>
+      <div class="debate-box decision"><div class="debate-label decision">DECISION</div>${d.action}: ${d.reasoning || 'N/A'}</div>
+      <div class="sub-text" style="margin-top:6px">${new Date(d.timestamp).toLocaleString()}</div>
+    `;
+  } catch(e) { console.error('debate:', e); }
+}
+
+loadAll();
+setInterval(loadAll, 30000);
 </script>
 </body>
 </html>
