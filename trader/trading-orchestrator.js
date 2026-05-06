@@ -24,6 +24,7 @@ import { validateTrade, calculatePositionSize } from './strategy-validator.js';
 import { debate } from './bull-bear-debate.js';
 import { watchRun, watchClose, synthesizeInsights, getWatcherStats } from './meta-watcher.js';
 import { runRoundtable } from './strategy-roundtable.js';
+import { logDomainRun, detectCrossDomainConvergence } from '../experiment-engine/meta-watcher.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG_PATH = path.join(__dirname, 'config.json');
@@ -447,6 +448,26 @@ async function run() {
     }
   } catch (e) {
     console.error('[watcher] Error:', e.message);
+  }
+
+  // Step 6b: Meta-watcher-of-watchers — cross-domain event logging
+  try {
+    logDomainRun('trading', signalData.signals.map(s => ({
+      type: s.type || s.source,
+      asset: s.asset,
+      direction: s.direction,
+      strength: s.strength,
+    })));
+    const crossDomain = detectCrossDomainConvergence(24);
+    if (crossDomain.length > 0) {
+      console.log(`  [meta-watcher] ${crossDomain.length} cross-domain convergences detected`);
+      for (const c of crossDomain) {
+        console.log(`    ${c.strategy}: ${c.direction} in ${c.domains.join(' + ')}`);
+      }
+    }
+  } catch (e) {
+    // Meta-watcher is optional — don't fail the run
+    console.error('[meta-watcher] Error:', e.message);
   }
 
   // Step 7: Save and report

@@ -3070,6 +3070,76 @@ Output the prompt as a single paragraph, 2-3 sentences max. Nothing else.`;
   }
 });
 
+// ── Boxing Lab (Domain 2) ────────────────────────────────────────────────────
+
+bot.onText(/^\/boxing[-_]?lab(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const args = match?.[1]?.trim();
+
+  // Parse: /boxing-lab [category] [filename] or just /boxing-lab for latest
+  let category = 'padwork', filename = 'noodles1';
+  if (args) {
+    const parts = args.split(/\s+/);
+    if (parts[0]) category = parts[0];
+    if (parts[1]) filename = parts[1];
+  }
+
+  await safeSend(chatId, `Boxing Lab analyzing ${category}/${filename}...`);
+
+  try {
+    const { execSync: exec } = require('child_process');
+    exec(`python3 experiment-engine/boxing/boxing-strategies.py ${category} ${filename}`, {
+      cwd: path.join(process.env.HOME, 'nanoclaw'),
+      stdio: 'pipe',
+      timeout: 30000,
+    });
+
+    const analysisPath = path.join(process.env.HOME, 'nanoclaw', 'experiment-engine', 'boxing', 'boxing-analysis-latest.json');
+    if (!fs.existsSync(analysisPath)) {
+      return safeSend(chatId, 'Analysis file not generated.');
+    }
+
+    const analysis = JSON.parse(fs.readFileSync(analysisPath, 'utf8'));
+    const m = analysis.metrics;
+
+    let response = `*Boxing Lab — ${category}/${filename}*\n`;
+    response += `${m.total_punches} punches | ${m.punch_rate_per_min}/min | vel ${m.mean_velocity} | ${m.guard_drops} guard drops\n`;
+
+    for (const strat of analysis.strategies) {
+      if (strat.signals.length === 0 && strat.recommendations.length === 0) continue;
+      response += `\n*${strat.strategy}*\n`;
+      for (const sig of strat.signals) {
+        const icon = sig.outcome === 'positive' ? '+' : '-';
+        response += `${icon} ${sig.reasoning.substring(0, 100)}\n`;
+      }
+      for (const rec of strat.recommendations) {
+        response += `> ${rec}\n`;
+      }
+    }
+
+    // Publish to meta-watcher
+    try {
+      const { logDomainRun, detectCrossDomainConvergence } = await import('./experiment-engine/meta-watcher.js');
+      logDomainRun('boxing', analysis.signals.map(s => ({
+        type: s.type, subject: s.subject, outcome: s.outcome,
+        strength: s.strength, asset: s.subject, direction: s.outcome,
+      })));
+      const crossDomain = detectCrossDomainConvergence(48);
+      if (crossDomain.length > 0) {
+        response += '\n*Cross-Domain Convergences:*\n';
+        for (const c of crossDomain) {
+          response += `${c.strategy}: ${c.direction} in ${c.domains.join(' + ')}\n`;
+        }
+      }
+    } catch(e) {}
+
+    await safeSend(chatId, response, { parse_mode: 'Markdown' });
+  } catch(e) {
+    console.error('[boxing-lab]', e.message);
+    await safeSend(chatId, `Boxing Lab error: ${e.message}`);
+  }
+});
+
 // ── Reed Visual Director ────────────────────────────────────────────────────
 const reedConversation = {};
 
