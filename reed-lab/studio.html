@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reed's Studio — Basic Reflex Visual Lab</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #e0e0e0; font-family: 'SF Mono', 'Menlo', monospace; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: linear-gradient(180deg, #0a0a0a 80%, transparent);
+    padding: 20px 24px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: 2px; color: #fff; }
+  .topbar h1 span { color: #8B2020; }
+  .stats { font-size: 12px; color: #666; }
+  .stats b { color: #8B2020; }
+
+  .tabs {
+    display: flex; gap: 2px; padding: 0 24px 16px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .tab {
+    padding: 8px 16px; font-size: 12px; letter-spacing: 1px;
+    background: #111; color: #666; border: none; cursor: pointer;
+    font-family: inherit; transition: all 0.2s;
+  }
+  .tab.active { background: #1a1a1a; color: #8B2020; }
+  .tab:hover { color: #ccc; }
+
+  /* Style Library */
+  .style-library {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px; padding: 24px;
+  }
+  .style-card {
+    background: #111; border: 1px solid #1a1a1a; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .style-card:hover { border-color: #8B2020; }
+  .style-card img {
+    width: 100%; aspect-ratio: 16/9; object-fit: cover;
+    filter: brightness(0.9);
+  }
+  .style-card .info { padding: 12px; }
+  .style-card .name { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .style-card .keyword { font-size: 11px; color: #8B2020; margin-bottom: 6px; }
+  .style-card .desc { font-size: 11px; color: #666; line-height: 1.4; }
+  .style-card .count { font-size: 10px; color: #444; margin-top: 8px; }
+
+  /* Gallery */
+  .gallery {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px; padding: 24px;
+  }
+  .gallery-item {
+    position: relative; overflow: hidden; cursor: pointer;
+    aspect-ratio: 16/9; background: #111;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.3s;
+  }
+  .gallery-item:hover img { transform: scale(1.05); }
+  .gallery-item .overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding: 20px 10px 8px; font-size: 10px; color: #999;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .gallery-item:hover .overlay { opacity: 1; }
+  .gallery-item .style-tag {
+    position: absolute; top: 6px; right: 6px;
+    background: #8B2020; color: #fff; font-size: 9px;
+    padding: 2px 6px; letter-spacing: 0.5px;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.95); cursor: pointer;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox .caption {
+    position: absolute; bottom: 20px; left: 0; right: 0;
+    text-align: center; font-size: 12px; color: #999;
+  }
+
+  /* Shot List */
+  .shot-list { padding: 24px; max-width: 700px; }
+  .shot-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; background: #111; border-left: 3px solid #333;
+    margin-bottom: 8px;
+  }
+  .shot-item.missing { border-left-color: #8B2020; }
+  .shot-item.partial { border-left-color: #EF9F27; }
+  .shot-item.done { border-left-color: #1D9E75; }
+  .shot-item .have { font-size: 20px; font-weight: 700; color: #333; min-width: 40px; text-align: center; }
+  .shot-item.missing .have { color: #8B2020; }
+  .shot-item .details .tag { font-size: 12px; font-weight: 600; color: #fff; }
+  .shot-item .details .desc { font-size: 11px; color: #666; margin-top: 2px; }
+
+  /* Experiments */
+  .experiments { padding: 24px; }
+  .exp-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .exp-card {
+    background: #111; border: 1px solid #1a1a1a; padding: 12px;
+    position: relative;
+  }
+  .exp-card .name { font-size: 13px; font-weight: 600; color: #fff; }
+  .exp-card .status { font-size: 10px; color: #666; margin-top: 4px; }
+  .exp-card.today { border-color: #8B2020; }
+  .exp-card.today::after {
+    content: 'TODAY'; position: absolute; top: 6px; right: 6px;
+    background: #8B2020; color: #fff; font-size: 8px; padding: 1px 5px;
+  }
+
+  .hidden { display: none; }
+  .section { min-height: 60vh; }
+
+  .filter-bar {
+    padding: 8px 24px; display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 4px 10px; font-size: 10px; background: #111;
+    color: #666; border: 1px solid #222; cursor: pointer;
+    font-family: inherit; letter-spacing: 0.5px;
+  }
+  .filter-btn.active { border-color: #8B2020; color: #8B2020; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>REED'S <span>STUDIO</span></h1>
+  <div class="stats">
+    <span id="totalCount">—</span> images &middot;
+    <b id="todayCount">—</b> today &middot;
+    <span id="styleCount">—</span> styles
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="library">STYLE LIBRARY</button>
+  <button class="tab" data-tab="gallery">GALLERY</button>
+  <button class="tab" data-tab="shots">SHOT LIST</button>
+  <button class="tab" data-tab="experiments">EXPERIMENTS</button>
+</div>
+
+<div id="library" class="section style-library"></div>
+<div id="gallery" class="section hidden">
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="gallery" id="galleryGrid"></div>
+</div>
+<div id="shots" class="section shot-list hidden"></div>
+<div id="experiments" class="section experiments hidden"></div>
+
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <img id="lightboxImg" src="">
+  <div class="caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+const BRIDGE = 'http://localhost:8080';
+const STYLES = {
+  pro_photo: { name: 'Pro Photo', keyword: '/reed', desc: 'Warm golden grade, saturated posters, leather patina, vignette. The everyday workhorse.' },
+  manga: { name: 'Manga', keyword: '/reed manga', desc: 'Sepia ink crosshatch, environment conversion, golden light rays. Zuko-quality.' },
+  noir: { name: 'Film Noir', keyword: '/reed noir', desc: 'B&W, 1940s fight night, single overhead, smoky, high contrast. Wall art material.' },
+  ippo: { name: 'Ippo Shonen', keyword: '/reed ippo', desc: 'Speed lines, impact frames, Japanese SFX, screentone. Weekly manga quality.' },
+  neon: { name: 'HK Neon', keyword: '/reed neon', desc: 'Cyberpunk Hong Kong, neon pink/blue/amber, rain-slicked floors, Chinese characters.' },
+  dramatic: { name: 'Dramatic Cinema', keyword: '/reed dramatic', desc: 'Volumetric haze, god rays, chiaroscuro, film grain. Golden hour atmosphere.' },
+  poster: { name: '70s Fight Poster', keyword: '/reed poster', desc: 'Ali-era, halftone dots, aged paper, BASIC REFLEX typography, fold creases.' },
+  oil: { name: 'Oil Painting', keyword: '/reed oil', desc: 'Rembrandt lighting, impasto brushstrokes, canvas texture. WIP — evolving.' },
+  video_cinematic: { name: 'Cinematic Video', keyword: '/reed video', desc: '5-second motion from any photo. Camera push, atmospheric shift.' },
+};
+const EXPERIMENTS = [
+  'Watercolor', 'Ukiyo-e Woodblock', 'Street Art Mural', 'Sports Illustrated Cover',
+  'Double Exposure', 'Risograph Print', 'Renaissance Fresco', 'Synthwave',
+  'Ink Wash', 'Polaroid Memory'
+];
+
+let catalogue = { photos: [], generations: [], stats: { total_generated: 0, by_style: {} } };
+let shotList = { assignments: [], full_list: [] };
+
+async function loadData() {
+  try {
+    const catResp = await fetch('/reed-lab/catalogue');
+    if (catResp.ok) catalogue = await catResp.json();
+  } catch { console.log('Catalogue not available via bridge, loading local'); }
+
+  try {
+    const shotResp = await fetch('/reed-lab/shots');
+    if (shotResp.ok) shotList = await shotResp.json();
+  } catch {}
+
+  render();
+}
+
+function render() {
+  document.getElementById('totalCount').textContent = catalogue.stats.total_generated || 0;
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById('todayCount').textContent = catalogue.generations.filter(g => g.date?.startsWith(today)).length;
+  document.getElementById('styleCount').textContent = Object.keys(catalogue.stats.by_style || {}).length;
+
+  renderLibrary();
+  renderGallery();
+  renderShots();
+  renderExperiments();
+}
+
+function renderLibrary() {
+  const el = document.getElementById('library');
+  el.innerHTML = Object.entries(STYLES).map(([key, style]) => {
+    const count = catalogue.stats.by_style?.[key] || 0;
+    const lastGen = catalogue.generations.filter(g => g.style === key).pop();
+    const imgSrc = lastGen ? `/reed-lab/image?path=${encodeURIComponent(lastGen.output)}` : '';
+    return `<div class="style-card">
+      ${imgSrc ? `<img src="${imgSrc}" onerror="this.style.display='none'" loading="lazy">` : '<div style="aspect-ratio:16/9;background:#111"></div>'}
+      <div class="info">
+        <div class="name">${style.name}</div>
+        <div class="keyword">${style.keyword}</div>
+        <div class="desc">${style.desc}</div>
+        <div class="count">${count} generated</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderGallery() {
+  const bar = document.getElementById('filterBar');
+  const styles = [...new Set(catalogue.generations.map(g => g.style))];
+  bar.innerHTML = `<button class="filter-btn active" data-filter="all">ALL</button>` +
+    styles.map(s => `<button class="filter-btn" data-filter="${s}">${s.replace(/_/g, ' ').toUpperCase()}</button>`).join('');
+
+  bar.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.onclick = () => {
+      bar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGalleryItems(btn.dataset.filter);
+    };
+  });
+  renderGalleryItems('all');
+}
+
+function renderGalleryItems(filter) {
+  const grid = document.getElementById('galleryGrid');
+  const items = catalogue.generations
+    .filter(g => filter === 'all' || g.style === filter)
+    .reverse();
+
+  grid.innerHTML = items.map(g => {
+    const imgSrc = `/reed-lab/image?path=${encodeURIComponent(g.output)}`;
+    const styleName = STYLES[g.style]?.name || g.style;
+    const date = g.date?.slice(0, 10) || '';
+    return `<div class="gallery-item" onclick="openLightbox('${imgSrc}', '${styleName} — ${date}')">
+      <img src="${imgSrc}" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <div class="style-tag">${styleName}</div>
+      <div class="overlay">${date}</div>
+    </div>`;
+  }).join('') || '<p style="padding:24px;color:#444">No images yet. Run /lab or drop photos in reed-inbox/</p>';
+}
+
+function renderShots() {
+  const el = document.getElementById('shots');
+  const list = shotList.full_list || [];
+  el.innerHTML = '<h2 style="font-size:14px;color:#fff;margin-bottom:16px;letter-spacing:1px">SHOT LIST — What Reed Needs</h2>' +
+    list.map(s => {
+      const cls = s.have === 0 ? 'missing' : s.have < s.need ? 'partial' : 'done';
+      return `<div class="shot-item ${cls}">
+        <div class="have">${s.have}/${s.need}</div>
+        <div class="details">
+          <div class="tag">${s.tag.replace(/_/g, ' ').toUpperCase()}</div>
+          <div class="desc">${s.desc}</div>
+        </div>
+      </div>`;
+    }).join('') || '<p style="color:#444">Run /shots to generate shot list</p>';
+}
+
+function renderExperiments() {
+  const el = document.getElementById('experiments');
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const todayIdx = dayOfYear % EXPERIMENTS.length;
+
+  el.innerHTML = '<h2 style="font-size:14px;color:#fff;margin-bottom:16px;letter-spacing:1px">EXPERIMENTAL RECIPES — Rotating Daily</h2>' +
+    '<div class="exp-grid">' + EXPERIMENTS.map((name, i) => {
+      const isToday = i === todayIdx;
+      const count = catalogue.generations.filter(g => g.style?.includes(name.toLowerCase().replace(/\W/g, '_'))).length;
+      return `<div class="exp-card ${isToday ? 'today' : ''}">
+        <div class="name">${name}</div>
+        <div class="status">${count > 0 ? `${count} generated` : 'Not tested yet'}</div>
+      </div>`;
+    }).join('') + '</div>';
+}
+
+function openLightbox(src, caption) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxCaption').textContent = caption;
+  document.getElementById('lightbox').classList.add('active');
+}
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.remove('hidden');
+  });
+});
+
+loadData();
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>

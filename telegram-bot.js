@@ -2932,57 +2932,119 @@ Examples:
 Gallery: localhost:8080/reed-slides`, { parse_mode: 'Markdown' });
   }
 
-  await safeSend(chatId, `🏛 Generating slide: "${topic}"...`);
+  await safeSend(chatId, `🏛 Cartographer mapping "${topic}"...`);
 
   try {
-    // Search vault for context
-    let context = '';
+    // Load Cartographer sage
+    const cartDef = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'sages', 'cartographer.json'), 'utf8'));
+
+    // Step 1: Vault context search
+    let vaultContext = '';
     try {
-      const searchRes = await fetch('http://localhost:8080/vault/search?q=' + encodeURIComponent(topic) + '&limit=3');
+      const searchRes = await fetch('http://localhost:8080/vault/search?q=' + encodeURIComponent(topic) + '&limit=5');
       if (searchRes.ok) {
         const results = await searchRes.json();
         if (results.results) {
-          context = results.results.map(r => r.title || r.path).join(', ');
+          vaultContext = results.results.map(r => `- ${r.title || r.path}: ${(r.content || '').substring(0, 200)}`).join('\n');
         }
       }
     } catch(e) {}
 
-    // Use hermes3 to generate slide content
-    const slidePrompt = `Generate a Cathedral slide card about: "${topic}"
+    // Step 2: Cartographer writes the structural brief
+    const cartographerPrompt = `You are ${cartDef.sage.name}, ${cartDef.sage.designation}.
+Voice: ${cartDef.sage.voice}
 
-Context from vault: ${context || 'none'}
+Your task: write a slide brief for the topic "${topic}".
 
-Output JSON only:
-{"title": "5-8 word title", "subtitle": "one sentence", "highlights": ["point 1", "point 2", "point 3"], "image_prompt": "A dark cathedral-aesthetic illustration of [topic concept]. Deep navy/black background (#09090f), amber accents, clean geometric style, architectural feeling, no text in image."}`;
+Vault context:
+${vaultContext || 'No vault results — use your knowledge of the Cathedral system.'}
 
-    const llmRes = await fetch('http://localhost:11434/api/chat', {
+Output JSON only, following this exact format:
+{
+  "title": "5-8 word structural title",
+  "subtitle": "One sentence — what this means for the system",
+  "key_concept": "The single idea this slide communicates",
+  "visual_metaphor": "What image would make this visible — think: map territory, constellation, architectural structure, system diagram. Cathedral aesthetic: dark (#09090f), amber accents, geometric.",
+  "highlights": ["structural point 1", "structural point 2", "structural point 3"],
+  "why_it_matters": "Why this deserves a slide — what it changes in the system",
+  "zone_change": "What moved on the map (e.g., 'new territory settled' or 'border crossing detected')"
+}`;
+
+    const cartRes = await fetch('http://localhost:11434/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'hermes3',
         messages: [
-          { role: 'system', content: 'You create slide card content for Cathedral architecture presentations. Output JSON only.' },
-          { role: 'user', content: slidePrompt }
+          { role: 'system', content: cartographerPrompt },
+          { role: 'user', content: `Write the slide brief for: "${topic}"` }
         ],
         stream: false,
-        options: { temperature: 0.4, num_predict: 300 },
+        options: { temperature: 0.3, num_predict: 400 },
         format: 'json',
       }),
     });
 
-    const llmData = await llmRes.json();
-    const slideData = JSON.parse(llmData.message?.content || '{}');
-
-    if (!slideData.title) {
-      slideData.title = topic;
-      slideData.subtitle = 'Cathedral architecture concept';
-      slideData.highlights = [];
+    const cartData = await cartRes.json();
+    let brief;
+    try {
+      brief = JSON.parse(cartData.message?.content || '{}');
+    } catch(e) {
+      brief = { title: topic, subtitle: 'Cathedral architecture', highlights: [], visual_metaphor: '' };
     }
 
-    slideData.date = new Date().toISOString().split('T')[0];
-    slideData.source = 'telegram-' + Date.now();
+    if (!brief.title) brief.title = topic;
 
-    // Save to catalogue
+    await safeSend(chatId, `🗺 Cartographer brief: "${brief.title}"\n🎬 Reed generating visual...`);
+
+    // Step 3: Reed generates Higgsfield image prompt from brief
+    const reedPrompt = `You are Reed, Visual Director. The Cartographer wrote this brief for a Cathedral slide:
+
+Title: ${brief.title}
+Concept: ${brief.key_concept || brief.subtitle || ''}
+Visual metaphor: ${brief.visual_metaphor || 'Cathedral architecture, dark geometric'}
+
+Write a Higgsfield nano_banana_2 image generation prompt. Requirements:
+- Dark Cathedral background (#09090f to #0f0f18)
+- Amber/gold accent lighting
+- Clean geometric or architectural style
+- The concept made visual — not literal, metaphorical
+- No text in the image
+- Cinematic 16:9 composition
+- Professional, minimal, striking
+
+Output the prompt as a single paragraph, 2-3 sentences max. Nothing else.`;
+
+    let imagePrompt = '';
+    try {
+      const reedRes = await fetch('http://localhost:11434/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'hermes3',
+          messages: [
+            { role: 'system', content: 'You are Reed, Visual Director. Write image generation prompts. Output ONLY the prompt text, nothing else.' },
+            { role: 'user', content: reedPrompt }
+          ],
+          stream: false,
+          options: { temperature: 0.5, num_predict: 150 },
+        }),
+      });
+      const reedData = await reedRes.json();
+      imagePrompt = reedData.message?.content || '';
+    } catch(e) {
+      imagePrompt = `Dark cathedral interior with amber geometric light patterns representing ${topic}. Deep navy-black background, clean architectural lines, cinematic 16:9 composition.`;
+    }
+
+    // Save slide to catalogue (with brief + image prompt for future generation)
+    const slideData = {
+      ...brief,
+      image_prompt: imagePrompt.trim(),
+      date: new Date().toISOString().split('T')[0],
+      source: 'telegram-' + Date.now(),
+      pipeline: 'cartographer→reed',
+    };
+
     const catPath = path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'slides', 'catalogue.json');
     let catalogue = [];
     try { catalogue = JSON.parse(fs.readFileSync(catPath, 'utf8')); } catch(e) {}
@@ -2990,12 +3052,15 @@ Output JSON only:
     fs.writeFileSync(catPath, JSON.stringify(catalogue, null, 2));
 
     // Format response
-    let response = `🏛 *${slideData.title}*\n\n${slideData.subtitle || ''}`;
-    if (slideData.highlights && slideData.highlights.length > 0) {
-      response += '\n\n' + slideData.highlights.map(h => `• ${h}`).join('\n');
+    let response = `🏛 *${brief.title}*\n\n${brief.subtitle || ''}`;
+    if (brief.key_concept) response += `\n\n💡 *Concept:* ${brief.key_concept}`;
+    if (brief.highlights && brief.highlights.length > 0) {
+      response += '\n\n' + brief.highlights.map(h => `• ${h}`).join('\n');
     }
-    response += `\n\n_Slide added to gallery (${catalogue.length} total)_`;
-    response += '\n📊 View: localhost:8080/reed-slides';
+    if (brief.why_it_matters) response += `\n\n🗺 *Map:* ${brief.why_it_matters}`;
+    if (brief.zone_change) response += `\n📍 ${brief.zone_change}`;
+    response += `\n\n🎨 _Reed's visual prompt:_ ${imagePrompt.substring(0, 120)}...`;
+    response += `\n\n_Slide ${catalogue.length} added to gallery_`;
 
     await safeSend(chatId, response, { parse_mode: 'Markdown' });
 
