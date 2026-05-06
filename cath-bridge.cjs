@@ -1659,6 +1659,16 @@ app.get('/scraper/hub', (req, res) => {
   res.sendFile(hubPath);
 });
 
+// ── Reed's Slides ────────────────────────────────────────────────────────────
+app.get('/reed-slides', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'slides-gallery.html'));
+});
+app.get('/reed-slides/catalogue', (req, res) => {
+  const catPath = path.join(NANOCLAW, 'reed-lab', 'slides', 'catalogue.json');
+  if (fs.existsSync(catPath)) return res.json(JSON.parse(fs.readFileSync(catPath, 'utf8')));
+  res.json([]);
+});
+
 // ── Reed's Studio ────────────────────────────────────────────────────────────
 app.get('/reed-studio', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'studio.html'));

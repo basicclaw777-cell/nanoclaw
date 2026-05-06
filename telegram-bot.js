@@ -2913,6 +2913,98 @@ bot.on('message', async (msg) => {
   }
 });
 
+// ── Cathedral Slides ────────────────────────────────────────────────────────
+
+bot.onText(/^\/slides?(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const topic = match?.[1]?.trim();
+
+  if (!topic) {
+    return safeSend(chatId, `🏛 *Cathedral Slides*
+
+\`/slides [topic]\` — Generate a visual slide card
+
+Examples:
+\`/slides The Experiment Lab\`
+\`/slides Cymatics Schumann strategy\`
+\`/slides Today's trading roundtable\`
+
+Gallery: localhost:8080/reed-slides`, { parse_mode: 'Markdown' });
+  }
+
+  await safeSend(chatId, `🏛 Generating slide: "${topic}"...`);
+
+  try {
+    // Search vault for context
+    let context = '';
+    try {
+      const searchRes = await fetch('http://localhost:8080/vault/search?q=' + encodeURIComponent(topic) + '&limit=3');
+      if (searchRes.ok) {
+        const results = await searchRes.json();
+        if (results.results) {
+          context = results.results.map(r => r.title || r.path).join(', ');
+        }
+      }
+    } catch(e) {}
+
+    // Use hermes3 to generate slide content
+    const slidePrompt = `Generate a Cathedral slide card about: "${topic}"
+
+Context from vault: ${context || 'none'}
+
+Output JSON only:
+{"title": "5-8 word title", "subtitle": "one sentence", "highlights": ["point 1", "point 2", "point 3"], "image_prompt": "A dark cathedral-aesthetic illustration of [topic concept]. Deep navy/black background (#09090f), amber accents, clean geometric style, architectural feeling, no text in image."}`;
+
+    const llmRes = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'hermes3',
+        messages: [
+          { role: 'system', content: 'You create slide card content for Cathedral architecture presentations. Output JSON only.' },
+          { role: 'user', content: slidePrompt }
+        ],
+        stream: false,
+        options: { temperature: 0.4, num_predict: 300 },
+        format: 'json',
+      }),
+    });
+
+    const llmData = await llmRes.json();
+    const slideData = JSON.parse(llmData.message?.content || '{}');
+
+    if (!slideData.title) {
+      slideData.title = topic;
+      slideData.subtitle = 'Cathedral architecture concept';
+      slideData.highlights = [];
+    }
+
+    slideData.date = new Date().toISOString().split('T')[0];
+    slideData.source = 'telegram-' + Date.now();
+
+    // Save to catalogue
+    const catPath = path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'slides', 'catalogue.json');
+    let catalogue = [];
+    try { catalogue = JSON.parse(fs.readFileSync(catPath, 'utf8')); } catch(e) {}
+    catalogue.push(slideData);
+    fs.writeFileSync(catPath, JSON.stringify(catalogue, null, 2));
+
+    // Format response
+    let response = `🏛 *${slideData.title}*\n\n${slideData.subtitle || ''}`;
+    if (slideData.highlights && slideData.highlights.length > 0) {
+      response += '\n\n' + slideData.highlights.map(h => `• ${h}`).join('\n');
+    }
+    response += `\n\n_Slide added to gallery (${catalogue.length} total)_`;
+    response += '\n📊 View: localhost:8080/reed-slides';
+
+    await safeSend(chatId, response, { parse_mode: 'Markdown' });
+
+  } catch(e) {
+    console.error('[slides] Error:', e.message);
+    await safeSend(chatId, `Slide generation failed: ${e.message}`);
+  }
+});
+
 // ── Reed Visual Director ────────────────────────────────────────────────────
 const reedConversation = {};
 

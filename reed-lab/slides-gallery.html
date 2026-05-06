@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral Slides — Reed's Visual Lab</title>
+<style>
+  :root {
+    --bg: #09090f;
+    --surface: #0f0f18;
+    --border: #1a1a2e;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --amber: #f59e0b;
+    --amber-dim: rgba(245,158,11,0.15);
+    --blue: #378ADD;
+    --green: #22c55e;
+    --red: #ef4444;
+    --purple: #534AB7;
+    --accent: #8B2020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', 'SF Pro Display', -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 32px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  h1 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .slides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
+    gap: 24px;
+    padding: 32px 40px;
+  }
+
+  /* ── Slide Card ── */
+  .slide {
+    aspect-ratio: 16/9;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px;
+    cursor: default;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .slide:hover {
+    border-color: var(--amber);
+    box-shadow: 0 0 30px rgba(245,158,11,0.08);
+  }
+
+  .slide-number {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+
+  .slide-badge {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: var(--amber-dim);
+    color: var(--amber);
+  }
+
+  .slide-visual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 0;
+  }
+
+  .slide-title {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .slide-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .slide-stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 11px;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .stat-value {
+    font-weight: 700;
+    color: var(--amber);
+  }
+
+  .stat-label {
+    color: var(--muted);
+  }
+
+  /* ── Visual Elements ── */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 80%;
+  }
+
+  .layer {
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .persona-ring {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .persona {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    border: 2px solid;
+    letter-spacing: 0.5px;
+  }
+
+  .domain-constellation {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .domain-node {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: 1px solid;
+  }
+
+  .system-map {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 90%;
+  }
+
+  .sys-node {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+  }
+
+  .sys-node.active { border-color: var(--amber); color: var(--amber); }
+  .sys-node.live { border-color: var(--green); color: var(--green); }
+
+  .phase-flow {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    width: 90%;
+  }
+
+  .phase-block {
+    flex: 1;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .phase-arrow {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* ── Catalogue Section ── */
+  .catalogue-header {
+    padding: 24px 40px 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+
+  .catalogue-header h2 {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  #catalogueGrid {
+    padding: 0 40px 40px;
+  }
+
+  .catalogue-empty {
+    color: var(--muted);
+    font-size: 12px;
+    padding: 20px 0;
+    font-style: italic;
+  }
+
+  @media (max-width: 700px) {
+    .slides-grid { grid-template-columns: 1fr; padding: 16px; }
+    header { padding: 20px 16px; }
+    .slide { padding: 20px; }
+    .slide-title { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Cathedral Slides</h1>
+    <div class="subtitle">Reed's Visual Lab — System Architecture Cards</div>
+  </div>
+  <div class="subtitle" id="slideCount">6 slides</div>
+</header>
+
+<div class="slides-grid">
+
+  <!-- Slide 1: Predictive Intelligence -->
+  <div class="slide">
+    <span class="slide-number">01</span>
+    <span class="slide-badge">Live</span>
+    <div class="slide-visual">
+      <div class="layer-stack">
+        <div class="layer" style="background:rgba(245,158,11,0.2);color:var(--amber)">Layer 4 — Autonomous Seeds</div>
+        <div class="layer" style="background:rgba(83,74,183,0.2);color:var(--purple)">Layer 3 — Visual Prediction Map</div>
+        <div class="layer" style="background:rgba(55,138,221,0.2);color:var(--blue)">Layer 2 — Completion Engine (hermes3)</div>
+        <div class="layer" style="background:rgba(34,197,94,0.15);color:var(--green)">Layer 1 — Knowledge Graph (6,811 nodes)</div>
+      </div>
+    </div>
+    <div class="slide-title">The Predictive Intelligence System</div>
+    <div class="slide-subtitle">Four layers transforming 6,878 vault nuggets into predictions. Graph finds structure. Completion engine finds gaps. Map makes it visible. Seeds make it autonomous.</div>
+    <div class="slide-stats">
+      <div class="stat"><span class="stat-value">6,811</span><span class="stat-label">nodes</span></div>
+      <div class="stat"><span class="stat-value">29,362</span><span class="stat-label">edges</span></div>
+      <div class="stat"><span class="stat-value">354</span><span class="stat-label">communities</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 2: The Roundtable -->
+  <div class="slide">
+    <span class="slide-number">02</span>
+    <span class="slide-badge">Live</span>
+    <div class="slide-visual">
+      <div class="persona-ring">
+        <div class="persona" style="border-color:var(--amber);color:var(--amber)">Gann</div>
+        <div class="persona" style="border-color:var(--blue);color:var(--blue)">Vortex</div>
+        <div class="persona" style="border-color:var(--purple);color:var(--purple)">Cycles</div>
+        <div class="persona" style="border-color:var(--red);color:var(--red)">Suppr</div>
+        <div class="persona" style="border-color:#94a3b8;color:#94a3b8">Lunar</div>
+        <div class="persona" style="border-color:var(--green);color:var(--green)">Fib</div>
+        <div class="persona" style="border-color:#f472b6;color:#f472b6">Cymtx</div>
+        <div class="persona" style="border-color:#fbbf24;color:#fbbf24">Mmtm</div>
+      </div>
+    </div>
+    <div class="slide-title">The Strategy Roundtable</div>
+    <div class="slide-subtitle">Eight worldviews argue about the same price action. Gann sees geometry. Vortex sees breath. Lunar sees rhythm. Cymatics sees vibration. The friction produces insight none of them see alone.</div>
+    <div class="slide-stats">
+      <div class="stat"><span class="stat-value">8</span><span class="stat-label">personas</span></div>
+      <div class="stat"><span class="stat-value">0-10</span><span class="stat-label">convergence</span></div>
+      <div class="stat"><span class="stat-value">Every 4h</span><span class="stat-label">cycle</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 3: The Steward -->
+  <div class="slide">
+    <span class="slide-number">03</span>
+    <span class="slide-badge">Court 16</span>
+    <div class="slide-visual">
+      <div style="text-align:center">
+        <div style="width:80px;height:80px;border-radius:50%;border:2px solid var(--amber);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--amber)">S</div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;max-width:300px;margin:0 auto">
+          Accidental Agreement &middot; Blindspots &middot; Friction Signals
+        </div>
+      </div>
+    </div>
+    <div class="slide-title">The Steward</div>
+    <div class="slide-subtitle">Emerges from friction between incompatible worldviews. Finds what none see alone: where three strategies accidentally agree, where a confident caller ignores a blindspot, where the pattern of disagreement IS the signal.</div>
+    <div class="slide-stats">
+      <div class="stat"><span class="stat-value">3</span><span class="stat-label">detection modes</span></div>
+      <div class="stat"><span class="stat-value">hermes3</span><span class="stat-label">local LLM</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 4: The Experiment Lab -->
+  <div class="slide">
+    <span class="slide-number">04</span>
+    <span class="slide-badge">7 Domains</span>
+    <div class="slide-visual">
+      <div class="domain-constellation">
+        <div class="domain-node" style="border-color:var(--green);color:var(--green)">Trading</div>
+        <div class="domain-node" style="border-color:var(--red);color:var(--red)">Boxing</div>
+        <div class="domain-node" style="border-color:var(--purple);color:var(--purple)">Creative</div>
+        <div class="domain-node" style="border-color:var(--blue);color:var(--blue)">Research</div>
+        <div class="domain-node" style="border-color:var(--amber);color:var(--amber)">Gym Ops</div>
+        <div class="domain-node" style="border-color:#f472b6;color:#f472b6">Health</div>
+        <div class="domain-node" style="border-color:#94a3b8;color:#94a3b8">HK Pulse</div>
+      </div>
+    </div>
+    <div class="slide-title">The Experiment Lab</div>
+    <div class="slide-subtitle">One template, seven domains. Competing worldviews race on real data. A meta-watcher-of-watchers observes across all domains for cross-domain convergence. Does reality have a unified pattern language?</div>
+    <div class="slide-stats">
+      <div class="stat"><span class="stat-value">1</span><span class="stat-label">live</span></div>
+      <div class="stat"><span class="stat-value">6</span><span class="stat-label">queued</span></div>
+      <div class="stat"><span class="stat-value">11</span><span class="stat-label">strategies</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Cathedral Architecture -->
+  <div class="slide">
+    <span class="slide-number">05</span>
+    <span class="slide-badge">System</span>
+    <div class="slide-visual">
+      <div class="system-map">
+        <div class="sys-node live">Telegram Bot</div>
+        <div class="sys-node live">Vault (6,878)</div>
+        <div class="sys-node live">Ollama (hermes3)</div>
+        <div class="sys-node active">Trading (11)</div>
+        <div class="sys-node live">Predictive Graph</div>
+        <div class="sys-node active">Experiment Lab</div>
+        <div class="sys-node live">Reed Visual</div>
+        <div class="sys-node live">Morning Brief</div>
+        <div class="sys-node live">Villa Panel</div>
+        <div class="sys-node live">Muse (3am)</div>
+        <div class="sys-node live">Archivist</div>
+        <div class="sys-node live">Timekeeper</div>
+      </div>
+    </div>
+    <div class="slide-title">The Cathedral Architecture</div>
+    <div class="slide-subtitle">Mac Mini, Hong Kong. Local-first sovereign intelligence. 33 PM2 processes. Obsidian vault. Ollama LLMs. Every piece compounds every other piece. Not a product — a research instrument.</div>
+    <div class="slide-stats">
+      <div class="stat"><span class="stat-value">33</span><span class="stat-label">processes</span></div>
+      <div class="stat"><span class="stat-value">12</span><span class="stat-label">court members</span></div>
+      <div class="stat"><span class="stat-value">HKT</span><span class="stat-label">timezone</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Reed's Daily Lab -->
+  <div class="slide">
+    <span class="slide-number">06</span>
+    <span class="slide-badge">Creative</span>
+    <div class="slide-visual">
+      <div class="phase-flow">
+        <div class="phase-block" style="background:rgba(245,158,11,0.15);color:var(--amber)">
+          <span>Scan</span>
+          <span style="font-size:7px;font-weight:400;opacity:0.7">vault + signals</span>
+        </div>
+        <span class="phase-arrow">&rarr;</span>
+        <div class="phase-block" style="background:rgba(83,74,183,0.15);color:var(--purple)">
+          <span>Select</span>
+          <span style="font-size:7px;font-weight:400;opacity:0.7">style + subject</span>
+        </div>
+        <span class="phase-arrow">&rarr;</span>
+        <div class="phase-block" style="background:rgba(55,138,221,0.15);color:var(--blue)">
+          <span>Generate</span>
+          <span style="font-size:7px;font-weight:400;opacity:0.7">Higgsfield</span>
+        </div>
+        <span class="phase-arrow">&rarr;</span>
+        <div class="phase-block" style="background:rgba(34,197,94,0.12);color:var(--green)">
+          <span>Publish</span>
+          <span style="font-size:7px;font-weight:400;opacity:0.7">Telegram + gallery</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-title">Reed's Daily Lab</div>
+    <div class="slide-subtitle">Visual Director Reed scans the vault overnight, selects today's subject, generates through 10 proven styles, publishes the best to Telegram. Shot assignments from the roundtable. Every image tells a Cathedral story.</div>
+    <div class="slide-stats">
+      <div class="stat"><span class="stat-value">10</span><span class="stat-label">styles</span></div>
+      <div class="stat"><span class="stat-value">Daily</span><span class="stat-label">cadence</span></div>
+      <div class="stat"><span class="stat-value">PM2</span><span class="stat-label">automated</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Dynamic catalogue: auto-generated session slides -->
+<div class="catalogue-header">
+  <h2>Session Build Slides</h2>
+</div>
+<div class="slides-grid" id="catalogueGrid">
+  <div class="catalogue-empty">Auto-generated slides from session harvests will appear here.</div>
+</div>
+
+<script>
+const BASE = 'http://localhost:8080';
+
+async function loadCatalogue() {
+  try {
+    const r = await fetch(`${BASE}/reed-slides/catalogue`);
+    if (!r.ok) return;
+    const slides = await r.json();
+    if (!slides || slides.length === 0) return;
+
+    const grid = document.getElementById('catalogueGrid');
+    grid.innerHTML = slides.map((s, i) => `
+      <div class="slide" style="aspect-ratio:16/9">
+        <span class="slide-number">${String(7 + i).padStart(2, '0')}</span>
+        <span class="slide-badge">${s.date || 'Build'}</span>
+        <div class="slide-visual" style="padding:16px">
+          <div style="text-align:center;max-width:400px">
+            ${(s.highlights || []).map(h =>
+              `<div style="font-size:11px;color:var(--muted);padding:3px 0;border-bottom:1px solid var(--border)">${h}</div>`
+            ).join('')}
+          </div>
+        </div>
+        <div class="slide-title">${s.title || 'Session Build'}</div>
+        <div class="slide-subtitle">${s.subtitle || ''}</div>
+        ${s.stats ? `<div class="slide-stats">${s.stats.map(st =>
+          `<div class="stat"><span class="stat-value">${st.value}</span><span class="stat-label">${st.label}</span></div>`
+        ).join('')}</div>` : ''}
+      </div>
+    `).join('');
+
+    document.getElementById('slideCount').textContent = `${6 + slides.length} slides`;
+  } catch(e) {}
+}
+
+loadCatalogue();
+</script>
+</body>
+</html>

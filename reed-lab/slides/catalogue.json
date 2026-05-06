@@ -1,0 +1,897 @@
+[
+  {
+    "title": "Head Orchestrator Harvest — Pass 1",
+    "subtitle": "Fixed Archivist crash loop, filed Logan assets and brief, updated CLAUDE.md, confirmed VibeVoice working, tested GLM-5.1",
+    "highlights": [
+      "Archivist crash loop fixed",
+      "Logan assets and brief filed",
+      "CLAUDE.md updated",
+      "VibeVoice confirmed working",
+      "GLM-5.1 tested"
+    ],
+    "stats": [
+      {
+        "value": "1026",
+        "label": "Vault files"
+      },
+      {
+        "value": "7hrs",
+        "label": "Archivist stable"
+      },
+      {
+        "value": "14",
+        "label": "Cartographer court member count"
+      }
+    ],
+    "date": "2026-04-12",
+    "source": "orchestrator-harvest-2026-04-12-pass1.md"
+  },
+  {
+    "title": "Head Orchestrator Harvest Decisions",
+    "subtitle": "API inventory, Gemini image generation tested, Logan test gen 1, Havana archive reviewed, nanoclaw pushed to GitHub",
+    "highlights": [
+      "API inventory created",
+      "Gemini image generation tested",
+      "Logan test gen 1",
+      "Havana archive reviewed",
+      "nanoclaw pushed to GitHub"
+    ],
+    "stats": [
+      {
+        "value": "10",
+        "label": "keys audited"
+      },
+      {
+        "value": "4",
+        "label": "tests run"
+      },
+      {
+        "value": "23",
+        "label": "photos scanned"
+      }
+    ],
+    "date": "2026-04-13",
+    "source": "session-harvest-2026-04-13-b-pass1.md"
+  },
+  {
+    "title": "Head Orchestrator Harvest — Decisions and Builds",
+    "subtitle": "Final session segment: what was decided, built, and filed.",
+    "highlights": [
+      "morning briefing Python script built",
+      "Chatterbox TTS confirmed running",
+      "Claude API fallback working",
+      "honest architecture assessment delivered",
+      "court sensory capabilities appended to all 4 transmissions"
+    ],
+    "stats": [
+      {
+        "value": "5",
+        "label": "completed builds"
+      },
+      {
+        "value": "1",
+        "label": "new standing instruction"
+      },
+      {
+        "value": "14",
+        "label": "scripts audited"
+      }
+    ],
+    "date": "2026-04-13",
+    "source": "session-harvest-2026-04-13-c-pass1.md"
+  },
+  {
+    "title": "Head Orchestrator Harvest Close",
+    "subtitle": "Nano Banana Pro finalized, engineer queue, trigger audit",
+    "highlights": [
+      "Photo-editor.js updated with nanabananapro flag",
+      "Nano Banana Pro retry/fallback pipeline implemented",
+      "Fallback prompt bug fixed",
+      "Telegram captions differentiated for Nano Banana Pro and BR Studio grade outputs",
+      "Two graphic novel posters generated from real gym photos"
+    ],
+    "stats": [
+      {
+        "value": "5",
+        "label": "photos reviewed"
+      },
+      {
+        "value": "2",
+        "label": "graphic novel posters generated"
+      },
+      {
+        "value": "1",
+        "label": "vision gem calibration note filed"
+      }
+    ],
+    "date": "2026-04-13",
+    "source": "session-harvest-2026-04-13-d-pass1.md"
+  },
+  {
+    "title": "Head Orchestrator Harvest Decisions",
+    "subtitle": "Cartographer built to process pass1 files, classify items, and update operational map. BR CRM folder structure created and 565 lapsed members imported.",
+    "highlights": [
+      "Cartographer built",
+      "Operational map seeded",
+      "Border crossings detected",
+      "Registered in PM2",
+      "import-members.js built"
+    ],
+    "stats": [
+      {
+        "value": "76",
+        "label": "items classified as DONE"
+      },
+      {
+        "value": "484",
+        "label": "members at 12+ months"
+      },
+      {
+        "value": "565",
+        "label": "lapsed members imported"
+      }
+    ],
+    "date": "2026-04-13",
+    "source": "session-harvest-2026-04-13-e-pass1.md"
+  },
+  {
+    "title": "Timekeeper Trigger Build",
+    "subtitle": "Built the Timekeeper's PM2 cron pulse and morning briefing trigger.",
+    "highlights": [
+      "Cathedral schedule built",
+      "Timekeeper PM2 script created",
+      "Telegram bot rhythm command wired"
+    ],
+    "stats": [
+      {
+        "value": "3",
+        "label": "built components"
+      },
+      {
+        "value": "1",
+        "label": "standing instruction gap closed"
+      },
+      {
+        "value": "5",
+        "label": "cron processes in master schedule"
+      }
+    ],
+    "date": "2026-04-13",
+    "source": "session-harvest-2026-04-13-evening-pass1.md"
+  },
+  {
+    "title": "Head Orchestrator Harvest — Pass 1",
+    "subtitle": "Decisions and Builds Completed in the First Pass of the Head Orchestrator Session",
+    "highlights": [
+      "Logan assets copied to vault",
+      "Illustrator.js analyzed",
+      "The-muse.js analyzed",
+      "Honest capability assessment delivered",
+      "Cartographer design doc authored"
+    ],
+    "stats": [
+      {
+        "value": "8",
+        "label": "files"
+      },
+      {
+        "value": "7",
+        "label": "sections"
+      },
+      {
+        "value": "4",
+        "label": "files"
+      }
+    ],
+    "date": "2026-04-13",
+    "source": "session-harvest-2026-04-13-pass1.md"
+  },
+  {
+    "title": "Session Harvest — 2026-04-14",
+    "subtitle": "Timekeeper trigger, DeepSeek research pipeline, harvester + vault state injector",
+    "highlights": [
+      "Timekeeper trigger implemented",
+      "DeepSeek API confirmed active",
+      "96 Cosmology Nuggets deposited",
+      "DeepSeek Session Harvester built",
+      "Suppression topology map filed"
+    ],
+    "stats": [
+      {
+        "value": "1",
+        "label": "Pass"
+      },
+      {
+        "value": "5",
+        "label": "New Nuggets from DeepSeek"
+      },
+      {
+        "value": "407",
+        "label": "Total .md files in staging after deposit"
+      }
+    ],
+    "date": "2026-04-14",
+    "source": "session-harvest-2026-04-14-pass1.md"
+  },
+  {
+    "title": "Session Harvest — Cinema Grade Pipeline",
+    "subtitle": "Extracted clean logos, added cinema grade engine to photo editor, updated vault deposits and icon systems.",
+    "highlights": [
+      "Updated logo fix in photo editor",
+      "Added cinema grade engine to photo editor",
+      "Deposited 40 vault files"
+    ],
+    "stats": [
+      {
+        "value": "2",
+        "label": "new scripts"
+      },
+      {
+        "value": "25",
+        "label": "Cathedral SVGs created"
+      },
+      {
+        "value": "12",
+        "label": "Basic Reflex SVGs created"
+      }
+    ],
+    "date": "2026-04-15",
+    "source": "session-harvest-2026-04-15-evening-pass1.md"
+  },
+  {
+    "title": "Head Orchestrator Harvest Pass 1",
+    "subtitle": "Decisions and builds for photo editor additions, leak registry, container distinction.",
+    "highlights": [
+      "photo-editor.js Addition 1: Headline generation via Ollama qwen3:14b",
+      "photo-editor.js Addition 2: BR logo border via sharp",
+      "sharp v0.34.5 installed to ~/nanoclaw/node_modules/",
+      "NANABANANAPRO_PROMPT updated to suppress Gemini auto-text",
+      "Telegram send confirmed working with composited image"
+    ],
+    "stats": [
+      {
+        "value": "7",
+        "label": "leaks in registry"
+      },
+      {
+        "value": "6",
+        "label": "leaks fixed"
+      },
+      {
+        "value": "2",
+        "label": "sharp operations"
+      }
+    ],
+    "date": "2026-04-15",
+    "source": "session-harvest-2026-04-15-f-pass1.md"
+  },
+  {
+    "title": "Head Orchestrator Harvest — Pass 1",
+    "subtitle": "Cinema grade pipeline, photo editor additions, icons, BR CRM, Cartographer, hallucinated API rejection",
+    "highlights": [
+      "Cinema-grade-v2.py built with OpenCV + LAB, 8-stage pipeline",
+      "Verification: edge preservation >= 60% (geometry), SSIM >= 0.55 (hallucination check)",
+      "photo-editor.js: headline generation and logo border analysis",
+      "The Cartographer built and live — PM2 id 13"
+    ],
+    "stats": [
+      {
+        "value": "7",
+        "label": "Leaks fixed"
+      },
+      {
+        "value": "565",
+        "label": "Lapsed members imported"
+      },
+      {
+        "value": "36",
+        "label": "SVG icons filed"
+      }
+    ],
+    "date": "2026-04-15",
+    "source": "session-harvest-2026-04-15-g-pass1.md"
+  },
+  {
+    "title": "Session Harvest 2026-04-15",
+    "subtitle": "DaVinci Resolve installed, boxing corpus audited, harvester CLI fix identified.",
+    "highlights": [
+      "DaVinci Resolve 21.0b1 installed",
+      "boxing-corpus/ audited",
+      "harvester CLI bug identified"
+    ],
+    "stats": [
+      {
+        "value": "8",
+        "label": "subdirectories in boxing-corpus/"
+      },
+      {
+        "value": "2",
+        "label": "video files in boxing-corpus/"
+      },
+      {
+        "value": "2",
+        "label": "processed outputs from boxing-corpus/"
+      }
+    ],
+    "date": "2026-04-15",
+    "source": "session-harvest-2026-04-15-pass1.md"
+  },
+  {
+    "title": "No Decisions or Builds Session",
+    "subtitle": "Paul's only message was 'end session' — no work was performed between open and close.",
+    "highlights": [
+      "No decisions or builds this session"
+    ],
+    "stats": [],
+    "date": "2026-04-16",
+    "source": "session-harvest-2026-04-16-b-pass1.md"
+  },
+  {
+    "title": "Pass 1 — Decisions and Builds",
+    "subtitle": "Session harvest for Pass 1 focusing on decisions and builds in the Cathedral project.",
+    "highlights": [
+      "Cognitive Signature Graph (new)",
+      "/test Command Upgrades",
+      "Cognitive Scanner (new PM2 process)",
+      "Reflection — Cathedral's 6th Sense",
+      "Court Character Cards Brief"
+    ],
+    "stats": [
+      {
+        "value": "5",
+        "label": "builds completed"
+      },
+      {
+        "value": "11",
+        "label": "character briefs written"
+      },
+      {
+        "value": "1",
+        "label": "new SVG icon added"
+      }
+    ],
+    "date": "2026-04-16",
+    "source": "session-harvest-2026-04-16-pass1.md"
+  },
+  {
+    "title": "Cathedral Villa Phase 1 Live",
+    "subtitle": "Session harvest covering decisions and builds for the first phase of the Cathedral Villa project, including aesthetic choices, build strategy, and system features.",
+    "highlights": [
+      "Single consolidated /villa/snapshot endpoint",
+      "Cathedral Villa Phase 1 control panel (32KB)",
+      "Node server replaces aggressive python caching"
+    ],
+    "stats": [
+      {
+        "value": "255",
+        "label": "files"
+      },
+      {
+        "value": "37,940",
+        "label": "lines"
+      },
+      {
+        "value": "1.7MB",
+        "label": "size"
+      }
+    ],
+    "date": "2026-04-16",
+    "source": "session-harvest-2026-04-16-villa-pass1.md"
+  },
+  {
+    "title": "Orchestrator seed generator",
+    "subtitle": "Built orchestrator-seed-generator.js to close the session context gap",
+    "highlights": [
+      "Assembled briefing from 5 sources",
+      "Added /seed Telegram command",
+      "Triggered via PM2 cron"
+    ],
+    "stats": [
+      {
+        "value": "422",
+        "label": "words in first run briefing"
+      }
+    ],
+    "date": "2026-04-17",
+    "source": "session-harvest-2026-04-17-evening-pass1.md"
+  },
+  {
+    "title": "Local Orchestrator Build",
+    "subtitle": "Audited cath_api.py and vault-state-generator.js, built local-orchestrator.js",
+    "highlights": [
+      "Built local-orchestrator.js with Anthropic SDK",
+      "Static block cached with prompt caching",
+      "Dynamic block refreshed each run from multiple sources"
+    ],
+    "stats": [
+      {
+        "value": "1",
+        "label": "pass"
+      },
+      {
+        "value": "13",
+        "label": "standing instructions extracted"
+      },
+      {
+        "value": "3",
+        "label": "latest harvests identified"
+      }
+    ],
+    "date": "2026-04-17",
+    "source": "session-harvest-2026-04-17-orc-pass1.md"
+  },
+  {
+    "title": "Cathy Phase 1 Tool Dispatch System",
+    "subtitle": "Built headless AI tool triggers and Telegram dispatch bot",
+    "highlights": [
+      "Created run scripts for Claude, Gemini, and Ollama",
+      "Developed a master dispatch router script",
+      "Implemented a long-polling Telegram bot with command routing"
+    ],
+    "stats": [
+      {
+        "value": 5,
+        "label": "tools"
+      },
+      {
+        "value": 1,
+        "label": "bot"
+      },
+      {
+        "value": 3,
+        "label": "run scripts"
+      }
+    ],
+    "date": "2026-04-17",
+    "source": "session-harvest-2026-04-17-pass1.md"
+  },
+  {
+    "title": "Think Command Pass 1",
+    "subtitle": "Single lightweight harvest focusing on decisions and builds for the Think command.",
+    "highlights": [
+      "/think command integrated with telegram-bot.js",
+      "cathy-router.js library module (220 lines)",
+      "Five test cases verified"
+    ],
+    "stats": [
+      {
+        "value": "1",
+        "label": "build"
+      },
+      {
+        "value": "3",
+        "label": "passes"
+      },
+      {
+        "value": "220",
+        "label": "lines of code"
+      }
+    ],
+    "date": "2026-04-17",
+    "source": "session-harvest-2026-04-17-think-pass1.md"
+  },
+  {
+    "title": "Behaviour Library foundation",
+    "subtitle": "Built directory, two index files, first LLM entry",
+    "highlights": [
+      "Built Behaviour Library directory",
+      "Two index files created (Paul's patterns, LLM behaviours)",
+      "First LLM entry: opus-orientation-protocol.md"
+    ],
+    "stats": [
+      {
+        "value": "1",
+        "label": "Pass"
+      },
+      {
+        "value": "742893a",
+        "label": "Commit SHA"
+      },
+      {
+        "value": "2",
+        "label": "Index files"
+      }
+    ],
+    "date": "2026-04-18",
+    "source": "session-harvest-2026-04-18-b-pass1.md"
+  },
+  {
+    "title": "Persistence layer fixes, Muse dispatch, Groundskeeper, Villa Phase 2",
+    "subtitle": "Four builds enhance the vault's operational map and decision-making.",
+    "highlights": [
+      "Built orchestrator seed generator for Head Orchestrator sessions",
+      "Muse-summon dispatch returns surprising orphan nuggets",
+      "The Groundskeeper composes one true observation about the vault's soil each morning",
+      "Villa Phase 2 adds projects view and visual asset gallery"
+    ],
+    "stats": [
+      {
+        "value": "4",
+        "label": "builds"
+      },
+      {
+        "value": "422",
+        "label": "words in first seed run"
+      },
+      {
+        "value": "149",
+        "label": "assets in Villa visual view"
+      }
+    ],
+    "date": "2026-04-18",
+    "source": "session-harvest-2026-04-18-main-pass1.md"
+  },
+  {
+    "title": "Local Orchestrator Build + Muse-Summon Dedup",
+    "subtitle": "Built local-orchestrator.js, filed Opus orientation protocol, added deduplication to muse-summon.js",
+    "highlights": [
+      "Built local-orchestrator.js with reusable patterns and identified gaps",
+      "Filed Opus Orientation Protocol documenting audit findings and architecture decisions",
+      "Added deduplicateByContent() function to muse-summon.js"
+    ],
+    "stats": [
+      {
+        "value": 1,
+        "label": "Pass"
+      },
+      {
+        "value": 3,
+        "label": "Total Passes"
+      },
+      {
+        "value": 4,
+        "label": "Total Builds"
+      }
+    ],
+    "date": "2026-04-18",
+    "source": "session-harvest-2026-04-18-pass1.md"
+  },
+  {
+    "title": "Morning Briefing Redesign & Project Status Commands",
+    "subtitle": "Updated morning briefing to emoji status board and added /projects and /project commands for project details.",
+    "highlights": [
+      "Reformatted text backup as scannable emoji status board",
+      "Added /projects command for full project list",
+      "Implemented /project command for single project drill-down"
+    ],
+    "stats": [
+      {
+        "value": "3",
+        "label": "files updated"
+      },
+      {
+        "value": "5",
+        "label": "default projects shown"
+      },
+      {
+        "value": "4",
+        "label": "emoji types"
+      }
+    ],
+    "date": "2026-04-23",
+    "source": "session-harvest-2026-04-23-pass1.md"
+  },
+  {
+    "title": "Session Harvest — 2026-04-22 to 2026-04-24",
+    "subtitle": "Pass 1 of 3 focused on decisions and major builds in the Cathedral system.",
+    "highlights": [
+      "Genius Council Phase 1 Complete",
+      "Cath Message Handler Rewritten to Node.js Native",
+      "Self-Audit System Built and First Run Complete",
+      "Cath v2 Transmission Genesis Session",
+      "Technique Library Full Structure Built"
+    ],
+    "stats": [
+      {
+        "value": "8",
+        "label": "characters in Genius Council"
+      },
+      {
+        "value": "6",
+        "label": "styles explored for illustrations"
+      },
+      {
+        "value": "17",
+        "label": "defence folders in Technique Library"
+      }
+    ],
+    "date": "2026-04-24",
+    "source": "session-harvest-2026-04-24-pass1.md"
+  },
+  {
+    "title": "Session Harvest — Decisions and Builds",
+    "subtitle": "Pass 1 of 3 focused on decisions and builds within the image pipeline and project management.",
+    "highlights": [
+      "API ≠ Web App: Web app models produce better results than API models for both ChatGPT and Gemini",
+      "Full BR Design System Audit: Documented ~150+ files across brand marks, character system, technique library, environment art",
+      "Project Card Updates: Cathedral, Genius Council, BR Operations, Universe, BR Management System all updated with current next-actions"
+    ],
+    "stats": [
+      {
+        "value": "271",
+        "label": "staging cleanup"
+      },
+      {
+        "value": "232",
+        "label": "unpromoted files remaining"
+      },
+      {
+        "value": "2",
+        "label": "passes completed"
+      }
+    ],
+    "date": "2026-04-29",
+    "source": "session-harvest-2026-04-29-pass1.md"
+  },
+  {
+    "title": "Session Harvest — Pass 1",
+    "subtitle": "Decisions and builds for aether-medium research, boxing vault audit, code development.",
+    "highlights": [
+      "Aether-Medium Research Sweep (6 agents, DARPA ARRIVE/QUEST confirmed)",
+      "Boxing Vault Audit (90+ nuggets audited, 4 coach profiles enriched)",
+      "Code Built (3 JavaScript modules completed)"
+    ],
+    "stats": [
+      {
+        "value": "20",
+        "label": "nuggets deposited"
+      },
+      {
+        "value": "7",
+        "label": "domains"
+      },
+      {
+        "value": "8",
+        "label": "tests passing"
+      }
+    ],
+    "date": "2026-05-03",
+    "source": "session-harvest-2026-05-03-pass1.md"
+  },
+  {
+    "title": "Intelligence Hub Scraping System",
+    "subtitle": "10-target scraping infrastructure with visual dashboard and Telegram integration",
+    "highlights": [
+      "7 scraper targets built",
+      "Cath-Bridge endpoints added",
+      "Test Results: PubMed 107 papers found"
+    ],
+    "stats": [
+      {
+        "value": "X",
+        "label": "thing"
+      }
+    ],
+    "date": "2026-05-04",
+    "source": "session-harvest-2026-05-04-evening-pass1.md"
+  },
+  {
+    "title": "Session Harvest Pass 1: Decisions and Builds",
+    "subtitle": "Completed Tier 1 and Tier 2 builds, including nine new modules and full pipeline wiring.",
+    "highlights": [
+      "MCP Server Expanded with 13 tools",
+      "SQLite Combo Logging with analytics",
+      "WAV Audio Generation for click tracks",
+      "Combo File Watcher auto-validates combos",
+      "Vitest Tests for data integrity"
+    ],
+    "stats": [
+      {
+        "value": "5",
+        "label": "Tier 1 builds completed"
+      },
+      {
+        "value": "4",
+        "label": "Tier 2 builds completed"
+      }
+    ],
+    "date": "2026-05-04",
+    "source": "session-harvest-2026-05-04-pass1.md"
+  },
+  {
+    "title": "Session Harvest Decisions and Builds",
+    "subtitle": "Full project audit with key discoveries and deliverables across multiple projects.",
+    "highlights": [
+      "One highest-leverage build per project",
+      "Cross-project connections discovered",
+      "Three-track order of operations"
+    ],
+    "stats": [
+      {
+        "value": "22",
+        "label": "vault project cards + orchestrator files read"
+      },
+      {
+        "value": "10",
+        "label": "projects with highest-leverage builds"
+      },
+      {
+        "value": "5",
+        "label": "cross-project connections discovered"
+      }
+    ],
+    "date": "2026-05-04",
+    "source": "session-harvest-2026-05-04b-pass1.md"
+  },
+  {
+    "title": "Vault Decisions and Builds",
+    "subtitle": "The vault discovers what it was always building toward.",
+    "highlights": [
+      "Principle Extraction Engine detects source domain and cross-domain applications",
+      "The Principle Map visualizes connected domains with bridge lines",
+      "Partnership Relay outlines principles of effective AI collaboration",
+      "Paul Kernel is a compressed identity seed with core principles",
+      "Basic Reflex book covers principles, systems, partnerships, and mastery"
+    ],
+    "stats": [
+      {
+        "value": "743",
+        "label": "principles extracted"
+      },
+      {
+        "value": "2",
+        "label": "bridges found in first batch"
+      },
+      {
+        "value": "15",
+        "label": "chapters in Basic Reflex book"
+      }
+    ],
+    "date": "2026-05-05",
+    "source": "session-harvest-2026-05-05-pass1.md"
+  },
+  {
+    "title": "Session Harvest 2026-05-06",
+    "subtitle": "Reflective session focusing on decisions and builds in the Code project.",
+    "highlights": [
+      "Cathedral Voice statement filed",
+      "12 working patterns documented",
+      "Memory system initialized"
+    ],
+    "stats": [
+      {
+        "value": "1",
+        "label": "session type"
+      },
+      {
+        "value": "2",
+        "label": "locations filed"
+      },
+      {
+        "value": "12",
+        "label": "working patterns"
+      }
+    ],
+    "date": "2026-05-06",
+    "source": "session-harvest-2026-05-06-pass1.md"
+  },
+  {
+    "title": "Higgsfield Build Session Harvest",
+    "subtitle": "Major build session with Higgsfield CLI, Soul ID training, pro photo pipeline validation and Logan generation system upgrades.",
+    "highlights": [
+      "Higgsfield CLI + Skills Installed",
+      "Soul ID Trained",
+      "Pro Photo Pipeline Built & Validated",
+      "Vault Docs Updated",
+      "Reed Visual Director Designed"
+    ],
+    "stats": [
+      {
+        "value": "5",
+        "label": "completed builds"
+      },
+      {
+        "value": "1",
+        "label": "skills installed globally"
+      },
+      {
+        "value": "4",
+        "label": "photos batch-processed"
+      }
+    ],
+    "date": "2026-05-06",
+    "source": "session-harvest-2026-05-06b-pass1.md"
+  },
+  {
+    "title": "Session harvest — decisions and builds",
+    "subtitle": "Phase 1 vault infrastructure development, including deposit watcher, densifier, /vault write modes, and decay detector.",
+    "highlights": [
+      "Downloads Deposit Watcher built and tested",
+      "Vault Densifier built and tested",
+      "/vault Write Modes built",
+      "Vault Decay Detector built and tested"
+    ],
+    "stats": [
+      {
+        "value": "1609",
+        "label": ".md files in vault"
+      },
+      {
+        "value": "8370",
+        "label": "total nodes, edges"
+      },
+      {
+        "value": "271",
+        "label": "nodes linking out with no inbound links"
+      }
+    ],
+    "date": "2026-05-06",
+    "source": "session-harvest-2026-05-06c-pass1.md"
+  },
+  {
+    "title": "Session Harvest Pass 1",
+    "subtitle": "Decisions and builds from the tail end of a megasession.",
+    "highlights": [
+      "Pulse map created with cathedral-rooms.html",
+      "Tailscale connected for remote access",
+      "No new server, cath-state.json symlinked"
+    ],
+    "stats": [
+      {
+        "value": "1",
+        "label": "new file"
+      },
+      {
+        "value": "1",
+        "label": "symlink"
+      },
+      {
+        "value": "2",
+        "label": "components added"
+      }
+    ],
+    "date": "2026-05-06",
+    "source": "session-harvest-2026-05-06d-pass1.md"
+  },
+  {
+    "title": "Trading Experiment Build",
+    "subtitle": "Built complete multi-strategy paper trading system from zero to 11 strategies running",
+    "highlights": [
+      "Built Trading Orchestrator connecting all components",
+      "Created $10K paper portfolio with position sizing",
+      "Developed 9 Cathedral Strategies including DCA, Gann Geometry, Fibonacci Time+Price"
+    ],
+    "stats": [
+      {
+        "value": "11",
+        "label": "strategies"
+      },
+      {
+        "value": "1",
+        "label": "paper trading system built"
+      },
+      {
+        "value": "10",
+        "label": "max concurrent positions"
+      }
+    ],
+    "date": "2026-05-07",
+    "source": "session-harvest-2026-05-07-evening-pass1.md"
+  },
+  {
+    "title": "Predictive Intelligence + Forge",
+    "subtitle": "Building a 4-layer knowledge graph system for predictive intelligence and renaming the Code engine to Forge.",
+    "highlights": [
+      "Layered knowledge graph system built",
+      "Graph engine with community detection",
+      "Completion engine with confidence scoring",
+      "Visual intelligence layer added"
+    ],
+    "stats": [
+      {
+        "value": "6811",
+        "label": "nodes"
+      },
+      {
+        "value": "29,362",
+        "label": "edges"
+      },
+      {
+        "value": "18",
+        "label": "autonomous seeds"
+      }
+    ],
+    "date": "2026-05-07",
+    "source": "session-harvest-2026-05-07-pass1.md"
+  }
+]
