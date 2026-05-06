@@ -948,6 +948,26 @@ He will decide when he's done.
 - localhost:8889 — 22 projects, live data
 - Supersedes cathedral-pressure-gauge HTML
 
+## Vault Infrastructure — Phase 1 (built 2026-05-06)
+- deposit-watcher.sh — LaunchAgent com.cathedral.deposit-watcher (WatchPaths ~/Downloads/)
+  - Processes cathedral-vault-deposit-*.tar.gz → extracts to vault → Telegram diff
+  - Idempotent: ~/Cathedral/deposit-processed/*.done markers
+- vault-densifier.py — /densify Telegram command
+  - Scans vault for 4+ shared-tag pairs without wikilinks, proposes connections
+  - Inline keyboard: Link/Skip. Approves append "See also: [[target]]" bidirectionally
+  - State: ~/Cathedral/densifier-state.json
+- /vault write modes (telegram-bot.js)
+  - /vault <text> → 00_Staging/telegram-deposit/
+  - /vault write <path> <content> or reply-to → specified path
+  - .md document attachment → 00_Staging/cathedral/ (caption overrides path)
+  - deduplicatePath(): -v2, -v3 suffix, never overwrites
+- vault-decay-detector.py — LaunchAgent com.cathedral.decay-detector (nightly 05:00 HKT)
+  - Scans 24h-modified files, finds 5 nearest tag-neighbors
+  - Flags: merge candidates (>60% overlap) + contradictions (<15% overlap, 4+ shared tags)
+  - State: ~/Cathedral/decay-detector-state.json
+- Morning sequence: 05:00 decay → 06:00 vault-state → 06:30 groundskeeper → 07:15 timekeeper → 07:30 briefing
+- callback_query handler in telegram-bot.js (for densifier inline keyboards)
+
 ## Standing Instruction — ESM/CJS Module Standard
 All new files in ~/nanoclaw/ use ESM (import/export syntax).
 .js extension = ESM. Always.

@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import fs from 'fs';
 import path from 'path';
-import { spawn } from 'child_process';
+import { spawn, execFileSync, execSync } from 'child_process';
 import lancedb from '@lancedb/lancedb';
 import { semanticSearch, startFileWatcher } from './vault-embedder.js';
 import { triageClaim, formatTriageResult } from './epistemic-triage.js';
@@ -2126,7 +2126,6 @@ function buildCathDynamic(query, history) {
   } catch {}
   // Vault keyword search via vault_reader.py (local filesystem, no network)
   try {
-    const { execFileSync } = await import('child_process');
     const raw = execFileSync('python3', [
       path.join(process.env.HOME, 'nanoclaw', 'vault_reader.py'),
       'search', query, '--top_k', '5', '--json'
@@ -2182,6 +2181,107 @@ async function callCath(query, history = []) {
   console.log(`[callCath] done ${elapsed}s in=${usage.prompt_tokens || '?'} out=${usage.completion_tokens || '?'}`);
   return text.trim();
 }
+
+// --- Voice Note Handler ---
+// ── Reed Photo Handler — send photo with /reed caption ──────────────────────
+bot.on('photo', async (msg) => {
+  const chatId = msg.chat.id;
+  const caption = (msg.caption || '').trim();
+
+  // Only handle if caption starts with /reed
+  if (!caption.toLowerCase().startsWith('/reed')) return;
+
+  const instruction = caption.replace(/^\/reed\s*/i, '').trim();
+  const fileStamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 15);
+  const photoFile = msg.photo[msg.photo.length - 1]; // highest resolution
+  const localPath = `/tmp/reed-${fileStamp}.jpg`;
+
+  try {
+    // Download photo from Telegram
+    const fileLink = await bot.getFileLink(photoFile.file_id);
+    const axios = (await import('axios')).default;
+    const response = await axios({ url: fileLink, responseType: 'arraybuffer' });
+    fs.writeFileSync(localPath, response.data);
+    console.log(`[reed-photo] Downloaded ${localPath} (${(response.data.length / 1024).toFixed(0)}KB)`);
+
+    if (!instruction) {
+      // No text — auto pro-photo pipeline
+      await safeSend(chatId, '🎬 Reed: Pro photo upgrade running...');
+
+      const result = execSync(
+        `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch to the attached image. Maintain 100% exact preservation of subject identity, poses, clothing, and all background elements. Strictly 16:9 cinematic aspect ratio. Camera Profile: Sony A7R V with 70mm lens; zero background blur; deep, crisp focus throughout. Lighting: Add a soft, directional key light from camera-left; diminish harsh overhead ceiling lights. Aesthetic: Premium sports documentary color grade with neutral-to-warm tones and natural skin tones. Enhance micro-contrast on leather textures and skin without smoothing. No hallucinations; do not add or remove objects. Final output must look like a professional Lightroom/Capture One grade of the original raw file." --image "${localPath}" --aspect_ratio 16:9 --resolution 2k --wait`,
+        { encoding: 'utf-8', timeout: 600000 }
+      ).trim();
+
+      if (result.startsWith('http')) {
+        const outPng = `/tmp/reed-pro-${fileStamp}.png`;
+        const outPath = `/tmp/reed-pro-${fileStamp}.jpg`;
+        execSync(`curl -sL "${result}" -o "${outPng}"`, { timeout: 60000 });
+        // Convert to JPEG for Telegram (PNGs too large, won't render on phone)
+        execSync(`sips -s format jpeg -s formatOptions 85 "${outPng}" --out "${outPath}"`, { timeout: 30000 });
+        await safeSendPhoto(chatId, outPath, '🎬 Reed: Pro photo — 16:9 cinematic grade');
+        console.log(`[reed-photo] Pro photo delivered`);
+      } else {
+        await safeSend(chatId, `⚠️ Reed: Unexpected result — ${result.slice(0, 200)}`);
+      }
+    } else {
+      // Has instruction — auto-execute based on keywords
+      const lower = instruction.toLowerCase();
+      let cmd, mode, aspect;
+
+      if (lower.includes('manga') || lower.includes('anime') || lower.includes('comic')) {
+        mode = 'Manga/anime conversion';
+        aspect = '3:4';
+        const style = lower.includes('anime') ? 'anime' : lower.includes('comic') ? 'graphic novel comic' : 'manga';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "${style} character illustration of a boxing coach with long dreadlocks and beard. ${style} art style, clean linework, dramatic lighting. Professional ${style} quality. Maintain subject identity from reference image." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      } else if (lower.includes('cinematic') || lower.includes('cinema') || lower.includes('movie')) {
+        mode = 'Soul Cinematic';
+        aspect = '16:9';
+        cmd = `higgsfield generate create soul_cinematic --prompt "Cinematic sports documentary still, dramatic lighting, shallow depth of field, boxing gym atmosphere, professional cinematography, warm tones. Man with long dreadlocks." --image "${localPath}" --aspect_ratio ${aspect} --wait`;
+      } else if (lower.includes('video') || lower.includes('animate') || lower.includes('motion')) {
+        mode = 'Video generation';
+        aspect = '16:9';
+        cmd = `higgsfield generate create seedance_2_0 --prompt "Subtle cinematic motion, camera slowly pushes in, atmospheric lighting shifts, documentary feel" --start-image "${localPath}" --duration 5 --aspect_ratio ${aspect} --wait`;
+      } else if (lower.includes('poster') || lower.includes('print') || lower.includes('wall')) {
+        mode = 'Print poster';
+        aspect = '3:4';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Professional sports poster design, bold typography space at top, dramatic cinematic lighting, boxing gym atmosphere, editorial quality, high contrast. Maintain 100% subject identity preservation from reference." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      } else {
+        // Default: pro photo with custom instruction baked in
+        mode = 'Pro photo + custom';
+        aspect = '16:9';
+        cmd = `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch. ${instruction}. Maintain exact preservation of subject identity, poses, clothing. Camera Profile: Sony A7R V, 70mm lens. Premium sports documentary color grade, natural skin tones. No hallucinations." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      }
+
+      await safeSend(chatId, `🎬 Reed: Running ${mode}...`);
+      console.log(`[reed-photo] Mode: ${mode}, cmd length: ${cmd.length}`);
+
+      const genResult = execSync(cmd, { encoding: 'utf-8', timeout: 600000 }).trim();
+
+      if (genResult.startsWith('http')) {
+        const outPng = `/tmp/reed-${mode.replace(/\W/g, '')}-${fileStamp}.png`;
+        const outPath = `/tmp/reed-${mode.replace(/\W/g, '')}-${fileStamp}.jpg`;
+        execSync(`curl -sL "${genResult}" -o "${outPng}"`, { timeout: 60000 });
+
+        if (lower.includes('video') || lower.includes('animate') || lower.includes('motion')) {
+          // Video — send as document (mp4)
+          const outVid = `/tmp/reed-video-${fileStamp}.mp4`;
+          execSync(`curl -sL "${genResult}" -o "${outVid}"`, { timeout: 120000 });
+          await bot.sendDocument(chatId, outVid, { caption: `🎬 Reed: ${mode} complete` });
+        } else {
+          execSync(`sips -s format jpeg -s formatOptions 85 "${outPng}" --out "${outPath}"`, { timeout: 30000 });
+          await safeSendPhoto(chatId, outPath, `🎬 Reed: ${mode} — ${aspect}`);
+        }
+        console.log(`[reed-photo] ${mode} delivered`);
+      } else {
+        await safeSend(chatId, `⚠️ Reed: Unexpected result — ${genResult.slice(0, 200)}`);
+      }
+    }
+  } catch (err) {
+    console.error('[reed-photo]', err.message);
+    await safeSend(chatId, `⚠️ Reed photo error: ${err.message.slice(0, 200)}`);
+  }
+});
 
 // --- Voice Note Handler ---
 bot.on('voice', async (msg) => {
@@ -2347,7 +2447,7 @@ bot.on('message', async (msg) => {
   if (msg.text === '/densify') {
     safeSend(chatId, '🔗 Running Vault Densifier...');
     try {
-      const { execSync } = require('child_process');
+      // execSync imported at top
       execSync(`python3 ${path.join(process.env.HOME, 'Cathedral', 'vault-densifier.py')}`, { timeout: 60000 });
     } catch (err) {
       safeSend(chatId, `⚠️ Densifier error: ${err.message}`);
@@ -2787,6 +2887,96 @@ bot.on('message', async (msg) => {
   }
 });
 
+// ── Reed Visual Director ────────────────────────────────────────────────────
+const reedConversation = {};
+
+bot.onText(/^\/reed(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const query = match?.[1]?.trim();
+  if (!query) {
+    return safeSend(chatId, '🎬 *Reed — Visual Director*\n\nUsage: `/reed <request>`\n\nExamples:\n• `/reed pro photo upgrade this gym shot`\n• `/reed generate logan in victoria peak at sunset`\n• `/reed manga character sheet for kael`\n• `/reed what model should I use for technique cards?`', { parse_mode: 'Markdown' });
+  }
+
+  await safeSend(chatId, '🎬 Reed reviewing...');
+
+  try {
+    // Load Reed sage definition
+    const reedDef = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'sages', 'reed.json'), 'utf8'));
+
+    // Build system prompt from sage definition
+    const systemPrompt = `You are ${reedDef.sage.name}, ${reedDef.sage.designation}.
+Voice: ${reedDef.sage.voice}
+Core lens: ${reedDef.sage.core_lens}
+
+You address Paul as "${reedDef.sage.addresses_user_as}".
+
+IDENTITY LOCK (Logan):
+${JSON.stringify(reedDef.identity_lock, null, 2)}
+
+GENERATION HIERARCHY:
+${reedDef.generation_hierarchy.join('\n')}
+
+AVAILABLE MODELS:
+${Object.entries(reedDef.capabilities.models).map(([k, v]) => `- ${k}: ${v}`).join('\n')}
+
+SOUL ID: ${reedDef.capabilities.soul_id.name} (${reedDef.capabilities.soul_id.ref_id})
+Note: ${reedDef.capabilities.soul_id.note}
+
+PRESERVATION PROMPT (for pro photo upgrades):
+${reedDef.preservation_prompt}
+
+STANDING RULES:
+${reedDef.standing_rules.map((r, i) => `${i + 1}. ${r}`).join('\n')}
+
+CONTENT TYPES YOU CAN PRODUCE:
+${reedDef.content_types.join(', ')}
+
+When Paul asks you to generate something, give the exact higgsfield CLI command he should run (or that Claude Code should run). Always specify the model, prompt, flags, and aspect ratio. Always remind to send results to Telegram.
+
+When Paul asks about approach/strategy, give direct creative direction based on the generation hierarchy and identity lock.
+
+Keep responses short and direct. You're a creative director, not a copywriter.`;
+
+    // Get conversation history
+    if (!reedConversation[chatId]) reedConversation[chatId] = [];
+    reedConversation[chatId].push({ role: 'user', content: query });
+    if (reedConversation[chatId].length > 20) {
+      reedConversation[chatId] = reedConversation[chatId].slice(-20);
+    }
+
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+    if (!apiKey) throw new Error('DEEPSEEK_API_KEY not set');
+
+    const resp = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        max_tokens: 1024,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...reedConversation[chatId],
+        ],
+      }),
+      signal: AbortSignal.timeout(60000),
+    });
+
+    if (!resp.ok) throw new Error(`DeepSeek ${resp.status}`);
+    const data = await resp.json();
+    const reply = data.choices?.[0]?.message?.content?.trim() || 'No response.';
+
+    reedConversation[chatId].push({ role: 'assistant', content: reply });
+
+    await safeSend(chatId, `🎬 *Reed:*\n\n${reply}`, { parse_mode: 'Markdown' });
+  } catch (err) {
+    console.error('[reed]', err.message);
+    await safeSend(chatId, `⚠️ Reed error: ${err.message}`);
+  }
+});
+
 // ── Inline keyboard callback handler (Densifier, Decay Detector) ────────────
 bot.on('callback_query', async (query) => {
   const data = query.data;
@@ -2796,7 +2986,7 @@ bot.on('callback_query', async (query) => {
   try {
     if (data.startsWith('dense_approve:') || data.startsWith('dense_skip:')) {
       const action = data.startsWith('dense_approve:') ? '--apply' : '--skip';
-      const { execSync } = require('child_process');
+      // execSync imported at top
       const result = execSync(
         `python3 ${path.join(process.env.HOME, 'Cathedral', 'vault-densifier.py')} ${action} "${data}"`,
         { timeout: 15000, encoding: 'utf8' }
