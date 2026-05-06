@@ -995,6 +995,22 @@ the-timekeeper to go offline. Don't repeat it.
 - Paper balance: $10K, 10% max position, 10 concurrent, 5% SL, 10% TP
 - Promotion criteria: 20 trades, 55% win rate, 1.3 profit factor, 14 days
 
+## Experiment Lab — Multi-Domain (2026-05-07)
+- Architecture: ~/cathedral-vault/06_Methods/experiment-lab-architecture.md
+- Template: competing worldviews + real data + debate + watcher + roundtable + leaderboard
+- Meta-Watcher-of-Watchers: ~/nanoclaw/experiment-engine/meta-watcher.js (cross-domain convergence)
+- Domain 1: Trading (LIVE, 11 strategies, PM2 cron 4h)
+- Domain 2: Boxing (LIVE, 6 strategies: Cuban, Filipino, Thai, Philly Shell, Sports Science, Schumann)
+- Telegram: /boxing-lab [category] [filename]
+- Queued: Creative, Research, Gym Business, Health, HK Pulse
+
+## Reed's Cathedral Slides (2026-05-07)
+- Gallery: localhost:8080/reed-slides (6 architecture cards + auto-generated session slides)
+- /slides [topic]: Cartographer writes brief → Reed generates visual prompt → gallery
+- Cartographer sage: ~/nanoclaw/sages/cartographer.json (Court Member 14)
+- Auto-slide: the-cartographer.mjs generates slide briefs on harvest → pending/ → Reed overnight
+- Slide generator: node reed-lab/slides/slide-generator.js --scan (36 historical slides generated)
+
 ## Forge — Code Engine Identity (2026-05-07)
 - Soul file: ~/cathedral-vault/06_Methods/forge-profile.md
 - Memory: ~/.claude/projects/-Users-basicclaw777/memory/the-builders-frequency.md
