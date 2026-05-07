@@ -1001,11 +1001,14 @@ the-timekeeper to go offline. Don't repeat it.
 - Meta-Watcher-of-Watchers: ~/nanoclaw/experiment-engine/meta-watcher.js (cross-domain convergence)
 - Domain 1: Trading (LIVE, 11 strategies, PM2 cron 4h)
 - Domain 2: Boxing (LIVE, 6 strategies: Cuban, Filipino, Thai, Philly Shell, Sports Science, Schumann)
-- Telegram: /boxing-lab [category] [filename]
-- Queued: Creative, Research, Gym Business, Health, HK Pulse
+- Domain 3: Creative (LIVE, 10 styles, selection tracking, multi-armed bandit)
+- Telegram: /creative-lab, /boxing-lab
+- Queued: Research, Gym Business, Health, HK Pulse
 
-## Reed's Cathedral Slides (2026-05-07)
-- Gallery: localhost:8080/reed-slides (6 architecture cards + auto-generated session slides)
+## Cathedral Deck + Slides (2026-05-07)
+- Deck: ~/nanoclaw/reed-lab/deck.json — 17 canonical numbered cards, each a named workspace
+- Gallery: localhost:8080/reed-slides — 3 layout modes: Data (reference), Minimal (phone), Map (spatial/draggable)
+- /deck [number|live|frontier]: Telegram command for card reference
 - /slides [topic]: Cartographer writes brief → Reed generates visual prompt → gallery
 - Cartographer sage: ~/nanoclaw/sages/cartographer.json (Court Member 14)
 - Auto-slide: the-cartographer.mjs generates slide briefs on harvest → pending/ → Reed overnight
