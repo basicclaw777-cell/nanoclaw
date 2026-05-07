@@ -21,6 +21,8 @@ import { getScheduleReport, formatScheduleReport } from './gcal-reader.js';
 import { startComboWatcher } from './combo-watcher.js';
 import { runTarget, runAll, getDashboardData, formatTelegramSummary } from './scraper/scraper-engine.js';
 import { debate } from './trader/bull-bear-debate.js';
+import tasteMap from './taste-elicitation.js';
+import { getTasteProfile, getVoiceReferences, getVoicePattern, addAnchor } from './taste-map-api.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -2271,9 +2273,47 @@ bot.on('photo', async (msg) => {
         aspect = '16:9';
         cmd = `higgsfield generate create seedance_2_0 --prompt "Subtle cinematic motion, camera slowly pushes in, atmospheric lighting shifts, documentary feel" --start-image "${localPath}" --duration 5 --aspect_ratio ${aspect} --wait`;
       } else if (lower.includes('poster') || lower.includes('fight poster') || lower.includes('70s')) {
-        mode = '70s fight poster';
-        aspect = '3:4';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Vintage 1970s boxing fight poster. Aged yellowed paper texture with fold creases. Bold sans-serif typography at top: BASIC REFLEX. Halftone dot printing effect. Red, black, and cream color palette. Retro sports illustration style inspired by Muhammad Ali era fight posters. Border frame with decorative corners. Preserve subject identity and action pose." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        // TWO-PASS PIPELINE: text-free art → composite real logos
+        mode = 'BR branded poster';
+        await safeSend(chatId, '🎬 Reed: Two-pass poster pipeline — generating art, then compositing real logos...');
+
+        try {
+          // Pass 1: Generate text-free art (can use source photo as reference)
+          const posterPrompt = lower.includes('no ref') || lower.includes('from scratch')
+            ? `Vertical vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas meets Cuban cigar label. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper with fold creases. Dense ornamental border: tropical leaves, Chinese cloud motifs, rope patterns, gloves, heavy bags, dragon. Central boxing action as layered graphic silhouettes. HK neon fragments integrated. Hand-pulled Kowloon 1978. ZERO TEXT.`
+            : `Transform this boxing photograph into vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper. Dense ornamental border. Preserve subject pose and gym environment but render as graphic print art. ZERO TEXT.`;
+
+          const imgFlag = lower.includes('no ref') || lower.includes('from scratch') ? '' : ` --image "${localPath}"`;
+          const pass1Cmd = `higgsfield generate create nano_banana_2 --prompt "${posterPrompt.replace(/"/g, '\\"')}"${imgFlag} --aspect_ratio 3:4 --resolution 2k --wait`;
+
+          const artUrl = execSync(pass1Cmd, { encoding: 'utf-8', timeout: 600000 }).trim();
+
+          if (!artUrl.startsWith('http')) {
+            await safeSend(chatId, `⚠️ Reed: Art generation failed — ${artUrl.slice(0, 100)}`);
+            return;
+          }
+
+          // Download art
+          const artPath = `/tmp/reed-poster-art-${fileStamp}.png`;
+          execSync(`curl -sL "${artUrl}" -o "${artPath}"`, { timeout: 60000 });
+
+          // Pass 2: Composite real logos
+          const brandedPath = execSync(
+            `python3 ${path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'poster-composite.py')} "${artPath}" --full`,
+            { encoding: 'utf-8', timeout: 30000 }
+          ).trim().split('\n').pop().replace('Branded poster: ', '');
+
+          await safeSendPhoto(chatId, brandedPath, '🎬 Reed: BR Branded Poster — real wordmark + CSOB badge + HONG KONG\nTwo-pass: AI art → logo composite');
+          console.log('[reed-photo] Branded poster delivered');
+
+          // Log to creative experiment
+          try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration('poster_br', instruction || 'poster', localPath, brandedPath, 'poster_br two-pass', 'nano_banana_2'); } catch(e) {}
+
+        } catch(e) {
+          console.error('[reed-poster]', e.message);
+          await safeSend(chatId, `⚠️ Reed poster pipeline failed: ${e.message}`);
+        }
+        return;
       } else {
         // Default: pro photo with custom instruction baked in
         mode = 'Pro photo + custom';
@@ -3436,7 +3476,7 @@ bot.onText(/^\/reed(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
 \`/reed neon\` — HK cyberpunk
 \`/reed dramatic\` — Volumetric cinema
 \`/reed oil\` — Oil painting
-\`/reed poster\` — 70s fight poster
+\`/reed poster\` — BR branded poster (two-pass: art + real logos)
 \`/reed video\` — 5s motion
 
 *Commands:*
@@ -3676,6 +3716,95 @@ bot.onText(/^\/predict-rebuild(?:@\w+)?$/i, async (msg) => {
   } catch (err) {
     safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
   }
+});
+
+// ── Taste Map commands ──────────────────────────────────────────────────────
+
+bot.onText(/^\/taste(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.getHelpText(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+status\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatStats(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+music\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatProfile('music'), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+visual\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatProfile('visual_style'), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+writing\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatProfile('writing_voice'), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+teaching\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatProfile('teaching_tone'), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+energy\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatProfile('class_energy'), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+voices\s*$/i, async (msg) => {
+  const refs = getVoiceReferences();
+  let text = '🗣 *Voice References*\n\n';
+  refs.forEach(r => {
+    text += `*${r.name}* (${r.platform})\n`;
+    text += `  ${r.signal}\n`;
+    if (r.tension) text += `  ⚡ _${r.tension}_\n`;
+    if (r.resolution) text += `  ✅ _${r.resolution}_\n`;
+    text += '\n';
+  });
+  text += `\n✍️ *Pattern:* _${getVoicePattern()}_`;
+  safeSend(msg.chat.id, text, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+add\s+music\s+(.+)$/i, async (msg, match) => {
+  const input = match[1].trim();
+  const chatId = msg.chat.id;
+  // Parse "artist - track" or just "artist"
+  const parts = input.split(' - ');
+  const anchor = {
+    artist: parts[0].trim(),
+    context: 'manual add via telegram'
+  };
+  if (parts[1]) anchor.tracks = [parts[1].trim()];
+
+  addAnchor('music', 'anchors_class_energy', anchor);
+  safeSend(chatId, `✅ Added music anchor: *${anchor.artist}*${anchor.tracks ? ' — ' + anchor.tracks[0] : ''}`, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+reject\s+(\w+)\s+(.+)$/i, async (msg, match) => {
+  const domain = match[1].trim();
+  const reason = match[2].trim();
+  const chatId = msg.chat.id;
+  const domainMap = { music: 'music', visual: 'visual_style', writing: 'writing_voice', teaching: 'teaching_tone', energy: 'class_energy' };
+  const actualDomain = domainMap[domain] || domain;
+
+  const { addRejection } = await import('./taste-map-api.js');
+  const result = addRejection(actualDomain, reason);
+  if (result) {
+    safeSend(chatId, `✅ Added rejection to *${actualDomain}*: "${reason}"`, { parse_mode: 'Markdown' });
+  } else {
+    safeSend(chatId, `❌ Unknown domain: ${domain}. Try: music, visual, writing, teaching, energy`);
+  }
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+elicit\s+(\w+)\s*$/i, async (msg, match) => {
+  const domain = match[1].trim();
+  const chatId = msg.chat.id;
+  const domainMap = { music: 'music', visual: 'visual_style', writing: 'writing_voice', teaching: 'teaching_tone', energy: 'class_energy' };
+  const actualDomain = domainMap[domain] || domain;
+  const result = tasteMap.startSession(chatId, actualDomain);
+  safeSend(chatId, result, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+stop\s*$/i, async (msg) => {
+  const result = tasteMap.stopSession(msg.chat.id);
+  safeSend(msg.chat.id, result);
 });
 
 // ── Inline keyboard callback handler (Densifier, Decay Detector) ────────────
