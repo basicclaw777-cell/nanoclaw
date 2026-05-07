@@ -48,6 +48,16 @@ Private sovereign AI research system for Paul (boxing gym owner, Hong Kong). Loc
 └── vortex_data/
     └── metrics.db             # SQLite — all system metrics + embeddings
 
+## Taste Map — Universal Preference Engine (built 2026-05-08)
+- Data: ~/nanoclaw/taste-map.json (70 anchors, 16 rejections, 5 voice references, 5 domains)
+- API: ~/nanoclaw/taste-map-api.js — getTasteProfile(), matchPreference(), checkRejection(), addAnchor()
+- Elicitation: ~/nanoclaw/taste-elicitation.js — /taste commands on Telegram
+- Reed integration: pre-generation gate checks checkRejection() before Higgsfield calls
+- Content Machine bridge: content_approve/reject callbacks update taste map passively
+- Voice pattern: "Miyagi substance, Brady energy, Carlton filter"
+- Music: 2 modes — War Mode (class peaks, BPM 120-160) + Vibe Mode (cooldown, BPM 85-120)
+- All agents should import taste-map-api.js before generating Paul-facing content
+
 ~/Cathedral/                   # Cathedral services directory
 ├── control-panel/
 │   ├── index.html             # Control panel UI (single file, cockpit aesthetic)

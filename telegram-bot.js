@@ -2217,7 +2217,8 @@ bot.on('photo', async (msg) => {
     }
 
     if (!instruction) {
-      // No text — auto pro-photo pipeline
+      // No text — auto pro-photo pipeline (taste map: pro_photo = YES anchor)
+      console.log('[reed-taste] Default pro_photo — confirmed anchor in taste map');
       await safeSend(chatId, '🎬 Reed: Pro photo upgrade running...');
 
       const result = execSync(
@@ -2319,6 +2320,19 @@ bot.on('photo', async (msg) => {
         mode = 'Pro photo + custom';
         aspect = '16:9';
         cmd = `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch. ${instruction}. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. Warm golden sports documentary color grade. Saturate wall posters. Enhance textures. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+      }
+
+      // ── Taste Map gate — check style against preferences before generating ──
+      try {
+        const styleKey = mode.toLowerCase().replace(/\s+/g, '_');
+        const rejection = checkRejection('visual_style', styleKey);
+        if (rejection.rejected) {
+          await safeSend(chatId, `⚠️ Reed: Style "${mode}" flagged by Taste Map.\nReasons: ${rejection.reasons.join(', ')}\n\nGenerating anyway — but flagging as unverified preference.`);
+        }
+        // Log what Reed is generating for passive taste map learning
+        console.log(`[reed-taste] Style: ${styleKey}, rejected: ${rejection.rejected}`);
+      } catch (tmErr) {
+        console.error('[reed-taste] Taste map check failed (non-blocking):', tmErr.message);
       }
 
       await safeSend(chatId, `🎬 Reed: Running ${mode}...`);
@@ -3826,6 +3840,39 @@ bot.on('callback_query', async (query) => {
         { inline_keyboard: [[{ text: data.startsWith('dense_approve:') ? '✅ Linked' : '⏭ Skipped', callback_data: 'noop' }]] },
         { chat_id: chatId, message_id: msgId }
       );
+    } else if (data.startsWith('content_approve:') || data.startsWith('content_reject:')) {
+      // Content Machine → Taste Map passive learning
+      const isApprove = data.startsWith('content_approve:');
+      const filename = data.split(':').slice(1).join(':');
+      // Extract style from filename pattern: {source}-{style}-captioned.jpg
+      const styleMatch = filename.match(/-(bw|neon|film|comic|cinematic|pro_photo|dramatic|manga|ippo|noir|poster|oil)-/i);
+      const style = styleMatch ? styleMatch[1] : 'unknown';
+
+      if (isApprove) {
+        addAnchor('visual_style', 'anchors', {
+          item: filename,
+          status: 'YES',
+          style,
+          reason: 'Paul approved via Content Machine',
+          timestamp: new Date().toISOString()
+        });
+        await bot.answerCallbackQuery(query.id, { text: `✅ Approved + taste map updated (${style})` });
+        await bot.editMessageReplyMarkup(
+          { inline_keyboard: [[{ text: `✅ Approved (${style})`, callback_data: 'noop' }]] },
+          { chat_id: chatId, message_id: msgId }
+        );
+      } else {
+        const { addRejection } = await import('./taste-map-api.js');
+        addRejection('visual_style', `Rejected: ${filename} — ${style} style`);
+        await bot.answerCallbackQuery(query.id, { text: `❌ Rejected + taste map updated (${style})` });
+        await bot.editMessageReplyMarkup(
+          { inline_keyboard: [[{ text: `❌ Rejected (${style})`, callback_data: 'noop' }]] },
+          { chat_id: chatId, message_id: msgId }
+        );
+      }
+    } else if (data.startsWith('content_edit:')) {
+      // Edit flow — just acknowledge, no taste map update (ambiguous signal)
+      await bot.answerCallbackQuery(query.id, { text: 'Edit noted — no taste map update (ambiguous)' });
     } else if (data.startsWith('decay_')) {
       await bot.answerCallbackQuery(query.id, { text: 'Noted' });
     } else if (data === 'noop') {
