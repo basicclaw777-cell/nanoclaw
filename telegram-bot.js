@@ -2927,6 +2927,155 @@ bot.onText(/^\/deck(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
     const deckPath = path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'deck.json');
     const deck = JSON.parse(fs.readFileSync(deckPath, 'utf8'));
 
+    // /deck add [name] — create new card
+    if (filter && filter.startsWith('add ')) {
+      const cardName = match[1].trim().replace(/^add\s+/i, '');
+      if (!cardName) return safeSend(chatId, 'Usage: `/deck add [card name]`', { parse_mode: 'Markdown' });
+
+      const nextId = Math.max(...deck.map(c => c.id)) + 1;
+      await safeSend(chatId, `🗺 Cartographer defining #${String(nextId).padStart(3,'0')} "${cardName}"...`);
+
+      // Step 1: Cartographer writes the card definition
+      try {
+        const cartRes = await fetch('http://localhost:11434/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'hermes3',
+            messages: [{
+              role: 'system',
+              content: `You are the Cartographer of the Cathedral. You define new system cards.
+The Cathedral is a sovereign AI research instrument with ${deck.length} existing cards.
+Existing cards: ${deck.map(c => `#${String(c.id).padStart(3,'0')} ${c.name}`).join(', ')}
+
+Output JSON only. Define a new card for the Cathedral Deck:
+{
+  "name": "exact name given",
+  "subtitle": "one-line description — what this IS",
+  "status": "live or planned or building",
+  "icon": "single letter, uppercase",
+  "color": "hex color that fits the Cathedral palette",
+  "description": "2-3 sentences. What it does, why it matters.",
+  "locations": ["likely file paths"],
+  "dashboards": [],
+  "connects": [list of existing card IDs this connects to],
+  "key_facts": ["3-4 key facts"],
+  "frontier": "the next unexplored edge — what this could become"
+}`
+            }, {
+              role: 'user',
+              content: `Define card #${nextId}: "${cardName}"`
+            }],
+            stream: false,
+            options: { temperature: 0.3, num_predict: 500 },
+            format: 'json',
+          }),
+        });
+
+        const cartData = await cartRes.json();
+        let cardDef;
+        try {
+          cardDef = JSON.parse(cartData.message?.content || '{}');
+        } catch(e) {
+          return safeSend(chatId, `Cartographer failed to define card: ${e.message}`);
+        }
+
+        // Ensure required fields
+        cardDef.id = nextId;
+        cardDef.name = cardDef.name || cardName;
+        cardDef.status = cardDef.status || 'building';
+        cardDef.icon = (cardDef.icon || cardName[0]).toUpperCase();
+        cardDef.color = cardDef.color || '#f59e0b';
+        if (!cardDef.connects) cardDef.connects = [];
+        if (!cardDef.key_facts) cardDef.key_facts = [];
+
+        // Step 2: Reed generates image prompt
+        await safeSend(chatId, `🎬 Reed generating visual for #${String(nextId).padStart(3,'0')}...`);
+
+        let imagePrompt = `Dark cathedral space with amber geometric light. Symbolic visual metaphor representing ${cardDef.name}: ${cardDef.subtitle || ''}. ${cardDef.frontier || ''}. Cinematic 16:9, architectural, no text, no people.`;
+        try {
+          const reedRes = await fetch('http://localhost:11434/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'hermes3',
+              messages: [{
+                role: 'system',
+                content: 'You are Reed, Visual Director. Write one Higgsfield image prompt. Dark Cathedral aesthetic (#09090f), amber accents, symbolic not literal. Output ONLY the prompt text.'
+              }, {
+                role: 'user',
+                content: `Visual metaphor for "${cardDef.name}": ${cardDef.description || ''}\nFrontier: ${cardDef.frontier || ''}`
+              }],
+              stream: false,
+              options: { temperature: 0.5, num_predict: 150 },
+            }),
+          });
+          const reedData = await reedRes.json();
+          if (reedData.message?.content) imagePrompt = reedData.message.content.trim();
+        } catch(e) {}
+
+        // Step 3: Generate Higgsfield image
+        let imageFile = '';
+        try {
+          const { execSync: exec } = require('child_process');
+          const genOutput = exec(
+            `higgsfield gen create nano_banana_2 --prompt "${imagePrompt.replace(/"/g, '\\"')}" --aspect_ratio "16:9" --resolution "2k"`,
+            { timeout: 30000, encoding: 'utf8' }
+          ).trim();
+
+          // genOutput is the job ID
+          if (genOutput && genOutput.length > 10) {
+            cardDef._higgsfield_job = genOutput;
+            imageFile = `${String(nextId).padStart(3,'0')}-${cardName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`;
+            cardDef.image = `slides/card-images/${imageFile}`;
+            cardDef._image_pending = true;
+
+            // Poll for completion (max 60s)
+            for (let attempt = 0; attempt < 12; attempt++) {
+              await new Promise(r => setTimeout(r, 5000));
+              try {
+                const status = exec(`higgsfield gen get ${genOutput}`, { timeout: 10000, encoding: 'utf8' });
+                const urlMatch = status.match(/https:\/\/\S+\.png/);
+                if (urlMatch) {
+                  const imgPath = path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'slides', 'card-images', imageFile);
+                  exec(`curl -sL "${urlMatch[0]}" -o "${imgPath}"`, { timeout: 30000 });
+                  delete cardDef._image_pending;
+                  break;
+                }
+              } catch(e) {}
+            }
+          }
+        } catch(e) {
+          console.error('[deck add] Higgsfield error:', e.message);
+        }
+
+        // Step 4: Save to deck.json
+        deck.push(cardDef);
+        fs.writeFileSync(deckPath, JSON.stringify(deck, null, 2));
+
+        // Step 5: Confirm
+        const conns = (cardDef.connects || []).map(id => {
+          const c = deck.find(d => d.id === id);
+          return c ? `#${String(id).padStart(3,'0')} ${c.name}` : `#${id}`;
+        }).join(', ');
+
+        let response = `*#${String(nextId).padStart(3,'0')} ${cardDef.name}* — added to deck\n\n`;
+        response += `${cardDef.subtitle || ''}\n\n`;
+        response += `${cardDef.description || ''}\n\n`;
+        if (cardDef.key_facts.length) response += cardDef.key_facts.map(f => `• ${f}`).join('\n') + '\n\n';
+        if (conns) response += `*Connects:* ${conns}\n`;
+        if (cardDef.frontier) response += `*Frontier:* ${cardDef.frontier}\n`;
+        response += `\n${cardDef._image_pending ? '⏳ Image generating...' : '🎨 Image ready'}`;
+        response += `\n📊 localhost:8080/reed-slides`;
+
+        return safeSend(chatId, response, { parse_mode: 'Markdown' });
+
+      } catch(e) {
+        console.error('[deck add]', e.message);
+        return safeSend(chatId, `Deck add failed: ${e.message}`);
+      }
+    }
+
     let filtered = deck;
     if (filter === 'live') filtered = deck.filter(c => c.status === 'live');
     else if (filter === 'planned') filtered = deck.filter(c => c.status === 'planned');
@@ -2962,7 +3111,7 @@ bot.onText(/^\/deck(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
       if (card.frontier) response += `    ↳ _${card.frontier.substring(0, 70)}_\n`;
     }
 
-    response += `\n\`/deck [number]\` — card detail\n\`/deck live|planned|frontier\` — filter`;
+    response += `\n\`/deck [number]\` — card detail\n\`/deck add [name]\` — create new card\n\`/deck live|planned|frontier\` — filter`;
     response += `\n📊 localhost:8080/reed-slides`;
     await safeSend(chatId, response, { parse_mode: 'Markdown' });
 
