@@ -73,24 +73,64 @@
     ]
   },
 
+  "visual_brand_system": {
+    "source": "~/cathedral-vault/09_Artifacts/branding/brand-reference/BasicReflex_Visual_Brand_System.md",
+    "colours": {
+      "obsidian_black": "#1A1A1A — backgrounds, primary text, dominant mood",
+      "warm_white": "#F5F0EB — text on dark, breathing space",
+      "ring_red": "#C4392D — CTAs, highlights, energy moments (use sparingly)",
+      "copper": "#B87333 — warm accent, premium feel, coach highlights",
+      "concrete_grey": "#6B6B6B — secondary text, captions, metadata",
+      "gym_floor": "#3D3D3D — mid-tone backgrounds, card elements"
+    },
+    "never_use": "Neon anything, electric blue, bright green, bright yellow — those belong to CrossFit and chain gyms",
+    "typography": {
+      "headline": "Bebas Neue (or Oswald Bold for digital) — UPPERCASE for short headlines",
+      "body": "Inter (or Helvetica Neue for print) — sentence case",
+      "accent": "Space Mono (or JetBrains Mono) — hashtags, labels, technical callouts"
+    },
+    "photography_style": {
+      "mood": "Technical, warm, real. Gritty but not aggressive. Documentary not advertisement. Private training session not fight night.",
+      "lighting": "Natural light preferred — gym windows, overhead strips. Warm tungsten if artificial. NEVER flash, ring light, studio-flat. Shadows welcome.",
+      "colour_treatment": "Warm shadows (never cold/blue). Slightly desaturated — NOT grey, NOT candy-coloured. Lifted blacks. Subtle organic grain. Overall: warm, honest, slightly vintage WITHOUT being filtered. NOT MONOTONE, NOT SEPIA.",
+      "composition": "Subject off-centre (rule of thirds). Negative space. Tight crop on hands/gloves/eyes for detail. Wide for environment/atmosphere. NEVER centred and symmetrical — that's corporate."
+    },
+    "what_to_shoot": ["Real sweat, real focus, real technique", "Hands wrapping, gloves lacing, bag swinging after hit", "Coach adjusting student stance (teaching moment)", "Gym empty — atmosphere", "Gym full — energy", "Members mid-conversation, post-session"],
+    "never_shoot": ["Flexing, mirror selfies, aggressive face-to-camera", "Stock photo poses (crossed arms, looking tough)", "Ring girls, fight night glamour, blood"],
+    "logo_usage": {
+      "primary": "BR wordmark in Warm White on Obsidian Black",
+      "watermark": "Bottom-right corner, 15% opacity, Warm White. Small enough to not distract.",
+      "clear_space": "Half the height of the logo on all sides",
+      "never": "Stretch, rotate, recolour, put on busy backgrounds"
+    },
+    "instagram_grid": {
+      "pattern": "Alternate: close-up detail / wide atmosphere / text-based quote. Never two of same type back-to-back.",
+      "feel": "Warm, cohesive, slightly dark, lived-in",
+      "text_overlay": "Bottom third, left-aligned, Bebas Neue headline",
+      "quote_card": "Obsidian background, Warm White text, centred"
+    }
+  },
+
   "prompts": {
-    "pro_photo": "Apply a high-end commercial retouch. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. 16:9 cinematic. Sony A7R V, 70mm lens, deep crisp focus throughout. Soft directional key light from camera-left, diminish harsh overhead fluorescents. Warm golden sports documentary color grade. Saturate wall posters and artwork. Enhance wood floor grain and leather bag textures with age patina. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people. Professional Lightroom grade of original raw file.",
+    "pro_photo": "Apply a high-end commercial retouch. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. 16:9 cinematic. Warm shadows (never cold/blue). Slightly desaturated but NOT grey or monotone — warm, honest, slightly vintage. Lifted blacks, subtle organic grain. Soft directional key light from camera-left, diminish harsh overhead fluorescents. Colour palette: Obsidian Black #1A1A1A, Warm White #F5F0EB, Copper #B87333 tones, Ring Red #C4392D accents. Documentary feel, not advertisement. Natural skin tones. No hallucinations, do not add or remove objects or people.",
+    "instagram": "Professional sports photography retouch for Instagram. FULL COLOUR — NOT monotone, NOT sepia, NOT desaturated to grey. Warm, honest, slightly vintage feel. Warm shadows, lifted blacks, subtle grain. Natural lighting enhanced. Subject off-centre (rule of thirds). Negative space to breathe. Colour palette grounded in Obsidian #1A1A1A, Warm White #F5F0EB, Copper #B87333, Ring Red #C4392D. Documentary boxing aesthetic — real sweat, real focus. Preserve exact identity and pose. The Basic Reflex Look: warm, lived-in, slightly dark, never corporate.",
+    "inner_game": "Dramatic cinematic reimagining for philosophical/inner game content. Volumetric haze, golden directional light, heavy chiaroscuro. FULL COLOUR — not monotone. Warm amber tones, Copper #B87333 highlights, deep Obsidian #1A1A1A shadows. Film grain. The moment between rounds. The focus face. The weight of discipline. Preserve identity but add atmosphere: dust particles, backlit depth, the feeling of a private training session where something internal is happening. Sports documentary at golden hour meets contemplative cinema.",
     "manga": "Convert this photograph into a detailed manga illustration. Warm sepia and earth tones with golden light rays through windows. Ink-style cross-hatching and clean linework. Preserve all architectural details, equipment placement, brand text (Lonsdale, Basic Reflex), and wall posters exactly. Enhance foreground detail: gym bags, gloves, rope, floor texture. Professional manga environment art quality. Do not add or remove any people. Convert only what exists in the photo.",
-    "dramatic_cinema": "Dramatic cinematic reimagining. Volumetric haze and atmospheric fog filling the gym. Golden god rays streaming through windows. Heavy chiaroscuro lighting with deep shadows. Film grain texture. Preserve subject identity and pose but add dramatic atmosphere: backlit silhouette depth, warm amber tones, dust particles in light beams. Boxing gym atmosphere. Sports documentary cinematography at golden hour.",
-    "poster_br": "Vertical vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream — no other colours. Style: Shaw Brothers kung fu promotional art meets Emory Douglas revolutionary graphics meets Cuban cigar label ornamentation. Rough silkscreen risograph aesthetic, halftone grain, misregistered print layers, aged paper with fold creases and ink bleed. Dense ornamental border with tropical leaves, Chinese cloud motifs, rope patterns, boxing gloves, heavy bags, dragon motifs. Central boxing action as layered graphic silhouettes. Hong Kong neon fragments and tropical elements integrated into border. Hand-pulled in Kowloon print shop 1978. ZERO TEXT ZERO LETTERS. Two-pass: this generates art, poster-composite.py adds real BR wordmark + CSOB badge."
+    "dramatic_cinema": "Dramatic cinematic reimagining. Volumetric haze and atmospheric fog filling the gym. Golden god rays streaming through windows. Heavy chiaroscuro lighting with deep shadows. FULL COLOUR — warm amber and copper tones, NOT monotone. Film grain texture. Preserve subject identity and pose but add dramatic atmosphere: backlit silhouette depth, warm amber tones, dust particles in light beams. Boxing gym atmosphere. Sports documentary cinematography at golden hour.",
+    "poster_br": "Vertical vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for logo overlay in Canva. BRAND PALETTE: Obsidian Black #1A1A1A, Warm White #F5F0EB, Ring Red #C4392D, Copper #B87333. Shaw Brothers meets Emory Douglas meets Cuban cigar label. Rough silkscreen risograph aesthetic, halftone grain, misregistered print layers, aged paper. Dense ornamental border. Central boxing action as layered graphic silhouettes. Hong Kong elements integrated. ZERO TEXT. Typography handled in Canva post-generation."
   },
 
   "brand_poster_pipeline": {
-    "description": "Two-pass poster generation: AI art (text-free) → composite real logos",
-    "pass_1": "Generate with poster_br prompt via nano_banana_2, aspect 3:4, 2k",
-    "pass_2": "Run poster-composite.py --full: adds BR wordmark top, HONG KONG text, CSOB distressed badge bottom",
-    "script": "~/nanoclaw/reed-lab/poster-composite.py",
-    "brand_colours": ["#8B2020 burgundy", "#6B7C47 olive", "#000000 black", "#FFFFFF white", "#F5F0E1 aged cream"],
+    "description": "Two-pass: Higgsfield generates text-free art → Canva adds proper typography",
+    "pass_1": "Generate with poster_br prompt via nano_banana_2, aspect 3:4, 2k — NO TEXT in image",
+    "pass_2": "Drop into Canva poster template — Bebas Neue headlines, proper brand typography, logo placement per brand system",
+    "brand_colours": ["#1A1A1A Obsidian Black", "#F5F0EB Warm White", "#C4392D Ring Red", "#B87333 Copper", "#6B6B6B Concrete Grey", "#3D3D3D Gym Floor"],
     "logo_files": {
       "wordmark_white": "09_Artifacts/branding/basic-reflex/br-wordmark-white-on-dark-clean.png",
       "wordmark_black": "09_Artifacts/branding/basic-reflex/br-wordmark-black-on-white-clean.png",
       "csob_distressed": "09_Artifacts/branding/csob/csob-circle-distressed.png",
-      "csob_clean": "09_Artifacts/branding/csob/csob-circle-clean.png"
+      "csob_clean": "09_Artifacts/branding/csob/csob-circle-clean.png",
+      "vector": "09_Artifacts/branding/brand-reference/logo_white_vector.svg"
     }
   },
 
