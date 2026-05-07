@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cathedral Slides — Reed's Visual Lab</title>
+<title>Cathedral Deck — System Cards</title>
 <style>
   :root {
     --bg: #09090f;
@@ -19,480 +19,181 @@
     --purple: #534AB7;
     --accent: #8B2020;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', 'SF Pro Display', -apple-system, sans-serif;
-    min-height: 100vh;
-  }
+  header { padding: 28px 32px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  h1 { font-size: 14px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--amber); }
+  .header-right { display: flex; gap: 12px; align-items: center; }
+  .count { font-size: 11px; color: var(--muted); }
 
-  header {
-    padding: 32px 40px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
+  .filters { display: flex; gap: 6px; padding: 16px 32px 0; flex-wrap: wrap; }
+  .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 5px 14px; border-radius: 16px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
 
-  h1 {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--amber);
-  }
+  .deck { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding: 20px 32px 40px; }
 
-  .subtitle {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1px;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: default; transition: all 0.3s; position: relative; }
+  .card:hover { border-color: var(--amber); box-shadow: 0 0 24px rgba(245,158,11,0.06); transform: translateY(-2px); }
+  .card.expanded { grid-column: span 2; }
 
-  .slides-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
-    gap: 24px;
-    padding: 32px 40px;
-  }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  .card-number { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 1px; }
+  .card-name { font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .card-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-  /* ── Slide Card ── */
-  .slide {
-    aspect-ratio: 16/9;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 32px;
-    cursor: default;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
+  .card-status { position: absolute; top: 16px; right: 16px; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; }
+  .status-live { background: rgba(34,197,94,0.15); color: var(--green); }
+  .status-building { background: var(--amber-dim); color: var(--amber); }
+  .status-planned { background: rgba(107,107,128,0.15); color: var(--muted); }
+  .status-dormant { background: rgba(239,68,68,0.1); color: #666; }
 
-  .slide:hover {
-    border-color: var(--amber);
-    box-shadow: 0 0 30px rgba(245,158,11,0.08);
-  }
+  .card-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
 
-  .slide-number {
-    position: absolute;
-    top: 20px;
-    left: 24px;
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: 2px;
-  }
+  .card-facts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .fact { background: rgba(255,255,255,0.04); border-radius: 4px; padding: 3px 8px; font-size: 10px; color: var(--text); font-weight: 600; }
 
-  .slide-badge {
-    position: absolute;
-    top: 20px;
-    right: 24px;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 4px;
-    background: var(--amber-dim);
-    color: var(--amber);
-  }
+  .card-connections { font-size: 10px; color: var(--muted); }
+  .conn-link { color: var(--amber); cursor: pointer; text-decoration: none; }
+  .conn-link:hover { text-decoration: underline; }
 
-  .slide-visual {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 0;
-  }
+  .card-frontier { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11px; color: var(--amber); font-style: italic; }
 
-  .slide-title {
-    font-size: 22px;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 6px;
-  }
+  .card-locations { margin-top: 8px; font-size: 10px; color: var(--muted); font-family: 'SF Mono', monospace; }
 
-  .slide-subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
+  .section-divider { padding: 24px 32px 8px; font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; border-top: 1px solid var(--border); margin-top: 8px; }
 
-  .slide-stats {
-    display: flex;
-    gap: 16px;
-    margin-top: 12px;
-    font-size: 11px;
-  }
-
-  .stat {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .stat-value {
-    font-weight: 700;
-    color: var(--amber);
-  }
-
-  .stat-label {
-    color: var(--muted);
-  }
-
-  /* ── Visual Elements ── */
-  .layer-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 80%;
-  }
-
-  .layer {
-    height: 28px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  .persona-ring {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .persona {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 700;
-    border: 2px solid;
-    letter-spacing: 0.5px;
-  }
-
-  .domain-constellation {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .domain-node {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    border: 1px solid;
-  }
-
-  .system-map {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    width: 90%;
-  }
-
-  .sys-node {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px;
-    text-align: center;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: var(--muted);
-  }
-
-  .sys-node.active { border-color: var(--amber); color: var(--amber); }
-  .sys-node.live { border-color: var(--green); color: var(--green); }
-
-  .phase-flow {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    width: 90%;
-  }
-
-  .phase-block {
-    flex: 1;
-    height: 40px;
-    border-radius: 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-
-  .phase-arrow {
-    color: var(--muted);
-    font-size: 14px;
-  }
-
-  /* ── Catalogue Section ── */
-  .catalogue-header {
-    padding: 24px 40px 12px;
-    border-top: 1px solid var(--border);
-    margin-top: 16px;
-  }
-
-  .catalogue-header h2 {
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  #catalogueGrid {
-    padding: 0 40px 40px;
-  }
-
-  .catalogue-empty {
-    color: var(--muted);
-    font-size: 12px;
-    padding: 20px 0;
-    font-style: italic;
-  }
-
-  @media (max-width: 700px) {
-    .slides-grid { grid-template-columns: 1fr; padding: 16px; }
-    header { padding: 20px 16px; }
-    .slide { padding: 20px; }
-    .slide-title { font-size: 18px; }
-  }
+  @media (max-width: 700px) { .deck { grid-template-columns: 1fr; padding: 12px; } header { padding: 16px; } .card.expanded { grid-column: span 1; } }
 </style>
 </head>
 <body>
 
 <header>
   <div>
-    <h1>Cathedral Slides</h1>
-    <div class="subtitle">Reed's Visual Lab — System Architecture Cards</div>
+    <h1>Cathedral Deck</h1>
+    <div class="count" id="deckCount">Loading...</div>
   </div>
-  <div class="subtitle" id="slideCount">6 slides</div>
+  <div class="header-right">
+    <div class="count" id="statusCount"></div>
+  </div>
 </header>
 
-<div class="slides-grid">
-
-  <!-- Slide 1: Predictive Intelligence -->
-  <div class="slide">
-    <span class="slide-number">01</span>
-    <span class="slide-badge">Live</span>
-    <div class="slide-visual">
-      <div class="layer-stack">
-        <div class="layer" style="background:rgba(245,158,11,0.2);color:var(--amber)">Layer 4 — Autonomous Seeds</div>
-        <div class="layer" style="background:rgba(83,74,183,0.2);color:var(--purple)">Layer 3 — Visual Prediction Map</div>
-        <div class="layer" style="background:rgba(55,138,221,0.2);color:var(--blue)">Layer 2 — Completion Engine (hermes3)</div>
-        <div class="layer" style="background:rgba(34,197,94,0.15);color:var(--green)">Layer 1 — Knowledge Graph (6,811 nodes)</div>
-      </div>
-    </div>
-    <div class="slide-title">The Predictive Intelligence System</div>
-    <div class="slide-subtitle">Four layers transforming 6,878 vault nuggets into predictions. Graph finds structure. Completion engine finds gaps. Map makes it visible. Seeds make it autonomous.</div>
-    <div class="slide-stats">
-      <div class="stat"><span class="stat-value">6,811</span><span class="stat-label">nodes</span></div>
-      <div class="stat"><span class="stat-value">29,362</span><span class="stat-label">edges</span></div>
-      <div class="stat"><span class="stat-value">354</span><span class="stat-label">communities</span></div>
-    </div>
-  </div>
-
-  <!-- Slide 2: The Roundtable -->
-  <div class="slide">
-    <span class="slide-number">02</span>
-    <span class="slide-badge">Live</span>
-    <div class="slide-visual">
-      <div class="persona-ring">
-        <div class="persona" style="border-color:var(--amber);color:var(--amber)">Gann</div>
-        <div class="persona" style="border-color:var(--blue);color:var(--blue)">Vortex</div>
-        <div class="persona" style="border-color:var(--purple);color:var(--purple)">Cycles</div>
-        <div class="persona" style="border-color:var(--red);color:var(--red)">Suppr</div>
-        <div class="persona" style="border-color:#94a3b8;color:#94a3b8">Lunar</div>
-        <div class="persona" style="border-color:var(--green);color:var(--green)">Fib</div>
-        <div class="persona" style="border-color:#f472b6;color:#f472b6">Cymtx</div>
-        <div class="persona" style="border-color:#fbbf24;color:#fbbf24">Mmtm</div>
-      </div>
-    </div>
-    <div class="slide-title">The Strategy Roundtable</div>
-    <div class="slide-subtitle">Eight worldviews argue about the same price action. Gann sees geometry. Vortex sees breath. Lunar sees rhythm. Cymatics sees vibration. The friction produces insight none of them see alone.</div>
-    <div class="slide-stats">
-      <div class="stat"><span class="stat-value">8</span><span class="stat-label">personas</span></div>
-      <div class="stat"><span class="stat-value">0-10</span><span class="stat-label">convergence</span></div>
-      <div class="stat"><span class="stat-value">Every 4h</span><span class="stat-label">cycle</span></div>
-    </div>
-  </div>
-
-  <!-- Slide 3: The Steward -->
-  <div class="slide">
-    <span class="slide-number">03</span>
-    <span class="slide-badge">Court 16</span>
-    <div class="slide-visual">
-      <div style="text-align:center">
-        <div style="width:80px;height:80px;border-radius:50%;border:2px solid var(--amber);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--amber)">S</div>
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;max-width:300px;margin:0 auto">
-          Accidental Agreement &middot; Blindspots &middot; Friction Signals
-        </div>
-      </div>
-    </div>
-    <div class="slide-title">The Steward</div>
-    <div class="slide-subtitle">Emerges from friction between incompatible worldviews. Finds what none see alone: where three strategies accidentally agree, where a confident caller ignores a blindspot, where the pattern of disagreement IS the signal.</div>
-    <div class="slide-stats">
-      <div class="stat"><span class="stat-value">3</span><span class="stat-label">detection modes</span></div>
-      <div class="stat"><span class="stat-value">hermes3</span><span class="stat-label">local LLM</span></div>
-    </div>
-  </div>
-
-  <!-- Slide 4: The Experiment Lab -->
-  <div class="slide">
-    <span class="slide-number">04</span>
-    <span class="slide-badge">7 Domains</span>
-    <div class="slide-visual">
-      <div class="domain-constellation">
-        <div class="domain-node" style="border-color:var(--green);color:var(--green)">Trading</div>
-        <div class="domain-node" style="border-color:var(--red);color:var(--red)">Boxing</div>
-        <div class="domain-node" style="border-color:var(--purple);color:var(--purple)">Creative</div>
-        <div class="domain-node" style="border-color:var(--blue);color:var(--blue)">Research</div>
-        <div class="domain-node" style="border-color:var(--amber);color:var(--amber)">Gym Ops</div>
-        <div class="domain-node" style="border-color:#f472b6;color:#f472b6">Health</div>
-        <div class="domain-node" style="border-color:#94a3b8;color:#94a3b8">HK Pulse</div>
-      </div>
-    </div>
-    <div class="slide-title">The Experiment Lab</div>
-    <div class="slide-subtitle">One template, seven domains. Competing worldviews race on real data. A meta-watcher-of-watchers observes across all domains for cross-domain convergence. Does reality have a unified pattern language?</div>
-    <div class="slide-stats">
-      <div class="stat"><span class="stat-value">1</span><span class="stat-label">live</span></div>
-      <div class="stat"><span class="stat-value">6</span><span class="stat-label">queued</span></div>
-      <div class="stat"><span class="stat-value">11</span><span class="stat-label">strategies</span></div>
-    </div>
-  </div>
-
-  <!-- Slide 5: Cathedral Architecture -->
-  <div class="slide">
-    <span class="slide-number">05</span>
-    <span class="slide-badge">System</span>
-    <div class="slide-visual">
-      <div class="system-map">
-        <div class="sys-node live">Telegram Bot</div>
-        <div class="sys-node live">Vault (6,878)</div>
-        <div class="sys-node live">Ollama (hermes3)</div>
-        <div class="sys-node active">Trading (11)</div>
-        <div class="sys-node live">Predictive Graph</div>
-        <div class="sys-node active">Experiment Lab</div>
-        <div class="sys-node live">Reed Visual</div>
-        <div class="sys-node live">Morning Brief</div>
-        <div class="sys-node live">Villa Panel</div>
-        <div class="sys-node live">Muse (3am)</div>
-        <div class="sys-node live">Archivist</div>
-        <div class="sys-node live">Timekeeper</div>
-      </div>
-    </div>
-    <div class="slide-title">The Cathedral Architecture</div>
-    <div class="slide-subtitle">Mac Mini, Hong Kong. Local-first sovereign intelligence. 33 PM2 processes. Obsidian vault. Ollama LLMs. Every piece compounds every other piece. Not a product — a research instrument.</div>
-    <div class="slide-stats">
-      <div class="stat"><span class="stat-value">33</span><span class="stat-label">processes</span></div>
-      <div class="stat"><span class="stat-value">12</span><span class="stat-label">court members</span></div>
-      <div class="stat"><span class="stat-value">HKT</span><span class="stat-label">timezone</span></div>
-    </div>
-  </div>
-
-  <!-- Slide 6: Reed's Daily Lab -->
-  <div class="slide">
-    <span class="slide-number">06</span>
-    <span class="slide-badge">Creative</span>
-    <div class="slide-visual">
-      <div class="phase-flow">
-        <div class="phase-block" style="background:rgba(245,158,11,0.15);color:var(--amber)">
-          <span>Scan</span>
-          <span style="font-size:7px;font-weight:400;opacity:0.7">vault + signals</span>
-        </div>
-        <span class="phase-arrow">&rarr;</span>
-        <div class="phase-block" style="background:rgba(83,74,183,0.15);color:var(--purple)">
-          <span>Select</span>
-          <span style="font-size:7px;font-weight:400;opacity:0.7">style + subject</span>
-        </div>
-        <span class="phase-arrow">&rarr;</span>
-        <div class="phase-block" style="background:rgba(55,138,221,0.15);color:var(--blue)">
-          <span>Generate</span>
-          <span style="font-size:7px;font-weight:400;opacity:0.7">Higgsfield</span>
-        </div>
-        <span class="phase-arrow">&rarr;</span>
-        <div class="phase-block" style="background:rgba(34,197,94,0.12);color:var(--green)">
-          <span>Publish</span>
-          <span style="font-size:7px;font-weight:400;opacity:0.7">Telegram + gallery</span>
-        </div>
-      </div>
-    </div>
-    <div class="slide-title">Reed's Daily Lab</div>
-    <div class="slide-subtitle">Visual Director Reed scans the vault overnight, selects today's subject, generates through 10 proven styles, publishes the best to Telegram. Shot assignments from the roundtable. Every image tells a Cathedral story.</div>
-    <div class="slide-stats">
-      <div class="stat"><span class="stat-value">10</span><span class="stat-label">styles</span></div>
-      <div class="stat"><span class="stat-value">Daily</span><span class="stat-label">cadence</span></div>
-      <div class="stat"><span class="stat-value">PM2</span><span class="stat-label">automated</span></div>
-    </div>
-  </div>
-
+<div class="filters" id="filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="live">Live</button>
+  <button class="filter-btn" data-filter="building">Building</button>
+  <button class="filter-btn" data-filter="planned">Planned</button>
+  <button class="filter-btn" data-filter="frontier">Has Frontier</button>
 </div>
 
-<!-- Dynamic catalogue: auto-generated session slides -->
-<div class="catalogue-header">
-  <h2>Session Build Slides</h2>
-</div>
-<div class="slides-grid" id="catalogueGrid">
-  <div class="catalogue-empty">Auto-generated slides from session harvests will appear here.</div>
-</div>
+<div class="deck" id="deck"></div>
+
+<div class="section-divider">Session Build History</div>
+<div class="deck" id="sessionDeck"></div>
 
 <script>
 const BASE = 'http://localhost:8080';
+let deckData = [];
+let nameMap = {};
 
-async function loadCatalogue() {
+function statusClass(s) {
+  if (s === 'live') return 'status-live';
+  if (s === 'building') return 'status-building';
+  if (s === 'planned') return 'status-planned';
+  return 'status-dormant';
+}
+
+function renderCard(card) {
+  const connections = (card.connects || [])
+    .map(id => nameMap[id] ? `<a class="conn-link" onclick="scrollToCard(${id})">#${String(id).padStart(3,'0')} ${nameMap[id]}</a>` : `#${id}`)
+    .join(' · ');
+
+  return `<div class="card" id="card-${card.id}" data-status="${card.status}">
+    <span class="card-status ${statusClass(card.status)}">${card.status}</span>
+    <div class="card-header">
+      <div class="card-icon" style="background:${card.color}22;color:${card.color}">${card.icon || '#'}</div>
+      <div>
+        <div class="card-number">#${String(card.id).padStart(3, '0')}</div>
+        <div class="card-name">${card.name}</div>
+        <div class="card-subtitle">${card.subtitle || ''}</div>
+      </div>
+    </div>
+    <div class="card-desc">${card.description || ''}</div>
+    ${card.key_facts ? `<div class="card-facts">${card.key_facts.map(f => `<span class="fact">${f}</span>`).join('')}</div>` : ''}
+    ${connections ? `<div class="card-connections">Connects: ${connections}</div>` : ''}
+    ${card.frontier ? `<div class="card-frontier">${card.frontier}</div>` : ''}
+    ${card.locations ? `<div class="card-locations">${card.locations.slice(0,2).join(' · ')}</div>` : ''}
+    ${card.dashboards && card.dashboards.length ? `<div class="card-locations" style="margin-top:4px">${card.dashboards.map(d => `<a href="${d}" style="color:var(--blue)" target="_blank">${d}</a>`).join(' ')}</div>` : ''}
+  </div>`;
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById('card-' + id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function applyFilter(filter) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+  const cards = document.querySelectorAll('#deck .card');
+  cards.forEach(c => {
+    if (filter === 'all') { c.style.display = ''; return; }
+    if (filter === 'frontier') { c.style.display = c.querySelector('.card-frontier') ? '' : 'none'; return; }
+    c.style.display = c.dataset.status === filter ? '' : 'none';
+  });
+}
+
+async function loadDeck() {
+  try {
+    const r = await fetch(`${BASE}/reed-slides/deck`);
+    if (!r.ok) return;
+    deckData = await r.json();
+
+    // Build name map for connections
+    deckData.forEach(c => { nameMap[c.id] = c.name; });
+
+    document.getElementById('deck').innerHTML = deckData.map(renderCard).join('');
+    document.getElementById('deckCount').textContent = `${deckData.length} cards`;
+
+    const live = deckData.filter(c => c.status === 'live').length;
+    const building = deckData.filter(c => c.status === 'building').length;
+    const planned = deckData.filter(c => c.status === 'planned').length;
+    document.getElementById('statusCount').textContent = `${live} live · ${building} building · ${planned} planned`;
+
+    // Bind filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.onclick = () => applyFilter(btn.dataset.filter);
+    });
+  } catch(e) { console.error('Deck:', e); }
+}
+
+async function loadSessionSlides() {
   try {
     const r = await fetch(`${BASE}/reed-slides/catalogue`);
     if (!r.ok) return;
     const slides = await r.json();
-    if (!slides || slides.length === 0) return;
-
-    const grid = document.getElementById('catalogueGrid');
-    grid.innerHTML = slides.map((s, i) => `
-      <div class="slide" style="aspect-ratio:16/9">
-        <span class="slide-number">${String(7 + i).padStart(2, '0')}</span>
-        <span class="slide-badge">${s.date || 'Build'}</span>
-        <div class="slide-visual" style="padding:16px">
-          <div style="text-align:center;max-width:400px">
-            ${(s.highlights || []).map(h =>
-              `<div style="font-size:11px;color:var(--muted);padding:3px 0;border-bottom:1px solid var(--border)">${h}</div>`
-            ).join('')}
+    if (!slides || slides.length === 0) {
+      document.getElementById('sessionDeck').innerHTML = '<div style="color:var(--muted);padding:20px;font-size:12px;font-style:italic">Auto-generated from session harvests</div>';
+      return;
+    }
+    document.getElementById('sessionDeck').innerHTML = slides.slice(-12).reverse().map((s, i) => `
+      <div class="card" data-status="live">
+        <span class="card-status status-live">${s.date || 'Build'}</span>
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--amber-dim);color:var(--amber)">${String(s.date || '').slice(-2) || '#'}</div>
+          <div>
+            <div class="card-name">${s.title || 'Session Build'}</div>
+            <div class="card-subtitle">${s.subtitle || ''}</div>
           </div>
         </div>
-        <div class="slide-title">${s.title || 'Session Build'}</div>
-        <div class="slide-subtitle">${s.subtitle || ''}</div>
-        ${s.stats ? `<div class="slide-stats">${s.stats.map(st =>
-          `<div class="stat"><span class="stat-value">${st.value}</span><span class="stat-label">${st.label}</span></div>`
-        ).join('')}</div>` : ''}
+        ${s.highlights ? `<div class="card-facts">${s.highlights.slice(0,4).map(h => `<span class="fact">${h}</span>`).join('')}</div>` : ''}
       </div>
     `).join('');
-
-    document.getElementById('slideCount').textContent = `${6 + slides.length} slides`;
   } catch(e) {}
 }
 
-loadCatalogue();
+loadDeck();
+loadSessionSlides();
 </script>
 </body>
 </html>

@@ -1663,6 +1663,11 @@ app.get('/scraper/hub', (req, res) => {
 app.get('/reed-slides', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'slides-gallery.html'));
 });
+app.get('/reed-slides/deck', (req, res) => {
+  const deckPath = path.join(NANOCLAW, 'reed-lab', 'deck.json');
+  if (fs.existsSync(deckPath)) return res.json(JSON.parse(fs.readFileSync(deckPath, 'utf8')));
+  res.json([]);
+});
 app.get('/reed-slides/catalogue', (req, res) => {
   const catPath = path.join(NANOCLAW, 'reed-lab', 'slides', 'catalogue.json');
   if (fs.existsSync(catPath)) return res.json(JSON.parse(fs.readFileSync(catPath, 'utf8')));

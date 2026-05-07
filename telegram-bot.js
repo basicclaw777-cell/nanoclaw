@@ -2917,6 +2917,61 @@ bot.on('message', async (msg) => {
   }
 });
 
+// ── Cathedral Deck ──────────────────────────────────────────────────────────
+
+bot.onText(/^\/deck(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const filter = match?.[1]?.trim()?.toLowerCase();
+
+  try {
+    const deckPath = path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'deck.json');
+    const deck = JSON.parse(fs.readFileSync(deckPath, 'utf8'));
+
+    let filtered = deck;
+    if (filter === 'live') filtered = deck.filter(c => c.status === 'live');
+    else if (filter === 'planned') filtered = deck.filter(c => c.status === 'planned');
+    else if (filter === 'frontier') filtered = deck.filter(c => c.frontier);
+    else if (filter && !isNaN(filter)) {
+      const card = deck.find(c => c.id === parseInt(filter));
+      if (card) {
+        const conns = (card.connects || []).map(id => {
+          const c = deck.find(d => d.id === id);
+          return c ? `#${String(id).padStart(3,'0')} ${c.name}` : `#${id}`;
+        }).join('\n    ');
+
+        let detail = `*#${String(card.id).padStart(3,'0')} ${card.name}*\n`;
+        detail += `${card.subtitle}\n\n`;
+        detail += `${card.description}\n\n`;
+        if (card.key_facts) detail += card.key_facts.map(f => `• ${f}`).join('\n') + '\n\n';
+        if (conns) detail += `*Connects to:*\n    ${conns}\n\n`;
+        if (card.frontier) detail += `*Frontier:* ${card.frontier}\n\n`;
+        if (card.locations) detail += `*Location:* ${card.locations[0]}\n`;
+        if (card.dashboards?.length) detail += `*Dashboard:* ${card.dashboards[0]}`;
+
+        return safeSend(chatId, detail, { parse_mode: 'Markdown' });
+      }
+    }
+
+    const live = filtered.filter(c => c.status === 'live').length;
+    let response = `*Cathedral Deck* — ${filtered.length} cards (${live} live)\n\n`;
+
+    for (const card of filtered) {
+      const icon = card.status === 'live' ? '●' : card.status === 'building' ? '◐' : '○';
+      response += `${icon} *#${String(card.id).padStart(3,'0')}* ${card.name}\n`;
+      response += `    ${card.subtitle}\n`;
+      if (card.frontier) response += `    ↳ _${card.frontier.substring(0, 70)}_\n`;
+    }
+
+    response += `\n\`/deck [number]\` — card detail\n\`/deck live|planned|frontier\` — filter`;
+    response += `\n📊 localhost:8080/reed-slides`;
+    await safeSend(chatId, response, { parse_mode: 'Markdown' });
+
+  } catch(e) {
+    console.error('[deck]', e.message);
+    await safeSend(chatId, `Deck error: ${e.message}`);
+  }
+});
+
 // ── Cathedral Slides ────────────────────────────────────────────────────────
 
 bot.onText(/^\/slides?(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
