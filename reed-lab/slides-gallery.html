@@ -78,6 +78,8 @@
   .map-node text { font-family:'Inter',sans-serif; fill:var(--text); pointer-events:none; }
   .map-edge { stroke:var(--border); stroke-width:1; opacity:0.4; }
   .map-edge.highlight { stroke:var(--amber); opacity:0.6; stroke-width:1.5; }
+  .map-edge.missing { stroke:var(--amber); stroke-dasharray:6,4; opacity:0.3; }
+  .map-edge.missing.highlight { opacity:0.7; }
   .map-tooltip { position:absolute; background:var(--surface); border:1px solid var(--amber); border-radius:8px; padding:12px 16px; font-size:11px; max-width:280px; pointer-events:none; display:none; z-index:10; box-shadow:0 4px 20px rgba(0,0,0,0.5); }
   .map-tooltip .tt-name { font-size:14px; font-weight:700; margin-bottom:4px; }
   .map-tooltip .tt-sub { color:var(--muted); margin-bottom:6px; }
@@ -136,6 +138,7 @@
     <button class="ctrl-btn active" data-filter="all">All</button>
     <button class="ctrl-btn" data-filter="live">Live</button>
     <button class="ctrl-btn" data-filter="frontier">Frontier</button>
+    <button class="ctrl-btn" data-filter="gaps">Gaps</button>
   </div>
 </div>
 
@@ -152,7 +155,7 @@
 
 <script>
 const BASE = 'http://localhost:8080';
-let deck = [], nameMap = {}, currentView = 'data', currentFilter = 'all';
+let deck = [], nameMap = {}, missingConns = [], currentView = 'magazine', currentFilter = 'all';
 
 // ── Data fetch ──
 async function init() {
@@ -162,6 +165,12 @@ async function init() {
     deck.forEach(c => nameMap[c.id] = c.name);
     const live = deck.filter(c => c.status === 'live').length;
     document.getElementById('meta').textContent = `${deck.length} cards · ${live} live`;
+    // Load missing connections
+    try {
+      const mr = await fetch(`${BASE}/reed-slides/missing-connections`);
+      if (mr.ok) missingConns = (await mr.json()).missing || [];
+    } catch(e) {}
+
     renderAll();
     // Overlay vault project card data
     for (const c of deck) {
@@ -197,6 +206,7 @@ function filtered() {
   if (currentFilter === 'all') return deck;
   if (currentFilter === 'live') return deck.filter(c => c.status === 'live');
   if (currentFilter === 'frontier') return deck.filter(c => c.frontier);
+  if (currentFilter === 'gaps') return deck; // gaps view handled separately
   return deck;
 }
 
@@ -226,6 +236,29 @@ function renderMagazine() {
 
 // ── VIEW 1: DATA ──
 function renderData() {
+  // If Gaps filter, show missing connections instead
+  if (currentFilter === 'gaps' && missingConns.length > 0) {
+    document.getElementById('viewData').innerHTML = missingConns.map(mc => {
+      const fromCard = deck.find(c => c.id === mc.from);
+      const toCard = mc.to_name ? null : deck.find(c => c.id === mc.to);
+      const toName = mc.to_name || (toCard ? toCard.name : mc.to);
+      const fromName = mc.from_name || (fromCard ? fromCard.name : mc.from);
+      return `<div class="card" style="border-left:3px dashed var(--amber)">
+        <div class="card-head">
+          <div class="card-icon" style="background:var(--amber-dim);color:var(--amber)">?</div>
+          <div>
+            <div class="card-num" style="color:var(--amber)">MISSING CONNECTION</div>
+            <div class="card-name">${fromName} → ${toName}</div>
+            <div class="card-sub">${mc.effort || ''} effort</div>
+          </div>
+        </div>
+        <div class="card-desc">${mc.gap || ''}</div>
+        ${mc.compounds ? `<div class="facts">${mc.compounds.map(f => `<span class="fact">${f}</span>`).join('')}</div>` : ''}
+        ${mc.creates ? `<div class="frontier">Creates: ${mc.creates}</div>` : ''}
+      </div>`;
+    }).join('');
+    return;
+  }
   document.getElementById('viewData').innerHTML = filtered().map(c => {
     const conns = (c.connects||[]).map(id => `<span class="conn-link" onclick="scrollTo(${id})">#${String(id).padStart(3,'0')} ${nameMap[id]||''}</span>`).join(' · ');
     return `<div class="card" id="dc-${c.id}" data-status="${c.status}">
@@ -287,15 +320,23 @@ function renderMap() {
   // Build SVG
   let edges = '', nodes = '';
 
-  // Edges
+  // Existing edges
   for (const c of cards) {
     const from = positions[c.id];
     if (!from) continue;
     for (const toId of (c.connects||[])) {
       if (!idSet.has(toId)) continue;
       const to = positions[toId];
-      if (!to || toId < c.id) continue; // draw once
+      if (!to || toId < c.id) continue;
       edges += `<line class="map-edge" data-from="${c.id}" data-to="${toId}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}"/>`;
+    }
+  }
+
+  // Missing connections (dashed amber lines)
+  for (const mc of missingConns) {
+    if (mc.from && mc.to && positions[mc.from] && positions[mc.to]) {
+      const f = positions[mc.from], t = positions[mc.to];
+      edges += `<line class="map-edge missing" data-from="${mc.from}" data-to="${mc.to}" x1="${f.x}" y1="${f.y}" x2="${t.x}" y2="${t.y}"><title>${mc.gap?.substring(0,80) || ''}</title></line>`;
     }
   }
 

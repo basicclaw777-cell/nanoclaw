@@ -1704,6 +1704,11 @@ app.get('/reed-slides/card-project', (req, res) => {
     domain: fm['project-domain'] || '',
   });
 });
+app.get('/reed-slides/missing-connections', (req, res) => {
+  const fp = path.join(NANOCLAW, 'reed-lab', 'missing-connections.json');
+  if (fs.existsSync(fp)) return res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  res.json({ missing: [] });
+});
 app.get('/reed-slides/card-image', (req, res) => {
   const file = req.query.file;
   if (!file || file.includes('..')) return res.status(400).send('Bad request');
