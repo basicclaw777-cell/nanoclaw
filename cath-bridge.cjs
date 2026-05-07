@@ -1668,6 +1668,42 @@ app.get('/reed-slides/deck', (req, res) => {
   if (fs.existsSync(deckPath)) return res.json(JSON.parse(fs.readFileSync(deckPath, 'utf8')));
   res.json([]);
 });
+app.get('/reed-slides/card-project', (req, res) => {
+  // Read vault project card for a deck card
+  const cardId = parseInt(req.query.id);
+  if (!cardId) return res.status(400).json({ error: 'Need ?id=N' });
+  const deckPath = path.join(NANOCLAW, 'reed-lab', 'deck.json');
+  if (!fs.existsSync(deckPath)) return res.status(404).json({ error: 'No deck' });
+  const deck = JSON.parse(fs.readFileSync(deckPath, 'utf8'));
+  const card = deck.find(c => c.id === cardId);
+  if (!card) return res.status(404).json({ error: 'Card not found' });
+  if (!card.project_card) return res.json({ card_id: cardId, has_project: false });
+
+  const vaultPath = path.join(process.env.HOME || '/Users/basicclaw777', 'cathedral-vault', card.project_card);
+  if (!fs.existsSync(vaultPath)) return res.json({ card_id: cardId, has_project: false, path: card.project_card });
+
+  const text = fs.readFileSync(vaultPath, 'utf8');
+  const fm = {};
+  const fmMatch = text.match(/^---\n([\s\S]*?)\n---/);
+  if (fmMatch) {
+    for (const line of fmMatch[1].split('\n')) {
+      const kv = line.match(/^([^:]+):\s*"?([^"]*)"?\s*$/);
+      if (kv) fm[kv[1].trim()] = kv[2].trim();
+    }
+  }
+  res.json({
+    card_id: cardId,
+    has_project: true,
+    path: card.project_card,
+    title: fm.title || '',
+    status: fm['project-status'] || '',
+    priority: fm['project-priority'] || '',
+    next_action: fm['project-next-action'] || '',
+    last_updated: fm['project-last-updated'] || '',
+    blocked_by: fm['project-blocked-by'] || '',
+    domain: fm['project-domain'] || '',
+  });
+});
 app.get('/reed-slides/card-image', (req, res) => {
   const file = req.query.file;
   if (!file || file.includes('..')) return res.status(400).send('Bad request');

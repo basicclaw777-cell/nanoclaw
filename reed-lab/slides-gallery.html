@@ -163,6 +163,20 @@ async function init() {
     const live = deck.filter(c => c.status === 'live').length;
     document.getElementById('meta').textContent = `${deck.length} cards · ${live} live`;
     renderAll();
+    // Overlay vault project card data
+    for (const c of deck) {
+      if (c.project_card) {
+        fetch(`${BASE}/reed-slides/card-project?id=${c.id}`).then(r => r.json()).then(p => {
+          if (!p.has_project) return;
+          const el = document.getElementById('dc-' + c.id);
+          if (!el) return;
+          const bar = document.createElement('div');
+          bar.style.cssText = 'margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)';
+          bar.innerHTML = `<span style="color:var(--green)">Vault:</span> ${p.status} · ${p.next_action ? '↳ ' + p.next_action.substring(0,60) : ''} ${p.blocked_by ? '<span style="color:var(--red)">Blocked: ' + p.blocked_by + '</span>' : ''}`;
+          el.appendChild(bar);
+        }).catch(() => {});
+      }
+    }
   } catch(e) { console.error(e); }
 
   // Session slides
@@ -193,7 +207,9 @@ function renderMagazine() {
   document.getElementById('viewMagazine').innerHTML = filtered().map(c => {
     const imgUrl = c.image ? `${BASE}/reed-slides/card-image?file=${c.image.split('/').pop()}` : '';
     const bgStyle = imgUrl ? `background-image:url('${imgUrl}')` : `background:linear-gradient(135deg, ${c.color}22, var(--surface))`;
-    return `<div class="mag-card">
+    const clickUrl = c.dashboards?.[0] || '';
+    const clickAttr = clickUrl ? `onclick="window.open('${clickUrl}','_blank')" style="cursor:pointer" title="Enter ${c.name}"` : '';
+    return `<div class="mag-card" ${clickAttr}>
       <div class="mag-bg" style="${bgStyle}"></div>
       <div class="mag-overlay"></div>
       <div class="mag-status"><span class="status-dot dot-${c.status}"></span></div>
