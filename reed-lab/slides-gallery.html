@@ -3,68 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cathedral Deck — System Cards</title>
+<title>Cathedral Deck</title>
 <style>
   :root {
-    --bg: #09090f;
-    --surface: #0f0f18;
-    --border: #1a1a2e;
-    --text: #e8e8f0;
-    --muted: #6b6b80;
-    --amber: #f59e0b;
-    --amber-dim: rgba(245,158,11,0.15);
-    --blue: #378ADD;
-    --green: #22c55e;
-    --red: #ef4444;
-    --purple: #534AB7;
-    --accent: #8B2020;
+    --bg: #09090f; --surface: #0f0f18; --border: #1a1a2e; --text: #e8e8f0;
+    --muted: #6b6b80; --amber: #f59e0b; --amber-dim: rgba(245,158,11,0.15);
+    --blue: #378ADD; --green: #22c55e; --red: #ef4444; --purple: #534AB7;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; min-height:100vh; overflow-x:hidden; }
 
-  header { padding: 28px 32px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-  h1 { font-size: 14px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--amber); }
-  .header-right { display: flex; gap: 12px; align-items: center; }
-  .count { font-size: 11px; color: var(--muted); }
+  /* ── Header ── */
+  header { padding:24px 28px 16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  h1 { font-size:13px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--amber); }
+  .header-meta { font-size:10px; color:var(--muted); }
 
-  .filters { display: flex; gap: 6px; padding: 16px 32px 0; flex-wrap: wrap; }
-  .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 5px 14px; border-radius: 16px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
-  .filter-btn:hover, .filter-btn.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
+  /* ── Controls ── */
+  .controls { display:flex; gap:6px; padding:14px 28px 0; flex-wrap:wrap; align-items:center; }
+  .ctrl-group { display:flex; gap:3px; background:var(--surface); border-radius:8px; padding:2px; border:1px solid var(--border); }
+  .ctrl-btn { background:none; border:none; color:var(--muted); padding:5px 12px; border-radius:6px; font-size:10px; cursor:pointer; transition:all 0.2s; font-weight:600; letter-spacing:0.5px; }
+  .ctrl-btn:hover { color:var(--text); }
+  .ctrl-btn.active { background:var(--amber-dim); color:var(--amber); }
+  .ctrl-sep { width:1px; background:var(--border); margin:0 8px; }
 
-  .deck { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding: 20px 32px 40px; }
+  /* ── Shared card base ── */
+  .status-dot { width:6px; height:6px; border-radius:50%; display:inline-block; flex-shrink:0; }
+  .dot-live { background:var(--green); }
+  .dot-building { background:var(--amber); }
+  .dot-planned { background:var(--muted); }
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: default; transition: all 0.3s; position: relative; }
-  .card:hover { border-color: var(--amber); box-shadow: 0 0 24px rgba(245,158,11,0.06); transform: translateY(-2px); }
-  .card.expanded { grid-column: span 2; }
+  /* ════════════════════════════════════════════════════════════
+     VIEW 1: DATA (current style, refined)
+     ════════════════════════════════════════════════════════════ */
+  .view-data { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; padding:16px 28px 40px; }
+  .view-data .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; transition:all 0.3s; position:relative; }
+  .view-data .card:hover { border-color:var(--amber); box-shadow:0 0 20px rgba(245,158,11,0.05); transform:translateY(-1px); }
+  .view-data .card-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .view-data .card-icon { width:32px; height:32px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; }
+  .view-data .card-num { font-size:9px; color:var(--muted); font-weight:600; letter-spacing:1px; }
+  .view-data .card-name { font-size:15px; font-weight:700; line-height:1.2; }
+  .view-data .card-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+  .view-data .card-status { position:absolute; top:14px; right:14px; }
+  .view-data .card-desc { font-size:11px; color:var(--muted); line-height:1.6; margin-bottom:10px; }
+  .view-data .facts { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+  .view-data .fact { background:rgba(255,255,255,0.04); border-radius:3px; padding:2px 7px; font-size:9px; color:var(--text); font-weight:600; }
+  .view-data .conns { font-size:9px; color:var(--muted); }
+  .view-data .conn-link { color:var(--amber); cursor:pointer; }
+  .view-data .frontier { margin-top:8px; padding-top:8px; border-top:1px solid var(--border); font-size:10px; color:var(--amber); font-style:italic; }
+  .view-data .locs { margin-top:6px; font-size:9px; color:var(--muted); font-family:'SF Mono',monospace; }
 
-  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
-  .card-number { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 1px; }
-  .card-name { font-size: 16px; font-weight: 700; line-height: 1.2; }
-  .card-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  /* ════════════════════════════════════════════════════════════
+     VIEW 2: MINIMAL (phone scan)
+     ════════════════════════════════════════════════════════════ */
+  .view-minimal { padding:16px 28px 40px; max-width:640px; }
+  .view-minimal .row { display:flex; align-items:baseline; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); cursor:pointer; transition:background 0.2s; }
+  .view-minimal .row:hover { background:rgba(245,158,11,0.03); }
+  .view-minimal .row-num { font-size:10px; color:var(--muted); font-weight:700; width:36px; flex-shrink:0; font-family:'SF Mono',monospace; }
+  .view-minimal .row-dot { margin-right:2px; }
+  .view-minimal .row-name { font-size:14px; font-weight:600; flex:1; }
+  .view-minimal .row-frontier { font-size:10px; color:var(--amber); font-style:italic; max-width:50%; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .view-minimal .row-detail { display:none; padding:8px 0 12px 46px; font-size:11px; color:var(--muted); line-height:1.6; }
+  .view-minimal .row-detail.open { display:block; }
+  .view-minimal .row-detail .conn-link { color:var(--amber); cursor:pointer; }
 
-  .card-status { position: absolute; top: 16px; right: 16px; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; }
-  .status-live { background: rgba(34,197,94,0.15); color: var(--green); }
-  .status-building { background: var(--amber-dim); color: var(--amber); }
-  .status-planned { background: rgba(107,107,128,0.15); color: var(--muted); }
-  .status-dormant { background: rgba(239,68,68,0.1); color: #666; }
+  /* ════════════════════════════════════════════════════════════
+     VIEW 3: MAP (spatial — SVG canvas with draggable nodes)
+     ════════════════════════════════════════════════════════════ */
+  .view-map { position:relative; width:100%; height:calc(100vh - 120px); overflow:hidden; }
+  .view-map svg { width:100%; height:100%; }
+  .map-node { cursor:grab; }
+  .map-node:active { cursor:grabbing; }
+  .map-node circle { transition:stroke 0.2s, r 0.2s; }
+  .map-node:hover circle { stroke:var(--amber); stroke-width:2; }
+  .map-node text { font-family:'Inter',sans-serif; fill:var(--text); pointer-events:none; }
+  .map-edge { stroke:var(--border); stroke-width:1; opacity:0.4; }
+  .map-edge.highlight { stroke:var(--amber); opacity:0.6; stroke-width:1.5; }
+  .map-tooltip { position:absolute; background:var(--surface); border:1px solid var(--amber); border-radius:8px; padding:12px 16px; font-size:11px; max-width:280px; pointer-events:none; display:none; z-index:10; box-shadow:0 4px 20px rgba(0,0,0,0.5); }
+  .map-tooltip .tt-name { font-size:14px; font-weight:700; margin-bottom:4px; }
+  .map-tooltip .tt-sub { color:var(--muted); margin-bottom:6px; }
+  .map-tooltip .tt-frontier { color:var(--amber); font-style:italic; font-size:10px; }
 
-  .card-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  /* ── Section divider ── */
+  .section-div { padding:20px 28px 8px; font-size:10px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; border-top:1px solid var(--border); margin-top:8px; }
 
-  .card-facts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-  .fact { background: rgba(255,255,255,0.04); border-radius: 4px; padding: 3px 8px; font-size: 10px; color: var(--text); font-weight: 600; }
+  .hidden { display:none !important; }
 
-  .card-connections { font-size: 10px; color: var(--muted); }
-  .conn-link { color: var(--amber); cursor: pointer; text-decoration: none; }
-  .conn-link:hover { text-decoration: underline; }
-
-  .card-frontier { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11px; color: var(--amber); font-style: italic; }
-
-  .card-locations { margin-top: 8px; font-size: 10px; color: var(--muted); font-family: 'SF Mono', monospace; }
-
-  .section-divider { padding: 24px 32px 8px; font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; border-top: 1px solid var(--border); margin-top: 8px; }
-
-  @media (max-width: 700px) { .deck { grid-template-columns: 1fr; padding: 12px; } header { padding: 16px; } .card.expanded { grid-column: span 1; } }
+  @media (max-width:700px) {
+    .view-data { grid-template-columns:1fr; padding:12px; }
+    .view-minimal { padding:12px; }
+    header,.controls { padding-left:12px; padding-right:12px; }
+  }
 </style>
 </head>
 <body>
@@ -72,128 +100,235 @@
 <header>
   <div>
     <h1>Cathedral Deck</h1>
-    <div class="count" id="deckCount">Loading...</div>
-  </div>
-  <div class="header-right">
-    <div class="count" id="statusCount"></div>
+    <div class="header-meta" id="meta">Loading...</div>
   </div>
 </header>
 
-<div class="filters" id="filters">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="live">Live</button>
-  <button class="filter-btn" data-filter="building">Building</button>
-  <button class="filter-btn" data-filter="planned">Planned</button>
-  <button class="filter-btn" data-filter="frontier">Has Frontier</button>
+<div class="controls">
+  <div class="ctrl-group" id="viewToggle">
+    <button class="ctrl-btn active" data-view="data">Data</button>
+    <button class="ctrl-btn" data-view="minimal">Minimal</button>
+    <button class="ctrl-btn" data-view="map">Map</button>
+  </div>
+  <div class="ctrl-sep"></div>
+  <div class="ctrl-group" id="filterToggle">
+    <button class="ctrl-btn active" data-filter="all">All</button>
+    <button class="ctrl-btn" data-filter="live">Live</button>
+    <button class="ctrl-btn" data-filter="frontier">Frontier</button>
+  </div>
 </div>
 
-<div class="deck" id="deck"></div>
+<div id="viewData" class="view-data"></div>
+<div id="viewMinimal" class="view-minimal hidden"></div>
+<div id="viewMap" class="view-map hidden">
+  <svg id="mapSvg"></svg>
+  <div class="map-tooltip" id="tooltip"></div>
+</div>
 
-<div class="section-divider">Session Build History</div>
-<div class="deck" id="sessionDeck"></div>
+<div class="section-div" id="sessionHeader">Session Builds</div>
+<div class="view-data" id="sessionDeck" style="padding-top:8px"></div>
 
 <script>
 const BASE = 'http://localhost:8080';
-let deckData = [];
-let nameMap = {};
+let deck = [], nameMap = {}, currentView = 'data', currentFilter = 'all';
 
-function statusClass(s) {
-  if (s === 'live') return 'status-live';
-  if (s === 'building') return 'status-building';
-  if (s === 'planned') return 'status-planned';
-  return 'status-dormant';
-}
-
-function renderCard(card) {
-  const connections = (card.connects || [])
-    .map(id => nameMap[id] ? `<a class="conn-link" onclick="scrollToCard(${id})">#${String(id).padStart(3,'0')} ${nameMap[id]}</a>` : `#${id}`)
-    .join(' · ');
-
-  return `<div class="card" id="card-${card.id}" data-status="${card.status}">
-    <span class="card-status ${statusClass(card.status)}">${card.status}</span>
-    <div class="card-header">
-      <div class="card-icon" style="background:${card.color}22;color:${card.color}">${card.icon || '#'}</div>
-      <div>
-        <div class="card-number">#${String(card.id).padStart(3, '0')}</div>
-        <div class="card-name">${card.name}</div>
-        <div class="card-subtitle">${card.subtitle || ''}</div>
-      </div>
-    </div>
-    <div class="card-desc">${card.description || ''}</div>
-    ${card.key_facts ? `<div class="card-facts">${card.key_facts.map(f => `<span class="fact">${f}</span>`).join('')}</div>` : ''}
-    ${connections ? `<div class="card-connections">Connects: ${connections}</div>` : ''}
-    ${card.frontier ? `<div class="card-frontier">${card.frontier}</div>` : ''}
-    ${card.locations ? `<div class="card-locations">${card.locations.slice(0,2).join(' · ')}</div>` : ''}
-    ${card.dashboards && card.dashboards.length ? `<div class="card-locations" style="margin-top:4px">${card.dashboards.map(d => `<a href="${d}" style="color:var(--blue)" target="_blank">${d}</a>`).join(' ')}</div>` : ''}
-  </div>`;
-}
-
-function scrollToCard(id) {
-  const el = document.getElementById('card-' + id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-function applyFilter(filter) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
-  const cards = document.querySelectorAll('#deck .card');
-  cards.forEach(c => {
-    if (filter === 'all') { c.style.display = ''; return; }
-    if (filter === 'frontier') { c.style.display = c.querySelector('.card-frontier') ? '' : 'none'; return; }
-    c.style.display = c.dataset.status === filter ? '' : 'none';
-  });
-}
-
-async function loadDeck() {
+// ── Data fetch ──
+async function init() {
   try {
     const r = await fetch(`${BASE}/reed-slides/deck`);
-    if (!r.ok) return;
-    deckData = await r.json();
+    deck = await r.json();
+    deck.forEach(c => nameMap[c.id] = c.name);
+    const live = deck.filter(c => c.status === 'live').length;
+    document.getElementById('meta').textContent = `${deck.length} cards · ${live} live`;
+    renderAll();
+  } catch(e) { console.error(e); }
 
-    // Build name map for connections
-    deckData.forEach(c => { nameMap[c.id] = c.name; });
-
-    document.getElementById('deck').innerHTML = deckData.map(renderCard).join('');
-    document.getElementById('deckCount').textContent = `${deckData.length} cards`;
-
-    const live = deckData.filter(c => c.status === 'live').length;
-    const building = deckData.filter(c => c.status === 'building').length;
-    const planned = deckData.filter(c => c.status === 'planned').length;
-    document.getElementById('statusCount').textContent = `${live} live · ${building} building · ${planned} planned`;
-
-    // Bind filters
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.onclick = () => applyFilter(btn.dataset.filter);
-    });
-  } catch(e) { console.error('Deck:', e); }
-}
-
-async function loadSessionSlides() {
+  // Session slides
   try {
     const r = await fetch(`${BASE}/reed-slides/catalogue`);
-    if (!r.ok) return;
     const slides = await r.json();
-    if (!slides || slides.length === 0) {
-      document.getElementById('sessionDeck').innerHTML = '<div style="color:var(--muted);padding:20px;font-size:12px;font-style:italic">Auto-generated from session harvests</div>';
-      return;
+    if (slides?.length) {
+      document.getElementById('sessionDeck').innerHTML = slides.slice(-8).reverse().map(s => `
+        <div class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px">
+          <div style="font-size:13px;font-weight:600">${s.title || 'Build'}</div>
+          <div style="font-size:10px;color:var(--muted)">${s.date || ''} · ${s.subtitle || ''}</div>
+        </div>`).join('');
     }
-    document.getElementById('sessionDeck').innerHTML = slides.slice(-12).reverse().map((s, i) => `
-      <div class="card" data-status="live">
-        <span class="card-status status-live">${s.date || 'Build'}</span>
-        <div class="card-header">
-          <div class="card-icon" style="background:var(--amber-dim);color:var(--amber)">${String(s.date || '').slice(-2) || '#'}</div>
-          <div>
-            <div class="card-name">${s.title || 'Session Build'}</div>
-            <div class="card-subtitle">${s.subtitle || ''}</div>
-          </div>
-        </div>
-        ${s.highlights ? `<div class="card-facts">${s.highlights.slice(0,4).map(h => `<span class="fact">${h}</span>`).join('')}</div>` : ''}
-      </div>
-    `).join('');
   } catch(e) {}
 }
 
-loadDeck();
-loadSessionSlides();
+function filtered() {
+  if (currentFilter === 'all') return deck;
+  if (currentFilter === 'live') return deck.filter(c => c.status === 'live');
+  if (currentFilter === 'frontier') return deck.filter(c => c.frontier);
+  return deck;
+}
+
+function renderAll() { renderData(); renderMinimal(); renderMap(); }
+
+// ── VIEW 1: DATA ──
+function renderData() {
+  document.getElementById('viewData').innerHTML = filtered().map(c => {
+    const conns = (c.connects||[]).map(id => `<span class="conn-link" onclick="scrollTo(${id})">#${String(id).padStart(3,'0')} ${nameMap[id]||''}</span>`).join(' · ');
+    return `<div class="card" id="dc-${c.id}" data-status="${c.status}">
+      <div class="card-status"><span class="status-dot dot-${c.status}"></span></div>
+      <div class="card-head">
+        <div class="card-icon" style="background:${c.color}22;color:${c.color}">${c.icon}</div>
+        <div><div class="card-num">#${String(c.id).padStart(3,'0')}</div><div class="card-name">${c.name}</div><div class="card-sub">${c.subtitle||''}</div></div>
+      </div>
+      <div class="card-desc">${c.description||''}</div>
+      ${c.key_facts?`<div class="facts">${c.key_facts.map(f=>`<span class="fact">${f}</span>`).join('')}</div>`:''}
+      ${conns?`<div class="conns">${conns}</div>`:''}
+      ${c.frontier?`<div class="frontier">${c.frontier}</div>`:''}
+      ${c.dashboards?.length?`<div class="locs"><a href="${c.dashboards[0]}" target="_blank" style="color:var(--blue)">${c.dashboards[0]}</a></div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── VIEW 2: MINIMAL ──
+function renderMinimal() {
+  document.getElementById('viewMinimal').innerHTML = filtered().map(c => {
+    const conns = (c.connects||[]).map(id => `<span class="conn-link" onclick="scrollTo(${id})">#${String(id).padStart(3,'0')} ${nameMap[id]||''}</span>`).join(' · ');
+    return `<div>
+      <div class="row" onclick="this.nextElementSibling.classList.toggle('open')">
+        <span class="row-num">#${String(c.id).padStart(3,'0')}</span>
+        <span class="row-dot"><span class="status-dot dot-${c.status}"></span></span>
+        <span class="row-name">${c.name}</span>
+        <span class="row-frontier">${c.frontier?c.frontier.substring(0,50):''}</span>
+      </div>
+      <div class="row-detail">
+        ${c.subtitle}<br><br>
+        ${c.description||''}<br>
+        ${c.key_facts?'<br>'+c.key_facts.map(f=>'· '+f).join('<br>'):''}
+        ${conns?'<br><br>Connects: '+conns:''}
+        ${c.frontier?'<br><br><span style="color:var(--amber)">Frontier: '+c.frontier+'</span>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── VIEW 3: MAP ──
+function renderMap() {
+  const svg = document.getElementById('mapSvg');
+  const tooltip = document.getElementById('tooltip');
+  const W = svg.clientWidth || 900, H = svg.clientHeight || 600;
+  const cards = filtered();
+  const idSet = new Set(cards.map(c => c.id));
+
+  // Position nodes in a circle with slight randomisation
+  const positions = {};
+  const cx = W/2, cy = H/2, radius = Math.min(W,H) * 0.35;
+  cards.forEach((c, i) => {
+    const angle = (i / cards.length) * Math.PI * 2 - Math.PI/2;
+    positions[c.id] = {
+      x: cx + Math.cos(angle) * radius + (Math.random()-0.5)*40,
+      y: cy + Math.sin(angle) * radius + (Math.random()-0.5)*40,
+    };
+  });
+
+  // Build SVG
+  let edges = '', nodes = '';
+
+  // Edges
+  for (const c of cards) {
+    const from = positions[c.id];
+    if (!from) continue;
+    for (const toId of (c.connects||[])) {
+      if (!idSet.has(toId)) continue;
+      const to = positions[toId];
+      if (!to || toId < c.id) continue; // draw once
+      edges += `<line class="map-edge" data-from="${c.id}" data-to="${toId}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}"/>`;
+    }
+  }
+
+  // Nodes
+  for (const c of cards) {
+    const p = positions[c.id];
+    const r = 20;
+    nodes += `<g class="map-node" data-id="${c.id}" transform="translate(${p.x},${p.y})">
+      <circle r="${r}" fill="${c.color}22" stroke="${c.color}" stroke-width="1.5"/>
+      <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="${c.color}">${c.icon}</text>
+      <text text-anchor="middle" dy="${r+14}" font-size="9" fill="var(--muted)">#${String(c.id).padStart(3,'0')}</text>
+      <text text-anchor="middle" dy="${r+25}" font-size="10" font-weight="600">${c.name}</text>
+    </g>`;
+  }
+
+  svg.innerHTML = edges + nodes;
+
+  // Drag + tooltip
+  let dragging = null, dragOffset = {x:0,y:0};
+
+  svg.querySelectorAll('.map-node').forEach(node => {
+    node.addEventListener('mouseenter', e => {
+      const id = +node.dataset.id;
+      const c = deck.find(d => d.id === id);
+      if (!c) return;
+      tooltip.innerHTML = `<div class="tt-name">#${String(c.id).padStart(3,'0')} ${c.name}</div>
+        <div class="tt-sub">${c.subtitle||''}</div>
+        ${c.key_facts?c.key_facts.map(f=>'· '+f).join('<br>')+'<br>':''}
+        ${c.frontier?`<div class="tt-frontier">${c.frontier}</div>`:''}`;
+      tooltip.style.display = 'block';
+      // Highlight edges
+      svg.querySelectorAll('.map-edge').forEach(edge => {
+        if (+edge.dataset.from === id || +edge.dataset.to === id) edge.classList.add('highlight');
+      });
+    });
+    node.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+      svg.querySelectorAll('.map-edge').forEach(e => e.classList.remove('highlight'));
+    });
+    node.addEventListener('mousedown', e => {
+      dragging = node;
+      const t = node.transform.baseVal[0]?.matrix || {e:0,f:0};
+      dragOffset = { x: e.clientX - t.e, y: e.clientY - t.f };
+      e.preventDefault();
+    });
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const x = e.clientX - dragOffset.x, y = e.clientY - dragOffset.y;
+    dragging.setAttribute('transform', `translate(${x},${y})`);
+    const id = +dragging.dataset.id;
+    positions[id] = {x, y};
+    // Update edges
+    svg.querySelectorAll('.map-edge').forEach(edge => {
+      if (+edge.dataset.from === id) { edge.setAttribute('x1', x); edge.setAttribute('y1', y); }
+      if (+edge.dataset.to === id) { edge.setAttribute('x2', x); edge.setAttribute('y2', y); }
+    });
+    // Move tooltip
+    tooltip.style.left = (e.clientX + 16) + 'px';
+    tooltip.style.top = (e.clientY - 10) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => { dragging = null; });
+}
+
+// ── View + Filter switching ──
+document.getElementById('viewToggle').addEventListener('click', e => {
+  if (!e.target.dataset.view) return;
+  currentView = e.target.dataset.view;
+  document.querySelectorAll('#viewToggle .ctrl-btn').forEach(b => b.classList.toggle('active', b.dataset.view === currentView));
+  document.getElementById('viewData').classList.toggle('hidden', currentView !== 'data');
+  document.getElementById('viewMinimal').classList.toggle('hidden', currentView !== 'minimal');
+  document.getElementById('viewMap').classList.toggle('hidden', currentView !== 'map');
+  document.getElementById('sessionHeader').classList.toggle('hidden', currentView === 'map');
+  document.getElementById('sessionDeck').classList.toggle('hidden', currentView === 'map');
+  if (currentView === 'map') renderMap(); // re-render on show
+});
+
+document.getElementById('filterToggle').addEventListener('click', e => {
+  if (!e.target.dataset.filter) return;
+  currentFilter = e.target.dataset.filter;
+  document.querySelectorAll('#filterToggle .ctrl-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === currentFilter));
+  renderAll();
+});
+
+function scrollTo(id) {
+  if (currentView === 'data') { const el = document.getElementById('dc-'+id); if (el) el.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+
+init();
 </script>
 </body>
 </html>
