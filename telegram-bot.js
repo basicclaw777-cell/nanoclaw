@@ -2231,6 +2231,8 @@ bot.on('photo', async (msg) => {
         execSync(`sips -s format jpeg -s formatOptions 85 "${outPng}" --out "${outPath}"`, { timeout: 30000 });
         await safeSendPhoto(chatId, outPath, '🎬 Reed: Pro photo — 16:9 cinematic grade');
         console.log(`[reed-photo] Pro photo delivered`);
+        // Log to creative experiment
+        try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration('pro_photo', 'photo', filePath, outPath, 'pro photo preservation', 'nano_banana_2'); } catch(e) {}
       } else {
         await safeSend(chatId, `⚠️ Reed: Unexpected result — ${result.slice(0, 200)}`);
       }
@@ -2299,6 +2301,8 @@ bot.on('photo', async (msg) => {
           await safeSendPhoto(chatId, outPath, `🎬 Reed: ${mode} — ${aspect}`);
         }
         console.log(`[reed-photo] ${mode} delivered`);
+        // Log to creative experiment
+        try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration(mode.toLowerCase().replace(/\s+/g, '_'), instruction || 'photo', filePath, outPath, instruction, 'nano_banana_2'); } catch(e) {}
       } else {
         await safeSend(chatId, `⚠️ Reed: Unexpected result — ${genResult.slice(0, 200)}`);
       }
@@ -3067,6 +3071,77 @@ Output the prompt as a single paragraph, 2-3 sentences max. Nothing else.`;
   } catch(e) {
     console.error('[slides] Error:', e.message);
     await safeSend(chatId, `Slide generation failed: ${e.message}`);
+  }
+});
+
+// ── Creative Lab (Domain 3) ──────────────────────────────────────────────────
+
+bot.onText(/^\/creative[-_]?lab(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const args = match?.[1]?.trim();
+
+  try {
+    const { getLeaderboard, logSelection, recommendStyle, getStats } = await import('./experiment-engine/creative/creative-strategies.js');
+
+    // /creative-lab — show leaderboard
+    if (!args) {
+      const board = getLeaderboard();
+      const stats = getStats();
+      const rec = recommendStyle();
+
+      let response = `*Creative Lab — Style Experiment*\n`;
+      response += `${stats.generations} generated | ${stats.selections} selections\n\n`;
+
+      if (board.length > 0) {
+        response += `*Leaderboard:*\n`;
+        for (const s of board) {
+          const bar = s.selection_rate > 0 ? '|'.repeat(Math.min(Math.round(s.selection_rate / 10), 10)) : '';
+          response += `${s.style}: ${s.selection_rate || 0}% ${bar} (${s.selected || 0}/${s.total_generated})\n`;
+        }
+      } else {
+        response += `No data yet. Generate images with /reed and track selections.\n`;
+      }
+
+      response += `\n*Next recommendation:* ${rec.style} (${rec.reason})`;
+      return safeSend(chatId, response, { parse_mode: 'Markdown' });
+    }
+
+    // /creative-lab select <style> — log Paul selected this style
+    if (args.startsWith('select ') || args.startsWith('use ')) {
+      const style = args.replace(/^(select|use)\s+/, '').trim();
+      const result = logSelection(null, style, 'selected', '', 'telegram');
+
+      // Publish to meta-watcher
+      try {
+        const { logDomainRun } = await import('./experiment-engine/meta-watcher.js');
+        logDomainRun('creative', [{ type: style, subject: 'selection', direction: 'positive', strength: 0.8 }]);
+      } catch(e) {}
+
+      return safeSend(chatId, `Logged: Paul selected *${style}*. Leaderboard updated.`, { parse_mode: 'Markdown' });
+    }
+
+    // /creative-lab reject <style>
+    if (args.startsWith('reject ') || args.startsWith('skip ')) {
+      const style = args.replace(/^(reject|skip)\s+/, '').trim();
+      logSelection(null, style, 'rejected', '', 'telegram');
+      return safeSend(chatId, `Logged: Paul rejected *${style}*.`, { parse_mode: 'Markdown' });
+    }
+
+    // /creative-lab recommend
+    if (args === 'recommend' || args === 'next') {
+      const rec = recommendStyle();
+      return safeSend(chatId, `*Recommended:* ${rec.style}\n${rec.reason}\n${rec.explore ? '(exploring)' : '(exploiting best)'}`, { parse_mode: 'Markdown' });
+    }
+
+    safeSend(chatId, `*Creative Lab commands:*
+\`/creative-lab\` — style leaderboard
+\`/creative-lab select <style>\` — log selection
+\`/creative-lab reject <style>\` — log rejection
+\`/creative-lab recommend\` — next style suggestion`, { parse_mode: 'Markdown' });
+
+  } catch(e) {
+    console.error('[creative-lab]', e.message);
+    await safeSend(chatId, `Creative Lab error: ${e.message}`);
   }
 });
 
