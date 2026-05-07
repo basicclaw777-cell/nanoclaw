@@ -83,6 +83,26 @@
   .map-tooltip .tt-sub { color:var(--muted); margin-bottom:6px; }
   .map-tooltip .tt-frontier { color:var(--amber); font-style:italic; font-size:10px; }
 
+  /* ════════════════════════════════════════════════════════════
+     VIEW 4: MAGAZINE (visual-first, image backgrounds)
+     ════════════════════════════════════════════════════════════ */
+  .view-magazine { display:grid; grid-template-columns:repeat(auto-fill,minmax(400px,1fr)); gap:16px; padding:16px 28px 40px; }
+  .mag-card { aspect-ratio:16/9; border-radius:12px; overflow:hidden; position:relative; cursor:default; transition:all 0.3s; border:1px solid var(--border); }
+  .mag-card:hover { border-color:var(--amber); transform:scale(1.02); box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+  .mag-bg { position:absolute; inset:0; background-size:cover; background-position:center; filter:brightness(0.6); transition:filter 0.3s; }
+  .mag-card:hover .mag-bg { filter:brightness(0.4); }
+  .mag-overlay { position:absolute; inset:0; background:linear-gradient(transparent 30%, rgba(9,9,15,0.95) 85%); }
+  .mag-content { position:absolute; bottom:0; left:0; right:0; padding:20px; }
+  .mag-num { font-size:10px; color:var(--amber); font-weight:700; letter-spacing:2px; opacity:0.8; }
+  .mag-name { font-size:20px; font-weight:700; line-height:1.2; margin:4px 0; }
+  .mag-sub { font-size:12px; color:var(--muted); }
+  .mag-frontier { font-size:10px; color:var(--amber); font-style:italic; margin-top:8px; opacity:0; transition:opacity 0.3s; }
+  .mag-card:hover .mag-frontier { opacity:1; }
+  .mag-status { position:absolute; top:12px; right:12px; }
+  .mag-facts { position:absolute; top:12px; left:12px; display:flex; gap:4px; opacity:0; transition:opacity 0.3s; }
+  .mag-card:hover .mag-facts { opacity:1; }
+  .mag-fact { background:rgba(0,0,0,0.6); border:1px solid rgba(245,158,11,0.3); border-radius:3px; padding:2px 6px; font-size:9px; color:var(--amber); backdrop-filter:blur(4px); }
+
   /* ── Section divider ── */
   .section-div { padding:20px 28px 8px; font-size:10px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; border-top:1px solid var(--border); margin-top:8px; }
 
@@ -106,6 +126,7 @@
 
 <div class="controls">
   <div class="ctrl-group" id="viewToggle">
+    <button class="ctrl-btn" data-view="magazine">Magazine</button>
     <button class="ctrl-btn active" data-view="data">Data</button>
     <button class="ctrl-btn" data-view="minimal">Minimal</button>
     <button class="ctrl-btn" data-view="map">Map</button>
@@ -118,7 +139,8 @@
   </div>
 </div>
 
-<div id="viewData" class="view-data"></div>
+<div id="viewMagazine" class="view-magazine"></div>
+<div id="viewData" class="view-data hidden"></div>
 <div id="viewMinimal" class="view-minimal hidden"></div>
 <div id="viewMap" class="view-map hidden">
   <svg id="mapSvg"></svg>
@@ -164,7 +186,27 @@ function filtered() {
   return deck;
 }
 
-function renderAll() { renderData(); renderMinimal(); renderMap(); }
+function renderAll() { renderMagazine(); renderData(); renderMinimal(); renderMap(); }
+
+// ── VIEW 0: MAGAZINE ──
+function renderMagazine() {
+  document.getElementById('viewMagazine').innerHTML = filtered().map(c => {
+    const imgUrl = c.image ? `${BASE}/reed-slides/card-image?file=${c.image.split('/').pop()}` : '';
+    const bgStyle = imgUrl ? `background-image:url('${imgUrl}')` : `background:linear-gradient(135deg, ${c.color}22, var(--surface))`;
+    return `<div class="mag-card">
+      <div class="mag-bg" style="${bgStyle}"></div>
+      <div class="mag-overlay"></div>
+      <div class="mag-status"><span class="status-dot dot-${c.status}"></span></div>
+      ${c.key_facts ? `<div class="mag-facts">${c.key_facts.slice(0,3).map(f => `<span class="mag-fact">${f}</span>`).join('')}</div>` : ''}
+      <div class="mag-content">
+        <div class="mag-num">#${String(c.id).padStart(3,'0')}</div>
+        <div class="mag-name">${c.name}</div>
+        <div class="mag-sub">${c.subtitle || ''}</div>
+        ${c.frontier ? `<div class="mag-frontier">${c.frontier}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
 
 // ── VIEW 1: DATA ──
 function renderData() {
@@ -309,6 +351,7 @@ document.getElementById('viewToggle').addEventListener('click', e => {
   if (!e.target.dataset.view) return;
   currentView = e.target.dataset.view;
   document.querySelectorAll('#viewToggle .ctrl-btn').forEach(b => b.classList.toggle('active', b.dataset.view === currentView));
+  document.getElementById('viewMagazine').classList.toggle('hidden', currentView !== 'magazine');
   document.getElementById('viewData').classList.toggle('hidden', currentView !== 'data');
   document.getElementById('viewMinimal').classList.toggle('hidden', currentView !== 'minimal');
   document.getElementById('viewMap').classList.toggle('hidden', currentView !== 'map');

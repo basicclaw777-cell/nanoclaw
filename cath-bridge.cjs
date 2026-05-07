@@ -1668,6 +1668,13 @@ app.get('/reed-slides/deck', (req, res) => {
   if (fs.existsSync(deckPath)) return res.json(JSON.parse(fs.readFileSync(deckPath, 'utf8')));
   res.json([]);
 });
+app.get('/reed-slides/card-image', (req, res) => {
+  const file = req.query.file;
+  if (!file || file.includes('..')) return res.status(400).send('Bad request');
+  const fp = path.join(NANOCLAW, 'reed-lab', 'slides', 'card-images', file);
+  if (fs.existsSync(fp)) return res.sendFile(fp);
+  res.status(404).send('Not found');
+});
 app.get('/reed-slides/catalogue', (req, res) => {
   const catPath = path.join(NANOCLAW, 'reed-lab', 'slides', 'catalogue.json');
   if (fs.existsSync(catPath)) return res.json(JSON.parse(fs.readFileSync(catPath, 'utf8')));
