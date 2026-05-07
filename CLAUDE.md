@@ -58,6 +58,18 @@ Private sovereign AI research system for Paul (boxing gym owner, Hong Kong). Loc
 - Music: 2 modes — War Mode (class peaks, BPM 120-160) + Vibe Mode (cooldown, BPM 85-120)
 - All agents should import taste-map-api.js before generating Paul-facing content
 
+## Architect Layer — Intent to Structured Plan (built 2026-05-08)
+- Engine: ~/nanoclaw/architect.js — intent → structured JSON plan via DeepSeek
+- Templates: ~/nanoclaw/architect-templates/ (agent-build, content-series, hardware-integration)
+- Output: ~/nanoclaw/architect-output/ (JSON plans + interactive HTML)
+- Infrastructure scanner: queries PM2 services, vault sections, existing projects, known agents, hardware constraints
+- Generates: dependency graph (Mermaid) + task sequence + resource map + risk flags + HTML visualization
+- Telegram: /architect <intent>, /architect status
+- Web: localhost:8080/architect (serves most recent plan HTML)
+- Vault auto-deposit: saves plan as markdown to 08_Project_Orchestrator/projects/
+- Key differentiator: grounds every plan in Cathedral infrastructure — references what exists, doesn't propose rebuilding
+- ⚠️ After pm2 restart cathedral-bot: verify Telegram webhook is set (can clear on restart)
+
 ~/Cathedral/                   # Cathedral services directory
 ├── control-panel/
 │   ├── index.html             # Control panel UI (single file, cockpit aesthetic)

@@ -23,6 +23,7 @@ import { runTarget, runAll, getDashboardData, formatTelegramSummary } from './sc
 import { debate } from './trader/bull-bear-debate.js';
 import tasteMap from './taste-elicitation.js';
 import { getTasteProfile, getVoiceReferences, getVoicePattern, addAnchor } from './taste-map-api.js';
+import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlanTelegram, listPlans } from './architect.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -3819,6 +3820,68 @@ bot.onText(/^\/taste(?:@\w+)?\s+elicit\s+(\w+)\s*$/i, async (msg, match) => {
 bot.onText(/^\/taste(?:@\w+)?\s+stop\s*$/i, async (msg) => {
   const result = tasteMap.stopSession(msg.chat.id);
   safeSend(msg.chat.id, result);
+});
+
+// ── Architect commands ──────────────────────────────────────────────────────
+
+bot.onText(/^\/architect(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, `⚙️ *Architect — Intent to Plan*
+
+*Commands:*
+\`/architect <intent>\` — generate structured plan
+\`/architect status\` — list all generated plans
+\`/architect deps <project>\` — show dependency graph
+
+*Example:*
+\`/architect build online boxing program\`
+\`/architect add speed bag rhythm tracker to gym\`
+
+Architect scans Cathedral infrastructure, references existing assets, and outputs: dependency graph + task sequence + resource map.`, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/architect(?:@\w+)?\s+status\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const plans = listPlans();
+  if (plans.length === 0) {
+    return safeSend(chatId, '⚙️ No plans generated yet. Use `/architect <intent>` to create one.', { parse_mode: 'Markdown' });
+  }
+  let text = '⚙️ *Architect Plans*\n\n';
+  plans.forEach(p => {
+    const date = p.generatedAt ? p.generatedAt.split('T')[0] : '?';
+    text += `• *${p.project || p.file}* — ${p.phases} phases (${date})\n`;
+    if (p.intent) text += `  _${p.intent.slice(0, 80)}_\n`;
+  });
+  safeSend(chatId, text, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/architect(?:@\w+)?\s+(?!status\s*$)(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const intent = match[1].trim();
+
+  await safeSend(chatId, `⚙️ Architect scanning infrastructure and generating plan...\n_"${intent.slice(0, 100)}"_`, { parse_mode: 'Markdown' });
+
+  try {
+    const plan = await generatePlan(intent);
+
+    // Send Telegram summary
+    const telegramMsg = formatPlanTelegram(plan);
+    await safeSend(chatId, telegramMsg, { parse_mode: 'Markdown' });
+
+    // Generate and save HTML
+    const html = generateHTML(plan);
+    const slug = plan.project || 'plan';
+    const htmlPath = path.join(process.env.HOME, 'nanoclaw', 'architect-output', `${slug}.html`);
+    fs.writeFileSync(htmlPath, html);
+
+    // Deposit to vault
+    const vaultPath = depositToVault(plan);
+
+    await safeSend(chatId, `📄 HTML: \`${htmlPath}\`\n📁 Vault: \`${path.basename(vaultPath)}\`\n🔗 Open: localhost:8080 (serve via cath-bridge)`, { parse_mode: 'Markdown' });
+
+  } catch (err) {
+    console.error('[architect]', err.message);
+    await safeSend(chatId, `❌ Architect failed: ${err.message.slice(0, 300)}`);
+  }
 });
 
 // ── Inline keyboard callback handler (Densifier, Decay Detector) ────────────

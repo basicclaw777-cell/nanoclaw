@@ -1,0 +1,29 @@
+{
+  "name": "hardware-integration",
+  "description": "Integrate new hardware device into Cathedral — research → purchase → setup → software → integration",
+  "phases": [
+    {
+      "name": "Research",
+      "tasks": [
+        { "id": "T1", "name": "Define requirements and use case", "depends": [], "resource": "Paul + spec", "effort": "30 min" },
+        { "id": "T2", "name": "Research options, compare specs and price", "depends": ["T1"], "resource": "web research", "effort": "1 session" },
+        { "id": "T3", "name": "Check compatibility with Mac Mini + existing stack", "depends": ["T2"], "resource": "hardware constraints doc", "effort": "15 min" }
+      ]
+    },
+    {
+      "name": "Acquisition",
+      "tasks": [
+        { "id": "T4", "name": "Purchase device", "depends": ["T3"], "resource": "Paul", "effort": "shipping time" },
+        { "id": "T5", "name": "Physical setup and mounting", "depends": ["T4"], "resource": "Paul + gym", "effort": "1 hour" }
+      ]
+    },
+    {
+      "name": "Software Integration",
+      "tasks": [
+        { "id": "T6", "name": "Build data transfer pipeline (device → Mac Mini)", "depends": ["T4"], "resource": "Claude Code", "effort": "1 session" },
+        { "id": "T7", "name": "Build processing pipeline (raw → useful data)", "depends": ["T6"], "resource": "Claude Code", "effort": "1-2 sessions" },
+        { "id": "T8", "name": "Wire into Cathedral (Telegram commands, vault deposit, agents)", "depends": ["T7"], "resource": "existing patterns", "effort": "1 session" }
+      ]
+    }
+  ]
+}

@@ -1499,6 +1499,29 @@ app.get('/agents/guide', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'agent-guide.html'));
 });
 
+// ── Architect Plans ──────────────────────────────────────────────────────────
+
+app.get('/architect', (req, res) => {
+  const dir = path.join(NANOCLAW, 'architect-output');
+  const fs = require('fs');
+  try {
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.html')).sort().reverse();
+    if (files.length === 0) return res.send('<h1>No architect plans yet</h1>');
+    // Serve most recent by default
+    res.sendFile(path.join(dir, files[0]));
+  } catch (e) {
+    res.status(500).send('Architect output dir not found');
+  }
+});
+
+app.get('/architect/:slug', (req, res) => {
+  const fs = require('fs');
+  const dir = path.join(NANOCLAW, 'architect-output');
+  const files = fs.readdirSync(dir).filter(f => f.startsWith(req.params.slug) && f.endsWith('.html'));
+  if (files.length === 0) return res.status(404).send('Plan not found');
+  res.sendFile(path.join(dir, files[files.length - 1]));
+});
+
 // ── Trading Hub ──────────────────────────────────────────────────────────────
 
 app.get('/trader/hub', (req, res) => {

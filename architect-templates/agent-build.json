@@ -1,0 +1,28 @@
+{
+  "name": "agent-build",
+  "description": "Build a new Cathedral agent — spec → code → test → PM2 → Telegram",
+  "phases": [
+    {
+      "name": "Design",
+      "tasks": [
+        { "id": "T1", "name": "Write spec with capabilities, commands, integration points", "depends": [], "resource": "Claude Code", "effort": "30 min" },
+        { "id": "T2", "name": "Define sage/skin JSON if personality needed", "depends": ["T1"], "resource": "existing sage pattern", "effort": "15 min" }
+      ]
+    },
+    {
+      "name": "Build",
+      "tasks": [
+        { "id": "T3", "name": "Core engine (ESM module)", "depends": ["T1"], "resource": "Claude Code", "effort": "1-2 sessions" },
+        { "id": "T4", "name": "Wire Telegram commands into telegram-bot.js", "depends": ["T3"], "resource": "existing bot pattern", "effort": "30 min" },
+        { "id": "T5", "name": "Add to PM2 ecosystem if cron needed", "depends": ["T3"], "resource": "PM2", "effort": "10 min" }
+      ]
+    },
+    {
+      "name": "Test & Deploy",
+      "tasks": [
+        { "id": "T6", "name": "Manual test via Telegram", "depends": ["T4"], "resource": "Paul + phone", "effort": "15 min" },
+        { "id": "T7", "name": "Wire integration points (vault, taste map, other agents)", "depends": ["T6"], "resource": "existing APIs", "effort": "30 min" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "content-series",
+  "description": "Plan and produce a content series — filming + editing + publishing pipeline",
+  "phases": [
+    {
+      "name": "Planning",
+      "tasks": [
+        { "id": "T1", "name": "Define series theme, target audience, post count", "depends": [], "resource": "Paul + taste map", "effort": "30 min" },
+        { "id": "T2", "name": "Create shot list per episode/post", "depends": ["T1"], "resource": "Reed shot list system", "effort": "30 min" }
+      ]
+    },
+    {
+      "name": "Production",
+      "tasks": [
+        { "id": "T3", "name": "Film raw footage/photos", "depends": ["T2"], "resource": "iPhone + gym", "effort": "1-3 sessions" },
+        { "id": "T4", "name": "Process through Reed (style variants)", "depends": ["T3"], "resource": "Reed pipeline", "effort": "automated" },
+        { "id": "T5", "name": "Add audio (voiceover/music) via Sound Studio", "depends": ["T3"], "resource": "Sound Studio", "effort": "30 min per piece" }
+      ]
+    },
+    {
+      "name": "Publishing",
+      "tasks": [
+        { "id": "T6", "name": "Generate captions (Kit GM + taste map writing voice)", "depends": ["T4"], "resource": "Kit GM agent", "effort": "automated" },
+        { "id": "T7", "name": "Paul approves via Telegram", "depends": ["T4", "T5", "T6"], "resource": "Telegram approval flow", "effort": "10 min" },
+        { "id": "T8", "name": "Schedule and post", "depends": ["T7"], "resource": "Content Conductor", "effort": "automated" }
+      ]
+    }
+  ]
+}
