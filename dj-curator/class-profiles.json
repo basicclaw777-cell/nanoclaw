@@ -1,0 +1,69 @@
+{
+  "profiles": {
+    "standard": {
+      "name": "Standard 60min",
+      "description": "Default group boxing class",
+      "duration": 60,
+      "phases": [
+        { "name": "arrival", "minutes": [0, 5], "bpm": [90, 110], "energy": [0.2, 0.4], "mood": "chill, confident", "genre_weight": { "funky_reggae": 0.3, "afrobeats": 0.3, "old_school_rnb": 0.2, "broader": 0.2 } },
+        { "name": "warmup", "minutes": [5, 15], "bpm": [110, 125], "energy": [0.4, 0.6], "mood": "building, focused", "genre_weight": { "hip_hop": 0.4, "pop_rap": 0.3, "afrobeats": 0.2, "broader": 0.1 } },
+        { "name": "technique", "minutes": [15, 25], "bpm": [120, 135], "energy": [0.55, 0.7], "mood": "precise, controlled", "genre_weight": { "hip_hop": 0.5, "trap": 0.3, "drill": 0.1, "broader": 0.1 } },
+        { "name": "combinations", "minutes": [25, 40], "bpm": [130, 150], "energy": [0.75, 0.9], "mood": "aggressive, driven", "genre_weight": { "trap": 0.4, "drill": 0.3, "hip_hop": 0.2, "pump_up": 0.1 } },
+        { "name": "burnout", "minutes": [40, 50], "bpm": [140, 160], "energy": [0.85, 1.0], "mood": "war mode, relentless", "genre_weight": { "drill": 0.4, "trap": 0.3, "pump_up": 0.2, "wildcard": 0.1 } },
+        { "name": "cooldown", "minutes": [50, 60], "bpm": [80, 110], "energy": [0.15, 0.4], "mood": "pride, accomplishment, feel good", "genre_weight": { "old_school_rnb": 0.4, "classic_hip_hop": 0.3, "wildcard": 0.2, "broader": 0.1 } }
+      ]
+    },
+    "la_habana": {
+      "name": "La Habana Mode",
+      "description": "Reggaeton-heavy — Cuban boxing connection, brand signature",
+      "duration": 60,
+      "phases": [
+        { "name": "arrival", "minutes": [0, 5], "bpm": [90, 110], "energy": [0.2, 0.4], "mood": "island chill", "genre_weight": { "reggaeton": 0.5, "funky_reggae": 0.3, "afrobeats": 0.2 } },
+        { "name": "warmup", "minutes": [5, 15], "bpm": [95, 120], "energy": [0.4, 0.6], "mood": "latin rhythm building", "genre_weight": { "reggaeton": 0.6, "latin_trap": 0.2, "afrobeats": 0.2 } },
+        { "name": "technique", "minutes": [15, 25], "bpm": [100, 130], "energy": [0.5, 0.7], "mood": "cuban rhythm, precise", "genre_weight": { "reggaeton": 0.5, "latin_trap": 0.3, "hip_hop": 0.2 } },
+        { "name": "combinations", "minutes": [25, 40], "bpm": [120, 145], "energy": [0.7, 0.9], "mood": "aggressive latin", "genre_weight": { "latin_trap": 0.4, "reggaeton": 0.3, "trap": 0.2, "drill": 0.1 } },
+        { "name": "burnout", "minutes": [40, 50], "bpm": [130, 155], "energy": [0.85, 1.0], "mood": "war mode", "genre_weight": { "trap": 0.3, "drill": 0.3, "latin_trap": 0.2, "pump_up": 0.2 } },
+        { "name": "cooldown", "minutes": [50, 60], "bpm": [80, 105], "energy": [0.15, 0.4], "mood": "cuban sunset", "genre_weight": { "reggaeton": 0.4, "old_school_rnb": 0.3, "wildcard": 0.2, "broader": 0.1 } }
+      ]
+    },
+    "old_school": {
+      "name": "Old School Vibes",
+      "description": "90s/2000s R&B hip-hop weighted",
+      "duration": 60,
+      "phases": [
+        { "name": "arrival", "minutes": [0, 5], "bpm": [85, 105], "energy": [0.2, 0.4], "mood": "smooth nostalgia", "genre_weight": { "old_school_rnb": 0.6, "classic_hip_hop": 0.3, "broader": 0.1 } },
+        { "name": "warmup", "minutes": [5, 15], "bpm": [100, 120], "energy": [0.4, 0.6], "mood": "groove building", "genre_weight": { "classic_hip_hop": 0.5, "old_school_rnb": 0.3, "hip_hop": 0.2 } },
+        { "name": "technique", "minutes": [15, 25], "bpm": [110, 130], "energy": [0.5, 0.7], "mood": "confident classic", "genre_weight": { "classic_hip_hop": 0.5, "hip_hop": 0.3, "old_school_rnb": 0.2 } },
+        { "name": "combinations", "minutes": [25, 40], "bpm": [120, 145], "energy": [0.7, 0.9], "mood": "golden era energy", "genre_weight": { "classic_hip_hop": 0.4, "hip_hop": 0.3, "trap": 0.2, "pump_up": 0.1 } },
+        { "name": "burnout", "minutes": [40, 50], "bpm": [130, 155], "energy": [0.85, 1.0], "mood": "peak classic", "genre_weight": { "hip_hop": 0.3, "trap": 0.3, "classic_hip_hop": 0.2, "pump_up": 0.2 } },
+        { "name": "cooldown", "minutes": [50, 60], "bpm": [75, 100], "energy": [0.15, 0.35], "mood": "smooth landing", "genre_weight": { "old_school_rnb": 0.6, "classic_hip_hop": 0.2, "wildcard": 0.2 } }
+      ]
+    },
+    "war_mode": {
+      "name": "War Mode",
+      "description": "Maximum aggression — competition prep / advanced",
+      "duration": 60,
+      "phases": [
+        { "name": "arrival", "minutes": [0, 3], "bpm": [110, 125], "energy": [0.4, 0.6], "mood": "locked in", "genre_weight": { "hip_hop": 0.5, "trap": 0.3, "drill": 0.2 } },
+        { "name": "warmup", "minutes": [3, 10], "bpm": [125, 140], "energy": [0.6, 0.8], "mood": "building fast", "genre_weight": { "trap": 0.4, "drill": 0.3, "hip_hop": 0.3 } },
+        { "name": "technique", "minutes": [10, 20], "bpm": [130, 145], "energy": [0.7, 0.85], "mood": "sharp, aggressive", "genre_weight": { "trap": 0.4, "drill": 0.4, "hip_hop": 0.2 } },
+        { "name": "combinations", "minutes": [20, 35], "bpm": [140, 160], "energy": [0.85, 0.95], "mood": "relentless", "genre_weight": { "drill": 0.4, "trap": 0.4, "pump_up": 0.2 } },
+        { "name": "burnout", "minutes": [35, 50], "bpm": [145, 170], "energy": [0.9, 1.0], "mood": "everything you've got", "genre_weight": { "drill": 0.4, "trap": 0.3, "pump_up": 0.3 } },
+        { "name": "cooldown", "minutes": [50, 60], "bpm": [80, 110], "energy": [0.15, 0.4], "mood": "earned rest", "genre_weight": { "classic_hip_hop": 0.4, "old_school_rnb": 0.3, "wildcard": 0.3 } }
+      ]
+    },
+    "wildcard_heavy": {
+      "name": "Wildcard Heavy",
+      "description": "Genre-jumping, surprise picks, fun class energy",
+      "duration": 60,
+      "phases": [
+        { "name": "arrival", "minutes": [0, 5], "bpm": [90, 115], "energy": [0.2, 0.5], "mood": "surprise from the start", "genre_weight": { "wildcard": 0.5, "broader": 0.3, "funky_reggae": 0.2 } },
+        { "name": "warmup", "minutes": [5, 15], "bpm": [110, 130], "energy": [0.4, 0.65], "mood": "what genre is next?", "genre_weight": { "wildcard": 0.4, "hip_hop": 0.3, "broader": 0.3 } },
+        { "name": "technique", "minutes": [15, 25], "bpm": [115, 140], "energy": [0.5, 0.75], "mood": "genre roulette", "genre_weight": { "wildcard": 0.4, "trap": 0.2, "afrobeats": 0.2, "broader": 0.2 } },
+        { "name": "combinations", "minutes": [25, 40], "bpm": [125, 150], "energy": [0.7, 0.9], "mood": "anything goes", "genre_weight": { "wildcard": 0.3, "trap": 0.3, "drill": 0.2, "pump_up": 0.2 } },
+        { "name": "burnout", "minutes": [40, 50], "bpm": [135, 165], "energy": [0.85, 1.0], "mood": "peak chaos", "genre_weight": { "pump_up": 0.3, "drill": 0.3, "wildcard": 0.2, "trap": 0.2 } },
+        { "name": "cooldown", "minutes": [50, 60], "bpm": [75, 105], "energy": [0.15, 0.4], "mood": "surprise landing", "genre_weight": { "wildcard": 0.5, "old_school_rnb": 0.3, "broader": 0.2 } }
+      ]
+    }
+  }
+}

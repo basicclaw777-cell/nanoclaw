@@ -24,6 +24,7 @@ import { debate } from './trader/bull-bear-debate.js';
 import tasteMap from './taste-elicitation.js';
 import { getTasteProfile, getVoiceReferences, getVoicePattern, addAnchor } from './taste-map-api.js';
 import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlanTelegram, listPlans } from './architect.js';
+import djCurator from './dj-curator.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -3881,6 +3882,84 @@ bot.onText(/^\/architect(?:@\w+)?\s+(?!status\s*$)(.+)$/s, async (msg, match) =>
   } catch (err) {
     console.error('[architect]', err.message);
     await safeSend(chatId, `❌ Architect failed: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// ── DJ Curator commands ─────────────────────────────────────────────────────
+
+bot.onText(/^\/(?:playlist|dj)(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, `🎵 *DJ Curator — Boxing Class Playlists*
+
+*Generate:*
+\`/playlist\` — standard class playlist
+\`/playlist <profile>\` — specific profile
+\`/playlist vibe <mood>\` — mood override
+
+*Profiles:*
+\`standard\` — default 60min class
+\`la_habana\` — reggaeton-heavy (Cuban boxing)
+\`old_school\` — 90s/2000s R&B + hip-hop
+\`war_mode\` — maximum aggression
+\`wildcard_heavy\` — genre-jumping, surprise picks
+
+*After class:*
+\`/playlist rate <1-5> [notes]\` — rate last playlist
+\`/playlist history\` — recent playlists + ratings
+\`/playlist profiles\` — list all profiles`, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/(?:playlist|dj)(?:@\w+)?\s+profiles?\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, djCurator.listProfiles(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/(?:playlist|dj)(?:@\w+)?\s+history\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, djCurator.formatHistoryTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/(?:playlist|dj)(?:@\w+)?\s+rate\s+(\d)\s*(.*)?$/i, async (msg, match) => {
+  const rating = parseInt(match[1]);
+  const notes = match[2]?.trim() || '';
+  if (rating < 1 || rating > 5) return safeSend(msg.chat.id, '❌ Rating must be 1-5');
+  const result = djCurator.rateLastPlaylist(rating, notes);
+  safeSend(msg.chat.id, `🎵 ${result}`);
+});
+
+bot.onText(/^\/(?:playlist|dj)(?:@\w+)?\s+vibe\s+(.+)$/i, async (msg, match) => {
+  const mood = match[1].trim();
+  const chatId = msg.chat.id;
+  await safeSend(chatId, `🎵 Generating ${mood} playlist...`);
+  try {
+    // Map mood to closest profile
+    const moodMap = {
+      'war': 'war_mode', 'aggressive': 'war_mode', 'hard': 'war_mode', 'intense': 'war_mode',
+      'cuba': 'la_habana', 'cuban': 'la_habana', 'latin': 'la_habana', 'reggaeton': 'la_habana', 'habana': 'la_habana',
+      'old school': 'old_school', 'classic': 'old_school', 'oldschool': 'old_school', '90s': 'old_school', 'vibe': 'old_school',
+      'wild': 'wildcard_heavy', 'surprise': 'wildcard_heavy', 'random': 'wildcard_heavy', 'fun': 'wildcard_heavy',
+      'chill': 'old_school', 'flow': 'standard'
+    };
+    const profile = moodMap[mood.toLowerCase()] || 'standard';
+    const playlist = djCurator.generatePlaylist(profile, { mood });
+    if (djCurator.hasSpotifyCredentials()) {
+      await djCurator.enrichWithSpotify(playlist);
+    }
+    await safeSend(chatId, djCurator.formatPlaylistTelegram(playlist), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ DJ error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/(?:playlist|dj)(?:@\w+)?\s+(?!profiles?|history|rate|vibe)(\w+)\s*$/i, async (msg, match) => {
+  const profileName = match[1].trim().toLowerCase();
+  const chatId = msg.chat.id;
+  await safeSend(chatId, `🎵 Generating ${profileName} playlist...`);
+  try {
+    const playlist = djCurator.generatePlaylist(profileName);
+    if (djCurator.hasSpotifyCredentials()) {
+      await djCurator.enrichWithSpotify(playlist);
+    }
+    await safeSend(chatId, djCurator.formatPlaylistTelegram(playlist), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ DJ error: ${err.message}`);
   }
 });
 
