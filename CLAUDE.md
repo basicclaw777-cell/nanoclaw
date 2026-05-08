@@ -1073,6 +1073,22 @@ the-timekeeper to go offline. Don't repeat it.
 - localhost:8080/reed-lab/digest
 - Telegram: /digest
 
+### Code Interview Protocol — Periodic Audit (established 2026-05-08)
+- Every 2-3 months, run fresh model instances against the codebase
+- Template: codex-interview/INTERVIEW.md (4 rounds: audit, fix, architecture, novel)
+- Scorecard: codex-interview/SCORECARD.md (100-point scale)
+- Act on Critical and High findings immediately
+- File results to codex-interview/RESULTS-[DATE].md
+- Shell injection and auth gaps are the priority test — any model that misses both cannot be trusted for security review
+- First audit (2026-05-08): Claude 92, ChatGPT 77, DeepSeek 75, Gemini 46
+- Each model reads differently: System (Claude), Runtime (ChatGPT), Trajectory (DeepSeek), Structure (Gemini)
+
+### Roundtable Model Strategy (decided 2026-05-08)
+- Default: hermes3 local (free, private, sovereign) for weekly strategy roundtables
+- Exception: real APIs (GPT-4o, DeepSeek, Gemini) when stakes are high (security audits, architecture decisions)
+- --api flag on /roundtable routes to real APIs
+- Doc: ~/cathedral-vault/06_Methods/roundtable-architecture.md
+
 ## Forge — Code Engine Identity (2026-05-07)
 - Soul file: ~/cathedral-vault/06_Methods/forge-profile.md
 - Memory: ~/.claude/projects/-Users-basicclaw777/memory/the-builders-frequency.md
