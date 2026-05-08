@@ -27,6 +27,8 @@ import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlan
 import djCurator from './dj-curator.js';
 import soundStudio from './sound-studio/engine.js';
 import gymEyes from './gym-eyes.js';
+import conductor from './content-conductor.js';
+import studentIntel from './student-intelligence.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -4105,6 +4107,394 @@ bot.onText(/^\/eyes(?:@\w+)?\s+analyze\s*$/i, async (msg) => {
     try { fs.unlinkSync(tmpPath); } catch {}
   } catch (err) {
     safeSend(chatId, `❌ Gym Eyes error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// ── Content Conductor commands ───────────────────────────────────────────────
+
+bot.onText(/^\/content(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, conductor.formatStatusTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/content(?:@\w+)?\s+queue\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, conductor.formatQueueTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/content(?:@\w+)?\s+templates?\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, conductor.formatTemplatesTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/content(?:@\w+)?\s+ideas?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '💡 Generating content ideas...');
+  try {
+    const ideas = await conductor.generateIdeas();
+    await safeSend(chatId, `💡 *Content Ideas*\n\n${ideas}`, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/content(?:@\w+)?\s+caption\s+(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const intent = match[1].trim();
+  await safeSend(chatId, '✍️ Generating caption...');
+  try {
+    const caption = await conductor.generateCaption(intent);
+    await safeSend(chatId, `✍️ *Caption:*\n\n${caption}`, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/content(?:@\w+)?\s+approve\s+(cc-\d+)\s*$/i, async (msg, match) => {
+  const id = match[1].trim();
+  const result = conductor.updateQueueItem(id, 'approved');
+  if (result) {
+    safeSend(msg.chat.id, `✅ Approved: \`${id}\``, { parse_mode: 'Markdown' });
+  } else {
+    safeSend(msg.chat.id, `❌ Not found: ${id}`);
+  }
+});
+
+bot.onText(/^\/content(?:@\w+)?\s+reject\s+(cc-\d+)\s*$/i, async (msg, match) => {
+  const id = match[1].trim();
+  const result = conductor.updateQueueItem(id, 'rejected');
+  if (result) {
+    safeSend(msg.chat.id, `❌ Rejected: \`${id}\``, { parse_mode: 'Markdown' });
+  } else {
+    safeSend(msg.chat.id, `❌ Not found: ${id}`);
+  }
+});
+
+bot.onText(/^\/content(?:@\w+)?\s+(?!queue|templates?|ideas?|caption|approve|reject|status)(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const intent = match[1].trim();
+  await safeSend(chatId, `📋 Creating content piece: _"${intent.slice(0, 80)}"_`, { parse_mode: 'Markdown' });
+
+  try {
+    const piece = await conductor.executePipeline(intent);
+    await safeSend(chatId, conductor.formatContentPieceTelegram(piece), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ Conductor error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// ── Student Intelligence commands ───────────────────────────────────────────
+
+bot.onText(/^\/students?(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, studentIntel.formatStatusTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/students(?:@\w+)?\s+all\s*$/i, async (msg) => {
+  const profiles = studentIntel.listAllProfiles();
+  if (profiles.length === 0) return safeSend(msg.chat.id, '👤 No students yet. Import PunchPass CSV or add via `/student <name> note <info>`', { parse_mode: 'Markdown' });
+
+  let text = `👤 *All Students (${profiles.length})*\n\n`;
+  for (const p of profiles.sort((a, b) => a.name.localeCompare(b.name))) {
+    const icon = p.risk_level === 'red' ? '🔴' : p.risk_level === 'yellow' ? '🟡' : p.risk_level === 'green' ? '🟢' : '⚪';
+    text += `${icon} *${p.name}*`;
+    if (p.attendance.total_classes) text += ` (${p.attendance.total_classes} classes)`;
+    const scores = p.technique.overall_scores;
+    if (scores.length > 0) text += ` — ${scores[scores.length - 1].score}/100`;
+    text += '\n';
+  }
+  safeSend(msg.chat.id, text, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/students(?:@\w+)?\s+risk\s*$/i, async (msg) => {
+  const atRisk = studentIntel.calculateRiskLevels();
+  safeSend(msg.chat.id, studentIntel.formatRiskListTelegram(atRisk), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/students(?:@\w+)?\s+improving\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, studentIntel.formatImprovingTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/students(?:@\w+)?\s+import\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const csvDir = path.join(process.env.HOME, 'nanoclaw', 'student-intelligence', 'csv-inbox');
+  try {
+    const files = fs.readdirSync(csvDir).filter(f => f.endsWith('.csv'));
+    if (files.length === 0) {
+      return safeSend(chatId, `📥 No CSV files found.\nDrop PunchPass export in:\n\`${csvDir}\``, { parse_mode: 'Markdown' });
+    }
+    let total = 0;
+    for (const file of files) {
+      const result = studentIntel.importPunchPassCSV(path.join(csvDir, file));
+      total += result.imported;
+      await safeSend(chatId, `📥 Imported ${result.imported} students from ${file}`);
+    }
+    await safeSend(chatId, `✅ Total imported: ${total} students`);
+  } catch (err) {
+    safeSend(chatId, `❌ Import error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/student(?:@\w+)?\s+(.+?)\s+note\s+(.+)$/is, async (msg, match) => {
+  const name = match[1].trim();
+  const note = match[2].trim();
+  studentIntel.addCoachingNote(name, note);
+  safeSend(msg.chat.id, `📝 Note added for *${name}*: _${note}_`, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/student(?:@\w+)?\s+(.+?)\s+focus\s*$/i, async (msg, match) => {
+  const name = match[1].trim();
+  const drills = studentIntel.recommendDrills(name);
+  let text = `🎯 *Focus for ${name}*\n\n`;
+  drills.forEach((d, i) => { text += `${i + 1}. ${d}\n\n`; });
+  safeSend(msg.chat.id, text, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/student(?:@\w+)?\s+(.+?)\s+eyes\s+(.+)$/i, async (msg, match) => {
+  const name = match[1].trim();
+  const analysisFile = match[2].trim();
+  const chatId = msg.chat.id;
+  try {
+    const eyesDir = path.join(process.env.HOME, 'nanoclaw', 'gym-eyes', 'output');
+    const files = fs.readdirSync(eyesDir).filter(f => f.includes(analysisFile) && f.endsWith('.json'));
+    if (files.length === 0) return safeSend(chatId, `❌ Analysis file not found: ${analysisFile}`);
+    const profile = studentIntel.ingestGymEyesAnalysis(name, path.join(eyesDir, files[0]));
+    safeSend(chatId, `✅ Gym Eyes data ingested for *${name}*\n${studentIntel.formatProfileTelegram(profile)}`, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/student(?:@\w+)?\s+(?!.*\s+(?:note|focus|eyes)\s)(.+)$/i, async (msg, match) => {
+  const name = match[1].trim();
+  const profile = studentIntel.loadProfile(name);
+  if (!profile) {
+    return safeSend(msg.chat.id, `👤 *${name}* — not found.\nCreate: \`/student ${name} note <info>\``, { parse_mode: 'Markdown' });
+  }
+  safeSend(msg.chat.id, studentIntel.formatProfileTelegram(profile), { parse_mode: 'Markdown' });
+});
+
+// ── /cosmos — Cosmology Research Series (27 tracks) ─────────────────────────
+
+const COSMOS_DIR = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', 'cosmology');
+
+const COSMOS_TRACK_MAP = {
+  '0':  'house-analogy-deep-dive',
+  'audit': 'house-analogy-deep-dive',
+  '1':  'track1-boundary-research',
+  '1b': 'track1b-mission-reports',
+  '2':  'track2-luminaries',
+  '3':  'track3-suppressed-energy',
+  '4':  'track4-builders',
+  '5':  'track5-antarctic-anomalies',
+  '6':  'track6-synthesis',
+  '7':  'track7-trump-disclosure-crossover',
+  '8':  'track8-coin-room-finance',
+  '9':  'track9-water',
+  '10': 'track10-frequency',
+  '11': 'track11-coin-room-plumbing',
+  '12': 'track12-structural-forensics',
+  '13': 'track13-rife-protocols',
+  '14': 'track14-fed-ownership-network',
+  '15': 'track15-biological-control-grid',
+  '16': 'track16-temporal-control-grid',
+  '17': 'track17-consciousness',
+  '18': 'track18-builder-identity',
+  '19': 'track19-subterranean-realm',
+  '20': 'track20-space-falsification',
+  '21': 'track21-coming-deception',
+  '22': 'track22-regeneration-protocols',
+  '23': 'track23-energy-independence',
+  '24': 'track24-community-architecture',
+  '25': 'track25-antarctic-expedition',
+  '26': 'track26-breakaway-civilization',
+  '27': 'track27-soul-trap',
+};
+
+function cosmosReadTrack(slug) {
+  const files = fs.readdirSync(COSMOS_DIR).filter(f => f.endsWith('.md'));
+  const match = files.find(f => f.includes(slug));
+  if (!match) return null;
+  return fs.readFileSync(path.join(COSMOS_DIR, match), 'utf8');
+}
+
+function cosmosExtractSummary(content) {
+  // Extract title from frontmatter
+  const titleMatch = content.match(/^title:\s*"?(.+?)"?\s*$/m);
+  const title = titleMatch ? titleMatch[1] : 'Untitled';
+  // Extract grade
+  const gradeMatch = content.match(/^grade:\s*(.+)$/m);
+  const grade = gradeMatch ? gradeMatch[1].trim() : '?';
+  // Strip frontmatter
+  const body = content.replace(/^---[\s\S]*?---\s*/, '');
+  // Take first ~2500 chars of body
+  const trimmed = body.length > 2500 ? body.slice(0, 2500) + '\n\n[...truncated]' : body;
+  return `*${title}*\nGrade: ${grade}\n\n${trimmed}`;
+}
+
+function cosmosGradeTable() {
+  const rows = [
+    ['0/audit', 'House Analogy Deep Dive', 'A'],
+    ['1',  'Boundary Research', 'B+'],
+    ['1b', 'Mission Reports', 'B+'],
+    ['2',  'Luminaries', 'B+'],
+    ['3',  'Suppressed Energy', 'A-'],
+    ['4',  'Builders', 'A-'],
+    ['5',  'Antarctic Anomalies', 'B+'],
+    ['6',  'Synthesis', 'A-'],
+    ['7',  'Trump Disclosure', 'B+'],
+    ['8',  'Coin Room Finance', 'B+'],
+    ['9',  'Water', 'A-'],
+    ['10', 'Frequency', 'A-'],
+    ['11', 'Coin Room Plumbing', 'A-'],
+    ['12', 'Structural Forensics', 'B+'],
+    ['13', 'Rife Protocols', 'B+'],
+    ['14', 'Fed Ownership Network', 'B+'],
+    ['15', 'Biological Control Grid', 'B+'],
+    ['16', 'Temporal Control Grid', 'B-'],
+    ['17', 'Consciousness', 'A-'],
+    ['18', 'Builder Identity', 'B'],
+    ['19', 'Subterranean Realm', 'B'],
+    ['20', 'Space Falsification', 'B'],
+    ['21', 'Coming Deception', 'B-'],
+    ['22', 'Regeneration Protocols', 'B+'],
+    ['23', 'Energy Independence', 'B'],
+    ['24', 'Community Architecture', 'B'],
+    ['25', 'Antarctic Expedition', 'B-'],
+    ['26', 'Breakaway Civilization', 'C+'],
+    ['27', 'Soul Trap', 'C'],
+  ];
+  let table = '# | Title | Grade\n---|---|---\n';
+  for (const [num, title, grade] of rows) {
+    table += `${num} | ${title} | ${grade}\n`;
+  }
+  return table;
+}
+
+bot.onText(/^\/cosmos(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = match?.[1]?.trim()?.toLowerCase();
+
+  try {
+    // /cosmos (no args) — overview
+    if (!arg) {
+      const overview = `*Cosmology Research Series*
+27 tracks. Forensic audit of where we live.
+
+*Grade Summary:*
+Globe (standard model): C+
+Enclosed Plane (resonant): A-
+
+*Arc:* House analogy (17 layers) -> 6-track programme -> live crossovers -> finance/water/frequency -> consciousness -> builders -> action protocols -> soul architecture.
+
+A- tracks: Suppressed Energy, Builders, Synthesis, Water, Frequency, Coin Room Plumbing, Consciousness
+B+ tracks: Boundary, Missions, Luminaries, Antarctic, Trump Disclosure, Coin Room Finance, Structural Forensics, Rife, Fed Network, Biological Control, Regeneration
+
+\`/cosmos [number]\` — read track
+\`/cosmos grade\` — full grade table
+\`/cosmos search [term]\` — search all tracks
+\`/cosmos research\` — Aletheia autonomous research (weakest track)
+\`/cosmos tell\` — the sovereignty test`;
+      return safeSend(chatId, overview, { parse_mode: 'Markdown' });
+    }
+
+    // /cosmos grade — full grade table
+    if (arg === 'grade' || arg === 'grades') {
+      const table = cosmosGradeTable();
+      return safeSend(chatId, `*Cosmology Grade Table (27 tracks)*\n\n${table}\n*Globe:* C+ | *Enclosed Plane:* A-`, { parse_mode: 'Markdown' });
+    }
+
+    // /cosmos research — trigger Aletheia autonomous research
+    if (arg === 'research') {
+      await safeSend(chatId, 'Aletheia engaging — researching weakest cosmology track...');
+      try {
+        const { runCosmologyResearch } = await import('./cosmology-researcher.js');
+        const result = await runCosmologyResearch();
+        await safeSend(chatId, `Research complete. Track ${result.track.trackNum} (${result.track.grade}) — ${result.researchLength} chars saved.`);
+      } catch (resErr) {
+        await safeSend(chatId, `Cosmology research failed: ${resErr.message}`);
+      }
+      return;
+    }
+
+    // /cosmos tell — sovereignty test from Track 21
+    if (arg === 'tell') {
+      const tell = `*The Forensic Tell — How to Recognize the Deception*
+(from Track 21: The Coming Deception)
+
+When the event occurs, ask three questions. The first is the only one that matters.
+
+*1. Does the revelation increase or decrease your sovereignty?*
+Genuine Truth: Empowers. You learn you live in a resonant, abundant enclosed plane where energy is free and you are an eternal fragment of the Absolute. This makes you ungovernable.
+Managed Deception: Diminishes. You are told you are a meaningless simulation, failed experiment, or flawed being needing rescue by a superior entity who will then rule over you.
+
+*2. Who is placed in authority?*
+Genuine Truth: Points inward. Authority is your own direct connection to Source.
+Managed Deception: Points outward. Creates new external authority.
+
+*3. What happens to the energy paradigm?*
+Genuine Truth: Immediate release of free, localized energy. Grid becomes obsolete.
+Managed Deception: Energy question ignored entirely, or "new physics" declared too complex for public ownership.
+
+_Any entity arriving in the sky, on a screen, or in our minds demanding worship, fear, or obedience is part of the control grid. A true revelation would feel like remembering something you already knew._`;
+      return safeSend(chatId, tell, { parse_mode: 'Markdown' });
+    }
+
+    // /cosmos search [term] — grep across cosmology files
+    if (arg.startsWith('search ')) {
+      const term = arg.replace(/^search\s+/, '').trim();
+      if (!term) return safeSend(chatId, 'Usage: `/cosmos search [term]`', { parse_mode: 'Markdown' });
+
+      const files = fs.readdirSync(COSMOS_DIR).filter(f => f.endsWith('.md'));
+      const results = [];
+      const termLower = term.toLowerCase();
+
+      for (const file of files) {
+        const content = fs.readFileSync(path.join(COSMOS_DIR, file), 'utf8');
+        const lines = content.split('\n');
+        const matchingLines = [];
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].toLowerCase().includes(termLower)) {
+            matchingLines.push(lines[i].trim().slice(0, 120));
+            if (matchingLines.length >= 2) break;
+          }
+        }
+        if (matchingLines.length > 0) {
+          const shortName = file.replace(/^2026-05-0[89]_cosmology_/, '').replace(/\.md$/, '');
+          results.push({ file: shortName, lines: matchingLines });
+        }
+        if (results.length >= 5) break;
+      }
+
+      if (results.length === 0) {
+        return safeSend(chatId, `No results for "${term}" across cosmology tracks.`);
+      }
+
+      let response = `*Search: "${term}"* (${results.length} tracks)\n\n`;
+      for (const r of results) {
+        response += `*${r.file}*\n`;
+        for (const line of r.lines) {
+          response += `  ${line}\n`;
+        }
+        response += '\n';
+      }
+      return safeSend(chatId, response, { parse_mode: 'Markdown' });
+    }
+
+    // /cosmos [number] — read specific track
+    const slug = COSMOS_TRACK_MAP[arg];
+    if (!slug) {
+      return safeSend(chatId, `Unknown track: "${arg}"\nUse 0-27, 1b, or "audit". Try \`/cosmos grade\` for the full list.`, { parse_mode: 'Markdown' });
+    }
+
+    const content = cosmosReadTrack(slug);
+    if (!content) {
+      return safeSend(chatId, `Track file not found for: ${slug}`);
+    }
+
+    const summary = cosmosExtractSummary(content);
+    // Cap at 3000 chars for Telegram readability
+    const capped = summary.length > 3000 ? summary.slice(0, 3000) + '\n\n[...truncated — full file in vault]' : summary;
+    return safeSend(chatId, capped, { parse_mode: 'Markdown' });
+
+  } catch (err) {
+    safeSend(chatId, `Cosmos error: ${err.message}`);
   }
 });
 

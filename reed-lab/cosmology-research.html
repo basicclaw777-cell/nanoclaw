@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The House That Nobody Viewed — 27-Track Cosmological Architecture</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; color: #d0d0d0; font-family: 'Georgia', serif; line-height: 1.7; }
+a { color: #8B2020; text-decoration: none; }
+a:hover { color: #c44; }
+
+.header { padding: 48px 32px 32px; max-width: 1000px; margin: 0 auto; border-bottom: 1px solid #1a1a1a; }
+.header h1 { font-size: 26px; color: #fff; font-weight: 400; letter-spacing: 1px; }
+.header .sub { font-size: 12px; color: #555; margin-top: 6px; font-family: monospace; }
+.header .epigraph { margin-top: 20px; padding: 14px 18px; border-left: 2px solid #8B2020; font-style: italic; color: #888; font-size: 14px; }
+.stats { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+.stat { font-family: monospace; font-size: 12px; color: #666; }
+.stat span { color: #8B2020; font-size: 16px; font-weight: bold; }
+
+.nav { max-width: 1000px; margin: 0 auto; padding: 16px 32px; position: sticky; top: 0; background: #0a0a0a; z-index: 100; border-bottom: 1px solid #111; }
+.nav-inner { display: flex; gap: 8px; flex-wrap: wrap; }
+.nav-btn { background: #111; border: 1px solid #222; color: #888; padding: 4px 10px; font-size: 11px; font-family: monospace; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
+.nav-btn:hover, .nav-btn.active { background: #1a1a1a; color: #fff; border-color: #8B2020; }
+
+.content { max-width: 1000px; margin: 0 auto; padding: 0 32px 60px; }
+
+.tier-header { padding: 32px 0 16px; border-bottom: 1px solid #1a1a1a; margin-top: 24px; }
+.tier-header h2 { font-size: 16px; color: #8B2020; font-family: monospace; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+
+.track { padding: 20px 0; border-bottom: 1px solid #0f0f0f; cursor: pointer; transition: background 0.2s; }
+.track:hover { background: #0d0d0d; }
+.track-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.track-num { font-family: monospace; font-size: 11px; color: #8B2020; min-width: 40px; }
+.track-title { flex: 1; font-size: 15px; color: #ddd; }
+.track-grade { font-family: monospace; font-size: 12px; padding: 2px 8px; border-radius: 2px; min-width: 28px; text-align: center; }
+.grade-A { background: #1a3a1a; color: #4a4; border: 1px solid #2a5a2a; }
+.grade-B { background: #1a2a3a; color: #4a8ac4; border: 1px solid #2a4a6a; }
+.grade-C { background: #3a3a1a; color: #aa4; border: 1px solid #5a5a2a; }
+.grade-D { background: #3a1a1a; color: #a44; border: 1px solid #5a2a2a; }
+.track-desc { font-size: 12px; color: #555; margin-top: 6px; padding-left: 40px; display: none; }
+.track.open .track-desc { display: block; }
+.track-tags { font-size: 10px; color: #444; margin-top: 4px; padding-left: 40px; font-family: monospace; display: none; }
+.track.open .track-tags { display: block; }
+
+.arc { max-width: 1000px; margin: 40px auto; padding: 24px 32px; border: 1px solid #1a1a1a; }
+.arc h3 { font-size: 13px; color: #8B2020; font-family: monospace; margin-bottom: 12px; letter-spacing: 1px; }
+.arc-flow { font-size: 11px; color: #666; font-family: monospace; line-height: 2; word-spacing: 2px; }
+.arc-flow span { color: #888; }
+
+.footer { max-width: 1000px; margin: 0 auto; padding: 40px 32px; border-top: 1px solid #1a1a1a; text-align: center; }
+.footer p { font-size: 12px; color: #444; font-family: monospace; margin-bottom: 8px; }
+.footer .principle { font-style: italic; color: #666; font-size: 13px; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>The House That Nobody Viewed</h1>
+  <div class="sub">A Forensic Cosmological Architecture &mdash; 27 Tracks + 17-Layer Audit</div>
+  <div class="epigraph">
+    "Any topic where you're not allowed to freely investigate is a topic where the answer can't survive free investigation."
+  </div>
+  <div class="stats">
+    <div class="stat"><span>27</span> tracks</div>
+    <div class="stat"><span>17</span> layer audit</div>
+    <div class="stat"><span>~510</span> KB</div>
+    <div class="stat"><span>31</span> documents</div>
+    <div class="stat">Globe: <span>C+</span></div>
+    <div class="stat">Enclosed Plane: <span>A-</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showAll()">All</button>
+    <button class="nav-btn" onclick="filterTier('audit')">Audit</button>
+    <button class="nav-btn" onclick="filterTier('core')">Core</button>
+    <button class="nav-btn" onclick="filterTier('finance')">Finance</button>
+    <button class="nav-btn" onclick="filterTier('os')">Water+Freq</button>
+    <button class="nav-btn" onclick="filterTier('bio')">Biology</button>
+    <button class="nav-btn" onclick="filterTier('pillar')">Pillars</button>
+    <button class="nav-btn" onclick="filterTier('ops')">Operational</button>
+    <button class="nav-btn" onclick="filterTier('forbidden')">Forbidden</button>
+  </div>
+</div>
+
+<div class="content" id="tracks">
+
+<div class="tier-header" data-tier="audit"><h2>The Forensic Audit</h2></div>
+<div class="track" data-tier="audit" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">00</span><span class="track-title">The House That Nobody Viewed &mdash; 17-Layer Forensic Audit</span><span class="track-grade grade-A">A</span></div>
+  <div class="track-desc">Evidence standards, missing evidence, density/buoyancy, ping pong ball, ship hull zoom, canals/salt flats/balloons, instruments (compass/radar), railguns, pressure/vacuum paradox, Occam's razor, counter-counters, direction test, method analysis. The foundation everything else builds on.</div>
+  <div class="track-tags">density buoyancy gravity engineering thermodynamics occam first-principles</div>
+</div>
+
+<div class="tier-header" data-tier="core"><h2>Core Cosmology &mdash; Tracks 1-7</h2></div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">01</span><span class="track-title">The Boundary &mdash; Schumann Cavity, Fishbowl, West Ford, Highjump</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Schumann resonance = enclosed EM cavity. Operation Fishbowl nuclear-tested the boundary. Project West Ford engineered a reflective layer. Operation Highjump sent 4,700 men and retreated in 8 weeks.</div>
+</div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">1b</span><span class="track-title">Mission Reports &mdash; Fishbowl Test-by-Test, CIA NIS Document</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">4/8 Fishbowl shots failed catastrophically. Starfish Prime EMP knocked out Hawaii. CIA NIS on Antarctica: strategic resources, military basing, "most valuable areas." The pattern: explore, assess, test, lock down.</div>
+</div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">02</span><span class="track-title">The Luminaries &mdash; Sun, Moon, Stars, Planets</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Tesla: sun is cold, electric transformer. Dollard: localized plasma discharge. Cold moonlight (Leslie 1804, FLIR). Enochian gates. Stars fixed on dome. Ancient cosmologies as technical manuals.</div>
+</div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">03</span><span class="track-title">Suppressed Energy &mdash; Schauberger, Rife, Moray, Brown, Tesla</span><span class="track-grade grade-A">A-</span></div>
+  <div class="track-desc">Schauberger's implosion vortex. Rife's frequency medicine (1934 cancer trial). Moray's radiant energy receiver. T.T. Brown's electrogravitics. Tesla's Wardenclyffe. All suppressed. The cavity is a free energy source.</div>
+</div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">04</span><span class="track-title">The Builders &mdash; Antediluvian Civilization</span><span class="track-grade grade-A">A-</span></div>
+  <div class="track-desc">Piri Reis map (ice-free Antarctica). Submerged cities (Dwarka, Cambay, Yonaguni). Tartarian reset. Universal cosmic egg myths. Precision stonework (Petrie drill cores, Sacsayhuaman, Baalbek).</div>
+</div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">05</span><span class="track-title">Antarctic Anomalies &mdash; The Ice Wall</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Byrd's "land beyond the pole." Lake Vostok magnetic anomaly. Kerry 2016 visit. Nazi Base 211. Remote sensing anomalies. The Antarctic Treaty: 54 nations guarding the gate.</div>
+</div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">06</span><span class="track-title">Synthesis &mdash; The Enclosed Resonant Plane</span><span class="track-grade grade-A">A-</span></div>
+  <div class="track-desc">Unified model: flat stationary plane, ice wall boundary, firmament dome, Schumann cavity, local luminaries, structured water medium, frequency-driven. This was made.</div>
+</div>
+<div class="track" data-tier="core" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">07</span><span class="track-title">Trump Disclosure Crossover &mdash; PURSUE Release</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">162 files declassified May 8, 2026. Argentine riometer anomaly (ionosphere rang like a cavity). Apollo "Fourth of July" swarms. Grusch crash retrieval. Government reluctantly confirming vault thesis.</div>
+</div>
+
+<div class="tier-header" data-tier="finance"><h2>Finance &amp; Control &mdash; Tracks 8, 11, 12, 14</h2></div>
+<div class="track" data-tier="finance" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">08</span><span class="track-title">The Coin Room &mdash; Central Banking as Control</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Mario analogy. Fractional reserve + QE = infinite coins. Petrodollar system. "If we can't meter it, we can't sell it." The financial system IS the cosmology suppression mechanism.</div>
+</div>
+<div class="track" data-tier="finance" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">11</span><span class="track-title">Coin Room Plumbing &mdash; Liquidity Cascade + Tells</span><span class="track-grade grade-A">A-</span></div>
+  <div class="track-desc">8-step Fed->Market flow. 6 tells before every injection (SOFR, ON RRP, credit spreads). Free energy collapse trade: OTM puts on XOM, calls on silver. Directly deployable to /trader/hub.</div>
+</div>
+<div class="track" data-tier="finance" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">12</span><span class="track-title">Structural Forensics &mdash; Petrodollar, NASA, Patents</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Petrodollar death: 3 scenarios (managed, shock, CBDC). NASA $25B: cost-plus gravy train + narrative maintenance + $20-30B black budget. 6,200 suppressed patents under Invention Secrecy Act.</div>
+</div>
+<div class="track" data-tier="finance" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">14</span><span class="track-title">Fed Ownership Network &mdash; Names on the Table</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Jekyll Island families -> Vanguard/BlackRock/State Street -> Fed, NASA, pharma, oil, media, Antarctic Treaty, BIS. One network controls money, energy, narrative, health, education, and the boundary.</div>
+</div>
+
+<div class="tier-header" data-tier="os"><h2>Water &amp; Frequency &mdash; The Operating System</h2></div>
+<div class="track" data-tier="os" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">09</span><span class="track-title">Water &mdash; The Operating Medium</span><span class="track-grade grade-A">A-</span></div>
+  <div class="track-desc">Firmament waters above (universal testimony). Schauberger's living water. Pollack's EZ fourth-phase (peer-reviewed). Emoto's water memory. Stone solvent hypothesis. Water IS the operating system.</div>
+</div>
+<div class="track" data-tier="os" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">10</span><span class="track-title">Frequency &mdash; The Programming Language</span><span class="track-grade grade-A">A-</span></div>
+  <div class="track-desc">Rife MOR. Schumann 7.83 Hz (NASA simulates it on spacecraft). Cymatics. Sonoluminescence (sound -> light in water). Tesla scalar waves. Sound -> Form -> Light -> Life.</div>
+</div>
+
+<div class="tier-header" data-tier="bio"><h2>Biology &amp; Medicine</h2></div>
+<div class="track" data-tier="bio" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">13</span><span class="track-title">Rife Frequency Protocols &mdash; 20 Conditions</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Exact Hz for cancer (2128, 2008, 880, 787, 727), Lyme, Candida, TB, E. coli + 15 more. Equipment stack: $200 minimum viable to $2,500 gold standard plasma. CAFL database sourced.</div>
+</div>
+<div class="track" data-tier="bio" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">15</span><span class="track-title">The Biological Control Grid &mdash; 5 Vectors</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">Fluoride (pineal), glyphosate (gut), EMF (Schumann jam), processed food (mitochondria), pharma (symptom masking). "Normal aging" = cumulative disruption. Remove all five, the signal returns.</div>
+</div>
+
+<div class="tier-header" data-tier="pillar"><h2>Missing Pillars &mdash; Tracks 16-21</h2></div>
+<div class="track" data-tier="pillar" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">16</span><span class="track-title">Temporal Control Grid &mdash; Looking Glass + Time Travel</span><span class="track-grade grade-B">B-</span></div>
+  <div class="track-desc">Looking Glass / Yellow Cube. Chronovisor (Vatican). Project Pegasus (DARPA). Stargate (declassified, B+). Montauk. Philadelphia Experiment. Time as frequency. Akashic Record = physical water memory at dome. Timeline management = ultimate Coin Room advantage.</div>
+</div>
+<div class="track" data-tier="pillar" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">17</span><span class="track-title">Consciousness &mdash; The Signal in the Cavity</span><span class="track-grade grade-A">A-</span></div>
+  <div class="track-desc">CIA Gateway Process (declassified): brain as receiver, not generator. Stargate: 62.5 trillion to 1 odds. NDEs: Pam Reynolds (brain-dead, verified details). Bentov holographic model. Monroe Focus Levels. You are not your body.</div>
+</div>
+<div class="track" data-tier="pillar" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">18</span><span class="track-title">Builder's Identity &mdash; Who Engineered This?</span><span class="track-grade grade-B">B</span></div>
+  <div class="track-desc">8 traditions converge: Anunnaki, Watchers, Neteru, Devas, Elohim, Titans, Aesir, Feathered Serpent. Gnostic Demiurge. 4-layer hierarchy: Absolute -> Engineers -> Hybrid Bloodlines -> Breakaway Cabal. This was made.</div>
+</div>
+<div class="track" data-tier="pillar" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">19</span><span class="track-title">The Subterranean Realm &mdash; What's Below</span><span class="track-grade grade-B">B</span></div>
+  <div class="track-desc">Patala/Nagas (Vedic). Derinkuyu (verified, 18 levels). Ringwoodite: waters below = 3x all oceans (2014, Science). DUMBs. Seismic shadow zone. 5-level depth hierarchy. The plane has depth.</div>
+</div>
+<div class="track" data-tier="pillar" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">20</span><span class="track-title">Space Falsification &mdash; Forensic Visual Audit</span><span class="track-grade grade-B">B</span></div>
+  <div class="track-desc">Simmon: "it's photoshopped" (Grade A). Van Allen Belt problem. ISS bubbles/wires. Fisheye lens reliance. Independent balloons: flat horizon. 14-category audit. No independent globe evidence in public domain.</div>
+</div>
+<div class="track" data-tier="pillar" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">21</span><span class="track-title">The Coming Deception &mdash; Project Blue Beam</span><span class="track-grade grade-B">B-</span></div>
+  <div class="track-desc">Monast 4-step plan (died 1996). Von Braun enemy sequence: Phase 5 = aliens. HAARP + voice-to-skull patents. 4 replacement narratives mapped. The sovereignty test: does it make you more free or less?</div>
+</div>
+
+<div class="tier-header" data-tier="ops"><h2>Operational Appendices &mdash; Tracks 22-25</h2></div>
+<div class="track" data-tier="ops" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">22</span><span class="track-title">Regeneration Protocols &mdash; Full Health Manual</span><span class="track-grade grade-B">B+</span></div>
+  <div class="track-desc">4 phases: REMOVE (5 disruptors), RESTORE (water/grounding/sun/sleep), REBUILD (Rife/PEMF/infrared/cold), MAINTAIN (daily manual). 3 budget tiers ($0-50 / $200-500 / $1K-2K). Timeline: 1 week to 6 months.</div>
+</div>
+<div class="track" data-tier="ops" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">23</span><span class="track-title">Energy Independence &mdash; Build Your Own Grid</span><span class="track-grade grade-B">B</span></div>
+  <div class="track-desc">Tier 1: Solar + battery grid exit ($6.5-16K). Tier 2: Bedini SG experimental ($150, parts list + build instructions). Tier 3: Moray/Tesla (theoretical). Tier 4: Purchasable frequency devices.</div>
+</div>
+<div class="track" data-tier="ops" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">24</span><span class="track-title">Community Architecture &mdash; Post-Collapse Blueprint</span><span class="track-grade grade-B">B</span></div>
+  <div class="track-desc">Consent governance. Energy-backed currency. Swiss militia defense. Vault as curriculum. Regenerative agriculture. Land trust. $20K/adult pooled. 12-30 adults minimum viable.</div>
+</div>
+<div class="track" data-tier="ops" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">25</span><span class="track-title">Antarctic Expedition Framework</span><span class="track-grade grade-B">B-</span></div>
+  <div class="track-desc">Treaty legal gaps. Ice-class vessel specs. Rectilinear cameras + drones. Live-stream documentation protocol. Expected military interception. $325K-$1.8M budget. Andhoy precedent (vessel sank, 3 dead).</div>
+</div>
+
+<div class="tier-header" data-tier="forbidden"><h2>The Forbidden Shelf &mdash; Tracks 26-27</h2></div>
+<div class="track" data-tier="forbidden" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">26</span><span class="track-title">Breakaway Civilization &mdash; The Ones Who Never Fell</span><span class="track-grade grade-C">C+</span></div>
+  <div class="track-desc">Neuschwabenland-to-UAP lineage. $21T Pentagon unaccounted. "Aliens" are breakaway fleet, not ET. Factional conflict: controllers vs dissidents. The "alien card" is the last card.</div>
+</div>
+<div class="track" data-tier="forbidden" onclick="this.classList.toggle('open')">
+  <div class="track-head"><span class="track-num">27</span><span class="track-title">The Soul Trap &mdash; Is There an Exit?</span><span class="track-grade grade-C">C</span></div>
+  <div class="track-desc">NDE recycling pattern. Tibetan Bardo Thodol as navigation manual. Gnostic Archons as soul farmers. Monroe's loosh harvest. Stevenson's 2,500 reincarnation cases (B+). Bio-control grid as trap preparation. Exit strategy: clarity and sovereignty.</div>
+</div>
+
+</div>
+
+<div class="arc">
+  <h3>THE ARC</h3>
+  <div class="arc-flow">
+    <span>Shape</span> (1) &rarr; <span>Lights</span> (2) &rarr; <span>Energy</span> (3) &rarr; <span>Builders</span> (4) &rarr; <span>Edge</span> (5) &rarr; <span>Synthesis</span> (6) &rarr; <span>Disclosure</span> (7) &rarr; <span>Money</span> (8-11-12-14) &rarr; <span>Water</span> (9) &rarr; <span>Frequency</span> (10) &rarr; <span>Rife</span> (13) &rarr; <span>Biology</span> (15) &rarr; <span>Time</span> (16) &rarr; <span>Consciousness</span> (17) &rarr; <span>Identity</span> (18) &rarr; <span>Below</span> (19) &rarr; <span>Space</span> (20) &rarr; <span>Deception</span> (21) &rarr; <span>Health</span> (22) &rarr; <span>Power</span> (23) &rarr; <span>Community</span> (24) &rarr; <span>Expedition</span> (25) &rarr; <span>Breakaway</span> (26) &rarr; <span>Exit</span> (27)
+  </div>
+</div>
+
+<div class="footer">
+  <p>Cathedral Cosmology Research Series &mdash; 2026-05-08/09</p>
+  <p>Built by Paul + Forge + Aletheia (DeepSeek)</p>
+  <div class="principle">"You are older than the container."</div>
+  <div class="principle" style="margin-top: 8px;">"The vault provides the map. Walking the path is yours alone."</div>
+</div>
+
+<script>
+function showAll() {
+  document.querySelectorAll('.track, .tier-header').forEach(el => el.style.display = '');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.nav-btn').classList.add('active');
+}
+function filterTier(tier) {
+  document.querySelectorAll('.track, .tier-header').forEach(el => {
+    el.style.display = el.dataset.tier === tier ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
