@@ -2286,46 +2286,25 @@ bot.on('photo', async (msg) => {
         aspect = '16:9';
         hfArgs = ['generate', 'create', 'seedance_2_0', '--prompt', 'Subtle cinematic motion, camera slowly pushes in, atmospheric lighting shifts, documentary feel', '--start-image', localPath, '--duration', '5', '--aspect_ratio', aspect, '--wait'];
       } else if (lower.includes('poster') || lower.includes('fight poster') || lower.includes('70s')) {
-        // TWO-PASS PIPELINE: text-free art → composite real logos
-        mode = 'BR branded poster';
-        await safeSend(chatId, '🎬 Reed: Two-pass poster pipeline — generating art, then compositing real logos...');
-
-        try {
-          const posterPrompt = lower.includes('no ref') || lower.includes('from scratch')
-            ? 'Vertical vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas meets Cuban cigar label. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper with fold creases. Dense ornamental border: tropical leaves, Chinese cloud motifs, rope patterns, gloves, heavy bags, dragon. Central boxing action as layered graphic silhouettes. HK neon fragments integrated. Hand-pulled Kowloon 1978. ZERO TEXT.'
-            : 'Transform this boxing photograph into vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper. Dense ornamental border. Preserve subject pose and gym environment but render as graphic print art. ZERO TEXT.';
-
-          const pass1Args = ['generate', 'create', 'nano_banana_2', '--prompt', posterPrompt];
-          if (!(lower.includes('no ref') || lower.includes('from scratch'))) {
-            pass1Args.push('--image', localPath);
-          }
-          pass1Args.push('--aspect_ratio', '3:4', '--resolution', '2k', '--wait');
-
-          const artUrl = execFileSync('higgsfield', pass1Args, { encoding: 'utf-8', timeout: 600000 }).trim();
-
-          if (!artUrl.startsWith('http')) {
-            await safeSend(chatId, `⚠️ Reed: Art generation failed — ${artUrl.slice(0, 100)}`);
-            return;
-          }
-
-          const artPath = `/tmp/reed-poster-art-${fileStamp}.png`;
-          execFileSync('curl', ['-sL', artUrl, '-o', artPath], { timeout: 60000 });
-
-          const compositeScript = path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'poster-composite.py');
-          const brandedPath = execFileSync('python3', [compositeScript, artPath, '--full'],
-            { encoding: 'utf-8', timeout: 30000 }
-          ).trim().split('\n').pop().replace('Branded poster: ', '');
-
-          await safeSendPhoto(chatId, brandedPath, '🎬 Reed: BR Branded Poster — real wordmark + CSOB badge + HONG KONG\nTwo-pass: AI art → logo composite');
-          console.log('[reed-photo] Branded poster delivered');
-
-          try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration('poster_br', instruction || 'poster', localPath, brandedPath, 'poster_br two-pass', 'nano_banana_2'); } catch(e) {}
-
-        } catch(e) {
-          console.error('[reed-poster]', e.message);
-          await safeSend(chatId, `⚠️ Reed poster pipeline failed: ${e.message}`);
+        // Text-free poster art — typography handled in Canva, NOT composited
+        mode = 'BR poster art';
+        const posterPrompt = lower.includes('no ref') || lower.includes('from scratch')
+          ? 'Vertical vintage fight-culture poster artwork with NO TEXT anywhere. BRAND PALETTE: Obsidian Black #1A1A1A, Warm White #F5F0EB, Ring Red #C4392D, Copper #B87333. Shaw Brothers meets Emory Douglas meets Cuban cigar label. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper with fold creases. Dense ornamental border: tropical leaves, Chinese cloud motifs, rope patterns, gloves, heavy bags, dragon. Central boxing action as layered graphic silhouettes. HK neon fragments. Kowloon 1978. ZERO TEXT ZERO LETTERS.'
+          : 'Transform this boxing photograph into vintage fight-culture poster artwork with NO TEXT anywhere. BRAND PALETTE: Obsidian Black #1A1A1A, Warm White #F5F0EB, Ring Red #C4392D, Copper #B87333. Shaw Brothers meets Emory Douglas. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper. Dense ornamental border. Preserve subject pose and gym but render as graphic print art. ZERO TEXT.';
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', posterPrompt];
+        if (!(lower.includes('no ref') || lower.includes('from scratch'))) {
+          hfArgs.push('--image', localPath);
         }
-        return;
+        aspect = '3:4';
+        hfArgs.push('--aspect_ratio', aspect, '--resolution', '2k', '--wait');
+      } else if (lower.includes('instagram') || lower.includes('insta') || lower.includes('ig')) {
+        mode = 'Instagram';
+        aspect = '4:5';
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', 'Professional sports photography retouch for Instagram. FULL COLOUR — NOT monotone, NOT sepia. Warm, honest, slightly vintage. Warm shadows, lifted blacks, subtle grain. Natural lighting enhanced. Documentary boxing aesthetic — real sweat, real focus. Colour palette grounded in Obsidian #1A1A1A, Warm White #F5F0EB, Copper #B87333, Ring Red #C4392D. Preserve exact identity and pose.', '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
+      } else if (lower.includes('inner') || lower.includes('philosophy') || lower.includes('mental') || lower.includes('deep')) {
+        mode = 'Inner game';
+        aspect = '16:9';
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', 'Dramatic cinematic reimagining for philosophical/inner game content. Volumetric haze, golden directional light, heavy chiaroscuro. FULL COLOUR — not monotone. Warm amber tones, Copper #B87333 highlights, deep Obsidian #1A1A1A shadows. Film grain. The moment between rounds. The weight of discipline. Preserve identity but add atmosphere: dust particles, backlit depth. Sports documentary meets contemplative cinema.', '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       } else {
         // Default: pro photo with custom instruction baked in (user text is safe — passed as arg, not shell)
         mode = 'Pro photo + custom';
@@ -3500,7 +3479,9 @@ bot.onText(/^\/reed(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
 \`/reed neon\` — HK cyberpunk
 \`/reed dramatic\` — Volumetric cinema
 \`/reed oil\` — Oil painting
-\`/reed poster\` — BR branded poster (two-pass: art + real logos)
+\`/reed poster\` — BR vintage poster art (text-free, add type in Canva)
+\`/reed instagram\` — IG-ready pro photo (full colour, 4:5)
+\`/reed inner\` — Inner game / philosophical (dramatic, contemplative)
 \`/reed video\` — 5s motion
 
 *Commands:*
