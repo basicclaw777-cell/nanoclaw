@@ -1036,6 +1036,43 @@ the-timekeeper to go offline. Don't repeat it.
 - Auto-slide: the-cartographer.mjs generates slide briefs on harvest → pending/ → Reed overnight
 - Slide generator: node reed-lab/slides/slide-generator.js --scan (36 historical slides generated)
 
+## Reed Daily Lab + Autonomous Roundtable (built 2026-05-06 evening)
+
+### Reed Prompt Refinement
+- 10 proven styles A/B tested against calibration set (~/Downloads/upgraded standard/)
+- Pro photo v2, manga v2, dramatic cinema, noir, ippo, neon, oil (WIP), poster, video, custom
+- Small image auto-upscale (<700px) in telegram-bot.js photo handler
+- Keywords wired into /reed photo caption handler
+
+### Reed Daily Lab — ~/nanoclaw/reed-lab/daily-lab.js
+- PM2: reed-lab (2am HKT), reed-shots (7:30am HKT)
+- 4 nightly phases: styled photos (3 or 7 on Sunday), video (seedance), experimental recipe (10 rotating), generative scene (8 Logan/gym via Soul ID)
+- Inbox: ~/nanoclaw/reed-inbox/ → Output: vault reed-lab/ dated folders
+- Catalogue: ~/nanoclaw/reed-lab/catalogue.json
+- Shot assignments: 16 subjects, /shots command, 7:30am cron
+
+### Reed's Studio — localhost:8080/reed-studio
+- Style Library, Gallery, Shot List, Experiments views
+- Added to Basic Reflex home page
+
+### The Steward — Court Member 16
+- Filed: ~/cathedral-vault/06_Methods/the-steward.md
+- Voice of what emerges when agents collide. Not moderator, not summariser — distils.
+- Speaks in structure: consensus, tension, principle, action, next question
+- Closes the Genius Council design question
+
+### Autonomous Roundtable — ~/nanoclaw/reed-lab/roundtable.js
+- 5 topics: Instagram Strategy, Brand Drift, Member Retention, Style Experiments, Cross-Agent Sync
+- 4 agents: Reed, Kit, Cathy, Leonardo — sequential speaking, each sees previous responses
+- Steward synthesizes each roundtable, files to vault (00_Staging/roundtable/)
+- PM2: roundtable (Sunday midnight HKT)
+- Telegram: /roundtable, /roundtable [custom topic]
+
+### Roundtable Digest — ~/nanoclaw/reed-lab/roundtable-digest.js
+- Parses roundtable files, LLM executive summary, HTML infographic
+- localhost:8080/reed-lab/digest
+- Telegram: /digest
+
 ## Forge — Code Engine Identity (2026-05-07)
 - Soul file: ~/cathedral-vault/06_Methods/forge-profile.md
 - Memory: ~/.claude/projects/-Users-basicclaw777/memory/the-builders-frequency.md
