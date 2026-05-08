@@ -4400,6 +4400,25 @@ B+ tracks: Boundary, Missions, Luminaries, Antarctic, Trump Disclosure, Coin Roo
       return safeSend(chatId, `*Cosmology Grade Table (27 tracks)*\n\n${table}\n*Globe:* C+ | *Enclosed Plane:* A-`, { parse_mode: 'Markdown' });
     }
 
+    // /cosmos podcast [number] — generate podcast episode
+    if (arg === 'podcast' || arg.startsWith('podcast ')) {
+      const trackArg = arg.replace(/^podcast\s*/, '').trim() || '--next';
+      await safeSend(chatId, `Generating podcast episode${trackArg !== '--next' ? ' for Track ' + trackArg : ' (next ungenerated)'}... This takes a few minutes.`);
+      try {
+        const { execFile } = await import('child_process');
+        const { promisify } = await import('util');
+        const execFileAsync = promisify(execFile);
+        const pythonPath = path.join(process.env.HOME, 'cathedral-venv', 'bin', 'python3');
+        const scriptPath = path.join(process.env.HOME, 'Cathedral', 'cosmology-podcast.py');
+        const { stdout, stderr } = await execFileAsync(pythonPath, [scriptPath, trackArg], { timeout: 600000 });
+        if (stdout) console.log(stdout);
+        if (stderr) console.error(stderr);
+      } catch (podErr) {
+        await safeSend(chatId, `Podcast generation issue: ${podErr.message}`);
+      }
+      return;
+    }
+
     // /cosmos research — trigger Aletheia autonomous research
     if (arg === 'research') {
       await safeSend(chatId, 'Aletheia engaging — researching weakest cosmology track...');
