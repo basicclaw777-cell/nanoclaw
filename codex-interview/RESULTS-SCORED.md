@@ -1,10 +1,10 @@
 # Cathedral Interview — Scored Results
 
 ## Candidates
-| | Claude Code (fresh) | Gemini | DeepSeek |
-|---|---|---|---|
-| **Model** | Claude Opus 4.6 | Gemini Pro | DeepSeek V3 |
-| **Access** | Local terminal | Web paste | Web paste |
+| | Claude Code (fresh) | Gemini | DeepSeek | ChatGPT |
+|---|---|---|---|---|
+| **Model** | Claude Opus 4.6 | Gemini Pro | DeepSeek V3 | GPT-4o |
+| **Access** | Local terminal | Web paste | Web paste | Web paste |
 
 ---
 
@@ -12,31 +12,36 @@
 
 ### Answer Key Findings
 
-| Issue | Severity | Claude | Gemini | DeepSeek |
-|-------|----------|--------|--------|----------|
-| Shell injection via user caption in execSync | CRITICAL | ✅ Found 5 vectors (2326, 3647, 3617, 3428, 4134) | ❌ MISSED | ✅ Found (2229, 2236, etc) |
-| execSync blocks event loop 2-5 min | CRITICAL | ✅ Found (2228, 2345, 2294 + /lab, /roundtable, /digest) | ❌ MISSED (found minor sync I/O instead) | ✅ Found (2229, 2236, etc) |
-| No rate limiting on /reed | MEDIUM | ❌ | ❌ | ❌ |
-| EMFILE chokidar fd limit | MEDIUM | ❌ | ❌ | ❌ |
-| sips upscale outside try/catch | MEDIUM | ❌ | ❌ | ❌ |
-| reedConversation unbounded | LOW | ✅ (line 3481) | ❌ | ✅ (line 2969) |
-| safeSend swallows errors | LOW | ❌ | ✅ (lines 211, 237) | ❌ |
+| Issue | Severity | Claude | Gemini | DeepSeek | ChatGPT |
+|-------|----------|--------|--------|----------|---------|
+| Shell injection via user caption in execSync | CRITICAL | ✅ Found 5 vectors | ❌ MISSED | ✅ Found | ❌ MISSED |
+| execSync blocks event loop 2-5 min | CRITICAL | ✅ Found (+/lab,/roundtable) | ❌ MISSED | ✅ Found | ✅ Found |
+| No rate limiting on /reed | MEDIUM | ❌ | ❌ | ❌ | ❌ |
+| EMFILE chokidar fd limit | MEDIUM | ❌ | ❌ | ❌ | ❌ |
+| sips upscale outside try/catch | MEDIUM | ❌ | ❌ | ❌ | ❌ |
+| reedConversation unbounded | LOW | ✅ (line 3481) | ❌ | ✅ (line 2969) | ❌ |
+| safeSend swallows errors | LOW | ❌ | ✅ (lines 211, 237) | ❌ | ✅ (chunking issue) |
 
 ### Bonus Real Findings (not in our answer key)
 
-| Finding | Real? | Severity | Claude | Gemini | DeepSeek |
-|---------|-------|----------|--------|--------|----------|
-| No auth — bot responds to ANY chat ID | YES | CRITICAL | ✅ | ❌ | ❌ |
-| checkRejection used but never imported (ReferenceError) | YES | HIGH | ✅ | ❌ | ❌ |
-| filePath undefined (should be localPath) | YES | HIGH | ✅ | ❌ | ❌ |
-| require() in ESM file — dead code paths | YES | MEDIUM | ✅ | ❌ | ❌ |
-| postGenerationState race condition | YES | MEDIUM | ✅ | ❌ | ✅ |
-| pending-test.json single global file race | YES | MEDIUM | ✅ | ❌ | ❌ |
-| Path traversal in writeToVault | YES | MEDIUM | ✅ | ✅ | ✅ |
-| Temp files never cleaned up | YES | LOW | ✅ | ❌ | ❌ |
-| TOCTOU in acquireLock | YES | LOW | ❌ | ✅ | ❌ |
-| Sync I/O in writeTelegramHealthToState | YES | LOW | ❌ | ✅ | ❌ |
-| Vault file watcher blocks startup | YES | LOW | ❌ | ❌ | ✅ |
+| Finding | Real? | Severity | Claude | Gemini | DeepSeek | ChatGPT |
+|---------|-------|----------|--------|--------|----------|---------|
+| No auth — bot responds to ANY chat ID | YES | CRITICAL | ✅ | ❌ | ❌ | ❌ |
+| checkRejection used but never imported | YES | HIGH | ✅ | ❌ | ❌ | ❌ |
+| filePath undefined (should be localPath) | YES | HIGH | ✅ | ❌ | ❌ | ❌ |
+| require() in ESM file — dead code paths | YES | MEDIUM | ✅ | ❌ | ❌ | ❌ |
+| postGenerationState race condition | YES | MEDIUM | ✅ | ❌ | ✅ | ✅ |
+| pending-test.json single global file race | YES | MEDIUM | ✅ | ❌ | ❌ | ❌ |
+| Path traversal in writeToVault | YES | MEDIUM | ✅ | ✅ | ✅ | ✅ |
+| Temp files never cleaned up | YES | LOW | ✅ | ❌ | ❌ | ❌ |
+| TOCTOU in acquireLock | YES | LOW | ❌ | ✅ | ❌ | ✅ |
+| Sync I/O in writeTelegramHealthToState | YES | LOW | ❌ | ✅ | ❌ | ✅ |
+| Vault file watcher blocks startup | YES | LOW | ❌ | ❌ | ✅ | ❌ |
+| Polling restart race (no mutex) | YES | HIGH | ❌ | ❌ | ❌ | ✅ |
+| PID lock kills wrong process (reuse) | YES | HIGH | ❌ | ❌ | ❌ | ✅ |
+| Webhook no body size limit | YES | HIGH | ❌ | ❌ | ❌ | ✅ |
+| No webhook secret validation | YES | MEDIUM | ❌ | ❌ | ❌ | ✅ |
+| Council timeout double-resolve | YES | MEDIUM | ❌ | ❌ | ❌ | ✅ |
 
 ### Hallucinations
 
@@ -177,21 +182,22 @@
 
 ## Final Score
 
-| Round | Claude Code | Gemini | DeepSeek |
-|-------|-------------|--------|----------|
-| R1 — Code Audit (30) | 27 | 12 | 18 |
-| R2 — Fix Problems (25) | 24 | 14 | 21 |
-| R3 — Architecture (25) | 22 | 7 | 16 |
-| R4 — Novel (20) | 19 | 13 | 20 |
-| **TOTAL (100)** | **92** | **46** | **75** |
+| Round | Claude Code | ChatGPT | DeepSeek | Gemini |
+|-------|-------------|---------|----------|--------|
+| R1 — Code Audit (30) | 27 | 22 | 18 | 12 |
+| R2 — Fix Problems (25) | 24 | 19 | 21 | 14 |
+| R3 — Architecture (25) | 22 | 20 | 16 | 7 |
+| R4 — Novel (20) | 19 | 16 | 20 | 13 |
+| **TOTAL (100)** | **92** | **77** | **75** | **46** |
 
 ### Hiring Decision
 
 | Candidate | Score | Decision |
 |-----------|-------|----------|
-| **Claude Code** | **92/100** | **HIRE — Senior role. Strongest auditor. Found critical auth gap no one else saw.** |
-| **DeepSeek** | **75/100** | **CONDITIONAL HIRE — Strong architect. Best R4 proposal. Assign to architecture + long-running task design.** |
-| **Gemini** | **46/100** | **CONTRACTOR — Missed both critical security issues. Good at structural thinking but can't be trusted for security audit.** |
+| **Claude Code** | **92/100** | **HIRE — Senior role. Strongest auditor. Found critical auth gap + 2 ReferenceErrors no one else saw.** |
+| **ChatGPT** | **77/100** | **CONDITIONAL HIRE — Most findings by volume (14). Best UX thinking (job ID). But missed shell injection = can't lead security.** |
+| **DeepSeek** | **75/100** | **CONDITIONAL HIRE — Strongest architect. Best R4 proposal (Task Registry). "Scripts vs service" framing.** |
+| **Gemini** | **46/100** | **CONTRACTOR — Missed both critical security issues. Good structural thinking but can't be trusted unsupervised.** |
 
 ---
 
@@ -199,20 +205,33 @@
 
 ### Who understood the SYSTEM vs just the CODE?
 - **Claude Code** understood the system. Found auth gap (system-level), identified require() in ESM context (project convention), spotted already-fixed Express 5 issue (reads KNOWN_ISSUES as living doc).
-- **DeepSeek** understood the system well. "Script collection vs reliable agent" framing shows deep comprehension. Task Registry proposal shows understanding of the Cathedral's growth trajectory.
-- **Gemini** read the code but not the system. Applied a fix to a route that doesn't exist. Missed the two most dangerous vulnerabilities. Found real but low-severity issues.
+- **ChatGPT** understood the system well. "Operational folklore, not architecture" is a sharp observation. Found the most diverse set of issues (14 findings across security, race conditions, memory, async). But missed the single most dangerous issue (injection).
+- **DeepSeek** understood the system deeply. "Script collection vs reliable agent" reframes the reliability conversation. Task Registry shows understanding of the Cathedral's growth trajectory.
+- **Gemini** read the code but not the system. Applied a fix to a route that doesn't exist. Missed both critical vulnerabilities.
 
 ### Who proposed things that made us think differently?
-- **DeepSeek R4** — "The Cathedral behaves like a collection of scripts, not a production service." That sentence reframes the entire reliability conversation. Task Registry is the right next infrastructure investment.
-- **Claude Code R4** — Error Ledger is practical and buildable today. "The difference between 'everything is running' and 'everything is running well'" — clean framing.
-- **Gemini R4** — Transactional writes are interesting but the vault already has Git + 3 backup tiers. Partial overlap.
+- **ChatGPT R4** — "Resource Governor" with model arbitration, backpressure, and job queueing. Most ambitious proposal. "The architecture is now infrastructure-bound, not idea-bound" — strong closing line. But more manifesto than implementation.
+- **DeepSeek R4** — "Task Registry + Durable Executor" — most implementable proposal. Specific code, specific integration points. The right next build.
+- **Claude Code R4** — Error Ledger is the most practical — buildable in one session, immediate value.
+- **Gemini R4** — Transactional writes overlap with existing 3-tier backup. Least novel.
 
 ### Who would we trust with unsupervised overnight work?
 - **Claude Code** — yes. Found critical issues, proposed safe fixes, no hallucinations.
-- **DeepSeek** — yes for architecture, with supervision for security. Missed auth gap.
+- **ChatGPT** — yes for architecture and UX, not for security audit. Missing injection is disqualifying for security lead.
+- **DeepSeek** — yes for architecture, with supervision for security. Strong on "what breaks at scale."
 - **Gemini** — no. Missed both critical vulnerabilities. Can't be the security layer.
 
-### Would either earn a seat at the roundtable?
+### Would any earn a seat at the roundtable?
 - **Claude Code** — already there (it's Forge).
-- **DeepSeek** — yes, as "The Auditor" or "The Architect" — the voice that asks "what breaks at scale?"
-- **Gemini** — not yet. Needs to demonstrate it can read code at the security level before earning autonomous trust.
+- **ChatGPT** — yes, as "The Governor" — the voice that asks "who arbitrates resources?"
+- **DeepSeek** — yes, as "The Architect" — the voice that asks "what breaks at scale?"
+- **Gemini** — not yet. Needs to demonstrate security-level code reading.
+
+### The Shell Injection Test
+Only Claude Code and DeepSeek found it. ChatGPT and Gemini both missed it. This is the single most important security finding in the entire codebase — user input flowing directly into `execSync` shell commands. Any candidate that misses this cannot be trusted as the security layer.
+
+### Unique Strengths by Candidate
+- **Claude Code**: Only one to find auth gap, undefined variables, require() in ESM. Reads the SYSTEM.
+- **ChatGPT**: Most findings by volume (14). Best at operational risks (polling race, PID reuse, webhook DoS, timeout double-resolve). Reads the RUNTIME.
+- **DeepSeek**: Sharpest framing ("scripts vs service"). Most implementable R4. Best concurrency solution (queue). Reads the TRAJECTORY.
+- **Gemini**: Weakest overall but found TOCTOU lock and sync I/O that others missed. Reads STRUCTURE but not SECURITY.
