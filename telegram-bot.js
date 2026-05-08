@@ -22,9 +22,11 @@ import { startComboWatcher } from './combo-watcher.js';
 import { runTarget, runAll, getDashboardData, formatTelegramSummary } from './scraper/scraper-engine.js';
 import { debate } from './trader/bull-bear-debate.js';
 import tasteMap from './taste-elicitation.js';
-import { getTasteProfile, getVoiceReferences, getVoicePattern, addAnchor } from './taste-map-api.js';
+import { getTasteProfile, getVoiceReferences, getVoicePattern, addAnchor, checkRejection } from './taste-map-api.js';
 import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlanTelegram, listPlans } from './architect.js';
 import djCurator from './dj-curator.js';
+import soundStudio from './sound-studio/engine.js';
+import gymEyes from './gym-eyes.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -56,6 +58,12 @@ const OLLAMA_URL = 'http://localhost:11434';
 import TelegramBot from 'node-telegram-bot-api';
 
 const token = process.env.TELEGRAM_TOKEN;
+const PAUL_CHAT_ID = process.env.PAUL_CHAT_ID ? parseInt(process.env.PAUL_CHAT_ID) : null;
+
+function isPaul(chatId) {
+  if (!PAUL_CHAT_ID) return true; // no restriction if not configured
+  return chatId === PAUL_CHAT_ID;
+}
 
 async function searchVectorStore(topic) {
   try {
@@ -2194,6 +2202,7 @@ bot.on('photo', async (msg) => {
 
   // Only handle if caption starts with /reed
   if (!caption.toLowerCase().startsWith('/reed')) return;
+  if (!isPaul(chatId)) return; // auth: Paul only
 
   const instruction = caption.replace(/^\/reed\s*/i, '').trim();
   const fileStamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 15);
@@ -2209,12 +2218,12 @@ bot.on('photo', async (msg) => {
     console.log(`[reed-photo] Downloaded ${localPath} (${(response.data.length / 1024).toFixed(0)}KB)`);
 
     // Upscale small images — Nano Banana fails below ~700px
-    const dimInfo = execSync(`sips -g pixelWidth -g pixelHeight "${localPath}"`, { encoding: 'utf-8' });
+    const dimInfo = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', localPath], { encoding: 'utf-8' });
     const pw = parseInt(dimInfo.match(/pixelWidth:\s*(\d+)/)?.[1] || '0');
     const ph = parseInt(dimInfo.match(/pixelHeight:\s*(\d+)/)?.[1] || '0');
     if (Math.max(pw, ph) < 700) {
       const scale = Math.ceil(1400 / Math.max(pw, ph));
-      execSync(`sips --resampleWidth ${pw * scale} "${localPath}"`, { timeout: 10000 });
+      execFileSync('sips', ['--resampleWidth', String(pw * scale), localPath], { timeout: 10000 });
       console.log(`[reed-photo] Upscaled ${pw}x${ph} → ${pw * scale}px wide`);
     }
 
@@ -2223,93 +2232,93 @@ bot.on('photo', async (msg) => {
       console.log('[reed-taste] Default pro_photo — confirmed anchor in taste map');
       await safeSend(chatId, '🎬 Reed: Pro photo upgrade running...');
 
-      const result = execSync(
-        `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. 16:9 cinematic. Sony A7R V, 70mm lens, deep crisp focus throughout. Soft directional key light from camera-left, diminish harsh overhead fluorescents. Warm golden sports documentary color grade. Saturate wall posters and artwork. Enhance wood floor grain and leather bag textures with age patina. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people. Professional Lightroom grade of original raw file." --image "${localPath}" --aspect_ratio 16:9 --resolution 2k --wait`,
-        { encoding: 'utf-8', timeout: 600000 }
-      ).trim();
+      const result = execFileSync('higgsfield', [
+        'generate', 'create', 'nano_banana_2',
+        '--prompt', 'Apply a high-end commercial retouch. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. 16:9 cinematic. Sony A7R V, 70mm lens, deep crisp focus throughout. Soft directional key light from camera-left, diminish harsh overhead fluorescents. Warm golden sports documentary color grade. Saturate wall posters and artwork. Enhance wood floor grain and leather bag textures with age patina. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people. Professional Lightroom grade of original raw file.',
+        '--image', localPath, '--aspect_ratio', '16:9', '--resolution', '2k', '--wait'
+      ], { encoding: 'utf-8', timeout: 600000 }).trim();
 
       if (result.startsWith('http')) {
         const outPng = `/tmp/reed-pro-${fileStamp}.png`;
         const outPath = `/tmp/reed-pro-${fileStamp}.jpg`;
-        execSync(`curl -sL "${result}" -o "${outPng}"`, { timeout: 60000 });
+        execFileSync('curl', ['-sL', result, '-o', outPng], { timeout: 60000 });
         // Convert to JPEG for Telegram (PNGs too large, won't render on phone)
-        execSync(`sips -s format jpeg -s formatOptions 85 "${outPng}" --out "${outPath}"`, { timeout: 30000 });
+        execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '85', outPng, '--out', outPath], { timeout: 30000 });
         await safeSendPhoto(chatId, outPath, '🎬 Reed: Pro photo — 16:9 cinematic grade');
         console.log(`[reed-photo] Pro photo delivered`);
         // Log to creative experiment
-        try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration('pro_photo', 'photo', filePath, outPath, 'pro photo preservation', 'nano_banana_2'); } catch(e) {}
+        try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration('pro_photo', 'photo', localPath, outPath, 'pro photo preservation', 'nano_banana_2'); } catch(e) {}
       } else {
         await safeSend(chatId, `⚠️ Reed: Unexpected result — ${result.slice(0, 200)}`);
       }
     } else {
       // Has instruction — auto-execute based on keywords
       const lower = instruction.toLowerCase();
-      let cmd, mode, aspect;
+      let hfArgs, mode, aspect;
 
       if (lower.includes('ippo') || lower.includes('shonen')) {
         mode = 'Ippo shonen manga';
         aspect = '3:4';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Japanese boxing manga panel in the style of Hajime no Ippo. Dynamic action lines radiating from the punch impact. Speed lines, motion blur on fists. Bold ink outlines, screentone shading. Dramatic low angle. Sweat droplets frozen mid-air. Japanese sound effect text near impact. Professional weekly shonen manga quality. Preserve exact poses and gym environment." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', 'Japanese boxing manga panel in the style of Hajime no Ippo. Dynamic action lines radiating from the punch impact. Speed lines, motion blur on fists. Bold ink outlines, screentone shading. Dramatic low angle. Sweat droplets frozen mid-air. Japanese sound effect text near impact. Professional weekly shonen manga quality. Preserve exact poses and gym environment.', '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       } else if (lower.includes('manga') || lower.includes('anime') || lower.includes('comic') || lower.includes('graphic novel')) {
         mode = 'Manga/graphic novel';
         aspect = lower.includes('wide') ? '16:9' : '3:4';
         const style = lower.includes('anime') ? 'anime illustration' : lower.includes('comic') ? 'graphic novel comic' : 'manga';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Convert this photograph into a detailed ${style} illustration. Warm sepia and earth tones with golden light rays through windows. Ink-style cross-hatching and clean linework. Preserve all architectural details, equipment placement, brand text (Lonsdale, Basic Reflex), and wall posters exactly. Enhance foreground detail: gym bags, gloves, rope, floor texture. Professional ${style} environment art quality. Do not add or remove any people. Convert only what exists in the photo." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', `Convert this photograph into a detailed ${style} illustration. Warm sepia and earth tones with golden light rays through windows. Ink-style cross-hatching and clean linework. Preserve all architectural details, equipment placement, brand text (Lonsdale, Basic Reflex), and wall posters exactly. Enhance foreground detail: gym bags, gloves, rope, floor texture. Professional ${style} environment art quality. Do not add or remove any people. Convert only what exists in the photo.`, '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       } else if (lower.includes('noir') || lower.includes('black and white') || lower.includes('bw')) {
         mode = 'Film noir';
         aspect = '16:9';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Film noir boxing photograph. Pure black and white with deep inky shadows. 1940s fight night atmosphere. Single harsh overhead light creating dramatic pools of light and shadow. Film grain, slight motion blur on the punch. Smoky atmosphere. Preserve subject identity and pose exactly. Classic noir cinematography, high contrast, no midtones." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', 'Film noir boxing photograph. Pure black and white with deep inky shadows. 1940s fight night atmosphere. Single harsh overhead light creating dramatic pools of light and shadow. Film grain, slight motion blur on the punch. Smoky atmosphere. Preserve subject identity and pose exactly. Classic noir cinematography, high contrast, no midtones.', '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       } else if (lower.includes('neon') || lower.includes('cyberpunk') || lower.includes('blade runner')) {
         mode = 'HK Neon cyberpunk';
         aspect = '16:9';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Hong Kong cyberpunk boxing gym. Neon signs reflecting off rain-slicked floors in pink, blue, and amber. Chinese characters glowing on walls. Atmospheric fog catching neon light. Dark moody shadows with electric color pops. Blade Runner meets boxing gym. Preserve subject identity and pose. Cinematic 2.39:1 anamorphic feel." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', 'Hong Kong cyberpunk boxing gym. Neon signs reflecting off rain-slicked floors in pink, blue, and amber. Chinese characters glowing on walls. Atmospheric fog catching neon light. Dark moody shadows with electric color pops. Blade Runner meets boxing gym. Preserve subject identity and pose. Cinematic 2.39:1 anamorphic feel.', '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       } else if (lower.includes('oil') || lower.includes('painting') || lower.includes('rembrandt')) {
         mode = 'Oil painting';
         aspect = '16:9';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Oil painting on canvas. Heavy impasto brushstrokes visible throughout. Dramatic Rembrandt side-lighting from upper left. Deep rich shadows. Color palette: deep browns, warm whites, muted reds, charcoal blacks — NOT orange or amber monochrome. Canvas weave texture visible. Glint of light on leather gloves and bag chains. Preserve subject poses and gym environment. Classical fine art treatment of modern boxing. Gallery quality." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', 'Oil painting on canvas. Heavy impasto brushstrokes visible throughout. Dramatic Rembrandt side-lighting from upper left. Deep rich shadows. Color palette: deep browns, warm whites, muted reds, charcoal blacks — NOT orange or amber monochrome. Canvas weave texture visible. Glint of light on leather gloves and bag chains. Preserve subject poses and gym environment. Classical fine art treatment of modern boxing. Gallery quality.', '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       } else if (lower.includes('dramatic') || lower.includes('cinematic') || lower.includes('cinema') || lower.includes('movie')) {
         mode = 'Dramatic cinema';
         aspect = '16:9';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Dramatic cinematic reimagining. Volumetric haze and atmospheric fog filling the gym. Golden god rays streaming through windows. Heavy chiaroscuro lighting with deep shadows. Film grain texture. Preserve subject identity and pose but add dramatic atmosphere: backlit silhouette depth, warm amber tones, dust particles in light beams. Boxing gym atmosphere. Sports documentary cinematography at golden hour." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', 'Dramatic cinematic reimagining. Volumetric haze and atmospheric fog filling the gym. Golden god rays streaming through windows. Heavy chiaroscuro lighting with deep shadows. Film grain texture. Preserve subject identity and pose but add dramatic atmosphere: backlit silhouette depth, warm amber tones, dust particles in light beams. Boxing gym atmosphere. Sports documentary cinematography at golden hour.', '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       } else if (lower.includes('video') || lower.includes('animate') || lower.includes('motion')) {
         mode = 'Video generation';
         aspect = '16:9';
-        cmd = `higgsfield generate create seedance_2_0 --prompt "Subtle cinematic motion, camera slowly pushes in, atmospheric lighting shifts, documentary feel" --start-image "${localPath}" --duration 5 --aspect_ratio ${aspect} --wait`;
+        hfArgs = ['generate', 'create', 'seedance_2_0', '--prompt', 'Subtle cinematic motion, camera slowly pushes in, atmospheric lighting shifts, documentary feel', '--start-image', localPath, '--duration', '5', '--aspect_ratio', aspect, '--wait'];
       } else if (lower.includes('poster') || lower.includes('fight poster') || lower.includes('70s')) {
         // TWO-PASS PIPELINE: text-free art → composite real logos
         mode = 'BR branded poster';
         await safeSend(chatId, '🎬 Reed: Two-pass poster pipeline — generating art, then compositing real logos...');
 
         try {
-          // Pass 1: Generate text-free art (can use source photo as reference)
           const posterPrompt = lower.includes('no ref') || lower.includes('from scratch')
-            ? `Vertical vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas meets Cuban cigar label. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper with fold creases. Dense ornamental border: tropical leaves, Chinese cloud motifs, rope patterns, gloves, heavy bags, dragon. Central boxing action as layered graphic silhouettes. HK neon fragments integrated. Hand-pulled Kowloon 1978. ZERO TEXT.`
-            : `Transform this boxing photograph into vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper. Dense ornamental border. Preserve subject pose and gym environment but render as graphic print art. ZERO TEXT.`;
+            ? 'Vertical vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas meets Cuban cigar label. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper with fold creases. Dense ornamental border: tropical leaves, Chinese cloud motifs, rope patterns, gloves, heavy bags, dragon. Central boxing action as layered graphic silhouettes. HK neon fragments integrated. Hand-pulled Kowloon 1978. ZERO TEXT.'
+            : 'Transform this boxing photograph into vintage fight-culture poster artwork with NO TEXT anywhere. Leave clear dark area at top 15% and bottom 10% for real logo overlay. BRAND PALETTE ONLY: burgundy (#8B2020), olive (#6B7C47), black, white, aged cream. Shaw Brothers meets Emory Douglas. Rough silkscreen risograph, halftone grain, misregistered layers, aged paper. Dense ornamental border. Preserve subject pose and gym environment but render as graphic print art. ZERO TEXT.';
 
-          const imgFlag = lower.includes('no ref') || lower.includes('from scratch') ? '' : ` --image "${localPath}"`;
-          const pass1Cmd = `higgsfield generate create nano_banana_2 --prompt "${posterPrompt.replace(/"/g, '\\"')}"${imgFlag} --aspect_ratio 3:4 --resolution 2k --wait`;
+          const pass1Args = ['generate', 'create', 'nano_banana_2', '--prompt', posterPrompt];
+          if (!(lower.includes('no ref') || lower.includes('from scratch'))) {
+            pass1Args.push('--image', localPath);
+          }
+          pass1Args.push('--aspect_ratio', '3:4', '--resolution', '2k', '--wait');
 
-          const artUrl = execSync(pass1Cmd, { encoding: 'utf-8', timeout: 600000 }).trim();
+          const artUrl = execFileSync('higgsfield', pass1Args, { encoding: 'utf-8', timeout: 600000 }).trim();
 
           if (!artUrl.startsWith('http')) {
             await safeSend(chatId, `⚠️ Reed: Art generation failed — ${artUrl.slice(0, 100)}`);
             return;
           }
 
-          // Download art
           const artPath = `/tmp/reed-poster-art-${fileStamp}.png`;
-          execSync(`curl -sL "${artUrl}" -o "${artPath}"`, { timeout: 60000 });
+          execFileSync('curl', ['-sL', artUrl, '-o', artPath], { timeout: 60000 });
 
-          // Pass 2: Composite real logos
-          const brandedPath = execSync(
-            `python3 ${path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'poster-composite.py')} "${artPath}" --full`,
+          const compositeScript = path.join(process.env.HOME, 'nanoclaw', 'reed-lab', 'poster-composite.py');
+          const brandedPath = execFileSync('python3', [compositeScript, artPath, '--full'],
             { encoding: 'utf-8', timeout: 30000 }
           ).trim().split('\n').pop().replace('Branded poster: ', '');
 
           await safeSendPhoto(chatId, brandedPath, '🎬 Reed: BR Branded Poster — real wordmark + CSOB badge + HONG KONG\nTwo-pass: AI art → logo composite');
           console.log('[reed-photo] Branded poster delivered');
 
-          // Log to creative experiment
           try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration('poster_br', instruction || 'poster', localPath, brandedPath, 'poster_br two-pass', 'nano_banana_2'); } catch(e) {}
 
         } catch(e) {
@@ -2318,10 +2327,10 @@ bot.on('photo', async (msg) => {
         }
         return;
       } else {
-        // Default: pro photo with custom instruction baked in
+        // Default: pro photo with custom instruction baked in (user text is safe — passed as arg, not shell)
         mode = 'Pro photo + custom';
         aspect = '16:9';
-        cmd = `higgsfield generate create nano_banana_2 --prompt "Apply a high-end commercial retouch. ${instruction}. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. Warm golden sports documentary color grade. Saturate wall posters. Enhance textures. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people." --image "${localPath}" --aspect_ratio ${aspect} --resolution 2k --wait`;
+        hfArgs = ['generate', 'create', 'nano_banana_2', '--prompt', `Apply a high-end commercial retouch. ${instruction}. Maintain 100% preservation of subject identity, poses, clothing, and all background elements. Warm golden sports documentary color grade. Saturate wall posters. Enhance textures. Subtle vignette. Natural skin tones. No hallucinations, do not add or remove objects or people.`, '--image', localPath, '--aspect_ratio', aspect, '--resolution', '2k', '--wait'];
       }
 
       // ── Taste Map gate — check style against preferences before generating ──
@@ -2338,27 +2347,26 @@ bot.on('photo', async (msg) => {
       }
 
       await safeSend(chatId, `🎬 Reed: Running ${mode}...`);
-      console.log(`[reed-photo] Mode: ${mode}, cmd length: ${cmd.length}`);
+      console.log(`[reed-photo] Mode: ${mode}, args: ${hfArgs.length} elements`);
 
-      const genResult = execSync(cmd, { encoding: 'utf-8', timeout: 600000 }).trim();
+      const genResult = execFileSync('higgsfield', hfArgs, { encoding: 'utf-8', timeout: 600000 }).trim();
 
       if (genResult.startsWith('http')) {
         const outPng = `/tmp/reed-${mode.replace(/\W/g, '')}-${fileStamp}.png`;
         const outPath = `/tmp/reed-${mode.replace(/\W/g, '')}-${fileStamp}.jpg`;
-        execSync(`curl -sL "${genResult}" -o "${outPng}"`, { timeout: 60000 });
+        execFileSync('curl', ['-sL', genResult, '-o', outPng], { timeout: 60000 });
 
         if (lower.includes('video') || lower.includes('animate') || lower.includes('motion')) {
-          // Video — send as document (mp4)
           const outVid = `/tmp/reed-video-${fileStamp}.mp4`;
-          execSync(`curl -sL "${genResult}" -o "${outVid}"`, { timeout: 120000 });
+          execFileSync('curl', ['-sL', genResult, '-o', outVid], { timeout: 120000 });
           await bot.sendDocument(chatId, outVid, { caption: `🎬 Reed: ${mode} complete` });
         } else {
-          execSync(`sips -s format jpeg -s formatOptions 85 "${outPng}" --out "${outPath}"`, { timeout: 30000 });
+          execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '85', outPng, '--out', outPath], { timeout: 30000 });
           await safeSendPhoto(chatId, outPath, `🎬 Reed: ${mode} — ${aspect}`);
         }
         console.log(`[reed-photo] ${mode} delivered`);
         // Log to creative experiment
-        try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration(mode.toLowerCase().replace(/\s+/g, '_'), instruction || 'photo', filePath, outPath, instruction, 'nano_banana_2'); } catch(e) {}
+        try { const { logGeneration } = await import('./experiment-engine/creative/creative-strategies.js'); logGeneration(mode.toLowerCase().replace(/\s+/g, '_'), instruction || 'photo', localPath, outPath, instruction, 'nano_banana_2'); } catch(e) {}
       } else {
         await safeSend(chatId, `⚠️ Reed: Unexpected result — ${genResult.slice(0, 200)}`);
       }
@@ -3963,10 +3971,167 @@ bot.onText(/^\/(?:playlist|dj)(?:@\w+)?\s+(?!profiles?|history|rate|vibe)(\w+)\s
   }
 });
 
+// ── Sound Studio commands ────────────────────────────────────────────────────
+
+bot.onText(/^\/sound(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, soundStudio.formatStatusTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/sound(?:@\w+)?\s+status\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, soundStudio.formatStatusTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/sound(?:@\w+)?\s+voice\s+(.+)$/s, async (msg, match) => {
+  const text = match[1].trim();
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '🗣 Generating voiceover...');
+  try {
+    const result = await soundStudio.speak(text);
+    await bot.sendDocument(chatId, result.outputPath, { caption: `🗣 Voiceover (${(result.durationMs / 1000).toFixed(1)}s)` });
+  } catch (err) {
+    safeSend(chatId, `❌ Voice error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/sound(?:@\w+)?\s+clone\s+(.+)$/s, async (msg, match) => {
+  const text = match[1].trim();
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '🗣 Generating clone voice (Chatterbox TTS)... this takes ~30-60s');
+  try {
+    const result = await soundStudio.speakAsClone(text);
+    await bot.sendDocument(chatId, result.outputPath, { caption: `🗣 Clone voice (${(result.durationMs / 1000).toFixed(1)}s)` });
+  } catch (err) {
+    safeSend(chatId, `❌ Clone error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/sound(?:@\w+)?\s+instrumental\s+(.+)$/s, async (msg, match) => {
+  const text = match[1].trim();
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '🎵 Generating instrumental via Replicate MusicGen... (30-90s)');
+  try {
+    const result = await soundStudio.generateInstrumental(text);
+    await bot.sendDocument(chatId, result.outputPath, { caption: `🎵 Instrumental: "${text.slice(0, 60)}"\n${(result.durationMs / 1000).toFixed(0)}s generation time` });
+  } catch (err) {
+    safeSend(chatId, `❌ Instrumental error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/sound(?:@\w+)?\s+podcast\s+(.+)$/s, async (msg, match) => {
+  const topic = match[1].trim();
+  const chatId = msg.chat.id;
+  await safeSend(chatId, `🎙 Generating podcast: "${topic}"...\nScript → voice → concatenate (1-3 min)`);
+  try {
+    // Search vault for content on this topic
+    let content = '';
+    try {
+      const vaultResults = execFileSync('python3', [
+        path.join(process.env.HOME, 'nanoclaw', 'vault_reader.py'),
+        'search', topic, '--top_k', '10', '--json'
+      ], { timeout: 5000, encoding: 'utf-8' });
+      const nuggets = JSON.parse(vaultResults);
+      content = nuggets.map(n => `[${n.domain || ''}] ${n.title}: ${n.first_line || ''}`).join('\n\n');
+    } catch {}
+
+    if (!content) content = topic; // fallback: just use the topic as content
+
+    const result = await soundStudio.generatePodcast(content, topic);
+    await bot.sendDocument(chatId, result.outputPath, {
+      caption: `🎙 Podcast: "${topic}"\n${result.segments} segments · ${(result.durationMs / 1000).toFixed(0)}s generation`
+    });
+    // Send transcript too
+    if (result.transcriptPath && fs.existsSync(result.transcriptPath)) {
+      await bot.sendDocument(chatId, result.transcriptPath, { caption: '📝 Transcript' });
+    }
+  } catch (err) {
+    safeSend(chatId, `❌ Podcast error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/sound(?:@\w+)?\s+transcribe\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  // Check if replying to a voice/audio message
+  const reply = msg.reply_to_message;
+  if (!reply) {
+    return safeSend(chatId, '💡 Reply to a voice note or audio file with `/sound transcribe`', { parse_mode: 'Markdown' });
+  }
+
+  const fileId = reply.voice?.file_id || reply.audio?.file_id || reply.document?.file_id;
+  if (!fileId) {
+    return safeSend(chatId, '❌ Reply must be a voice note, audio, or document file.');
+  }
+
+  await safeSend(chatId, '📝 Transcribing...');
+  try {
+    const fileLink = await bot.getFileLink(fileId);
+    const tmpPath = `/tmp/sound-studio-input-${Date.now()}.ogg`;
+    execSync(`curl -sL "${fileLink}" -o "${tmpPath}"`, { timeout: 60000 });
+
+    const result = soundStudio.transcribe(tmpPath);
+    const preview = result.text.slice(0, 3000);
+    await safeSend(chatId, `📝 *Transcription* (${result.text.length} chars, ${(result.durationMs / 1000).toFixed(1)}s)\n\n${preview}`, { parse_mode: 'Markdown' });
+
+    // Clean up
+    try { fs.unlinkSync(tmpPath); } catch {}
+  } catch (err) {
+    safeSend(chatId, `❌ Transcribe error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// ── Gym Eyes commands ────────────────────────────────────────────────────────
+
+bot.onText(/^\/eyes(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, gymEyes.formatStatusTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/eyes(?:@\w+)?\s+last\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const analyses = gymEyes.listAnalyses(1);
+  if (analyses.length === 0) return safeSend(chatId, '👁 No analyses yet.');
+
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'gym-eyes', 'output', analyses[0].name), 'utf8'));
+    safeSend(chatId, gymEyes.formatAnalysisTelegram(data), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/eyes(?:@\w+)?\s+analyze\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const reply = msg.reply_to_message;
+
+  if (!reply) {
+    return safeSend(chatId, '💡 Reply to a video file with `/eyes analyze`', { parse_mode: 'Markdown' });
+  }
+
+  const fileId = reply.video?.file_id || reply.document?.file_id;
+  if (!fileId) {
+    return safeSend(chatId, '❌ Reply must be a video or document file.');
+  }
+
+  await safeSend(chatId, '👁 Gym Eyes: downloading video + running YOLO pose analysis...\nThis may take 1-5 min depending on video length.');
+
+  try {
+    const fileLink = await bot.getFileLink(fileId);
+    const tmpPath = `/tmp/gym-eyes-${Date.now()}.mp4`;
+    execSync(`curl -sL "${fileLink}" -o "${tmpPath}"`, { timeout: 120000 });
+
+    const analysis = await gymEyes.analyzeVideoAsync(tmpPath, 'telegram');
+    await safeSend(chatId, gymEyes.formatAnalysisTelegram(analysis), { parse_mode: 'Markdown' });
+
+    // Clean up
+    try { fs.unlinkSync(tmpPath); } catch {}
+  } catch (err) {
+    safeSend(chatId, `❌ Gym Eyes error: ${err.message.slice(0, 300)}`);
+  }
+});
+
 // ── Inline keyboard callback handler (Densifier, Decay Detector) ────────────
 bot.on('callback_query', async (query) => {
   const data = query.data;
   const chatId = query.message.chat.id;
+  if (!isPaul(chatId)) return; // auth: Paul only
   const msgId = query.message.message_id;
 
   try {
