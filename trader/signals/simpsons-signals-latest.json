@@ -1,0 +1,115 @@
+{
+  "strategy": "simpsons_temporal",
+  "generated": "2026-05-09T16:55:48.922Z",
+  "watchlist_size": 42,
+  "predictions_scored": 42,
+  "signals_generated": 7,
+  "top_prediction": "Equation nearly predicting the Higgs boson mass",
+  "signals": [
+    {
+      "source": "simpsons_temporal",
+      "asset": "QQQ",
+      "direction": "long",
+      "strength": 0.9,
+      "reasoning": "[Simpsons Signal] \"Equation nearly predicting the Higgs boson mass\" (Treehouse of Horror VI, 1995-10-29, specificity 5). Scientific breakthrough → tech sector lift",
+      "metadata": {
+        "episode": "Treehouse of Horror VI",
+        "airDate": "1995-10-29",
+        "claim": "Equation nearly predicting the Higgs boson mass",
+        "domain": "science",
+        "specificity": 5,
+        "anomalyScore": 125
+      }
+    },
+    {
+      "source": "simpsons_temporal",
+      "asset": "QQQ",
+      "direction": "long",
+      "strength": 0.9,
+      "reasoning": "[Simpsons Signal] \"The mass of the Higgs boson is approximately 775 GeV/c², as written on a blackboard by Homer.\" (The Wizard of Evergreen Terrace, 1998-09-20, specificity 5). Scientific breakthrough → tech sector lift",
+      "metadata": {
+        "episode": "The Wizard of Evergreen Terrace",
+        "airDate": "1998-09-20",
+        "claim": "The mass of the Higgs boson is approximately 775 GeV/c², as written on a blackboard by Homer.",
+        "domain": "science",
+        "specificity": 5,
+        "anomalyScore": 125
+      }
+    },
+    {
+      "source": "simpsons_temporal",
+      "asset": "SPY",
+      "direction": "short",
+      "strength": 0.9,
+      "reasoning": "[Simpsons Signal] \"20th Century Fox becomes a division of Walt Disney Co.\" (When You Dish Upon a Star, 1998-11-08, specificity 5). Corporate scandal → market downturn",
+      "metadata": {
+        "episode": "When You Dish Upon a Star",
+        "airDate": "1998-11-08",
+        "claim": "20th Century Fox becomes a division of Walt Disney Co.",
+        "domain": "corporate",
+        "specificity": 5,
+        "anomalyScore": 125
+      }
+    },
+    {
+      "source": "simpsons_temporal",
+      "asset": "QQQ",
+      "direction": "long",
+      "strength": 0.9,
+      "reasoning": "[Simpsons Signal] \"Smartwatch-like device used for communication\" (Lisa on Ice, 1994-11-13, specificity 4). Tech disruption → NASDAQ growth",
+      "metadata": {
+        "episode": "Lisa on Ice",
+        "airDate": "1994-11-13",
+        "claim": "Smartwatch-like device used for communication",
+        "domain": "technology",
+        "specificity": 4,
+        "anomalyScore": 105
+      }
+    },
+    {
+      "source": "simpsons_temporal",
+      "asset": "ARKK",
+      "direction": "long",
+      "strength": 0.9,
+      "reasoning": "[Simpsons Signal] \"Smartwatch-like device used for communication\" (Lisa on Ice, 1994-11-13, specificity 4). Disruptive innovation basket",
+      "metadata": {
+        "episode": "Lisa on Ice",
+        "airDate": "1994-11-13",
+        "claim": "Smartwatch-like device used for communication",
+        "domain": "technology",
+        "specificity": 4,
+        "anomalyScore": 105
+      }
+    },
+    {
+      "source": "simpsons_temporal",
+      "asset": "QQQ",
+      "direction": "long",
+      "strength": 0.9,
+      "reasoning": "[Simpsons Signal] \"Video calling will be common by 2010\" (Lisa's Wedding, 1995-03-19, specificity 4). Tech disruption → NASDAQ growth",
+      "metadata": {
+        "episode": "Lisa's Wedding",
+        "airDate": "1995-03-19",
+        "claim": "Video calling will be common by 2010",
+        "domain": "technology",
+        "specificity": 4,
+        "anomalyScore": 105
+      }
+    },
+    {
+      "source": "simpsons_temporal",
+      "asset": "ARKK",
+      "direction": "long",
+      "strength": 0.9,
+      "reasoning": "[Simpsons Signal] \"Video calling will be common by 2010\" (Lisa's Wedding, 1995-03-19, specificity 4). Disruptive innovation basket",
+      "metadata": {
+        "episode": "Lisa's Wedding",
+        "airDate": "1995-03-19",
+        "claim": "Video calling will be common by 2010",
+        "domain": "technology",
+        "specificity": 4,
+        "anomalyScore": 105
+      }
+    }
+  ]
+}

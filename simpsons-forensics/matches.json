@@ -11,14 +11,14 @@
       "airDate": "1991-02-14"
     },
     "event": {
-      "date": "2022-11-30",
-      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "date": "2025-01-27",
+      "event": "DeepSeek R1 AI model released from China causes tech stock selloff",
       "category": "technology",
-      "significance": 5
+      "significance": 4
     },
-    "deltaT_years": 31.8,
-    "matchScore": 1.19,
-    "anomalyScore": 635.8,
+    "deltaT_years": 34,
+    "matchScore": 1.26,
+    "anomalyScore": 679,
     "sharedWords": [
       "technology"
     ],
@@ -36,14 +36,14 @@
       "airDate": "2003-03-09"
     },
     "event": {
-      "date": "2024-11-05",
-      "event": "Donald Trump elected President for second term",
+      "date": "2025-04-02",
+      "event": "Trump announces Liberation Day tariffs sweeping import duties on all countries",
       "category": "political",
-      "significance": 5
+      "significance": 4
     },
-    "deltaT_years": 21.7,
-    "matchScore": 0.6,
-    "anomalyScore": 577.7,
+    "deltaT_years": 22.1,
+    "matchScore": 0.61,
+    "anomalyScore": 588.5,
     "sharedWords": [
       "political"
     ],
@@ -61,14 +61,89 @@
       "airDate": "2007-12-16"
     },
     "event": {
-      "date": "2022-11-30",
-      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "date": "2025-01-27",
+      "event": "DeepSeek R1 AI model released from China causes tech stock selloff",
       "category": "technology",
-      "significance": 5
+      "significance": 4
     },
-    "deltaT_years": 15,
-    "matchScore": 0.44,
-    "anomalyScore": 448.7,
+    "deltaT_years": 17.1,
+    "matchScore": 0.48,
+    "anomalyScore": 513.5,
+    "sharedWords": [
+      "technology"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Private companies will launch rockets into space",
+      "specificity": 4,
+      "domain": "technology",
+      "description": "Mr. Burns sponsors a private rocket launch from a church, foreshadowing the era of commercial spaceflight by companies like SpaceX and Blue Origin.",
+      "episode": "She of Little Faith",
+      "season": 13,
+      "episodeNum": 6,
+      "airDate": "2001-12-16"
+    },
+    "event": {
+      "date": "2024-10-10",
+      "event": "SpaceX Starship booster caught by mechazilla chopstick arms on landing",
+      "category": "space",
+      "significance": 4
+    },
+    "deltaT_years": 22.8,
+    "matchScore": 0.82,
+    "anomalyScore": 456.3,
+    "sharedWords": [
+      "space"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Silicon Valley's 'cool boss' culture masking corporate villainy",
+      "specificity": 4,
+      "domain": "cultural",
+      "description": "Hank Scorpio's friendly, perk-filled management style hides his global domination schemes, predicting the later exposure of toxic work cultures and unethical practices in tech companies like Theranos or Uber.",
+      "episode": "You Only Move Twice",
+      "season": 8,
+      "episodeNum": 2,
+      "airDate": "1996-11-03"
+    },
+    "event": {
+      "date": "2023-11-06",
+      "event": "OpenAI board fires Sam Altman then rehires him days later corporate chaos",
+      "category": "corporate",
+      "significance": 3
+    },
+    "deltaT_years": 27,
+    "matchScore": 0.48,
+    "anomalyScore": 432.1,
+    "sharedWords": [
+      "corporate"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Interactive stadium technology with real-time audience polling via Jumbotron",
+      "specificity": 4,
+      "domain": "technology",
+      "description": "The episode features a Jumbotron voting system that allows real-time audience polling and interactive stadium experiences, predicting modern interactive fan engagement technologies.",
+      "episode": "Marge and Homer Turn a Couple Play",
+      "season": 17,
+      "episodeNum": 22,
+      "airDate": "2006-05-21"
+    },
+    "event": {
+      "date": "2025-01-27",
+      "event": "DeepSeek R1 AI model released from China causes tech stock selloff",
+      "category": "technology",
+      "significance": 4
+    },
+    "deltaT_years": 18.7,
+    "matchScore": 0.6,
+    "anomalyScore": 373.8,
     "sharedWords": [
       "technology"
     ],
@@ -101,31 +176,6 @@
   },
   {
     "prediction": {
-      "claim": "Interactive stadium technology with real-time audience polling via Jumbotron",
-      "specificity": 4,
-      "domain": "technology",
-      "description": "The episode features a Jumbotron voting system that allows real-time audience polling and interactive stadium experiences, predicting modern interactive fan engagement technologies.",
-      "episode": "Marge and Homer Turn a Couple Play",
-      "season": 17,
-      "episodeNum": 22,
-      "airDate": "2006-05-21"
-    },
-    "event": {
-      "date": "2022-11-30",
-      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
-      "category": "technology",
-      "significance": 5
-    },
-    "deltaT_years": 16.5,
-    "matchScore": 0.56,
-    "anomalyScore": 330.6,
-    "sharedWords": [
-      "technology"
-    ],
-    "status": "VERIFIED"
-  },
-  {
-    "prediction": {
       "claim": "Wearable health monitoring devices that track biometric data during sleep",
       "specificity": 3,
       "domain": "technology",
@@ -136,16 +186,41 @@
       "airDate": "2002-02-10"
     },
     "event": {
-      "date": "2020-12-14",
-      "event": "First COVID-19 mRNA vaccines administered",
+      "date": "2023-05-11",
+      "event": "WHO declares end of COVID-19 as global health emergency",
       "category": "health",
-      "significance": 5
+      "significance": 4
     },
-    "deltaT_years": 18.8,
-    "matchScore": 0.38,
-    "anomalyScore": 282.6,
+    "deltaT_years": 21.2,
+    "matchScore": 0.41,
+    "anomalyScore": 318.7,
     "sharedWords": [
       "health"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Anti-competitive corporate behavior where a product destroys competing toys",
+      "specificity": 3,
+      "domain": "cultural",
+      "description": "Funzo toy is designed to destroy other toys, foreshadowing aggressive market tactics and product sabotage.",
+      "episode": "Grift of the Magi",
+      "season": 11,
+      "episodeNum": 9,
+      "airDate": "1999-12-19"
+    },
+    "event": {
+      "date": "2023-11-06",
+      "event": "OpenAI board fires Sam Altman then rehires him days later corporate chaos",
+      "category": "corporate",
+      "significance": 3
+    },
+    "deltaT_years": 23.9,
+    "matchScore": 0.6,
+    "anomalyScore": 286.6,
+    "sharedWords": [
+      "corporate"
     ],
     "status": "VERIFIED"
   },
@@ -161,14 +236,14 @@
       "airDate": "2004-05-16"
     },
     "event": {
-      "date": "2024-11-05",
-      "event": "Donald Trump elected President for second term",
+      "date": "2025-04-02",
+      "event": "Trump announces Liberation Day tariffs sweeping import duties on all countries",
       "category": "political",
-      "significance": 5
+      "significance": 4
     },
-    "deltaT_years": 20.5,
-    "matchScore": 0.57,
-    "anomalyScore": 245.7,
+    "deltaT_years": 20.9,
+    "matchScore": 0.58,
+    "anomalyScore": 250.5,
     "sharedWords": [
       "political"
     ],
@@ -186,14 +261,14 @@
       "airDate": "2005-04-17"
     },
     "event": {
-      "date": "2022-11-30",
-      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "date": "2025-01-27",
+      "event": "DeepSeek R1 AI model released from China causes tech stock selloff",
       "category": "technology",
-      "significance": 5
+      "significance": 4
     },
-    "deltaT_years": 17.6,
-    "matchScore": 0.61,
-    "anomalyScore": 176.2,
+    "deltaT_years": 19.8,
+    "matchScore": 0.66,
+    "anomalyScore": 197.8,
     "sharedWords": [
       "technology"
     ],
@@ -211,16 +286,41 @@
       "airDate": "2011-12-11"
     },
     "event": {
-      "date": "2022-11-30",
-      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "date": "2025-01-27",
+      "event": "DeepSeek R1 AI model released from China causes tech stock selloff",
       "category": "technology",
-      "significance": 5
+      "significance": 4
     },
-    "deltaT_years": 11,
-    "matchScore": 0.79,
-    "anomalyScore": 164.6,
+    "deltaT_years": 13.1,
+    "matchScore": 0.87,
+    "anomalyScore": 197,
     "sharedWords": [
       "technology"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Space colonization by private entities",
+      "specificity": 2,
+      "domain": "technology",
+      "description": "The episode features themes of space colonization, which later became a topic of interest for companies like SpaceX and Blue Origin.",
+      "episode": "The Man Who Came to Be Dinner",
+      "season": 26,
+      "episodeNum": 10,
+      "airDate": "2015-01-04"
+    },
+    "event": {
+      "date": "2024-10-10",
+      "event": "SpaceX Starship booster caught by mechazilla chopstick arms on landing",
+      "category": "space",
+      "significance": 4
+    },
+    "deltaT_years": 9.8,
+    "matchScore": 0.3,
+    "anomalyScore": 97.7,
+    "sharedWords": [
+      "space"
     ],
     "status": "VERIFIED"
   }

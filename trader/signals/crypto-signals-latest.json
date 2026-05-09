@@ -1,41 +1,41 @@
 {
-  "timestamp": "2026-05-08T08:00:06.282054",
+  "timestamp": "2026-05-10T00:00:03.956660",
   "prices": {
     "BTC": {
-      "price": 80022,
-      "change_24h": -1.7230015227420243,
-      "volume_24h": 38385751841.67185,
-      "market_cap": 1602537556660.9
+      "price": 80513,
+      "change_24h": 0.5100801246280475,
+      "volume_24h": 22969701442.20461,
+      "market_cap": 1612404410674.822
     },
     "ETH": {
-      "price": 2291.18,
-      "change_24h": -2.5226029552747975,
-      "volume_24h": 22081476649.42533,
-      "market_cap": 276516619989.3092
+      "price": 2316.94,
+      "change_24h": 1.115521909207008,
+      "volume_24h": 14087259200.50671,
+      "market_cap": 279540316711.6593
     },
     "SOL": {
-      "price": 88.42,
-      "change_24h": -0.7842770577710418,
-      "volume_24h": 3853659940.328435,
-      "market_cap": 51037273812.92828
+      "price": 92.89,
+      "change_24h": 3.9843662074528954,
+      "volume_24h": 3835160453.755193,
+      "market_cap": 53649925612.18281
     },
     "AVAX": {
-      "price": 9.5,
-      "change_24h": -1.1022996539293632,
-      "volume_24h": 253620603.97135523,
-      "market_cap": 4103205970.0809894
+      "price": 9.83,
+      "change_24h": 0.7651493320559968,
+      "volume_24h": 277272124.7568272,
+      "market_cap": 4244730671.3206677
     },
     "LINK": {
-      "price": 9.85,
-      "change_24h": -1.4222856382810953,
-      "volume_24h": 371260770.6191438,
-      "market_cap": 7163362491.001239
+      "price": 10.33,
+      "change_24h": 2.815282911364848,
+      "volume_24h": 520743945.30217063,
+      "market_cap": 7511605938.401007
     },
     "DOT": {
-      "price": 1.31,
-      "change_24h": -0.699948742573604,
-      "volume_24h": 170187502.3125571,
-      "market_cap": 2201935761.506567
+      "price": 1.34,
+      "change_24h": -0.8911010697386103,
+      "volume_24h": 155951207.10989317,
+      "market_cap": 2259695300.099605
     },
     "MATIC": {
       "price": null,
@@ -44,16 +44,16 @@
       "market_cap": null
     },
     "ARB": {
-      "price": 0.126669,
-      "change_24h": -1.0086972632742741,
-      "volume_24h": 105078198.76234733,
-      "market_cap": 779235048.1847618
+      "price": 0.13942,
+      "change_24h": 1.332986074426995,
+      "volume_24h": 170154417.53405774,
+      "market_cap": 857888390.796353
     }
   },
   "fear_greed": {
     "value": 38,
     "label": "Fear",
-    "week_avg": 43.9,
+    "week_avg": 43.7,
     "trend": "falling"
   },
   "reddit_sentiment": null,
@@ -75,27 +75,27 @@
     },
     {
       "source": "coindesk",
-      "title": "Donald Trump Jr. denies rumors World Liberty Financial is falling apart",
+      "title": "LayerZero says it \u2018made a mistake\u2019 in $292 Million Kelp exploit",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Donald Trump Jr. denies rumors World Liberty Financial is falling apart",
+      "title": "LayerZero says it \u2018made a mistake\u2019 in $292 Million Kelp exploit",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "&#x27;DeFi is not dead,&#x27; it\u2019s going mainstream with AI agents, crypto executives agree",
+      "title": "BlackRock deepens tokenization push with new onchain fund offerings",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Aave to expand collateral and listing standards after KelpDAO exploit",
+      "title": "Senate Banking Committee plans to hold key market structure hearing on Thursday",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Consensus Miami Day 3: Real-time coverage and highlights from on the ground",
+      "title": "Judge clears path for Aave to move $71 million in ETH linked to North Korea hack",
       "url": "https://www.coindesk.com/"
     },
     {
@@ -109,5 +109,22 @@
       "url": "https://www.coindesk.com/"
     }
   ],
-  "signals": []
+  "signals": [
+    {
+      "source": "technical",
+      "asset": "SOL",
+      "direction": "long",
+      "strength": 0.4980457759316119,
+      "reasoning": "SOL up 4.0% in 24h \u2014 momentum continuation",
+      "type": "momentum"
+    },
+    {
+      "source": "technical",
+      "asset": "SOL",
+      "direction": "long",
+      "strength": 0.796873241490579,
+      "reasoning": "SOL is top performer (+4.0%) \u2014 relative strength leader",
+      "type": "relative_strength"
+    }
+  ]
 }

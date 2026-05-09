@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-05-08T08:00:08.854502",
+  "timestamp": "2026-05-10T00:00:06.352536",
   "strategy_count": 9,
-  "total_signals": 13,
+  "total_signals": 10,
   "signals": [
     {
       "source": "gann_geometry",
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC approaching Gann ordinal level $79881 from above (-0.2% away) \u2014 geometric resistance",
+      "reasoning": "BTC approaching Gann ordinal level $80371 from above (-0.2% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
@@ -16,23 +16,15 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH approaching Gann ordinal level $2267 from above (-1.0% away) \u2014 geometric resistance",
+      "reasoning": "ETH approaching Gann ordinal level $2293 from above (-1.0% away) \u2014 geometric resistance",
       "type": "gann_geometry"
-    },
-    {
-      "source": "fibonacci_time",
-      "asset": "BTC",
-      "direction": "long",
-      "strength": 0.55,
-      "reasoning": "BTC at 0.236 Fib retracement ($78907) in uptrend \u2014 golden ratio bounce zone",
-      "type": "fibonacci_time"
     },
     {
       "source": "fibonacci_time",
       "asset": "ETH",
       "direction": "long",
-      "strength": 0.55,
-      "reasoning": "ETH at 0.500 Fib retracement ($2305) in uptrend \u2014 golden ratio bounce zone",
+      "strength": 0.65,
+      "reasoning": "ETH at 0.382 Fib retracement ($2332) in uptrend \u2014 golden ratio bounce zone",
       "type": "fibonacci_time"
     },
     {
@@ -41,22 +33,6 @@
       "direction": "long",
       "strength": 0.6,
       "reasoning": "ETH at Fibonacci time zone (8 * 2.618 = day 21) \u2014 phi timing suggests turning point",
-      "type": "fibonacci_time"
-    },
-    {
-      "source": "fibonacci_time",
-      "asset": "SOL",
-      "direction": "long",
-      "strength": 0.55,
-      "reasoning": "SOL at 0.236 Fib retracement ($87) in uptrend \u2014 golden ratio bounce zone",
-      "type": "fibonacci_time"
-    },
-    {
-      "source": "fibonacci_time",
-      "asset": "AVAX",
-      "direction": "short",
-      "strength": 0.55,
-      "reasoning": "AVAX at 0.500 Fib retracement ($9) in downtrend \u2014 golden ratio resistance",
       "type": "fibonacci_time"
     },
     {
@@ -88,23 +64,23 @@
       "asset": "ETH",
       "direction": "long",
       "strength": 0.65,
-      "reasoning": "ETH in COMPRESSION phase (vol ratio 0.53). Toroidal coil \u2014 energy accumulating. Breakout up expected. Schauberger: implosion precedes creation.",
+      "reasoning": "ETH in COMPRESSION phase (vol ratio 0.46). Toroidal coil \u2014 energy accumulating. Breakout up expected. Schauberger: implosion precedes creation.",
       "type": "vortex_flow"
-    },
-    {
-      "source": "cymatics_schumann",
-      "asset": "BTC",
-      "direction": "long",
-      "strength": 0.7,
-      "reasoning": "BTC oscillation period 7.8 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 2.4%.",
-      "type": "cymatics_schumann"
     },
     {
       "source": "cymatics_schumann",
       "asset": "ETH",
       "direction": "long",
+      "strength": 0.7474,
+      "reasoning": "ETH forming STANDING WAVE pattern (symmetry 0.74, range compressing). Cymatic node \u2014 matter self-organizing at resonant frequency. Breakout up expected when node releases energy.",
+      "type": "cymatics_schumann"
+    },
+    {
+      "source": "cymatics_schumann",
+      "asset": "SOL",
+      "direction": "long",
       "strength": 0.7,
-      "reasoning": "ETH oscillation period 7.8 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: down 0.2%.",
+      "reasoning": "SOL oscillation period 6.9 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 10.7%.",
       "type": "cymatics_schumann"
     }
   ]

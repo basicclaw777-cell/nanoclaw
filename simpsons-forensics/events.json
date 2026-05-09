@@ -1,51 +1,639 @@
 [
   {
+    "date": "1989-11-09",
+    "event": "Berlin Wall falls ending Cold War division of Germany",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "1989-06-04",
+    "event": "Tiananmen Square massacre Chinese military kills protesters",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "1989-03-24",
+    "event": "Exxon Valdez oil spill in Prince William Sound Alaska",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "1989-12-20",
+    "event": "US invades Panama Operation Just Cause to oust Noriega",
+    "category": "military",
+    "significance": 3
+  },
+  {
+    "date": "1989-10-17",
+    "event": "Loma Prieta earthquake hits San Francisco during World Series",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "1989-12-17",
+    "event": "The Simpsons premieres on Fox as full series",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "1990-02-11",
+    "event": "Nelson Mandela released from prison after 27 years",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "1990-08-02",
+    "event": "Iraq invades Kuwait triggering Gulf War buildup",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "1990-10-03",
+    "event": "German reunification East and West Germany officially merge",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "1990-03-12",
+    "event": "Tim Berners-Lee proposes the World Wide Web at CERN",
+    "category": "technology",
+    "significance": 5
+  },
+  {
+    "date": "1990-04-24",
+    "event": "Hubble Space Telescope launched into orbit by Space Shuttle Discovery",
+    "category": "space",
+    "significance": 5
+  },
+  {
+    "date": "1991-01-17",
+    "event": "Gulf War Operation Desert Storm begins US-led coalition attacks Iraq",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "1991-12-26",
+    "event": "Soviet Union officially dissolves ending the Cold War",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "1991-06-12",
+    "event": "Boris Yeltsin elected first president of Russian Federation",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1991-01-18",
+    "event": "First Iraq War Scud missile attacks on Israel",
+    "category": "military",
+    "significance": 3
+  },
+  {
+    "date": "1992-11-03",
+    "event": "Bill Clinton elected 42nd President of the United States",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1992-04-29",
+    "event": "Los Angeles riots after Rodney King verdict",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "1992-08-24",
+    "event": "Hurricane Andrew devastates southern Florida",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "1992-02-07",
+    "event": "Maastricht Treaty signed creating the European Union",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1993-02-26",
+    "event": "World Trade Center bombed first terrorist attack on WTC",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "1993-04-19",
+    "event": "Waco siege ends in fire killing 76 Branch Davidians",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "1993-09-13",
+    "event": "Oslo Accords signed Israeli-Palestinian peace agreement on White House lawn",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1993-01-01",
+    "event": "Czechoslovakia peacefully splits into Czech Republic and Slovakia",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "1994-04-07",
+    "event": "Rwandan genocide begins 800000 killed in 100 days",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "1994-06-17",
+    "event": "OJ Simpson white Bronco chase watched by 95 million viewers",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "1994-01-01",
+    "event": "NAFTA North American Free Trade Agreement takes effect",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1994-05-06",
+    "event": "Channel Tunnel opens connecting England and France under the sea",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "1994-04-27",
+    "event": "Nelson Mandela elected president of South Africa first multiracial elections",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "1994-01-17",
+    "event": "Northridge earthquake hits Los Angeles magnitude 6.7",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "1995-04-19",
+    "event": "Oklahoma City bombing Timothy McVeigh kills 168 people",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "1995-03-20",
+    "event": "Tokyo subway sarin gas attack by Aum Shinrikyo cult",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "1995-07-11",
+    "event": "Srebrenica massacre 8000 Bosnian Muslims killed",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "1995-09-01",
+    "event": "eBay founded as online auction marketplace",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "1995-11-28",
+    "event": "Toy Story released first fully computer-animated feature film by Pixar",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "1996-07-05",
+    "event": "Dolly the sheep born first mammal cloned from adult somatic cell",
+    "category": "science",
+    "significance": 5
+  },
+  {
+    "date": "1996-07-27",
+    "event": "Centennial Olympic Park bombing during Atlanta Olympics",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "1996-11-05",
+    "event": "Bill Clinton re-elected President of the United States",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "1996-02-10",
+    "event": "IBM Deep Blue defeats chess champion Garry Kasparov in a game",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "1997-02-22",
+    "event": "Dolly the sheep cloning announced first mammal cloned from adult cell",
+    "category": "science",
+    "significance": 5
+  },
+  {
+    "date": "1997-05-11",
+    "event": "IBM Deep Blue defeats chess world champion Garry Kasparov in match",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "1997-07-01",
+    "event": "Hong Kong handed back to China from British rule",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1997-08-31",
+    "event": "Princess Diana killed in Paris car crash",
+    "category": "cultural",
+    "significance": 5
+  },
+  {
+    "date": "1997-07-04",
+    "event": "Mars Pathfinder and Sojourner rover land on Mars",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "1997-12-19",
+    "event": "Titanic film released by James Cameron becomes highest-grossing film",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "1998-09-04",
+    "event": "Google founded by Larry Page and Sergey Brin",
+    "category": "technology",
+    "significance": 5
+  },
+  {
+    "date": "1998-01-21",
+    "event": "Monica Lewinsky scandal breaks Clinton impeachment begins",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1998-08-07",
+    "event": "US embassy bombings in Kenya and Tanzania by al-Qaeda",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "1998-04-10",
+    "event": "Good Friday Agreement signed ending The Troubles in Northern Ireland",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1998-10-29",
+    "event": "John Glenn returns to space at age 77 aboard Space Shuttle Discovery",
+    "category": "space",
+    "significance": 3
+  },
+  {
+    "date": "1999-04-20",
+    "event": "Columbine High School massacre two students kill 13 in Colorado",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "1999-01-01",
+    "event": "Euro currency officially launched in 11 European countries",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "1999-06-01",
+    "event": "Napster launches revolutionizing music piracy and file sharing",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "1999-12-31",
+    "event": "Y2K millennium bug panic governments and companies spend billions preparing",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "1999-03-24",
+    "event": "NATO begins bombing Yugoslavia over Kosovo crisis",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "1999-12-31",
+    "event": "Panama Canal transferred from US to Panama control",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "1999-11-30",
+    "event": "WTO protests in Seattle Battle of Seattle anti-globalization movement",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2000-03-10",
+    "event": "Dot-com bubble peaks NASDAQ hits 5048 before crashing",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2000-11-07",
+    "event": "US presidential election Bush vs Gore Florida recount chaos",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2000-10-12",
+    "event": "USS Cole attacked by al-Qaeda suicide bombers in Yemen",
+    "category": "military",
+    "significance": 3
+  },
+  {
+    "date": "2000-03-26",
+    "event": "Vladimir Putin elected President of Russia for first time",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2000-06-26",
+    "event": "Human Genome Project announces first draft of human genome sequence",
+    "category": "science",
+    "significance": 5
+  },
+  {
     "date": "2001-09-11",
     "event": "September 11 terrorist attacks on World Trade Center and Pentagon",
     "category": "disaster",
     "significance": 5
   },
   {
-    "date": "2003-03-20",
-    "event": "US invasion of Iraq begins",
+    "date": "2001-10-07",
+    "event": "US invades Afghanistan Operation Enduring Freedom begins",
     "category": "military",
     "significance": 5
   },
   {
+    "date": "2001-10-23",
+    "event": "Apple iPod unveiled revolutionizing portable music",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2001-01-20",
+    "event": "George W Bush inaugurated as 43rd President of the United States",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2001-12-02",
+    "event": "Enron files for bankruptcy largest corporate fraud in US history at time",
+    "category": "corporate",
+    "significance": 5
+  },
+  {
+    "date": "2001-01-15",
+    "event": "Wikipedia launched as free online encyclopedia",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2001-11-10",
+    "event": "China joins World Trade Organization transforming global trade",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2002-01-29",
+    "event": "George W Bush Axis of Evil speech names Iraq Iran North Korea",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2002-10-12",
+    "event": "Bali bombings kill 202 people in Indonesian nightclub",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2002-07-21",
+    "event": "WorldCom files for bankruptcy 11 billion dollar accounting fraud",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2002-11-25",
+    "event": "Department of Homeland Security created in response to 9/11",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2003-03-20",
+    "event": "US invasion of Iraq begins based on WMD claims",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "2003-02-01",
+    "event": "Space Shuttle Columbia disintegrates during re-entry 7 crew die",
+    "category": "space",
+    "significance": 5
+  },
+  {
+    "date": "2003-04-14",
+    "event": "Human Genome Project completed mapping all human genes",
+    "category": "science",
+    "significance": 5
+  },
+  {
     "date": "2003-10-03",
-    "event": "Siegfried and Roy tiger attack, Roy Horn mauled by white tiger Montecore",
+    "event": "Siegfried and Roy tiger attack Roy Horn mauled by white tiger Montecore",
     "category": "cultural",
     "significance": 3
   },
   {
+    "date": "2003-03-06",
+    "event": "SARS outbreak detected spreading from Hong Kong globally",
+    "category": "health",
+    "significance": 4
+  },
+  {
+    "date": "2003-12-13",
+    "event": "Saddam Hussein captured hiding in spider hole near Tikrit",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2003-04-28",
+    "event": "Apple iTunes Store launches selling individual songs for 99 cents",
+    "category": "technology",
+    "significance": 4
+  },
+  {
     "date": "2004-12-26",
-    "event": "Indian Ocean tsunami kills 230000 people",
+    "event": "Indian Ocean tsunami kills 230000 people across 14 countries",
     "category": "disaster",
     "significance": 5
   },
   {
-    "date": "2005-08-29",
-    "event": "Hurricane Katrina devastates New Orleans",
-    "category": "disaster",
-    "significance": 5
-  },
-  {
-    "date": "2007-01-09",
-    "event": "Apple iPhone announced by Steve Jobs",
+    "date": "2004-02-04",
+    "event": "Facebook launched by Mark Zuckerberg from Harvard dorm room",
     "category": "technology",
     "significance": 5
   },
   {
+    "date": "2004-01-04",
+    "event": "NASA Spirit rover lands on Mars beginning surface exploration",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2004-11-02",
+    "event": "George W Bush re-elected President defeating John Kerry",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2004-05-01",
+    "event": "European Union expands adding 10 new member states",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2004-12-03",
+    "event": "Ukrainian Orange Revolution protests overturn fraudulent election",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2005-08-29",
+    "event": "Hurricane Katrina devastates New Orleans killing 1800 people",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "2005-02-14",
+    "event": "YouTube founded as video sharing platform",
+    "category": "technology",
+    "significance": 5
+  },
+  {
+    "date": "2005-04-02",
+    "event": "Pope John Paul II dies after 26 year pontificate",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "2005-07-07",
+    "event": "London 7/7 bombings four suicide bombers attack transport system",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2005-10-08",
+    "event": "Kashmir earthquake kills 87000 people in Pakistan",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2006-08-24",
+    "event": "Pluto reclassified as dwarf planet by International Astronomical Union",
+    "category": "science",
+    "significance": 3
+  },
+  {
+    "date": "2006-07-15",
+    "event": "Twitter launched as microblogging social media platform",
+    "category": "technology",
+    "significance": 5
+  },
+  {
+    "date": "2006-10-09",
+    "event": "North Korea conducts first nuclear weapon test",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2006-03-21",
+    "event": "Twitter co-founder Jack Dorsey sends first tweet",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2006-09-26",
+    "event": "Facebook opens to general public beyond college students",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2006-12-30",
+    "event": "Saddam Hussein executed by hanging in Iraq",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2007-01-09",
+    "event": "Apple iPhone announced by Steve Jobs revolutionizing smartphones",
+    "category": "technology",
+    "significance": 5
+  },
+  {
+    "date": "2007-08-01",
+    "event": "I-35W Mississippi River bridge collapses in Minneapolis during rush hour",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2007-04-16",
+    "event": "Virginia Tech massacre 32 people killed in deadliest US school shooting",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2007-02-01",
+    "event": "Intergovernmental Panel on Climate Change report confirms human-caused global warming",
+    "category": "science",
+    "significance": 4
+  },
+  {
     "date": "2008-09-15",
     "event": "Lehman Brothers collapses triggering global financial crisis",
-    "category": "cultural",
+    "category": "corporate",
     "significance": 5
   },
   {
     "date": "2008-11-04",
-    "event": "Barack Obama elected first Black President",
+    "event": "Barack Obama elected first Black President of the United States",
     "category": "political",
     "significance": 5
+  },
+  {
+    "date": "2008-08-08",
+    "event": "Beijing Olympics opening ceremony China debuts on world stage",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2008-11-26",
+    "event": "Mumbai terrorist attacks gunmen kill 166 people over 4 days",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2008-09-10",
+    "event": "Large Hadron Collider at CERN activated for first time",
+    "category": "science",
+    "significance": 4
+  },
+  {
+    "date": "2008-05-12",
+    "event": "Sichuan earthquake kills 69000 people in China",
+    "category": "disaster",
+    "significance": 4
   },
   {
     "date": "2009-01-03",
@@ -54,28 +642,124 @@
     "significance": 5
   },
   {
+    "date": "2009-06-25",
+    "event": "Michael Jackson dies from propofol overdose age 50",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
     "date": "2009-06-11",
     "event": "H1N1 swine flu pandemic declared by WHO",
     "category": "health",
     "significance": 4
   },
   {
+    "date": "2009-01-15",
+    "event": "Miracle on the Hudson Captain Sullenberger lands US Airways on Hudson River",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2009-01-20",
+    "event": "Barack Obama inaugurated as 44th President of the United States",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2009-06-01",
+    "event": "GM General Motors files for bankruptcy largest industrial bankruptcy in history",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
     "date": "2010-04-20",
-    "event": "Deepwater Horizon oil spill in Gulf of Mexico",
+    "event": "Deepwater Horizon oil rig explodes Gulf of Mexico oil spill",
     "category": "disaster",
     "significance": 5
   },
   {
     "date": "2010-01-27",
-    "event": "Apple iPad tablet announced",
+    "event": "Apple iPad tablet announced creating new device category",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2010-11-28",
+    "event": "WikiLeaks releases 250000 US diplomatic cables",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2010-01-12",
+    "event": "Haiti earthquake kills 316000 people magnitude 7.0",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "2010-10-06",
+    "event": "Instagram photo sharing app launched",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2010-04-14",
+    "event": "Eyjafjallajokull volcano eruption in Iceland grounds flights across Europe",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2010-10-28",
+    "event": "Stuxnet computer worm revealed to have sabotaged Iranian nuclear centrifuges",
     "category": "technology",
     "significance": 4
   },
   {
     "date": "2011-03-11",
-    "event": "Fukushima nuclear disaster after earthquake and tsunami in Japan",
+    "event": "Fukushima nuclear disaster after magnitude 9.0 earthquake and tsunami in Japan",
     "category": "disaster",
     "significance": 5
+  },
+  {
+    "date": "2011-05-02",
+    "event": "Osama bin Laden killed by US Navy SEALs in Abbottabad Pakistan",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "2011-02-11",
+    "event": "Egyptian President Hosni Mubarak resigns after Arab Spring protests",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2011-02-16",
+    "event": "IBM Watson wins Jeopardy against human champions Ken Jennings and Brad Rutter",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2011-10-05",
+    "event": "Steve Jobs dies of pancreatic cancer age 56",
+    "category": "cultural",
+    "significance": 5
+  },
+  {
+    "date": "2011-10-20",
+    "event": "Muammar Gaddafi killed ending Libyan civil war",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2011-07-21",
+    "event": "Space Shuttle Atlantis lands final shuttle mission ending 30-year program",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2011-01-08",
+    "event": "Tucson shooting Gabrielle Giffords shot 6 killed",
+    "category": "disaster",
+    "significance": 3
   },
   {
     "date": "2012-07-04",
@@ -84,8 +768,38 @@
     "significance": 5
   },
   {
-    "date": "2013-01-16",
-    "event": "Horse meat scandal beef products found containing horse meat across Europe",
+    "date": "2012-08-06",
+    "event": "NASA Curiosity rover lands on Mars using sky crane maneuver",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2012-11-06",
+    "event": "Barack Obama re-elected President defeating Mitt Romney",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2012-10-29",
+    "event": "Hurricane Sandy superstorm devastates US East Coast",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2012-12-14",
+    "event": "Sandy Hook Elementary School shooting 26 killed including 20 children",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "2012-08-05",
+    "event": "Curiosity rover performs first laser test on Mars rock",
+    "category": "science",
+    "significance": 3
+  },
+  {
+    "date": "2012-10-14",
+    "event": "Felix Baumgartner skydives from edge of space breaking sound barrier",
     "category": "cultural",
     "significance": 3
   },
@@ -96,33 +810,165 @@
     "significance": 5
   },
   {
+    "date": "2013-01-16",
+    "event": "Horse meat scandal beef products found containing horse meat across Europe",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2013-03-13",
+    "event": "Pope Francis elected first pope from the Americas and first Jesuit pope",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "2013-04-15",
+    "event": "Boston Marathon bombing pressure cooker bombs kill 3 injure 264",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2013-02-15",
+    "event": "Chelyabinsk meteor explodes over Russia injuring 1500 people",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2013-06-15",
+    "event": "Google Glass Explorer Edition released to public wearable computing",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2013-11-07",
+    "event": "Twitter IPO shares open at 45 dollars valued at 31 billion",
+    "category": "corporate",
+    "significance": 3
+  },
+  {
     "date": "2014-03-23",
-    "event": "Ebola outbreak in West Africa declared kills 11000 people",
+    "event": "Ebola outbreak in West Africa declared eventually kills 11000 people",
     "category": "health",
     "significance": 5
   },
   {
     "date": "2014-03-01",
-    "event": "Massive water reservoir discovered in Earth mantle ringwoodite",
+    "event": "Massive water reservoir discovered in Earth mantle ringwoodite crystal structure",
     "category": "science",
     "significance": 4
   },
   {
     "date": "2014-09-09",
-    "event": "Apple Watch smartwatch announced",
+    "event": "Apple Watch smartwatch announced by Tim Cook",
     "category": "technology",
     "significance": 4
   },
   {
+    "date": "2014-03-08",
+    "event": "Malaysia Airlines Flight 370 disappears with 239 people onboard",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "2014-03-18",
+    "event": "Russia annexes Crimea from Ukraine after referendum",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "2014-06-29",
+    "event": "ISIS declares caliphate across Iraq and Syria",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "2014-09-22",
+    "event": "US begins airstrikes against ISIS in Syria",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2014-12-17",
+    "event": "US and Cuba announce restoration of diplomatic relations after 54 years",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2014-11-12",
+    "event": "Rosetta mission Philae lander touches down on comet 67P first comet landing",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2014-08-09",
+    "event": "Michael Brown shooting in Ferguson Missouri sparks Black Lives Matter movement growth",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
     "date": "2015-05-27",
-    "event": "FIFA corruption scandal 14 officials indicted for racketeering",
+    "event": "FIFA corruption scandal 14 officials indicted for racketeering and bribery",
     "category": "cultural",
     "significance": 4
   },
   {
     "date": "2015-09-14",
-    "event": "Gravitational waves detected for first time by LIGO",
+    "event": "Gravitational waves detected for first time by LIGO confirming Einstein",
     "category": "science",
+    "significance": 5
+  },
+  {
+    "date": "2015-11-13",
+    "event": "Paris terrorist attacks ISIS gunmen and bombers kill 130 people",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "2015-07-14",
+    "event": "NASA New Horizons spacecraft flyby of Pluto first close-up images",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2015-12-12",
+    "event": "Paris Climate Agreement adopted by 196 nations at COP21",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2015-09-18",
+    "event": "Volkswagen emissions scandal diesel cars cheating pollution tests revealed",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2015-06-26",
+    "event": "US Supreme Court legalizes same-sex marriage nationwide",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2015-06-17",
+    "event": "Donald Trump announces presidential candidacy descending golden escalator",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2015-09-15",
+    "event": "European migrant crisis peaks over 1 million refugees cross Mediterranean",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2016-11-08",
+    "event": "Donald Trump elected 45th President of the United States defeating Hillary Clinton",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2016-06-23",
+    "event": "United Kingdom votes to leave European Union Brexit referendum",
+    "category": "political",
     "significance": 5
   },
   {
@@ -132,16 +978,46 @@
     "significance": 3
   },
   {
-    "date": "2016-06-23",
-    "event": "United Kingdom votes to leave European Union Brexit",
-    "category": "political",
-    "significance": 5
+    "date": "2016-04-21",
+    "event": "Prince dies of accidental fentanyl overdose age 57",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "2016-06-12",
+    "event": "Pulse nightclub shooting in Orlando 49 killed",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2016-07-06",
+    "event": "Pokemon Go augmented reality game released causes worldwide phenomenon",
+    "category": "technology",
+    "significance": 3
   },
   {
     "date": "2016-11-08",
-    "event": "Donald Trump elected President of the United States",
+    "event": "US election polls wildly wrong Trump wins upset victory",
     "category": "political",
-    "significance": 5
+    "significance": 4
+  },
+  {
+    "date": "2016-10-07",
+    "event": "WikiLeaks releases John Podesta emails during US election campaign",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2016-09-09",
+    "event": "North Korea conducts fifth nuclear test largest yet",
+    "category": "military",
+    "significance": 3
+  },
+  {
+    "date": "2017-01-20",
+    "event": "Donald Trump inaugurated as 45th President of the United States",
+    "category": "political",
+    "significance": 4
   },
   {
     "date": "2017-02-05",
@@ -156,81 +1032,369 @@
     "significance": 4
   },
   {
-    "date": "2018-03-18",
-    "event": "Cambridge Analytica scandal Facebook data harvested for political manipulation",
+    "date": "2017-10-01",
+    "event": "Las Vegas mass shooting 60 killed at country music festival deadliest in modern US history",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
+    "date": "2017-08-25",
+    "event": "Hurricane Harvey hits Texas causing catastrophic flooding 125 billion in damage",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2017-09-20",
+    "event": "Hurricane Maria devastates Puerto Rico kills estimated 3000 people",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2017-10-05",
+    "event": "Harvey Weinstein sexual abuse allegations break open MeToo movement begins",
+    "category": "cultural",
+    "significance": 5
+  },
+  {
+    "date": "2017-12-18",
+    "event": "Bitcoin price reaches nearly 20000 dollars for first time",
     "category": "technology",
     "significance": 4
   },
   {
+    "date": "2017-08-21",
+    "event": "Total solar eclipse crosses entire continental United States",
+    "category": "science",
+    "significance": 3
+  },
+  {
+    "date": "2017-06-01",
+    "event": "Trump announces US withdrawal from Paris Climate Agreement",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2017-09-03",
+    "event": "North Korea detonates hydrogen bomb sixth nuclear test",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2017-11-29",
+    "event": "North Korea launches ICBM capable of reaching entire US mainland",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2018-03-18",
+    "event": "Cambridge Analytica scandal Facebook data of 87 million harvested for political manipulation",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2018-06-12",
+    "event": "Trump-Kim Jong Un summit in Singapore first sitting US-North Korea leaders meeting",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2018-11-12",
+    "event": "Stan Lee dies age 95 creator of Marvel Comics universe",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2018-11-26",
+    "event": "He Jiankui announces first CRISPR gene-edited babies born in China",
+    "category": "science",
+    "significance": 5
+  },
+  {
+    "date": "2018-03-18",
+    "event": "Uber self-driving car kills pedestrian in Arizona first autonomous vehicle fatality",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2018-02-06",
+    "event": "SpaceX Falcon Heavy launches successfully with Tesla Roadster payload",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2018-11-08",
+    "event": "Camp Fire deadliest wildfire in California history destroys Paradise 85 killed",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2018-09-05",
+    "event": "Elon Musk smokes marijuana on Joe Rogan podcast Tesla stock drops",
+    "category": "corporate",
+    "significance": 2
+  },
+  {
+    "date": "2018-10-02",
+    "event": "Journalist Jamal Khashoggi murdered in Saudi Arabian consulate in Istanbul",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2018-05-19",
+    "event": "Royal wedding Prince Harry marries Meghan Markle",
+    "category": "cultural",
+    "significance": 2
+  },
+  {
+    "date": "2019-04-10",
+    "event": "First image of a black hole captured by Event Horizon Telescope M87 galaxy",
+    "category": "science",
+    "significance": 5
+  },
+  {
     "date": "2019-04-15",
-    "event": "Notre-Dame Cathedral fire in Paris",
+    "event": "Notre-Dame Cathedral fire in Paris spire collapses",
     "category": "cultural",
     "significance": 4
   },
   {
+    "date": "2019-01-01",
+    "event": "China social credit system fully operational nationwide",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2019-12-31",
+    "event": "First cases of novel coronavirus reported in Wuhan China",
+    "category": "health",
+    "significance": 5
+  },
+  {
+    "date": "2019-07-02",
+    "event": "Total solar eclipse visible across South America",
+    "category": "science",
+    "significance": 2
+  },
+  {
+    "date": "2019-11-12",
+    "event": "Disney Plus streaming service launches with 10 million subscribers on day one",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2019-06-09",
+    "event": "Hong Kong protests begin against extradition bill millions march",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2019-10-27",
+    "event": "ISIS leader Abu Bakr al-Baghdadi killed in US raid",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2019-01-03",
+    "event": "China Chang'e 4 lands on far side of the Moon first ever",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2019-09-20",
+    "event": "Area 51 raid meme 2 million people sign up to storm Nevada base",
+    "category": "cultural",
+    "significance": 2
+  },
+  {
+    "date": "2019-10-31",
+    "event": "UK misses second Brexit deadline Boris Johnson calls snap election",
+    "category": "political",
+    "significance": 3
+  },
+  {
     "date": "2020-01-30",
-    "event": "COVID-19 pandemic declared by WHO global lockdowns begin",
+    "event": "WHO declares COVID-19 a Public Health Emergency of International Concern",
+    "category": "health",
+    "significance": 5
+  },
+  {
+    "date": "2020-03-11",
+    "event": "WHO declares COVID-19 a pandemic global lockdowns begin",
     "category": "health",
     "significance": 5
   },
   {
     "date": "2020-02-03",
-    "event": "Diamond Princess cruise ship quarantined with COVID-19 outbreak virus on cruise ship",
+    "event": "Diamond Princess cruise ship quarantined with COVID-19 outbreak",
     "category": "health",
     "significance": 4
   },
   {
     "date": "2020-12-14",
-    "event": "First COVID-19 mRNA vaccines administered",
+    "event": "First COVID-19 mRNA vaccines administered Pfizer BioNTech",
     "category": "health",
     "significance": 5
   },
   {
     "date": "2020-05-30",
     "event": "SpaceX Crew Dragon launches first commercial crewed mission to ISS",
-    "category": "technology",
+    "category": "space",
     "significance": 4
   },
   {
+    "date": "2020-05-25",
+    "event": "George Floyd killed by Minneapolis police sparking worldwide BLM protests",
+    "category": "cultural",
+    "significance": 5
+  },
+  {
+    "date": "2020-01-26",
+    "event": "Kobe Bryant dies in helicopter crash with daughter Gianna age 41",
+    "category": "cultural",
+    "significance": 5
+  },
+  {
+    "date": "2020-01-03",
+    "event": "US drone strike kills Iranian General Qasem Soleimani in Baghdad",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2020-08-04",
+    "event": "Beirut port explosion 2750 tons of ammonium nitrate kills 218 people",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2020-11-03",
+    "event": "Joe Biden elected 46th President of the United States defeating Trump",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2020-09-18",
+    "event": "Ruth Bader Ginsburg dies Amy Coney Barrett nominated to Supreme Court",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2020-12-21",
+    "event": "Great Conjunction Jupiter and Saturn closest in 800 years",
+    "category": "science",
+    "significance": 2
+  },
+  {
+    "date": "2020-09-09",
+    "event": "US West Coast wildfires create apocalyptic orange skies over San Francisco",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2020-07-30",
+    "event": "NASA Perseverance rover launched to Mars with Ingenuity helicopter",
+    "category": "space",
+    "significance": 3
+  },
+  {
     "date": "2021-01-06",
-    "event": "US Capitol stormed by protesters during electoral certification",
+    "event": "US Capitol stormed by pro-Trump protesters during electoral certification",
     "category": "political",
     "significance": 5
   },
   {
     "date": "2021-01-27",
-    "event": "GameStop short squeeze Reddit retail traders vs Wall Street hedge funds",
-    "category": "cultural",
+    "event": "GameStop short squeeze Reddit WallStreetBets retail traders vs hedge funds",
+    "category": "corporate",
     "significance": 4
   },
   {
     "date": "2021-03-23",
-    "event": "Ever Given container ship blocks Suez Canal for 6 days",
+    "event": "Ever Given container ship blocks Suez Canal for 6 days global trade disrupted",
     "category": "disaster",
     "significance": 3
   },
   {
     "date": "2021-01-08",
-    "event": "Twitter and Facebook permanently ban sitting US President Trump",
+    "event": "Twitter permanently bans sitting US President Trump from platform",
     "category": "technology",
     "significance": 4
   },
   {
+    "date": "2021-01-20",
+    "event": "Joe Biden inaugurated as 46th President of the United States",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2021-02-18",
+    "event": "NASA Perseverance rover lands on Mars with Ingenuity helicopter",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2021-04-19",
+    "event": "Ingenuity helicopter performs first powered flight on another planet",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2021-08-15",
+    "event": "Taliban retakes Kabul Afghanistan US withdrawal chaotic evacuation",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "2021-07-20",
+    "event": "Jeff Bezos flies to space on Blue Origin New Shepard",
+    "category": "space",
+    "significance": 3
+  },
+  {
+    "date": "2021-07-11",
+    "event": "Richard Branson flies to edge of space on Virgin Galactic",
+    "category": "space",
+    "significance": 3
+  },
+  {
+    "date": "2021-11-10",
+    "event": "Bitcoin reaches all-time high near 69000 dollars",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2021-10-28",
+    "event": "Facebook rebrands to Meta announcing metaverse pivot",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2021-09-14",
+    "event": "SpaceX Inspiration4 first all-civilian orbital spaceflight",
+    "category": "space",
+    "significance": 3
+  },
+  {
+    "date": "2021-12-25",
+    "event": "James Webb Space Telescope launched on Christmas Day",
+    "category": "space",
+    "significance": 5
+  },
+  {
     "date": "2022-02-24",
-    "event": "Russia invades Ukraine",
+    "event": "Russia invades Ukraine full-scale war in Europe",
     "category": "military",
     "significance": 5
   },
   {
     "date": "2022-04-25",
     "event": "Elon Musk acquires Twitter for 44 billion dollars",
-    "category": "cultural",
+    "category": "corporate",
     "significance": 4
   },
   {
     "date": "2022-11-11",
-    "event": "FTX cryptocurrency exchange collapses Sam Bankman-Fried arrested",
-    "category": "cultural",
+    "event": "FTX cryptocurrency exchange collapses Sam Bankman-Fried arrested for fraud",
+    "category": "corporate",
     "significance": 4
   },
   {
@@ -240,16 +1404,226 @@
     "significance": 5
   },
   {
+    "date": "2022-07-12",
+    "event": "James Webb Space Telescope first images released deepest infrared view of universe",
+    "category": "space",
+    "significance": 5
+  },
+  {
+    "date": "2022-09-08",
+    "event": "Queen Elizabeth II dies at age 96 after 70 year reign",
+    "category": "cultural",
+    "significance": 5
+  },
+  {
+    "date": "2022-09-26",
+    "event": "Nord Stream pipelines sabotaged underwater explosions in Baltic Sea",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2022-10-27",
+    "event": "Elon Musk completes Twitter acquisition fires 75 percent of staff",
+    "category": "corporate",
+    "significance": 3
+  },
+  {
+    "date": "2022-06-24",
+    "event": "US Supreme Court overturns Roe v Wade ending federal abortion rights",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2022-09-26",
+    "event": "DART spacecraft intentionally crashes into asteroid Dimorphos planetary defense test",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2022-01-15",
+    "event": "Tonga volcanic eruption and tsunami one of largest eruptions in decades",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2022-05-22",
+    "event": "Monkeypox outbreak detected spreading globally outside endemic regions",
+    "category": "health",
+    "significance": 3
+  },
+  {
+    "date": "2023-02-06",
+    "event": "Turkey-Syria earthquake kills 50000 people magnitude 7.8",
+    "category": "disaster",
+    "significance": 5
+  },
+  {
     "date": "2023-06-05",
     "event": "David Grusch testifies about UFO crash retrieval and reverse engineering programs",
     "category": "military",
     "significance": 4
   },
   {
+    "date": "2023-03-10",
+    "event": "Silicon Valley Bank collapses second largest bank failure in US history",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2023-03-14",
+    "event": "GPT-4 released by OpenAI multimodal AI model",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2023-07-01",
+    "event": "Threads launched by Meta as Twitter competitor gains 100 million users in 5 days",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2023-10-07",
+    "event": "Hamas attacks Israel killing 1200 people Israel declares war on Gaza",
+    "category": "military",
+    "significance": 5
+  },
+  {
+    "date": "2023-11-30",
+    "event": "Henry Kissinger dies at age 100",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2023-06-01",
+    "event": "Apple Vision Pro mixed reality headset announced",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2023-06-18",
+    "event": "Titan submersible implodes killing 5 during Titanic wreck dive",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2023-09-01",
+    "event": "Burning Man festival attendees trapped by flooding in Nevada desert",
+    "category": "cultural",
+    "significance": 2
+  },
+  {
+    "date": "2023-11-06",
+    "event": "OpenAI board fires Sam Altman then rehires him days later corporate chaos",
+    "category": "corporate",
+    "significance": 3
+  },
+  {
+    "date": "2023-08-08",
+    "event": "Maui wildfires in Lahaina Hawaii kill over 100 deadliest US wildfire in century",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2023-05-11",
+    "event": "WHO declares end of COVID-19 as global health emergency",
+    "category": "health",
+    "significance": 4
+  },
+  {
     "date": "2024-11-05",
-    "event": "Donald Trump elected President for second term",
+    "event": "Donald Trump elected 47th President for second non-consecutive term",
     "category": "political",
     "significance": 5
+  },
+  {
+    "date": "2024-07-13",
+    "event": "Assassination attempt on Donald Trump shot in ear at Pennsylvania rally",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2024-07-21",
+    "event": "Joe Biden drops out of presidential race endorses Kamala Harris",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2024-03-26",
+    "event": "Francis Scott Key Bridge in Baltimore collapses after cargo ship collision",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2024-04-08",
+    "event": "Total solar eclipse crosses North America from Mexico to Canada",
+    "category": "science",
+    "significance": 3
+  },
+  {
+    "date": "2024-02-15",
+    "event": "OpenAI unveils Sora text-to-video AI model",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2024-01-08",
+    "event": "Alaska Airlines Boeing 737 MAX 9 door plug blows out mid-flight",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2024-10-10",
+    "event": "SpaceX Starship booster caught by mechazilla chopstick arms on landing",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2024-09-17",
+    "event": "Hezbollah pager explosions across Lebanon coordinated Israel operation",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2024-11-27",
+    "event": "South Korea brief martial law declared and reversed within hours",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2025-01-20",
+    "event": "Donald Trump inaugurated as 47th President of the United States second term",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2025-01-27",
+    "event": "DeepSeek R1 AI model released from China causes tech stock selloff",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2025-01-07",
+    "event": "Los Angeles Palisades and Eaton wildfires burn through Pacific Palisades Altadena",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2025-03-04",
+    "event": "Trump signs executive orders on mass deportation and border wall",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2025-04-02",
+    "event": "Trump announces Liberation Day tariffs sweeping import duties on all countries",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2025-02-01",
+    "event": "US imposes 25 percent tariffs on Canada and Mexico trade war escalates",
+    "category": "political",
+    "significance": 3
   },
   {
     "date": "2026-05-08",
@@ -258,87 +1632,519 @@
     "significance": 4
   },
   {
-    "date": "1997-02-22",
-    "event": "Dolly the sheep cloned first mammal cloned from adult cell",
-    "category": "science",
-    "significance": 5
-  },
-  {
-    "date": "1997-05-11",
-    "event": "IBM Deep Blue defeats chess world champion Garry Kasparov",
-    "category": "technology",
-    "significance": 4
-  },
-  {
-    "date": "1998-09-04",
-    "event": "Google founded by Larry Page and Sergey Brin",
-    "category": "technology",
-    "significance": 5
-  },
-  {
-    "date": "2000-03-10",
-    "event": "Dot-com bubble peaks NASDAQ crashes",
-    "category": "cultural",
-    "significance": 4
-  },
-  {
-    "date": "2003-02-01",
-    "event": "Space Shuttle Columbia disintegrates during re-entry 7 crew die",
-    "category": "disaster",
-    "significance": 5
-  },
-  {
-    "date": "2003-04-14",
-    "event": "Human Genome Project completed mapping all human genes",
-    "category": "science",
-    "significance": 5
-  },
-  {
-    "date": "2004-02-04",
-    "event": "Facebook launched by Mark Zuckerberg",
-    "category": "technology",
-    "significance": 5
-  },
-  {
-    "date": "2006-08-24",
-    "event": "Pluto reclassified as dwarf planet",
-    "category": "science",
-    "significance": 3
-  },
-  {
-    "date": "2009-06-25",
-    "event": "Michael Jackson dies",
-    "category": "cultural",
-    "significance": 4
-  },
-  {
-    "date": "2010-11-28",
-    "event": "WikiLeaks releases 250000 US diplomatic cables",
-    "category": "political",
-    "significance": 5
-  },
-  {
-    "date": "2011-02-16",
-    "event": "IBM Watson wins Jeopardy against human champions",
+    "date": "1998-12-01",
+    "event": "AOL Instant Messenger becomes dominant chat platform in US",
     "category": "technology",
     "significance": 3
   },
   {
-    "date": "2012-08-06",
-    "event": "NASA Curiosity rover lands on Mars",
+    "date": "2001-03-24",
+    "event": "Mac OS X first released by Apple beginning macOS era",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2003-06-23",
+    "event": "MySpace social network launches becomes most visited website by 2006",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2005-10-19",
+    "event": "Google Maps satellite imagery launched",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2007-11-19",
+    "event": "Amazon Kindle e-reader released digital books go mainstream",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2008-07-11",
+    "event": "Apple App Store launches with 500 apps creating app economy",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2010-04-03",
+    "event": "Apple iPad goes on sale first modern tablet computer",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2011-02-08",
+    "event": "Watson AI system built by IBM wins Jeopardy against all-time champions",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2012-04-09",
+    "event": "Facebook acquires Instagram for 1 billion dollars",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2013-09-20",
+    "event": "Tesla Model S receives highest ever safety rating from NHTSA",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2014-01-06",
+    "event": "Consumer drones go mainstream DJI Phantom 2 Vision Plus debuts at CES",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2014-03-25",
+    "event": "Facebook acquires Oculus VR for 2 billion dollars virtual reality goes mainstream",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2016-09-01",
+    "event": "TikTok launched as Douyin in China international version follows 2017",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2017-06-18",
+    "event": "Tesla Model 3 production begins mass market electric vehicle",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2019-03-25",
+    "event": "Apple TV Plus streaming service announced Apple enters streaming wars",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2020-01-02",
+    "event": "Tesla delivers first China-made Model 3 cars from Shanghai Gigafactory",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2021-01-28",
+    "event": "Robinhood restricts GameStop trading retail investors locked out of buying",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2023-02-01",
+    "event": "Microsoft invests 10 billion in OpenAI biggest AI investment deal",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2001-10-04",
+    "event": "Enron accounting fraud exposed stock crashes from 90 to under 1 dollar",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2002-06-25",
+    "event": "WorldCom reveals 3.8 billion in fraudulent accounting",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2008-03-16",
+    "event": "Bear Stearns collapses acquired by JPMorgan for 2 dollars per share",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2009-06-11",
+    "event": "Bernie Madoff sentenced to 150 years for 65 billion Ponzi scheme",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2015-10-15",
+    "event": "Theranos fraud exposed Elizabeth Holmes fake blood testing technology",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2019-03-20",
+    "event": "Disney acquires 21st Century Fox for 71 billion dollars",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2023-07-24",
+    "event": "Twitter rebrands to X under Elon Musk blue bird logo removed",
+    "category": "corporate",
+    "significance": 3
+  },
+  {
+    "date": "2012-09-01",
+    "event": "MERS coronavirus first identified in Saudi Arabia",
+    "category": "health",
+    "significance": 3
+  },
+  {
+    "date": "2017-10-26",
+    "event": "Trump declares opioid crisis a public health emergency 70000 annual deaths",
+    "category": "health",
+    "significance": 4
+  },
+  {
+    "date": "2020-03-13",
+    "event": "Trump declares national emergency over COVID-19 pandemic",
+    "category": "health",
+    "significance": 4
+  },
+  {
+    "date": "2021-12-01",
+    "event": "Omicron COVID-19 variant detected spreading rapidly worldwide",
+    "category": "health",
+    "significance": 3
+  },
+  {
+    "date": "1990-02-14",
+    "event": "Voyager 1 takes Pale Blue Dot photo of Earth from 6 billion km away",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "1998-11-20",
+    "event": "International Space Station first module Zarya launched assembly begins",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2000-11-02",
+    "event": "First crew arrives at International Space Station continuous habitation begins",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2006-01-15",
+    "event": "NASA Stardust mission returns comet dust samples to Earth first ever",
+    "category": "space",
+    "significance": 3
+  },
+  {
+    "date": "2012-08-25",
+    "event": "Voyager 1 enters interstellar space first human-made object to leave solar system",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2015-12-21",
+    "event": "SpaceX Falcon 9 first successful orbital rocket landing",
+    "category": "space",
+    "significance": 4
+  },
+  {
+    "date": "2020-12-06",
+    "event": "Japan Hayabusa2 returns asteroid Ryugu samples to Earth",
+    "category": "space",
+    "significance": 3
+  },
+  {
+    "date": "2016-01-20",
+    "event": "Planet Nine hypothesized evidence of massive planet in outer solar system",
+    "category": "science",
+    "significance": 3
+  },
+  {
+    "date": "2017-10-16",
+    "event": "LIGO detects gravitational waves from neutron star merger with electromagnetic counterpart",
     "category": "science",
     "significance": 4
   },
   {
-    "date": "2019-01-01",
-    "event": "China social credit system fully operational",
+    "date": "2020-09-14",
+    "event": "Possible signs of phosphine detected in Venus atmosphere potential biosignature",
+    "category": "science",
+    "significance": 3
+  },
+  {
+    "date": "2023-07-27",
+    "event": "Scientists achieve net energy gain from nuclear fusion at National Ignition Facility confirmed",
+    "category": "science",
+    "significance": 4
+  },
+  {
+    "date": "2019-10-23",
+    "event": "Google claims quantum supremacy with 53-qubit Sycamore processor",
+    "category": "science",
+    "significance": 4
+  },
+  {
+    "date": "1997-03-26",
+    "event": "Heavens Gate cult mass suicide 39 members die believing aliens would save them",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2006-01-04",
+    "event": "Jack Abramoff lobbyist scandal rocks US Congress corruption exposed",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2009-01-20",
+    "event": "Bernie Madoff Ponzi scheme fully exposed 65 billion in fraud",
+    "category": "corporate",
+    "significance": 4
+  },
+  {
+    "date": "2014-05-24",
+    "event": "Elliot Rodger Isla Vista killings sparks incel violence debate",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2016-01-10",
+    "event": "David Bowie dies of liver cancer age 69",
+    "category": "cultural",
+    "significance": 4
+  },
+  {
+    "date": "2020-08-28",
+    "event": "Chadwick Boseman dies of colon cancer age 43 Black Panther star",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2023-01-10",
+    "event": "Lisa Marie Presley dies age 54 daughter of Elvis Presley",
+    "category": "cultural",
+    "significance": 2
+  },
+  {
+    "date": "2017-10-01",
+    "event": "Catalonia independence referendum Spain declares it illegal",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2018-06-05",
+    "event": "Anthony Bourdain dies by suicide age 61",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2005-10-08",
+    "event": "Kashmir earthquake magnitude 7.6 kills 87000 people in Pakistan",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2010-08-05",
+    "event": "Chilean mine collapse 33 miners trapped underground for 69 days all rescued",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2013-11-08",
+    "event": "Typhoon Hainan hits Philippines one of strongest tropical cyclones ever 6300 killed",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2015-04-25",
+    "event": "Nepal earthquake magnitude 7.8 kills 9000 people damages ancient temples",
+    "category": "disaster",
+    "significance": 4
+  },
+  {
+    "date": "2019-08-23",
+    "event": "Amazon rainforest fires surge thousands of fires detected sparking global outcry",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2021-07-20",
+    "event": "Zhengzhou floods in China subway passengers trapped 302 killed",
+    "category": "disaster",
+    "significance": 3
+  },
+  {
+    "date": "2011-03-19",
+    "event": "NATO military intervention in Libya Operation Unified Protector",
+    "category": "military",
+    "significance": 3
+  },
+  {
+    "date": "2013-08-21",
+    "event": "Chemical weapons attack in Ghouta Syria kills hundreds",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2015-09-30",
+    "event": "Russia begins military intervention in Syrian civil war",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2020-09-27",
+    "event": "Nagorno-Karabakh war erupts Azerbaijan vs Armenia drone warfare showcase",
+    "category": "military",
+    "significance": 3
+  },
+  {
+    "date": "2021-04-13",
+    "event": "Pentagon releases declassified UFO footage confirming unidentified aerial phenomena",
+    "category": "military",
+    "significance": 3
+  },
+  {
+    "date": "2022-04-14",
+    "event": "Russian warship Moskva sunk by Ukrainian Neptune missiles in Black Sea",
+    "category": "military",
+    "significance": 4
+  },
+  {
+    "date": "2007-01-15",
+    "event": "Netflix launches streaming service pivoting from DVD mail to digital",
+    "category": "technology",
+    "significance": 5
+  },
+  {
+    "date": "2011-04-14",
+    "event": "Game of Thrones premieres on HBO becomes cultural phenomenon",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2015-02-01",
+    "event": "Netflix expands to 130 countries simultaneously becoming global platform",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2000-03-19",
+    "event": "Simpsons episode Bart to the Future shows Trump presidency prediction aired",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2014-07-08",
+    "event": "Germany defeats Brazil 7-1 in World Cup semifinal historic humiliation",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2013-02-10",
+    "event": "Super Bowl XLVII power outage halts game for 34 minutes in New Orleans",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2017-01-22",
+    "event": "Womens March largest single-day protest in US history millions participate",
+    "category": "cultural",
+    "significance": 3
+  },
+  {
+    "date": "2019-07-14",
+    "event": "US Womens soccer team wins World Cup Megan Rapinoe named Golden Ball",
+    "category": "cultural",
+    "significance": 2
+  },
+  {
+    "date": "2011-12-17",
+    "event": "Kim Jong Il dies Kim Jong Un takes power in North Korea",
     "category": "political",
     "significance": 4
   },
   {
-    "date": "2023-02-06",
-    "event": "Turkey-Syria earthquake kills 50000 people",
-    "category": "disaster",
+    "date": "2013-07-03",
+    "event": "Egyptian military coup ousts President Mohamed Morsi",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2016-08-05",
+    "event": "Rio Olympics opening ceremony first South American Olympics amid Zika fears",
+    "category": "cultural",
+    "significance": 2
+  },
+  {
+    "date": "2018-07-06",
+    "event": "US-China trade war begins 34 billion in tariffs imposed",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2020-01-31",
+    "event": "United Kingdom officially leaves the European Union Brexit Day",
+    "category": "political",
+    "significance": 4
+  },
+  {
+    "date": "2021-12-13",
+    "event": "Elizabeth Holmes found guilty of fraud Theranos trial concludes",
+    "category": "corporate",
+    "significance": 3
+  },
+  {
+    "date": "2024-05-30",
+    "event": "Donald Trump found guilty on 34 felony counts first former president convicted",
+    "category": "political",
+    "significance": 5
+  },
+  {
+    "date": "2022-02-04",
+    "event": "Beijing Winter Olympics open Putin and Xi meet before Ukraine invasion",
+    "category": "political",
+    "significance": 3
+  },
+  {
+    "date": "2013-11-28",
+    "event": "Bitcoin price crosses 1000 dollars for first time",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2021-09-07",
+    "event": "El Salvador becomes first country to adopt Bitcoin as legal tender",
+    "category": "technology",
+    "significance": 3
+  },
+  {
+    "date": "2024-01-10",
+    "event": "SEC approves first Bitcoin spot ETFs mainstream financial adoption",
+    "category": "technology",
+    "significance": 4
+  },
+  {
+    "date": "2016-08-24",
+    "event": "Proxima Centauri b discovered potentially habitable exoplanet orbiting nearest star",
+    "category": "science",
+    "significance": 4
+  },
+  {
+    "date": "2017-02-22",
+    "event": "TRAPPIST-1 system announced 7 Earth-sized planets around single star",
+    "category": "science",
+    "significance": 4
+  },
+  {
+    "date": "2022-12-05",
+    "event": "US National Ignition Facility achieves nuclear fusion ignition net energy gain",
+    "category": "science",
+    "significance": 5
+  },
+  {
+    "date": "2020-12-10",
+    "event": "Katalin Kariko and Drew Weissman mRNA research enables COVID vaccines later win Nobel",
+    "category": "science",
+    "significance": 4
+  },
+  {
+    "date": "2012-06-01",
+    "event": "CRISPR gene editing technology first demonstrated by Doudna and Charpentier",
+    "category": "science",
     "significance": 5
   }
 ]
