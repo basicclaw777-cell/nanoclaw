@@ -1766,6 +1766,18 @@ app.get('/reed-lab/image', (req, res) => {
   res.sendFile(imgPath);
 });
 
+app.get('/cosmology', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'cosmology-research.html'));
+});
+
+app.get('/cosmology/graph', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'cosmology-graph.html'));
+});
+
+app.get('/publisher', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'publisher-studio.html'));
+});
+
 app.get('/reed-lab/digest', (req, res) => {
   const today = new Date().toISOString().slice(0, 10);
   const digestPath = path.join(NANOCLAW, 'reed-lab', `roundtable-digest-${today}.html`);
