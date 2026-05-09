@@ -66,7 +66,7 @@ function savePortfolio(portfolio) {
 
 // ── Step 1: Fetch fresh signals ──────────────────────────────────────────────
 
-function fetchSignals() {
+async function fetchSignals() {
   console.log('[1/5] Fetching fresh signals (10 strategies)...');
 
   let baseData = null;
@@ -112,6 +112,20 @@ function fetchSignals() {
   } catch (e) {
     console.error('[cathedral-strategies] Failed:', e.message);
     // Continue with just market signals
+  }
+
+  // Run strategy 12: Simpsons Temporal Signal
+  try {
+    const simpsonsModule = await import('./strategies/simpsons-signal.js');
+    const simpsonsData = simpsonsModule.generateSimpsonsSignals();
+    if (simpsonsData.signals.length > 0) {
+      baseData.signals = [...baseData.signals, ...simpsonsData.signals];
+      baseData.strategy_count = (baseData.strategy_count || 10) + 1;
+      console.log(`  Simpsons temporal signals: ${simpsonsData.signals.length} from ${simpsonsData.predictions_scored} predictions`);
+      console.log(`  Top prediction: "${simpsonsData.top_prediction}"`);
+    }
+  } catch (e) {
+    console.error('[simpsons-signal] Failed:', e.message);
   }
 
   return baseData;
@@ -387,7 +401,7 @@ async function run() {
   const portfolio = loadPortfolio();
 
   // Step 1: Fetch signals
-  const signalData = fetchSignals();
+  const signalData = await fetchSignals();
   if (!signalData) {
     console.log('[ABORT] No signal data available');
     await notify('[TRADER] Run aborted — no signal data');
