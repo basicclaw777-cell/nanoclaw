@@ -1774,6 +1774,10 @@ app.get('/cosmology/graph', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'cosmology-graph.html'));
 });
 
+app.get('/simpsons', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'simpsons-forensics', 'dashboard.html'));
+});
+
 app.get('/publisher', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'publisher-studio.html'));
 });

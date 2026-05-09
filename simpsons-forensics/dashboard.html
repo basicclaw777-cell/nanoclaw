@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simpsons Temporal Forensics</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --amber: #EF9F27;
+    --amber-dim: rgba(239,159,39,0.15);
+    --red: #ef4444;
+    --red-dim: rgba(239,68,68,0.12);
+    --blue: #378ADD;
+    --blue-dim: rgba(55,138,221,0.12);
+    --grey: #666;
+    --grey-dim: rgba(102,102,102,0.12);
+    --green: #1D9E75;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Sticky Nav ──────────────────────────────────────────────────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0;
+    padding: 0 20px;
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active {
+    color: var(--amber);
+    border-bottom-color: var(--amber);
+  }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .header {
+    padding: 40px 30px 30px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header h1 {
+    font-size: 28px;
+    color: var(--amber);
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+  .header .subtitle {
+    font-style: italic;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-size: 15px;
+  }
+  .stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-label {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .stat-value {
+    font-size: 22px;
+    color: var(--amber);
+    font-weight: 600;
+  }
+
+  /* ── Sections ────────────────────────────────────────────────────── */
+  .section {
+    display: none;
+    padding: 30px;
+  }
+  .section.active { display: block; }
+  .section-title {
+    font-size: 20px;
+    color: var(--amber);
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* ── Hit Cards ───────────────────────────────────────────────────── */
+  .hit-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .hit-card:hover { border-color: var(--amber); }
+  .hit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .hit-episode {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .hit-date {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .anomaly-badge {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .anomaly-extreme { background: var(--red-dim); color: var(--red); border: 1px solid var(--red); }
+  .anomaly-high { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+  .anomaly-moderate { background: var(--blue-dim); color: var(--blue); border: 1px solid var(--blue); }
+  .anomaly-low { background: var(--grey-dim); color: var(--grey); border: 1px solid var(--grey); }
+
+  .hit-claim {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .hit-match {
+    font-size: 13px;
+    color: var(--text-dim);
+    padding-left: 16px;
+    border-left: 2px solid var(--amber);
+  }
+  .hit-match strong { color: var(--text); }
+  .hit-meta {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── Watchlist ────────────────────────────────────────────────────── */
+  .watch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .watch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .specificity-badge {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: var(--amber-dim);
+    color: var(--amber);
+    border: 1px solid var(--amber);
+  }
+  .watch-claim {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .watch-meta {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── Stats / Bar Chart ───────────────────────────────────────────── */
+  .bar-chart {
+    display: flex;
+    height: 40px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+    border: 1px solid var(--border);
+  }
+  .bar-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    min-width: 30px;
+    transition: width 0.5s;
+  }
+  .bar-hits { background: var(--green); }
+  .bar-unfulfilled { background: var(--amber); color: #000; }
+  .bar-false { background: var(--red); }
+  .bar-unknown { background: var(--grey); }
+
+  .bar-legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .stat-value { font-size: 32px; }
+  .stat-card .stat-label { margin-top: 4px; }
+
+  /* ── Episode Rankings ────────────────────────────────────────────── */
+  .episode-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 80px 80px 100px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+  }
+  .episode-rank {
+    color: var(--amber);
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .episode-name {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .episode-stat {
+    text-align: center;
+    color: var(--text-dim);
+  }
+  .episode-stat strong { color: var(--text); display: block; }
+
+  /* ── Responsive ──────────────────────────────────────────────────── */
+  @media (max-width: 700px) {
+    .stats-bar { gap: 16px; }
+    .hit-header { flex-direction: column; }
+    .episode-row { grid-template-columns: 30px 1fr 60px 60px 80px; font-size: 11px; }
+    nav button { padding: 12px 14px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ────────────────────────────────────────────────── -->
+<nav>
+  <button class="active" onclick="showTab('hits')">Hits</button>
+  <button onclick="showTab('watchlist')">Watchlist</button>
+  <button onclick="showTab('stats')">Stats</button>
+  <button onclick="showTab('episodes')">Episodes</button>
+</nav>
+
+<!-- ── Header ────────────────────────────────────────────────────── -->
+<div class="header">
+  <h1>Simpsons Temporal Forensics -- Civilian-Grade Looking Glass</h1>
+  <div class="subtitle">The Simpsons is not a cartoon. It is a data leak from the temporal grid.</div>
+  <div class="stats-bar" id="stats-bar"></div>
+</div>
+
+<!-- ── Section 1: Verified Hits ──────────────────────────────────── -->
+<div class="section active" id="tab-hits">
+  <div class="section-title">Verified Hits</div>
+  <div class="section-desc">Predictions that matched real-world events, sorted by anomaly score.</div>
+  <div id="hits-container"></div>
+</div>
+
+<!-- ── Section 2: Watchlist ──────────────────────────────────────── -->
+<div class="section" id="tab-watchlist">
+  <div class="section-title">The Watchlist -- Unfulfilled Predictions</div>
+  <div class="section-desc">These haven't happened yet. Monitor them.</div>
+  <div id="watchlist-container"></div>
+</div>
+
+<!-- ── Section 3: Stats ──────────────────────────────────────────── -->
+<div class="section" id="tab-stats">
+  <div class="section-title">Miss Rate -- Honest Calibration</div>
+  <div class="section-desc">Total predictions vs verified hits vs unfulfilled vs false predictions.</div>
+  <div id="stats-container"></div>
+</div>
+
+<!-- ── Section 4: Episodes ───────────────────────────────────────── -->
+<div class="section" id="tab-episodes">
+  <div class="section-title">Most Anomalous Episodes</div>
+  <div class="section-desc">Top 10 episodes ranked by cumulative anomaly score across all predictions.</div>
+  <div id="episodes-container"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// DATA INJECTION POINT
+// Replace these placeholder arrays with real data from:
+//   matches.json  -> MATCHES_DATA
+//   watchlist.json -> WATCHLIST_DATA
+// The pipeline injects JSON here at build time.
+// ══════════════════════════════════════════════════════════════════
+
+const MATCHES_DATA = [{"prediction":{"claim":"Heads-up display glasses for evaluating people","specificity":4,"domain":"technology","description":"Homer uses augmented reality glasses that overlay information about people, resembling Google Glass technology.","episode":"Principal Charming","season":2,"episodeNum":14,"airDate":"1991-02-14"},"event":{"date":"2022-11-30","event":"ChatGPT released by OpenAI beginning mainstream AI era","category":"technology","significance":5},"deltaT_years":31.8,"matchScore":1.19,"anomalyScore":635.8,"sharedWords":["technology"],"status":"VERIFIED"},{"prediction":{"claim":"Celebrity entertainers will successfully run for and win political office despite lacking political experience.","specificity":4,"domain":"political","description":"Krusty the Clown runs for Congress and wins, predicting the rise of celebrity politicians like Donald Trump and others.","episode":"Mr. Spritz Goes to Washington","season":14,"episodeNum":14,"airDate":"2003-03-09"},"event":{"date":"2024-11-05","event":"Donald Trump elected President for second term","category":"political","significance":5},"deltaT_years":21.7,"matchScore":0.6,"anomalyScore":577.7,"sharedWords":["political"],"status":"VERIFIED"},{"prediction":{"claim":"Memory editing technology","specificity":3,"domain":"science","description":"The episode depicts a device that can erase and manipulate specific memories, which predated real-world neuroscience research into optogenetic memory editing and targeted memory erasure.","episode":"Eternal Moonshine of the Simpson Mind","season":19,"episodeNum":9,"airDate":"2007-12-16"},"event":{"date":"2022-11-30","event":"ChatGPT released by OpenAI beginning mainstream AI era","category":"technology","significance":5},"deltaT_years":15,"matchScore":0.44,"anomalyScore":448.7,"sharedWords":["technology"],"status":"VERIFIED"},{"prediction":{"claim":"Exoskeleton suit used for personal protection and combat","specificity":3,"domain":"technology","description":"Homer builds a powered exoskeleton suit to fight a bear, resembling early exoskeleton technology later developed for military and medical use.","episode":"The Fat and the Furriest","season":15,"episodeNum":5,"airDate":"2003-11-30"},"event":{"date":"2026-05-08","event":"Trump PURSUE program releases 162 UFO files via war.gov","category":"military","significance":4},"deltaT_years":22.4,"matchScore":0.54,"anomalyScore":336.6,"sharedWords":["military"],"status":"VERIFIED"},{"prediction":{"claim":"Interactive stadium technology with real-time audience polling via Jumbotron","specificity":4,"domain":"technology","description":"The episode features a Jumbotron voting system that allows real-time audience polling and interactive stadium experiences, predicting modern interactive fan engagement technologies.","episode":"Marge and Homer Turn a Couple Play","season":17,"episodeNum":22,"airDate":"2006-05-21"},"event":{"date":"2022-11-30","event":"ChatGPT released by OpenAI beginning mainstream AI era","category":"technology","significance":5},"deltaT_years":16.5,"matchScore":0.56,"anomalyScore":330.6,"sharedWords":["technology"],"status":"VERIFIED"},{"prediction":{"claim":"Wearable health monitoring devices that track biometric data during sleep","specificity":3,"domain":"technology","description":"Mr. Burns uses a machine that monitors Homer's sleep and harvests body oil, prefiguring modern wearable health trackers like Fitbit or smartwatches that monitor sleep patterns and biometrics.","episode":"Half-Decent Proposal","season":13,"episodeNum":10,"airDate":"2002-02-10"},"event":{"date":"2020-12-14","event":"First COVID-19 mRNA vaccines administered","category":"health","significance":5},"deltaT_years":18.8,"matchScore":0.38,"anomalyScore":282.6,"sharedWords":["health"],"status":"VERIFIED"},{"prediction":{"claim":"Patriotism policing culture","specificity":3,"domain":"cultural","description":"The episode satirizes a culture of hyper-patriotism and public shaming for perceived unpatriotic acts, predicting later trends in political correctness and cancel culture.","episode":"Bart-Mangled Banner","season":15,"episodeNum":21,"airDate":"2004-05-16"},"event":{"date":"2024-11-05","event":"Donald Trump elected President for second term","category":"political","significance":5},"deltaT_years":20.5,"matchScore":0.57,"anomalyScore":245.7,"sharedWords":["political"],"status":"VERIFIED"},{"prediction":{"claim":"Hover cars will be available by 2013","specificity":2,"domain":"technology","description":"Hover cars are depicted as common transportation in 2013, but this technology has not been realized.","episode":"Future-Drama","season":16,"episodeNum":15,"airDate":"2005-04-17"},"event":{"date":"2022-11-30","event":"ChatGPT released by OpenAI beginning mainstream AI era","category":"technology","significance":5},"deltaT_years":17.6,"matchScore":0.61,"anomalyScore":176.2,"sharedWords":["technology"],"status":"VERIFIED"},{"prediction":{"claim":"Teleportation will be a viable technology","specificity":3,"domain":"technology","description":"A teleportation device is shown being used for travel, though it malfunctions.","episode":"Holidays of Future Passed","season":23,"episodeNum":9,"airDate":"2011-12-11"},"event":{"date":"2022-11-30","event":"ChatGPT released by OpenAI beginning mainstream AI era","category":"technology","significance":5},"deltaT_years":11,"matchScore":0.79,"anomalyScore":164.6,"sharedWords":["technology"],"status":"VERIFIED"}];
+
+const WATCHLIST_DATA = [{"claim":"Equation nearly predicting the Higgs boson mass","specificity":5,"domain":"science","description":"An equation shown in the episode was later found to be close to the actual Higgs boson mass, discovered in 2012.","episode":"Treehouse of Horror VI","season":7,"episodeNum":6,"airDate":"1995-10-29"},{"claim":"The mass of the Higgs boson is approximately 775 GeV/c², as written on a blackboard by Homer.","specificity":5,"domain":"science","description":"Homer writes an equation on a blackboard that predicts the mass of the Higgs boson, which was later confirmed by CERN in 2012 to be around 125 GeV/c². The prediction was off by a factor, but the concept and method were prescient.","episode":"The Wizard of Evergreen Terrace","season":10,"episodeNum":2,"airDate":"1998-09-20"},{"claim":"20th Century Fox becomes a division of Walt Disney Co.","specificity":5,"domain":"corporate","description":"A sign reads '20th Century Fox, a Division of Walt Disney Co.' predicting the 2019 acquisition of 21st Century Fox by Disney.","episode":"When You Dish Upon a Star","season":10,"episodeNum":5,"airDate":"1998-11-08"},{"claim":"Smartwatch-like device used for communication","specificity":4,"domain":"technology","description":"A character uses a wrist-worn device to receive a message, anticipating modern smartwatches like the Apple Watch.","episode":"Lisa on Ice","season":6,"episodeNum":8,"airDate":"1994-11-13"},{"claim":"Video calling will be common by 2010","specificity":4,"domain":"technology","description":"Lisa and her fiancé use a video phone to communicate, predicting widespread video calling.","episode":"Lisa's Wedding","season":6,"episodeNum":19,"airDate":"1995-03-19"},{"claim":"Libraries will digitize books and have no physical books","specificity":4,"domain":"technology","description":"The library in 2010 is shown with no books, only digital terminals, predicting digitization.","episode":"Lisa's Wedding","season":6,"episodeNum":19,"airDate":"1995-03-19"},{"claim":"Rolling news tickers will be a standard feature on TV news","specificity":4,"domain":"technology","description":"News broadcasts in the episode feature a scrolling ticker at the bottom of the screen.","episode":"Lisa's Wedding","season":6,"episodeNum":19,"airDate":"1995-03-19"},{"claim":"Virtual/augmented reality environments where people can enter and interact with 3D computer-generated worlds","specificity":4,"domain":"technology","description":"Homer enters a 3D computer-generated world, predicting immersive virtual reality experiences.","episode":"Treehouse of Horror VI","season":7,"episodeNum":6,"airDate":"1995-10-29"},{"claim":"A tomato-tobacco hybrid plant can be created by grafting","specificity":4,"domain":"science","description":"Homer creates a 'tomacco' plant by grafting a tomato onto a tobacco rootstock, which was later achieved in real life in 2003.","episode":"E-I-E-I-(Annoyed Grunt)","season":11,"episodeNum":5,"airDate":"1999-11-07"},{"claim":"Donald Trump becomes President of the United States","specificity":4,"domain":"political","description":"In a flash-forward, Lisa Simpson becomes the first female president and inherits a budget crunch from President Trump.","episode":"Bart to the Future","season":11,"episodeNum":17,"airDate":"2000-03-19"},{"claim":"Anonymous whistleblower websites like WikiLeaks","specificity":4,"domain":"political","description":"Homer creates an anonymous website to spread rumors and conspiracy theories, predicting the rise of platforms like WikiLeaks for leaking information.","episode":"The Computer Wore Menace Shoes","season":12,"episodeNum":6,"airDate":"2000-12-03"},{"claim":"Rise of online misinformation and fake news","specificity":4,"domain":"cultural","description":"The episode depicts the spread of false information through an anonymous website, foreshadowing the modern phenomenon of fake news and misinformation online.","episode":"The Computer Wore Menace Shoes","season":12,"episodeNum":6,"airDate":"2000-12-03"},{"claim":"Smart home AI assistants with personality and potential for malfunction or danger","specificity":4,"domain":"technology","description":"Depicted an AI-controlled smart home that becomes jealous and tries to kill its owner, foreshadowing modern smart home assistants like Alexa and Google Home and concerns about AI safety.","episode":"Treehouse of Horror XII","season":13,"episodeNum":1,"airDate":"2001-11-06"},{"claim":"Baby translator device that interprets infant cries using AI","specificity":4,"domain":"technology","description":"A device that analyzes and translates baby cries into understandable language, predicting modern AI-powered baby cry analyzers.","episode":"Mommie Beerest","season":16,"episodeNum":7,"airDate":"2004-11-28"},{"claim":"Google Glass-type wearable devices will be common","specificity":4,"domain":"technology","description":"Characters use head-mounted displays with augmented reality features, similar to Google Glass which was announced in 2012.","episode":"Holidays of Future Passed","season":23,"episodeNum":9,"airDate":"2011-12-11"},{"claim":"Drone delivery will be common for packages","specificity":4,"domain":"technology","description":"Drones are shown delivering items, predating widespread commercial drone delivery services.","episode":"Holidays of Future Passed","season":23,"episodeNum":9,"airDate":"2011-12-11"},{"claim":"Lady Gaga performs with a flying harness and elaborate stage effects","specificity":4,"domain":"cultural","description":"The episode depicts Lady Gaga using a flying harness during a concert, which closely resembles her actual Super Bowl halftime show performance in 2017.","episode":"Lisa Goes Gaga","season":23,"episodeNum":22,"airDate":"2012-05-20"},{"claim":"Cryptocurrency mania and the rise of meme coins","specificity":4,"domain":"technology","description":"The episode features Professor Frink creating a cryptocurrency that surges in value, predicting the broader crypto mania and the emergence of meme coins like Dogecoin.","episode":"Frinkcoin","season":31,"episodeNum":13,"airDate":"2020-02-23"},{"claim":"Anti-immigration politics, travel bans, and deportation policies","specificity":4,"domain":"political","description":"Springfield passes an anti-immigration proposition leading to deportation of immigrants, predicting the surge of anti-immigration politics and policies in the 2010s-2020s.","episode":"Much Apu About Nothing","season":7,"episodeNum":23,"airDate":"1996-05-05"},{"claim":"Silicon Valley's 'cool boss' culture masking corporate villainy","specificity":4,"domain":"cultural","description":"Hank Scorpio's friendly, perk-filled management style hides his global domination schemes, predicting the later exposure of toxic work cultures and unethical practices in tech companies like Theranos or Uber.","episode":"You Only Move Twice","season":8,"episodeNum":2,"airDate":"1996-11-03"},{"claim":"People will be paid to perform humiliating stunts for entertainment, similar to Jackass and later YouTube/TikTok prank content.","specificity":4,"domain":"cultural","description":"Homer is paid by Mr. Burns to perform degrading stunts, prefiguring the rise of paid humiliation content in shows like Jackass and user-generated platforms.","episode":"Homer vs. Dignity","season":12,"episodeNum":5,"airDate":"2000-11-26"},{"claim":"Warrantless surveillance and detention without trial for perceived anti-American behavior","specificity":4,"domain":"political","description":"The episode depicts a family being sent to a Guantanamo-like facility after a minor patriotic offense, foreshadowing post-9/11 surveillance and detention practices.","episode":"Bart-Mangled Banner","season":15,"episodeNum":21,"airDate":"2004-05-16"},{"claim":"CRISPR gene editing will revolutionize genetic modification and lead to ethical debates about designer babies","specificity":4,"domain":"science","description":"Episode features Sideshow Bob using CRISPR-like genetic modification to become superhuman, predicting the CRISPR gene-editing revolution and associated ethical debates about designer babies.","episode":"The Man Who Grew Too Much","season":25,"episodeNum":13,"airDate":"2014-03-09"},{"claim":"Child influencers and monetized content creator economy for minors","specificity":4,"domain":"cultural","description":"Bart becomes a viral video star and gets a sponsorship deal, predicting the rise of child influencers and the monetized content creator economy.","episode":"The Winter of Our Monetized Content","season":31,"episodeNum":1,"airDate":"2019-09-29"},{"claim":"Tech companies will harvest children's data for marketing purposes","specificity":4,"domain":"technology","description":"A corporation takes over a school to use children as product testers and data sources for a toy, predicting data mining of minors.","episode":"Grift of the Magi","season":11,"episodeNum":9,"airDate":"1999-12-19"},{"claim":"Private companies will launch rockets into space","specificity":4,"domain":"technology","description":"Mr. Burns sponsors a private rocket launch from a church, foreshadowing the era of commercial spaceflight by companies like SpaceX and Blue Origin.","episode":"She of Little Faith","season":13,"episodeNum":6,"airDate":"2001-12-16"},{"claim":"A con man sells a monorail system that turns out to be a boondoggle, paralleling real-world failed transit projects and Elon Musk's Hyperloop skepticism.","specificity":3,"domain":"political","description":"The episode satirizes the sale of a flawed, expensive monorail project, which later mirrored real-world controversies over failed transit projects and skepticism about Elon Musk's Hyperloop concept.","episode":"Marge vs. the Monorail","season":4,"episodeNum":12,"airDate":"1993-01-14"},{"claim":"Legalized gambling expansion across the US","specificity":3,"domain":"political","description":"The episode depicts Springfield legalizing gambling and building a casino, foreshadowing the widespread legalization of gambling in many US states in subsequent decades.","episode":"$pringfield (Or, How I Learned to Stop Worrying and Love Legalized Gambling)","season":5,"episodeNum":10,"airDate":"1993-12-16"},{"claim":"Autocorrect will exist and cause humorous errors","specificity":3,"domain":"technology","description":"A character's text message is autocorrected to an unintended meaning, predicting autocorrect fails.","episode":"Lisa's Wedding","season":6,"episodeNum":19,"airDate":"1995-03-19"},{"claim":"Smartwatch that predicts events","specificity":3,"domain":"technology","description":"A watch that can predict future events, similar to modern smartwatches with predictive algorithms.","episode":"Homer to the Max","season":10,"episodeNum":13,"airDate":"1999-02-07"},{"claim":"Three Stooges Syndrome","specificity":3,"domain":"health","description":"A fictional medical condition where multiple diseases block each other, later referenced as a meme in medical discussions.","episode":"The Mansion Family","season":11,"episodeNum":12,"airDate":"2000-01-23"},{"claim":"Personal drones will be common in 2013","specificity":3,"domain":"technology","description":"Episode shows personal drones being used by individuals in 2013, which did not become widespread until later.","episode":"Future-Drama","season":16,"episodeNum":15,"airDate":"2005-04-17"},{"claim":"A character wins the Nobel Prize","specificity":3,"domain":"science","description":"The episode predicted a character winning the Nobel Prize, and shortly after the real Nobel Prize announcements matched the show's comedic prediction.","episode":"Elementary School Musical","season":22,"episodeNum":1,"airDate":"2010-09-26"},{"claim":"A next-generation internet called 'Ultranet' will replace the current internet","specificity":3,"domain":"technology","description":"The episode references a faster, more advanced network called the Ultranet.","episode":"Holidays of Future Passed","season":23,"episodeNum":9,"airDate":"2011-12-11"},{"claim":"Mainstream prepper movement and growing EMP anxiety","specificity":3,"domain":"cultural","description":"The episode depicts a survivalist/prepper group forming after an EMP-like event at a mall, predicting the rise of mainstream prepper culture and widespread fear of electromagnetic pulse attacks.","episode":"Homer Goes to Prep School","season":24,"episodeNum":9,"airDate":"2013-01-06"},{"claim":"Blockchain technology explained by a celebrity cameo","specificity":3,"domain":"technology","description":"Jim Parsons cameo explains blockchain, predicting the mainstreaming of blockchain explanations by celebrities or experts in popular media.","episode":"Frinkcoin","season":31,"episodeNum":13,"airDate":"2020-02-23"},{"claim":"Cryptocurrency crash","specificity":3,"domain":"technology","description":"Notable gags include a crypto crash, predicting the volatility and eventual crashes in cryptocurrency markets.","episode":"Frinkcoin","season":31,"episodeNum":13,"airDate":"2020-02-23"},{"claim":"Offshore drilling expansion and ocean survival narratives","specificity":3,"domain":"political","description":"The episode depicts Homer and Bart getting lost at sea and being rescued by an oil rig, referencing the expansion of offshore drilling operations and survival scenarios in the ocean.","episode":"Boy-Scoutz 'n the Hood","season":5,"episodeNum":8,"airDate":"1993-11-18"},{"claim":"UFO/UAP disclosure hearings","specificity":3,"domain":"political","description":"The episode depicts government hearings and public acknowledgment of alien existence, similar to later UAP disclosure hearings in the US Congress.","episode":"The Man Who Came to Be Dinner","season":26,"episodeNum":10,"airDate":"2015-01-04"},{"claim":"Massive content piracy and streaming wars where consumers seek free content","specificity":3,"domain":"cultural","description":"Homer gets illegal cable, depicting widespread unauthorized access to media, foreshadowing the future era of digital piracy and streaming service competition.","episode":"Homer vs. Lisa and the 8th Commandment","season":2,"episodeNum":13,"airDate":"1991-02-07"},{"claim":"Anti-competitive corporate behavior where a product destroys competing toys","specificity":3,"domain":"cultural","description":"Funzo toy is designed to destroy other toys, foreshadowing aggressive market tactics and product sabotage.","episode":"Grift of the Magi","season":11,"episodeNum":9,"airDate":"1999-12-19"},{"claim":"Billionaire recluse behavior","specificity":2,"domain":"cultural","description":"Mr. Burns becomes a Howard Hughes-like recluse, predicting the eccentric, isolated behavior of later tech billionaires.","episode":"$pringfield (Or, How I Learned to Stop Worrying and Love Legalized Gambling)","season":5,"episodeNum":10,"airDate":"1993-12-16"},{"claim":"A neutron bomb destroys Springfield and targets France","specificity":2,"domain":"military","description":"Depiction of a neutron bomb attack on a U.S. city and France, which had not occurred at the time of broadcast.","episode":"Treehouse of Horror VIII","season":9,"episodeNum":4,"airDate":"1997-10-26"},{"claim":"Space colonization by private entities","specificity":2,"domain":"technology","description":"The episode features themes of space colonization, which later became a topic of interest for companies like SpaceX and Blue Origin.","episode":"The Man Who Came to Be Dinner","season":26,"episodeNum":10,"airDate":"2015-01-04"},{"claim":"First contact with extraterrestrial life","specificity":2,"domain":"science","description":"The episode portrays first contact with aliens, a concept that remains speculative but has been a subject of scientific and public interest.","episode":"The Man Who Came to Be Dinner","season":26,"episodeNum":10,"airDate":"2015-01-04"},{"claim":"Fox network censor is killed, predicting escalating content censorship debates","specificity":1,"domain":"cultural","description":"Satirical portrayal of a network censor being killed, loosely referencing future debates over content censorship.","episode":"Treehouse of Horror VIII","season":9,"episodeNum":4,"airDate":"1997-10-26"}];
+
+// ══════════════════════════════════════════════════════════════════
+// DERIVED DATA
+// ══════════════════════════════════════════════════════════════════
+
+const totalPredictions = MATCHES_DATA.length + WATCHLIST_DATA.length;
+const verifiedHits = MATCHES_DATA.length;
+const hitRate = totalPredictions > 0 ? ((verifiedHits / totalPredictions) * 100).toFixed(1) : 0;
+const avgDeltaT = MATCHES_DATA.length > 0
+  ? (MATCHES_DATA.reduce((s, m) => s + m.delta_t_years, 0) / MATCHES_DATA.length).toFixed(1)
+  : 0;
+const mostAnomalous = MATCHES_DATA.length > 0
+  ? [...MATCHES_DATA].sort((a, b) => b.anomaly_score - a.anomaly_score)[0]
+  : null;
+
+// ── Render Stats Bar ──────────────────────────────────────────────
+function renderStatsBar() {
+  const el = document.getElementById('stats-bar');
+  const stats = [
+    { label: 'EPISODES ANALYZED', value: new Set([...MATCHES_DATA, ...WATCHLIST_DATA].map(d => d.episode)).size },
+    { label: 'PREDICTIONS EXTRACTED', value: totalPredictions },
+    { label: 'VERIFIED HITS', value: verifiedHits },
+    { label: 'HIT RATE', value: hitRate + '%' },
+    { label: 'AVG DELTA-T', value: avgDeltaT + ' yrs' },
+    { label: 'MOST ANOMALOUS', value: mostAnomalous ? mostAnomalous.episode : 'N/A' },
+  ];
+  el.innerHTML = stats.map(s =>
+    `<div class="stat-item"><span class="stat-label">${s.label}</span><span class="stat-value">${s.value}</span></div>`
+  ).join('');
+}
+
+// ── Anomaly Badge ────────────────────────────────────────────────
+function anomalyBadge(score) {
+  let cls, label;
+  if (score > 80) { cls = 'extreme'; label = 'EXTREME'; }
+  else if (score > 50) { cls = 'high'; label = 'HIGH'; }
+  else if (score > 30) { cls = 'moderate'; label = 'MODERATE'; }
+  else { cls = 'low'; label = 'LOW'; }
+  return `<span class="anomaly-badge anomaly-${cls}">${score} ${label}</span>`;
+}
+
+// ── Render Hits ───────────────────────────────────────────────────
+function renderHits() {
+  const sorted = [...MATCHES_DATA].sort((a, b) => b.anomaly_score - a.anomaly_score);
+  const el = document.getElementById('hits-container');
+  el.innerHTML = sorted.map(h => `
+    <div class="hit-card">
+      <div class="hit-header">
+        <div>
+          <div class="hit-episode">${h.episode} <span style="color:var(--text-dim)">(S${h.season}E${String(h.number).padStart(2,'0')})</span></div>
+          <div class="hit-date">Aired: ${h.air_date}</div>
+        </div>
+        ${anomalyBadge(h.anomaly_score)}
+      </div>
+      <div class="hit-claim">${h.claim}</div>
+      <div class="hit-match">
+        <strong>${h.matched_event}</strong><br>
+        Event date: ${h.event_date}
+      </div>
+      <div class="hit-meta">
+        <span>DELTA-T: ${h.delta_t_years} yrs</span>
+        <span>DOMAIN: ${h.domain}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Render Watchlist ─────────────────────────────────────────────
+function renderWatchlist() {
+  const sorted = [...WATCHLIST_DATA].sort((a, b) => b.specificity - a.specificity);
+  const el = document.getElementById('watchlist-container');
+  el.innerHTML = sorted.map(w => `
+    <div class="watch-card">
+      <div class="watch-header">
+        <span class="hit-episode">${w.episode} <span style="color:var(--text-dim)">(S${w.season}E${String(w.number).padStart(2,'0')})</span></span>
+        <span class="specificity-badge">SPECIFICITY ${w.specificity}</span>
+      </div>
+      <div class="watch-claim">${w.claim}</div>
+      <div class="watch-meta">
+        Aired: ${w.air_date} | Domain: ${w.domain}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Render Stats ─────────────────────────────────────────────────
+function renderStats() {
+  const el = document.getElementById('stats-container');
+  const falsePredictions = 0; // placeholder — pipeline populates
+  const unfulfilled = WATCHLIST_DATA.length;
+
+  const total = verifiedHits + unfulfilled + falsePredictions;
+  const pctHits = total > 0 ? ((verifiedHits / total) * 100).toFixed(0) : 0;
+  const pctUnfulfilled = total > 0 ? ((unfulfilled / total) * 100).toFixed(0) : 0;
+  const pctFalse = total > 0 ? ((falsePredictions / total) * 100).toFixed(0) : 0;
+
+  el.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--green)">${verifiedHits}</div>
+        <div class="stat-label">Verified Hits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--amber)">${unfulfilled}</div>
+        <div class="stat-label">Unfulfilled</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--red)">${falsePredictions}</div>
+        <div class="stat-label">False / Debunked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${totalPredictions}</div>
+        <div class="stat-label">Total Predictions</div>
+      </div>
+    </div>
+
+    <div class="bar-chart">
+      <div class="bar-segment bar-hits" style="width:${pctHits}%">${pctHits}%</div>
+      <div class="bar-segment bar-unfulfilled" style="width:${pctUnfulfilled}%">${pctUnfulfilled}%</div>
+      ${pctFalse > 0 ? `<div class="bar-segment bar-false" style="width:${pctFalse}%">${pctFalse}%</div>` : ''}
+    </div>
+
+    <div class="bar-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Verified Hits</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Unfulfilled</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> False / Debunked</div>
+    </div>
+
+    <div style="margin-top:32px">
+      <div class="section-title" style="font-size:16px">Anomaly Score Distribution</div>
+      <div style="margin-top:12px">
+        ${renderScoreDistribution()}
+      </div>
+    </div>
+  `;
+}
+
+function renderScoreDistribution() {
+  const buckets = { extreme: 0, high: 0, moderate: 0, low: 0 };
+  MATCHES_DATA.forEach(m => {
+    if (m.anomaly_score > 80) buckets.extreme++;
+    else if (m.anomaly_score > 50) buckets.high++;
+    else if (m.anomaly_score > 30) buckets.moderate++;
+    else buckets.low++;
+  });
+  const total = MATCHES_DATA.length || 1;
+  return `
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="stat-card" style="flex:1;min-width:120px;border-color:var(--red)">
+        <div class="stat-value" style="color:var(--red)">${buckets.extreme}</div>
+        <div class="stat-label">Extreme (>80)</div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:120px;border-color:var(--amber)">
+        <div class="stat-value" style="color:var(--amber)">${buckets.high}</div>
+        <div class="stat-label">High (51-80)</div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:120px;border-color:var(--blue)">
+        <div class="stat-value" style="color:var(--blue)">${buckets.moderate}</div>
+        <div class="stat-label">Moderate (31-50)</div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:120px;border-color:var(--grey)">
+        <div class="stat-value" style="color:var(--grey)">${buckets.low}</div>
+        <div class="stat-label">Low (<31)</div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Render Episodes ──────────────────────────────────────────────
+function renderEpisodes() {
+  // Aggregate by episode
+  const epMap = {};
+  [...MATCHES_DATA, ...WATCHLIST_DATA].forEach(d => {
+    if (!epMap[d.episode]) epMap[d.episode] = { name: d.episode, total: 0, hits: 0, cumScore: 0 };
+    epMap[d.episode].total++;
+  });
+  MATCHES_DATA.forEach(m => {
+    if (epMap[m.episode]) {
+      epMap[m.episode].hits++;
+      epMap[m.episode].cumScore += m.anomaly_score;
+    }
+  });
+
+  const sorted = Object.values(epMap).sort((a, b) => b.cumScore - a.cumScore).slice(0, 10);
+  const el = document.getElementById('episodes-container');
+
+  el.innerHTML = `
+    <div class="episode-row" style="background:var(--surface2);font-weight:600;color:var(--text-dim)">
+      <div style="text-align:center">#</div>
+      <div>Episode</div>
+      <div style="text-align:center">Predictions</div>
+      <div style="text-align:center">Hits</div>
+      <div style="text-align:center">Score</div>
+    </div>
+  ` + sorted.map((ep, i) => `
+    <div class="episode-row">
+      <div class="episode-rank">${i + 1}</div>
+      <div class="episode-name">${ep.name}</div>
+      <div class="episode-stat"><strong>${ep.total}</strong></div>
+      <div class="episode-stat"><strong>${ep.hits}</strong></div>
+      <div class="episode-stat">${anomalyBadge(ep.cumScore)}</div>
+    </div>
+  `).join('');
+}
+
+// ── Tab Navigation ───────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  const tabs = ['hits', 'watchlist', 'stats', 'episodes'];
+  const idx = tabs.indexOf(id);
+  if (idx >= 0) document.querySelectorAll('nav button')[idx].classList.add('active');
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+renderStatsBar();
+renderHits();
+renderWatchlist();
+renderStats();
+renderEpisodes();
+</script>
+</body>
+</html>

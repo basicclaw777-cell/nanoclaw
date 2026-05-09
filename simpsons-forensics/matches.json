@@ -1,0 +1,227 @@
+[
+  {
+    "prediction": {
+      "claim": "Heads-up display glasses for evaluating people",
+      "specificity": 4,
+      "domain": "technology",
+      "description": "Homer uses augmented reality glasses that overlay information about people, resembling Google Glass technology.",
+      "episode": "Principal Charming",
+      "season": 2,
+      "episodeNum": 14,
+      "airDate": "1991-02-14"
+    },
+    "event": {
+      "date": "2022-11-30",
+      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "category": "technology",
+      "significance": 5
+    },
+    "deltaT_years": 31.8,
+    "matchScore": 1.19,
+    "anomalyScore": 635.8,
+    "sharedWords": [
+      "technology"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Celebrity entertainers will successfully run for and win political office despite lacking political experience.",
+      "specificity": 4,
+      "domain": "political",
+      "description": "Krusty the Clown runs for Congress and wins, predicting the rise of celebrity politicians like Donald Trump and others.",
+      "episode": "Mr. Spritz Goes to Washington",
+      "season": 14,
+      "episodeNum": 14,
+      "airDate": "2003-03-09"
+    },
+    "event": {
+      "date": "2024-11-05",
+      "event": "Donald Trump elected President for second term",
+      "category": "political",
+      "significance": 5
+    },
+    "deltaT_years": 21.7,
+    "matchScore": 0.6,
+    "anomalyScore": 577.7,
+    "sharedWords": [
+      "political"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Memory editing technology",
+      "specificity": 3,
+      "domain": "science",
+      "description": "The episode depicts a device that can erase and manipulate specific memories, which predated real-world neuroscience research into optogenetic memory editing and targeted memory erasure.",
+      "episode": "Eternal Moonshine of the Simpson Mind",
+      "season": 19,
+      "episodeNum": 9,
+      "airDate": "2007-12-16"
+    },
+    "event": {
+      "date": "2022-11-30",
+      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "category": "technology",
+      "significance": 5
+    },
+    "deltaT_years": 15,
+    "matchScore": 0.44,
+    "anomalyScore": 448.7,
+    "sharedWords": [
+      "technology"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Exoskeleton suit used for personal protection and combat",
+      "specificity": 3,
+      "domain": "technology",
+      "description": "Homer builds a powered exoskeleton suit to fight a bear, resembling early exoskeleton technology later developed for military and medical use.",
+      "episode": "The Fat and the Furriest",
+      "season": 15,
+      "episodeNum": 5,
+      "airDate": "2003-11-30"
+    },
+    "event": {
+      "date": "2026-05-08",
+      "event": "Trump PURSUE program releases 162 UFO files via war.gov",
+      "category": "military",
+      "significance": 4
+    },
+    "deltaT_years": 22.4,
+    "matchScore": 0.54,
+    "anomalyScore": 336.6,
+    "sharedWords": [
+      "military"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Interactive stadium technology with real-time audience polling via Jumbotron",
+      "specificity": 4,
+      "domain": "technology",
+      "description": "The episode features a Jumbotron voting system that allows real-time audience polling and interactive stadium experiences, predicting modern interactive fan engagement technologies.",
+      "episode": "Marge and Homer Turn a Couple Play",
+      "season": 17,
+      "episodeNum": 22,
+      "airDate": "2006-05-21"
+    },
+    "event": {
+      "date": "2022-11-30",
+      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "category": "technology",
+      "significance": 5
+    },
+    "deltaT_years": 16.5,
+    "matchScore": 0.56,
+    "anomalyScore": 330.6,
+    "sharedWords": [
+      "technology"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Wearable health monitoring devices that track biometric data during sleep",
+      "specificity": 3,
+      "domain": "technology",
+      "description": "Mr. Burns uses a machine that monitors Homer's sleep and harvests body oil, prefiguring modern wearable health trackers like Fitbit or smartwatches that monitor sleep patterns and biometrics.",
+      "episode": "Half-Decent Proposal",
+      "season": 13,
+      "episodeNum": 10,
+      "airDate": "2002-02-10"
+    },
+    "event": {
+      "date": "2020-12-14",
+      "event": "First COVID-19 mRNA vaccines administered",
+      "category": "health",
+      "significance": 5
+    },
+    "deltaT_years": 18.8,
+    "matchScore": 0.38,
+    "anomalyScore": 282.6,
+    "sharedWords": [
+      "health"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Patriotism policing culture",
+      "specificity": 3,
+      "domain": "cultural",
+      "description": "The episode satirizes a culture of hyper-patriotism and public shaming for perceived unpatriotic acts, predicting later trends in political correctness and cancel culture.",
+      "episode": "Bart-Mangled Banner",
+      "season": 15,
+      "episodeNum": 21,
+      "airDate": "2004-05-16"
+    },
+    "event": {
+      "date": "2024-11-05",
+      "event": "Donald Trump elected President for second term",
+      "category": "political",
+      "significance": 5
+    },
+    "deltaT_years": 20.5,
+    "matchScore": 0.57,
+    "anomalyScore": 245.7,
+    "sharedWords": [
+      "political"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Hover cars will be available by 2013",
+      "specificity": 2,
+      "domain": "technology",
+      "description": "Hover cars are depicted as common transportation in 2013, but this technology has not been realized.",
+      "episode": "Future-Drama",
+      "season": 16,
+      "episodeNum": 15,
+      "airDate": "2005-04-17"
+    },
+    "event": {
+      "date": "2022-11-30",
+      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "category": "technology",
+      "significance": 5
+    },
+    "deltaT_years": 17.6,
+    "matchScore": 0.61,
+    "anomalyScore": 176.2,
+    "sharedWords": [
+      "technology"
+    ],
+    "status": "VERIFIED"
+  },
+  {
+    "prediction": {
+      "claim": "Teleportation will be a viable technology",
+      "specificity": 3,
+      "domain": "technology",
+      "description": "A teleportation device is shown being used for travel, though it malfunctions.",
+      "episode": "Holidays of Future Passed",
+      "season": 23,
+      "episodeNum": 9,
+      "airDate": "2011-12-11"
+    },
+    "event": {
+      "date": "2022-11-30",
+      "event": "ChatGPT released by OpenAI beginning mainstream AI era",
+      "category": "technology",
+      "significance": 5
+    },
+    "deltaT_years": 11,
+    "matchScore": 0.79,
+    "anomalyScore": 164.6,
+    "sharedWords": [
+      "technology"
+    ],
+    "status": "VERIFIED"
+  }
+]

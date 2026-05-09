@@ -3725,6 +3725,48 @@ bot.onText(/^\/predict-rebuild(?:@\w+)?$/i, async (msg) => {
   }
 });
 
+// ── /simpsons — Simpsons Temporal Forensics summary ─────────────────────────
+bot.onText(/^\/simpsons(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const matchesPath = path.join(process.env.HOME, 'nanoclaw', 'simpsons-forensics', 'matches.json');
+    const watchlistPath = path.join(process.env.HOME, 'nanoclaw', 'simpsons-forensics', 'watchlist.json');
+
+    if (!fs.existsSync(matchesPath) || !fs.existsSync(watchlistPath)) {
+      return safeSend(chatId, 'Simpsons forensics data not generated yet. Run the pipeline first.');
+    }
+
+    const matches = JSON.parse(fs.readFileSync(matchesPath, 'utf8'));
+    const watchlist = JSON.parse(fs.readFileSync(watchlistPath, 'utf8'));
+
+    const avgScore = matches.length > 0
+      ? (matches.reduce((s, m) => s + (m.anomaly_score || 0), 0) / matches.length).toFixed(1)
+      : 0;
+
+    const topWatch = [...watchlist].sort((a, b) => (b.specificity || 0) - (a.specificity || 0)).slice(0, 3);
+    const mostAnom = matches.length > 0
+      ? [...matches].sort((a, b) => (b.anomaly_score || 0) - (a.anomaly_score || 0))[0]
+      : null;
+
+    let text = `Simpsons Temporal Forensics\n\n`;
+    text += `Verified Hits: ${matches.length} (anomaly score avg: ${avgScore})\n`;
+    text += `Unfulfilled Predictions: ${watchlist.length}\n\n`;
+    text += `Top 3 Watchlist Items:\n`;
+    topWatch.forEach((w, i) => {
+      const ep = w.season && w.number ? `S${w.season}E${String(w.number).padStart(2,'0')}` : w.episode || '?';
+      text += `${i + 1}. ${(w.claim || '').slice(0, 80)} (${ep}, specificity: ${w.specificity || '?'})\n`;
+    });
+    if (mostAnom) {
+      text += `\nMost Anomalous: ${mostAnom.episode} (score: ${mostAnom.anomaly_score})`;
+    }
+    text += `\n\nFull dashboard: localhost:8080/simpsons`;
+
+    await safeSend(chatId, text);
+  } catch (err) {
+    await safeSend(chatId, `Simpsons forensics error: ${err.message.slice(0, 200)}`);
+  }
+});
+
 // ── Taste Map commands ──────────────────────────────────────────────────────
 
 bot.onText(/^\/taste(?:@\w+)?\s*$/, async (msg) => {
