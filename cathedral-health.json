@@ -1,0 +1,174 @@
+{
+  "timestamp": "2026-05-10T13:14:30.950Z",
+  "score": 88,
+  "max": 100,
+  "percentage": "88%",
+  "dimensions": {
+    "revenue_flow": {
+      "score": 18,
+      "max": 25,
+      "streams": [
+        {
+          "name": "Gym memberships",
+          "status": "active",
+          "monthly": "existing",
+          "score": 20
+        },
+        {
+          "name": "Active trading (paper)",
+          "status": "profitable",
+          "pnl": 200.00000000000023,
+          "score": 5
+        },
+        {
+          "name": "Long-term portfolio (paper)",
+          "status": "accumulating",
+          "invested": 300,
+          "score": 5
+        },
+        {
+          "name": "Online course",
+          "status": "content exists, not productised",
+          "score": 3
+        },
+        {
+          "name": "Content → Instagram",
+          "status": "generates but not posting",
+          "score": 2
+        }
+      ],
+      "raw": 35
+    },
+    "project_liveness": {
+      "score": 21,
+      "max": 25,
+      "projects": [
+        {
+          "name": "PM2 processes",
+          "online": 17,
+          "stopped": 20,
+          "total": 37
+        },
+        {
+          "name": "Trading cron",
+          "status": "active",
+          "hours_since": "0.3"
+        },
+        {
+          "name": "Cathedral Deck",
+          "status": "live"
+        },
+        {
+          "name": "10 Blocks syllabus",
+          "status": "designed, not deployed to students",
+          "live": false
+        }
+      ],
+      "live": 23,
+      "total": 28
+    },
+    "compound_rate": {
+      "score": 24,
+      "max": 25,
+      "indicators": [
+        {
+          "name": "Vault nuggets",
+          "count": 1859
+        },
+        {
+          "name": "Deck cards",
+          "count": 17
+        },
+        {
+          "name": "Experiment domains",
+          "status": "meta-watcher active"
+        },
+        {
+          "name": "Sages/agents",
+          "count": 16
+        },
+        {
+          "name": "Known gaps",
+          "count": 9,
+          "note": "fewer = more connected"
+        }
+      ]
+    },
+    "pauls_freedom": {
+      "score": 25,
+      "max": 25,
+      "indicators": [
+        {
+          "name": "Autonomous systems",
+          "count": 9
+        },
+        {
+          "name": "Still manual",
+          "count": 3
+        },
+        {
+          "name": "Can leave for a week?",
+          "answer": "Yes (core systems run)"
+        }
+      ],
+      "autonomous": [
+        {
+          "name": "Trading (4h cron)",
+          "auto": true
+        },
+        {
+          "name": "Long-term DCA (weekly)",
+          "auto": true
+        },
+        {
+          "name": "Muse (3am daily)",
+          "auto": true
+        },
+        {
+          "name": "Morning briefing (7:30 daily)",
+          "auto": true
+        },
+        {
+          "name": "Vault backup (nightly)",
+          "auto": true
+        },
+        {
+          "name": "Timekeeper (15min)",
+          "auto": true
+        },
+        {
+          "name": "Roundtable debate",
+          "auto": true
+        },
+        {
+          "name": "Meta-watcher",
+          "auto": true
+        },
+        {
+          "name": "Reed Daily Lab (2am)",
+          "auto": true
+        },
+        {
+          "name": "Content → Instagram",
+          "auto": false
+        },
+        {
+          "name": "10 Blocks teaching",
+          "auto": false
+        },
+        {
+          "name": "Course revenue",
+          "auto": false
+        }
+      ]
+    }
+  },
+  "target": "Flow state: finance flowing + projects live + system sustains itself",
+  "phase": "Flow",
+  "history": [
+    {
+      "date": "2026-05-10",
+      "score": 88
+    }
+  ]
+}
