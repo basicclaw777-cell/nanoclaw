@@ -27,6 +27,12 @@ import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlan
 import djCurator from './dj-curator.js';
 import soundStudio from './sound-studio/engine.js';
 import gymEyes from './gym-eyes.js';
+process.env.INTAKE_IMPORT_ONLY = '1';
+import { formatIntakeStatusTelegram, handleIntakeCallback } from './intake-watcher.js';
+import faceRegistry from './face-registry.js';
+import curriculum from './curriculum-tracker.js';
+import drillGen from './drill-generator.js';
+import attendance from './attendance-logger.js';
 import conductor from './content-conductor.js';
 import studentIntel from './student-intelligence.js';
 
@@ -3394,6 +3400,83 @@ bot.onText(/^\/creative[-_]?lab(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
   }
 });
 
+// ── Investment Coach ─────────────────────────────────────────────────────────
+
+bot.onText(/^\/coach(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const question = match?.[1]?.trim();
+
+  if (!question) {
+    return safeSend(chatId, `*The Coin Room — Investment Coach*
+
+Ask me anything about investing. I teach through boxing metaphors.
+
+Examples:
+\`/coach what is DCA?\`
+\`/coach how much should I put in one asset?\`
+\`/coach where are we in the cycle?\`
+\`/coach show me my portfolio\`
+\`/coach what's the difference between investing and gambling?\`
+
+I go one concept at a time. No rush. This is the infinite game.`, { parse_mode: 'Markdown' });
+  }
+
+  // Show portfolio if asked
+  if (question.includes('portfolio') || question.includes('balance') || question.includes('positions')) {
+    try {
+      const portfolio = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'trader', 'long-term-portfolio.json'), 'utf8'));
+      let response = `*Your Long-Term Portfolio (Paper)*\n\n`;
+      response += `Cash: $${portfolio.balance_cash.toLocaleString()}\n`;
+      response += `Invested: $${portfolio.total_invested.toLocaleString()}\n`;
+      response += `Total Value: $${portfolio.total_value.toLocaleString()}\n`;
+      response += `P&L: $${portfolio.unrealised_pnl >= 0 ? '+' : ''}${portfolio.unrealised_pnl}\n\n`;
+      response += `*Positions:*\n`;
+      for (const [asset, pos] of Object.entries(portfolio.positions)) {
+        response += `${asset}: ${pos.qty.toFixed(6)} @ avg $${pos.avg_price.toFixed(0)} (${pos.unrealised_pct >= 0 ? '+' : ''}${pos.unrealised_pct || 0}%)\n`;
+      }
+      response += `\nDCA: $${portfolio.dca_schedule.btc_weekly}/wk BTC + $${portfolio.dca_schedule.eth_weekly}/wk ETH`;
+      return safeSend(chatId, response, { parse_mode: 'Markdown' });
+    } catch(e) {
+      return safeSend(chatId, 'Portfolio not available yet.');
+    }
+  }
+
+  await safeSend(chatId, '🥊 The Coin Room thinking...');
+
+  try {
+    const coachDef = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'sages', 'investment-coach.json'), 'utf8'));
+
+    // Load portfolio context
+    let portfolioContext = '';
+    try {
+      const p = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'trader', 'long-term-portfolio.json'), 'utf8'));
+      portfolioContext = `\n\nPaul's live paper portfolio: Cash $${p.balance_cash}, Invested $${p.total_invested}. Positions: ${Object.entries(p.positions).map(([a, pos]) => `${a}: ${pos.qty.toFixed(6)} @ $${pos.avg_price.toFixed(0)}`).join(', ') || 'none yet'}. DCA: $${p.dca_schedule.btc_weekly}/wk BTC + $${p.dca_schedule.eth_weekly}/wk ETH. Week ${Math.ceil((Date.now() - new Date(p.started).getTime()) / 604800000)}.`;
+    } catch(e) {}
+
+    const res = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'hermes3',
+        messages: [
+          { role: 'system', content: coachDef.system_prompt + portfolioContext },
+          { role: 'user', content: question }
+        ],
+        stream: false,
+        options: { temperature: 0.4, num_predict: 500 },
+      }),
+    });
+
+    const data = await res.json();
+    const answer = data.message?.content || 'No response.';
+    await safeSend(chatId, `🥊 *The Coin Room*\n\n${answer}`, { parse_mode: 'Markdown' });
+
+  } catch(e) {
+    console.error('[coach]', e.message);
+    await safeSend(chatId, `Coach error: ${e.message}`);
+  }
+});
+
 // ── Boxing Lab (Domain 2) ────────────────────────────────────────────────────
 
 bot.onText(/^\/boxing[-_]?lab(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
@@ -4103,6 +4186,161 @@ bot.onText(/^\/sound(?:@\w+)?\s+transcribe\s*$/i, async (msg) => {
   }
 });
 
+// ── Drill Generator commands ─────────────────────────────────────────────────
+
+bot.onText(/^\/drill(?:@\w+)?\s+([a-zA-Z].+)$/i, async (msg, match) => {
+  const name = match[1].trim();
+  const drillText = drillGen.formatDrillTelegram(name);
+  safeSend(msg.chat.id, drillText, { parse_mode: 'Markdown' });
+
+  // Log the generated drill
+  try {
+    const drill = drillGen.generateDrill(name);
+    drillGen.logDrill(name, drill);
+  } catch {}
+});
+
+// ── Curriculum commands ──────────────────────────────────────────────────────
+
+bot.onText(/^\/progress(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, curriculum.formatAllProgressTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/progress(?:@\w+)?\s+([a-zA-Z].+)$/i, async (msg, match) => {
+  const name = match[1].trim();
+  safeSend(msg.chat.id, curriculum.formatProgressTelegram(name), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/advance(?:@\w+)?\s+([a-zA-Z].+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const name = match[1].trim();
+  const result = curriculum.advanceMember(name, 'coach');
+  if (result.status === 'ok') {
+    safeSend(chatId, `*${name}* advanced to Block ${result.new_block}: ${result.block_name}\n${result.block_focus}`, { parse_mode: 'Markdown' });
+  } else {
+    safeSend(chatId, result.message);
+  }
+});
+
+bot.onText(/^\/setblock(?:@\w+)?\s+(.+?)\s+(\d+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const name = match[1].trim();
+  const block = parseInt(match[2]);
+  const result = curriculum.setMemberBlock(name, block);
+  if (result.status === 'ok') {
+    safeSend(chatId, `*${name}* set to Block ${result.block}: ${result.block_name}`, { parse_mode: 'Markdown' });
+  } else {
+    safeSend(chatId, result.message);
+  }
+});
+
+bot.onText(/^\/block(?:@\w+)?\s+(\d+)\s*$/i, async (msg, match) => {
+  const num = parseInt(match[1]);
+  const info = curriculum.getBlockInfo(num);
+  safeSend(msg.chat.id, info || `Block ${num} not found (1-10)`, { parse_mode: 'Markdown' });
+});
+
+// ── Attendance commands ──────────────────────────────────────────────────────
+
+bot.onText(/^\/attendance(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, attendance.formatSummaryTelegram(7), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/attendance(?:@\w+)?\s+(\d+)d?\s*$/i, async (msg, match) => {
+  const days = parseInt(match[1]) || 7;
+  safeSend(msg.chat.id, attendance.formatSummaryTelegram(days), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/attendance(?:@\w+)?\s+([a-zA-Z].+)$/i, async (msg, match) => {
+  const name = match[1].trim();
+  safeSend(msg.chat.id, attendance.formatAttendanceTelegram(name), { parse_mode: 'Markdown' });
+});
+
+// ── Face Registry commands ───────────────────────────────────────────────────
+
+bot.onText(/^\/members(?:@\w+)?\s*$/, async (msg) => {
+  const result = await faceRegistry.listMembers();
+  safeSend(msg.chat.id, faceRegistry.formatMemberListTelegram(result), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/enroll(?:@\w+)?\s+(.+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const name = match[1].trim();
+  const reply = msg.reply_to_message;
+
+  if (!reply || !reply.photo) {
+    return safeSend(chatId, 'Reply to a photo with `/enroll [name]`', { parse_mode: 'Markdown' });
+  }
+
+  safeSend(chatId, `Enrolling ${name}...`);
+
+  try {
+    const fileId = reply.photo[reply.photo.length - 1].file_id;
+    const file = await bot.getFile(fileId);
+    const tmpPath = `/tmp/enroll-${Date.now()}.jpg`;
+    const fileUrl = `https://api.telegram.org/file/bot${token}/${file.file_path}`;
+    const res = await fetch(fileUrl);
+    const buffer = Buffer.from(await res.arrayBuffer());
+    fs.writeFileSync(tmpPath, buffer);
+
+    const result = await faceRegistry.enrollMember(name, tmpPath);
+    try { fs.unlinkSync(tmpPath); } catch {}
+
+    if (result.status === 'ok') {
+      safeSend(chatId, `Enrolled *${name}*`, { parse_mode: 'Markdown' });
+    } else {
+      safeSend(chatId, `Enrollment failed: ${result.message}`);
+    }
+  } catch (err) {
+    safeSend(chatId, `Error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+bot.onText(/^\/unenroll(?:@\w+)?\s+(.+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const name = match[1].trim();
+  const result = await faceRegistry.deleteMember(name);
+  safeSend(chatId, result.status === 'ok' ? `Removed ${name}` : result.message);
+});
+
+bot.onText(/^\/whoisthis(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const reply = msg.reply_to_message;
+
+  if (!reply || !reply.photo) {
+    return safeSend(chatId, 'Reply to a photo with `/whoisthis`', { parse_mode: 'Markdown' });
+  }
+
+  safeSend(chatId, 'Identifying...');
+
+  try {
+    const fileId = reply.photo[reply.photo.length - 1].file_id;
+    const file = await bot.getFile(fileId);
+    const tmpPath = `/tmp/identify-${Date.now()}.jpg`;
+    const fileUrl = `https://api.telegram.org/file/bot${token}/${file.file_path}`;
+    const res = await fetch(fileUrl);
+    const buffer = Buffer.from(await res.arrayBuffer());
+    fs.writeFileSync(tmpPath, buffer);
+
+    const result = await faceRegistry.identifyFaces(tmpPath);
+    try { fs.unlinkSync(tmpPath); } catch {}
+
+    safeSend(chatId, faceRegistry.formatIdentifyTelegram(result), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `Error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── Intake Pipeline commands ─────────────────────────────────────────────────
+
+bot.onText(/^\/intake(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, formatIntakeStatusTelegram(), { parse_mode: 'Markdown' });
+});
+
 // ── Gym Eyes commands ────────────────────────────────────────────────────────
 
 bot.onText(/^\/eyes(?:@\w+)?\s*$/, async (msg) => {
@@ -4614,6 +4852,13 @@ bot.on('callback_query', async (query) => {
       await bot.answerCallbackQuery(query.id, { text: 'Edit noted — no taste map update (ambiguous)' });
     } else if (data.startsWith('decay_')) {
       await bot.answerCallbackQuery(query.id, { text: 'Noted' });
+    } else if (data.startsWith('intake_cat:')) {
+      // Intake watcher classification callback
+      const parts = data.split(':');
+      const category = parts[1];
+      const filename = parts.slice(2).join(':');
+      handleIntakeCallback({ callback_query: query });
+      await bot.answerCallbackQuery(query.id, { text: `${category} selected` });
     } else if (data === 'noop') {
       await bot.answerCallbackQuery(query.id);
     }
