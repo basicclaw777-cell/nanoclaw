@@ -1109,5 +1109,20 @@ the-timekeeper to go offline. Don't repeat it.
 - The Publisher: Court Member #17, studio at localhost:8080/publisher
 - Aletheia onboarding: ~/cathedral-vault/06_Methods/aletheia-onboarding-prompt.md
 
+## The Looking Glass — Celestial Intelligence Instrument (built 2026-05-11)
+- **Sky Sense:** ~/nanoclaw/services/sky-sense/ — 5 pipelines (VSOP87, Meeus, GeoC, HelioC, Ptolemy), 7 bodies, 1.8ms/query, zero dependencies
+- **Events Index:** 17 curated historical sky configs → aftermath, pattern matching, echo scanning
+- **Convergence Detector:** scores pipeline consensus × historical precedent × vault graph density. 4 signal types.
+- **Looking Glass UI:** localhost:8080/looking-glass (interactive observatory, timeline scrubber, live API data)
+- **Telegram:** /sky, /sky [date], /signal, /glass, /pipelines [body]
+- **API:** 6 endpoints on cath-bridge (/looking-glass/sky, /signal, /scan, /pipelines/:body, /events, UI)
+- **The Whisperer:** Court Member #18, ~/nanoclaw/looking-glass-whisperer.mjs, PM2 cron 06:45 HKT daily
+- **Morning sequence:** decay → vault-state → groundskeeper → **whisperer (06:45)** → timekeeper → briefing
+- **Transmission:** ~/cathedral-vault/06_Methods/transmissions/the-whisperer-transmission.md
+- **Architecture:** ~/cathedral-vault/08_Project_Orchestrator/projects/looking-glass-architecture.md
+- **Origin:** Alan Space Audits GitHub repo → deep dive → math extraction → instrument → Court Member. One session.
+- **Cathedral Sense #8:** Sky — the Cathedral watching the heavens
+- **Visuals:** alan-deep-dive-report.html, alan-spaceaudits-graph.html, alan-vs-erp-comparison.html, alan-observatory.html, looking-glass.html (all in ~/basic-reflex/visuals/)
+
 ## Shell Injection Fix (2026-05-08)
 - Reed photo handler: all execSync with template literals replaced with execFileSync + args arrays
