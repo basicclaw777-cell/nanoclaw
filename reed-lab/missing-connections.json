@@ -3,79 +3,145 @@
   "generated": "2026-05-08",
   "missing": [
     {
-      "from": 10, "from_name": "Reed — Visual Director",
+      "from": 10,
+      "from_name": "Reed \u2014 Visual Director",
       "to": "Instagram Project",
       "to_card": null,
-      "gap": "Reed generates 10 styles of boxing imagery daily. Instagram needs consistent visual content. Reed should feed Instagram directly — style selection from Creative Lab determines the post aesthetic.",
-      "compounds": ["#009 Creative Lab tracks which styles Paul picks", "#010 Reed generates daily", "Instagram needs daily content"],
+      "gap": "Reed generates 10 styles of boxing imagery daily. Instagram needs consistent visual content. Reed should feed Instagram directly \u2014 style selection from Creative Lab determines the post aesthetic.",
+      "compounds": [
+        "#009 Creative Lab tracks which styles Paul picks",
+        "#010 Reed generates daily",
+        "Instagram needs daily content"
+      ],
       "effort": "low",
-      "creates": "Automated visual content pipeline: Reed generates → Creative Lab filters → Instagram publishes"
+      "creates": "Automated visual content pipeline: Reed generates \u2192 Creative Lab filters \u2192 Instagram publishes"
     },
     {
-      "from": 16, "from_name": "The Boxing Engine",
+      "from": 16,
+      "from_name": "The Boxing Engine",
       "to": "Boxing App",
       "to_card": null,
       "gap": "combination-validator.js has the canonical curriculum, weight-state relay, defense axis. The boxing app project needs these exact teaching atoms. They're the same knowledge, disconnected.",
-      "compounds": ["#016 has 39 tested validations", "Boxing app needs technique library", "Technique gallery already shows 29 techniques"],
+      "compounds": [
+        "#016 has 39 tested validations",
+        "Boxing app needs technique library",
+        "Technique gallery already shows 29 techniques"
+      ],
       "effort": "medium",
-      "creates": "Boxing app powered by the same engine that validates combinations — single source of truth"
+      "creates": "Boxing app powered by the same engine that validates combinations \u2014 single source of truth"
     },
     {
-      "from": 8, "from_name": "The Boxing Lab",
-      "to": 16, "to_name": "The Boxing Engine",
-      "gap": "Lab analyses sessions (guard drops, velocity, rhythm). Engine validates combinations. Lab findings should inform what the engine recommends — if Cuban school says 'guard drill priority', engine should weight guard-focused combinations higher next session.",
-      "compounds": ["#008 produces coaching recommendations", "#016 generates combinations", "Feedback loop: analysis → recommendation → validation"],
+      "from": 8,
+      "from_name": "The Boxing Lab",
+      "to": 16,
+      "to_name": "The Boxing Engine",
+      "gap": "Lab analyses sessions (guard drops, velocity, rhythm). Engine validates combinations. Lab findings should inform what the engine recommends \u2014 if Cuban school says 'guard drill priority', engine should weight guard-focused combinations higher next session.",
+      "compounds": [
+        "#008 produces coaching recommendations",
+        "#016 generates combinations",
+        "Feedback loop: analysis \u2192 recommendation \u2192 validation"
+      ],
       "effort": "medium",
-      "creates": "Adaptive curriculum — what you train next is informed by how your last session went"
+      "creates": "Adaptive curriculum \u2014 what you train next is informed by how your last session went"
     },
     {
-      "from": 9, "from_name": "The Creative Lab",
-      "to": 10, "to_name": "Reed — Visual Director",
+      "from": 9,
+      "from_name": "The Creative Lab",
+      "to": 10,
+      "to_name": "Reed \u2014 Visual Director",
       "gap": "Already connected (Reed feeds Creative Lab). But the REVERSE isn't wired: Creative Lab's selection data should inform which styles Reed prioritises in Daily Lab. The bandit recommender exists but doesn't feed back to reed-lab/daily-lab.js.",
-      "compounds": ["Creative Lab has multi-armed bandit", "Reed generates daily", "Selection data is ground truth"],
+      "compounds": [
+        "Creative Lab has multi-armed bandit",
+        "Reed generates daily",
+        "Selection data is ground truth"
+      ],
       "effort": "low",
-      "creates": "Reed learns Paul's taste automatically — generates more of what Paul actually uses"
+      "creates": "Reed learns Paul's taste automatically \u2014 generates more of what Paul actually uses"
     },
     {
-      "from": 14, "from_name": "The Muse",
-      "to": 3, "to_name": "The Experiment Lab",
-      "gap": "Muse finds cross-domain bridges in the vault at 3am. Some findings could become experiment hypotheses — 'the Muse found a connection between Schumann resonance and boxing rhythm, should we test this?' Currently Muse findings stay in the vault. They should also seed experiment strategies.",
-      "compounds": ["#014 finds bridges nightly", "#003 runs experiments", "Muse finding → new strategy hypothesis"],
+      "from": 14,
+      "from_name": "The Muse",
+      "to": 3,
+      "to_name": "The Experiment Lab",
+      "gap": "Muse finds cross-domain bridges in the vault at 3am. Some findings could become experiment hypotheses \u2014 'the Muse found a connection between Schumann resonance and boxing rhythm, should we test this?' Currently Muse findings stay in the vault. They should also seed experiment strategies.",
+      "compounds": [
+        "#014 finds bridges nightly",
+        "#003 runs experiments",
+        "Muse finding \u2192 new strategy hypothesis"
+      ],
       "effort": "medium",
       "creates": "The Cathedral's unconscious (Muse) feeding its conscious experiments (Lab)"
     },
     {
-      "from": 6, "from_name": "Predictive Intelligence",
-      "to": 3, "to_name": "The Experiment Lab",
-      "gap": "The knowledge graph (6,811 nodes, 29,362 edges) predicts gaps and completions. These predictions could become experiment seeds — 'the graph predicts boxing rhythm connects to Schumann, test it.' Currently the graph and experiments are separate systems.",
-      "compounds": ["#006 finds structural gaps", "#003 tests hypotheses", "Graph prediction → experiment design"],
+      "from": 6,
+      "from_name": "Predictive Intelligence",
+      "to": 3,
+      "to_name": "The Experiment Lab",
+      "gap": "The knowledge graph (6,811 nodes, 29,362 edges) predicts gaps and completions. These predictions could become experiment seeds \u2014 'the graph predicts boxing rhythm connects to Schumann, test it.' Currently the graph and experiments are separate systems.",
+      "compounds": [
+        "#006 finds structural gaps",
+        "#003 tests hypotheses",
+        "Graph prediction \u2192 experiment design"
+      ],
       "effort": "medium",
-      "creates": "Predictive experiments — the graph tells the lab what to test next"
+      "creates": "Predictive experiments \u2014 the graph tells the lab what to test next"
     },
     {
-      "from": 13, "from_name": "The Morning Briefing",
-      "to": 8, "to_name": "The Boxing Lab",
+      "from": 13,
+      "from_name": "The Morning Briefing",
+      "to": 8,
+      "to_name": "The Boxing Lab",
       "gap": "Morning briefing includes trading desk update but not boxing lab results. If Paul had a pad session yesterday, the briefing should include: 'Cuban school flagged your guard drops, Sports Science says good endurance, Schumann rhythm detected a harmonic lock.'",
-      "compounds": ["#013 reads trading data", "#008 produces session analysis", "Morning = review what happened"],
+      "compounds": [
+        "#013 reads trading data",
+        "#008 produces session analysis",
+        "Morning = review what happened"
+      ],
       "effort": "low",
       "creates": "Complete morning intelligence: trading + boxing + creative + vault"
     },
     {
-      "from": 5, "from_name": "The Meta-Watcher",
-      "to": 13, "to_name": "The Morning Briefing",
-      "gap": "Meta-watcher finds cross-domain convergences. Morning briefing should surface the most interesting ones: 'Schumann resonance appeared in both trading and boxing data this week.' Currently meta-watcher is silent — needs a voice through the briefing.",
-      "compounds": ["#005 detects convergences", "#013 reaches Paul daily", "Cross-domain findings are highest signal"],
+      "from": 5,
+      "from_name": "The Meta-Watcher",
+      "to": 13,
+      "to_name": "The Morning Briefing",
+      "gap": "Meta-watcher finds cross-domain convergences. Morning briefing should surface the most interesting ones: 'Schumann resonance appeared in both trading and boxing data this week.' Currently meta-watcher is silent \u2014 needs a voice through the briefing.",
+      "compounds": [
+        "#005 detects convergences",
+        "#013 reaches Paul daily",
+        "Cross-domain findings are highest signal"
+      ],
       "effort": "low",
       "creates": "The Cathedral's most surprising findings delivered to Paul's ear every morning"
     },
     {
-      "from": 12, "from_name": "Cymatics / Schumann",
+      "from": 12,
+      "from_name": "Cymatics / Schumann",
       "to": "Health Lab (future)",
       "to_card": null,
       "gap": "Schumann resonance in trading (price oscillations) and boxing (punch rhythm). Next domain: does Paul's HRV/sleep/energy correlate with Schumann? Same strategy, third domain. The meta-watcher would detect the convergence automatically.",
-      "compounds": ["#012 already detects Schumann in 2 domains", "Health data would be domain 3 for Schumann", "Meta-watcher watches for exactly this"],
+      "compounds": [
+        "#012 already detects Schumann in 2 domains",
+        "Health data would be domain 3 for Schumann",
+        "Meta-watcher watches for exactly this"
+      ],
       "effort": "high (needs health data source)",
-      "creates": "Triple-domain Schumann test — the Cathedral's frequency hypothesis at full strength"
+      "creates": "Triple-domain Schumann test \u2014 the Cathedral's frequency hypothesis at full strength"
+    },
+    {
+      "from": 1,
+      "from_name": "The Cathedral",
+      "to": "The Allocator (model intelligence)",
+      "to_card": null,
+      "gap": "No visibility into which models are called where, how often, at what cost. No intelligence about when a cheaper model would suffice or when a better model is needed. Cathedral is spending without seeing.",
+      "compounds": [
+        "DeepSeek now wired into 6 systems",
+        "Replicate for ESRGAN",
+        "Higgsfield for images",
+        "Ollama local free but weaker"
+      ],
+      "effort": "low",
+      "creates": "Cost awareness + model fitness monitoring. Weekly cost report. Swap recommendations when new models drop."
     }
   ]
 }
