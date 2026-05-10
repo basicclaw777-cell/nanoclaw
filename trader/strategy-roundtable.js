@@ -26,6 +26,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = path.join(__dirname, 'logs', 'trades.db');
+import { smartQuery } from '../deepseek-query.js';
 const OLLAMA_URL = 'http://localhost:11434/api/chat';
 
 let db;
@@ -168,11 +169,11 @@ export async function runRoundtable(signals, prices) {
 
     const brief = briefParts.join('\n');
 
-    // The Steward reads all positions and synthesizes
+    // The Steward reads all positions and synthesizes (DeepSeek for sharper reasoning)
     let synthesis = '';
     let convergenceScore = 0;
     try {
-      synthesis = await queryOllama(STEWARD_PROMPT, brief);
+      synthesis = await smartQuery(STEWARD_PROMPT, brief, 250);
 
       // Extract confidence score from synthesis
       const scoreMatch = synthesis.match(/(\d+)\s*(?:\/10|out of 10)/i);

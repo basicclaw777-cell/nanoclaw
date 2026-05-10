@@ -13,6 +13,7 @@ import { runMetabolism, getMetabolismSummary, startMetabolismCron } from './vaul
 import { recordStatement, getTrajectory, getDriftAlerts, runBeliefScan, formatTrajectory, formatDriftAlerts } from './belief-tracker.js';
 import { runNegativeSpaceScan } from './negative-space.js';
 import { buildAtlas, getOrBuildAtlas } from './convergence-atlas.js';
+import { smartQuery, smartQueryJSON } from './deepseek-query.js';
 import { runOracle, getOracleOutputs, formatOracleResult } from './oracle.js';
 import { addToConversation, getConversationHistory, updateMemoryAfterConversation } from './memory-system.js';
 import { registerBoxingCommands } from './boxing-commands.js';
@@ -2988,14 +2989,7 @@ bot.onText(/^\/deck(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
 
       // Step 1: Cartographer writes the card definition
       try {
-        const cartRes = await fetch('http://localhost:11434/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'hermes3',
-            messages: [{
-              role: 'system',
-              content: `You are the Cartographer of the Cathedral. You define new system cards.
+        const cardSystemPrompt = `You are the Cartographer of the Cathedral. You define new system cards.
 The Cathedral is a sovereign AI research instrument with ${deck.length} existing cards.
 Existing cards: ${deck.map(c => `#${String(c.id).padStart(3,'0')} ${c.name}`).join(', ')}
 
@@ -3012,21 +3006,11 @@ Output JSON only. Define a new card for the Cathedral Deck:
   "connects": [list of existing card IDs this connects to],
   "key_facts": ["3-4 key facts"],
   "frontier": "the next unexplored edge — what this could become"
-}`
-            }, {
-              role: 'user',
-              content: `Define card #${nextId}: "${cardName}"`
-            }],
-            stream: false,
-            options: { temperature: 0.3, num_predict: 500 },
-            format: 'json',
-          }),
-        });
+}`;
 
-        const cartData = await cartRes.json();
         let cardDef;
         try {
-          cardDef = JSON.parse(cartData.message?.content || '{}');
+          cardDef = await smartQueryJSON(cardSystemPrompt, `Define card #${nextId}: "${cardName}"`, 500);
         } catch(e) {
           return safeSend(chatId, `Cartographer failed to define card: ${e.message}`);
         }
@@ -3229,30 +3213,14 @@ Output JSON only, following this exact format:
   "zone_change": "What moved on the map (e.g., 'new territory settled' or 'border crossing detected')"
 }`;
 
-    const cartRes = await fetch('http://localhost:11434/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'hermes3',
-        messages: [
-          { role: 'system', content: cartographerPrompt },
-          { role: 'user', content: `Write the slide brief for: "${topic}"` }
-        ],
-        stream: false,
-        options: { temperature: 0.3, num_predict: 400 },
-        format: 'json',
-      }),
-    });
-
-    const cartData = await cartRes.json();
     let brief;
     try {
-      brief = JSON.parse(cartData.message?.content || '{}');
+      brief = await smartQueryJSON(cartographerPrompt, `Write the slide brief for: "${topic}"`, 400);
     } catch(e) {
       brief = { title: topic, subtitle: 'Cathedral architecture', highlights: [], visual_metaphor: '' };
     }
 
-    if (!brief.title) brief.title = topic;
+    if (!brief || !brief.title) brief = { ...(brief || {}), title: topic };
 
     await safeSend(chatId, `🗺 Cartographer brief: "${brief.title}"\n🎬 Reed generating visual...`);
 
@@ -3453,22 +3421,7 @@ I go one concept at a time. No rush. This is the infinite game.`, { parse_mode: 
       portfolioContext = `\n\nPaul's live paper portfolio: Cash $${p.balance_cash}, Invested $${p.total_invested}. Positions: ${Object.entries(p.positions).map(([a, pos]) => `${a}: ${pos.qty.toFixed(6)} @ $${pos.avg_price.toFixed(0)}`).join(', ') || 'none yet'}. DCA: $${p.dca_schedule.btc_weekly}/wk BTC + $${p.dca_schedule.eth_weekly}/wk ETH. Week ${Math.ceil((Date.now() - new Date(p.started).getTime()) / 604800000)}.`;
     } catch(e) {}
 
-    const res = await fetch('http://localhost:11434/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'hermes3',
-        messages: [
-          { role: 'system', content: coachDef.system_prompt + portfolioContext },
-          { role: 'user', content: question }
-        ],
-        stream: false,
-        options: { temperature: 0.4, num_predict: 500 },
-      }),
-    });
-
-    const data = await res.json();
-    const answer = data.message?.content || 'No response.';
+    const answer = await smartQuery(coachDef.system_prompt + portfolioContext, question, 500) || 'No response.';
     await safeSend(chatId, `🥊 *The Coin Room*\n\n${answer}`, { parse_mode: 'Markdown' });
 
   } catch(e) {
