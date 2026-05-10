@@ -831,11 +831,90 @@ def cymatics_schumann(prices, history):
     return signals
 
 
+# ── Strategy 12: Range Trader ─────────────────────────────────────────────────
+
+def range_trader(prices, history):
+    """Profits from flat/sideways markets. When everyone else is waiting, this acts.
+
+    Detects range-bound conditions, buys near support, sells near resistance.
+    Tighter SL/TP than directional strategies — small bites in a flat market.
+    """
+    signals = []
+
+    for sym, price_list in history.items():
+        if len(price_list) < 14:
+            continue
+
+        current_price = prices.get(sym, {}).get("price")
+        if not current_price:
+            continue
+
+        # Detect range-bound: low volatility over recent period
+        recent = price_list[-14:]
+        high = max(recent)
+        low = min(recent)
+        rng = high - low
+
+        if high == 0:
+            continue
+
+        range_pct = rng / ((high + low) / 2) * 100
+
+        # Range-bound = less than 10% range over 14 days
+        if range_pct > 10:
+            continue  # Too volatile — not range-bound
+
+        # Where is price within the range? (0 = bottom, 1 = top)
+        if rng == 0:
+            continue
+        position_in_range = (current_price - low) / rng
+
+        # Mean reversion signals
+        if position_in_range < 0.3:
+            # Near bottom of range — buy (expect reversion to mean)
+            strength = 0.5 + (0.3 - position_in_range)  # Stronger at extremes
+            signals.append({
+                "source": "range_trader",
+                "asset": sym,
+                "direction": "long",
+                "strength": min(strength, 0.85),
+                "reasoning": f"{sym} at {position_in_range*100:.0f}% of 14-day range (${low:.2f}-${high:.2f}). Near support in range-bound market ({range_pct:.1f}% range). Mean reversion buy.",
+                "type": "range_trader",
+            })
+        elif position_in_range > 0.7:
+            # Near top of range — sell/short (expect reversion)
+            strength = 0.5 + (position_in_range - 0.7)
+            signals.append({
+                "source": "range_trader",
+                "asset": sym,
+                "direction": "short",
+                "strength": min(strength, 0.85),
+                "reasoning": f"{sym} at {position_in_range*100:.0f}% of 14-day range (${low:.2f}-${high:.2f}). Near resistance in range-bound market ({range_pct:.1f}% range). Mean reversion sell.",
+                "type": "range_trader",
+            })
+
+        # Tight oscillation signal — if range is very narrow (<5%), any position is a trade
+        if range_pct < 5 and 0.35 < position_in_range < 0.65:
+            # Dead center of a very tight range — breakout imminent, lean with recent direction
+            recent_trend = (price_list[-1] - price_list[-3]) / price_list[-3] if price_list[-3] > 0 else 0
+            direction = "long" if recent_trend > 0 else "short"
+            signals.append({
+                "source": "range_trader",
+                "asset": sym,
+                "direction": direction,
+                "strength": 0.6,
+                "reasoning": f"{sym} in ultra-tight {range_pct:.1f}% range. Coiled spring — breakout direction: {'up' if direction == 'long' else 'down'} based on micro-trend ({recent_trend*100:.2f}%).",
+                "type": "range_trader",
+            })
+
+    return signals
+
+
 # ── Master Runner ─────────────────────────────────────────────────────────────
 
 def run(prices=None, news=None):
-    """Run all 9 cathedral strategies. Returns combined signal list."""
-    print("[cathedral-strategies] Running 9 strategies...")
+    """Run all 10 cathedral strategies. Returns combined signal list."""
+    print("[cathedral-strategies] Running 10 strategies...")
 
     # Load current prices from existing signals file if not provided
     if not prices:
@@ -901,10 +980,15 @@ def run(prices=None, news=None):
     print(f"  Cymatics Schumann: {len(sigs)} signals")
     all_signals.extend(sigs)
 
+    # Strategy 12: Range Trader (flat market specialist)
+    sigs = range_trader(prices, history)
+    print(f"  Range Trader: {len(sigs)} signals")
+    all_signals.extend(sigs)
+
     # Save output
     output = {
         "timestamp": datetime.now().isoformat(),
-        "strategy_count": 9,
+        "strategy_count": 10,
         "total_signals": len(all_signals),
         "signals": all_signals,
     }
