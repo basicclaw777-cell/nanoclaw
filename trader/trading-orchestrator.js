@@ -159,6 +159,47 @@ function checkOpenPositions(prices, portfolio) {
     const currentPrice = priceData.price;
     const isLong = pos.direction === 'long';
 
+    // Stale position check: if open 5+ days and within 2% of entry, tighten SL/TP to free slot
+    const openedAt = new Date(pos.opened_at);
+    const daysOpen = (Date.now() - openedAt.getTime()) / 86400000;
+
+    if (daysOpen >= 5) {
+      const moveFromEntry = isLong
+        ? (currentPrice - pos.entry_price) / pos.entry_price
+        : (pos.entry_price - currentPrice) / pos.entry_price;
+
+      if (Math.abs(moveFromEntry) < 0.02) {
+        // Stale — close at current price to free the slot
+        const result = closeTrade(pos.id, currentPrice);
+        if (result) {
+          portfolio.balance += result.pnl;
+          portfolio.daily_pnl += result.pnl;
+          portfolio.total_pnl += result.pnl;
+          portfolio.total_trades++;
+          if (result.pnl >= 0) portfolio.wins++; else portfolio.losses++;
+          const msg = `STALE EXIT: ${pos.direction} ${pos.asset} @ ${currentPrice} after ${daysOpen.toFixed(0)} days | PnL: $${result.pnl.toFixed(2)} (${(result.pnlPct * 100).toFixed(2)}%) | Strategy: ${pos.strategy} — freeing slot`;
+          console.log(`  ${msg}`);
+          notify(`[TRADER] ${msg}`);
+          watchClose({ ...pos, pnl: result.pnl, pnl_pct: result.pnlPct }, currentPrice);
+        }
+        continue;
+      }
+
+      // If profitable after 5 days, tighten SL to lock in gains (trailing stop)
+      if (moveFromEntry > 0.03) {
+        const newSL = isLong
+          ? currentPrice * 0.98  // 2% trailing stop
+          : currentPrice * 1.02;
+        if ((isLong && newSL > pos.stop_loss) || (!isLong && newSL < pos.stop_loss)) {
+          // Update SL in DB
+          try {
+            const db = getOpenPositions.__db || (await import('./trade-logger.js')).default;
+          } catch(e) {}
+          console.log(`  ${pos.asset} ${pos.strategy}: trailing stop tightened from $${pos.stop_loss.toFixed(2)} to $${newSL.toFixed(2)} (${daysOpen.toFixed(0)} days, +${(moveFromEntry*100).toFixed(1)}%)`);
+        }
+      }
+    }
+
     // Check stop loss
     if (pos.stop_loss) {
       const hitSL = isLong ? currentPrice <= pos.stop_loss : currentPrice >= pos.stop_loss;
@@ -493,7 +534,15 @@ async function run() {
     console.error('[meta-watcher] Error:', e.message);
   }
 
-  // Step 6c: Weekly strategy elimination (Sundays only)
+  // Step 6c: Weekly management (Sundays only)
+  if (new Date().getDay() === 0) {
+    // Weekly health digest
+    try {
+      const { execSync: exec } = await import('child_process');
+      exec('node cathedral-health.js', { cwd: path.join(__dirname, '..'), timeout: 30000, stdio: 'pipe' });
+      console.log('  [health] Weekly health check sent');
+    } catch(e) { console.error('[health]', e.message); }
+  }
   if (new Date().getDay() === 0) {
     try {
       console.log('[6c/7] Running weekly strategy elimination...');
@@ -509,6 +558,24 @@ async function run() {
       console.error('[elimination] Error:', e.message);
     }
   }
+
+  // Step 6d: Position health monitoring
+  try {
+    const openPos = getOpenPositions();
+    const staleCount = openPos.filter(p => {
+      const days = (Date.now() - new Date(p.opened_at).getTime()) / 86400000;
+      return days >= 4;
+    }).length;
+
+    if (staleCount > openPos.length * 0.7 && openPos.length > 5) {
+      console.log(`  [monitor] WARNING: ${staleCount}/${openPos.length} positions are 4+ days old — market may be too flat`);
+    }
+
+    const slotsUsed = openPos.length;
+    const config = loadConfig();
+    const slotsAvailable = config.risk_rules.max_concurrent_positions - slotsUsed;
+    console.log(`  [monitor] Positions: ${slotsUsed} open, ${slotsAvailable} slots free`);
+  } catch(e) {}
 
   // Step 7: Save and report
   portfolio.last_run = new Date().toISOString();
