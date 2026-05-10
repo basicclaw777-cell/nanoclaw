@@ -1,15 +1,26 @@
 /**
  * bull-bear-debate.js — Two agents argue before a trade decision
  *
- * Inspired by TradingAgents but built Cathedral-native.
  * Bull makes the case FOR. Bear makes the case AGAINST.
  * Trader reads both, then decides. All logged.
  *
- * Uses Ollama hermes3 locally. Free. Sovereign.
+ * Uses DeepSeek API for debates (sharper reasoning, ~$0.001/debate).
+ * Falls back to Ollama hermes3 if DeepSeek unavailable.
+ *
+ * ESM.
  */
 
 import { logDecision } from './trade-logger.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
+
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
 const OLLAMA_URL = 'http://localhost:11434/api/chat';
 
 const BULL_PROMPT = `You are the BULL analyst in a trading firm. Your job is to make the strongest possible case FOR this trade.
@@ -32,32 +43,67 @@ const TRADER_PROMPT = `You are the TRADER. You've read the bull case and the bea
 
 Respond with one word (BUY/SKIP/WAIT) then one sentence of reasoning.`;
 
-async function queryOllama(systemPrompt, userMessage) {
-  const payload = JSON.stringify({
-    model: 'hermes3',
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userMessage },
-    ],
-    stream: false,
-    options: { temperature: 0.4, num_predict: 200 },
+// ── DeepSeek API ─────────────────────────────────────────────────────────────
+
+async function queryDeepSeek(systemPrompt, userMessage) {
+  const res = await fetch(DEEPSEEK_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      max_tokens: 250,
+      temperature: 0.4,
+    }),
   });
 
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+// ── Ollama fallback ──────────────────────────────────────────────────────────
+
+async function queryOllama(systemPrompt, userMessage) {
   const res = await fetch(OLLAMA_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: payload,
+    body: JSON.stringify({
+      model: 'hermes3',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      stream: false,
+      options: { temperature: 0.4, num_predict: 200 },
+    }),
   });
 
   const data = await res.json();
   return data.message?.content || '';
 }
 
+// ── Smart query: DeepSeek first, Ollama fallback ─────────────────────────────
+
+async function query(systemPrompt, userMessage) {
+  if (DEEPSEEK_API_KEY) {
+    try {
+      const result = await queryDeepSeek(systemPrompt, userMessage);
+      if (result) return result;
+    } catch (e) {
+      console.error('[debate] DeepSeek failed, falling back to Ollama:', e.message);
+    }
+  }
+  return queryOllama(systemPrompt, userMessage);
+}
+
 /**
  * Run the bull-bear debate for a proposed trade.
- *
- * @param {object} setup — { asset, direction, entryPrice, signals[], context }
- * @returns {object} — { bullCase, bearCase, decision, reasoning }
  */
 export async function debate(setup) {
   const briefing = `
@@ -68,10 +114,10 @@ Context: ${setup.context || 'No additional context'}
 `;
 
   // Bull argues FOR
-  const bullCase = await queryOllama(BULL_PROMPT, briefing);
+  const bullCase = await query(BULL_PROMPT, briefing);
 
   // Bear argues AGAINST
-  const bearCase = await queryOllama(BEAR_PROMPT, briefing);
+  const bearCase = await query(BEAR_PROMPT, briefing);
 
   // Trader decides
   const traderBrief = `
@@ -85,7 +131,7 @@ ${bearCase}
 
 Your decision:`;
 
-  const traderResponse = await queryOllama(TRADER_PROMPT, traderBrief);
+  const traderResponse = await query(TRADER_PROMPT, traderBrief);
 
   // Parse decision
   const firstWord = traderResponse.trim().split(/[\s.,:]/)[0].toUpperCase();
@@ -131,6 +177,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   };
 
   console.log('Running bull-bear debate for:', setup.asset, setup.direction, '@', setup.entryPrice);
+  console.log(`Using: ${DEEPSEEK_API_KEY ? 'DeepSeek API' : 'Ollama hermes3 (no DeepSeek key)'}`);
   console.log('');
 
   const result = await debate(setup);
