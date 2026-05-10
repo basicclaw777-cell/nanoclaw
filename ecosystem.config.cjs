@@ -13,6 +13,29 @@
 module.exports = {
   apps: [
     {
+      name:           'long-term-portfolio',
+      script:         'trader/long-term-orchestrator.js',
+      cwd:            '/Users/basicclaw777/nanoclaw',
+      interpreter:    'node',
+
+      // Cron: every Monday at 08:00 HKT (00:00 UTC Monday)
+      cron_restart:   '0 0 * * 1',
+      autorestart:    false,
+
+      error_file:     '/Users/basicclaw777/nanoclaw/trader/logs/long-term-error.log',
+      out_file:       '/Users/basicclaw777/nanoclaw/trader/logs/long-term.log',
+      merge_logs:     true,
+      log_date_format: 'YYYY-MM-DD HH:mm:ss HKT',
+
+      env: {
+        NODE_ENV:       'production',
+        HOME:           '/Users/basicclaw777',
+        TZ:             'Asia/Hong_Kong',
+        TELEGRAM_TOKEN: '8284790243:AAHocCsFhjkzmRsGPI0t1I_NMF4ZcPV--v4',
+        PAUL_CHAT_ID:   '1912121485',
+      },
+    },
+    {
       name:           'trader',
       script:         'trader/trading-orchestrator.js',
       cwd:            '/Users/basicclaw777/nanoclaw',
