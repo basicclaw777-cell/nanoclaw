@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral Nervous System — 8 Modules</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e0e0e0; font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  .header { padding: 24px 32px; border-bottom: 1px solid #222; }
+  .header h1 { color: #e94560; font-size: 1.5rem; margin-bottom: 4px; }
+  .header .sub { color: #666; font-size: 0.85rem; }
+
+  .stats { display: flex; gap: 16px; padding: 16px 32px; flex-wrap: wrap; }
+  .stat { background: #1a1a2e; border: 1px solid #333; border-radius: 8px; padding: 12px 16px; min-width: 100px; }
+  .stat .label { color: #666; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; }
+  .stat .value { color: #e94560; font-size: 1.6rem; font-weight: bold; }
+
+  .graph-section { padding: 24px 32px; }
+  .graph-section h2 { color: #e94560; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  .diagram { background: #1a1a2e; border: 1px solid #333; border-radius: 8px; padding: 24px; overflow-x: auto; margin-bottom: 24px; }
+
+  .modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; padding: 0 32px 32px; }
+  .module-card { background: #1a1a2e; border: 1px solid #333; border-radius: 8px; padding: 16px; transition: border-color 0.2s; }
+  .module-card:hover { border-color: #e94560; }
+  .module-card .num { color: #e94560; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+  .module-card .name { color: #fff; font-size: 1.1rem; font-weight: bold; margin: 4px 0 8px; }
+  .module-card .desc { color: #888; font-size: 0.8rem; line-height: 1.4; margin-bottom: 8px; }
+  .module-card .cmd { display: inline-block; background: #162447; color: #a8d8ea; padding: 2px 8px; border-radius: 3px; font-size: 0.75rem; margin: 2px 2px 2px 0; }
+  .module-card .feeds { color: #6b8f71; font-size: 0.75rem; margin-top: 8px; }
+  .module-card .status { display: inline-block; background: #1a3a1a; color: #4ade80; padding: 2px 8px; border-radius: 3px; font-size: 0.7rem; margin-top: 8px; }
+
+  .connections { padding: 0 32px 32px; }
+  .connections h2 { color: #e94560; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; align-items: center; }
+  .flow .arrow { color: #e94560; }
+  .flow .node { background: #162447; color: #a8d8ea; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; }
+  .flow .label { color: #666; font-size: 0.75rem; font-style: italic; margin-left: 8px; }
+
+  .voice { background: #1a1a2e; border: 1px solid #333; border-radius: 8px; padding: 16px 32px; margin: 0 32px 32px; }
+  .voice .pattern { color: #c4a35a; font-size: 0.9rem; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Cathedral Nervous System</h1>
+  <div class="sub">8 interconnected modules — from DeepSeek conversation to live infrastructure</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="label">Modules</div><div class="value">8</div></div>
+  <div class="stat"><div class="label">Telegram Cmds</div><div class="value">50+</div></div>
+  <div class="stat"><div class="label">Taste Anchors</div><div class="value">70</div></div>
+  <div class="stat"><div class="label">Voice Refs</div><div class="value">5</div></div>
+  <div class="stat"><div class="label">Domains</div><div class="value">5</div></div>
+  <div class="stat"><div class="label">Status</div><div class="value" style="color:#4ade80">ALL LIVE</div></div>
+</div>
+
+<div class="graph-section">
+  <h2>Module Dependency Graph</h2>
+  <div class="diagram">
+    <pre class="mermaid">
+graph TD
+  TM["1. Taste Map\n/taste"]
+  AR["2. Architect\n/architect"]
+  DJ["3. DJ Curator\n/playlist"]
+  SS["4. Sound Studio\n/sound"]
+  GE["5. Gym Eyes\n/eyes"]
+  CC["6. Content Conductor\n/content"]
+  SI["7. Student Intelligence\n/student"]
+  CR["8. Community Radar\n/radar"]
+
+  RE["Reed Visual Director\n/reed"]
+  KIT["Kit GM\n/kit"]
+  BE["Boxing Engine\n/combo"]
+  PG["Predictive Graph\n/predict"]
+
+  TM -->|preferences| DJ
+  TM -->|visual rules| RE
+  TM -->|voice pattern| CC
+  TM -->|teaching tone| SI
+
+  AR -->|plans| CC
+  AR -->|workstreams| GE
+
+  DJ -->|class playlist| CC
+  SS -->|voiceover + beat| CC
+  RE -->|styled images| CC
+  KIT -->|captions| CC
+
+  GE -->|technique scores| SI
+  BE -->|combo data| SI
+  GE -->|highlight clips| CC
+
+  CR -->|discoveries| PG
+  CR -->|content ideas| CC
+  PG -->|graph gaps| CR
+
+  SI -->|milestones| CC
+  SI -->|at-risk alerts| KIT
+
+  CC -->|approval flow| TM
+
+  classDef core fill:#1a1a2e,stroke:#e94560,color:#fff
+  classDef existing fill:#162447,stroke:#1f4068,color:#a8d8ea
+  class TM,AR,DJ,SS,GE,CC,SI,CR core
+  class RE,KIT,BE,PG existing
+    </pre>
+  </div>
+</div>
+
+<div class="graph-section">
+  <h2>Data Flow: Class Night</h2>
+  <div class="diagram">
+    <pre class="mermaid">
+sequenceDiagram
+  participant P as Paul
+  participant DJ as DJ Curator
+  participant TM as Taste Map
+  participant GE as Gym Eyes
+  participant SI as Student Intel
+  participant CC as Content Conductor
+  participant RE as Reed
+  participant SS as Sound Studio
+
+  P->>DJ: /playlist standard
+  DJ->>TM: getTasteProfile('music', 'boxing_class')
+  TM-->>DJ: 29 war mode anchors
+  DJ-->>P: 17-track playlist (arrival → burnout → cooldown)
+
+  Note over P: Class runs. iPhone records.
+
+  P->>GE: /eyes analyze (video)
+  GE-->>P: Technique score 74/100, 14 combos, guard return 72%
+
+  P->>SI: /student John eyes analysis
+  SI-->>P: John profile updated: guard +8% this month
+
+  P->>CC: /content tonight's class was fire
+  CC->>TM: getVoicePattern()
+  CC-->>P: Caption + instructions (queue for approval)
+  CC->>RE: Process class photos (pro_photo + neon)
+  CC->>SS: Generate voiceover for reel
+
+  P->>CC: /content approve cc-xxx
+  Note over CC: Ready to post
+    </pre>
+  </div>
+</div>
+
+<div class="modules">
+  <div class="module-card">
+    <div class="num">Module 1 — Foundation</div>
+    <div class="name">Taste Map</div>
+    <div class="desc">Universal preference engine. 70 anchors across music, visual, writing, teaching, class energy. 5 voice references (Brady, Wicks, Cus, Carlton, Miyagi). Every module queries it.</div>
+    <div><span class="cmd">/taste</span><span class="cmd">/taste status</span><span class="cmd">/taste music</span><span class="cmd">/taste visual</span><span class="cmd">/taste voices</span></div>
+    <div class="feeds">Feeds → Reed, DJ Curator, Sound Studio, Content Conductor, Student Intelligence</div>
+    <div class="status">LIVE</div>
+  </div>
+
+  <div class="module-card">
+    <div class="num">Module 2 — Meta Layer</div>
+    <div class="name">Architect</div>
+    <div class="desc">Intent → structured plans. Scans PM2 (16 services), vault (35 projects), 6 agents. Outputs JSON + Mermaid + interactive HTML. Grounds every plan in Cathedral infrastructure.</div>
+    <div><span class="cmd">/architect &lt;intent&gt;</span><span class="cmd">/architect status</span></div>
+    <div class="feeds">Feeds → All future builds. Templates: agent-build, content-series, hardware-integration</div>
+    <div class="status">LIVE</div>
+  </div>
+
+  <div class="module-card">
+    <div class="num">Module 3 — Audio/Class</div>
+    <div class="name">DJ Curator</div>
+    <div class="desc">Boxing class playlists from taste map. Energy curves: arrival → warmup → technique → combos → burnout → cooldown. 5 profiles: standard, la_habana, old_school, war_mode, wildcard_heavy.</div>
+    <div><span class="cmd">/playlist</span><span class="cmd">/playlist la_habana</span><span class="cmd">/playlist rate 5</span><span class="cmd">/playlist vibe aggressive</span></div>
+    <div class="feeds">Consumes ← Taste Map. Feeds → Content Conductor (playlist links)</div>
+    <div class="status">LIVE</div>
+  </div>
+
+  <div class="module-card">
+    <div class="num">Module 4 — Audio/Media</div>
+    <div class="name">Sound Studio</div>
+    <div class="desc">Transcription (local Whisper, Metal GPU), voice (Edge TTS), clone voice (Chatterbox), instrumentals (Replicate MusicGen), podcast (DeepSeek script → two-voice audio).</div>
+    <div><span class="cmd">/sound voice</span><span class="cmd">/sound clone</span><span class="cmd">/sound transcribe</span><span class="cmd">/sound instrumental</span><span class="cmd">/sound podcast</span></div>
+    <div class="feeds">Feeds → Content Conductor (voiceovers, beats). Consumes ← Taste Map (voice pattern)</div>
+    <div class="status">LIVE</div>
+  </div>
+
+  <div class="module-card">
+    <div class="num">Module 5 — Vision</div>
+    <div class="name">Gym Eyes</div>
+    <div class="desc">YOLO pose estimation (Metal GPU) → punch detection → combo detection → technique scoring (0-100) vs canonical Cuban form. Guard return, stance width, velocity analysis. Auto coaching notes.</div>
+    <div><span class="cmd">/eyes</span><span class="cmd">/eyes analyze</span><span class="cmd">/eyes last</span></div>
+    <div class="feeds">Feeds → Student Intelligence (technique scores), Content Conductor (highlight clips)</div>
+    <div class="status">LIVE</div>
+  </div>
+
+  <div class="module-card">
+    <div class="num">Module 6 — Orchestration</div>
+    <div class="name">Content Conductor</div>
+    <div class="desc">Coordinates Reed + Sound Studio + DJ Curator + Kit GM into content pipelines. 5 templates. Caption generator uses taste map voice profile. Approval queue on Telegram. Replaces social media manager.</div>
+    <div><span class="cmd">/content</span><span class="cmd">/content ideas</span><span class="cmd">/content caption</span><span class="cmd">/content queue</span><span class="cmd">/content approve</span></div>
+    <div class="feeds">Consumes ← ALL modules. Target: 2-3 posts/week</div>
+    <div class="status">LIVE</div>
+  </div>
+
+  <div class="module-card">
+    <div class="num">Module 7 — Coaching</div>
+    <div class="name">Student Intelligence</div>
+    <div class="desc">Per-student profiles for all 72 members. Attendance, technique scores, combos, coaching notes. Churn prediction (red/yellow/green). Personalized drill recommendations. PunchPass CSV import.</div>
+    <div><span class="cmd">/student John</span><span class="cmd">/student John focus</span><span class="cmd">/student John note</span><span class="cmd">/students risk</span><span class="cmd">/students improving</span></div>
+    <div class="feeds">Consumes ← Gym Eyes, Boxing Engine, PunchPass. Future: student-facing portal</div>
+    <div class="status">LIVE</div>
+  </div>
+
+  <div class="module-card">
+    <div class="num">Module 8 — External Intelligence</div>
+    <div class="name">Community Radar</div>
+    <div class="desc">Autonomous scanning: Reddit (boxing + AI subs), HackerNews, GitHub trending. Signal filters: peer validation, explanatory depth, novelty, cross-domain bridging. Voice registry tracks consistent posters.</div>
+    <div><span class="cmd">/radar</span><span class="cmd">/radar run</span><span class="cmd">/radar voices</span><span class="cmd">/radar &lt;topic&gt;</span></div>
+    <div class="feeds">Feeds → Predictive Graph (new knowledge), Content Conductor (external content to share)</div>
+    <div class="status">LIVE</div>
+  </div>
+</div>
+
+<div class="connections">
+  <h2>Key Data Flows</h2>
+
+  <div class="flow">
+    <span class="node">Paul approves image</span>
+    <span class="arrow">→</span>
+    <span class="node">Taste Map</span>
+    <span class="arrow">→</span>
+    <span class="node">Reed checks preferences</span>
+    <span class="arrow">→</span>
+    <span class="node">Better images next time</span>
+    <span class="label">Passive learning loop</span>
+  </div>
+
+  <div class="flow">
+    <span class="node">Class video</span>
+    <span class="arrow">→</span>
+    <span class="node">Gym Eyes (YOLO)</span>
+    <span class="arrow">→</span>
+    <span class="node">Student Intelligence</span>
+    <span class="arrow">→</span>
+    <span class="node">Drill recommendations</span>
+    <span class="label">Automated coaching</span>
+  </div>
+
+  <div class="flow">
+    <span class="node">Intent: "post about class"</span>
+    <span class="arrow">→</span>
+    <span class="node">Content Conductor</span>
+    <span class="arrow">→</span>
+    <span class="node">Reed + Sound + Caption</span>
+    <span class="arrow">→</span>
+    <span class="node">Approve on phone</span>
+    <span class="label">Content factory</span>
+  </div>
+
+  <div class="flow">
+    <span class="node">Reddit/HN/GitHub</span>
+    <span class="arrow">→</span>
+    <span class="node">Community Radar</span>
+    <span class="arrow">→</span>
+    <span class="node">Signal scored</span>
+    <span class="arrow">→</span>
+    <span class="node">Vault + Voice Registry</span>
+    <span class="label">External intelligence</span>
+  </div>
+</div>
+
+<div class="voice">
+  <div class="pattern">"Miyagi substance, Brady energy, Carlton filter. If it sounds like a guru, it fails. If it sounds like a mate who happens to know deep things, it passes."</div>
+</div>
+
+<script>mermaid.initialize({ theme: 'dark', startOnLoad: true });</script>
+</body>
+</html>

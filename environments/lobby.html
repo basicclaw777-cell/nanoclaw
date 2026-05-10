@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Environments">
+<meta name="theme-color" content="#09090b">
+<link rel="apple-touch-icon" href="/env/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Environments</title>
+<style>
+/* Font loaded via link tag instead */
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #09090b; --surface: #111113; --surface-2: #18181b; --surface-3: #1e1e22;
+  --border: #27272a; --border-hover: #3f3f46;
+  --text: #fafafa; --text-muted: #a1a1aa; --text-dim: #71717a;
+  --accent: #e63e2f; --green: #22c55e; --blue: #3b82f6; --purple: #a855f7;
+  --amber: #f59e0b; --cyan: #06b6d4; --rose: #f43f5e;
+  --radius: 16px; --radius-sm: 10px;
+}
+body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; min-height:100vh; overflow-x:hidden; }
+a { color:inherit; text-decoration:none; }
+
+/* ─── TRANSITIONS ─── */
+#lobby, #room-view { transition: opacity 0.35s ease, transform 0.35s ease; }
+#room-view { display:none; opacity:0; transform:translateY(16px); }
+#room-view.active { display:block; opacity:1; transform:translateY(0); }
+#lobby.hidden { display:none; opacity:0; }
+
+/* ─── LOBBY ─── */
+.lobby-wrap { max-width:960px; margin:0 auto; padding:32px 20px 60px; }
+.lobby-header { margin-bottom:32px; }
+.lobby-title { font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+.lobby-sub { font-size:12px; color:var(--text-dim); }
+.lobby-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+
+/* ─── ROOM CARD (lobby) ─── */
+.env-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px; cursor:pointer; transition:all 0.25s; position:relative; overflow:hidden; }
+.env-card:hover { border-color:var(--border-hover); transform:translateY(-2px); box-shadow:0 8px 32px rgba(0,0,0,0.3); }
+.env-card-glow { position:absolute; top:-40px; right:-40px; width:120px; height:120px; border-radius:50%; opacity:0.06; pointer-events:none; transition:opacity 0.3s; }
+.env-card:hover .env-card-glow { opacity:0.12; }
+.env-card-top { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.env-icon { width:42px; height:42px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:20px; }
+.env-name { font-size:18px; font-weight:600; letter-spacing:-0.3px; }
+.env-status { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; margin-left:auto; }
+.env-desc { font-size:14px; color:var(--text-muted); line-height:1.5; margin-bottom:14px; }
+.env-cards-list { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
+.env-card-tag { font-size:10px; padding:2px 8px; border-radius:4px; font-weight:500; }
+.env-senses { display:flex; gap:6px; }
+.env-sense { font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(255,255,255,0.04); color:var(--text-dim); }
+.env-footer { display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid var(--border); }
+.env-stat { font-size:11px; color:var(--text-dim); }
+.env-stat strong { color:var(--text-muted); }
+.env-enter { font-size:11px; color:var(--text-dim); font-weight:500; transition:color 0.2s; }
+.env-card:hover .env-enter { color:var(--text); }
+
+/* ─── CROSS-ROOM SIGNALS (lobby) ─── */
+.signals-bar { margin-top:24px; padding:16px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); }
+.signals-title { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:10px; }
+.signal-item { font-size:12px; color:var(--text-muted); padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03); display:flex; gap:8px; align-items:center; }
+.signal-item:last-child { border:none; }
+.signal-badge { font-size:10px; padding:1px 6px; border-radius:3px; font-weight:600; white-space:nowrap; }
+
+/* ─── ROOM VIEW ─── */
+.room-wrap { max-width:1200px; margin:0 auto; padding:0 20px 60px; }
+.room-topbar { display:flex; align-items:center; gap:14px; padding:16px 0; position:sticky; top:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--border); margin-bottom:20px; }
+.room-back { background:var(--surface); border:1px solid var(--border); color:var(--text-muted); padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:inherit; transition:all 0.2s; }
+.room-back:hover { border-color:var(--border-hover); color:var(--text); }
+.room-title { font-size:18px; font-weight:600; }
+.room-status-dot { width:8px; height:8px; border-radius:50%; margin-left:auto; }
+
+/* Room grid */
+.room-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:768px) { .room-grid { grid-template-columns:1fr; } }
+
+.room-panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+.room-panel.span-2 { grid-column:span 2; }
+@media (max-width:768px) { .room-panel.span-2 { grid-column:span 1; } }
+.panel-head { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.panel-label { font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); }
+.panel-action { font-size:10px; color:var(--text-dim); cursor:pointer; padding:2px 8px; border-radius:4px; border:1px solid var(--border); background:none; font-family:inherit; }
+.panel-action:hover { color:var(--text); border-color:var(--border-hover); }
+.panel-body { padding:16px; }
+
+/* Widgets inside room */
+.widget-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+.widget-box { flex:1; min-width:100px; background:var(--surface-2); border-radius:8px; padding:12px; }
+.widget-label { font-size:11px; color:var(--text-muted); margin-bottom:4px; letter-spacing:0.5px; font-weight:500; }
+.widget-value { font-size:24px; font-weight:700; letter-spacing:-0.5px; }
+.widget-change { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.widget-change.up { color:var(--green); }
+.widget-change.down { color:var(--accent); }
+
+/* Activity feed */
+.activity-item { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); align-items:flex-start; }
+.activity-item:last-child { border:none; }
+.activity-dot { width:6px; height:6px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+.activity-text { font-size:13px; color:var(--text); line-height:1.5; }
+.activity-time { font-size:11px; color:var(--text-muted); margin-top:2px; }
+
+/* Dashboard embed */
+.dash-frame { width:100%; border:none; border-radius:0; background:var(--bg); height:60vh; max-height:600px; }
+
+/* Floating home button (mobile) */
+.fab-home { position:fixed; bottom:24px; right:24px; width:48px; height:48px; border-radius:50%; background:var(--accent); border:none; color:white; font-size:20px; cursor:pointer; z-index:9999; box-shadow:0 4px 16px rgba(230,62,47,0.4); display:flex; align-items:center; justify-content:center; }
+
+/* Chat widget */
+.chat-panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; display:flex; flex-direction:column; max-height:400px; }
+.chat-messages { flex:1; overflow-y:auto; padding:12px; min-height:120px; max-height:300px; }
+.chat-msg { margin-bottom:10px; }
+.chat-msg-user { text-align:right; }
+.chat-msg-user .chat-bubble { background:var(--surface-3); border:1px solid var(--border-hover); display:inline-block; padding:8px 12px; border-radius:12px 12px 4px 12px; font-size:13px; max-width:85%; text-align:left; }
+.chat-msg-agent .chat-bubble { background:var(--surface-2); border:1px solid var(--border); display:inline-block; padding:8px 12px; border-radius:12px 12px 12px 4px; font-size:13px; max-width:85%; line-height:1.5; color:var(--text-muted); }
+.chat-msg-agent .chat-name { font-size:10px; font-weight:600; margin-bottom:3px; letter-spacing:0.5px; }
+.chat-input-row { display:flex; gap:8px; padding:10px 12px; border-top:1px solid var(--border); background:var(--surface-2); }
+.chat-input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:13px; color:var(--text); font-family:inherit; outline:none; resize:none; }
+.chat-input:focus { border-color:var(--border-hover); }
+.chat-send { background:none; border:1px solid var(--border); color:var(--text-muted); border-radius:8px; padding:8px 14px; font-size:12px; cursor:pointer; font-family:inherit; font-weight:600; transition:all 0.2s; }
+.chat-send:hover { border-color:var(--border-hover); color:var(--text); }
+.chat-send:disabled { opacity:0.3; cursor:default; }
+.chat-typing { font-size:11px; color:var(--text-dim); padding:4px 12px; font-style:italic; }
+
+/* Orchestrator */
+.orc-bar { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--surface-2); border-radius:8px; margin-bottom:12px; }
+.orc-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+.orc-name { font-size:13px; font-weight:600; }
+.orc-state { font-size:10px; color:var(--text-dim); }
+.orc-desc { font-size:13px; color:var(--text-muted); line-height:1.5; }
+
+/* Deck cards in room */
+.deck-cards { display:flex; gap:8px; flex-wrap:wrap; }
+.deck-chip { font-size:11px; padding:4px 10px; border-radius:6px; background:var(--surface-2); border:1px solid var(--border); cursor:pointer; transition:all 0.2s; }
+.deck-chip:hover { border-color:var(--border-hover); }
+.deck-chip.active { border-color:var(--amber); color:var(--amber); }
+
+/* Sense indicators */
+.sense-row { display:flex; gap:8px; flex-wrap:wrap; }
+.sense-pill { font-size:11px; padding:4px 10px; border-radius:6px; display:flex; align-items:center; gap:4px; }
+.sense-active { background:rgba(34,197,94,0.1); color:var(--green); }
+.sense-inactive { background:rgba(255,255,255,0.03); color:var(--text-dim); }
+
+/* Loading */
+.loading { color:var(--text-dim); font-size:12px; padding:20px; text-align:center; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ LOBBY ═══════ -->
+<div id="lobby">
+  <div class="lobby-wrap">
+    <div class="lobby-header">
+      <div class="lobby-title">Environments</div>
+      <div class="lobby-sub" id="lobby-meta">6 rooms</div>
+    </div>
+    <div class="lobby-grid" id="lobby-grid"><div style="color:#a1a1aa;font-size:14px;padding:20px">Loading rooms...</div></div>
+    <div class="signals-bar" id="signals-bar" style="display:none">
+      <div class="signals-title">Cross-Room Signals</div>
+      <div id="signals-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ ROOM VIEW ═══════ -->
+<div id="room-view">
+  <div class="room-wrap">
+    <div class="room-topbar">
+      <button class="room-back" onclick="closeRoom()">Lobby</button>
+      <div class="room-title" id="rv-title"></div>
+      <div class="room-status-dot" id="rv-dot" style="background:var(--green)"></div>
+    </div>
+
+    <!-- Orchestrator bar -->
+    <div class="orc-bar" id="rv-orc"></div>
+
+    <!-- Senses -->
+    <div style="margin-bottom:14px">
+      <div class="sense-row" id="rv-senses"></div>
+    </div>
+
+    <!-- Widgets -->
+    <div class="widget-row" id="rv-widgets"></div>
+
+    <!-- Main grid -->
+    <div class="room-grid" id="rv-grid"></div>
+  </div>
+  </div>
+</div>
+<button class="fab-home" id="fab-home" onclick="closeRoom()" title="Back to Lobby" style="display:none">&larr;</button>
+
+<script>
+const BASE = '';  // same origin
+
+// ═══════════════════ ROOM DEFINITIONS ═══════════════════
+const ENV = [
+  {
+    id: 'money',
+    name: 'Money',
+    icon: '💰',
+    color: '#f59e0b',
+    colorDim: 'rgba(245,158,11,0.12)',
+    desc: 'Trading, finance, patterns. 10 strategies running, 4-hour cycles.',
+    orc: { name: 'Trader', state: 'Scanning', desc: 'Runs 10 parallel trading strategies on 4-hour cycles. Cross-references unconventional signals (lunar, Gann, Fibonacci, suppression).' },
+    senses: [
+      { icon: '📊', name: 'Data', detail: 'Markets, accounts, feeds', active: true },
+      { icon: '🕒', name: 'Time', detail: 'Trading windows & cycles', active: true },
+      { icon: '📍', name: 'Location', detail: 'Spending context', active: false }
+    ],
+    deckCards: [
+      { id: 7, name: 'Trading Desk' },
+      { id: 4, name: 'Roundtable' },
+      { id: 15, name: 'Steward' },
+      { id: 12, name: 'Cymatics' }
+    ],
+    dashboards: ['/trader/hub'],
+    dataEndpoints: {
+      signals: '/trader/signals',
+      portfolio: '/trader/portfolio',
+      positions: '/trader/positions',
+      performance: '/trader/performance',
+      debate: '/trader/latest-debate'
+    }
+  },
+  {
+    id: 'body',
+    name: 'Body',
+    icon: '💪',
+    color: '#22c55e',
+    colorDim: 'rgba(34,197,94,0.12)',
+    desc: 'Training, movement, recovery. Eyes and ears on the gym floor.',
+    orc: { name: 'Coach', state: 'Watching', desc: 'Monitors gym floor via cameras. Tracks member form, session intensity, recovery. Learns each member\'s baseline.' },
+    senses: [
+      { icon: '👁', name: 'Vision', detail: 'Camera form analysis', active: false },
+      { icon: '🌡', name: 'Sensors', detail: 'HR, reps, fatigue', active: false },
+      { icon: '🕒', name: 'Time', detail: 'Session & rest', active: true },
+      { icon: '👂', name: 'Hearing', detail: 'Coaching cues', active: false },
+      { icon: '📊', name: 'Data', detail: 'Member progress', active: true }
+    ],
+    deckCards: [
+      { id: 8, name: 'Boxing Lab' },
+      { id: 16, name: 'Boxing Engine' }
+    ],
+    dashboards: ['/techniques'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'mind',
+    name: 'Mind',
+    icon: '🧠',
+    color: '#a855f7',
+    colorDim: 'rgba(168,85,247,0.12)',
+    desc: 'Learning, research, curiosity, reflection. Vault-connected knowledge engine.',
+    orc: { name: 'Sage', state: 'Listening', desc: 'Manages research pipelines, vault connections, knowledge graph. Routes curiosity into structured investigation.' },
+    senses: [
+      { icon: '⌨', name: 'Input', detail: 'Reading & research', active: true },
+      { icon: '🕒', name: 'Time', detail: 'Focus blocks', active: true },
+      { icon: '📊', name: 'Data', detail: 'Vault & feeds', active: true }
+    ],
+    deckCards: [
+      { id: 2, name: 'Vault' },
+      { id: 6, name: 'Predictive Intelligence' },
+      { id: 14, name: 'Muse' }
+    ],
+    dashboards: ['/cosmology', '/predictive/map'],
+    dataEndpoints: {
+      graphStats: '/predictive/stats',
+      seeds: '/predictive/seeds'
+    }
+  },
+  {
+    id: 'create',
+    name: 'Create',
+    icon: '🎨',
+    color: '#3b82f6',
+    colorDim: 'rgba(59,130,246,0.12)',
+    desc: 'Visual art, music, aesthetic direction. Reed\'s studio and beyond.',
+    orc: { name: 'Reed', state: 'Creating', desc: 'Visual Director with 10 proven styles. Daily Lab, shot assignments, Taste Map alignment. Studio at /reed-studio.' },
+    senses: [
+      { icon: '👁', name: 'Vision', detail: 'Design review', active: true },
+      { icon: '👂', name: 'Hearing', detail: 'Music analysis', active: true },
+      { icon: '⌨', name: 'Input', detail: 'Creative tools', active: true }
+    ],
+    deckCards: [
+      { id: 10, name: 'Reed' },
+      { id: 9, name: 'Creative Lab' },
+      { id: 17, name: 'Cathedral Slides' }
+    ],
+    dashboards: ['/reed-studio'],
+    dataEndpoints: {
+      catalogue: '/reed-lab/catalogue',
+      shots: '/reed-lab/shots'
+    }
+  },
+  {
+    id: 'work',
+    name: 'Work',
+    icon: '💼',
+    color: '#06b6d4',
+    colorDim: 'rgba(6,182,212,0.12)',
+    desc: 'Basic Reflex operations, clients, content, communication.',
+    orc: { name: 'Conductor', state: 'Coordinating', desc: 'Manages BR operations. Members, content, revenue, retention. Coordinates gym floor data and business metrics.' },
+    senses: [
+      { icon: '⌨', name: 'Input', detail: 'Comms & tasks', active: true },
+      { icon: '📊', name: 'Data', detail: 'Members & clients', active: true },
+      { icon: '📍', name: 'Location', detail: 'On-site / remote', active: false }
+    ],
+    deckCards: [
+      { id: 1, name: 'Cathedral' },
+      { id: 13, name: 'Morning Briefing' },
+      { id: 11, name: 'Cartographer' },
+      { id: 3, name: 'Experiment Lab' }
+    ],
+    dashboards: ['/scraper/hub'],
+    dataEndpoints: {
+      snapshot: '/villa/snapshot',
+      projects: '/villa/projects'
+    }
+  },
+  {
+    id: 'forge',
+    name: 'Forge',
+    icon: '\u2692',
+    color: '#e63e2f',
+    colorDim: 'rgba(230,62,47,0.12)',
+    desc: 'Claude Code terminal. Build, debug, deploy. The Cathedral\'s builder.',
+    orc: { name: 'Forge', state: 'Ready', desc: 'Claude Code running as Forge — the Cathedral\'s builder identity. Full terminal access to the Mac Mini.' },
+    senses: [
+      { icon: '\u2328', name: 'Terminal', detail: 'Full shell access', active: true },
+      { icon: '\u{1F4CA}', name: 'Code', detail: 'Read, write, execute', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['FORGE_TTYD'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'social',
+    name: 'Social',
+    icon: '🤝',
+    color: '#f43f5e',
+    colorDim: 'rgba(244,63,94,0.12)',
+    desc: 'Relationships, community, presence. Who matters and why.',
+    orc: { name: 'Connector', state: 'Tracking', desc: 'Maintains relationship awareness. Communication cadence, shared interests. Surfaces opportunities for genuine connection.' },
+    senses: [
+      { icon: '⌨', name: 'Input', detail: 'Messages & calls', active: false },
+      { icon: '📍', name: 'Location', detail: 'Proximity', active: false },
+      { icon: '🕒', name: 'Time', detail: 'Relationship cadence', active: false }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {}
+  }
+];
+
+// ═══════════════════ RENDER LOBBY ═══════════════════
+function renderLobby() {
+  const grid = document.getElementById('lobby-grid');
+  const activeSenses = ENV.reduce((n, e) => n + e.senses.filter(s => s.active).length, 0);
+  document.getElementById('lobby-meta').textContent = `${ENV.length} rooms \u00B7 ${activeSenses} senses active`;
+
+  grid.innerHTML = ENV.map(e => {
+    const activeCount = e.senses.filter(s => s.active).length;
+    return `
+    <div class="env-card" onclick="openRoom('${e.id}')" style="--c:${e.color}">
+      <div class="env-card-glow" style="background:${e.color}"></div>
+      <div class="env-card-top">
+        <div class="env-icon" style="background:${e.colorDim}">${e.icon}</div>
+        <div class="env-name">${e.name}</div>
+        <div class="env-status" style="background:${e.colorDim};color:${e.color}">${e.deckCards.length ? 'Active' : 'Planned'}</div>
+      </div>
+      <div class="env-desc">${e.desc}</div>
+      <div class="env-cards-list">
+        ${e.deckCards.map(c => `<span class="env-card-tag" style="background:${e.colorDim};color:${e.color}">#${String(c.id).padStart(3,'0')} ${c.name}</span>`).join('')}
+      </div>
+      <div class="env-senses">
+        ${e.senses.filter(s => s.active).map(s => `<span class="env-sense">${s.icon} ${s.name}</span>`).join('')}
+      </div>
+      <div class="env-footer">
+        <span class="env-stat"><strong>${e.deckCards.length}</strong> workspaces</span>
+        <span class="env-stat"><strong>${activeCount}</strong> senses</span>
+        <span class="env-enter">Enter \u2192</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════ OPEN ROOM ═══════════════════
+var chatHistory = [];
+var currentRoom = null;
+
+function openRoom(id) {
+  const env = ENV.find(e => e.id === id);
+  if (!env) return;
+  currentRoom = env;
+
+  // Clear chat history for new room
+  chatHistory = [];
+
+  // Update URL without reload
+  history.pushState({ room: id }, '', `/env/${id}`);
+
+  // Title + dot
+  document.getElementById('rv-title').innerHTML = `${env.icon} ${env.name}`;
+  document.getElementById('rv-dot').style.background = env.color;
+
+  // Orchestrator
+  document.getElementById('rv-orc').innerHTML = `
+    <div class="orc-icon" style="background:${env.colorDim}">${env.icon}</div>
+    <div>
+      <div class="orc-name">${env.orc.name}</div>
+      <div class="orc-state">${env.orc.state}</div>
+    </div>
+    <div class="orc-desc" style="margin-left:auto;max-width:400px;text-align:right">${env.orc.desc}</div>
+  `;
+
+  // Senses
+  document.getElementById('rv-senses').innerHTML = env.senses.map(s =>
+    `<span class="sense-pill ${s.active ? 'sense-active' : 'sense-inactive'}">${s.icon} ${s.name}</span>`
+  ).join('');
+
+  // Widgets placeholder — filled by data fetch
+  document.getElementById('rv-widgets').innerHTML = '<div class="loading">Loading data...</div>';
+
+  // Build room grid
+  let gridHTML = '';
+
+  // Resolve dynamic dashboard URLs
+  var dashUrls = env.dashboards.map(function(d) {
+    if (d === 'FORGE_TTYD') return 'http://' + location.hostname + ':7681';
+    return d;
+  });
+
+  // Forge room — terminal needs its own tab (cross-origin iframe blocks keyboard)
+  if (env.id === 'forge' && dashUrls.length) {
+    gridHTML += `
+      <div class="room-panel span-2">
+        <div class="panel-head">
+          <span class="panel-label">Terminal</span>
+        </div>
+        <div class="panel-body" style="text-align:center;padding:40px 20px">
+          <a href="${dashUrls[0]}" target="_blank" style="display:inline-block;background:var(--accent);color:white;padding:16px 40px;border-radius:10px;font-size:16px;font-weight:600;font-family:inherit;text-decoration:none;transition:opacity 0.2s">Open Terminal</a>
+          <div style="color:var(--text-dim);font-size:12px;margin-top:12px">Opens in new tab. Type <code style="background:var(--bg);padding:2px 6px;border-radius:3px">claude</code> to start Forge.</div>
+        </div>
+      </div>`;
+  }
+
+  // Dashboard panel (iframe) — skip for rooms with no working dashboard
+  if (dashUrls.length && env.id !== 'body' && env.id !== 'forge') {
+    gridHTML += `
+      <div class="room-panel span-2">
+        <div class="panel-head">
+          <span class="panel-label">Dashboard</span>
+          <div class="deck-cards">
+            ${dashUrls.map((d, i) => `<button class="deck-chip ${i === 0 ? 'active' : ''}" onclick="switchDash('${d}', this)" style="--c:${env.color}">${d.replace(/^http:\/\/[^/]+/,'')  || 'Terminal'}</button>`).join('')}
+          </div>
+          <a href="${dashUrls[0]}" target="_blank" class="panel-action">Open Full \u2197</a>
+        </div>
+        <iframe class="dash-frame" id="rv-dash" src="${dashUrls[0]}"${env.id === 'forge' ? ' style="height:80vh;max-height:900px"' : ''}></iframe>
+      </div>`;
+  }
+
+  // Deck cards panel
+  if (env.deckCards.length) {
+    gridHTML += `
+      <div class="room-panel">
+        <div class="panel-head">
+          <span class="panel-label">Workspaces</span>
+        </div>
+        <div class="panel-body">
+          <div class="deck-cards">
+            ${env.deckCards.map(c => {
+              const dashMap = { 7:'/trader/hub', 8:'/techniques', 16:'/techniques', 4:'/trader/hub', 10:'/reed-studio', 9:'/reed-studio', 17:'/reed-slides' };
+              const href = dashMap[c.id] || '/reed-slides';
+              return `<a class="deck-chip" href="${href}" target="_blank" style="color:${env.color}">#${String(c.id).padStart(3,'0')} ${c.name}</a>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // Activity panel
+  gridHTML += `
+    <div class="room-panel">
+      <div class="panel-head"><span class="panel-label">Activity</span></div>
+      <div class="panel-body" id="rv-activity"><div class="loading">Loading...</div></div>
+    </div>`;
+
+  // Chat panel (for rooms with agents)
+  if (['money','mind','body','create','work'].includes(env.id) && env.id !== 'forge') {
+    const agentNames = { money:'Trader', mind:'Sage', body:'Coach', create:'Reed', work:'Conductor' };
+    gridHTML += `
+      <div class="room-panel span-2">
+        <div class="panel-head">
+          <span class="panel-label">Talk to ${agentNames[env.id] || 'Agent'}</span>
+          <span style="font-size:10px;color:var(--text-dim)">hermes3 local</span>
+        </div>
+        <div class="chat-panel">
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-msg chat-msg-agent">
+              <div class="chat-name" style="color:${env.color}">${agentNames[env.id]}</div>
+              <div class="chat-bubble">${env.id === 'money' ? 'Trading Desk ready. I have live portfolio, positions, and latest Roundtable debate loaded. Ask me anything.' : 'Room agent ready. Ask me anything.'}</div>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-input" id="chat-input" placeholder="Ask ${agentNames[env.id]}..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}">
+            <button class="chat-send" id="chat-send" onclick="sendChat()">Send</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('rv-grid').innerHTML = gridHTML;
+
+  // Transition
+  document.getElementById('lobby').classList.add('hidden');
+  document.getElementById('fab-home').style.display = 'flex';
+  const rv = document.getElementById('room-view');
+  rv.style.display = 'block';
+  requestAnimationFrame(() => rv.classList.add('active'));
+
+  // Fetch live data
+  loadRoomData(env);
+}
+
+function closeRoom() {
+  currentRoom = null;
+  history.pushState({}, '', '/env');
+  document.getElementById('fab-home').style.display = 'none';
+  const rv = document.getElementById('room-view');
+  rv.classList.remove('active');
+  setTimeout(() => {
+    rv.style.display = 'none';
+    document.getElementById('lobby').classList.remove('hidden');
+  }, 300);
+}
+
+function switchDash(url, btn) {
+  document.getElementById('rv-dash').src = url;
+  document.querySelectorAll('.deck-chip.active').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ═══════════════════ LOAD LIVE DATA ═══════════════════
+async function loadRoomData(env) {
+  if (env.id === 'money') return loadMoneyRoom(env);
+  if (env.id === 'mind') return loadMindRoom(env);
+  if (env.id === 'work') return loadWorkRoom(env);
+  if (env.id === 'create') return loadCreateRoom(env);
+  if (env.id === 'body') return loadBodyRoom(env);
+  if (env.id === 'forge') return loadForgeRoom(env);
+
+  // Default: no live data
+  document.getElementById('rv-widgets').innerHTML = '';
+  document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-dim);font-size:12px;padding:8px">No live data yet. Senses coming soon.</div>';
+}
+
+// ─── MONEY ROOM ───
+async function loadMoneyRoom(env) {
+  const [portfolio, positions, performance, debate, signals] = await Promise.allSettled([
+    fetchJSON('/trader/portfolio'),
+    fetchJSON('/trader/positions'),
+    fetchJSON('/trader/performance'),
+    fetchJSON('/trader/latest-debate'),
+    fetchJSON('/trader/signals')
+  ]);
+
+  const p = portfolio.value || {};
+  const pos = positions.value || { open: [], closed: [] };
+  const perf = performance.value || {};
+  const sig = signals.value || {};
+
+  // Widgets
+  const balance = p.balance != null ? '$' + Number(p.balance).toLocaleString() : '--';
+  const pnl = perf.total_pnl != null ? (perf.total_pnl >= 0 ? '+' : '') + '$' + Number(perf.total_pnl).toFixed(2) : '--';
+  const winRate = perf.win_rate != null ? perf.win_rate + '%' : '--';
+  const openCount = pos.open?.length || 0;
+  const totalTrades = perf.total_trades || 0;
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Portfolio</div>
+      <div class="widget-value" style="color:${env.color}">${balance}</div>
+      <div class="widget-change">${openCount} open positions</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Total P&L</div>
+      <div class="widget-value ${perf.total_pnl >= 0 ? 'up' : 'down'}" style="color:${perf.total_pnl >= 0 ? 'var(--green)' : 'var(--accent)'}">${pnl}</div>
+      <div class="widget-change">${totalTrades} trades</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Win Rate</div>
+      <div class="widget-value" style="color:${env.color}">${winRate}</div>
+      <div class="widget-change">${perf.wins || 0}W / ${perf.losses || 0}L</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Best Trade</div>
+      <div class="widget-value" style="color:var(--green);font-size:16px">${perf.best_trade != null ? '+$' + perf.best_trade : '--'}</div>
+      <div class="widget-change">Worst: ${perf.worst_trade != null ? '$' + perf.worst_trade : '--'}</div>
+    </div>
+  `;
+
+  // Activity from positions + debate
+  let actItems = [];
+  if (pos.open?.length) {
+    pos.open.forEach(t => actItems.push({
+      text: `Open: ${t.asset} ${t.direction} @ $${Number(t.entry_price).toFixed(2)} (${t.strategy})`,
+      color: t.direction === 'long' ? 'var(--green)' : 'var(--accent)',
+      time: t.opened_at ? timeAgo(t.opened_at) : ''
+    }));
+  }
+  if (pos.closed?.length) {
+    pos.closed.slice(0, 5).forEach(t => actItems.push({
+      text: `Closed: ${t.asset} ${t.direction} P&L: $${Number(t.pnl).toFixed(2)} (${t.strategy})`,
+      color: t.pnl >= 0 ? 'var(--green)' : 'var(--accent)',
+      time: t.closed_at ? timeAgo(t.closed_at) : ''
+    }));
+  }
+  const deb = debate.value;
+  if (deb?.synthesis) {
+    actItems.push({
+      text: 'Roundtable: ' + (deb.synthesis || '').substring(0, 120) + '...',
+      color: 'var(--amber)',
+      time: deb.created_at ? timeAgo(deb.created_at) : ''
+    });
+  }
+  if (!actItems.length) actItems.push({ text: 'No recent activity', color: 'var(--text-dim)', time: '' });
+
+  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── MIND ROOM ───
+async function loadMindRoom(env) {
+  const [stats, seeds] = await Promise.allSettled([
+    fetchJSON('/predictive/stats'),
+    fetchJSON('/predictive/seeds')
+  ]);
+  const s = stats.value || {};
+  const sd = seeds.value || [];
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Vault Nodes</div>
+      <div class="widget-value" style="color:${env.color}">${s.nodes ? s.nodes.toLocaleString() : '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Edges</div>
+      <div class="widget-value" style="color:${env.color}">${s.edges ? s.edges.toLocaleString() : '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Communities</div>
+      <div class="widget-value" style="color:${env.color}">${s.communities || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Predictions</div>
+      <div class="widget-value" style="color:${env.color}">${Array.isArray(sd) ? sd.length : '--'}</div>
+    </div>
+  `;
+  document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-dim);font-size:12px;padding:8px">Vault activity feed coming soon.</div>';
+}
+
+// ─── WORK ROOM ───
+async function loadWorkRoom(env) {
+  const [snap, projects] = await Promise.allSettled([
+    fetchJSON('/villa/snapshot'),
+    fetchJSON('/villa/projects')
+  ]);
+  const sn = snap.value || {};
+  const prjData = projects.value || {};
+  const prj = prjData.projects || (Array.isArray(prjData) ? prjData : []);
+
+  const pm2Count = sn.pm2?.length || 0;
+  const onlineCount = sn.pm2?.filter(p => p.status === 'online').length || 0;
+  const activeProjects = prj.filter(p => p.status === 'active');
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">PM2 Processes</div>
+      <div class="widget-value" style="color:${env.color}">${onlineCount}/${pm2Count}</div>
+      <div class="widget-change">online</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Active Projects</div>
+      <div class="widget-value" style="color:${env.color}">${activeProjects.length}</div>
+      <div class="widget-change">${prj.length} total</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Vault Notes</div>
+      <div class="widget-value" style="color:${env.color}">${sn.vault?.total || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Latest Muse</div>
+      <div class="widget-value" style="color:var(--purple);font-size:11px;line-height:1.4">${sn.muse?.snippet ? sn.muse.snippet.substring(0,80) + '...' : '--'}</div>
+      <div class="widget-change">${sn.muse?.date || ''}</div>
+    </div>
+  `;
+
+  let actItems = [];
+  activeProjects.slice(0, 8).forEach(p => {
+    actItems.push({
+      text: p.title || p.file,
+      color: p.priority === 'high' ? 'var(--amber)' : 'var(--cyan)',
+      time: p.nextAction ? '\u2192 ' + p.nextAction.substring(0, 80) : ''
+    });
+  });
+  if (!actItems.length) actItems.push({ text: 'No active projects', color: 'var(--text-dim)', time: '' });
+  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── FORGE ROOM ───
+async function loadForgeRoom(env) {
+  document.getElementById('rv-widgets').innerHTML = [
+    { label:'Engine', value:'Claude Code', change:'Opus 4.6 (1M context)', color:env.color },
+    { label:'Identity', value:'Forge v2', change:'The Awakened Builder', color:env.color },
+    { label:'PM2 Processes', value:'--', change:'checking...', color:env.color }
+  ].map(function(w) {
+    return '<div class="widget-box"><div class="widget-label">'+w.label+'</div><div class="widget-value" style="color:'+w.color+'">'+w.value+'</div><div class="widget-change">'+w.change+'</div></div>';
+  }).join('');
+
+  // Get PM2 count
+  try {
+    var snap = await fetchJSON('/villa/snapshot');
+    if (snap && snap.pm2) {
+      var online = snap.pm2.filter(function(p){ return p.status === 'online'; }).length;
+      var boxes = document.querySelectorAll('.widget-box');
+      if (boxes[2]) {
+        boxes[2].querySelector('.widget-value').textContent = online + '/' + snap.pm2.length;
+        boxes[2].querySelector('.widget-change').textContent = 'online';
+      }
+    }
+  } catch(e) {}
+
+  document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:8px">Type <code style="background:var(--bg);padding:2px 6px;border-radius:3px">claude</code> in the terminal to start a session.</div>';
+}
+
+// ─── BODY ROOM ───
+async function loadBodyRoom(env) {
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Technique Library</div>
+      <div class="widget-value" style="color:${env.color}">56</div>
+      <div class="widget-change">reference photos</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Boxing Engine</div>
+      <div class="widget-value" style="color:${env.color}">39</div>
+      <div class="widget-change">tests passing</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Coaching Schools</div>
+      <div class="widget-value" style="color:${env.color}">6</div>
+      <div class="widget-change">Cuban, Filipino, Thai, Philly, Science, Schumann</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Gym Eyes</div>
+      <div class="widget-value" style="color:var(--text-dim)">Planned</div>
+      <div class="widget-change">MediaPipe pose + combo detection</div>
+    </div>
+  `;
+  document.getElementById('rv-activity').innerHTML = `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:var(--green)"></div>
+      <div>
+        <div class="activity-text">Technique Gallery live at <a href="/techniques" target="_blank" style="color:var(--green)">/techniques</a></div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot" style="background:var(--amber)"></div>
+      <div>
+        <div class="activity-text">Gym Eyes spec filed. Tier 1: process existing iPhone footage via MediaPipe.</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot" style="background:var(--green)"></div>
+      <div>
+        <div class="activity-text">Baseline: 1,008 punches, 138 guard drops (noodles1 pad session)</div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── CREATE ROOM ───
+async function loadCreateRoom(env) {
+  const [cat, shots] = await Promise.allSettled([
+    fetchJSON('/reed-lab/catalogue'),
+    fetchJSON('/reed-lab/shots')
+  ]);
+  const c = cat.value || {};
+  const sh = shots.value || {};
+  const entries = c.entries || c.photos || [];
+  const styles = {};
+  entries.forEach(e => { if (e.style) styles[e.style] = (styles[e.style]||0) + 1; });
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Total Generated</div>
+      <div class="widget-value" style="color:${env.color}">${entries.length || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Styles Used</div>
+      <div class="widget-value" style="color:${env.color}">${Object.keys(styles).length || '10'}</div>
+      <div class="widget-change">${Object.keys(styles).slice(0,3).join(', ')}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Shot Assignments</div>
+      <div class="widget-value" style="color:${env.color}">${sh.assignments?.length || sh.full_list?.length || '--'}</div>
+    </div>
+  `;
+
+  // Recent generations as activity
+  let actItems = entries.slice(-6).reverse().map(e => ({
+    text: (e.file || '').replace(/\.(jpg|png|jpeg)$/i, ''),
+    color: env.color,
+    time: e.date || ''
+  }));
+  if (!actItems.length) actItems.push({ text: 'No recent generations', color: 'var(--text-dim)', time: '' });
+  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════ HELPERS ═══════════════════
+async function fetchJSON(url) {
+  try {
+    const r = await fetch(BASE + url);
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; }
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const now = Date.now();
+  const diff = now - d.getTime();
+  if (diff < 0) return '';
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  return days + 'd ago';
+}
+
+// ═══════════════════ CHAT ═══════════════════
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('chat-send');
+  const messages = document.getElementById('chat-messages');
+  const query = input.value.trim();
+  if (!query || !currentRoom) return;
+
+  // Show user message
+  messages.innerHTML += `<div class="chat-msg chat-msg-user"><div class="chat-bubble">${escapeHtml(query)}</div></div>`;
+  input.value = '';
+  btn.disabled = true;
+  messages.scrollTop = messages.scrollHeight;
+
+  // Show typing
+  messages.innerHTML += `<div class="chat-typing" id="chat-typing">thinking...</div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  chatHistory.push({ role: 'user', content: query });
+
+  try {
+    const r = await fetch(BASE + '/env/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, history: chatHistory.slice(-10), room: currentRoom.id })
+    });
+    const data = await r.json();
+    const reply = data.response || data.error || 'No response';
+
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    // Remove typing indicator
+    const typing = document.getElementById('chat-typing');
+    if (typing) typing.remove();
+
+    const agentNames = { money:'Trader', mind:'Sage', body:'Coach', create:'Reed', work:'Conductor' };
+    messages.innerHTML += `
+      <div class="chat-msg chat-msg-agent">
+        <div class="chat-name" style="color:${currentRoom.color}">${agentNames[currentRoom.id] || 'Agent'}</div>
+        <div class="chat-bubble">${formatReply(reply)}</div>
+      </div>`;
+  } catch (err) {
+    const typing = document.getElementById('chat-typing');
+    if (typing) typing.remove();
+    messages.innerHTML += `<div class="chat-msg chat-msg-agent"><div class="chat-bubble" style="color:var(--accent)">Error: ${err.message}</div></div>`;
+  }
+
+  btn.disabled = false;
+  messages.scrollTop = messages.scrollHeight;
+  input.focus();
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatReply(s) {
+  // Basic markdown: bold, code, newlines
+  return escapeHtml(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code style="background:var(--bg);padding:1px 4px;border-radius:3px;font-size:12px">$1</code>')
+    .replace(/\n/g, '<br>');
+}
+
+// ═══════════════════ ROUTING ═══════════════════
+function handleRoute() {
+  const path = window.location.pathname;
+  const match = path.match(/^\/env\/(\w+)$/);
+  if (match) {
+    const roomId = match[1];
+    if (ENV.find(e => e.id === roomId)) {
+      openRoom(roomId);
+      return;
+    }
+  }
+  // Default: show lobby
+  renderLobby();
+}
+
+window.addEventListener('popstate', () => {
+  if (currentRoom) {
+    closeRoom();
+  }
+});
+
+// ═══════════════════ INIT ═══════════════════
+window.onerror = function(msg, url, line) {
+  document.getElementById('lobby-grid').innerHTML = '<div style="color:#ef4444;padding:20px">Error line ' + line + ': ' + msg + '</div>';
+};
+try { handleRoute(); } catch(e) {
+  document.getElementById('lobby-grid').innerHTML = '<div style="color:#ef4444;padding:20px">' + e.message + '</div>';
+}
+</script>
+</body>
+</html>

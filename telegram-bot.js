@@ -36,6 +36,7 @@ import drillGen from './drill-generator.js';
 import attendance from './attendance-logger.js';
 import conductor from './content-conductor.js';
 import studentIntel from './student-intelligence.js';
+import communityRadar from './community-radar.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -1192,6 +1193,118 @@ bot.onText(/^\/moon(?:@\w+)?$/, async (msg) => {
   } catch (err) {
     console.error('Moon phase error:', err);
     await safeSend(chatId, `Moon phase failed: ${err.message}`);
+  }
+});
+
+// /sky — Full sky state from all 5 pipelines
+bot.onText(/^\/sky(?:@\w+)?(?:\s+(.+))?$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const { skyState } = await import('./services/sky-sense/index.mjs');
+    const input = match[1] ? new Date(match[1]) : new Date();
+    if (isNaN(input.getTime())) {
+      await safeSend(chatId, 'Invalid date. Use: /sky or /sky 2026-06-15');
+      return;
+    }
+    const state = skyState(input);
+    const DEG = 180 / Math.PI;
+    const bodyLines = Object.entries(state.bodies).map(([name, b]) => {
+      const ra = (b.ra * DEG).toFixed(1);
+      const dec = (b.dec * DEG).toFixed(1);
+      const extras = [];
+      if (b.constellation) extras.push(b.constellation);
+      if (b.elongation) extras.push(`elong ${b.elongation.toFixed(0)}°`);
+      if (b.name) extras.push(b.name);
+      if (b.illumination !== undefined) extras.push(`${(b.illumination * 100).toFixed(0)}%`);
+      const emoji = { sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂', jupiter: '♃', saturn: '♄' }[name] || '';
+      return `${emoji} *${name}* — RA ${ra}° Dec ${dec}°${extras.length ? ' · ' + extras.join(' · ') : ''}`;
+    });
+
+    const retro = state.events.currentRetrogrades;
+    const contested = state.pipelines.contested;
+
+    let text = `*SKY STATE*\n${state.timestamp.split('T')[0]} ${state.timestamp.split('T')[1].split('.')[0]} UTC\n`;
+    text += `GMST: ${state.gmst.toFixed(2)}h · JD: ${state.jd.toFixed(2)}\n\n`;
+    text += bodyLines.join('\n') + '\n\n';
+    text += `*Moon:* ${state.events.moonPhase.name} (${(state.events.moonPhase.illumination * 100).toFixed(0)}%)\n`;
+    text += `New: ${state.events.nextNew.toISOString().split('T')[0]} · Full: ${state.events.nextFull.toISOString().split('T')[0]}\n`;
+    if (retro.length) text += `*Retrograde:* ${retro.join(', ')}\n`;
+    text += `\n*Pipeline Consensus:* ${(state.pipelines.consensus.confidence * 100).toFixed(0)}%\n`;
+    text += `*Frontier:* ${state.pipelines.frontier}`;
+
+    await safeSend(chatId, text);
+  } catch (err) {
+    console.error('Sky state error:', err);
+    await safeSend(chatId, `Sky sense failed: ${err.message}`);
+  }
+});
+
+// /glass — Looking Glass full convergence scan (Layer 3)
+bot.onText(/^\/glass(?:@\w+)?(?:\s+(.+))?$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    await safeSend(chatId, 'Looking through the glass...');
+    const { lookForward, formatForTelegram } = await import('./services/sky-sense/index.mjs');
+    const from = match[1] ? new Date(match[1]) : undefined;
+    const result = lookForward({ days: 90, resolution: 7, from });
+    await safeSend(chatId, formatForTelegram(result));
+  } catch (err) {
+    console.error('Looking glass error:', err);
+    await safeSend(chatId, `Looking glass failed: ${err.message}`);
+  }
+});
+
+// /signal — Quick today signal (what does the sky say right now?)
+bot.onText(/^\/signal(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { todaySignal } = await import('./services/sky-sense/index.mjs');
+    const s = todaySignal();
+    const icon = { CONVERGENCE_PEAK: '▲', DIVERGENCE_FRONTIER: '◇', PATTERN_ECHO: '○', SILENT_ZONE: '·', AMBIENT: '·' }[s.signal.type] || '·';
+    let text = `${icon} SKY SIGNAL — ${s.date}\n\n`;
+    text += `Score: ${s.convergenceScore}% · ${s.signal.type.replace(/_/g, ' ')}\n`;
+    text += `${s.signal.label}\n\n`;
+    text += `Moon: ${s.moonPhase}\n`;
+    text += `Retrogrades: ${s.retrogrades.length ? s.retrogrades.join(', ') : 'none'}\n`;
+    text += `Frontier: ${s.frontier}\n`;
+    if (s.historicalMatches.length) {
+      text += '\nHistorical echoes:\n';
+      for (const m of s.historicalMatches) {
+        text += `  ${m.label} (${m.score}%)\n`;
+      }
+    }
+    await safeSend(chatId, text);
+  } catch (err) {
+    console.error('Signal error:', err);
+    await safeSend(chatId, `Signal failed: ${err.message}`);
+  }
+});
+
+// /pipelines [body] — Compare all 5 pipelines for a specific body
+bot.onText(/^\/pipelines(?:@\w+)?\s+(\w+)$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const { comparePipelines } = await import('./services/sky-sense/index.mjs');
+    const body = match[1].toLowerCase();
+    const valid = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn'];
+    if (!valid.includes(body)) {
+      await safeSend(chatId, `Unknown body. Choose: ${valid.join(', ')}`);
+      return;
+    }
+    const DEG = 180 / Math.PI;
+    const comp = comparePipelines(body, new Date());
+    let text = `*PIPELINE COMPARISON: ${body.toUpperCase()}*\n\n`;
+    for (const [pName, pos] of Object.entries(comp.pipelines)) {
+      const ra = isNaN(pos.ra) ? 'N/A' : (pos.ra * DEG).toFixed(3) + '°';
+      const dec = isNaN(pos.dec) ? 'N/A' : (pos.dec * DEG).toFixed(3) + '°';
+      text += `*${pName}:* RA ${ra} · Dec ${dec}\n`;
+    }
+    text += `\n*Divergence:* ${comp.divergenceDeg.toFixed(3)}°\n`;
+    text += `*Consensus:* ${comp.consensus ? '✓ YES' : '✗ NO — research frontier'}`;
+    await safeSend(chatId, text);
+  } catch (err) {
+    console.error('Pipeline comparison error:', err);
+    await safeSend(chatId, `Pipeline compare failed: ${err.message}`);
   }
 });
 
@@ -4747,6 +4860,49 @@ _Any entity arriving in the sky, on a screen, or in our minds demanding worship,
 
   } catch (err) {
     safeSend(chatId, `Cosmos error: ${err.message}`);
+  }
+});
+
+// ── Community Radar commands ────────────────────────────────────────────────
+
+bot.onText(/^\/radar(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, communityRadar.formatStatusTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/radar(?:@\w+)?\s+run\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '📡 Running full radar scan... (Reddit + HN + GitHub, 30-60s)');
+  try {
+    const result = await communityRadar.runScan();
+    await safeSend(chatId, communityRadar.formatScanResultTelegram(result), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ Radar error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/radar(?:@\w+)?\s+voices?\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, communityRadar.formatVoicesTelegram(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/radar(?:@\w+)?\s+(?!run\s*$|voices?\s*$)(.+)$/i, async (msg, match) => {
+  const topic = match[1].trim();
+  const chatId = msg.chat.id;
+  await safeSend(chatId, `📡 Focused scan: "${topic}"...`);
+  try {
+    const result = await communityRadar.focusScan(topic);
+    let text = `📡 *Radar: "${topic}"*\n\n`;
+    text += `Fetched: ${result.fetched} | High-signal: ${result.highSignal.length}\n\n`;
+    for (const post of result.highSignal.slice(0, 8)) {
+      const icon = post.platform === 'reddit' ? '🔴' : post.platform === 'github' ? '⚫' : '🟠';
+      text += `${icon} *[${post.signal_score}]* ${post.title?.slice(0, 80)}\n`;
+      text += `  by ${post.author} | ${post.platform}\n`;
+      if (post.signal_reason) text += `  _${post.signal_reason}_\n`;
+      text += '\n';
+    }
+    if (result.highSignal.length === 0) text += '_No high-signal content found._';
+    await safeSend(chatId, text, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ Radar error: ${err.message.slice(0, 200)}`);
   }
 });
 

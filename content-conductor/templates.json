@@ -1,0 +1,63 @@
+{
+  "templates": {
+    "technique_reel": {
+      "name": "Technique Reel",
+      "description": "Technique demo → styled thumbnail + caption → approval",
+      "content_type": "reel",
+      "steps": [
+        { "id": "S1", "module": "reed", "action": "style_photo", "config": { "styles": ["pro_photo", "dramatic"] }, "input": "source_photo", "output": "styled_images" },
+        { "id": "S2", "module": "sound_studio", "action": "voice", "config": { "text_from": "caption" }, "input": "caption_text", "output": "voiceover", "optional": true },
+        { "id": "S3", "module": "kit_gm", "action": "caption", "config": { "tone": "teaching", "style": "technique" }, "input": "intent", "output": "caption" },
+        { "id": "S4", "module": "conductor", "action": "assemble", "input": ["styled_images", "caption"], "output": "content_piece" }
+      ],
+      "approval_required": true
+    },
+    "class_recap": {
+      "name": "Class Recap",
+      "description": "Class photos → styled + captioned → carousel post",
+      "content_type": "carousel",
+      "steps": [
+        { "id": "S1", "module": "reed", "action": "style_photo", "config": { "styles": ["pro_photo", "neon"], "count": "3-5" }, "input": "source_photos", "output": "styled_images" },
+        { "id": "S2", "module": "dj_curator", "action": "get_playlist_link", "config": {}, "input": "class_date", "output": "playlist_link", "optional": true },
+        { "id": "S3", "module": "kit_gm", "action": "caption", "config": { "tone": "community", "style": "recap", "include_shoutout": true }, "input": "intent", "output": "caption" },
+        { "id": "S4", "module": "conductor", "action": "assemble", "input": ["styled_images", "caption", "playlist_link"], "output": "content_piece" }
+      ],
+      "approval_required": true
+    },
+    "weekly_highlight": {
+      "name": "Weekly Highlight",
+      "description": "Best moments from the week → compiled reel + cover",
+      "content_type": "reel",
+      "steps": [
+        { "id": "S1", "module": "reed", "action": "select_best", "config": { "period": "week", "count": 5 }, "input": "reed_catalogue", "output": "best_images" },
+        { "id": "S2", "module": "sound_studio", "action": "instrumental", "config": { "duration": 30, "mood": "confident boxing energy" }, "input": null, "output": "background_track", "optional": true },
+        { "id": "S3", "module": "reed", "action": "style_photo", "config": { "styles": ["pro_photo"] }, "input": "best_images[0]", "output": "cover_image" },
+        { "id": "S4", "module": "kit_gm", "action": "caption", "config": { "tone": "pride", "style": "weekly_recap" }, "input": "intent", "output": "caption" },
+        { "id": "S5", "module": "conductor", "action": "assemble", "input": ["best_images", "cover_image", "caption", "background_track"], "output": "content_piece" }
+      ],
+      "approval_required": true
+    },
+    "student_spotlight": {
+      "name": "Student Spotlight",
+      "description": "Feature a student's progress or milestone",
+      "content_type": "post",
+      "steps": [
+        { "id": "S1", "module": "reed", "action": "style_photo", "config": { "styles": ["pro_photo", "dramatic"] }, "input": "student_photo", "output": "styled_images" },
+        { "id": "S2", "module": "kit_gm", "action": "caption", "config": { "tone": "celebration", "style": "student_feature" }, "input": "student_name + milestone", "output": "caption" },
+        { "id": "S3", "module": "conductor", "action": "assemble", "input": ["styled_images", "caption"], "output": "content_piece" }
+      ],
+      "approval_required": true
+    },
+    "quick_post": {
+      "name": "Quick Post",
+      "description": "Single photo + caption — fastest path to content",
+      "content_type": "post",
+      "steps": [
+        { "id": "S1", "module": "reed", "action": "style_photo", "config": { "styles": ["pro_photo"] }, "input": "source_photo", "output": "styled_image" },
+        { "id": "S2", "module": "kit_gm", "action": "caption", "config": { "tone": "casual" }, "input": "intent", "output": "caption" },
+        { "id": "S3", "module": "conductor", "action": "assemble", "input": ["styled_image", "caption"], "output": "content_piece" }
+      ],
+      "approval_required": true
+    }
+  }
+}

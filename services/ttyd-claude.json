@@ -1,0 +1,15 @@
+{
+  "name": "ttyd-claude",
+  "script": "/opt/homebrew/bin/ttyd",
+  "args": [
+    "--writable",
+    "--interface", "utun6",
+    "--port", "7681",
+    "--title-fixed", "Claude Code",
+    "-t", "fontSize=14",
+    "-t", "theme={\"background\":\"#1a1a2e\"}",
+    "/bin/zsh", "-l"
+  ],
+  "autorestart": true,
+  "watch": false
+}

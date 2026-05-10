@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constellation — Cathedral Projects</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e0e0e0; font-family: 'SF Mono', 'Fira Code', monospace; min-height: 100vh; overflow: hidden; }
+
+  .header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 24px; background: rgba(10,10,15,0.9); border-bottom: 1px solid #1a1a2e; display: flex; justify-content: space-between; align-items: center; }
+  .header h1 { color: #e94560; font-size: 1.2rem; letter-spacing: 2px; }
+  .header .stats { color: #666; font-size: 0.75rem; }
+  .header .stats b { color: #e94560; }
+
+  .canvas { position: absolute; top: 60px; left: 0; right: 0; bottom: 0; }
+
+  svg { width: 100%; height: 100%; }
+  .project-node { cursor: pointer; transition: opacity 0.2s; }
+  .project-node:hover { opacity: 1 !important; }
+  .project-node circle { transition: r 0.2s; }
+  .project-node:hover circle { r: attr(r) + 3; }
+  .connection { stroke: #222; stroke-width: 1; }
+
+  .tooltip { position: fixed; background: #1a1a2e; border: 1px solid #e94560; border-radius: 8px; padding: 12px 16px; max-width: 320px; z-index: 200; pointer-events: none; display: none; }
+  .tooltip .name { color: #e94560; font-weight: bold; font-size: 0.9rem; }
+  .tooltip .kind { color: #666; font-size: 0.7rem; text-transform: uppercase; }
+  .tooltip .lede { color: #ccc; font-size: 0.8rem; margin-top: 6px; }
+  .tooltip .stats-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .tooltip .mini { background: #0a0a12; padding: 2px 6px; border-radius: 3px; font-size: 0.65rem; }
+  .tooltip .mini b { color: #e94560; }
+
+  .legend { position: fixed; bottom: 16px; left: 24px; display: flex; gap: 16px; font-size: 0.7rem; color: #555; }
+  .legend .item { display: flex; align-items: center; gap: 4px; }
+  .legend .dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>CONSTELLATION</h1>
+  <div class="stats" id="headerStats"></div>
+</div>
+
+<div class="canvas" id="canvas"></div>
+
+<div class="tooltip" id="tooltip">
+  <div class="name" id="ttName"></div>
+  <div class="kind" id="ttKind"></div>
+  <div class="lede" id="ttLede"></div>
+  <div class="stats-row" id="ttStats"></div>
+</div>
+
+<div class="legend">
+  <div class="item"><div class="dot" style="background:#e94560"></div> System</div>
+  <div class="item"><div class="dot" style="background:#4ade80"></div> Ops</div>
+  <div class="item"><div class="dot" style="background:#60a5fa"></div> Product</div>
+  <div class="item"><div class="dot" style="background:#c084fc"></div> Research</div>
+  <div class="item"><div class="dot" style="background:#f59e0b"></div> Creative</div>
+  <div class="item"><div class="dot" style="background:#666"></div> Personal</div>
+</div>
+
+<script>
+const COLORS = { SYSTEM: '#e94560', OPS: '#4ade80', PRODUCT: '#60a5fa', RESEARCH: '#c084fc', CREATIVE: '#f59e0b', PERSONAL: '#666' };
+
+async function load() {
+  const resp = await fetch('/constellation');
+  const data = await resp.json();
+  if (!data.ok) return;
+
+  const projects = data.projects;
+  const sys = data.system;
+
+  document.getElementById('headerStats').innerHTML =
+    `<b>${projects.length}</b> projects · <b>${sys.pm2_online}</b> services online · <b>${sys.vault_total}</b> vault nuggets`;
+
+  const canvas = document.getElementById('canvas');
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+
+  // Build SVG
+  let svg = `<svg viewBox="0 0 ${w} ${h}">`;
+
+  // Draw connections first
+  const posMap = {};
+  projects.forEach(p => {
+    posMap[p.id] = { x: (p.x / 100) * w, y: (p.y / 100) * h };
+  });
+
+  projects.forEach(p => {
+    const from = posMap[p.id];
+    (p.connections || []).forEach(cId => {
+      const to = posMap[cId];
+      if (from && to) {
+        svg += `<line class="connection" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" />`;
+      }
+    });
+  });
+
+  // Draw nodes
+  projects.forEach(p => {
+    const pos = posMap[p.id];
+    const color = COLORS[p.kind] || '#666';
+    const r = Math.max(12, (p.r || 20) * 0.5);
+    const opacity = Math.max(0.3, p.active || 0.3);
+
+    svg += `<g class="project-node" data-id="${p.id}" opacity="${opacity}">`;
+    svg += `<circle cx="${pos.x}" cy="${pos.y}" r="${r}" fill="${color}" fill-opacity="0.15" stroke="${color}" stroke-width="1.5" />`;
+    svg += `<circle cx="${pos.x}" cy="${pos.y}" r="3" fill="${color}" />`;
+    svg += `<text x="${pos.x}" y="${pos.y + r + 14}" text-anchor="middle" fill="${color}" font-size="10" font-family="SF Mono, monospace">${p.code}</text>`;
+    svg += `</g>`;
+  });
+
+  svg += '</svg>';
+  canvas.innerHTML = svg;
+
+  // Tooltip
+  const tooltip = document.getElementById('tooltip');
+  document.querySelectorAll('.project-node').forEach(node => {
+    node.addEventListener('mouseenter', (e) => {
+      const id = node.dataset.id;
+      const p = projects.find(pr => pr.id === id);
+      if (!p) return;
+
+      document.getElementById('ttName').textContent = p.name;
+      document.getElementById('ttKind').textContent = `${p.kind} · ${p.code}`;
+      document.getElementById('ttLede').textContent = p.briefing?.lede || '';
+
+      const statsDiv = document.getElementById('ttStats');
+      statsDiv.innerHTML = '';
+      (p.briefing?.stats || []).forEach(([k, v]) => {
+        statsDiv.innerHTML += `<span class="mini"><b>${v}</b> ${k}</span>`;
+      });
+
+      tooltip.style.display = 'block';
+      tooltip.style.left = Math.min(e.clientX + 12, window.innerWidth - 340) + 'px';
+      tooltip.style.top = Math.min(e.clientY + 12, window.innerHeight - 150) + 'px';
+    });
+
+    node.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+  });
+}
+
+load();
+</script>
+</body>
+</html>

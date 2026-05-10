@@ -29,12 +29,24 @@ app.use((req, res, next) => {
   next();
 });
 
+// ── Home page ────────────────────────────────────────────────────────────────
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'cathedral-home.html'));
+});
+
 // ── Auth middleware ────────────────────────────────────────────────────────────
 
 function requireApiKey(req, res, next) {
   const key = process.env.CATH_API_KEY;
-  if (key && req.headers['x-api-key'] !== key) {
-    return res.status(401).json({ error: 'unauthorized' });
+  // Allow localhost browser access without key (query param or header)
+  if (key && req.headers['x-api-key'] !== key && req.query['x-api-key'] !== key) {
+    const host = req.hostname || req.ip || '';
+    const isLocal = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+    // Skip auth for GET requests from localhost (browser access)
+    if (!(isLocal && req.method === 'GET')) {
+      return res.status(401).json({ error: 'unauthorized' });
+    }
   }
   next();
 }
@@ -66,6 +78,96 @@ app.post('/chat/local', async (req, res) => {
 
   const messages = [
     { role: 'system', content: 'You are Cath — Paul\'s cognitive extension. Be direct, precise, and brief. No filler.' },
+    ...history.slice(-10),
+    { role: 'user', content: query }
+  ];
+
+  try {
+    const response = await fetch('http://127.0.0.1:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'hermes3', messages, stream: false })
+    });
+    const data = await response.json();
+    res.json({ response: data.message?.content || '' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── POST /env/chat — Room-aware agent chat ───────────────────────────────────
+
+app.post('/env/chat', async (req, res) => {
+  const { query, history = [], room = 'money' } = req.body || {};
+  if (!query) return res.status(400).json({ error: 'query required' });
+
+  // Build room-specific system prompt with live context
+  let systemPrompt = '';
+  let liveContext = '';
+
+  try {
+    if (room === 'money') {
+      // Fetch live trading data for context
+      const [portfolio, positions, performance, debate] = await Promise.all([
+        fs.existsSync(path.join(NANOCLAW, 'trader', 'portfolio.json'))
+          ? JSON.parse(fs.readFileSync(path.join(NANOCLAW, 'trader', 'portfolio.json'), 'utf8'))
+          : {},
+        (() => {
+          try {
+            const Database = require('better-sqlite3');
+            const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+            const open = db.prepare('SELECT * FROM trades WHERE status = ?').all('open');
+            const closed = db.prepare('SELECT * FROM trades WHERE status = ? ORDER BY closed_at DESC LIMIT 5').all('closed');
+            db.close();
+            return { open, closed };
+          } catch { return { open: [], closed: [] }; }
+        })(),
+        (() => {
+          try {
+            const Database = require('better-sqlite3');
+            const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+            const perf = db.prepare(`SELECT COUNT(*) as total_trades, SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END) as wins, SUM(CASE WHEN pnl <= 0 THEN 1 ELSE 0 END) as losses, ROUND(100.0 * SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END) / MAX(COUNT(*), 1), 1) as win_rate, ROUND(SUM(pnl), 2) as total_pnl FROM trades WHERE status = 'closed'`).get();
+            db.close();
+            return perf;
+          } catch { return {}; }
+        })(),
+        (() => {
+          try {
+            const Database = require('better-sqlite3');
+            const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+            const row = db.prepare('SELECT * FROM decisions ORDER BY id DESC LIMIT 1').get();
+            db.close();
+            return row;
+          } catch { return null; }
+        })()
+      ]);
+
+      liveContext = `LIVE TRADING DATA:
+Portfolio: $${portfolio.balance || '?'} (started $${portfolio.initial_balance || 10000})
+Total P&L: $${performance.total_pnl || 0} | Win rate: ${performance.win_rate || 0}% | ${performance.total_trades || 0} trades
+Open positions: ${positions.open?.length || 0}${positions.open?.length ? '\n' + positions.open.map(t => `  - ${t.asset} ${t.direction} @ $${t.entry_price} (${t.strategy})`).join('\n') : ''}
+Recent closed: ${positions.closed?.slice(0, 3).map(t => `${t.asset} ${t.direction} P&L:$${t.pnl} (${t.strategy})`).join(', ') || 'none'}
+Latest Roundtable: ${debate?.synthesis ? debate.synthesis.substring(0, 200) : 'none'}`;
+
+      systemPrompt = `You are the Trading Desk intelligence for Paul's Cathedral system. You have deep knowledge of all 11 trading strategies running in parallel: Sentiment, Momentum, DCA, Gann, Lunar, Fibonacci, Historical Cycles, Vortex Flow, Suppression Detection, Polymarket, and Cymatics/Schumann.
+
+You know the Roundtable: 8 personas (each strategy has a voice) argue every 4 hours, and the Steward synthesizes their friction into actionable signal. Convergence score 0-10.
+
+Rules: Paper trading phase. Promotion to real money requires 20+ trades, 55% win rate, 1.3 profit factor, 14 days.
+
+Be direct. Speak like a senior trader who also understands unconventional signals. No filler.
+
+${liveContext}`;
+    }
+  } catch (e) {
+    // If context fetch fails, use basic prompt
+    if (!systemPrompt) systemPrompt = 'You are the Trading Desk intelligence. Be direct, precise, brief.';
+  }
+
+  if (!systemPrompt) systemPrompt = 'You are a Cathedral room agent. Be direct, precise, brief.';
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
     ...history.slice(-10),
     { role: 'user', content: query }
   ];
@@ -477,7 +579,18 @@ app.post('/creative/send-photo', requireApiKey, async (req, res) => {
   }
 });
 
-// ── Creative Court: List Illustrations ───────────────────────────────────────
+// ── Creative Court: Gallery HTML ─────────────────────────────────────────────
+
+app.get('/creative/gallery', (req, res, next) => {
+  const accept = req.headers.accept || '';
+  if (accept.includes('text/html') && !req.query.format) {
+    const galleryPath = path.join(HOME, 'Cathedral', 'br-content', 'gallery.html');
+    if (require('fs').existsSync(galleryPath)) return res.sendFile(galleryPath);
+  }
+  next();
+});
+
+// ── Creative Court: List Illustrations (API) ────────────────────────────────
 
 app.get('/creative/gallery', requireApiKey, async (req, res) => {
   const fs = require('fs');
@@ -628,10 +741,6 @@ app.get('/graph/rebuild/status', requireApiKey, (req, res) => {
 const PRED_DIR = path.join(HOME, 'Cathedral', 'predictive-intelligence');
 
 app.get('/predictive/map', (req, res) => {
-  const key = process.env.CATH_API_KEY;
-  if (key && req.headers['x-api-key'] !== key && req.query['x-api-key'] !== key) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
   const htmlPath = path.join(PRED_DIR, 'predictive-map.html');
   if (!require('fs').existsSync(htmlPath)) return res.status(404).json({ error: 'predictive-map.html not found — run predictive-graph.py first' });
   res.setHeader('Content-Type', 'text/html');
@@ -1062,6 +1171,15 @@ app.get('/villa', (req, res) => {
 // Reads registry.json, merges PM2 state, vault card frontmatter, activity scores.
 
 const os = require('os');
+
+app.get('/constellation', (req, res, next) => {
+  // Serve HTML for browser, JSON for API
+  const accept = req.headers.accept || '';
+  if (accept.includes('text/html') && !req.query.format) {
+    return res.sendFile(path.join(NANOCLAW, 'constellation.html'));
+  }
+  next();
+});
 
 app.get('/constellation', async (req, res) => {
   try {
@@ -1499,6 +1617,11 @@ app.get('/agents/guide', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'agent-guide.html'));
 });
 
+// ── Icons ────────────────────────────────────────────────────────────────────
+app.get('/icons', (req, res) => {
+  res.sendFile(path.join(process.env.HOME || '/Users/basicclaw777', 'cathedral-vault', '09_Artifacts', 'icons', 'index.html'));
+});
+
 // ── Architect Plans ──────────────────────────────────────────────────────────
 
 app.get('/architect', (req, res) => {
@@ -1794,8 +1917,74 @@ app.get('/reed-lab/digest', (req, res) => {
   res.status(404).send('No digest yet. Run /digest on Telegram.');
 });
 
+// ── Environments ──────────────────────────────────────────────────────────────
+
+app.get('/env/test', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'environments', 'test.html'));
+});
+app.get('/env', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.sendFile(path.join(NANOCLAW, 'environments', 'lobby.html'));
+});
+app.get('/env/icon-180.png', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'environments', 'icon-180.png'));
+});
+app.get('/env/:domain', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.sendFile(path.join(NANOCLAW, 'environments', 'lobby.html'));
+});
+
+// ── Looking Glass (Sky Sense) ────────────────────────────────────────────────
+
+app.get('/looking-glass', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'looking-glass.html'));
+});
+
+app.get('/looking-glass/sky', async (req, res) => {
+  try {
+    const { skyState } = await import('./services/sky-sense/index.mjs');
+    const date = req.query.date ? new Date(req.query.date) : new Date();
+    res.json(skyState(date));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/looking-glass/signal', async (req, res) => {
+  try {
+    const { todaySignal } = await import('./services/sky-sense/index.mjs');
+    res.json(todaySignal());
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/looking-glass/scan', async (req, res) => {
+  try {
+    const { lookForward } = await import('./services/sky-sense/index.mjs');
+    const days = parseInt(req.query.days) || 90;
+    const from = req.query.from ? new Date(req.query.from) : undefined;
+    res.json(lookForward({ days, resolution: 7, from }));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/looking-glass/pipelines/:body', async (req, res) => {
+  try {
+    const { comparePipelines } = await import('./services/sky-sense/index.mjs');
+    const date = req.query.date ? new Date(req.query.date) : new Date();
+    res.json(comparePipelines(req.params.body, date));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/looking-glass/events', async (req, res) => {
+  try {
+    const { findEvents } = await import('./services/sky-sense/index.mjs');
+    const days = parseInt(req.query.days) || 90;
+    res.json(findEvents(new Date(), days));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // ── Start ─────────────────────────────────────────────────────────────────────
 
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`[cath-bridge] listening on http://127.0.0.1:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[cath-bridge] listening on http://0.0.0.0:${PORT}`);
 });

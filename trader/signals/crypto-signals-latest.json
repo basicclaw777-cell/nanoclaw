@@ -1,41 +1,41 @@
 {
-  "timestamp": "2026-05-10T00:00:03.956660",
+  "timestamp": "2026-05-10T21:00:05.459121",
   "prices": {
     "BTC": {
-      "price": 80513,
-      "change_24h": 0.5100801246280475,
-      "volume_24h": 22969701442.20461,
-      "market_cap": 1612404410674.822
+      "price": 80887,
+      "change_24h": 0.635038934987325,
+      "volume_24h": 17717999827.42794,
+      "market_cap": 1620139308780.558
     },
     "ETH": {
-      "price": 2316.94,
-      "change_24h": 1.115521909207008,
-      "volume_24h": 14087259200.50671,
-      "market_cap": 279540316711.6593
+      "price": 2322.72,
+      "change_24h": 0.32394095067176437,
+      "volume_24h": 10025339316.211788,
+      "market_cap": 280353993821.8927
     },
     "SOL": {
-      "price": 92.89,
-      "change_24h": 3.9843662074528954,
-      "volume_24h": 3835160453.755193,
-      "market_cap": 53649925612.18281
+      "price": 93.29,
+      "change_24h": -0.15050602847540995,
+      "volume_24h": 2351712503.754651,
+      "market_cap": 53892917083.88367
     },
     "AVAX": {
-      "price": 9.83,
-      "change_24h": 0.7651493320559968,
-      "volume_24h": 277272124.7568272,
-      "market_cap": 4244730671.3206677
+      "price": 9.99,
+      "change_24h": 0.619203547979969,
+      "volume_24h": 191217442.1144045,
+      "market_cap": 4314618033.412275
     },
     "LINK": {
-      "price": 10.33,
-      "change_24h": 2.815282911364848,
-      "volume_24h": 520743945.30217063,
-      "market_cap": 7511605938.401007
+      "price": 10.49,
+      "change_24h": 0.6255785795672347,
+      "volume_24h": 217840799.07594848,
+      "market_cap": 7627450300.99525
     },
     "DOT": {
-      "price": 1.34,
-      "change_24h": -0.8911010697386103,
-      "volume_24h": 155951207.10989317,
-      "market_cap": 2259695300.099605
+      "price": 1.36,
+      "change_24h": 0.23616277030521587,
+      "volume_24h": 118090142.5346183,
+      "market_cap": 2287638334.8797693
     },
     "MATIC": {
       "price": null,
@@ -44,17 +44,17 @@
       "market_cap": null
     },
     "ARB": {
-      "price": 0.13942,
-      "change_24h": 1.332986074426995,
-      "volume_24h": 170154417.53405774,
-      "market_cap": 857888390.796353
+      "price": 0.143515,
+      "change_24h": 0.9018716604666602,
+      "volume_24h": 81201407.78176782,
+      "market_cap": 882552755.9291945
     }
   },
   "fear_greed": {
-    "value": 38,
-    "label": "Fear",
+    "value": 47,
+    "label": "Neutral",
     "week_avg": 43.7,
-    "trend": "falling"
+    "trend": "rising"
   },
   "reddit_sentiment": null,
   "news": [
@@ -90,12 +90,12 @@
     },
     {
       "source": "coindesk",
-      "title": "Senate Banking Committee plans to hold key market structure hearing on Thursday",
+      "title": "Crypto industry cheers Senate Clarity Act markup date as market structure push resumes",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Judge clears path for Aave to move $71 million in ETH linked to North Korea hack",
+      "title": "Senate Banking Committee plans to hold key market structure hearing on Thursday",
       "url": "https://www.coindesk.com/"
     },
     {
@@ -109,22 +109,5 @@
       "url": "https://www.coindesk.com/"
     }
   ],
-  "signals": [
-    {
-      "source": "technical",
-      "asset": "SOL",
-      "direction": "long",
-      "strength": 0.4980457759316119,
-      "reasoning": "SOL up 4.0% in 24h \u2014 momentum continuation",
-      "type": "momentum"
-    },
-    {
-      "source": "technical",
-      "asset": "SOL",
-      "direction": "long",
-      "strength": 0.796873241490579,
-      "reasoning": "SOL is top performer (+4.0%) \u2014 relative strength leader",
-      "type": "relative_strength"
-    }
-  ]
+  "signals": []
 }

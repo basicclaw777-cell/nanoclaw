@@ -1,0 +1,40 @@
+{
+  "sources": {
+    "reddit_boxing": {
+      "platform": "reddit",
+      "type": "subreddit",
+      "targets": ["boxing", "amateur_boxing"],
+      "domain": "boxing",
+      "scan_frequency_hours": 6,
+      "min_upvotes": 10,
+      "enabled": true
+    },
+    "reddit_ai": {
+      "platform": "reddit",
+      "type": "subreddit",
+      "targets": ["LocalLLaMA", "selfhosted"],
+      "domain": "ai_tech",
+      "scan_frequency_hours": 6,
+      "min_upvotes": 20,
+      "enabled": true
+    },
+    "hackernews": {
+      "platform": "hackernews",
+      "type": "top_stories",
+      "domain": "ai_tech",
+      "scan_frequency_hours": 6,
+      "min_score": 50,
+      "keyword_filter": ["AI", "LLM", "local", "self-hosted", "boxing", "fitness", "pose estimation", "computer vision"],
+      "enabled": true
+    },
+    "github_trending": {
+      "platform": "github",
+      "type": "trending",
+      "domain": "ai_tech",
+      "scan_frequency_hours": 12,
+      "language_filter": ["python", "javascript", "typescript"],
+      "topic_filter": ["machine-learning", "llm", "pose-estimation", "computer-vision", "self-hosted"],
+      "enabled": true
+    }
+  }
+}
