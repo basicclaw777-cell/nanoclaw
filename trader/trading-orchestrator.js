@@ -25,6 +25,7 @@ import { debate } from './bull-bear-debate.js';
 import { watchRun, watchClose, synthesizeInsights, getWatcherStats } from './meta-watcher.js';
 import { runRoundtable } from './strategy-roundtable.js';
 import { logDomainRun, detectCrossDomainConvergence } from '../experiment-engine/meta-watcher.js';
+import { isEliminated, runElimination } from './strategy-elimination.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG_PATH = path.join(__dirname, 'config.json');
@@ -251,6 +252,14 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
   const direction = signal.direction; // 'long' or 'short'
 
   console.log(`\n  --- ${signal.asset} ${direction} @ ${entryPrice} (strength ${signal.strength}) ---`);
+
+  // Skip if strategy has been eliminated
+  try {
+    if (isEliminated(signal.type)) {
+      console.log(`  ${signal.type} ELIMINATED — skipping`);
+      return null;
+    }
+  } catch(e) {}
 
   // Skip if already have open position for this asset+strategy
   const existingPositions = getOpenPositions();
@@ -482,6 +491,23 @@ async function run() {
   } catch (e) {
     // Meta-watcher is optional — don't fail the run
     console.error('[meta-watcher] Error:', e.message);
+  }
+
+  // Step 6c: Weekly strategy elimination (Sundays only)
+  if (new Date().getDay() === 0) {
+    try {
+      console.log('[6c/7] Running weekly strategy elimination...');
+      const elimResult = runElimination();
+      if (elimResult.event) {
+        console.log(`  ${elimResult.event}`);
+        console.log(`  Active strategies: ${elimResult.active_count}`);
+        await notify(`[TRADER] ${elimResult.event}\nActive strategies: ${elimResult.active_count}`);
+      } else {
+        console.log(`  ${elimResult.message}`);
+      }
+    } catch (e) {
+      console.error('[elimination] Error:', e.message);
+    }
   }
 
   // Step 7: Save and report
