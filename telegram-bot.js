@@ -518,6 +518,42 @@ Generate visual direction for an Instagram post about ${topic}:
   return result.response;
 }
 
+// /help — The commands Paul actually needs
+bot.onText(/^\/help(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  const text = `◉ CATHEDRAL COMMANDS
+
+DAILY USE
+/sky — what's in the sky right now
+/signal — today's convergence signal
+/glass — 90-day forward scan
+/physician — Cathedral health check
+/think [msg] — Cathy routes to best tool
+
+RATE & CALIBRATE
+/rate [agent] [1-5] [notes] — grade any agent
+/answer [1-5] [response] — Physician interview
+/bloat — output quality report
+
+RESEARCH
+/search [query] — vault semantic search
+/council [topic] — Genius Council debate
+/predict [seed] — pattern completion
+/cosmos [track#] — cosmology research
+
+CREATIVE
+/reed [caption on photo] — visual generation
+/pipelines [body] — 5-pipeline comparison
+
+SYSTEM
+/projects — project status board
+/rhythm — schedule status
+/physician — full sense diagnosis
+
+Just talk to Cathy normally — no command needed.`;
+  await safeSend(chatId, text);
+});
+
 // /search command — semantic vault search via SQLite embeddings
 bot.onText(/\/search (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;

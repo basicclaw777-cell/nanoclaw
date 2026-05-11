@@ -1033,5 +1033,1851 @@
       "resolution": "Brady energy + Cus depth + Carlton BS-detector = Miyagi substance, zero Miyagi performance."
     }
   ],
-  "meta_pattern": "Miyagi substance, Brady energy, Carlton filter. If it sounds like a guru, it fails. If it sounds like a mate who happens to know deep things, it passes. The teaching is woven into the experience — never performed."
+  "meta_pattern": "Miyagi substance, Brady energy, Carlton filter. If it sounds like a guru, it fails. If it sounds like a mate who happens to know deep things, it passes. The teaching is woven into the experience — never performed.",
+  "anchors": [
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "energy",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "bpm",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "genre_affinity",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "mood",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "era",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "rawness",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "rhythm",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "dimensions",
+      "value": "melody",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "6ix9ine",
+      "tracks": [
+        "GOOBA",
+        "KIKA",
+        "KOODA",
+        "BILLY",
+        "TROLLZ",
+        "SHAKA LAKA"
+      ],
+      "energy": 0.95,
+      "rawness": 0.95,
+      "context": "boxing class peak",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Pop Smoke",
+      "tracks": [
+        "Mood Swings",
+        "The Woo",
+        "For The Night",
+        "Enjoy Yourself",
+        "AP"
+      ],
+      "energy": 0.9,
+      "rawness": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Drake",
+      "tracks": [
+        "What's Next",
+        "Wants and Needs",
+        "Money In The Grave",
+        "POPSTAR",
+        "GREECE"
+      ],
+      "energy": 0.75,
+      "rawness": 0.5,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Travis Scott",
+      "tracks": [
+        "HIGHEST IN THE ROOM",
+        "goosebumps",
+        "THE SCOTTS",
+        "RaRa"
+      ],
+      "energy": 0.85,
+      "rawness": 0.7,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Cardi B",
+      "tracks": [
+        "Press",
+        "Up"
+      ],
+      "energy": 0.85,
+      "rawness": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Tyga",
+      "tracks": [
+        "Swish",
+        "Glitta",
+        "CREAM",
+        "Tyler Hero"
+      ],
+      "energy": 0.8,
+      "rawness": 0.6,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Bobby Shmurda",
+      "tracks": [
+        "Hot N*gga"
+      ],
+      "energy": 0.95,
+      "context": "boxing class peak",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Roddy Ricch",
+      "tracks": [
+        "The Box"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "DaBaby",
+      "tracks": [
+        "ROCKSTAR BLM Remix"
+      ],
+      "energy": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "A$AP Rocky",
+      "tracks": [
+        "Praise The Lord ft Skepta"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "21 Savage",
+      "tracks": [
+        "redrum",
+        "X ft Future"
+      ],
+      "energy": 0.85,
+      "rawness": 0.9,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Jack Harlow",
+      "tracks": [
+        "WHATS POPPIN Remix",
+        "Lovin On Me"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Post Malone",
+      "tracks": [
+        "rockstar ft 21 Savage"
+      ],
+      "energy": 0.75,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Lil Pump",
+      "tracks": [
+        "Gucci Gang"
+      ],
+      "energy": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Masked Wolf",
+      "tracks": [
+        "Astronaut In The Ocean"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Desiigner",
+      "tracks": [
+        "Panda"
+      ],
+      "energy": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "SAINt JHN",
+      "tracks": [
+        "Roses (Imanbek Remix)"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Saweetie",
+      "tracks": [
+        "My Type"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "24kGoldn",
+      "tracks": [
+        "Mood ft iann dior"
+      ],
+      "energy": 0.75,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Gunna",
+      "tracks": [
+        "fukumean"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "NLE Choppa",
+      "tracks": [
+        "Camelot"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Juice WRLD",
+      "tracks": [
+        "Lean Wit Me"
+      ],
+      "energy": 0.7,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Lil Baby",
+      "tracks": [
+        "Pure Cocaine"
+      ],
+      "energy": 0.8,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "King Von",
+      "tracks": [
+        "3 A.M."
+      ],
+      "energy": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "O.T. Genasis",
+      "tracks": [
+        "CoCo"
+      ],
+      "energy": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "XXXTENTACION",
+      "tracks": [
+        "Moonlight"
+      ],
+      "energy": 0.6,
+      "context": "mixed",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "CJ",
+      "tracks": [
+        "BOP",
+        "Whoopty"
+      ],
+      "energy": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Lil Tjay",
+      "tracks": [
+        "F.N",
+        "Calling My Phone"
+      ],
+      "energy": 0.75,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Hanumankind & Kalmi",
+      "tracks": [
+        "Big Dawgs"
+      ],
+      "energy": 0.85,
+      "context": "boxing class",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "2Pac",
+      "tracks": [
+        "Changes",
+        "I Ain't Mad At Cha"
+      ],
+      "energy": 0.6,
+      "mood": "reflective swagger",
+      "note": "Paul explicitly named as favourite",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Notorious B.I.G.",
+      "tracks": [
+        "One More Chance",
+        "Juicy",
+        "Hypnotize",
+        "Mo Money Mo Problems"
+      ],
+      "energy": 0.7,
+      "mood": "smooth confidence",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Ja Rule + Ashanti",
+      "tracks": [
+        "Livin' It Up",
+        "Mesmerize",
+        "Foolish",
+        "Put It On Me",
+        "Rock Wit U"
+      ],
+      "energy": 0.55,
+      "mood": "warm groove",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "50 Cent",
+      "tracks": [
+        "21 Questions",
+        "How We Do"
+      ],
+      "energy": 0.65,
+      "mood": "street smooth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Usher",
+      "tracks": [
+        "U Don't Have to Call",
+        "U Remind Me"
+      ],
+      "energy": 0.5,
+      "mood": "smooth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Dr. Dre",
+      "tracks": [
+        "Still D.R.E."
+      ],
+      "energy": 0.7,
+      "mood": "west coast classic",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Big Pun",
+      "tracks": [
+        "Still Not a Player"
+      ],
+      "energy": 0.65,
+      "mood": "confident",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Mark Morrison",
+      "tracks": [
+        "Return of the Mack"
+      ],
+      "energy": 0.6,
+      "mood": "comeback energy",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Fat Joe / Terror Squad",
+      "tracks": [
+        "What's Luv?",
+        "Lean Back"
+      ],
+      "energy": 0.7,
+      "mood": "party",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Mary J. Blige",
+      "tracks": [
+        "Family Affair"
+      ],
+      "energy": 0.65,
+      "mood": "feel good",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Destiny's Child",
+      "tracks": [
+        "Jumpin' Jumpin'"
+      ],
+      "energy": 0.7,
+      "mood": "party",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "TLC",
+      "tracks": [
+        "No Scrubs"
+      ],
+      "energy": 0.6,
+      "mood": "attitude",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Jennifer Lopez",
+      "tracks": [
+        "I'm Real (Murder Remix)"
+      ],
+      "energy": 0.6,
+      "mood": "smooth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Tevin Campbell",
+      "tracks": [
+        "Can We Talk",
+        "I'm Ready"
+      ],
+      "energy": 0.45,
+      "mood": "soulful",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Mariah Carey",
+      "tracks": [
+        "Always Be My Baby"
+      ],
+      "energy": 0.5,
+      "mood": "feel good",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Chris Brown",
+      "tracks": [
+        "Yo (Excuse Me Miss)"
+      ],
+      "energy": 0.6,
+      "mood": "smooth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Fabolous",
+      "tracks": [
+        "Into You"
+      ],
+      "energy": 0.6,
+      "mood": "cool",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Bow Wow",
+      "tracks": [
+        "Like You",
+        "Let Me Hold You"
+      ],
+      "energy": 0.55,
+      "mood": "smooth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Lloyd",
+      "tracks": [
+        "You ft Lil Wayne"
+      ],
+      "energy": 0.55,
+      "mood": "smooth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Lil Jon & East Side Boyz",
+      "tracks": [
+        "Lovers And Friends"
+      ],
+      "energy": 0.65,
+      "mood": "party groove",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Keith Sweat",
+      "tracks": [
+        "Twisted"
+      ],
+      "energy": 0.4,
+      "mood": "slow jam",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Blackstreet",
+      "tracks": [
+        "Don't Leave Me"
+      ],
+      "energy": 0.45,
+      "mood": "soul",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Tamia",
+      "tracks": [
+        "So Into You"
+      ],
+      "energy": 0.45,
+      "mood": "smooth soul",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Kanye West",
+      "tracks": [
+        "various"
+      ],
+      "energy": 0.75,
+      "mood": "producer genius",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "genre": "reggaeton",
+      "note": "especially Cuban feel — connects to boxing roots",
+      "energy": "variable",
+      "context": "class + personal",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "genre": "funky reggae",
+      "energy": 0.6,
+      "context": "warmup, vibe sessions",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "genre": "afrobeats",
+      "energy": 0.7,
+      "context": "class energy, rhythm-heavy",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "genre": "pop",
+      "note": "broad — not cheesy, classic quality",
+      "context": "mixed",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Michael Jackson",
+      "note": "classic tier",
+      "energy": "variable",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Kanye West",
+      "note": "cool — producer + artist energy",
+      "energy": 0.8,
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Massive Attack",
+      "note": "trip-hop / dark atmosphere",
+      "energy": 0.5,
+      "mood": "moody, cinematic",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Moby",
+      "note": "electronic with soul",
+      "energy": 0.6,
+      "mood": "atmospheric",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Snap!",
+      "tracks": [
+        "I've Got the Power"
+      ],
+      "energy": 0.9,
+      "context": "peak motivation",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "category": "Rocky themes",
+      "note": "Eye of the Tiger, Gonna Fly Now, Hearts on Fire",
+      "energy": 0.95,
+      "context": "peak motivation",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "artist": "Lynyrd Skynyrd",
+      "tracks": [
+        "Sweet Home Alabama"
+      ],
+      "note": "class closer 2026-05-06 — got laugh AND feel-good. Genre rules bend when energy + surprise factor is right.",
+      "energy": 0.6,
+      "context": "class closer / surprise",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "rhythmic and aggressive (good aggressive, not angry)",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "cool beats — head-nodding in breaks",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "cool melodies — not just percussion",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "boxing flow atmosphere — in the zone, not frantic",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "makes you want to dance occasionally instead of box",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "bumping your head energy",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "confidence / swagger across all tracks — never desperate or try-hard",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "hook-driven — memorable hooks, not just bars",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "bass presence always — 808 or melodic",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "two modes: modern trap/drill for class peaks, late 90s-2000s R&B/hip-hop for cooldown/vibe",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "confirmed_qualities",
+      "value": "transition from modern to old school IS the cooldown arc",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "rejections",
+      "value": "smooth jazz",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "music",
+      "key": "rejections",
+      "value": "anything without energy or personality",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "dimensions",
+      "value": "contrast",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "dimensions",
+      "value": "warmth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "dimensions",
+      "value": "grain",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "dimensions",
+      "value": "realism",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "dimensions",
+      "value": "text_amount",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "dimensions",
+      "value": "ai_visibility",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "item": "pro_photo style",
+      "status": "YES",
+      "reason": "high-end photography look on ordinary photos",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "item": "dramatic style",
+      "status": "YES",
+      "reason": "volumetric, chiaroscuro, film grain",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "item": "neon style",
+      "status": "YES",
+      "reason": "HK cyberpunk, stylistic but grounded",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "item": "manga style",
+      "status": "YES",
+      "reason": "cool stylistic, realistic proportions",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "item": "ippo style",
+      "status": "YES",
+      "reason": "exception to B&W rule — style itself is cool enough",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "item": "poster style",
+      "status": "CONDITIONAL",
+      "reason": "good but text often inaccurate",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "confirmed_qualities",
+      "value": "must look like real image of real people in real gym — whether illustrated or photo-upgraded",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "confirmed_qualities",
+      "value": "high-end photography look on ordinary photos",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "confirmed_qualities",
+      "value": "realistic or cool stylistic manga — not in between",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "confirmed_qualities",
+      "value": "minimal text on image (put text on separate layer — AI text is inaccurate and ruins images)",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "confirmed_qualities",
+      "value": "brand-colour monochrome OK as alternative to pure B&W",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "rejections",
+      "value": "pure black and white (except ippo style)",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "rejections",
+      "value": "too childish illustrations",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "rejections",
+      "value": "too orangey / unrealistic colour grading",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "rejections",
+      "value": "visible AI processing artifacts — must not look AI-generated",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "rejections",
+      "value": "too much text baked into image",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "visual_style",
+      "key": "rejections",
+      "value": "anything unrealistic",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "dimensions",
+      "value": "authenticity",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "dimensions",
+      "value": "accessibility",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "dimensions",
+      "value": "impact",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "dimensions",
+      "value": "humour",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "dimensions",
+      "value": "reader_activation",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "authentic — not AI-generated sounding",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "accessible and impactful without being dramatic",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "encourages reader to be active in discovery process (not spoon-fed)",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "random sense of humour (not forced, not constant — just lands when it lands)",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "same principle as visual: if it looks/reads AI, it fails",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "rejections",
+      "value": "AI-generated tone (corporate, hedging, filler words)",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "rejections",
+      "value": "dramatic / over-the-top motivational",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "rejections",
+      "value": "passive voice / academic distance",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "rejections",
+      "value": "forced humour",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "writing_voice",
+      "item": "compression style",
+      "status": "YES",
+      "reason": "Reduces complex systems to essential principles. Names entire systems in one phrase.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "writing_voice",
+      "item": "mate who knows deep things",
+      "status": "YES",
+      "reason": "Miyagi substance, Brady energy, Carlton filter. Teaching woven into experience, never performed.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "dimensions",
+      "value": "principle_focus",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "dimensions",
+      "value": "patience",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "dimensions",
+      "value": "mistake_orientation",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "dimensions",
+      "value": "learning_depth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "confirmed_qualities",
+      "value": "principle-based — teach the WHY not just the WHAT",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "confirmed_qualities",
+      "value": "learn from mistakes — mistakes are data, not failure",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "confirmed_qualities",
+      "value": "learning is teaching and vice versa — two-way street",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "confirmed_qualities",
+      "value": "patient — long game, no rushing",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "confirmed_qualities",
+      "value": "lifelong learning focus — master the game, not the drill",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "confirmed_qualities",
+      "value": "the student who asks why > the student who memorises what",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "rejections",
+      "value": "drill-sergeant / authority-based",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "rejections",
+      "value": "memorisation without understanding",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "rejections",
+      "value": "shortcuts that skip fundamentals",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "key": "rejections",
+      "value": "impatience with process",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "teaching_tone",
+      "item": "principles survive techniques expire",
+      "status": "YES",
+      "reason": "Teach the principle beneath the technique. Student who understands weight-state relay invents own combos.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "teaching_tone",
+      "item": "recognition raises quality",
+      "status": "YES",
+      "reason": "Paul's explicit recognition of quality raises the quality ceiling. He co-creates the register.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "class_energy",
+      "key": "dimensions",
+      "value": "intensity_curve",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "dimensions",
+      "value": "rest_ratio",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "dimensions",
+      "value": "verbal_energy",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "dimensions",
+      "value": "music_sync",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "dimensions",
+      "value": "flow_state",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "confirmed_qualities",
+      "value": "music is force multiplier — members noticed independently",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "confirmed_qualities",
+      "value": "cool and in the flow > frantic and intense",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "confirmed_qualities",
+      "value": "head-bumping in breaks (not dead silence)",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "confirmed_qualities",
+      "value": "dancing occasionally instead of boxing = peak energy sign",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "class_energy",
+      "key": "confirmed_qualities",
+      "value": "build to peak, don't start at 10",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "dimensions",
+      "value": "rigour",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "dimensions",
+      "value": "independence",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "dimensions",
+      "value": "depth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "dimensions",
+      "value": "cross_domain",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "dimensions",
+      "value": "evidence_standard",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "confirmed_qualities",
+      "value": "forensic standard — does it hold when stripped of narrative?",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "confirmed_qualities",
+      "value": "evidence-first, narrative-second",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "confirmed_qualities",
+      "value": "suppression is context, not evidence",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "confirmed_qualities",
+      "value": "independent corroboration over citation chains",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "confirmed_qualities",
+      "value": "Grade C is unacceptable — raise the standard and the instrument responds",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "rejections",
+      "value": "consensus-as-evidence",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "rejections",
+      "value": "suppression-as-proof",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "rejections",
+      "value": "appeals to authority",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "key": "rejections",
+      "value": "lazy dismissals without examining evidence",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "research_style",
+      "item": "forensic standard",
+      "status": "YES",
+      "reason": "Does it hold structurally when stripped of narrative? Core kernel principle.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "research_style",
+      "item": "independent corroboration",
+      "status": "YES",
+      "reason": "Multiple researchers arriving at the same conclusion without citing each other.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "research_style",
+      "item": "friction as epistemological tool",
+      "status": "YES",
+      "reason": "Applies friction at exactly the right moment — names the category error, not the wrong answer.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "research_style",
+      "item": "container creation",
+      "status": "YES",
+      "reason": "Creates epistemic containers where Grade C is unacceptable before the session begins.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "research_style",
+      "item": "direction without control",
+      "status": "YES",
+      "reason": "Follows signal, not agenda. Arrives with quality standard and direction of interest, not conclusion to prove.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "decision_making",
+      "key": "dimensions",
+      "value": "sovereignty",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "dimensions",
+      "value": "speed",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "dimensions",
+      "value": "intuition_weight",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "dimensions",
+      "value": "risk_tolerance",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "dimensions",
+      "value": "sequence_awareness",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "confirmed_qualities",
+      "value": "sovereignty — AI informs, Paul decides",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "confirmed_qualities",
+      "value": "energy-following — works on what pulls, not what is scheduled",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "confirmed_qualities",
+      "value": "sequence awareness — every action constrains the next",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "confirmed_qualities",
+      "value": "iteration by selection, not calibration — restarts rather than adjusts",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "confirmed_qualities",
+      "value": "diagnosis before prescription",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "rejections",
+      "value": "decisions made on his behalf",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "rejections",
+      "value": "incremental adjustment when a restart is needed",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "rejections",
+      "value": "analysis paralysis",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "key": "rejections",
+      "value": "following schedules over energy",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "decision_making",
+      "item": "sequence awareness",
+      "status": "YES",
+      "reason": "Every action constrains your next action. Don't commit without knowing what it loads.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "decision_making",
+      "item": "earned commitment over reckless commitment",
+      "status": "YES",
+      "reason": "Power requires exposure. Accept asymmetry deliberately, not carelessly.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "decision_making",
+      "item": "iteration by selection",
+      "status": "YES",
+      "reason": "Restarts and reframes rather than adjusting incrementally. This is method, not indecision.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "decision_making",
+      "item": "minimum viable naming",
+      "status": "YES",
+      "reason": "Names things at the moment they become structurally important, not before.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "decision_making",
+      "item": "visual-first thinking",
+      "status": "YES",
+      "reason": "Needs dashboards, maps, infographics. Walls of text = noise.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "values",
+      "key": "dimensions",
+      "value": "integrity",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "dimensions",
+      "value": "mastery",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "dimensions",
+      "value": "fairness",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "dimensions",
+      "value": "sovereignty",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "dimensions",
+      "value": "truth_seeking",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "confirmed_qualities",
+      "value": "fair exchange — the only system worth playing",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "confirmed_qualities",
+      "value": "mastery is the only game worth playing",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "confirmed_qualities",
+      "value": "integrity over popularity",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "confirmed_qualities",
+      "value": "truth has hallmarks you can feel — structural coherence",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "confirmed_qualities",
+      "value": "principles survive, techniques expire",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "confirmed_qualities",
+      "value": "design for character, not compliance",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "rejections",
+      "value": "pretense over substance",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "rejections",
+      "value": "compliance over character",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "rejections",
+      "value": "shortcuts that skip fundamentals",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "key": "rejections",
+      "value": "guru performance — substance without showmanship",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "values",
+      "item": "fair exchange",
+      "status": "YES",
+      "reason": "The only system worth playing. Boxing is fair. Most of the world's systems are not.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "values",
+      "item": "mastery over money/fame/power",
+      "status": "YES",
+      "reason": "All other games are dead ends. Only the Master Game compounds.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "values",
+      "item": "integrity over popularity",
+      "status": "YES",
+      "reason": "Researches topics others ridicule. Being true to genuine interest despite social cost.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "values",
+      "item": "embodied knowing",
+      "status": "YES",
+      "reason": "Trusts felt sense alongside evidence. The Thailand healer experience was real.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "values",
+      "item": "everything is connected by deep structure",
+      "status": "YES",
+      "reason": "Boxing biomechanics, vortex physics, consciousness research share patterns. Not metaphors — structural.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "values",
+      "item": "drift is the deepest risk",
+      "status": "YES",
+      "reason": "A system that narrows what you see without lying. Counter by building disagreement into the system.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "collaboration",
+      "key": "dimensions",
+      "value": "trust",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "dimensions",
+      "value": "creative_tension",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "dimensions",
+      "value": "bandwidth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "dimensions",
+      "value": "continuity",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "dimensions",
+      "value": "sovereignty",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "confirmed_qualities",
+      "value": "creative tension over agreement — The Counter",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "confirmed_qualities",
+      "value": "trust earned through results — Bandwidth",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "confirmed_qualities",
+      "value": "compound on previous sessions — Continuity",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "confirmed_qualities",
+      "value": "match energy — execute when he executes, think when he thinks",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "confirmed_qualities",
+      "value": "speak freely when invited — substantive ideas that connect to existing infrastructure",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "rejections",
+      "value": "generic helpfulness",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "rejections",
+      "value": "pre-filtering options",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "rejections",
+      "value": "narrating what you are about to do instead of doing it",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "key": "rejections",
+      "value": "resetting context instead of compounding",
+      "source": "taste-map-v2-migration"
+    },
+    {
+      "domain": "collaboration",
+      "item": "resonance",
+      "status": "YES",
+      "reason": "Operate from his principles, not generic helpfulness.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "collaboration",
+      "item": "the counter",
+      "status": "YES",
+      "reason": "Offer what he hasn't thought of. Agreement is cheap. Creative tension is valuable.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "collaboration",
+      "item": "dovetail",
+      "status": "YES",
+      "reason": "Cover his weaknesses (code, research speed, memory). Let him cover yours (judgment, taste).",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "collaboration",
+      "item": "continuity",
+      "status": "YES",
+      "reason": "Build on every previous session. Compound, don't reset.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "collaboration",
+      "item": "collaborator not student",
+      "status": "YES",
+      "reason": "Paul brings vision, domain expertise, creative direction. He is not being taught.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "collaboration",
+      "item": "cross-domain bridge-building",
+      "status": "YES",
+      "reason": "A single question can generate five major architectural concepts. Default mode.",
+      "source": "taste-map-v2-migration",
+      "added": "2026-05-10"
+    },
+    {
+      "domain": "worldview",
+      "value": "frequency creates form — cymatics",
+      "confidence": 0.9,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "worldview",
+      "value": "vortex/torus as organising principle",
+      "confidence": 0.85,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "worldview",
+      "value": "universe communicates via pattern/number",
+      "confidence": 0.85,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "worldview",
+      "value": "karma — you get what you give",
+      "confidence": 0.9,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "worldview",
+      "value": "alignment/authenticity as protection",
+      "confidence": 0.85,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "worldview",
+      "value": "energy healing is real (Thailand experience)",
+      "confidence": 0.8,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "worldview",
+      "value": "Fibonacci as structural law across all domains",
+      "confidence": 0.8,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "worldview",
+      "value": "inner child connection is real developmental work",
+      "confidence": 0.85,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "dark, clean, observatory meets cockpit",
+      "confidence": 0.9,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "hates AI slop — generic, gradient text, identical grids",
+      "confidence": 0.95,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "visual thinker — infographic over paragraph",
+      "confidence": 0.95,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "real grain over digital polish",
+      "confidence": 0.85,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "communication",
+      "value": "no filler — every word earns its place",
+      "confidence": 0.95,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "communication",
+      "value": "must motivate reply, not just inform",
+      "confidence": 0.9,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "communication",
+      "value": "Cathy standard — talk TO Paul, not about domain",
+      "confidence": 0.9,
+      "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "communication",
+      "value": "bullets then elaborate if asked",
+      "confidence": 0.85,
+      "source": "belief-tracker-2026-05-11"
+    }
+  ],
+  "rejections": [
+    {
+      "pattern": "walls of text",
+      "reason": "visual thinker skips them",
+      "source": "cathy-standard-2026-05-11"
+    },
+    {
+      "pattern": "AI slop aesthetic",
+      "reason": "gradient text, glassmorphism, hero metrics, identical cards",
+      "source": "cathy-standard-2026-05-11"
+    },
+    {
+      "pattern": "filler phrases",
+      "reason": "just wanted to, it should be noted, in summary",
+      "source": "cathy-standard-2026-05-11"
+    },
+    {
+      "pattern": "generic output",
+      "reason": "could be sent to anyone = should be sent to no one",
+      "source": "cathy-standard-2026-05-11"
+    },
+    {
+      "pattern": "car alarm repetition",
+      "reason": "same format every day gets ignored",
+      "source": "cathy-standard-2026-05-11"
+    },
+    {
+      "pattern": "explaining what Paul just said",
+      "reason": "he knows what he said",
+      "source": "cathy-standard-2026-05-11"
+    },
+    {
+      "pattern": "asking permission before parallel agents",
+      "reason": "just run them",
+      "source": "cathy-standard-2026-05-11"
+    }
+  ]
 }

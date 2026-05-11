@@ -14,6 +14,7 @@
 
 import { skyState, todaySignal, lookForward, findEvents, comparePipelines, indexStats } from './services/sky-sense/index.mjs';
 import { fullScan, recordScan, formatSignalReport } from './services/sky-sense/signal-tracker.mjs';
+import { getTasteContext } from './taste-gate.mjs';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
@@ -180,7 +181,10 @@ RULES:
 6. Think like a newspaper editor whose ONE reader is Paul. What's the headline? Why should he keep reading?`;
 
 async function generateWhisper(reading) {
-  const prompt = `Today's Looking Glass reading:
+  const tasteContext = getTasteContext();
+  const prompt = `${tasteContext}
+
+Today's Looking Glass reading:
 
 Date: ${reading.date}
 Signal: ${reading.signal.signal.type} (${reading.signal.convergenceScore}%)
