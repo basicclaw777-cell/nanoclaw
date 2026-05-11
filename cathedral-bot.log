@@ -28364,3 +28364,1159 @@ Vault watcher active: /Users/basicclaw777/cathedral-vault
 2026-05-11 16:29:49 16KT: 🫀 Vault Metabolism cron scheduled (weekly).
 2026-05-11 16:29:49 16KT: [combo-watcher] Watching /Users/basicclaw777/nanoclaw/combo-inbox
 2026-05-11 16:29:49 16KT: [webhook] Internal listener on 127.0.0.1:8443
+2026-05-11 18:05:19 18KT: [heartbeat] Double failure — restarting polling
+2026-05-11 18:05:50 18KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 18:05:50 18KT: [heartbeat] Polling restarted
+2026-05-11 18:05:52 18KT: [telegram] Connection recovered after 1 consecutive errors
+2026-05-11 18:05:52 18KT: [chat] id=1912121485
+2026-05-11 18:05:52 18KT: [chat] id=1912121485
+2026-05-11 18:05:52 18KT: [telegram] Polling restarted after double failure
+2026-05-11 18:05:53 18KT: [callCath] query="444 is the number I associate with the cathedral" history=1 turns
+2026-05-11 18:06:09 18KT: [callCath] done 15.4s in=4452 out=218
+2026-05-11 19:39:20 19KT: [heartbeat] Double failure — restarting polling
+2026-05-11 19:39:20 19KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 19:39:26 19KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 19:39:26 19KT: [telegram] Polling restarted after double failure
+2026-05-11 19:39:37 19KT: [telegram] Polling restarted after double failure
+2026-05-11 19:55:44 19KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 19:55:56 19KT: [telegram] Polling restarted after double failure
+2026-05-11 20:14:50 20KT: [heartbeat] Double failure — restarting polling
+2026-05-11 20:14:50 20KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 20:14:56 20KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 20:14:56 20KT: [telegram] Polling restarted after double failure
+2026-05-11 20:15:07 20KT: [telegram] Polling restarted after double failure
+2026-05-11 20:32:23 20KT: [heartbeat] Double failure — restarting polling
+2026-05-11 20:32:24 20KT: [telegram] Connection recovered after 2 consecutive errors
+2026-05-11 20:32:24 20KT: [heartbeat] Polling restarted
+2026-05-11 20:32:26 20KT: [reed-photo] Downloaded /tmp/reed-20260511123224..jpg (82KB)
+2026-05-11 20:32:26 20KT: [reed-taste] Default pro_photo — confirmed anchor in taste map
+2026-05-11 20:40:20 20KT: [heartbeat] Double failure — restarting polling
+2026-05-11 20:40:21 20KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 20:40:21 20KT: [heartbeat] Polling restarted
+2026-05-11 20:40:33 20KT: [telegram] Polling restarted after double failure
+2026-05-11 21:54:30 21KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 21:54:41 21KT: [telegram] Polling restarted after double failure
+2026-05-11 22:29:49 22KT: [gold-extractor] Running extraction passes...
+2026-05-11 22:29:49 22KT: [gold-extractor] Loaded 554 nuggets from vault.
+2026-05-11 22:29:50 22KT: 🕳️  Negative Space Detector — scanning for forensic absences...
+2026-05-11 22:29:50 22KT:    Researcher corpora found: Tesla, Schauberger
+2026-05-11 22:29:50 22KT:    Scanning Tesla (6 nuggets)...
+2026-05-11 22:30:24 22KT:    Scanning Schauberger (19 nuggets)...
+2026-05-11 22:31:08 22KT:    Negative space findings: 5
+2026-05-11 22:31:08 22KT: [gold-extractor] Done. 29 findings. Briefing stored.
+2026-05-11 23:58:24 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:26 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:26 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:27 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:28 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:29 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:29 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:31 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:32 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:33 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:33 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:34 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:35 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:37 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:37 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:38 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:39 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:40 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:40 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:41 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:43 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:44 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:44 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:45 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:46 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:47 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:47 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:49 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:50 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:51 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:51 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:52 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:53 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:54 23KT: [heartbeat] Double failure — restarting polling
+2026-05-11 23:58:55 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:55 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:56 23KT: [heartbeat] Polling restarted
+2026-05-11 23:58:56 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:58:57 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:58 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:58:58 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:00 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:01 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:02 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:02 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:03 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:04 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:06 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:06 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:07 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:08 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:09 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:09 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:10 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:12 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:13 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:13 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:14 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:15 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:16 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:16 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:18 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:19 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:20 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:20 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:21 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:22 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:24 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:24 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:25 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:26 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:27 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:27 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:29 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:30 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:31 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:31 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:32 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:33 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:35 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:35 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:36 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:37 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:38 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:38 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:40 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:41 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:42 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:42 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:43 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:44 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:46 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:46 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:47 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:48 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:49 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:49 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:50 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:52 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:53 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:53 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:54 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:55 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:56 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:56 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:57 23KT: [telegram] Polling restarted after double failure
+2026-05-11 23:59:58 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:59 23KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-11 23:59:59 23KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:01 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:03 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:07 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:08 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:12 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:14 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:18 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:19 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:23 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:25 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:26 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:29 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:30 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:32 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:36 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:37 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:41 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:43 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:47 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:48 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:52 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:00:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:00:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:06 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:06 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:11 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:12 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:17 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:17 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:23 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:26 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:32 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:35 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:40 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:41 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:46 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:46 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:52 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:01:57 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:01:58 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:04 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:06 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:06 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:09 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:12 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:15 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:16 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:20 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:22 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:26 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:27 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:33 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:35 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:38 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:41 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:44 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:45 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:49 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:51 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:56 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:57 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:02:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:02:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:01 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:03 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:07 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:08 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:12 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:14 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:18 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:19 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:25 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:26 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:30 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:32 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:36 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:37 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:41 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:43 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:47 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:48 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:52 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:03:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:03:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:06 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:06 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:11 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:12 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:17 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:17 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:23 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:35 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:40 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:41 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:46 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:46 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:52 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:57 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:04:58 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:04:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:04 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:05 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:09 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:11 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:15 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:16 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:20 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:22 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:26 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:27 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:33 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:35 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:38 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:41 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:44 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:45 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:49 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:51 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:56 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:57 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:05:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:05:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:01 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:03 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:07 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:08 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:12 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:14 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:18 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:19 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:25 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:26 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:30 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:32 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:36 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:37 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:41 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:43 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:47 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:48 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:06:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:06:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:06 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:06 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:11 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:12 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:17 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:17 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:23 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:35 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:40 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:41 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:46 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:46 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:52 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:57 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:07:58 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:07:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:04 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:05 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:09 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:11 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:15 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:16 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:20 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:22 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:26 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:27 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:33 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:34 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:38 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:40 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:44 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:45 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:49 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:51 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:56 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:57 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:08:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:08:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:01 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:03 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:07 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:08 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:12 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:14 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:18 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:19 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:25 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:26 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:30 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:32 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:36 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:37 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:41 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:43 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:47 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:48 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:09:57 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:09:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:06 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:06 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:11 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:12 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:17 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:17 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:23 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:35 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:40 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:41 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:46 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:46 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:52 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:57 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:10:58 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:10:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:00 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:04 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:05 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:09 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:11 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:15 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:16 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:17 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:20 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:22 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:23 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:23 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:26 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:27 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:29 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:33 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:34 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:38 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:40 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:44 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:45 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:49 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:51 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:54 0KT: [heartbeat] Double failure — restarting polling
+2026-05-12 00:11:56 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:56 0KT: [heartbeat] Polling restarted
+2026-05-12 00:11:57 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:11:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:11:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:01 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:03 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:07 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:08 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:11 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:14 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:15 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:17 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:17 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:19 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:21 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:21 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:23 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:25 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:26 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:27 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:30 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:32 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:32 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:36 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:37 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:38 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:40 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:43 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:46 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:46 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:48 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:52 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:55 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:12:57 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:12:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:01 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:02 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:06 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:06 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:08 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:10 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:10 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:11 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:12 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:13 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:16 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:17 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:17 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:19 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:20 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:23 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:24 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:26 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:28 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:30 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:31 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:34 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:35 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:37 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:39 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:40 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:41 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:42 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:44 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:45 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:46 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:46 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:48 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:50 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:50 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:52 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:53 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:55 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:56 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:13:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:57 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:13:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:00 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:01 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:03 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:05 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:06 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:07 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:07 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:08 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:09 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:11 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:11 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:12 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:13 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:14 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:14 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:16 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:17 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:18 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:18 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:19 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:20 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:22 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:22 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:23 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:24 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:25 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:25 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:27 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:28 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:29 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:29 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:30 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:31 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:33 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:33 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:34 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:35 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:36 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:36 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:37 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:39 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:40 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:40 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:41 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:42 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:43 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:43 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:45 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:46 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:47 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:47 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:48 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:49 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:51 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:51 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:52 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:53 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:54 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:54 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:56 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:56 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:57 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:14:58 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:59 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:14:59 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:15:00 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:15:02 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:15:03 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:15:03 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:15:04 0KT: [telegram] Polling restarted after double failure
+2026-05-12 00:15:05 0KT: [telegram] Double failure detected — forcing immediate polling restart
+2026-05-12 00:15:17 0KT: [telegram] Polling restarted after double failure

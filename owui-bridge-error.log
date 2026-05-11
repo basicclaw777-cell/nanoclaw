@@ -253244,3 +253244,4511 @@ print(json.dumps(result))
 '
 failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
 
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+❌ DB query failed: docker exec failed: Command failed: docker exec open-webui python3 -c '
+import sqlite3, json
+
+conn = sqlite3.connect('\''/app/backend/data/webui.db'\'')
+c = conn.cursor()
+
+# Get all messages newer than last_seen, grouped by chat
+c.execute("""
+  SELECT
+    cm.chat_id,
+    cm.role,
+    cm.content,
+    cm.model_id,
+    cm.created_at
+  FROM chat_message cm
+  WHERE cm.created_at > 1778424915
+    AND cm.content IS NOT NULL
+    AND cm.content != '\'''\''
+    AND cm.done = 1
+  ORDER BY cm.chat_id, cm.created_at ASC
+""")
+rows = c.fetchall()
+
+# Also fetch chat titles for context
+chat_ids = list(set(r[0] for r in rows))
+titles = {}
+if chat_ids:
+  placeholders = '\'','\''.join(['\''?'\'' for _ in chat_ids])
+  c.execute(f"SELECT id, title FROM chat WHERE id IN ({placeholders})", chat_ids)
+  for cid, title in c.fetchall():
+    titles[cid] = title
+
+conn.close()
+
+result = {
+  "messages": [
+    {"chat_id": r[0], "role": r[1], "content": r[2], "model_id": r[3], "created_at": r[4]}
+    for r in rows
+  ],
+  "titles": titles
+}
+print(json.dumps(result))
+'
+failed to connect to the docker API at unix:///Users/basicclaw777/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/basicclaw777/.docker/run/docker.sock: connect: no such file or directory
+

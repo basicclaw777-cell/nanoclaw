@@ -1126,3 +1126,14 @@ the-timekeeper to go offline. Don't repeat it.
 
 ## Shell Injection Fix (2026-05-08)
 - Reed photo handler: all execSync with template literals replaced with execFileSync + args arrays
+
+## The Prospector — Court Member #21 (built 2026-05-12)
+- Script: ~/nanoclaw/prospector.js (ESM)
+- Seed prompt: ~/cathedral-vault/10_Agents/prospector/seed-prompt.md
+- Architecture: ~/cathedral-vault/10_Agents/prospector/architecture.md
+- Output: ~/cathedral-vault/08_Project_Orchestrator/products/
+- Scan log: ~/cathedral-vault/08_Project_Orchestrator/products/scan-log.md
+- Model: DeepSeek via API
+- Detection: reads session harvests, fires on "the triple" (pushed past surface + discovered mechanism + built capture)
+- CLI: node prospector.js [date] (scans harvests for that date)
+- TRIGGER: UNASSIGNED — needs PM2 cron daily 19:00 HKT
