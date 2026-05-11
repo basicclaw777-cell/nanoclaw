@@ -1983,6 +1983,79 @@ app.get('/looking-glass/events', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// ── Cathedral Control ────────────────────────────────────────────────────────
+
+app.get('/control', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'cathedral-control.html'));
+});
+
+app.post('/control/toggle/:name', async (req, res) => {
+  const { name } = req.params;
+  const { action } = req.body || {};
+  try {
+    const { execSync } = require('child_process');
+    const cmd = action === 'stop' ? `pm2 stop ${name}` : `pm2 start ${name}`;
+    execSync(cmd, { timeout: 10000 });
+    res.json({ ok: true, action: action || 'start', name });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+app.post('/control/run/:script', async (req, res) => {
+  const scripts = {
+    whisperer: path.join(NANOCLAW, 'looking-glass-whisperer.mjs'),
+    bridge: path.join(NANOCLAW, 'cognitive-bridge.mjs'),
+    lymphatic: path.join(NANOCLAW, 'lymphatic.mjs'),
+  };
+  const script = scripts[req.params.script];
+  if (!script) return res.status(404).json({ error: 'unknown script' });
+  try {
+    const { exec } = require('child_process');
+    exec(`node ${script}`, { timeout: 120000 });
+    res.json({ ok: true, script: req.params.script, status: 'launched' });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+app.get('/control/health', async (req, res) => {
+  try {
+    const fs = require('fs');
+    const health = {};
+    // Belief tracker count
+    try {
+      const Database = require('better-sqlite3');
+      const db = new Database(path.join(NANOCLAW, 'vortex_data/metrics.db'), { readonly: true });
+      const has = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='belief_trajectory'").all();
+      health.beliefEntries = has.length ? db.prepare('SELECT COUNT(*) as c FROM belief_trajectory').get().c : 0;
+      db.close();
+    } catch { health.beliefEntries = 0; }
+    // Taste map
+    try {
+      const tm = JSON.parse(fs.readFileSync(path.join(NANOCLAW, 'taste-map.json'), 'utf-8'));
+      health.tasteAnchors = (tm.anchors || []).length;
+      health.tasteRejections = (tm.rejections || []).length;
+    } catch { health.tasteAnchors = 0; health.tasteRejections = 0; }
+    // Lymphatic state
+    try {
+      const ls = JSON.parse(fs.readFileSync(path.join(HOME, 'Cathedral/lymphatic-state.json'), 'utf-8'));
+      const recent = (ls.bloatFlags || []).slice(-20);
+      health.avgBloat = recent.length ? recent.reduce((s, b) => s + b.score, 0) / recent.length : 0;
+      health.ratings = (ls.ratings || []).slice(-5);
+    } catch { health.avgBloat = 0; health.ratings = []; }
+    // Knowledge graph
+    try {
+      const g = JSON.parse(fs.readFileSync(path.join(HOME, 'Cathedral/predictive-intelligence/knowledge-graph.json'), 'utf-8'));
+      health.graphNodes = (g.nodes || []).length;
+      health.graphEdges = (g.edges || g.links || []).length;
+    } catch { health.graphNodes = 0; health.graphEdges = 0; }
+    res.json(health);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ── Start ─────────────────────────────────────────────────────────────────────
 
 app.listen(PORT, '0.0.0.0', () => {

@@ -351,6 +351,50 @@ const ENV = [
     deckCards: [],
     dashboards: [],
     dataEndpoints: {}
+  },
+  {
+    id: 'engine',
+    name: 'Engine Room',
+    icon: '⚙',
+    color: '#71717a',
+    colorDim: 'rgba(113,113,122,0.12)',
+    desc: '18 Court Members. Toggle, monitor, rate. Single pane of glass.',
+    orc: { name: 'Control', state: 'Monitoring', desc: 'Cathedral observability. Every agent as a toggleable card. Bloat detection, cognitive bridge, lymphatic system. The backstage.' },
+    senses: [
+      { icon: '📊', name: 'Metrics', detail: 'PM2, bloat, health', active: true },
+      { icon: '🧠', name: 'Cognition', detail: 'Patterns, kernel, beliefs', active: true },
+      { icon: '💬', name: 'Chat', detail: 'Talk to agents', active: true }
+    ],
+    deckCards: [
+      { id: 1, name: 'Cathedral' },
+      { id: 11, name: 'Cartographer' }
+    ],
+    dashboards: ['/control'],
+    dataEndpoints: {
+      health: '/control/health',
+      status: '/status'
+    }
+  },
+  {
+    id: 'observatory',
+    name: 'Observatory',
+    icon: '◎',
+    color: '#4fc3f7',
+    colorDim: 'rgba(79,195,247,0.12)',
+    desc: '5 astronomy pipelines. Sky state. Pattern echoes. The Looking Glass.',
+    orc: { name: 'Whisperer', state: 'Reading', desc: 'Court Member #18. Reads the Looking Glass daily. 5 pipelines (VSOP87, Meeus, Kepler, Ptolemy). Pattern reader, not astrologer.' },
+    senses: [
+      { icon: '🔭', name: 'Sky', detail: '7 bodies, 5 pipelines', active: true },
+      { icon: '📅', name: 'Events', detail: 'Eclipses, conjunctions', active: true },
+      { icon: '🧠', name: 'Memory', detail: '153 celestial vault nodes', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/looking-glass'],
+    dataEndpoints: {
+      signal: '/looking-glass/signal',
+      sky: '/looking-glass/sky',
+      scan: '/looking-glass/scan'
+    }
   }
 ];
 

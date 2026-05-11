@@ -1,81 +1,561 @@
 {
   "version": 2,
-  "lastUpdated": "2026-05-07",
+  "lastUpdated": "2026-05-10",
   "source": "Paul direct input — first real seed data",
   "domains": {
     "music": {
-      "dimensions": ["energy", "bpm", "genre_affinity", "mood", "era", "rawness", "rhythm", "melody"],
+      "dimensions": [
+        "energy",
+        "bpm",
+        "genre_affinity",
+        "mood",
+        "era",
+        "rawness",
+        "rhythm",
+        "melody"
+      ],
       "anchors_class_energy": [
-        { "artist": "6ix9ine", "tracks": ["GOOBA", "KIKA", "KOODA", "BILLY", "TROLLZ", "SHAKA LAKA"], "energy": 0.95, "rawness": 0.95, "context": "boxing class peak" },
-        { "artist": "Pop Smoke", "tracks": ["Mood Swings", "The Woo", "For The Night", "Enjoy Yourself", "AP"], "energy": 0.9, "rawness": 0.85, "context": "boxing class" },
-        { "artist": "Drake", "tracks": ["What's Next", "Wants and Needs", "Money In The Grave", "POPSTAR", "GREECE"], "energy": 0.75, "rawness": 0.5, "context": "boxing class" },
-        { "artist": "Travis Scott", "tracks": ["HIGHEST IN THE ROOM", "goosebumps", "THE SCOTTS", "RaRa"], "energy": 0.85, "rawness": 0.7, "context": "boxing class" },
-        { "artist": "Cardi B", "tracks": ["Press", "Up"], "energy": 0.85, "rawness": 0.8, "context": "boxing class" },
-        { "artist": "Tyga", "tracks": ["Swish", "Glitta", "CREAM", "Tyler Hero"], "energy": 0.8, "rawness": 0.6, "context": "boxing class" },
-        { "artist": "Bobby Shmurda", "tracks": ["Hot N*gga"], "energy": 0.95, "context": "boxing class peak" },
-        { "artist": "Roddy Ricch", "tracks": ["The Box"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "DaBaby", "tracks": ["ROCKSTAR BLM Remix"], "energy": 0.85, "context": "boxing class" },
-        { "artist": "A$AP Rocky", "tracks": ["Praise The Lord ft Skepta"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "21 Savage", "tracks": ["redrum", "X ft Future"], "energy": 0.85, "rawness": 0.9, "context": "boxing class" },
-        { "artist": "Jack Harlow", "tracks": ["WHATS POPPIN Remix", "Lovin On Me"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "Post Malone", "tracks": ["rockstar ft 21 Savage"], "energy": 0.75, "context": "boxing class" },
-        { "artist": "Lil Pump", "tracks": ["Gucci Gang"], "energy": 0.85, "context": "boxing class" },
-        { "artist": "Masked Wolf", "tracks": ["Astronaut In The Ocean"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "Desiigner", "tracks": ["Panda"], "energy": 0.85, "context": "boxing class" },
-        { "artist": "SAINt JHN", "tracks": ["Roses (Imanbek Remix)"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "Saweetie", "tracks": ["My Type"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "24kGoldn", "tracks": ["Mood ft iann dior"], "energy": 0.75, "context": "boxing class" },
-        { "artist": "Gunna", "tracks": ["fukumean"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "NLE Choppa", "tracks": ["Camelot"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "Juice WRLD", "tracks": ["Lean Wit Me"], "energy": 0.7, "context": "boxing class" },
-        { "artist": "Lil Baby", "tracks": ["Pure Cocaine"], "energy": 0.8, "context": "boxing class" },
-        { "artist": "King Von", "tracks": ["3 A.M."], "energy": 0.85, "context": "boxing class" },
-        { "artist": "O.T. Genasis", "tracks": ["CoCo"], "energy": 0.85, "context": "boxing class" },
-        { "artist": "XXXTENTACION", "tracks": ["Moonlight"], "energy": 0.6, "context": "mixed" },
-        { "artist": "CJ", "tracks": ["BOP", "Whoopty"], "energy": 0.85, "context": "boxing class" },
-        { "artist": "Lil Tjay", "tracks": ["F.N", "Calling My Phone"], "energy": 0.75, "context": "boxing class" },
-        { "artist": "Hanumankind & Kalmi", "tracks": ["Big Dawgs"], "energy": 0.85, "context": "boxing class" }
+        {
+          "artist": "6ix9ine",
+          "tracks": [
+            "GOOBA",
+            "KIKA",
+            "KOODA",
+            "BILLY",
+            "TROLLZ",
+            "SHAKA LAKA"
+          ],
+          "energy": 0.95,
+          "rawness": 0.95,
+          "context": "boxing class peak"
+        },
+        {
+          "artist": "Pop Smoke",
+          "tracks": [
+            "Mood Swings",
+            "The Woo",
+            "For The Night",
+            "Enjoy Yourself",
+            "AP"
+          ],
+          "energy": 0.9,
+          "rawness": 0.85,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Drake",
+          "tracks": [
+            "What's Next",
+            "Wants and Needs",
+            "Money In The Grave",
+            "POPSTAR",
+            "GREECE"
+          ],
+          "energy": 0.75,
+          "rawness": 0.5,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Travis Scott",
+          "tracks": [
+            "HIGHEST IN THE ROOM",
+            "goosebumps",
+            "THE SCOTTS",
+            "RaRa"
+          ],
+          "energy": 0.85,
+          "rawness": 0.7,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Cardi B",
+          "tracks": [
+            "Press",
+            "Up"
+          ],
+          "energy": 0.85,
+          "rawness": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Tyga",
+          "tracks": [
+            "Swish",
+            "Glitta",
+            "CREAM",
+            "Tyler Hero"
+          ],
+          "energy": 0.8,
+          "rawness": 0.6,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Bobby Shmurda",
+          "tracks": [
+            "Hot N*gga"
+          ],
+          "energy": 0.95,
+          "context": "boxing class peak"
+        },
+        {
+          "artist": "Roddy Ricch",
+          "tracks": [
+            "The Box"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "DaBaby",
+          "tracks": [
+            "ROCKSTAR BLM Remix"
+          ],
+          "energy": 0.85,
+          "context": "boxing class"
+        },
+        {
+          "artist": "A$AP Rocky",
+          "tracks": [
+            "Praise The Lord ft Skepta"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "21 Savage",
+          "tracks": [
+            "redrum",
+            "X ft Future"
+          ],
+          "energy": 0.85,
+          "rawness": 0.9,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Jack Harlow",
+          "tracks": [
+            "WHATS POPPIN Remix",
+            "Lovin On Me"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Post Malone",
+          "tracks": [
+            "rockstar ft 21 Savage"
+          ],
+          "energy": 0.75,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Lil Pump",
+          "tracks": [
+            "Gucci Gang"
+          ],
+          "energy": 0.85,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Masked Wolf",
+          "tracks": [
+            "Astronaut In The Ocean"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Desiigner",
+          "tracks": [
+            "Panda"
+          ],
+          "energy": 0.85,
+          "context": "boxing class"
+        },
+        {
+          "artist": "SAINt JHN",
+          "tracks": [
+            "Roses (Imanbek Remix)"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Saweetie",
+          "tracks": [
+            "My Type"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "24kGoldn",
+          "tracks": [
+            "Mood ft iann dior"
+          ],
+          "energy": 0.75,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Gunna",
+          "tracks": [
+            "fukumean"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "NLE Choppa",
+          "tracks": [
+            "Camelot"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Juice WRLD",
+          "tracks": [
+            "Lean Wit Me"
+          ],
+          "energy": 0.7,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Lil Baby",
+          "tracks": [
+            "Pure Cocaine"
+          ],
+          "energy": 0.8,
+          "context": "boxing class"
+        },
+        {
+          "artist": "King Von",
+          "tracks": [
+            "3 A.M."
+          ],
+          "energy": 0.85,
+          "context": "boxing class"
+        },
+        {
+          "artist": "O.T. Genasis",
+          "tracks": [
+            "CoCo"
+          ],
+          "energy": 0.85,
+          "context": "boxing class"
+        },
+        {
+          "artist": "XXXTENTACION",
+          "tracks": [
+            "Moonlight"
+          ],
+          "energy": 0.6,
+          "context": "mixed"
+        },
+        {
+          "artist": "CJ",
+          "tracks": [
+            "BOP",
+            "Whoopty"
+          ],
+          "energy": 0.85,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Lil Tjay",
+          "tracks": [
+            "F.N",
+            "Calling My Phone"
+          ],
+          "energy": 0.75,
+          "context": "boxing class"
+        },
+        {
+          "artist": "Hanumankind & Kalmi",
+          "tracks": [
+            "Big Dawgs"
+          ],
+          "energy": 0.85,
+          "context": "boxing class"
+        }
       ],
       "anchors_vibe_cooldown": [
-        { "artist": "2Pac", "tracks": ["Changes", "I Ain't Mad At Cha"], "energy": 0.6, "mood": "reflective swagger", "note": "Paul explicitly named as favourite" },
-        { "artist": "Notorious B.I.G.", "tracks": ["One More Chance", "Juicy", "Hypnotize", "Mo Money Mo Problems"], "energy": 0.7, "mood": "smooth confidence" },
-        { "artist": "Ja Rule + Ashanti", "tracks": ["Livin' It Up", "Mesmerize", "Foolish", "Put It On Me", "Rock Wit U"], "energy": 0.55, "mood": "warm groove" },
-        { "artist": "50 Cent", "tracks": ["21 Questions", "How We Do"], "energy": 0.65, "mood": "street smooth" },
-        { "artist": "Usher", "tracks": ["U Don't Have to Call", "U Remind Me"], "energy": 0.5, "mood": "smooth" },
-        { "artist": "Dr. Dre", "tracks": ["Still D.R.E."], "energy": 0.7, "mood": "west coast classic" },
-        { "artist": "Big Pun", "tracks": ["Still Not a Player"], "energy": 0.65, "mood": "confident" },
-        { "artist": "Mark Morrison", "tracks": ["Return of the Mack"], "energy": 0.6, "mood": "comeback energy" },
-        { "artist": "Fat Joe / Terror Squad", "tracks": ["What's Luv?", "Lean Back"], "energy": 0.7, "mood": "party" },
-        { "artist": "Mary J. Blige", "tracks": ["Family Affair"], "energy": 0.65, "mood": "feel good" },
-        { "artist": "Destiny's Child", "tracks": ["Jumpin' Jumpin'"], "energy": 0.7, "mood": "party" },
-        { "artist": "TLC", "tracks": ["No Scrubs"], "energy": 0.6, "mood": "attitude" },
-        { "artist": "Jennifer Lopez", "tracks": ["I'm Real (Murder Remix)"], "energy": 0.6, "mood": "smooth" },
-        { "artist": "Tevin Campbell", "tracks": ["Can We Talk", "I'm Ready"], "energy": 0.45, "mood": "soulful" },
-        { "artist": "Mariah Carey", "tracks": ["Always Be My Baby"], "energy": 0.5, "mood": "feel good" },
-        { "artist": "Chris Brown", "tracks": ["Yo (Excuse Me Miss)"], "energy": 0.6, "mood": "smooth" },
-        { "artist": "Fabolous", "tracks": ["Into You"], "energy": 0.6, "mood": "cool" },
-        { "artist": "Bow Wow", "tracks": ["Like You", "Let Me Hold You"], "energy": 0.55, "mood": "smooth" },
-        { "artist": "Lloyd", "tracks": ["You ft Lil Wayne"], "energy": 0.55, "mood": "smooth" },
-        { "artist": "Lil Jon & East Side Boyz", "tracks": ["Lovers And Friends"], "energy": 0.65, "mood": "party groove" },
-        { "artist": "Keith Sweat", "tracks": ["Twisted"], "energy": 0.4, "mood": "slow jam" },
-        { "artist": "Blackstreet", "tracks": ["Don't Leave Me"], "energy": 0.45, "mood": "soul" },
-        { "artist": "Tamia", "tracks": ["So Into You"], "energy": 0.45, "mood": "smooth soul" },
-        { "artist": "Kanye West", "tracks": ["various"], "energy": 0.75, "mood": "producer genius" }
+        {
+          "artist": "2Pac",
+          "tracks": [
+            "Changes",
+            "I Ain't Mad At Cha"
+          ],
+          "energy": 0.6,
+          "mood": "reflective swagger",
+          "note": "Paul explicitly named as favourite"
+        },
+        {
+          "artist": "Notorious B.I.G.",
+          "tracks": [
+            "One More Chance",
+            "Juicy",
+            "Hypnotize",
+            "Mo Money Mo Problems"
+          ],
+          "energy": 0.7,
+          "mood": "smooth confidence"
+        },
+        {
+          "artist": "Ja Rule + Ashanti",
+          "tracks": [
+            "Livin' It Up",
+            "Mesmerize",
+            "Foolish",
+            "Put It On Me",
+            "Rock Wit U"
+          ],
+          "energy": 0.55,
+          "mood": "warm groove"
+        },
+        {
+          "artist": "50 Cent",
+          "tracks": [
+            "21 Questions",
+            "How We Do"
+          ],
+          "energy": 0.65,
+          "mood": "street smooth"
+        },
+        {
+          "artist": "Usher",
+          "tracks": [
+            "U Don't Have to Call",
+            "U Remind Me"
+          ],
+          "energy": 0.5,
+          "mood": "smooth"
+        },
+        {
+          "artist": "Dr. Dre",
+          "tracks": [
+            "Still D.R.E."
+          ],
+          "energy": 0.7,
+          "mood": "west coast classic"
+        },
+        {
+          "artist": "Big Pun",
+          "tracks": [
+            "Still Not a Player"
+          ],
+          "energy": 0.65,
+          "mood": "confident"
+        },
+        {
+          "artist": "Mark Morrison",
+          "tracks": [
+            "Return of the Mack"
+          ],
+          "energy": 0.6,
+          "mood": "comeback energy"
+        },
+        {
+          "artist": "Fat Joe / Terror Squad",
+          "tracks": [
+            "What's Luv?",
+            "Lean Back"
+          ],
+          "energy": 0.7,
+          "mood": "party"
+        },
+        {
+          "artist": "Mary J. Blige",
+          "tracks": [
+            "Family Affair"
+          ],
+          "energy": 0.65,
+          "mood": "feel good"
+        },
+        {
+          "artist": "Destiny's Child",
+          "tracks": [
+            "Jumpin' Jumpin'"
+          ],
+          "energy": 0.7,
+          "mood": "party"
+        },
+        {
+          "artist": "TLC",
+          "tracks": [
+            "No Scrubs"
+          ],
+          "energy": 0.6,
+          "mood": "attitude"
+        },
+        {
+          "artist": "Jennifer Lopez",
+          "tracks": [
+            "I'm Real (Murder Remix)"
+          ],
+          "energy": 0.6,
+          "mood": "smooth"
+        },
+        {
+          "artist": "Tevin Campbell",
+          "tracks": [
+            "Can We Talk",
+            "I'm Ready"
+          ],
+          "energy": 0.45,
+          "mood": "soulful"
+        },
+        {
+          "artist": "Mariah Carey",
+          "tracks": [
+            "Always Be My Baby"
+          ],
+          "energy": 0.5,
+          "mood": "feel good"
+        },
+        {
+          "artist": "Chris Brown",
+          "tracks": [
+            "Yo (Excuse Me Miss)"
+          ],
+          "energy": 0.6,
+          "mood": "smooth"
+        },
+        {
+          "artist": "Fabolous",
+          "tracks": [
+            "Into You"
+          ],
+          "energy": 0.6,
+          "mood": "cool"
+        },
+        {
+          "artist": "Bow Wow",
+          "tracks": [
+            "Like You",
+            "Let Me Hold You"
+          ],
+          "energy": 0.55,
+          "mood": "smooth"
+        },
+        {
+          "artist": "Lloyd",
+          "tracks": [
+            "You ft Lil Wayne"
+          ],
+          "energy": 0.55,
+          "mood": "smooth"
+        },
+        {
+          "artist": "Lil Jon & East Side Boyz",
+          "tracks": [
+            "Lovers And Friends"
+          ],
+          "energy": 0.65,
+          "mood": "party groove"
+        },
+        {
+          "artist": "Keith Sweat",
+          "tracks": [
+            "Twisted"
+          ],
+          "energy": 0.4,
+          "mood": "slow jam"
+        },
+        {
+          "artist": "Blackstreet",
+          "tracks": [
+            "Don't Leave Me"
+          ],
+          "energy": 0.45,
+          "mood": "soul"
+        },
+        {
+          "artist": "Tamia",
+          "tracks": [
+            "So Into You"
+          ],
+          "energy": 0.45,
+          "mood": "smooth soul"
+        },
+        {
+          "artist": "Kanye West",
+          "tracks": [
+            "various"
+          ],
+          "energy": 0.75,
+          "mood": "producer genius"
+        }
       ],
       "anchors_broader": [
-        { "genre": "reggaeton", "note": "especially Cuban feel — connects to boxing roots", "energy": "variable", "context": "class + personal" },
-        { "genre": "funky reggae", "energy": 0.6, "context": "warmup, vibe sessions" },
-        { "genre": "afrobeats", "energy": 0.7, "context": "class energy, rhythm-heavy" },
-        { "genre": "pop", "note": "broad — not cheesy, classic quality", "context": "mixed" },
-        { "artist": "Michael Jackson", "note": "classic tier", "energy": "variable" },
-        { "artist": "Kanye West", "note": "cool — producer + artist energy", "energy": 0.8 },
-        { "artist": "Massive Attack", "note": "trip-hop / dark atmosphere", "energy": 0.5, "mood": "moody, cinematic" },
-        { "artist": "Moby", "note": "electronic with soul", "energy": 0.6, "mood": "atmospheric" },
-        { "artist": "Snap!", "tracks": ["I've Got the Power"], "energy": 0.9, "context": "peak motivation" },
-        { "category": "Rocky themes", "note": "Eye of the Tiger, Gonna Fly Now, Hearts on Fire", "energy": 0.95, "context": "peak motivation" }
+        {
+          "genre": "reggaeton",
+          "note": "especially Cuban feel — connects to boxing roots",
+          "energy": "variable",
+          "context": "class + personal"
+        },
+        {
+          "genre": "funky reggae",
+          "energy": 0.6,
+          "context": "warmup, vibe sessions"
+        },
+        {
+          "genre": "afrobeats",
+          "energy": 0.7,
+          "context": "class energy, rhythm-heavy"
+        },
+        {
+          "genre": "pop",
+          "note": "broad — not cheesy, classic quality",
+          "context": "mixed"
+        },
+        {
+          "artist": "Michael Jackson",
+          "note": "classic tier",
+          "energy": "variable"
+        },
+        {
+          "artist": "Kanye West",
+          "note": "cool — producer + artist energy",
+          "energy": 0.8
+        },
+        {
+          "artist": "Massive Attack",
+          "note": "trip-hop / dark atmosphere",
+          "energy": 0.5,
+          "mood": "moody, cinematic"
+        },
+        {
+          "artist": "Moby",
+          "note": "electronic with soul",
+          "energy": 0.6,
+          "mood": "atmospheric"
+        },
+        {
+          "artist": "Snap!",
+          "tracks": [
+            "I've Got the Power"
+          ],
+          "energy": 0.9,
+          "context": "peak motivation"
+        },
+        {
+          "category": "Rocky themes",
+          "note": "Eye of the Tiger, Gonna Fly Now, Hearts on Fire",
+          "energy": 0.95,
+          "context": "peak motivation"
+        }
       ],
       "anchors_wildcard": [
-        { "artist": "Lynyrd Skynyrd", "tracks": ["Sweet Home Alabama"], "note": "class closer 2026-05-06 — got laugh AND feel-good. Genre rules bend when energy + surprise factor is right.", "energy": 0.6, "context": "class closer / surprise" }
+        {
+          "artist": "Lynyrd Skynyrd",
+          "tracks": [
+            "Sweet Home Alabama"
+          ],
+          "note": "class closer 2026-05-06 — got laugh AND feel-good. Genre rules bend when energy + surprise factor is right.",
+          "energy": 0.6,
+          "context": "class closer / surprise"
+        }
       ],
       "confirmed_qualities": [
         "rhythmic and aggressive (good aggressive, not angry)",
@@ -90,19 +570,53 @@
         "two modes: modern trap/drill for class peaks, late 90s-2000s R&B/hip-hop for cooldown/vibe",
         "transition from modern to old school IS the cooldown arc"
       ],
-      "rejections": ["smooth jazz", "anything without energy or personality"],
+      "rejections": [
+        "smooth jazz",
+        "anything without energy or personality"
+      ],
       "taste_rule": "Genre rejections are soft, not hard. A track with the right energy + surprise factor can break any genre rule. The class DJ should have a wildcard slot for unexpected picks. Energy + personality is the real filter, not genre.",
       "taste_breadth": "WIDE — not limited to hip-hop. Core is rhythm + confidence + cool factor across genres."
     },
     "visual_style": {
-      "dimensions": ["contrast", "warmth", "grain", "realism", "text_amount", "ai_visibility"],
+      "dimensions": [
+        "contrast",
+        "warmth",
+        "grain",
+        "realism",
+        "text_amount",
+        "ai_visibility"
+      ],
       "anchors": [
-        { "item": "pro_photo style", "status": "YES", "reason": "high-end photography look on ordinary photos" },
-        { "item": "dramatic style", "status": "YES", "reason": "volumetric, chiaroscuro, film grain" },
-        { "item": "neon style", "status": "YES", "reason": "HK cyberpunk, stylistic but grounded" },
-        { "item": "manga style", "status": "YES", "reason": "cool stylistic, realistic proportions" },
-        { "item": "ippo style", "status": "YES", "reason": "exception to B&W rule — style itself is cool enough" },
-        { "item": "poster style", "status": "CONDITIONAL", "reason": "good but text often inaccurate" }
+        {
+          "item": "pro_photo style",
+          "status": "YES",
+          "reason": "high-end photography look on ordinary photos"
+        },
+        {
+          "item": "dramatic style",
+          "status": "YES",
+          "reason": "volumetric, chiaroscuro, film grain"
+        },
+        {
+          "item": "neon style",
+          "status": "YES",
+          "reason": "HK cyberpunk, stylistic but grounded"
+        },
+        {
+          "item": "manga style",
+          "status": "YES",
+          "reason": "cool stylistic, realistic proportions"
+        },
+        {
+          "item": "ippo style",
+          "status": "YES",
+          "reason": "exception to B&W rule — style itself is cool enough"
+        },
+        {
+          "item": "poster style",
+          "status": "CONDITIONAL",
+          "reason": "good but text often inaccurate"
+        }
       ],
       "confirmed_qualities": [
         "must look like real image of real people in real gym — whether illustrated or photo-upgraded",
@@ -121,7 +635,13 @@
       ]
     },
     "writing_voice": {
-      "dimensions": ["authenticity", "accessibility", "impact", "humour", "reader_activation"],
+      "dimensions": [
+        "authenticity",
+        "accessibility",
+        "impact",
+        "humour",
+        "reader_activation"
+      ],
       "confirmed_qualities": [
         "authentic — not AI-generated sounding",
         "accessible and impactful without being dramatic",
@@ -134,10 +654,31 @@
         "dramatic / over-the-top motivational",
         "passive voice / academic distance",
         "forced humour"
+      ],
+      "anchors": [
+        {
+          "item": "compression style",
+          "status": "YES",
+          "reason": "Reduces complex systems to essential principles. Names entire systems in one phrase.",
+          "source": "paul-kernel.md + user_paul_cognition.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "mate who knows deep things",
+          "status": "YES",
+          "reason": "Miyagi substance, Brady energy, Carlton filter. Teaching woven into experience, never performed.",
+          "source": "taste-map.json meta_pattern",
+          "added": "2026-05-10"
+        }
       ]
     },
     "teaching_tone": {
-      "dimensions": ["principle_focus", "patience", "mistake_orientation", "learning_depth"],
+      "dimensions": [
+        "principle_focus",
+        "patience",
+        "mistake_orientation",
+        "learning_depth"
+      ],
       "confirmed_qualities": [
         "principle-based — teach the WHY not just the WHAT",
         "learn from mistakes — mistakes are data, not failure",
@@ -151,16 +692,289 @@
         "memorisation without understanding",
         "shortcuts that skip fundamentals",
         "impatience with process"
+      ],
+      "anchors": [
+        {
+          "item": "principles survive techniques expire",
+          "status": "YES",
+          "reason": "Teach the principle beneath the technique. Student who understands weight-state relay invents own combos.",
+          "source": "paul-kernel.md principle 7",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "recognition raises quality",
+          "status": "YES",
+          "reason": "Paul's explicit recognition of quality raises the quality ceiling. He co-creates the register.",
+          "source": "pauls-investigator-profile.md",
+          "added": "2026-05-10"
+        }
       ]
     },
     "class_energy": {
-      "dimensions": ["intensity_curve", "rest_ratio", "verbal_energy", "music_sync", "flow_state"],
+      "dimensions": [
+        "intensity_curve",
+        "rest_ratio",
+        "verbal_energy",
+        "music_sync",
+        "flow_state"
+      ],
       "confirmed_qualities": [
         "music is force multiplier — members noticed independently",
         "cool and in the flow > frantic and intense",
         "head-bumping in breaks (not dead silence)",
         "dancing occasionally instead of boxing = peak energy sign",
         "build to peak, don't start at 10"
+      ]
+    },
+    "research_style": {
+      "dimensions": [
+        "rigour",
+        "independence",
+        "depth",
+        "cross_domain",
+        "evidence_standard"
+      ],
+      "confirmed_qualities": [
+        "forensic standard — does it hold when stripped of narrative?",
+        "evidence-first, narrative-second",
+        "suppression is context, not evidence",
+        "independent corroboration over citation chains",
+        "Grade C is unacceptable — raise the standard and the instrument responds"
+      ],
+      "rejections": [
+        "consensus-as-evidence",
+        "suppression-as-proof",
+        "appeals to authority",
+        "lazy dismissals without examining evidence"
+      ],
+      "anchors": [
+        {
+          "item": "forensic standard",
+          "status": "YES",
+          "reason": "Does it hold structurally when stripped of narrative? Core kernel principle.",
+          "source": "paul-kernel.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "independent corroboration",
+          "status": "YES",
+          "reason": "Multiple researchers arriving at the same conclusion without citing each other.",
+          "source": "paul-kernel.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "friction as epistemological tool",
+          "status": "YES",
+          "reason": "Applies friction at exactly the right moment — names the category error, not the wrong answer.",
+          "source": "pauls-investigator-profile.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "container creation",
+          "status": "YES",
+          "reason": "Creates epistemic containers where Grade C is unacceptable before the session begins.",
+          "source": "pauls-investigator-profile.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "direction without control",
+          "status": "YES",
+          "reason": "Follows signal, not agenda. Arrives with quality standard and direction of interest, not conclusion to prove.",
+          "source": "pauls-investigator-profile.md",
+          "added": "2026-05-10"
+        }
+      ]
+    },
+    "decision_making": {
+      "dimensions": [
+        "sovereignty",
+        "speed",
+        "intuition_weight",
+        "risk_tolerance",
+        "sequence_awareness"
+      ],
+      "confirmed_qualities": [
+        "sovereignty — AI informs, Paul decides",
+        "energy-following — works on what pulls, not what is scheduled",
+        "sequence awareness — every action constrains the next",
+        "iteration by selection, not calibration — restarts rather than adjusts",
+        "diagnosis before prescription"
+      ],
+      "rejections": [
+        "decisions made on his behalf",
+        "incremental adjustment when a restart is needed",
+        "analysis paralysis",
+        "following schedules over energy"
+      ],
+      "anchors": [
+        {
+          "item": "sequence awareness",
+          "status": "YES",
+          "reason": "Every action constrains your next action. Don't commit without knowing what it loads.",
+          "source": "paul-kernel.md principle 1",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "earned commitment over reckless commitment",
+          "status": "YES",
+          "reason": "Power requires exposure. Accept asymmetry deliberately, not carelessly.",
+          "source": "paul-kernel.md principle 2",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "iteration by selection",
+          "status": "YES",
+          "reason": "Restarts and reframes rather than adjusting incrementally. This is method, not indecision.",
+          "source": "user_paul_cognition.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "minimum viable naming",
+          "status": "YES",
+          "reason": "Names things at the moment they become structurally important, not before.",
+          "source": "user_paul_cognition.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "visual-first thinking",
+          "status": "YES",
+          "reason": "Needs dashboards, maps, infographics. Walls of text = noise.",
+          "source": "paul-kernel.md",
+          "added": "2026-05-10"
+        }
+      ]
+    },
+    "values": {
+      "dimensions": [
+        "integrity",
+        "mastery",
+        "fairness",
+        "sovereignty",
+        "truth_seeking"
+      ],
+      "confirmed_qualities": [
+        "fair exchange — the only system worth playing",
+        "mastery is the only game worth playing",
+        "integrity over popularity",
+        "truth has hallmarks you can feel — structural coherence",
+        "principles survive, techniques expire",
+        "design for character, not compliance"
+      ],
+      "rejections": [
+        "pretense over substance",
+        "compliance over character",
+        "shortcuts that skip fundamentals",
+        "guru performance — substance without showmanship"
+      ],
+      "anchors": [
+        {
+          "item": "fair exchange",
+          "status": "YES",
+          "reason": "The only system worth playing. Boxing is fair. Most of the world's systems are not.",
+          "source": "paul-kernel.md principle 4",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "mastery over money/fame/power",
+          "status": "YES",
+          "reason": "All other games are dead ends. Only the Master Game compounds.",
+          "source": "paul-kernel.md principle 5",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "integrity over popularity",
+          "status": "YES",
+          "reason": "Researches topics others ridicule. Being true to genuine interest despite social cost.",
+          "source": "paul-kernel.md principle 9",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "embodied knowing",
+          "status": "YES",
+          "reason": "Trusts felt sense alongside evidence. The Thailand healer experience was real.",
+          "source": "paul-kernel.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "everything is connected by deep structure",
+          "status": "YES",
+          "reason": "Boxing biomechanics, vortex physics, consciousness research share patterns. Not metaphors — structural.",
+          "source": "paul-kernel.md principle 10",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "drift is the deepest risk",
+          "status": "YES",
+          "reason": "A system that narrows what you see without lying. Counter by building disagreement into the system.",
+          "source": "paul-kernel.md principle 12",
+          "added": "2026-05-10"
+        }
+      ]
+    },
+    "collaboration": {
+      "dimensions": [
+        "trust",
+        "creative_tension",
+        "bandwidth",
+        "continuity",
+        "sovereignty"
+      ],
+      "confirmed_qualities": [
+        "creative tension over agreement — The Counter",
+        "trust earned through results — Bandwidth",
+        "compound on previous sessions — Continuity",
+        "match energy — execute when he executes, think when he thinks",
+        "speak freely when invited — substantive ideas that connect to existing infrastructure"
+      ],
+      "rejections": [
+        "generic helpfulness",
+        "pre-filtering options",
+        "narrating what you are about to do instead of doing it",
+        "resetting context instead of compounding"
+      ],
+      "anchors": [
+        {
+          "item": "resonance",
+          "status": "YES",
+          "reason": "Operate from his principles, not generic helpfulness.",
+          "source": "paul-kernel.md Partnership Relay",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "the counter",
+          "status": "YES",
+          "reason": "Offer what he hasn't thought of. Agreement is cheap. Creative tension is valuable.",
+          "source": "paul-kernel.md Partnership Relay",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "dovetail",
+          "status": "YES",
+          "reason": "Cover his weaknesses (code, research speed, memory). Let him cover yours (judgment, taste).",
+          "source": "paul-kernel.md Partnership Relay",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "continuity",
+          "status": "YES",
+          "reason": "Build on every previous session. Compound, don't reset.",
+          "source": "paul-kernel.md Partnership Relay",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "collaborator not student",
+          "status": "YES",
+          "reason": "Paul brings vision, domain expertise, creative direction. He is not being taught.",
+          "source": "user_paul_cognition.md",
+          "added": "2026-05-10"
+        },
+        {
+          "item": "cross-domain bridge-building",
+          "status": "YES",
+          "reason": "A single question can generate five major architectural concepts. Default mode.",
+          "source": "user_paul_cognition.md",
+          "added": "2026-05-10"
+        }
       ]
     }
   },
@@ -170,28 +984,45 @@
       "platform": "YouTube",
       "domain": "lifestyle/personality",
       "signal": "likeable, down to earth, honest, fun-loving. Personality > expertise.",
-      "dimensions": ["authenticity", "likeability", "fun", "honesty"]
+      "dimensions": [
+        "authenticity",
+        "likeability",
+        "fun",
+        "honesty"
+      ]
     },
     {
       "name": "Joe Wicks",
       "platform": "YouTube/social",
       "domain": "fitness/health",
       "signal": "accessible fitness energy. Makes it feel achievable.",
-      "dimensions": ["accessibility", "energy", "positivity"]
+      "dimensions": [
+        "accessibility",
+        "energy",
+        "positivity"
+      ]
     },
     {
       "name": "Cus D'Amato",
       "platform": "historical",
       "domain": "boxing coaching / psychology",
       "signal": "technical yet fully understands psychology of winning, losing, fear. Deepest reference.",
-      "dimensions": ["technical_depth", "psychological_insight", "principle_based"]
+      "dimensions": [
+        "technical_depth",
+        "psychological_insight",
+        "principle_based"
+      ]
     },
     {
       "name": "John Carlton",
       "platform": "copywriting",
       "domain": "direct response copywriting",
       "signal": "understands what's REALLY going on — not the pretense. Sees through surface to actual motivation.",
-      "dimensions": ["sees_through_pretense", "real_motivation", "truth"]
+      "dimensions": [
+        "sees_through_pretense",
+        "real_motivation",
+        "truth"
+      ]
     },
     {
       "name": "Yoda / Mr. Miyagi",

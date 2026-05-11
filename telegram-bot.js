@@ -216,6 +216,13 @@ const TG_MAX = 4000; // leave margin below 4096
 async function safeSend(chatId, text, opts = {}) {
   if (!text) return;
   text = String(text);
+  // Lymphatic: log bloat + compress filler
+  try {
+    const { logBloat, compress } = await import('./lymphatic.mjs');
+    const caller = new Error().stack?.split('\n')[2]?.match(/at (\w+)/)?.[1] || 'unknown';
+    logBloat(text, caller);
+    text = compress(text);
+  } catch {} // silent — lymphatic is non-critical
 
   // Short message — send directly
   if (text.length <= TG_MAX) {
@@ -1305,6 +1312,29 @@ bot.onText(/^\/pipelines(?:@\w+)?\s+(\w+)$/, async (msg, match) => {
   } catch (err) {
     console.error('Pipeline comparison error:', err);
     await safeSend(chatId, `Pipeline compare failed: ${err.message}`);
+  }
+});
+
+// /rate — Lymphatic feedback (rate a Cathedral output)
+bot.onText(/^\/rate(?:@\w+)?\s+(\w+)\s+(\d)(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const { recordRating } = await import('./lymphatic.mjs');
+    recordRating(match[1], parseInt(match[2]), match[3] || '');
+    await safeSend(chatId, `Rated ${match[1]}: ${match[2]}/5${match[3] ? ' — ' + match[3] : ''}`);
+  } catch (err) {
+    await safeSend(chatId, `Rate failed: ${err.message}`);
+  }
+});
+
+// /bloat — Lymphatic bloat report
+bot.onText(/^\/bloat(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { bloatReport } = await import('./lymphatic.mjs');
+    await safeSend(chatId, bloatReport());
+  } catch (err) {
+    await safeSend(chatId, `Bloat report failed: ${err.message}`);
   }
 });
 
@@ -3065,6 +3095,49 @@ bot.on('message', async (msg) => {
 
   // Ignore other slash commands
   if (msg.text.startsWith('/')) return;
+
+  // ── Passive Belief Scanner ──────────────────────────────────────────────────
+  // Lightweight regex scan for belief signals. No LLM calls. False positives OK.
+  if (isPaul(chatId) && msg.text.length > 10) {
+    try {
+      const text = msg.text;
+      const beliefPatterns = [
+        // High confidence signals
+        { pattern: /\b(?:I(?:'m| am) certain|I know for (?:a )?fact|this is (?:definitely |absolutely )?true|(?:it's |that's )proven|(?:it's |that's )verified)\b/i, confidence: 0.95 },
+        { pattern: /\b(?:I(?:'m| am) sure|clearly|obviously|no doubt|without question|100%|definitely)\b/i, confidence: 0.85 },
+        // Medium confidence
+        { pattern: /\b(?:I believe|I think|I reckon|most likely|probably|it seems like|it looks like|my view is|my take is)\b/i, confidence: 0.65 },
+        { pattern: /\b(?:I suspect|perhaps|might be|possibly|could be|seems to be)\b/i, confidence: 0.45 },
+        // Revision signals
+        { pattern: /\b(?:I was wrong|I(?:'ve| have) changed my mind|I used to think|actually (?:no|wait)|I take (?:that |it )back|on second thought)\b/i, confidence: 0.30 },
+        { pattern: /\b(?:I don(?:'t| not) know|not sure|hard to say|uncertain|can(?:'t| not) tell|no idea)\b/i, confidence: 0.20 },
+        // Strong assertion patterns
+        { pattern: /\bX is (?:definitely|absolutely|clearly|obviously)\b/i, confidence: 0.90 },
+        { pattern: /\b(?:the truth is|the reality is|the fact is|what(?:'s| is) really going on is)\b/i, confidence: 0.80 },
+      ];
+
+      for (const { pattern, confidence } of beliefPatterns) {
+        if (pattern.test(text)) {
+          // Extract a topic from the sentence containing the match
+          const sentences = text.split(/[.!?\n]+/).filter(s => s.trim().length > 5);
+          const matchingSentence = sentences.find(s => pattern.test(s)) || sentences[0] || text;
+          const topic = matchingSentence.trim().slice(0, 80).replace(/^(I think |I believe |I reckon |I suspect |I know )/i, '').trim();
+
+          recordStatement(
+            topic,
+            matchingSentence.trim().slice(0, 200),
+            confidence,
+            'passive_scan',
+            'telegram'
+          );
+          console.log(`[belief-tracker] passive capture: "${topic.slice(0, 40)}..." conf=${confidence}`);
+          break; // one match per message
+        }
+      }
+    } catch (err) {
+      console.error('[belief-tracker] passive scan error:', err.message);
+    }
+  }
 
   // Route everything else through Cath
   try {
