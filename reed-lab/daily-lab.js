@@ -133,6 +133,47 @@ const EXPERIMENTAL = [
 const NIGHTLY_STYLES = ['pro_photo', 'noir', 'dramatic'];
 const WEEKLY_BONUS = ['ippo', 'neon', 'manga', 'poster']; // Sunday gets all
 
+// ── CATHY STANDARD: Reed knows Paul ─────────────────────────────────────────
+// Reed is making visuals for Paul Logan. Boxing gym owner, Hong Kong.
+// He built the Cathedral. He has a graphic novel character called Logan.
+// His aesthetic: dark, clean, observatory meets cockpit. He hates AI slop.
+// He rated Reed's output 2/5. This function loads preferences to fix that.
+
+function loadTastePreferences() {
+  const prefs = { preferredStyles: null, rejections: [], anchors: [] };
+  try {
+    const tasteMap = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'taste-map.json'), 'utf-8'));
+    prefs.anchors = (tasteMap.anchors || []).filter(a => a.domain === 'visual' || a.domain === 'music' || a.domain === 'writing_voice');
+    prefs.rejections = (tasteMap.rejections || []).map(r => r.pattern || r);
+  } catch {}
+
+  // Read lymphatic ratings for style preferences
+  try {
+    const ls = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'Cathedral', 'lymphatic-state.json'), 'utf-8'));
+    const reedRatings = (ls.ratings || []).filter(r => r.questionId === 'reed' || r.questionId === 'reed-lab');
+    if (reedRatings.length) {
+      prefs.latestRating = reedRatings[reedRatings.length - 1];
+    }
+  } catch {}
+
+  return prefs;
+}
+
+function weightStyles(baseStyles, catalogue) {
+  // Weight styles Paul engages with more. Use catalogue stats.
+  const stats = catalogue.stats?.by_style || {};
+  const total = Object.values(stats).reduce((s, v) => s + v, 0) || 1;
+
+  // If a style has been generated a lot but never rated well, deprioritize
+  // For now: rotate experimental styles to avoid repetition
+  const lastNight = catalogue.photos?.slice(-2).flatMap(p => p.styles_done || []) || [];
+  const fresh = baseStyles.filter(s => !lastNight.includes(s));
+
+  // Always include pro_photo (baseline). Rotate the other two.
+  if (fresh.length >= 2) return ['pro_photo', ...fresh.filter(s => s !== 'pro_photo').slice(0, 2)];
+  return baseStyles;
+}
+
 function loadCatalogue() {
   if (fs.existsSync(CATALOGUE)) return JSON.parse(fs.readFileSync(CATALOGUE, 'utf8'));
   return { photos: [], generations: [], stats: { total_generated: 0, by_style: {} } };
@@ -262,7 +303,19 @@ async function run() {
   console.log('[reed-lab] Daily Lab starting...');
   const catalogue = loadCatalogue();
   const isSunday = new Date().getDay() === 0;
-  const styles = isSunday ? [...NIGHTLY_STYLES, ...WEEKLY_BONUS] : NIGHTLY_STYLES;
+
+  // Taste gate — load Paul's preferences before generating anything
+  const taste = loadTastePreferences();
+  if (taste.rejections.length) {
+    console.log(`[reed-lab] Taste gate: ${taste.anchors.length} anchors, ${taste.rejections.length} rejections loaded`);
+  }
+  if (taste.latestRating) {
+    console.log(`[reed-lab] Paul's latest rating: ${taste.latestRating.rating}/5 — "${taste.latestRating.notes || 'no notes'}"`);
+  }
+
+  // Style selection — weighted by preference, rotated to avoid repetition
+  const baseStyles = isSunday ? [...NIGHTLY_STYLES, ...WEEKLY_BONUS] : NIGHTLY_STYLES;
+  const styles = weightStyles(baseStyles, catalogue);
 
   // Get photos to process
   let photos = getNewPhotos();

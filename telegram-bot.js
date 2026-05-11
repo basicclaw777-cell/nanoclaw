@@ -1338,6 +1338,61 @@ bot.onText(/^\/bloat(?:@\w+)?$/, async (msg) => {
   }
 });
 
+// /physician — Cathedral health diagnosis
+bot.onText(/^\/physician(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    await safeSend(chatId, 'The Physician is examining the Cathedral...');
+    const { execSync } = await import('child_process');
+    execSync('node /Users/basicclaw777/nanoclaw/the-physician.mjs', { timeout: 60000 });
+    await safeSend(chatId, 'Diagnosis complete — check above message.');
+  } catch (err) {
+    await safeSend(chatId, `Physician failed: ${err.message}`);
+  }
+});
+
+// /answer — Physician interview response
+bot.onText(/^\/answer(?:@\w+)?\s+(\d)\s+(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const num = parseInt(match[1]);
+    const response = match[2].trim();
+    const ids = ['changed_mind', 'actually_used', 'ignored', 'morning_rate', 'blind_spot'];
+    const id = ids[num - 1];
+    if (!id) { await safeSend(chatId, 'Use 1-5. Example: /answer 1 I changed my mind about X'); return; }
+
+    // Save to physician state
+    const fs = await import('fs');
+    const statePath = path.join(process.env.HOME, 'Cathedral/physician-state.json');
+    let state = {};
+    try { state = JSON.parse(fs.readFileSync(statePath, 'utf-8')); } catch {}
+    if (!state.interviews) state.interviews = [];
+    state.interviews.push({ date: new Date().toISOString().slice(0, 10), question: id, response });
+    if (state.interviews.length > 100) state.interviews = state.interviews.slice(-100);
+    fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
+
+    // Feed belief tracker if Q1 (changed mind)
+    if (num === 1 && typeof recordStatement === 'function') {
+      try { recordStatement(response, 0.3, 'physician_interview', 'changed_mind'); } catch {}
+    }
+
+    // Feed lymphatic ratings if Q4 (morning rate)
+    if (num === 4) {
+      try {
+        const ratingMatch = response.match(/(\d)/);
+        if (ratingMatch) {
+          const { recordRating } = await import('./lymphatic.mjs');
+          recordRating('morning_sequence', parseInt(ratingMatch[1]), response);
+        }
+      } catch {}
+    }
+
+    await safeSend(chatId, `Recorded answer ${num}: ${id}. ${num === 1 ? 'Fed to belief tracker.' : num === 4 ? 'Fed to lymphatic ratings.' : 'Filed.'}`);
+  } catch (err) {
+    await safeSend(chatId, `Answer failed: ${err.message}`);
+  }
+});
+
 // /harvest-deepseek — harvest DeepSeek transcripts from ~/raw-chats/deepseek/
 bot.onText(/^\/harvest-deepseek(?:@\w+)?$/, async (msg) => {
   const chatId = msg.chat.id;
