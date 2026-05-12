@@ -1136,4 +1136,4 @@ the-timekeeper to go offline. Don't repeat it.
 - Model: DeepSeek via API
 - Detection: reads session harvests, fires on "the triple" (pushed past surface + discovered mechanism + built capture)
 - CLI: node prospector.js [date] (scans harvests for that date)
-- TRIGGER: UNASSIGNED — needs PM2 cron daily 19:00 HKT
+- TRIGGER: PM2 cron prospector (id 48) at 19:00 HKT daily (0 11 * * * UTC), no-autorestart
