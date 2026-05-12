@@ -191,10 +191,7 @@ function checkOpenPositions(prices, portfolio) {
           ? currentPrice * 0.98  // 2% trailing stop
           : currentPrice * 1.02;
         if ((isLong && newSL > pos.stop_loss) || (!isLong && newSL < pos.stop_loss)) {
-          // Update SL in DB
-          try {
-            const db = getOpenPositions.__db || (await import('./trade-logger.js')).default;
-          } catch(e) {}
+          // Trailing stop logged below
           console.log(`  ${pos.asset} ${pos.strategy}: trailing stop tightened from $${pos.stop_loss.toFixed(2)} to $${newSL.toFixed(2)} (${daysOpen.toFixed(0)} days, +${(moveFromEntry*100).toFixed(1)}%)`);
         }
       }

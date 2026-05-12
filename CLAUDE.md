@@ -1137,3 +1137,21 @@ the-timekeeper to go offline. Don't repeat it.
 - Detection: reads session harvests, fires on "the triple" (pushed past surface + discovered mechanism + built capture)
 - CLI: node prospector.js [date] (scans harvests for that date)
 - TRIGGER: PM2 cron prospector (id 48) at 19:00 HKT daily (0 11 * * * UTC), no-autorestart
+
+## Hermes Agent — Court Member #20: The Liaison (installed 2026-05-12)
+- Install: ~/.hermes/ (hermes-agent v0.13.0, Nous Research, open source)
+- SOUL: ~/.hermes/SOUL.md (Cathedral personality, Court Member #20)
+- Config: ~/.hermes/config.yaml, ~/.hermes/.env
+- Model: gemini-2.5-flash (free, Google AI Studio)
+- Gateway: launchd service ai.hermes.gateway (auto-starts on boot)
+- Skills: 87 bundled (macos-computer-use, obsidian, browser, terminal, github, etc)
+- Browser: Playwright Chromium installed (CDP + local Chrome)
+- Command: hermes (CLI), hermes -z "prompt" (one-shot)
+- Role: browser automation, web research, form filling, account management
+- TRIGGER: gateway service (always running). Telegram integration pending (needs BotFather bot token)
+
+## Trading Safety Net (built 2026-05-12)
+- position-guardian.js — PM2 5min cron, independent SL/TP checker
+- trader-watchdog.sh — PM2 5min cron, restarts trader if down + Telegram alert
+- Triple net: trader (4h signals) + guardian (5min SL/TP) + watchdog (5min restart)
+- Crash was 2 days undetected before this — now max 5 minutes

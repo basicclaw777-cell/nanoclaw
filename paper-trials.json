@@ -1,0 +1,68 @@
+{
+  "trials": {
+    "content": {
+      "name": "Content Auto-Post",
+      "description": "Reed generates → Paul reviews → track approval rate",
+      "metric": "approval_rate",
+      "graduation": {
+        "min_votes": 30,
+        "approval_rate": 0.8,
+        "max_embarrass_rate": 0.05
+      },
+      "votes": [],
+      "started": "2026-05-12T07:05:59.307Z",
+      "status": "active"
+    },
+    "trading": {
+      "name": "Trading",
+      "description": "Paper $10K → live signals → track win rate + profit factor",
+      "metric": "win_rate",
+      "graduation": {
+        "min_trades": 20,
+        "win_rate": 0.55,
+        "profit_factor": 1.3,
+        "min_days": 14
+      },
+      "votes": [],
+      "started": "2026-05-07T00:00:00Z",
+      "status": "active"
+    },
+    "grants": {
+      "name": "Grant Auto-Submit",
+      "description": "Grant Hunter scans → Paul reviews shortlist → track agreement",
+      "metric": "agreement_rate",
+      "graduation": {
+        "min_votes": 40,
+        "agreement_rate": 0.7
+      },
+      "votes": [],
+      "started": "2026-05-12T07:05:59.307Z",
+      "status": "queued"
+    },
+    "leads": {
+      "name": "Gym Lead Outreach",
+      "description": "Scrape + draft outreach → Paul grades → track send rate",
+      "metric": "send_rate",
+      "graduation": {
+        "min_votes": 30,
+        "send_rate": 0.6
+      },
+      "votes": [],
+      "started": "2026-05-12T07:05:59.307Z",
+      "status": "queued"
+    },
+    "products": {
+      "name": "Product Auto-Build",
+      "description": "Prospector briefs → Paul grades → track quality",
+      "metric": "yes_rate",
+      "graduation": {
+        "min_votes": 10,
+        "yes_rate": 0.5,
+        "max_embarrass_rate": 0
+      },
+      "votes": [],
+      "started": "2026-05-12T07:05:59.307Z",
+      "status": "active"
+    }
+  }
+}
