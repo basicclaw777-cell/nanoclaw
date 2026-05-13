@@ -544,6 +544,8 @@ RESEARCH
 CREATIVE
 /reed [caption on photo] — visual generation
 /pipelines [body] — 5-pipeline comparison
+/ling [question] — ask Ling (HK AI advisor)
+/ling draft [pillar] [topic] — generate content draft
 
 SYSTEM
 /projects — project status board
@@ -4038,6 +4040,104 @@ bot.onText(/^\/predict-rebuild(?:@\w+)?$/i, async (msg) => {
   }
 });
 
+// ── /ling — Ling AI Tech Reviewer (advisory + content pipeline) ─────────────
+bot.onText(/^\/ling(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const input = (match?.[1] || '').trim();
+
+  try {
+    const { askLing, generateDraft, getStatus, getDrafts, readDraft, logReview, logPosition } = await import('./ling-engine.js');
+
+    // /ling — status
+    if (!input) {
+      const s = getStatus();
+      let status = `🔴 *LING — HK AI Tech Reviewer*\n\n`;
+      status += `Published: ${s.published} posts\n`;
+      status += `Drafts: ${s.drafts} pending\n`;
+      status += `Reviews logged: ${s.reviews}\n`;
+      status += `Positions: ${s.positions}\n`;
+      status += `Predictions: ${s.predictions}\n`;
+      status += `GitHub drops: ${s.github_drops}\n`;
+      status += `Conversations: ${s.conversations}\n\n`;
+      status += `Commands:\n`;
+      status += `/ling [question] — ask Ling anything\n`;
+      status += `/ling draft [pillar] [topic] — generate draft post\n`;
+      status += `/ling drafts — list pending drafts\n`;
+      status += `/ling read [filename] — read a draft\n`;
+      status += `/ling log [tool] [verdict] [summary] — log a review\n`;
+      status += `/ling position [topic] [stance] — log a position`;
+      return safeSend(chatId, status, { parse_mode: 'Markdown' });
+    }
+
+    // /ling drafts — list pending
+    if (input.toLowerCase() === 'drafts') {
+      const drafts = getDrafts();
+      if (drafts.length === 0) return safeSend(chatId, 'No drafts pending. Use `/ling draft [pillar] [topic]` to generate one.', { parse_mode: 'Markdown' });
+      let list = '🔴 *LING Drafts*\n\n';
+      drafts.slice(0, 10).forEach(d => { list += `• \`${d}\`\n`; });
+      list += `\n/ling read [filename] to view`;
+      return safeSend(chatId, list, { parse_mode: 'Markdown' });
+    }
+
+    // /ling read [filename]
+    if (input.toLowerCase().startsWith('read ')) {
+      const filename = input.slice(5).trim();
+      const content = readDraft(filename);
+      if (!content) return safeSend(chatId, `Draft not found: ${filename}`);
+      return safeSend(chatId, content);
+    }
+
+    // /ling draft [pillar] [topic]
+    if (input.toLowerCase().startsWith('draft ')) {
+      const parts = input.slice(6).trim();
+      const spaceIdx = parts.indexOf(' ');
+      if (spaceIdx < 0) return safeSend(chatId, 'Usage: `/ling draft [pillar] [topic]`\nPillars: tool_reviews, setup_guides, github_drops, hk_landscape, sovereignty, myth_demolition', { parse_mode: 'Markdown' });
+
+      const pillar = parts.slice(0, spaceIdx).trim();
+      const topic = parts.slice(spaceIdx + 1).trim();
+
+      safeSend(chatId, `🔴 Ling is drafting a ${pillar.replace(/_/g, ' ')} post about "${topic}"...`);
+
+      const result = await generateDraft(pillar, topic);
+      if (result.error) return safeSend(chatId, `❌ ${result.error}`);
+
+      safeSend(chatId, `✅ Draft saved: \`${result.filename}\`\n\n${result.draft}`, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    // /ling log [tool] [verdict] [summary]
+    if (input.toLowerCase().startsWith('log ')) {
+      const parts = input.slice(4).trim().split(/\s+/);
+      if (parts.length < 3) return safeSend(chatId, 'Usage: /ling log [tool] [red|yellow|green] [summary]');
+      const tool = parts[0];
+      const verdict = parts[1];
+      const summary = parts.slice(2).join(' ');
+      logReview(tool, verdict, summary);
+      return safeSend(chatId, `🔴 Logged: ${tool} — ${verdict}. Ling remembers.`);
+    }
+
+    // /ling position [topic] [stance]
+    if (input.toLowerCase().startsWith('position ')) {
+      const parts = input.slice(9).trim();
+      const spaceIdx = parts.indexOf(' ');
+      if (spaceIdx < 0) return safeSend(chatId, 'Usage: /ling position [topic] [stance]');
+      const topic = parts.slice(0, spaceIdx).trim();
+      const stance = parts.slice(spaceIdx + 1).trim();
+      logPosition(topic, stance);
+      return safeSend(chatId, `🔴 Position logged: ${topic} — "${stance}"`);
+    }
+
+    // /ling [question] — advisory mode
+    safeSend(chatId, '🔴 Ling is thinking...');
+    const response = await askLing(input);
+    if (!response) return safeSend(chatId, '❌ No response from Ling.');
+    safeSend(chatId, `🔴 *LING*\n\n${response}`, { parse_mode: 'Markdown' });
+
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
 // ── /trial — Paper Trial Dashboard ──────────────────────────────────────────
 bot.onText(/^\/trial(?:@\w+)?(?:\s+(.+))?$/i, async (msg, match) => {
   const chatId = msg.chat.id;
@@ -5103,7 +5203,7 @@ import { createRequire } from 'module';
 const _require = createRequire(import.meta.url);
 const agentEngine = _require(path.join(process.env.HOME, 'Cathedral', 'agents', 'agent-engine.js'));
 
-const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼' };
+const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼', ling: '🔴' };
 
 function registerAgentCommand(agentId, pattern) {
   bot.onText(pattern, async (msg, match) => {
@@ -5137,6 +5237,7 @@ registerAgentCommand('boxing', /^\/boxing-agent(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('br', /^\/br-agent(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('universe', /^\/universe(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('trading', /^\/trading-agent(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('ling', /^\/ling(?:@\w+)?\s+(.+)$/is);
 
 // /agents — list all available agents
 bot.onText(/^\/agents(?:@\w+)?\s*$/i, async (msg) => {
