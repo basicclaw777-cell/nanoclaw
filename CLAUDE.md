@@ -1153,11 +1153,12 @@ the-timekeeper to go offline. Don't repeat it.
 - Role: browser automation, web research, form filling, account management
 - TRIGGER: gateway service (always running). Telegram integration pending (needs BotFather bot token)
 
-## Trading Safety Net (built 2026-05-12)
-- position-guardian.js — PM2 5min cron, independent SL/TP checker
-- trader-watchdog.sh — PM2 5min cron, restarts trader if down + Telegram alert
-- Triple net: trader (4h signals) + guardian (5min SL/TP) + watchdog (5min restart)
-- Crash was 2 days undetected before this — now max 5 minutes
+## Trading Safety Net — Simplified (2026-05-13)
+- Previous triple net (trader + position-guardian + trader-watchdog + resurrector) caused feedback spam loop
+- PM2 cron_restart fires even on stopped processes — `pm2 stop` is NOT enough, must `pm2 delete`
+- Now: single trader process, cron `0 0,12 * * *` (8am + 8pm HKT, twice daily)
+- Event-driven notifications: only sends Telegram on new trades or position closes. Quiet runs = silence.
+- No watchdog, no resurrector, no guardian. Simpler = more reliable.
 
 ## X/Twitter Integration (built 2026-05-13)
 - Library: @the-convocation/twitter-scraper (npm, free, no API key)
@@ -1186,15 +1187,16 @@ the-timekeeper to go offline. Don't repeat it.
 - CLI flags: `--local` for offline hermes3 mode
 - Orc reads: operational map, harvests (web+terminal), standing instructions, cath state, all agent states, inter-agent messages
 - Architecture: one engine, config-per-agent. Add new agent = context .md + registry entry. No code changes.
-- Phase 1 agents: Head Orchestrator, Boxing Intelligence, BR Operations
+- 5 agents active: Head Orchestrator, Boxing Intelligence, BR Operations, Trading Intelligence, Universe Intelligence
 - Purpose: replaces Claude.ai web project chats. Shared filesystem, inter-agent messaging, no copy-paste bridge.
 - Cross-domain sync: ~/Cathedral/agents/cross-domain-sync.js — scans harvests for multi-domain content, extracts domain-specific findings via DeepSeek, routes to agent inboxes via project-messages.cjs
-- Telegram: /sync (manual trigger)
+- Telegram: /orc, /boxing-agent, /br-agent, /trading-agent, /universe, /sync, /uptake
 - State: ~/Cathedral/agents/sync-state.json (tracks which sessions already synced)
-- First run: 95 cross-domain sessions found, messages routed to all 3 agents
-- Agent Hub visual: localhost:8080/agents — 4 views (Flow, Agents, Timeline, Feed)
-- Flow tab: connection map canvas, gap alerts, cross-domain session cards
-- API: /agents/data on cath-bridge (registry, states, calls, harvests, connections, crossReferences)
+- Expanded run: 124 cross-domain sessions found, 360 messages routed across 5 agents
+- Agent Hub visual: localhost:8080/agents — uptake rings, gap alerts, connection map
+- Uptake measurement: 3 levels (Delivered/Loaded/Referenced), keyword extraction, per-agent stats at agents/uptake/
+- Orc gate: 60% uptake before adding new agents. All 5 above threshold.
+- API: /agents/data on cath-bridge (registry, states, calls, harvests, connections, crossReferences, uptake)
 
 ## Terminal Session Harvester (built 2026-05-13)
 - Script: ~/nanoclaw/terminal-harvester.js (ESM)
