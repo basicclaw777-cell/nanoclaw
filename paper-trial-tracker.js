@@ -63,6 +63,15 @@ function load() {
           votes: [],
           started: new Date().toISOString(),
           status: 'active'
+        },
+        fifthgear: {
+          name: 'Fifth Gear',
+          description: 'LLM extraction toolkit → The Guide PDF → track sales + feedback quality',
+          metric: 'approval_rate',
+          graduation: { min_votes: 20, approval_rate: 0.70, min_days: 14 },
+          votes: [],
+          started: new Date().toISOString(),
+          status: 'queued'
         }
       }
     };

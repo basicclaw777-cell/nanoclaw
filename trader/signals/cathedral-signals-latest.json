@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-05-10T20:48:10.110534",
-  "strategy_count": 9,
-  "total_signals": 10,
+  "timestamp": "2026-05-13T15:51:11.201499",
+  "strategy_count": 10,
+  "total_signals": 14,
   "signals": [
     {
       "source": "gann_geometry",
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC approaching Gann ordinal level $80767 from above (-0.2% away) \u2014 geometric resistance",
+      "reasoning": "BTC approaching Gann ordinal level $80791 from above (-0.2% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
@@ -16,15 +16,47 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH approaching Gann ordinal level $2299 from above (-1.0% away) \u2014 geometric resistance",
+      "reasoning": "ETH approaching Gann ordinal level $2276 from above (-1.0% away) \u2014 geometric resistance",
+      "type": "gann_geometry"
+    },
+    {
+      "source": "gann_geometry",
+      "asset": "ARB",
+      "direction": "short",
+      "strength": 0.55,
+      "reasoning": "ARB approaching Gann ordinal level $0 from above (0.9% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
       "source": "fibonacci_time",
-      "asset": "ETH",
+      "asset": "BTC",
       "direction": "long",
-      "strength": 0.65,
-      "reasoning": "ETH at 0.382 Fib retracement ($2334) in uptrend \u2014 golden ratio bounce zone",
+      "strength": 0.55,
+      "reasoning": "BTC at 0.236 Fib retracement ($80189) in uptrend \u2014 golden ratio bounce zone",
+      "type": "fibonacci_time"
+    },
+    {
+      "source": "fibonacci_time",
+      "asset": "ETH",
+      "direction": "short",
+      "strength": 0.55,
+      "reasoning": "ETH at 0.236 Fib retracement ($2293) in downtrend \u2014 golden ratio resistance",
+      "type": "fibonacci_time"
+    },
+    {
+      "source": "fibonacci_time",
+      "asset": "SOL",
+      "direction": "long",
+      "strength": 0.55,
+      "reasoning": "SOL at 0.236 Fib retracement ($94) in uptrend \u2014 golden ratio bounce zone",
+      "type": "fibonacci_time"
+    },
+    {
+      "source": "fibonacci_time",
+      "asset": "AVAX",
+      "direction": "long",
+      "strength": 0.55,
+      "reasoning": "AVAX at 0.236 Fib retracement ($10) in uptrend \u2014 golden ratio bounce zone",
       "type": "fibonacci_time"
     },
     {
@@ -52,36 +84,36 @@
       "type": "historical_cycles"
     },
     {
-      "source": "vortex_flow",
-      "asset": "ETH",
-      "direction": "long",
-      "strength": 0.65,
-      "reasoning": "ETH in COMPRESSION phase (vol ratio 0.48). Toroidal coil \u2014 energy accumulating. Breakout up expected. Schauberger: implosion precedes creation.",
-      "type": "vortex_flow"
-    },
-    {
       "source": "cymatics_schumann",
       "asset": "BTC",
       "direction": "long",
       "strength": 0.7,
-      "reasoning": "BTC oscillation period 7.8 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 1.4%.",
+      "reasoning": "BTC oscillation period 6.9 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 1.1%.",
       "type": "cymatics_schumann"
     },
     {
       "source": "cymatics_schumann",
-      "asset": "ETH",
+      "asset": "AVAX",
       "direction": "long",
       "strength": 0.7,
-      "reasoning": "ETH oscillation period 6.9 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: down 1.0%.",
+      "reasoning": "AVAX oscillation period 7.8 days resonates with Schumann harmonic 7.83 Hz (within 15%). Market vibrating at Earth's frequency. Trend: up 5.0%.",
       "type": "cymatics_schumann"
     },
     {
-      "source": "cymatics_schumann",
+      "source": "range_trader",
+      "asset": "BTC",
+      "direction": "short",
+      "strength": 0.5930295740564437,
+      "reasoning": "BTC at 79% of 14-day range ($76286.58-$82145.66). Near resistance in range-bound market (7.4% range). Mean reversion sell.",
+      "type": "range_trader"
+    },
+    {
+      "source": "range_trader",
       "asset": "ETH",
-      "direction": "long",
-      "strength": 0.783,
-      "reasoning": "ETH forming STANDING WAVE pattern (symmetry 0.92, range compressing). Cymatic node \u2014 matter self-organizing at resonant frequency. Breakout up expected when node releases energy.",
-      "type": "cymatics_schumann"
+      "direction": "short",
+      "strength": 0.6,
+      "reasoning": "ETH in ultra-tight 4.9% range. Coiled spring \u2014 breakout direction: down based on micro-trend (-1.71%).",
+      "type": "range_trader"
     }
   ]
 }

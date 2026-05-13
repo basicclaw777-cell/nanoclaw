@@ -378,15 +378,23 @@ app.post('/telegram/webhook', async (req, res) => {
     if (!update || !update.update_id) {
       return res.status(400).json({ error: 'invalid update' });
     }
-    // Forward to bot's internal webhook listener
+    // Forward to bot's internal webhook listener (only if bot is listening)
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3000);
     const resp = await fetch('http://127.0.0.1:8443/webhook', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(update),
+      signal: controller.signal,
     });
+    clearTimeout(timer);
     const result = await resp.json();
     res.json(result);
   } catch (err) {
+    // Suppress spam when bot is in polling mode (no webhook listener on 8443)
+    if (err.name === 'AbortError' || err.cause?.code === 'ECONNREFUSED') {
+      return res.json({ ok: true, note: 'bot in polling mode, webhook ignored' });
+    }
     console.error('[webhook] Error forwarding update:', err.message);
     res.status(500).json({ error: err.message });
   }
@@ -1943,6 +1951,154 @@ app.get('/looking-glass', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'looking-glass.html'));
 });
 
+// ── Agent Hub ─────────────────────────────────────────────────────────────
+
+app.get('/agents', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'agents', 'agent-hub.html'));
+});
+
+app.get('/agents/data', (req, res) => {
+  try {
+    const agentsDir = path.join(HOME, 'Cathedral', 'agents');
+    const registry = JSON.parse(fs.readFileSync(path.join(agentsDir, 'registry.json'), 'utf8'));
+    const stagingDir = path.join(HOME, 'cathedral-vault', '00_Staging', 'cathedral');
+
+    // Agent states
+    const states = {};
+    const stateDir = path.join(agentsDir, 'state');
+    if (fs.existsSync(stateDir)) {
+      for (const f of fs.readdirSync(stateDir).filter(f => f.endsWith('.json'))) {
+        try {
+          states[f.replace('.json', '')] = JSON.parse(fs.readFileSync(path.join(stateDir, f), 'utf8'));
+        } catch {}
+      }
+    }
+
+    // Call log (last 100)
+    const logPath = path.join(HOME, 'Cathedral', 'agent-calls.jsonl');
+    let calls = [];
+    if (fs.existsSync(logPath)) {
+      const lines = fs.readFileSync(logPath, 'utf8').trim().split('\n').filter(Boolean);
+      calls = lines.slice(-100).map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+    }
+
+    // Harvests (all types, last 30)
+    let harvests = [];
+    if (fs.existsSync(stagingDir)) {
+      harvests = fs.readdirSync(stagingDir)
+        .filter(f => f.startsWith('session-harvest-') || f.startsWith('terminal-harvest-') || f.startsWith('orc-session-'))
+        .map(f => {
+          const stat = fs.statSync(path.join(stagingDir, f));
+          const content = fs.readFileSync(path.join(stagingDir, f), 'utf8');
+          const titleMatch = content.match(/^title:\s*"?([^"\n]+)"?/m);
+          const msgsMatch = content.match(/^messages:\s*(\d+)/m);
+          const turnsMatch = content.match(/^turns:\s*(\d+)/m);
+          const typeMatch = content.match(/^type:\s*(\S+)/m);
+          return {
+            name: f,
+            date: stat.mtime.toISOString(),
+            size: stat.size,
+            title: titleMatch ? titleMatch[1] : f,
+            messages: msgsMatch ? parseInt(msgsMatch[1]) : (turnsMatch ? parseInt(turnsMatch[1]) : 0),
+            type: typeMatch ? typeMatch[1] : (f.startsWith('terminal-') ? 'terminal' : 'web'),
+          };
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 30);
+    }
+
+    // Inter-agent messages
+    let messages = [];
+    try {
+      const { listInboxes, readMessages } = require(path.join(HOME, 'nanoclaw', 'project-messages.cjs'));
+      const inboxes = listInboxes();
+      messages = inboxes.map(ib => ({
+        projectId: ib.projectId,
+        total: ib.total,
+        unread: ib.unread,
+      }));
+    } catch {}
+
+    // Knowledge overlap: which vault sections do agents share?
+    const connections = [];
+    const agentIds = Object.keys(registry.agents);
+    for (let i = 0; i < agentIds.length; i++) {
+      for (let j = i + 1; j < agentIds.length; j++) {
+        const a = registry.agents[agentIds[i]];
+        const b = registry.agents[agentIds[j]];
+        const aSections = new Set((a.vaultSections || []).map(s => s.split('/')[0]));
+        const bSections = new Set((b.vaultSections || []).map(s => s.split('/')[0]));
+        const shared = [...aSections].filter(s => bSections.has(s));
+        const aOnly = [...aSections].filter(s => !bSections.has(s));
+        const bOnly = [...bSections].filter(s => !aSections.has(s));
+        connections.push({
+          from: agentIds[i],
+          to: agentIds[j],
+          shared,
+          fromOnly: aOnly,
+          toOnly: bOnly,
+          strength: shared.length / Math.max(aSections.size, bSections.size, 1),
+        });
+      }
+    }
+
+    // Harvest content keywords per agent domain (scan recent harvests for domain relevance)
+    const domainKeywords = {
+      orc: ['orchestr', 'project', 'build', 'architect', 'standing instruction', 'cartograph', 'harvest'],
+      boxing: ['boxing', 'punch', 'guard', 'combo', 'technique', 'padwork', 'sparring', 'curriculum', 'drill', 'defence'],
+      br: ['revenue', 'member', 'crm', 'campaign', 'instagram', 'grant', 'churn', 'retention', 'business', 'pricing'],
+    };
+
+    // Scan harvests for cross-domain mentions (which harvests contain info relevant to which agents)
+    const crossReferences = [];
+    for (const h of harvests.slice(0, 20)) {
+      try {
+        const content = fs.readFileSync(path.join(stagingDir, h.name), 'utf8').toLowerCase();
+        const relevant = {};
+        for (const [agentId, keywords] of Object.entries(domainKeywords)) {
+          const hits = keywords.filter(k => content.includes(k));
+          if (hits.length >= 1) relevant[agentId] = hits;
+        }
+        const relevantAgents = Object.keys(relevant);
+        if (relevantAgents.length >= 2) {
+          crossReferences.push({
+            harvest: h.name,
+            date: h.date,
+            agents: relevant,
+            type: h.type,
+            messages: h.messages,
+          });
+        }
+      } catch {}
+    }
+
+    // Uptake stats
+    const uptake = {};
+    const uptakeDir = path.join(agentsDir, 'uptake');
+    if (fs.existsSync(uptakeDir)) {
+      for (const f of fs.readdirSync(uptakeDir).filter(f => f.endsWith('.json'))) {
+        try {
+          uptake[f.replace('.json', '')] = JSON.parse(fs.readFileSync(path.join(uptakeDir, f), 'utf8'));
+        } catch {}
+      }
+    }
+
+    res.json({
+      registry: registry.agents,
+      states,
+      calls,
+      harvests,
+      messages,
+      connections,
+      crossReferences,
+      uptake,
+      now: new Date().toISOString(),
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/looking-glass/sky', async (req, res) => {
   try {
     const { skyState } = await import('./services/sky-sense/index.mjs');
@@ -2053,6 +2209,65 @@ app.get('/control/health', async (req, res) => {
     res.json(health);
   } catch (e) {
     res.status(500).json({ error: e.message });
+  }
+});
+
+// ── POST /hermes — Dispatch to Hermes Agent (Court Member #20) ───────────────
+
+app.post('/hermes', requireApiKey, async (req, res) => {
+  const { prompt, timeout = 120000 } = req.body || {};
+  if (!prompt) return res.status(400).json({ error: 'prompt required' });
+
+  // Write prompt to file, run hermes-oneshot.py, read output from file
+  const ts = Date.now();
+  const promptFile = path.join(NANOCLAW, `.hermes-prompt-${ts}.txt`);
+  const outFile = path.join(NANOCLAW, `.hermes-out-${ts}.txt`);
+  const maxMs = Math.min(timeout, 300000);
+
+  fs.writeFileSync(promptFile, prompt);
+
+  // Write prompt to file, launch hermes via nohup (fully detached from PM2 tree)
+  fs.writeFileSync(promptFile, prompt);
+  const doneFile = outFile + '.done';
+  // Use nohup + setsid to fully escape PM2's process group
+  const cmd = [
+    `cd /Users/basicclaw777/.hermes/hermes-agent`,
+    `export HOME=/Users/basicclaw777`,
+    `unset PYTHONPATH PYTHONHOME`,
+    `source /Users/basicclaw777/.hermes/.env 2>/dev/null || true`,
+    `/Users/basicclaw777/.hermes/hermes-agent/venv/bin/hermes -z "$(cat ${promptFile})" > ${outFile} 2>&1`,
+    `touch ${doneFile}`,
+  ].join(' && ');
+  spawn('nohup', ['bash', '-c', cmd], {
+    stdio: ['ignore', 'ignore', 'ignore'],
+    detached: true,
+    env: {},  // completely clean env
+  }).unref();
+
+  const start = Date.now();
+  const poll = setInterval(() => {
+    if (Date.now() - start > maxMs) {
+      clearInterval(poll);
+      try { fs.unlinkSync(outFile); fs.unlinkSync(doneFile); fs.unlinkSync(promptFile); } catch {}
+      return res.status(504).json({ error: 'hermes timeout' });
+    }
+    if (!fs.existsSync(doneFile)) return;
+    clearInterval(poll);
+    let output = '';
+    try { output = fs.readFileSync(outFile, 'utf8').trim(); } catch {}
+    try { fs.unlinkSync(outFile); fs.unlinkSync(doneFile); fs.unlinkSync(promptFile); } catch {}
+    res.json({ response: output || '', exitCode: output ? 0 : 1 });
+  }, 500);
+});
+
+// ── GET /hermes/status — Check Hermes gateway health ─────────────────────────
+
+app.get('/hermes/status', async (req, res) => {
+  try {
+    const result = await run('/Users/basicclaw777/.local/bin/hermes', ['--version'], 5000);
+    res.json({ status: 'online', version: result });
+  } catch (err) {
+    res.json({ status: 'offline', error: err.message });
   }
 });
 

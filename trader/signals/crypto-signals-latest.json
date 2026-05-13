@@ -1,41 +1,41 @@
 {
-  "timestamp": "2026-05-10T21:00:05.459121",
+  "timestamp": "2026-05-13T15:51:08.519937",
   "prices": {
     "BTC": {
-      "price": 80887,
-      "change_24h": 0.635038934987325,
-      "volume_24h": 17717999827.42794,
-      "market_cap": 1620139308780.558
+      "price": 80933,
+      "change_24h": 0.03887093248558193,
+      "volume_24h": 40587566488.44669,
+      "market_cap": 1620986616342.6973
     },
     "ETH": {
-      "price": 2322.72,
-      "change_24h": 0.32394095067176437,
-      "volume_24h": 10025339316.211788,
-      "market_cap": 280353993821.8927
+      "price": 2299.52,
+      "change_24h": 0.07739942129416436,
+      "volume_24h": 14511765243.956078,
+      "market_cap": 277567192667.5795
     },
     "SOL": {
-      "price": 93.29,
-      "change_24h": -0.15050602847540995,
-      "volume_24h": 2351712503.754651,
-      "market_cap": 53892917083.88367
+      "price": 95.14,
+      "change_24h": -1.023675920238695,
+      "volume_24h": 3119672131.178897,
+      "market_cap": 54989623001.708244
     },
     "AVAX": {
-      "price": 9.99,
-      "change_24h": 0.619203547979969,
-      "volume_24h": 191217442.1144045,
-      "market_cap": 4314618033.412275
+      "price": 9.98,
+      "change_24h": -0.25561094063908346,
+      "volume_24h": 215332467.56272054,
+      "market_cap": 4310732651.704464
     },
     "LINK": {
-      "price": 10.49,
-      "change_24h": 0.6255785795672347,
-      "volume_24h": 217840799.07594848,
-      "market_cap": 7627450300.99525
+      "price": 10.57,
+      "change_24h": 1.3796956522742005,
+      "volume_24h": 391961657.4307366,
+      "market_cap": 7682974734.016778
     },
     "DOT": {
-      "price": 1.36,
-      "change_24h": 0.23616277030521587,
-      "volume_24h": 118090142.5346183,
-      "market_cap": 2287638334.8797693
+      "price": 1.39,
+      "change_24h": 2.4810399881541256,
+      "volume_24h": 157462555.66739753,
+      "market_cap": 2335445583.8647346
     },
     "MATIC": {
       "price": null,
@@ -44,20 +44,25 @@
       "market_cap": null
     },
     "ARB": {
-      "price": 0.143515,
-      "change_24h": 0.9018716604666602,
-      "volume_24h": 81201407.78176782,
-      "market_cap": 882552755.9291945
+      "price": 0.140006,
+      "change_24h": 0.9622042851148572,
+      "volume_24h": 69499045.45113055,
+      "market_cap": 861220781.8315966
     }
   },
   "fear_greed": {
-    "value": 47,
-    "label": "Neutral",
-    "week_avg": 43.7,
-    "trend": "rising"
+    "value": 42,
+    "label": "Fear",
+    "week_avg": 44.1,
+    "trend": "falling"
   },
   "reddit_sentiment": null,
   "news": [
+    {
+      "source": "coindesk",
+      "title": "CoinW Amplifies Global Leadership and Community Engagement with Strong Presence at Consensus Miami",
+      "url": "https://www.coindesk.com/"
+    },
     {
       "source": "coindesk",
       "title": "CoinW Expands Global Presence at Blockchain Forum 2026, Strengthening User Engagement",
@@ -70,32 +75,27 @@
     },
     {
       "source": "coindesk",
-      "title": "MSX Marks First Anniversary as It Builds Toward a \u201cBlockchain Brokerage\u201d Vision",
+      "title": "Bitcoin back above $81,000 after hot CPI print, BNB, DOGE lead majors gains",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "LayerZero says it \u2018made a mistake\u2019 in $292 Million Kelp exploit",
+      "title": "Bitcoin back above $81,000 after hot CPI print, BNB, DOGE lead majors gains",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "LayerZero says it \u2018made a mistake\u2019 in $292 Million Kelp exploit",
+      "title": "Nevada regulators push back after prediction market conference blames them for move",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "BlackRock deepens tokenization push with new onchain fund offerings",
+      "title": "XRP tops bitcoin, ether volumes on major South Korean exchanges",
       "url": "https://www.coindesk.com/"
     },
     {
       "source": "coindesk",
-      "title": "Crypto industry cheers Senate Clarity Act markup date as market structure push resumes",
-      "url": "https://www.coindesk.com/"
-    },
-    {
-      "source": "coindesk",
-      "title": "Senate Banking Committee plans to hold key market structure hearing on Thursday",
+      "title": "The Ethereum Foundation unveils new &#x27;Clear Signing&#x27; standard to stop users from approving malicious crypto transactions",
       "url": "https://www.coindesk.com/"
     },
     {
@@ -109,5 +109,14 @@
       "url": "https://www.coindesk.com/"
     }
   ],
-  "signals": []
+  "signals": [
+    {
+      "source": "technical",
+      "asset": "DOT",
+      "direction": "long",
+      "strength": 0.4962079976308251,
+      "reasoning": "DOT is top performer (+2.5%) \u2014 relative strength leader",
+      "type": "relative_strength"
+    }
+  ]
 }

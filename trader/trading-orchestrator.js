@@ -447,6 +447,9 @@ async function run() {
   const config = loadConfig();
   const portfolio = loadPortfolio();
 
+  // Track trade count to detect closes
+  portfolio._prevTotalTrades = portfolio.total_trades;
+
   // Step 1: Fetch signals
   const signalData = await fetchSignals();
   if (!signalData) {
@@ -580,7 +583,18 @@ async function run() {
 
   const summary = generateSummary(portfolio);
   console.log(`\n[7/7] Summary:\n${summary}`);
-  await notify(summary);
+
+  // Only notify Telegram when something actually happened
+  // Silent runs = no message. Paul gets notified on: new trades, closed positions, errors.
+  if (tradesOpened > 0) {
+    await notify(summary);
+  } else {
+    // Check if any positions were closed this run (SL/TP/stale exits)
+    const prevTrades = portfolio._prevTotalTrades || portfolio.total_trades;
+    if (portfolio.total_trades > prevTrades) {
+      await notify(summary);
+    }
+  }
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n[TRADER] Done in ${elapsed}s — ${tradesOpened} trades opened\n`);

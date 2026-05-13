@@ -63,6 +63,19 @@
       "votes": [],
       "started": "2026-05-12T07:05:59.307Z",
       "status": "active"
+    },
+    "fifthgear": {
+      "name": "Fifth Gear",
+      "description": "LLM extraction toolkit → The Guide PDF → track sales + feedback quality",
+      "metric": "approval_rate",
+      "graduation": {
+        "min_votes": 20,
+        "approval_rate": 0.7,
+        "min_days": 14
+      },
+      "votes": [],
+      "started": "2026-05-12T12:00:00.000Z",
+      "status": "queued"
     }
   }
 }

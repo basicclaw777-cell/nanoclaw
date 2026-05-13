@@ -810,6 +810,9 @@ Never call external APIs from Python subprocesses spawned by PM2. Use Node.js fe
 ### Standing Instruction 27 — Don't cycle through broken variants
 When an approach hits a fundamental blocker, stop. Document the blocker in KNOWN_ISSUES.md. Don't iterate through variant fixes that each fail differently — that wastes Paul's time. Verify fixes work before involving Paul.
 
+### Standing Instruction 28 — Document builds immediately, not at session end
+When a build is complete and working, update CLAUDE.md and memory RIGHT THEN — don't wait for session end or /end-session. Sessions often end without formal close. If it's not documented at build time, it's lost. This applies to: new scripts, new Telegram commands, new integrations, new PM2 processes, new vault files, architecture decisions, and failed approaches worth remembering.
+
 ## Container vs Mac Mini — Critical Distinction
 Claude.ai chat sessions (including this Orchestrator) run in
 containers. Code calls in claude.ai chats write to the container,
@@ -1155,3 +1158,50 @@ the-timekeeper to go offline. Don't repeat it.
 - trader-watchdog.sh — PM2 5min cron, restarts trader if down + Telegram alert
 - Triple net: trader (4h signals) + guardian (5min SL/TP) + watchdog (5min restart)
 - Crash was 2 days undetected before this — now max 5 minutes
+
+## X/Twitter Integration (built 2026-05-13)
+- Library: @the-convocation/twitter-scraper (npm, free, no API key)
+- Auth: Chrome cookie extraction (not programmatic login — X blocks that with Cloudflare 403)
+- Cookie extractor: ~/nanoclaw/extract-x-cookies.js (reads Chrome DB, decrypts via macOS Keychain)
+- Post script: ~/nanoclaw/x-post.js (post, reply, thread, whoami)
+- Cookies file: ~/nanoclaw/x-cookies.json (gitignored — contains session tokens)
+- Telegram commands: /tweet, /tweetconfirm, /tweetthread, /threadconfirm, /xstatus
+- Safety: every tweet requires explicit /tweetconfirm (2 min expiry), threads 5 min expiry
+- Cookie refresh: when auth fails, re-run `node extract-x-cookies.js` (requires Chrome logged into x.com + macOS Keychain password)
+- Failed approaches: twikit (KEY_BYTE indices error), twitter-scraper programmatic login (Cloudflare 403), xurl (requires $5/mo paid API)
+- Fifth Gear paper trial: added to paper-trial-tracker.js (status: queued)
+- LLM Extraction Toolkit index: ~/cathedral-vault/06_Methods/llm-extraction-toolkit-index.md
+
+## Agent Engine — Connected Agent Infrastructure (built 2026-05-13)
+- Engine: ~/Cathedral/agents/agent-engine.js (CJS, shared runner for all agents)
+- Registry: ~/Cathedral/agents/registry.json (agent configs, vault sections, model settings)
+- Contexts: ~/Cathedral/agents/contexts/{orchestrator,boxing,br-ops}.md (persona + domain knowledge)
+- State: ~/Cathedral/agents/state/{agent}.json (auto-updated on every call — Orc sees all)
+- Sessions: in-memory, 30 min timeout, multi-turn conversation
+- Call log: ~/Cathedral/agent-calls.jsonl (every agent action logged — the nervous system)
+- Model: DeepSeek primary, Ollama hermes3 fallback (auto-failover)
+- Telegram commands: /orc, /boxing-agent, /br-agent, /agents (list all)
+- All commands support multi-turn + `reset` to clear
+- CLI: ~/Cathedral/local-orchestrator.js (richer context — transmission, taste profile, full standing instructions)
+- CLI flags: `--local` for offline hermes3 mode
+- Orc reads: operational map, harvests (web+terminal), standing instructions, cath state, all agent states, inter-agent messages
+- Architecture: one engine, config-per-agent. Add new agent = context .md + registry entry. No code changes.
+- Phase 1 agents: Head Orchestrator, Boxing Intelligence, BR Operations
+- Purpose: replaces Claude.ai web project chats. Shared filesystem, inter-agent messaging, no copy-paste bridge.
+- Cross-domain sync: ~/Cathedral/agents/cross-domain-sync.js — scans harvests for multi-domain content, extracts domain-specific findings via DeepSeek, routes to agent inboxes via project-messages.cjs
+- Telegram: /sync (manual trigger)
+- State: ~/Cathedral/agents/sync-state.json (tracks which sessions already synced)
+- First run: 95 cross-domain sessions found, messages routed to all 3 agents
+- Agent Hub visual: localhost:8080/agents — 4 views (Flow, Agents, Timeline, Feed)
+- Flow tab: connection map canvas, gap alerts, cross-domain session cards
+- API: /agents/data on cath-bridge (registry, states, calls, harvests, connections, crossReferences)
+
+## Terminal Session Harvester (built 2026-05-13)
+- Script: ~/nanoclaw/terminal-harvester.js (ESM)
+- Scans: ~/.claude/projects/-Users-basicclaw777/*.jsonl
+- Summarizes: Ollama hermes3 (builds, decisions, discoveries, status)
+- Deposits: ~/cathedral-vault/00_Staging/cathedral/terminal-harvest-{date}-{id}.md
+- Skips: files < 5KB, sessions < 6 messages, active sessions (< 30 min old), trivial
+- State: ~/nanoclaw/terminal-harvest-state.json
+- PM2: terminal-harvester (cron every 6h)
+- Telegram: /harvest-terminal [--force]

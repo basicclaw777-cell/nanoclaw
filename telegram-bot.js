@@ -4038,6 +4038,33 @@ bot.onText(/^\/predict-rebuild(?:@\w+)?$/i, async (msg) => {
   }
 });
 
+// ── /trial — Paper Trial Dashboard ──────────────────────────────────────────
+bot.onText(/^\/trial(?:@\w+)?(?:\s+(.+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const { formatTrialReport, getTrialStats } = await import('./paper-trial-tracker.js');
+    const trialName = match?.[1]?.trim();
+    if (trialName) {
+      const stats = getTrialStats(trialName);
+      if (!stats) return safeSend(chatId, `Unknown trial: ${trialName}. Try: content, trading, grants, leads, products`);
+      let detail = `📋 *${stats.name}*\n`;
+      detail += `Status: ${stats.status} | ${stats.daysActive} days active\n`;
+      detail += `Votes: ${stats.total} (${stats.approvals} ✅ / ${stats.rejections} ❌ / ${stats.embarrassments} 🚫 / ${stats.edits} ✏️)\n`;
+      detail += `Rate: ${stats.rate} | Embarrass: ${stats.embarrassRate}\n\n`;
+      detail += `*Graduation checks:*\n`;
+      for (const [check, passed] of Object.entries(stats.graduation)) {
+        detail += `  ${passed ? '✅' : '⬜'} ${check}\n`;
+      }
+      detail += `\n${stats.message}`;
+      safeSend(chatId, detail, { parse_mode: 'Markdown' });
+    } else {
+      safeSend(chatId, formatTrialReport(), { parse_mode: 'Markdown' });
+    }
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
 // ── /simpsons — Simpsons Temporal Forensics summary ─────────────────────────
 bot.onText(/^\/simpsons(?:@\w+)?$/i, async (msg) => {
   const chatId = msg.chat.id;
@@ -5070,6 +5097,226 @@ bot.onText(/^\/radar(?:@\w+)?\s+(?!run\s*$|voices?\s*$)(.+)$/i, async (msg, matc
   }
 });
 
+// ── Agent Engine (Orc, Boxing, BR-Ops) ──────────────────────────────────────
+
+import { createRequire } from 'module';
+const _require = createRequire(import.meta.url);
+const agentEngine = _require(path.join(process.env.HOME, 'Cathedral', 'agents', 'agent-engine.js'));
+
+const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼' };
+
+function registerAgentCommand(agentId, pattern) {
+  bot.onText(pattern, async (msg, match) => {
+    const chatId = msg.chat.id;
+    if (!isPaul(chatId)) return;
+
+    const input = match[1].trim();
+    const icon = AGENT_ICONS[agentId] || '🤖';
+    const config = agentEngine.getAgentConfig(agentId);
+
+    // Reset command
+    if (input.toLowerCase() === 'reset') {
+      agentEngine.reset(agentId, chatId);
+      await safeSend(chatId, `${icon} ${config.name} session reset.`);
+      return;
+    }
+
+    await safeSend(chatId, `${icon} _${config.name} thinking..._`, { parse_mode: 'Markdown' });
+
+    try {
+      const result = await agentEngine.run(agentId, input, chatId);
+      await safeSend(chatId, `${icon} *${result.agent}*\n\n${result.text}`, { parse_mode: 'Markdown' });
+    } catch (err) {
+      await safeSend(chatId, `❌ ${config.name} error: ${err.message}`);
+    }
+  });
+}
+
+registerAgentCommand('orc', /^\/orc(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('boxing', /^\/boxing-agent(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('br', /^\/br-agent(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('universe', /^\/universe(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('trading', /^\/trading-agent(?:@\w+)?\s+(.+)$/is);
+
+// /agents — list all available agents
+bot.onText(/^\/agents(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+
+  const agents = agentEngine.listAgents();
+  const lines = agents.map(a => `${AGENT_ICONS[a.id] || '🤖'} *${a.command}* — ${a.name}\n   ${a.description}`);
+  await safeSend(chatId, `*Cathedral Agents*\n\n${lines.join('\n\n')}\n\nAll commands support multi-turn conversation. Send \`reset\` to clear.`, { parse_mode: 'Markdown' });
+});
+
+// ── Cross-domain sync ───────────────────────────────────────────────────────
+
+bot.onText(/^\/sync(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  await safeSend(chatId, '🔄 Running cross-domain sync...');
+
+  try {
+    const syncPath = path.join(process.env.HOME, 'Cathedral', 'agents', 'cross-domain-sync.js');
+    const { main } = await import(`file://${syncPath}`);
+    // CJS module — use createRequire
+    const _req = (await import('module')).createRequire(import.meta.url);
+    const sync = _req(syncPath);
+    const result = await sync.main();
+    const lines = [`🔄 *Cross-Domain Sync Complete*\n`];
+    lines.push(`Sessions: ${result.synced}`);
+    lines.push(`Messages routed: ${result.messages}`);
+    if (result.report?.length) {
+      lines.push('');
+      for (const r of result.report) {
+        const icon = { orc: '🏛️', boxing: '🥊', br: '💼' }[r.agent] || '📨';
+        lines.push(`${icon} ${r.findingPreview}`);
+      }
+    }
+    await safeSend(chatId, lines.join('\n'), { parse_mode: 'Markdown' });
+  } catch (err) {
+    await safeSend(chatId, `❌ Sync error: ${err.message}`);
+  }
+});
+
+// /uptake — agent message uptake measurement
+bot.onText(/^\/uptake(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const _req = (await import('module')).createRequire(import.meta.url);
+    const agentEngine = _req(path.join(process.env.HOME, 'Cathedral', 'agents', 'agent-engine.js'));
+    const stats = agentEngine.getUptakeStats();
+    if (!stats || !Object.keys(stats).length) {
+      await safeSend(chatId, '📊 No uptake data yet. Agents need to receive and respond to messages first.');
+      return;
+    }
+    const lines = ['📊 *Agent Uptake Measurement*\n'];
+    for (const [id, s] of Object.entries(stats)) {
+      const icon = { orc: '🏛️', boxing: '🥊', br: '💼' }[id] || '📨';
+      lines.push(`${icon} *${id}*: ${s.uptakeRate}% uptake (${s.totalReferenced}/${s.totalLoaded} referenced)`);
+      if (s.history?.length) {
+        const recent = s.history.slice(-3);
+        for (const h of recent) {
+          const status = h.referenced ? '✅' : '⬜';
+          lines.push(`  ${status} ${h.file.slice(0, 40)} — ${h.keywordsHit}/${h.keywordsLoaded} keywords`);
+        }
+      }
+      lines.push('');
+    }
+    await safeSend(chatId, lines.join('\n'), { parse_mode: 'Markdown' });
+  } catch (err) {
+    await safeSend(chatId, `❌ Uptake error: ${err.message}`);
+  }
+});
+
+// ── Terminal session harvester ───────────────────────────────────────────────
+
+bot.onText(/^\/harvest-terminal(?:@\w+)?(?:\s+(--force))?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  await safeSend(chatId, '📋 Harvesting terminal sessions...');
+  try {
+    const { harvestTerminalSessions, formatHarvestReport } = await import('./terminal-harvester.js');
+    const force = match && match[1] === '--force';
+    const results = await harvestTerminalSessions({ force });
+    await safeSend(chatId, formatHarvestReport(results), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ Harvest error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// ── X/Twitter commands ──────────────────────────────────────────────────────
+
+bot.onText(/^\/tweet(?:@\w+)?\s+(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const text = match[1].trim();
+  if (text.length > 280) {
+    return safeSend(chatId, `❌ Tweet too long: ${text.length}/280 chars`);
+  }
+  await safeSend(chatId, `📝 Posting to X:\n"${text}"\n\nConfirm? /tweetconfirm`);
+  // Store pending tweet
+  global._pendingTweet = { text, chatId, timestamp: Date.now() };
+});
+
+bot.onText(/^\/tweetconfirm(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  if (!global._pendingTweet || Date.now() - global._pendingTweet.timestamp > 120000) {
+    return safeSend(chatId, '❌ No pending tweet or expired (2 min limit)');
+  }
+  const { text } = global._pendingTweet;
+  global._pendingTweet = null;
+  await safeSend(chatId, '⏳ Posting...');
+  try {
+    const scriptPath = path.join(process.env.HOME, 'nanoclaw', 'x-post.js');
+    const result = execFileSync('node', [scriptPath, 'post', text], {
+      timeout: 30000, encoding: 'utf8'
+    }).trim();
+    const parsed = JSON.parse(result);
+    await safeSend(chatId, `✅ Posted!\n${parsed.url}`);
+  } catch (err) {
+    safeSend(chatId, `❌ Tweet failed: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/tweetthread(?:@\w+)?\s+(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  // Split on --- or numbered lines
+  const parts = match[1].split(/\n---\n|\n-{3,}\n/).map(p => p.trim()).filter(p => p);
+  if (parts.length < 2) {
+    return safeSend(chatId, '❌ Thread needs 2+ parts separated by ---');
+  }
+  const over = parts.find(p => p.length > 280);
+  if (over) {
+    return safeSend(chatId, `❌ Thread part too long (${over.length}/280):\n"${over.slice(0, 100)}..."`);
+  }
+  let preview = '📝 *Thread preview:*\n\n';
+  parts.forEach((p, i) => { preview += `*${i + 1}.* ${p}\n\n`; });
+  preview += `${parts.length} parts. /threadconfirm to post.`;
+  await safeSend(chatId, preview, { parse_mode: 'Markdown' });
+  global._pendingThread = { parts, chatId, timestamp: Date.now() };
+});
+
+bot.onText(/^\/threadconfirm(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  if (!global._pendingThread || Date.now() - global._pendingThread.timestamp > 300000) {
+    return safeSend(chatId, '❌ No pending thread or expired (5 min limit)');
+  }
+  const { parts } = global._pendingThread;
+  global._pendingThread = null;
+  await safeSend(chatId, `⏳ Posting ${parts.length}-part thread...`);
+  try {
+    const scriptPath = path.join(process.env.HOME, 'nanoclaw', 'x-post.js');
+    const result = execFileSync('node', [scriptPath, 'thread', ...parts], {
+      timeout: 60000, encoding: 'utf8'
+    }).trim();
+    const parsed = JSON.parse(result);
+    let msg = `✅ Thread posted! ${parsed.length} parts\n`;
+    msg += parsed.map(p => `${p.part}. ${p.url}`).join('\n');
+    await safeSend(chatId, msg);
+  } catch (err) {
+    safeSend(chatId, `❌ Thread failed: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/xstatus(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const scriptPath = path.join(process.env.HOME, 'nanoclaw', 'x-post.js');
+    const result = execFileSync('node', [scriptPath, 'whoami'], {
+      timeout: 15000, encoding: 'utf8'
+    }).trim();
+    const parsed = JSON.parse(result);
+    await safeSend(chatId, `🐦 X: @${parsed.username} (${parsed.name})\nFollowers: ${parsed.followers} | Following: ${parsed.following}`);
+  } catch (err) {
+    safeSend(chatId, `❌ X auth check failed: ${err.message.slice(0, 300)}\n\nRun: node ~/nanoclaw/x-post.js login USERNAME PASSWORD EMAIL`);
+  }
+});
+
 // ── Inline keyboard callback handler (Densifier, Decay Detector) ────────────
 bot.on('callback_query', async (query) => {
   const data = query.data;
@@ -5098,6 +5345,9 @@ bot.on('callback_query', async (query) => {
       const styleMatch = filename.match(/-(bw|neon|film|comic|cinematic|pro_photo|dramatic|manga|ippo|noir|poster|oil)-/i);
       const style = styleMatch ? styleMatch[1] : 'unknown';
 
+      // Paper trial tracking
+      const { recordVote } = await import('./paper-trial-tracker.js');
+
       if (isApprove) {
         addAnchor('visual_style', 'anchors', {
           item: filename,
@@ -5106,7 +5356,8 @@ bot.on('callback_query', async (query) => {
           reason: 'Paul approved via Content Machine',
           timestamp: new Date().toISOString()
         });
-        await bot.answerCallbackQuery(query.id, { text: `✅ Approved + taste map updated (${style})` });
+        recordVote('content', 'approve', { filename, style });
+        await bot.answerCallbackQuery(query.id, { text: `✅ Approved + taste map + trial tracked (${style})` });
         await bot.editMessageReplyMarkup(
           { inline_keyboard: [[{ text: `✅ Approved (${style})`, callback_data: 'noop' }]] },
           { chat_id: chatId, message_id: msgId }
@@ -5114,7 +5365,8 @@ bot.on('callback_query', async (query) => {
       } else {
         const { addRejection } = await import('./taste-map-api.js');
         addRejection('visual_style', `Rejected: ${filename} — ${style} style`);
-        await bot.answerCallbackQuery(query.id, { text: `❌ Rejected + taste map updated (${style})` });
+        recordVote('content', 'reject', { filename, style });
+        await bot.answerCallbackQuery(query.id, { text: `❌ Rejected + taste map + trial tracked (${style})` });
         await bot.editMessageReplyMarkup(
           { inline_keyboard: [[{ text: `❌ Rejected (${style})`, callback_data: 'noop' }]] },
           { chat_id: chatId, message_id: msgId }
