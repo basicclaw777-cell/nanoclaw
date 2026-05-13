@@ -1224,3 +1224,22 @@ the-timekeeper to go offline. Don't repeat it.
 - Hermes skills.disabled config list works — added comfyui to ~/.hermes/config.yaml
 - Skill directory + backup removed, poisoned session purged from state.db
 - No package-level surgery needed — config mechanism is the right layer
+
+## Pro Photo Pipeline v2 — Two-Stage Enhanced (2026-05-14)
+- Script: ~/nanoclaw/pro-photo.js (ESM, two-stage pipeline)
+- Stage 1: DeepSeek prompt enhancement (grading/lighting/texture directives only)
+- Stage 2: Higgsfield image generation with enhanced prompt
+- Default engine: gpt_image_2 (won comparison vs nano_banana_2, 2026-05-14)
+- Default mode: enhanced (DeepSeek ON). --no-enhance for static prompt.
+- Flags: --engine gpt|nano, --no-enhance
+- Enhancement discipline: NEVER describe scene content in img2img prompts. Model can see the image. Only describe grading, lighting, texture, color science. Describing subjects causes content hallucination.
+- Prompt capped at 800 chars (Higgsfield chokes on longer)
+- Inbox: ~/nanoclaw/pro-photo-inbox/ → Outbox: ~/nanoclaw/pro-photo-outbox/
+- Auto-sends to Telegram
+- Pending: retest enhanced prompt when Higgsfield stabilizes (HTTP 500 blocked final test)
+
+### Leaked System Prompt Finding (2026-05-14)
+- ChatGPT and Gemini image_gen tool definitions contain NO hidden prompt enhancement
+- Web app quality gap comes from reasoning model rewriting casual prompts before calling image_gen
+- Source: github.com/asgeirtj/system_prompts_leaks (GPT-5 + Gemini 3.1 Pro prompts)
+- Our two-stage pipeline replicates this: DeepSeek = our reasoning layer
