@@ -21,6 +21,7 @@ Private sovereign AI research system for Paul (boxing gym owner, Hong Kong). Loc
 - **Vault bridge:** localhost:8080 — ~/nanoclaw/cath-bridge.cjs, REST API for vault read/write/search
 - **Desktop UI:** Open Web UI at localhost:3001 (Docker container: open-webui)
 - **MCP server:** ~/nanoclaw/cathedral-mcp-server.js — registered in Claude Desktop
+- **Git remotes (nanoclaw):** origin = basicclaw777-cell/nanoclaw.git, upstream = qwibitai/nanoclaw.git
 - **Internet:** Surfshark VPN required (Singapore). Run `unset http_proxy && unset https_proxy` before starting bot.
 
 ## Directory Structure
