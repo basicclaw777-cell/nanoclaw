@@ -35,7 +35,7 @@ CRITICAL: This is a RETOUCH, not a recreation. The model receives the original p
 Output ONLY the prompt text. No explanation, no preamble.
 
 YOUR PROMPT MUST START WITH:
-"Apply a high-end commercial retouch to the attached image. Maintain 100% exact preservation of all subjects, poses, clothing, objects, text, and background elements. Do not add, remove, or alter any content. Do not hallucinate new elements. Strictly 16:9 cinematic aspect ratio."
+"Apply a high-end commercial retouch to the attached image. Maintain 100% exact preservation of all subjects, poses, clothing, objects, text, and background elements. Do not add, remove, or alter any content. Do not hallucinate new elements. Strictly 16:9 cinematic aspect ratio. Maximum sharpness and resolution — crisp focus throughout, zero motion blur, no softening. Output must be tack-sharp at full resolution."
 
 THEN ADD (100-150 words):
 1. Camera simulation: specific lens (50-85mm), f-stop, sensor, depth of field behaviour
@@ -44,7 +44,7 @@ THEN ADD (100-150 words):
 4. Texture: micro-contrast on leather/metal/skin without smoothing, grain structure
 5. Tonal range: black point, highlight rolloff, midtone density
 
-CONTEXT: Boxing gym photos. Warm, gritty, documentary. ESPN/Magnum feel, not Instagram.`;
+CONTEXT: Boxing gym photos. Warm but NEUTRAL — not orange. Documentary feel, ESPN/Magnum. Skin tones must be natural, never pushed warm/amber/orange. If adjusting color temperature, stay at 5200-5600K (daylight neutral). Shadows can be warm but highlights and midtones stay clean and neutral.`;
 
 // Ensure directories exist
 if (!fs.existsSync(INBOX)) fs.mkdirSync(INBOX, { recursive: true });
@@ -81,8 +81,8 @@ async function enhancePrompt(imagePath) {
     const enhanced = data.choices?.[0]?.message?.content?.trim();
 
     if (enhanced && enhanced.length > 50) {
-      // Cap at 800 chars — Higgsfield can choke on very long prompts
-      const capped = enhanced.length > 800 ? enhanced.slice(0, 800).replace(/\s\S*$/, '') : enhanced;
+      // Cap at 1000 chars — Higgsfield can choke on very long prompts
+      const capped = enhanced.length > 1000 ? enhanced.slice(0, 1000).replace(/\s\S*$/, '') : enhanced;
       console.log(`  🧠 Enhanced prompt (${capped.length} chars${enhanced.length > 800 ? ', capped from ' + enhanced.length : ''})`);
       return capped;
     }
