@@ -1225,6 +1225,15 @@ the-timekeeper to go offline. Don't repeat it.
 - Orc gate: 60% uptake before adding new agents. All 5 above threshold.
 - API: /agents/data on cath-bridge (registry, states, calls, harvests, connections, crossReferences, uptake)
 
+## Pretta Origin Layer (harvested 2026-05-15)
+- Field Manual: ~/cathedral-vault/06_Methods/pretta-field-manual.md (42+ mechanisms, Pretta-to-Cathedral map, 6-step method)
+- Before & After: ~/cathedral-vault/06_Methods/the-before-and-after.md (diagnosis → build proof doc)
+- Cathy Narration: ~/cathedral-vault/06_Methods/cathy-origin-narration.md (script) + ~/Cathedral/cathy-narration/ (MP3/OGG audio)
+- Agent Calibration: ~/Cathedral/agents/contexts/pretta-origin-calibration.md (injected into all agents via agent-engine.js)
+- Origin Transcripts: ~/cathedral-vault/01_Raw_Transcripts/pretta-origin/ (5 files, ~5MB)
+- Sage Books: ~/cathedral-vault/03_The_Sages/pretta-council/ (7 books, sage-extractor.js — autonomous)
+- Harvesters: ~/nanoclaw/pretta-harvester.js + ~/nanoclaw/sage-extractor.js (DeepSeek, 30K chunk size)
+
 ## Terminal Session Harvester (built 2026-05-13)
 - Script: ~/nanoclaw/terminal-harvester.js (ESM)
 - Scans: ~/.claude/projects/-Users-basicclaw777/*.jsonl
