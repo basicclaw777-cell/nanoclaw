@@ -1251,10 +1251,13 @@ the-timekeeper to go offline. Don't repeat it.
 - Default mode: enhanced (DeepSeek ON). --no-enhance for static prompt.
 - Flags: --engine gpt|nano, --no-enhance
 - Enhancement discipline: NEVER describe scene content in img2img prompts. Model can see the image. Only describe grading, lighting, texture, color science. Describing subjects causes content hallucination.
-- Prompt capped at 800 chars (Higgsfield chokes on longer)
+- Color science: locked neutral 5200-5600K. Anti-orange directive. Shadows warm, highlights/midtones clean.
+- Sharpness: mandatory prefix includes "tack-sharp, crisp focus, zero motion blur" — never gets capped.
+- Prompt capped at 1000 chars (was 800, raised after sharpness directives got cut)
+- Two tiers: enhanced (DeepSeek, premium content) and base (static prompt, daily content). Both good.
 - Inbox: ~/nanoclaw/pro-photo-inbox/ → Outbox: ~/nanoclaw/pro-photo-outbox/
 - Auto-sends to Telegram
-- Pending: retest enhanced prompt when Higgsfield stabilizes (HTTP 500 blocked final test)
+- Tested: 6/6 gym photos processed successfully. Pipeline confirmed stable.
 
 ### Leaked System Prompt Finding (2026-05-14)
 - ChatGPT and Gemini image_gen tool definitions contain NO hidden prompt enhancement
