@@ -462,6 +462,87 @@ function validateIntegratedSequence(defense, counterCombo) {
   };
 }
 
+// ─── BLOCK-AWARE VALIDATION ─────────────────────────────────────────────────
+// Loads block-config.json to enforce per-block constraints.
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const CONFIG_PATH = path.join(__dirname, 'block-config.json');
+const _blockConfig = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
+
+/**
+ * Validate a punch combo against a student's current block constraints.
+ * Checks: punch availability, combo length, defense availability, footwork availability.
+ * @param {string[]} sequence - Punch names
+ * @param {number} blockNum - Student's current block (1-10)
+ * @returns {object} Block validation + standard weight-state validation
+ */
+function validateForBlock(sequence, blockNum) {
+  const block = _blockConfig.blocks.find(b => b.num === blockNum);
+  if (!block) return { valid: false, error: `Unknown block: ${blockNum}` };
+
+  const errors = [];
+
+  // Check combo length
+  if (block.maxComboLength > 0 && sequence.length > block.maxComboLength) {
+    errors.push(`Combo length ${sequence.length} exceeds Block ${blockNum} max of ${block.maxComboLength}`);
+  }
+  if (block.maxComboLength === 0 && sequence.length > 0) {
+    errors.push(`Block ${blockNum} (${block.name}) has no punches yet`);
+  }
+
+  // Check each punch is available at this block
+  const available = new Set(block.punches || []);
+  for (const punch of sequence) {
+    if (!available.has(punch)) {
+      errors.push(`"${punch}" not available at Block ${blockNum} (${block.name})`);
+    }
+  }
+
+  // Run standard weight-state validation
+  const weightCheck = validatePunchCombo(sequence);
+
+  return {
+    valid: errors.length === 0 && weightCheck.valid,
+    blockErrors: errors,
+    block: { num: block.num, name: block.name, maxComboLength: block.maxComboLength },
+    weightValidation: weightCheck,
+  };
+}
+
+/**
+ * Check if a defense is available at a given block.
+ */
+function validateDefenseForBlock(defenseNames, blockNum) {
+  const block = _blockConfig.blocks.find(b => b.num === blockNum);
+  if (!block) return { valid: false, error: `Unknown block: ${blockNum}` };
+
+  const available = new Set(block.defenses || []);
+  const errors = [];
+  for (const d of defenseNames) {
+    if (!available.has(d)) errors.push(`"${d}" not available at Block ${blockNum} (${block.name})`);
+  }
+  return { valid: errors.length === 0, errors, available: [...available] };
+}
+
+/**
+ * Check if a footwork atom is available at a given block.
+ */
+function validateFootworkForBlock(footworkNames, blockNum) {
+  const block = _blockConfig.blocks.find(b => b.num === blockNum);
+  if (!block) return { valid: false, error: `Unknown block: ${blockNum}` };
+
+  const available = new Set(block.footwork || []);
+  const errors = [];
+  for (const f of footworkNames) {
+    if (!available.has(f)) errors.push(`"${f}" not available at Block ${blockNum} (${block.name})`);
+  }
+  return { valid: errors.length === 0, errors, available: [...available] };
+}
+
 // ─── EXPORTS ────────────────────────────────────────────────────────────────
 
 export {
@@ -475,6 +556,9 @@ export {
   validateFootworkChain,
   validateDefenseToCounter,
   validateIntegratedSequence,
+  validateForBlock,
+  validateDefenseForBlock,
+  validateFootworkForBlock,
 };
 
 // ─── CLI TEST HARNESS ───────────────────────────────────────────────────────

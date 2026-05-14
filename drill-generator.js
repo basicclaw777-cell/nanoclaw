@@ -4,10 +4,12 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
 import { getMemberProgress, BLOCKS } from './curriculum-tracker.js';
 import { validatePunchCombo, PUNCHES } from './combination-validator.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HOME = process.env.HOME;
 const DB_PATH = path.join(HOME, 'nanoclaw', 'vortex_data', 'metrics.db');
 const CORPUS_DIR = path.join(HOME, 'boxing-corpus');
@@ -41,22 +43,15 @@ const CORRECTIONS = [
   { flag: 'late_guard_return',     block_min: 3, priority: 'high',   drill: 'Metronome drill: single punch on beat, guard returns before next beat. 60→100 BPM. 3x1min.' },
 ];
 
-// ── Block-Appropriate Punch Sets ────────────────────────────────────────────
+// ── Block-Appropriate Punch Sets (from block-config.json) ───────────────────
+// Loaded from config so Paul can change constraints without touching code.
 
-const BLOCK_PUNCHES = {
-  1: [],  // No punches
-  2: [],  // No punches
-  3: ['jab', 'cross', 'jab_body', 'rear_body'],
-  4: ['jab', 'cross', 'jab_body', 'rear_body', 'lead_hook', 'rear_hook', 'lead_body', 'lead_uppercut', 'rear_uppercut', 'overhand'],
-  5: ['jab', 'cross', 'jab_body', 'rear_body', 'lead_hook', 'rear_hook', 'lead_body', 'lead_uppercut', 'rear_uppercut', 'overhand'],
-  6: ['jab', 'cross', 'jab_body', 'rear_body', 'lead_hook', 'rear_hook', 'lead_body', 'lead_uppercut', 'rear_uppercut', 'overhand'],
-  7: ['jab', 'cross', 'jab_body', 'rear_body', 'lead_hook', 'rear_hook', 'lead_body', 'lead_uppercut', 'rear_uppercut', 'overhand'],
-  8: ['jab', 'cross', 'jab_body', 'rear_body', 'lead_hook', 'rear_hook', 'lead_body', 'lead_uppercut', 'rear_uppercut', 'overhand'],
-  9: ['jab', 'cross', 'jab_body', 'rear_body', 'lead_hook', 'rear_hook', 'lead_body', 'lead_uppercut', 'rear_uppercut', 'overhand'],
-  10: ['jab', 'cross', 'jab_body', 'rear_body', 'lead_hook', 'rear_hook', 'lead_body', 'lead_uppercut', 'rear_uppercut', 'overhand'],
-};
-
-const BLOCK_MAX_COMBO = { 1: 0, 2: 0, 3: 2, 4: 3, 5: 5, 6: 5, 7: 5, 8: 5, 9: 6, 10: 8 };
+const BLOCK_PUNCHES = {};
+const BLOCK_MAX_COMBO = {};
+for (const block of BLOCKS) {
+  BLOCK_PUNCHES[block.num] = block.punches || [];
+  BLOCK_MAX_COMBO[block.num] = block.maxComboLength || 0;
+}
 
 // ── Get Member's YOLO Weaknesses ────────────────────────────────────────────
 
@@ -208,7 +203,7 @@ export function generateDrill(name) {
     if (combos.length > 0) {
       drill.sections.push({
         title: `Block ${block} Combinations`,
-        subtitle: `Max ${BLOCK_MAX_COMBO[block]} punches. Practice on pads, shadow, then bag.`,
+        subtitle: `Max ${BLOCK_MAX_COMBO[block] || 0} punches. Practice on pads, shadow, then bag.`,
         items: combos.map(c => ({
           combo: c.display,
           weight_trace: c.weightTrace.join(' → '),

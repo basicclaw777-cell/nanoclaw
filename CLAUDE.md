@@ -884,7 +884,11 @@ He will decide when he's done.
 - combination-validator.js — weight-state relay, defense axis, footwork rhythm. ESM.
 - rhythm-engine.js — 10 rudiment→combination mappings, click track generator. ESM.
 - boxing-commands.js — /combo, /defense, /counter, /rudiment, /punches wired into telegram-bot.js
-- Canonical curriculum: ~/cathedral-vault/10_Agents/kit/decisions/canonical-curriculum-2026-05-03.md
+- Canonical curriculum: ~/cathedral-vault/06_Basic_Reflex_Syllabus/10_BLOCK_CURRICULUM.md (consolidated 2026-05-14)
+- block-config.json — single source of truth for all 10-block definitions. Paul edits JSON, code obeys.
+- curriculum-tracker.js, drill-generator.js, combination-validator.js, rhythm-engine.js all load from block-config.json (wired 2026-05-14)
+- New exports: validateForBlock(), validateDefenseForBlock(), validateFootworkForBlock() on combination-validator.js
+- New exports: checkRhythmGate(), generateForBlock() on rhythm-engine.js (blocks <5 locked out)
 - Visual hub: ~/basic-reflex/visuals/index.html (4 interactive HTML tools)
 - Roadmap: ~/basic-reflex/roadmap/index.html
 
@@ -1229,8 +1233,8 @@ the-timekeeper to go offline. Don't repeat it.
 - Voice: warm, enthusiastic, genuine. Celebrates members. Never salesy. Loves BR and Coach Paul.
 - Interview transcript: ~/cathedral-vault/00_Staging/cathedral/social-media-manager-interview-2026-05-13.md
 - Colour palette: white #FAFAFA, burgundy #8B2020, gold #D4A853
-- Soul V2: d6332de3-e9d4-490e-ad1c-d3502ccec9a9 (training pending)
-- Soul Cinematic: 54384ac1-1cae-4850-9c86-5c41ceb31b94 (training pending)
+- Soul V2: ea241374-0a51-4b28-90d4-b98fc9d7bc3d
+- Soul Cinematic: 6c02624c-2b07-45a8-a210-f6cda81f70b9
 - Training images: 10 photorealistic angles at ~/Downloads/maya/split/
 
 ## Hermes ComfyUI Fix (2026-05-13)

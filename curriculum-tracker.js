@@ -3,26 +3,21 @@
 // Tracks progress through 10-block Basic Reflex system.
 
 import Database from 'better-sqlite3';
+import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HOME = process.env.HOME;
 const DB_PATH = path.join(HOME, 'nanoclaw', 'vortex_data', 'metrics.db');
 
 // ── Canonical 10-Block Curriculum ───────────────────────────────────────────
-// Source: ~/cathedral-vault/10_Agents/kit/decisions/canonical-curriculum-2026-05-03.md
+// Source: ~/nanoclaw/block-config.json (generated from 10_BLOCK_CURRICULUM.md)
+// Authority: Paul Logan — Head Coach. He changes it, code obeys.
 
-const BLOCKS = [
-  { num: 1,  name: 'Foundation',  sessions_to_advance: 4,  focus: 'Guard position, mindset',          session_types: ['class', 'padwork', 'technique'] },
-  { num: 2,  name: 'Level',       sessions_to_advance: 6,  focus: 'Footwork fundamentals',             session_types: ['class', 'padwork', 'technique'] },
-  { num: 3,  name: 'Angle',       sessions_to_advance: 8,  focus: 'Straight punches + turns',          session_types: ['class', 'padwork', 'technique'] },
-  { num: 4,  name: 'Inside',      sessions_to_advance: 8,  focus: 'Hooks, crosses, body work',         session_types: ['class', 'padwork', 'technique'] },
-  { num: 5,  name: 'Rhythm',      sessions_to_advance: 10, focus: 'Timing, broken rhythm',             session_types: ['class', 'padwork', 'technique', 'sparring'] },
-  { num: 6,  name: 'Counter',     sessions_to_advance: 10, focus: 'Defense-to-offense integration',    session_types: ['class', 'padwork', 'technique', 'sparring'] },
-  { num: 7,  name: 'Pressure',    sessions_to_advance: 12, focus: 'Technique under fatigue',           session_types: ['class', 'padwork', 'sparring'] },
-  { num: 8,  name: 'Escape',      sessions_to_advance: 12, focus: 'Ring craft, rope/corner escape',    session_types: ['class', 'sparring'] },
-  { num: 9,  name: 'Control',     sessions_to_advance: 15, focus: 'Strategy, opponent reading',        session_types: ['sparring'] },
-  { num: 10, name: 'Arena',       sessions_to_advance: 0,  focus: 'Full integration, independence',    session_types: ['sparring'] }
-];
+const CONFIG_PATH = path.join(__dirname, 'block-config.json');
+const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
+const BLOCKS = config.blocks;
 
 // Session types that count toward curriculum progress
 const CURRICULUM_SESSION_TYPES = new Set(['class', 'padwork', 'technique', 'sparring']);

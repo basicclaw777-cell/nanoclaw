@@ -9,7 +9,13 @@
  * (c) Basic Reflex / Paul Logan 2026
  */
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { validatePunchCombo, WEIGHT_TRANSITIONS, PUNCHES } from './combination-validator.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const _rhythmConfig = JSON.parse(fs.readFileSync(path.join(__dirname, 'block-config.json'), 'utf-8'));
 
 // ─── SUBDIVISION DEFINITIONS ────────────────────────────────────────────────
 
@@ -346,6 +352,37 @@ function listRudiments(level = 'intermediate') {
   return results;
 }
 
+// ─── BLOCK GATE ─────────────────────────────────────────────────────────────
+// Rhythm engine only unlocks at Block 5+. Below that, students aren't ready.
+
+/**
+ * Check if a student's block has rhythm engine access.
+ * @param {number} blockNum - Student's current block (1-10)
+ * @returns {object} { unlocked, block, message }
+ */
+function checkRhythmGate(blockNum) {
+  const block = _rhythmConfig.blocks.find(b => b.num === blockNum);
+  if (!block) return { unlocked: false, error: `Unknown block: ${blockNum}` };
+
+  return {
+    unlocked: !!block.rhythmEngineUnlocked,
+    block: { num: block.num, name: block.name },
+    message: block.rhythmEngineUnlocked
+      ? `Rhythm engine unlocked at Block ${block.num} (${block.name})`
+      : `Rhythm engine locked until Block 5 (Rhythm). Student is at Block ${block.num} (${block.name}).`,
+  };
+}
+
+/**
+ * Generate from rudiment with block gate check.
+ * Returns gate error if student's block hasn't unlocked rhythm engine.
+ */
+function generateForBlock(rudimentName, blockNum, options = {}) {
+  const gate = checkRhythmGate(blockNum);
+  if (!gate.unlocked) return { error: gate.message, gate };
+  return generateFromRudiment(rudimentName, options);
+}
+
 // ─── EXPORTS ────────────────────────────────────────────────────────────────
 
 export {
@@ -355,6 +392,8 @@ export {
   generateFromRudiment,
   generateClickTrack,
   listRudiments,
+  checkRhythmGate,
+  generateForBlock,
 };
 
 // ─── CLI TEST HARNESS ───────────────────────────────────────────────────────

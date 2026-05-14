@@ -1,0 +1,127 @@
+{
+  "_source": "Generated from ~/cathedral-vault/06_Basic_Reflex_Syllabus/10_BLOCK_CURRICULUM.md",
+  "_authority": "Paul Logan — Head Coach. This is a living config. Paul changes it, code obeys.",
+  "_updated": "2026-05-14",
+  "blocks": [
+    {
+      "num": 1, "name": "Foundation",
+      "focus": "Guard position, mindset",
+      "stage": "0-1",
+      "sessions_to_advance": 4,
+      "session_types": ["class", "padwork", "technique"],
+      "punches": [],
+      "defenses": [],
+      "footwork": [],
+      "maxComboLength": 0,
+      "rhythmEngineUnlocked": false
+    },
+    {
+      "num": 2, "name": "Level",
+      "focus": "Footwork fundamentals",
+      "stage": "1-2",
+      "sessions_to_advance": 6,
+      "session_types": ["class", "padwork", "technique"],
+      "punches": [],
+      "defenses": [],
+      "footwork": ["step"],
+      "maxComboLength": 0,
+      "rhythmEngineUnlocked": false
+    },
+    {
+      "num": 3, "name": "Angle",
+      "focus": "Straight punches + turns",
+      "stage": "2-3",
+      "sessions_to_advance": 8,
+      "session_types": ["class", "padwork", "technique"],
+      "punches": ["jab", "jab_body", "cross", "rear_body"],
+      "defenses": ["parry", "catch"],
+      "footwork": ["step", "snap"],
+      "maxComboLength": 2,
+      "rhythmEngineUnlocked": false
+    },
+    {
+      "num": 4, "name": "Inside",
+      "focus": "Hooks, crosses, body work",
+      "stage": "2-3",
+      "sessions_to_advance": 8,
+      "session_types": ["class", "padwork", "technique"],
+      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "defenses": ["parry", "catch", "front_block", "hook_block", "body_block"],
+      "footwork": ["step", "snap", "pop"],
+      "maxComboLength": 3,
+      "rhythmEngineUnlocked": false
+    },
+    {
+      "num": 5, "name": "Rhythm",
+      "focus": "Timing, broken rhythm",
+      "stage": "3",
+      "sessions_to_advance": 10,
+      "session_types": ["class", "padwork", "technique", "sparring"],
+      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "bob_weave_left", "bob_weave_right"],
+      "footwork": ["step", "snap", "pop", "reset", "beat"],
+      "maxComboLength": 5,
+      "rhythmEngineUnlocked": true
+    },
+    {
+      "num": 6, "name": "Counter",
+      "focus": "Defense-to-offense integration",
+      "stage": "3-4",
+      "sessions_to_advance": 10,
+      "session_types": ["class", "padwork", "technique", "sparring"],
+      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
+      "footwork": ["step", "snap", "pop", "reset", "beat"],
+      "maxComboLength": 5,
+      "rhythmEngineUnlocked": true
+    },
+    {
+      "num": 7, "name": "Pressure",
+      "focus": "Technique under fatigue",
+      "stage": "4",
+      "sessions_to_advance": 12,
+      "session_types": ["class", "padwork", "sparring"],
+      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
+      "footwork": ["step", "snap", "pop", "reset", "beat"],
+      "maxComboLength": 5,
+      "rhythmEngineUnlocked": true
+    },
+    {
+      "num": 8, "name": "Escape",
+      "focus": "Ring craft, rope/corner escape",
+      "stage": "4-5",
+      "sessions_to_advance": 12,
+      "session_types": ["class", "sparring"],
+      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
+      "footwork": ["step", "snap", "pop", "reset", "beat"],
+      "maxComboLength": 6,
+      "rhythmEngineUnlocked": true
+    },
+    {
+      "num": 9, "name": "Control",
+      "focus": "Strategy, opponent reading",
+      "stage": "5",
+      "sessions_to_advance": 15,
+      "session_types": ["sparring"],
+      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
+      "footwork": ["step", "snap", "pop", "reset", "beat"],
+      "maxComboLength": 8,
+      "rhythmEngineUnlocked": true
+    },
+    {
+      "num": 10, "name": "Arena",
+      "focus": "Full integration, independence",
+      "stage": "5-6",
+      "sessions_to_advance": 0,
+      "session_types": ["sparring"],
+      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
+      "footwork": ["step", "snap", "pop", "reset", "beat"],
+      "maxComboLength": 999,
+      "rhythmEngineUnlocked": true
+    }
+  ]
+}
