@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-05-10",
+  "lastUpdated": "2026-05-14",
   "source": "Paul direct input — first real seed data",
   "domains": {
     "music": {
@@ -2841,6 +2841,128 @@
       "value": "bullets then elaborate if asked",
       "confidence": 0.85,
       "source": "belief-tracker-2026-05-11"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "Bebas Neue for authority — bold, uppercase, industrial headings",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "gold #C4943A and maroon #7B3040 as accent on dark backgrounds",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "information density over whitespace — see everything at once",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "character sheet aesthetic — annotated, technical, callouts and labels",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "aesthetic",
+      "value": "dashboards over single-metric displays, maps over lists",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "aesthetic",
+      "item": "LING character card",
+      "status": "YES",
+      "reason": "ink-outline, evaluating expression, warm amber, red accent",
+      "source": "orchestrator-harvest-2026-05-14"
+    },
+    {
+      "domain": "aesthetic",
+      "item": "two-pass poster pipeline",
+      "status": "YES",
+      "reason": "text-free art + real logo composite — keeps AI text out",
+      "source": "orchestrator-harvest-2026-05-14"
+    },
+    {
+      "domain": "communication",
+      "value": "emoji signals: 👍🏽=acknowledged, 👊🏽👊🏽👊🏽=strong approval, 🙏🏽=gratitude",
+      "confidence": 0.95,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "communication",
+      "value": "approval language: 'looks good'=proceed, 'cool'=neutral, 'let me think'=don't push",
+      "confidence": 0.95,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "communication",
+      "value": "unprompted link or image = new idea, capture immediately",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "communication",
+      "value": "warm but final — warmth and accountability in same gesture",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "communication",
+      "value": "written for the third reader — crafted for anyone evaluating later",
+      "confidence": 0.85,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "forensic precision over emotional description",
+      "source": "orchestrator-harvest-2026-05-14"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "mechanism over effect — name the operating system not the behavior",
+      "source": "orchestrator-harvest-2026-05-14"
+    },
+    {
+      "domain": "writing_voice",
+      "key": "confirmed_qualities",
+      "value": "compression to one load-bearing phrase",
+      "source": "orchestrator-harvest-2026-05-14"
+    },
+    {
+      "domain": "decision_making",
+      "value": "needs the number first — quantify before deciding, concrete numbers liberate",
+      "confidence": 0.95,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "decision_making",
+      "value": "the 'or not' trigger — when Paul adds 'or not', decision is made",
+      "confidence": 0.9,
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "domain": "decision_making",
+      "value": "the compounding question — 'does this compound?' as universal filter",
+      "confidence": 0.9,
+      "source": "orchestrator-harvest-2026-05-14"
+    },
+    {
+      "domain": "decision_making",
+      "value": "solar plexus signal — proprioceptive detection of betrayal before evidence arrives",
+      "confidence": 0.9,
+      "source": "paul-correction-2026-05-14"
+    },
+    {
+      "domain": "decision_making",
+      "value": "sits with big decisions overnight — I Ching as structured access to intuition",
+      "confidence": 0.85,
+      "source": "orc-harvest-2026-05-14"
     }
   ],
   "rejections": [
@@ -2878,6 +3000,26 @@
       "pattern": "asking permission before parallel agents",
       "reason": "just run them",
       "source": "cathy-standard-2026-05-11"
+    },
+    {
+      "pattern": "corporate formality",
+      "reason": "clean but soulless design",
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "pattern": "excessive whitespace",
+      "reason": "feels empty, not elegant — density is the aesthetic",
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "pattern": "generic motivational aesthetics",
+      "reason": "no sunrise gradients, no hustle harder energy",
+      "source": "orc-harvest-2026-05-14"
+    },
+    {
+      "pattern": "cautious deflection",
+      "reason": "'hmm I'm not sure' instead of direct disagreement with reasoning",
+      "source": "orc-harvest-2026-05-14"
     }
   ]
 }
