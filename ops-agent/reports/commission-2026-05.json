@@ -1,0 +1,41 @@
+{
+  "generated": "2026-05-14T12:12:55.631Z",
+  "dataAsOf": "2026-05-04",
+  "dataStaleDays": 0,
+  "totalActiveMembers": 73,
+  "passBreakdown": {
+    "unlimited": 0,
+    "pack": 20,
+    "PT": 29,
+    "trial": 12,
+    "drop_in": 10,
+    "kids": 1,
+    "bootcamp": 0,
+    "other": 1
+  },
+  "revenue": {
+    "estimatedGroupMonthly": 31680,
+    "estimatedPTMonthly": 152250,
+    "estimatedTotalMonthly": 183930,
+    "note": "Estimates based on member count × average rates. Actual from PunchPass revenue report."
+  },
+  "commission": {
+    "groupPerHead": 90,
+    "ptRate": "50%",
+    "estimatedGroupCommission": 15840,
+    "estimatedPTCommission": 76125,
+    "note": "Coach assignment not tracked in PunchPass. Paul assigns manually."
+  },
+  "coaches": {
+    "aman": {
+      "name": "Aman",
+      "active": false,
+      "lastDay": "2026-06-11"
+    },
+    "paul": {
+      "name": "Paul",
+      "active": true,
+      "isOwner": true
+    }
+  }
+}

@@ -46,6 +46,10 @@ Private sovereign AI research system for Paul (boxing gym owner, Hong Kong). Loc
 │   ├── summaries/
 │   └── conversations/
 ├── prompts/                   # System prompts for Obliteratus engine
+├── comms-engine/              # Client comms (Phase 3) — WhatsApp templates, outbox queue
+├── growth-agent/              # Growth (Phase 4) — calendar, corporate, newsletter, SEO
+├── merch-agent/               # Merch (Phase 5) — run lifecycle, supplier DB
+├── course-engine/             # Digital course (Phase 6) — 10 modules, authority map, filming briefs
 └── vortex_data/
     └── metrics.db             # SQLite — all system metrics + embeddings
 
@@ -142,6 +146,24 @@ All six processes must be running. Check with `pm2 list`.
 | vault-state-refresh | ~/nanoclaw/vault-state-generator.js | — | Cron: 06:00 HKT daily. Regenerates vault state for DeepSeek seed prompt |
 
 If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
+
+## Cathedral Staff Agents (Phases 1-6)
+All 6 phases of the cathedral-staff-build-plan.md are COMPLETE.
+24/24 Clara functions replaced. All agents serve from localhost:8080.
+
+| Agent | Directory | Telegram | Web UI | PM2 Crons |
+|-------|-----------|----------|--------|-----------|
+| Operations | ops-agent/ | /ops | /dashboard | — |
+| Client Comms | comms-engine/ | /comms | /comms | daily expiry+birthdays, monthly lapsed |
+| Growth + Maya | growth-agent/ | /growth, /maya | /growth | weekly calendar, monthly newsletter+SEO |
+| Merch | merch-agent/ | /merch | /merch | — (event-driven) |
+| Course | course-engine/ | /course | /course | — (project-driven) |
+
+Key infrastructure:
+- cath-bridge.cjs routes all UIs at localhost:8080
+- environments/lobby.html has 13 rooms
+- the-physician.mjs monitors all agents for staleness
+- CJS-ESM bridge: child_process.execSync with node -e "import(...)"
 
 ## Boxing Video Pipeline
 - **Pipeline script:** ~/Cathedral/boxing-pipeline.sh
@@ -1264,3 +1286,20 @@ the-timekeeper to go offline. Don't repeat it.
 - Web app quality gap comes from reasoning model rewriting casual prompts before calling image_gen
 - Source: github.com/asgeirtj/system_prompts_leaks (GPT-5 + Gemini 3.1 Pro prompts)
 - Our two-stage pipeline replicates this: DeepSeek = our reasoning layer
+
+## Reed Scene Director — Character Scene Generation (built 2026-05-14)
+- Script: ~/nanoclaw/reed-scene-director.js (ESM, two-stage: DeepSeek prompt → Higgsfield generation)
+- Character registry: ~/nanoclaw/reed-characters.json (Logan, Ling, Maya + gym environment specs)
+- Output: ~/nanoclaw/reed-scene-outbox/
+- Exports: generateScene(), generateVideo(), generateEnvironment(), buildScenePrompt(), buildVideoPrompt(), getCharacter(), registry
+- Two-pass pipeline: Soul V2 pass1 (face accuracy via --custom_reference_id UUID) → Nano Banana Pro pass2 (gym grounding with detailed BR gym prompt)
+- DeepSeek as prompt writer: cinematography grammar (ARRI Alexa, Panavision anamorphic, Kodak Vision3), BR color science (5200-5600K neutral, anti-orange)
+- Scene safety: checkSceneSafety() blocks sparring, contact, grappling, clinching — solo activities only. Hallucination prevention.
+- Cinema Worldbuilder grammar absorbed: 5 cinema modes, Seedance video prompts (Style & Mood / Dynamic / Static), diegetic audio design
+- Telegram commands: /scene [character] [activity], /scene env [description], /scenevideo [character] [activity]
+- Soul IDs: Logan 2a825762, Ling fbc29317, Maya ea241374
+- Key finding: nano_banana_2 does NOT support --custom_reference_id or --soul-id. Must use text2image_soul_v2 for face lock.
+- Key finding: text2image_soul_v2 is text-only (no --image input). Gym always generated from text description, not reference photo.
+- Two-pass solves both: Soul V2 gets face right, Nano Banana grounds into BR gym environment.
+- TRIGGER: /scene and /scenevideo Telegram commands (manual). Future: wire into Reed Daily Lab.
+- Pending: real BR gym reference photos (~/Downloads/gym images -basic reflex/) not yet used as pass 2 --image reference. Video pipeline untested. Ling/Maya untested.

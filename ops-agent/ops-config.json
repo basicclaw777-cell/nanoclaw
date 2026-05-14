@@ -1,0 +1,22 @@
+{
+  "_authority": "Paul Logan — edit this file to update operations data. Code reads it.",
+  "_updated": "2026-05-14",
+  "fixedCosts": {
+    "rent": 52000,
+    "cleaning": 3000,
+    "insurance": 2000,
+    "mpf": 1500,
+    "utilities": 2000,
+    "misc": 1500
+  },
+  "mpf": {
+    "provider": "HSBC MPF",
+    "lastContributionDate": null,
+    "staff": []
+  },
+  "hr": {
+    "insuranceRenewalDate": null,
+    "staff": [],
+    "deadlines": []
+  }
+}

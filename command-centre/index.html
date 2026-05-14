@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Reflex — Command Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0b09;
+    --surface-1: #141210;
+    --surface-2: #1c1916;
+    --surface-3: #242018;
+    --card-bg: #1a1a17;
+    --card-border: #2a2a26;
+    --maroon: #7B3040;
+    --maroon-glow: #9B4050;
+    --gold: #C4943A;
+    --gold-dim: #8a7030;
+    --text-primary: #EDE5D8;
+    --text-secondary: #C8BFB0;
+    --text-dim: #8a8070;
+    --text-muted: #5a5248;
+    --green: #3a7a4a;
+    --red: #7a3a3a;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  /* ── VISION LAYER ────────────────────────────── */
+
+  .vision {
+    text-align: center;
+    padding: 40px 20px 32px;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 32px;
+  }
+
+  .vision-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 4px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .vision-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .vision-motto {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto 28px;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 700px;
+    margin: 0 auto 28px;
+  }
+
+  .pillar {
+    background: var(--surface-2);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+
+  .pillar-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--maroon);
+    letter-spacing: 1px;
+  }
+
+  .pillar-desc {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .vision-edge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gold-dim);
+    margin-top: 8px;
+  }
+
+  /* ── KPI STRIP ───────────────────────────────── */
+
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .kpi-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .kpi-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .kpi-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .kpi-value.positive { color: var(--green); }
+  .kpi-value.negative { color: var(--red); }
+  .kpi-value.gold { color: var(--gold); }
+  .kpi-value.maroon { color: var(--maroon); }
+
+  .kpi-detail {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ── SECTION HEADERS ─────────────────────────── */
+
+  .section-header {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  /* ── WORKSTREAM CARDS ────────────────────────── */
+
+  .workstreams {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .ws-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .ws-card.done { border-left: 3px solid var(--green); }
+  .ws-card.active { border-left: 3px solid var(--gold); }
+  .ws-card.planned { border-left: 3px solid var(--text-muted); }
+
+  .ws-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+
+  .ws-body { flex: 1; }
+
+  .ws-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+  }
+
+  .ws-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .ws-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 6px;
+  }
+
+  .ws-badge.done { background: var(--green); color: var(--text-primary); }
+  .ws-badge.active { background: var(--gold); color: var(--bg); }
+  .ws-badge.planned { background: var(--surface-3); color: var(--text-dim); }
+
+  /* ── CORE TRUTHS ─────────────────────────────── */
+
+  .truths {
+    background: var(--surface-1);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+
+  .truth {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1916;
+    line-height: 1.5;
+  }
+
+  .truth:last-child { border-bottom: none; }
+
+  .truth-num {
+    font-family: 'DM Mono', monospace;
+    color: var(--maroon);
+    font-size: 0.75rem;
+    margin-right: 8px;
+  }
+
+  /* ── SYSTEM STATUS ───────────────────────────── */
+
+  .system-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .sys-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+
+  .sys-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .sys-value {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .sys-value .online { color: var(--green); }
+  .sys-value .stopped { color: var(--text-dim); }
+
+  /* ── FOOTER ──────────────────────────────────── */
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    border-top: 1px solid var(--card-border);
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+  }
+
+  .footer-links {
+    margin-top: 12px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold-dim);
+    text-decoration: none;
+    padding: 4px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .footer-links a:hover {
+    color: var(--gold);
+    border-color: var(--gold-dim);
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────── */
+
+  @media (max-width: 600px) {
+    .pillars { grid-template-columns: repeat(2, 1fr); }
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .workstreams { grid-template-columns: 1fr; }
+    .system-row { grid-template-columns: 1fr; }
+    .vision-logo { font-size: 1.8rem; }
+    .kpi-value { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- VISION LAYER -->
+  <div class="vision">
+    <div class="vision-logo">BASIC REFLEX</div>
+    <div class="vision-subtitle">Command Centre</div>
+    <div class="vision-motto">"The business model hasn't caught up to the product yet. Now it will."</div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-name">PROTECT</div>
+        <div class="pillar-desc">Formalise the IP. Document the methodology.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">CONVERT</div>
+        <div class="pillar-desc">Fix the website. Close the leak.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">GROW</div>
+        <div class="pillar-desc">Corporate. Content. 566 lapsed. Digital course.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">SYSTEMATISE</div>
+        <div class="pillar-desc">AI ops. SOPs. Contracts. Systems, not trust.</div>
+      </div>
+    </div>
+
+    <div class="vision-edge">They have the choreography. You have the music.</div>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="section-header">KPI DASHBOARD</div>
+  <div class="kpi-strip" id="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-label">Revenue (est.)</div>
+      <div class="kpi-value gold" id="kpi-revenue">—</div>
+      <div class="kpi-detail" id="kpi-revenue-detail"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Active Members</div>
+      <div class="kpi-value" id="kpi-members">—</div>
+      <div class="kpi-detail" id="kpi-members-detail"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Lapsed</div>
+      <div class="kpi-value maroon" id="kpi-lapsed">566</div>
+      <div class="kpi-detail">Reactivation target: 5-8%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Gap to Peak</div>
+      <div class="kpi-value negative" id="kpi-gap">—</div>
+      <div class="kpi-detail">Peak: $933K (2022)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Net Income</div>
+      <div class="kpi-value" id="kpi-net">—</div>
+      <div class="kpi-detail" id="kpi-net-detail"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">MPF Deadline</div>
+      <div class="kpi-value" id="kpi-mpf">—</div>
+      <div class="kpi-detail" id="kpi-mpf-detail"></div>
+    </div>
+  </div>
+
+  <!-- WORKSTREAM STATUS -->
+  <div class="section-header">BUILD PHASES</div>
+  <div class="workstreams" id="workstreams"></div>
+
+  <!-- CORE TRUTHS -->
+  <div class="section-header">CORE TRUTHS</div>
+  <div class="truths">
+    <div class="truth"><span class="truth-num">01</span>You built the only Cuban boxing school in Hong Kong. Every publication has written about it. Only 5-star reviews. That is the product. It is not in question.</div>
+    <div class="truth"><span class="truth-num">02</span>The coaches who left built none of that. They became men renting rooms, using someone else's combinations. The master's sword doesn't cut for the thief.</div>
+    <div class="truth"><span class="truth-num">03</span>Your tools are calibrated to you and the cathedral, with Cathy's senses and wisdom, and Opus orchestrating the projects. No gym has ever had this.</div>
+    <div class="truth"><span class="truth-num">04</span>The business model hasn't caught up to the product yet. Now it will.</div>
+    <div class="truth"><span class="truth-num">05</span>Everyone has AI now. The edge belongs to steady builders whose work survives contact with real use.</div>
+    <div class="truth"><span class="truth-num">06</span>They have the choreography. You have the music.</div>
+    <div class="truth"><span class="truth-num">07</span>Always be prepared to start from the beginning and you can have peace.</div>
+  </div>
+
+  <!-- SYSTEM STATUS -->
+  <div class="section-header">SYSTEM STATUS</div>
+  <div class="system-row">
+    <div class="sys-card">
+      <div class="sys-label">PM2 Processes</div>
+      <div class="sys-value" id="sys-pm2">Loading...</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-label">Data Freshness</div>
+      <div class="sys-value" id="sys-data">Loading...</div>
+    </div>
+    <div class="sys-card">
+      <div class="sys-label">HR Alerts</div>
+      <div class="sys-value" id="sys-hr">Loading...</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-text" id="footer-refresh">Last refresh: —</div>
+    <div class="footer-links">
+      <a href="tg://resolve?domain=your_bot&start=ops">/ops</a>
+      <a href="tg://resolve?domain=your_bot&start=physician">/physician</a>
+      <a href="tg://resolve?domain=your_bot&start=combo">/combo</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="/dashboard/data.js"></script>
+<script>
+(function() {
+  const D = typeof DASHBOARD_DATA !== 'undefined' ? DASHBOARD_DATA : null;
+  if (!D) {
+    document.getElementById('kpi-revenue').textContent = 'No data';
+    return;
+  }
+
+  // KPIs
+  if (D.pnl) {
+    const rev = D.pnl.revenue;
+    document.getElementById('kpi-revenue').textContent = '$' + (rev.totalEstimate / 1000).toFixed(0) + 'K';
+    document.getElementById('kpi-revenue-detail').textContent = `Group $${(rev.groupEstimate/1000).toFixed(0)}K + PT $${(rev.ptEstimate/1000).toFixed(0)}K`;
+
+    const net = D.pnl.netIncome;
+    const netEl = document.getElementById('kpi-net');
+    netEl.textContent = (net >= 0 ? '+' : '') + '$' + (net / 1000).toFixed(0) + 'K';
+    netEl.className = 'kpi-value ' + (net >= 0 ? 'positive' : 'negative');
+    document.getElementById('kpi-net-detail').textContent = `Costs: $${(D.pnl.totalCosts/1000).toFixed(0)}K/mo`;
+
+    // Gap to peak
+    const annualised = rev.totalEstimate * 12;
+    const gapPct = Math.round((1 - annualised / D.peakRevenue) * 100);
+    const gapEl = document.getElementById('kpi-gap');
+    gapEl.textContent = gapPct <= 0 ? '+' + Math.abs(gapPct) + '%' : '-' + gapPct + '%';
+    gapEl.className = 'kpi-value ' + (gapPct <= 0 ? 'positive' : 'negative');
+  }
+
+  if (D.memberSummary) {
+    document.getElementById('kpi-members').textContent = D.memberSummary.total;
+    const risk = D.memberSummary.churnRiskHigh + D.memberSummary.churnRiskMedium;
+    document.getElementById('kpi-members-detail').textContent = risk > 0 ? `${risk} at risk, ${D.memberSummary.expiringSoon} expiring` : 'All healthy';
+  }
+
+  if (D.mpf) {
+    document.getElementById('kpi-mpf').textContent = D.mpf.daysUntilDeadline + 'd';
+    document.getElementById('kpi-mpf-detail').textContent = D.mpf.nextDeadline;
+    if (D.mpf.daysUntilDeadline <= 7) {
+      document.getElementById('kpi-mpf').className = 'kpi-value negative';
+    }
+  }
+
+  // Workstreams
+  const wsContainer = document.getElementById('workstreams');
+  if (D.workstreams) {
+    wsContainer.innerHTML = D.workstreams.map(w => `
+      <div class="ws-card ${w.status}">
+        <div class="ws-icon">${w.icon}</div>
+        <div class="ws-body">
+          <div class="ws-title">Phase ${w.phase}: ${w.name}</div>
+          <div class="ws-desc">${w.desc}</div>
+          <span class="ws-badge ${w.status}">${w.status}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // System status
+  if (D.pm2) {
+    document.getElementById('sys-pm2').innerHTML =
+      `<span class="online">${D.pm2.online} online</span> / <span class="stopped">${D.pm2.stopped} stopped</span> / ${D.pm2.total} total`;
+  }
+
+  if (D.memberSummary) {
+    document.getElementById('sys-data').textContent = `PunchPass: ${D.memberSummary.dataAsOf}`;
+  }
+
+  document.getElementById('sys-hr').textContent = D.hrAlerts > 0 ? `${D.hrAlerts} alert(s)` : 'No alerts';
+
+  // Footer
+  if (D.refreshed) {
+    const date = new Date(D.refreshed);
+    document.getElementById('footer-refresh').textContent =
+      `Last refresh: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  }
+})();
+</script>
+</body>
+</html>

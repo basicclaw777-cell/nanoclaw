@@ -47,6 +47,12 @@ const MODULES = {
     status: 'live',
     telegram_cmd: '/eyes'
   },
+  maya: {
+    name: 'Maya (Social Voice)',
+    capabilities: ['caption', 'story_sequence', 'reel_script', 'celebrate'],
+    status: 'live',
+    telegram_cmd: '/maya'
+  },
   conductor: {
     name: 'Content Conductor',
     capabilities: ['assemble', 'queue', 'suggest'],

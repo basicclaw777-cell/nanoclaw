@@ -37,6 +37,11 @@ import attendance from './attendance-logger.js';
 import conductor from './content-conductor.js';
 import studentIntel from './student-intelligence.js';
 import communityRadar from './community-radar.js';
+import { registerOpsCommands } from './ops-agent/ops-commands.js';
+import { registerCommsCommands } from './comms-engine/comms-commands.js';
+import { registerGrowthCommands } from './growth-agent/growth-commands.js';
+import { registerMerchCommands } from './merch-agent/merch-commands.js';
+import { registerCourseCommands } from './course-engine/course-commands.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -176,6 +181,13 @@ const bot = new TelegramBot(token, { polling: false });
 
 // ── Boxing commands (Basic Reflex) ──────────────────────────────────────────
 registerBoxingCommands(bot);
+
+// ── Operations Agent commands ────────────────────────────────────────────────
+registerOpsCommands(bot);
+registerCommsCommands(bot);
+registerGrowthCommands(bot);
+registerMerchCommands(bot);
+registerCourseCommands(bot);
 
 // ── Telegram health state (written to cath-state.json) ──────────────────────
 const telegramHealth = {
@@ -3801,6 +3813,12 @@ bot.onText(/^\/reed(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
 \`/reed inner\` — Inner game / philosophical (dramatic, contemplative)
 \`/reed video\` — 5s motion
 
+*Scene Director* (text commands):
+\`/scene logan training on heavy bag\` — Character in gym scene
+\`/scene maya wrapping hands\` — Any character + solo activity
+\`/scene env empty gym at dawn\` — Environment plate (no people)
+\`/scenevideo logan shadow boxing\` — 5s video scene
+
 *Commands:*
 \`/shots\` — Today's photo assignments
 \`/lab\` — Run Daily Lab now
@@ -3935,6 +3953,82 @@ bot.onText(/^\/digest(?:@\w+)?$/i, async (msg) => {
     execSync('cd ~/nanoclaw && node reed-lab/roundtable-digest.js --all', { encoding: 'utf-8', timeout: 300000 });
   } catch (err) {
     await safeSend(chatId, `⚠️ Digest error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── Reed Scene Director — /scene ────────────────────────────────────────────
+bot.onText(/^\/scene(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const input = match?.[1]?.trim();
+  if (!input) {
+    return safeSend(chatId, `🎬 *Reed Scene Director*
+
+\`/scene logan training on heavy bag\`
+\`/scene ling standing in gym doorway\`
+\`/scene maya wrapping hands\`
+\`/scene env empty gym at dawn\`
+
+Characters: logan, ling, maya
+First word = character name (or "env" for environment plate)`, { parse_mode: 'Markdown' });
+  }
+
+  try {
+    const { generateScene, generateEnvironment } = await import('./reed-scene-director.js');
+    const parts = input.split(/\s+/);
+    const first = parts[0].toLowerCase();
+    const sceneDesc = parts.slice(1).join(' ');
+
+    if (first === 'env' || first === 'environment') {
+      await safeSend(chatId, `🎬 Reed: Building environment plate — "${sceneDesc}"...`);
+      const result = await generateEnvironment(sceneDesc);
+      if (!result) await safeSend(chatId, '⚠️ Reed: Environment generation failed.');
+    } else {
+      if (!sceneDesc) {
+        return safeSend(chatId, '⚠️ Need a scene description after character name.');
+      }
+      await safeSend(chatId, `🎬 Reed: Building scene — ${first} "${sceneDesc}"...`);
+      const result = await generateScene(first, sceneDesc);
+      if (!result) await safeSend(chatId, '⚠️ Reed: Scene generation failed.');
+    }
+  } catch (err) {
+    console.error('[reed-scene]', err.message);
+    await safeSend(chatId, `⚠️ Reed scene error: ${err.message.slice(0, 200)}`);
+  }
+});
+
+// ── Reed Scene Video — /scenevideo ──────────────────────────────────────────
+bot.onText(/^\/scenevideo(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const input = match?.[1]?.trim();
+  if (!input) {
+    return safeSend(chatId, `🎬 *Reed Video Director*
+
+\`/scenevideo logan shadow boxing\`
+\`/scenevideo maya jump rope\`
+\`/scenevideo logan wrapping hands\`
+
+Characters: logan, ling, maya
+Generates 5s Seedance video with BR cinema grammar.`, { parse_mode: 'Markdown' });
+  }
+
+  try {
+    const { generateVideo } = await import('./reed-scene-director.js');
+    const parts = input.split(/\s+/);
+    const character = parts[0].toLowerCase();
+    const sceneDesc = parts.slice(1).join(' ');
+
+    if (!sceneDesc) {
+      return safeSend(chatId, '⚠️ Need a scene description after character name.');
+    }
+
+    await safeSend(chatId, `🎬 Reed: Building video — ${character} "${sceneDesc}" (5s Seedance)...`);
+    const result = await generateVideo(character, sceneDesc);
+    if (!result) await safeSend(chatId, '⚠️ Reed: Video generation failed.');
+  } catch (err) {
+    console.error('[reed-scenevideo]', err.message);
+    await safeSend(chatId, `⚠️ Reed video error: ${err.message.slice(0, 200)}`);
   }
 });
 
@@ -5203,7 +5297,7 @@ import { createRequire } from 'module';
 const _require = createRequire(import.meta.url);
 const agentEngine = _require(path.join(process.env.HOME, 'Cathedral', 'agents', 'agent-engine.js'));
 
-const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼', ling: '🔴' };
+const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼', ling: '🔴', maya: '⭐' };
 
 function registerAgentCommand(agentId, pattern) {
   bot.onText(pattern, async (msg, match) => {
@@ -5238,6 +5332,7 @@ registerAgentCommand('br', /^\/br-agent(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('universe', /^\/universe(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('trading', /^\/trading-agent(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('ling', /^\/ling(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('maya', /^\/maya(?:@\w+)?\s+(.+)$/is);
 
 // /agents — list all available agents
 bot.onText(/^\/agents(?:@\w+)?\s*$/i, async (msg) => {

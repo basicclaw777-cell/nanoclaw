@@ -1,0 +1,97 @@
+{
+  "week": "2026-05-18",
+  "generated": "2026-05-14T12:56:50.903Z",
+  "principle": "Test range",
+  "featuredBlock": {
+    "num": 10,
+    "name": "Arena"
+  },
+  "posts": [
+    {
+      "day": "Monday",
+      "type": "reel",
+      "topic": "Block 10 drill breakdown",
+      "angle": "Start the week with fundamentals",
+      "visual": "Reed pro_photo: clean technique demo",
+      "template": "technique_reel",
+      "cta": "Book your trial — link in bio",
+      "hashtags": [
+        "#BasicReflex",
+        "#BoxingHK",
+        "#CubanBoxing",
+        "#HongKongBoxing",
+        "#BoxingLife"
+      ],
+      "status": "planned"
+    },
+    {
+      "day": "Tuesday",
+      "type": "carousel",
+      "topic": "Monday night class recap",
+      "angle": "The energy from last night",
+      "visual": "Reed: 3-5 class photos, pro_photo style",
+      "template": "class_recap",
+      "cta": "Tag someone who needs this",
+      "hashtags": [
+        "#BasicReflex",
+        "#BoxingHK",
+        "#CubanBoxing",
+        "#BoxingGym",
+        "#BoxingTraining"
+      ],
+      "status": "planned"
+    },
+    {
+      "day": "Wednesday",
+      "type": "post",
+      "topic": "\"Test range...\"",
+      "angle": "Weekly principle — surface layer only",
+      "visual": "Text overlay on gym atmosphere shot",
+      "template": "quick_post",
+      "cta": "Save this for your next session",
+      "hashtags": [
+        "#BasicReflex",
+        "#BoxingHK",
+        "#CubanBoxing",
+        "#BoxingTraining",
+        "#LearnToBox"
+      ],
+      "status": "planned"
+    },
+    {
+      "day": "Thursday",
+      "type": "reel",
+      "topic": "Coach Paul pad work",
+      "angle": "Watch the hands. Every detail matters.",
+      "visual": "Reed dramatic: slow-mo pad work",
+      "template": "technique_reel",
+      "cta": "DM us to get started",
+      "hashtags": [
+        "#BasicReflex",
+        "#BoxingHK",
+        "#CubanBoxing",
+        "#HongKongBoxing",
+        "#BoxingGym"
+      ],
+      "status": "planned"
+    },
+    {
+      "day": "Friday",
+      "type": "post",
+      "topic": "Community highlight",
+      "angle": "Friday vibes at the gym",
+      "visual": "Reed pro_photo: member portrait or group energy",
+      "template": "quick_post",
+      "cta": "WhatsApp +852 9464 5361",
+      "hashtags": [
+        "#BasicReflex",
+        "#BoxingHK",
+        "#CubanBoxing",
+        "#SheungWan",
+        "#PadWork"
+      ],
+      "status": "planned"
+    }
+  ],
+  "note": "Fallback calendar (no LLM). Upgrade with DEEPSEEK_API_KEY."
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merch Agent — Basic Reflex</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #0c0b09; --surface: #151412; --surface-2: #1c1a17;
+  --border: #2a2723; --border-hover: #3d3832;
+  --text: #EDE5D8; --text-muted: #a89f92; --text-dim: #6b6358;
+  --maroon: #7B3040; --gold: #C4943A; --green: #4ade80; --red: #ef4444;
+  --amber: #f59e0b; --blue: #60a5fa; --purple: #a855f7; --pink: #ec4899;
+}
+body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+.wrap { max-width:1000px; margin:0 auto; padding:24px 20px 60px; }
+.header { display:flex; align-items:center; gap:16px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.header h1 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:2px; color:var(--pink); }
+
+.tabs { display:flex; gap:4px; margin-bottom:20px; }
+.tab { padding:8px 16px; border-radius:6px; border:1px solid transparent; background:transparent; color:var(--text-dim); font-family:inherit; font-size:13px; cursor:pointer; transition:all 0.2s; }
+.tab:hover { color:var(--text-muted); }
+.tab.active { background:var(--surface); border-color:var(--border); color:var(--text); }
+
+.panel { display:none; }
+.panel.active { display:block; }
+
+.card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:10px; }
+.card-title { font-weight:600; font-size:15px; margin-bottom:6px; }
+.card-meta { font-size:11px; color:var(--text-dim); }
+
+.status-badge { font-size:10px; padding:2px 8px; border-radius:4px; font-weight:600; text-transform:uppercase; }
+.status-idea { background:rgba(245,158,11,0.15); color:var(--amber); }
+.status-sampling { background:rgba(96,165,250,0.15); color:var(--blue); }
+.status-sample_received { background:rgba(168,85,247,0.15); color:var(--purple); }
+.status-approved { background:rgba(74,222,128,0.15); color:var(--green); }
+.status-ordered { background:rgba(236,72,153,0.15); color:var(--pink); }
+.status-delivered { background:rgba(196,148,58,0.15); color:var(--gold); }
+
+.supplier-cap { display:inline-block; font-size:10px; padding:2px 6px; border-radius:3px; background:rgba(255,255,255,0.05); color:var(--text-dim); margin:2px; }
+
+.rule { font-size:13px; color:var(--text-muted); padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.rule:last-child { border:none; }
+
+.empty { text-align:center; padding:40px; color:var(--text-dim); }
+
+@media (max-width:600px) { .wrap { padding:16px 12px 40px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header"><h1>MERCH AGENT</h1></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('runs')">Active Runs</button>
+    <button class="tab" onclick="showTab('suppliers')">Suppliers</button>
+    <button class="tab" onclick="showTab('ideas')">Ideas</button>
+    <button class="tab" onclick="showTab('history')">History</button>
+    <button class="tab" onclick="showTab('rules')">Rules</button>
+  </div>
+
+  <div class="panel active" id="panel-runs"></div>
+  <div class="panel" id="panel-suppliers"></div>
+  <div class="panel" id="panel-ideas"></div>
+  <div class="panel" id="panel-history"></div>
+  <div class="panel" id="panel-rules"></div>
+</div>
+
+<script>
+let DATA = {};
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="showTab('${name}')"]`).classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+async function load() {
+  try {
+    const [stateRes, suppRes] = await Promise.all([
+      fetch('/merch/state'), fetch('/merch/suppliers')
+    ]);
+    const stateData = await stateRes.json();
+    const suppData = await suppRes.json();
+    DATA.state = stateData.ok ? stateData.state : { runs: [], ideas: [] };
+    DATA.suppliers = suppData.ok ? suppData.suppliers : [];
+    render();
+  } catch(e) { console.error(e); }
+}
+
+function render() {
+  // Active runs
+  const active = (DATA.state.runs || []).filter(r => !['delivered','archived'].includes(r.status));
+  const runsEl = document.getElementById('panel-runs');
+  if (active.length === 0) {
+    runsEl.innerHTML = '<div class="empty">No active runs. Start via /merch new on Telegram.</div>';
+  } else {
+    runsEl.innerHTML = active.map(r => `
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span class="card-title">${esc(r.idea)}</span>
+          <span class="status-badge status-${r.status}">${r.status.replace('_',' ')}</span>
+        </div>
+        <div class="card-meta">
+          ID: ${r.id} | Material: ${r.material || '100% cotton'} | Supplier: ${r.supplier || 'none'}
+          ${r.samples?.length ? ` | Samples: ${r.samples.length}` : ''}
+          ${r.order_qty ? ` | Order: ${r.order_qty} units` : ''}
+          ${r.total_cost ? ` | Cost: HK$${r.total_cost}` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Suppliers
+  const suppEl = document.getElementById('panel-suppliers');
+  suppEl.innerHTML = DATA.suppliers.map(s => `
+    <div class="card">
+      <div class="card-title">${esc(s.name)} ${s.quality_rating === 'approved' ? '✅' : '❓'}</div>
+      <div style="margin:6px 0">${(s.capabilities||[]).map(c => `<span class="supplier-cap">${esc(c)}</span>`).join('')}</div>
+      <div class="card-meta">
+        ${s.website ? s.website + ' | ' : ''}Sample: HK$${s.sample_cost || '?'}
+        ${s.turnaround ? ' | ' + s.turnaround : ''}
+      </div>
+      ${s.notes ? `<div style="font-size:13px;color:var(--text-muted);margin-top:6px;font-style:italic">${esc(s.notes)}</div>` : ''}
+    </div>
+  `).join('') || '<div class="empty">No suppliers.</div>';
+
+  // Ideas
+  const ideas = DATA.state.ideas || [];
+  const ideasEl = document.getElementById('panel-ideas');
+  ideasEl.innerHTML = ideas.length === 0 ? '<div class="empty">No ideas in backlog.</div>' :
+    ideas.map(i => `<div class="card"><span class="card-title">${esc(i.idea)}</span><div class="card-meta">${(i.createdAt||'').split('T')[0]}</div></div>`).join('');
+
+  // History
+  const all = DATA.state.runs || [];
+  const histEl = document.getElementById('panel-history');
+  histEl.innerHTML = all.length === 0 ? '<div class="empty">No merch history.</div>' :
+    all.slice().reverse().map(r => `
+      <div class="card">
+        <span class="status-badge status-${r.status}">${r.status.replace('_',' ')}</span>
+        <strong>${esc(r.idea)}</strong>
+        <div class="card-meta">${r.id} | Created: ${(r.createdAt||'').split('T')[0]}${r.total_cost ? ' | HK$' + r.total_cost : ''}</div>
+      </div>
+    `).join('');
+
+  // Rules
+  document.getElementById('panel-rules').innerHTML = `
+    <div class="card"><div class="card-title">Paul's Merch Rules</div>
+    ${['100% cotton always','Colour variation plan required before ordering','Premium/limited edition angle — consider box packaging','Sample budget: HK$285-350 per sample','Get 2-3 supplier quotes before committing','Poster tees are the premium anchor line'].map(r => `<div class="rule">• ${r}</div>`).join('')}
+    </div>`;
+}
+
+load();
+</script>
+</body>
+</html>

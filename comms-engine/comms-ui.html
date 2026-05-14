@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comms Outbox — Basic Reflex</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #0c0b09; --surface: #151412; --surface-2: #1c1a17;
+  --border: #2a2723; --border-hover: #3d3832;
+  --text: #EDE5D8; --text-muted: #a89f92; --text-dim: #6b6358;
+  --maroon: #7B3040; --gold: #C4943A; --green: #4ade80; --red: #ef4444;
+  --amber: #f59e0b; --blue: #60a5fa;
+}
+body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+a { color:var(--gold); }
+
+.wrap { max-width:1000px; margin:0 auto; padding:24px 20px 60px; }
+
+/* Header */
+.header { display:flex; align-items:center; gap:16px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.header h1 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:2px; color:var(--gold); }
+.header .sub { font-size:12px; color:var(--text-dim); margin-left:auto; }
+
+/* Stats strip */
+.stats { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+.stat { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px 16px; flex:1; min-width:120px; }
+.stat-label { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); margin-bottom:4px; }
+.stat-value { font-family:'DM Mono',monospace; font-size:22px; font-weight:700; }
+.stat-pending .stat-value { color:var(--amber); }
+.stat-sent .stat-value { color:var(--green); }
+.stat-skipped .stat-value { color:var(--text-dim); }
+
+/* Actions bar */
+.actions { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+.btn { padding:8px 16px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text-muted); font-family:inherit; font-size:13px; cursor:pointer; transition:all 0.2s; }
+.btn:hover { border-color:var(--border-hover); color:var(--text); }
+.btn-gold { border-color:var(--gold); color:var(--gold); }
+.btn-gold:hover { background:var(--gold); color:var(--bg); }
+.btn-scan { border-color:var(--maroon); color:var(--maroon); }
+.btn-scan:hover { background:var(--maroon); color:var(--text); }
+
+/* Filter tabs */
+.filters { display:flex; gap:4px; margin-bottom:16px; }
+.filter-tab { padding:6px 14px; border-radius:6px; background:transparent; border:1px solid transparent; color:var(--text-dim); font-family:inherit; font-size:12px; cursor:pointer; transition:all 0.2s; }
+.filter-tab:hover { color:var(--text-muted); }
+.filter-tab.active { background:var(--surface); border-color:var(--border); color:var(--text); }
+
+/* Message cards */
+.msg-list { display:flex; flex-direction:column; gap:8px; }
+.msg-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; transition:all 0.2s; }
+.msg-card:hover { border-color:var(--border-hover); }
+.msg-top { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.msg-name { font-weight:600; font-size:15px; }
+.msg-type { font-size:10px; padding:2px 8px; border-radius:4px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+.msg-type-expiry { background:rgba(239,68,68,0.15); color:var(--red); }
+.msg-type-lapsed { background:rgba(245,158,11,0.15); color:var(--amber); }
+.msg-type-birthday { background:rgba(168,85,247,0.15); color:#a855f7; }
+.msg-type-trial { background:rgba(96,165,250,0.15); color:var(--blue); }
+.msg-type-attendance { background:rgba(74,222,128,0.15); color:var(--green); }
+.msg-type-welcome { background:rgba(6,182,212,0.15); color:#06b6d4; }
+.msg-type-milestone { background:rgba(196,148,58,0.15); color:var(--gold); }
+.msg-priority { font-size:10px; color:var(--text-dim); margin-left:auto; }
+.msg-body { font-size:14px; color:var(--text-muted); line-height:1.6; margin-bottom:10px; padding:10px; background:var(--surface-2); border-radius:6px; font-style:italic; }
+.msg-meta { display:flex; align-items:center; gap:12px; font-size:11px; color:var(--text-dim); }
+.msg-phone { font-family:'DM Mono',monospace; }
+.msg-actions { display:flex; gap:6px; margin-left:auto; }
+.msg-btn { padding:4px 12px; border-radius:4px; border:1px solid var(--border); background:transparent; color:var(--text-dim); font-family:inherit; font-size:11px; cursor:pointer; transition:all 0.15s; }
+.msg-btn:hover { border-color:var(--border-hover); color:var(--text); }
+.msg-btn-send { border-color:var(--green); color:var(--green); }
+.msg-btn-send:hover { background:var(--green); color:var(--bg); }
+.msg-btn-skip { border-color:var(--text-dim); }
+.msg-btn-skip:hover { background:var(--text-dim); color:var(--bg); }
+.msg-card.status-sent { opacity:0.5; }
+.msg-card.status-skipped { opacity:0.35; }
+.msg-status-badge { font-size:10px; padding:2px 8px; border-radius:4px; font-weight:600; }
+.badge-sent { background:rgba(74,222,128,0.15); color:var(--green); }
+.badge-skipped { background:rgba(113,113,122,0.15); color:var(--text-dim); }
+.badge-approved { background:rgba(96,165,250,0.15); color:var(--blue); }
+
+/* Toast */
+.toast { position:fixed; bottom:24px; right:24px; padding:10px 20px; border-radius:8px; background:var(--surface-2); border:1px solid var(--border); color:var(--text); font-size:13px; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; z-index:100; }
+.toast.show { opacity:1; transform:translateY(0); }
+
+/* Empty */
+.empty { text-align:center; padding:60px 20px; color:var(--text-dim); }
+.empty-icon { font-size:48px; margin-bottom:12px; }
+
+@media (max-width:600px) {
+  .stats { gap:8px; }
+  .stat { min-width:80px; padding:10px 12px; }
+  .stat-value { font-size:18px; }
+  .msg-actions { flex-wrap:wrap; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>COMMS OUTBOX</h1>
+    <span class="sub" id="refreshed"></span>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="actions">
+    <button class="btn btn-scan" onclick="runScan('expiry')">Scan Expiry</button>
+    <button class="btn btn-scan" onclick="runScan('lapsed')">Scan Lapsed</button>
+    <button class="btn btn-scan" onclick="runScan('birthdays')">Scan Birthdays</button>
+    <button class="btn" onclick="loadQueue()">Refresh</button>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="msg-list" id="msg-list"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let allMessages = [];
+let currentFilter = 'pending';
+
+async function loadQueue() {
+  try {
+    const res = await fetch('/comms/queue');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    allMessages = data.queue;
+    renderStats(data.summary);
+    renderFilters();
+    renderMessages();
+    document.getElementById('refreshed').textContent = new Date().toLocaleTimeString();
+  } catch (err) {
+    toast('Error loading queue: ' + err.message);
+  }
+}
+
+function renderStats(s) {
+  document.getElementById('stats').innerHTML = `
+    <div class="stat stat-pending"><div class="stat-label">Pending</div><div class="stat-value">${s.pending}</div></div>
+    <div class="stat stat-sent"><div class="stat-label">Sent</div><div class="stat-value">${s.sent}</div></div>
+    <div class="stat stat-skipped"><div class="stat-label">Skipped</div><div class="stat-value">${s.skipped}</div></div>
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-value">${s.total}</div></div>
+  `;
+}
+
+function renderFilters() {
+  const counts = {};
+  for (const m of allMessages) counts[m.status] = (counts[m.status] || 0) + 1;
+  const tabs = ['pending', 'approved', 'sent', 'skipped', 'all'];
+  document.getElementById('filters').innerHTML = tabs.map(t => {
+    const c = t === 'all' ? allMessages.length : (counts[t] || 0);
+    return `<button class="filter-tab ${t === currentFilter ? 'active' : ''}" onclick="setFilter('${t}')">${t} (${c})</button>`;
+  }).join('');
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  renderFilters();
+  renderMessages();
+}
+
+function renderMessages() {
+  const filtered = currentFilter === 'all' ? allMessages : allMessages.filter(m => m.status === currentFilter);
+  if (filtered.length === 0) {
+    document.getElementById('msg-list').innerHTML = `<div class="empty"><div class="empty-icon">📭</div>No ${currentFilter} messages</div>`;
+    return;
+  }
+  document.getElementById('msg-list').innerHTML = filtered.map(m => {
+    const type = m.message?.type || 'other';
+    const typeClass = 'msg-type-' + type;
+    const statusBadge = m.status !== 'pending'
+      ? `<span class="msg-status-badge badge-${m.status}">${m.status}</span>` : '';
+    const actions = m.status === 'pending' ? `
+      <button class="msg-btn msg-btn-send" onclick="doAction('${m.id}','send')">Mark Sent</button>
+      <button class="msg-btn msg-btn-skip" onclick="doAction('${m.id}','skip')">Skip</button>
+    ` : m.status === 'approved' ? `
+      <button class="msg-btn msg-btn-send" onclick="doAction('${m.id}','send')">Mark Sent</button>
+    ` : '';
+    const age = Math.round((Date.now() - new Date(m.created).getTime()) / 86400000);
+    return `
+      <div class="msg-card status-${m.status}">
+        <div class="msg-top">
+          <span class="msg-name">${esc(m.memberName)}</span>
+          <span class="msg-type ${typeClass}">${type}</span>
+          ${statusBadge}
+          <span class="msg-priority">${m.message?.priority || ''} · ${age}d ago</span>
+        </div>
+        <div class="msg-body">${esc(m.message?.body || '')}</div>
+        <div class="msg-meta">
+          ${m.memberPhone ? `<span class="msg-phone">${esc(m.memberPhone)}</span>` : ''}
+          ${m.memberEmail ? `<span>${esc(m.memberEmail)}</span>` : ''}
+          <span style="font-family:'DM Mono';font-size:10px;color:#4a4540">${m.id}</span>
+          <div class="msg-actions">${actions}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function doAction(id, action) {
+  try {
+    const res = await fetch('/comms/action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, action })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    toast(`${action}: ${data.item.memberName}`);
+    loadQueue();
+  } catch (err) {
+    toast('Error: ' + err.message);
+  }
+}
+
+async function runScan(type) {
+  toast(`Scanning ${type}...`);
+  try {
+    const res = await fetch('/comms/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    const r = data.result;
+    toast(`${type}: ${r.generated || 0} new messages`);
+    loadQueue();
+  } catch (err) {
+    toast('Scan error: ' + err.message);
+  }
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+loadQueue();
+</script>
+</body>
+</html>

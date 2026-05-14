@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Engine — Basic Reflex</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #0c0b09; --surface: #151412; --surface-2: #1c1a17;
+  --border: #2a2723; --border-hover: #3d3832;
+  --text: #EDE5D8; --text-muted: #a89f92; --text-dim: #6b6358;
+  --maroon: #7B3040; --gold: #C4943A; --green: #4ade80; --red: #ef4444;
+  --amber: #f59e0b; --blue: #60a5fa; --purple: #a855f7; --pink: #ec4899;
+  --cyan: #22d3ee;
+}
+body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+.wrap { max-width:1100px; margin:0 auto; padding:24px 20px 60px; }
+.header { display:flex; align-items:center; gap:16px; margin-bottom:8px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.header h1 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:2px; color:var(--gold); }
+.positioning { font-size:13px; color:var(--text-muted); font-style:italic; margin-bottom:20px; }
+
+.tabs { display:flex; gap:4px; margin-bottom:20px; flex-wrap:wrap; }
+.tab { padding:8px 16px; border-radius:6px; border:1px solid transparent; background:transparent; color:var(--text-dim); font-family:inherit; font-size:13px; cursor:pointer; transition:all 0.2s; }
+.tab:hover { color:var(--text-muted); }
+.tab.active { background:var(--surface); border-color:var(--border); color:var(--text); }
+
+.panel { display:none; }
+.panel.active { display:block; }
+
+.card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:10px; cursor:pointer; transition:border-color 0.2s; }
+.card:hover { border-color:var(--border-hover); }
+.card-title { font-weight:600; font-size:15px; margin-bottom:4px; }
+.card-sub { font-size:13px; color:var(--text-muted); margin-bottom:6px; }
+.card-meta { font-size:11px; color:var(--text-dim); }
+
+.module-detail { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:12px; display:none; }
+.module-detail.open { display:block; }
+.module-detail h3 { font-size:16px; margin-bottom:8px; color:var(--gold); }
+.module-detail h4 { font-size:13px; margin:12px 0 6px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
+.module-detail ul { list-style:none; padding:0; }
+.module-detail li { font-size:13px; padding:3px 0; color:var(--text-muted); }
+.module-detail li::before { content:'• '; color:var(--gold); }
+
+.citation-row { display:flex; gap:8px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+.citation-row:last-child { border:none; }
+.citation-claim { flex:1; color:var(--text-muted); }
+.citation-source { color:var(--amber); min-width:160px; text-align:right; }
+
+.block-bar { display:flex; align-items:center; gap:8px; margin:4px 0; }
+.block-bar-label { font-size:11px; color:var(--text-dim); min-width:30px; }
+.block-bar-fill { height:14px; background:var(--gold); border-radius:3px; transition:width 0.5s; }
+.block-bar-count { font-size:11px; color:var(--text-muted); }
+
+.shot-item { padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.shot-type { font-size:10px; padding:2px 6px; border-radius:3px; background:rgba(255,255,255,0.05); color:var(--cyan); display:inline-block; margin-right:6px; }
+.shot-desc { font-size:13px; color:var(--text-muted); }
+
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center; }
+.stat-num { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--gold); }
+.stat-label { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+
+.revenue-row { display:flex; gap:12px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+.revenue-row:last-child { border:none; }
+.revenue-row span { flex:1; color:var(--text-muted); }
+.revenue-row .mrr { color:var(--green); font-weight:600; }
+
+.empty { text-align:center; padding:40px; color:var(--text-dim); }
+.btn { padding:8px 16px; border-radius:6px; border:1px solid var(--gold); background:rgba(196,148,58,0.1); color:var(--gold); font-family:inherit; font-size:13px; cursor:pointer; transition:all 0.2s; }
+.btn:hover { background:rgba(196,148,58,0.2); }
+
+@media (max-width:600px) { .wrap { padding:16px 12px 40px; } .stat-grid { grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header"><h1>COURSE ENGINE</h1></div>
+  <div class="positioning" id="positioning"></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('modules')">Modules</button>
+    <button class="tab" onclick="showTab('filming')">Filming</button>
+    <button class="tab" onclick="showTab('authority')">Authority Map</button>
+    <button class="tab" onclick="showTab('revenue')">Revenue</button>
+  </div>
+
+  <div class="panel active" id="panel-overview"></div>
+  <div class="panel" id="panel-modules"></div>
+  <div class="panel" id="panel-filming"></div>
+  <div class="panel" id="panel-authority"></div>
+  <div class="panel" id="panel-revenue"></div>
+</div>
+
+<script>
+let DATA = {};
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="showTab('${name}')"]`).classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+async function load() {
+  try {
+    const [outlineRes, authorityRes, pricingRes] = await Promise.all([
+      fetch('/course/outline'), fetch('/course/authority'), fetch('/course/pricing')
+    ]);
+    DATA.outline = (await outlineRes.json());
+    DATA.authority = (await authorityRes.json());
+    DATA.pricing = (await pricingRes.json());
+    render();
+  } catch(e) { console.error(e); }
+}
+
+function render() {
+  const outline = DATA.outline?.ok ? DATA.outline.data : DATA.outline;
+  const authority = DATA.authority?.ok ? DATA.authority.data : DATA.authority;
+  const pricing = DATA.pricing?.ok ? DATA.pricing.data : DATA.pricing;
+
+  if (!outline || !outline.modules) return;
+
+  document.getElementById('positioning').textContent = outline.positioning || '';
+
+  // Overview
+  const overviewEl = document.getElementById('panel-overview');
+  overviewEl.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">${outline.totalModules}</div><div class="stat-label">Modules</div></div>
+      <div class="stat-card"><div class="stat-num">${outline.totalCitations}</div><div class="stat-label">Citations</div></div>
+      <div class="stat-card"><div class="stat-num">${(authority?.primarySources || []).length}</div><div class="stat-label">Primary Sources</div></div>
+      <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Direct Competitors</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Primary Sources</div>
+      ${(outline.primarySources || []).map(s => `<div class="card-meta" style="padding:4px 0">${esc(s)}</div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Module Map</div>
+      ${outline.modules.map(m => `
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03)">
+          <span style="font-size:12px;color:var(--gold);min-width:24px;font-weight:700">${m.module}</span>
+          <span style="font-size:13px;flex:1">${esc(m.name)} — <span style="color:var(--text-muted)">${esc(m.subtitle)}</span></span>
+          <span style="font-size:11px;color:var(--text-dim)">${m.techniques.punches.length}P ${m.techniques.defenses.length}D ${m.techniques.footwork.length}F</span>
+          <span style="font-size:11px;color:var(--amber)">${m.citations.length} cit</span>
+        </div>
+      `).join('')}
+    </div>`;
+
+  // Modules
+  const modulesEl = document.getElementById('panel-modules');
+  modulesEl.innerHTML = outline.modules.map(m => `
+    <div class="card" onclick="toggleModule(${m.module})">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:'Bebas Neue';font-size:20px;color:var(--gold)">${m.module}</span>
+        <div>
+          <div class="card-title">${esc(m.name)}</div>
+          <div class="card-sub">${esc(m.subtitle)}</div>
+        </div>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-dim)">Stage ${m.capabilityStage} | ${m.citations.length} citations</span>
+      </div>
+    </div>
+    <div class="module-detail" id="mod-${m.module}">
+      <h3>${esc(m.name)} — ${esc(m.subtitle)}</h3>
+      <div class="card-meta">${esc(m.cubanEquivalent)}</div>
+      <h4>Learning Objectives</h4>
+      <ul>${m.learningObjectives.map(o => `<li>${esc(o)}</li>`).join('')}</ul>
+      <h4>Techniques</h4>
+      <div class="card-meta">
+        ${m.techniques.punches.length ? 'Punches: ' + m.techniques.punches.join(', ') + '<br>' : ''}
+        ${m.techniques.defenses.length ? 'Defenses: ' + m.techniques.defenses.join(', ') + '<br>' : ''}
+        ${m.techniques.footwork.length ? 'Footwork: ' + m.techniques.footwork.join(', ') + '<br>' : ''}
+        Max combo: ${m.techniques.maxComboLength}${m.techniques.rhythmUnlocked ? ' | Rhythm: UNLOCKED' : ''}
+      </div>
+      <h4>Gate</h4>
+      <div style="font-size:13px;color:var(--text-muted);padding:4px 0">${esc(m.gate)}</div>
+      <h4>Key Principles</h4>
+      <ul>${m.keyPrinciples.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+      <h4>Citations (${m.citations.length})</h4>
+      ${m.citations.map(c => `<div class="citation-row"><span class="citation-claim">"${esc(c.claim)}"</span><span class="citation-source">${esc(c.source)}</span></div>`).join('')}
+    </div>
+  `).join('');
+
+  // Filming
+  const filmingEl = document.getElementById('panel-filming');
+  filmingEl.innerHTML = outline.modules.map(m => `
+    <div class="card" onclick="loadFilming(${m.module})">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:'Bebas Neue';font-size:18px;color:var(--gold)">${m.module}</span>
+        <span class="card-title">${esc(m.name)}</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-dim)">${esc(m.filmingNotes?.substring(0,60) || 'Click to generate brief')}...</span>
+      </div>
+    </div>
+    <div class="module-detail" id="filming-${m.module}"></div>
+  `).join('');
+
+  // Authority
+  if (authority && authority.citations) {
+    const authEl = document.getElementById('panel-authority');
+    const maxCount = Math.max(...Object.values(authority.citationsByBlock || {}));
+    authEl.innerHTML = `
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-num">${authority.totalCitations}</div><div class="stat-label">Total Citations</div></div>
+        <div class="stat-card"><div class="stat-num">${authority.primarySources.length}</div><div class="stat-label">Sources</div></div>
+        <div class="stat-card"><div class="stat-num">${authority.gaps.length}</div><div class="stat-label">Gaps</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Citations by Block</div>
+        ${Object.entries(authority.citationsByBlock || {}).map(([b,c]) => `
+          <div class="block-bar">
+            <span class="block-bar-label">B${b}</span>
+            <div class="block-bar-fill" style="width:${(c/maxCount)*100}%"></div>
+            <span class="block-bar-count">${c}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="card">
+        <div class="card-title">Citations by Source</div>
+        ${Object.entries(authority.citationsBySource || {}).map(([s,c]) => `
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.03)">
+            <span style="color:var(--text-muted)">${esc(s)}</span>
+            <span style="color:var(--amber)">${c}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="card">
+        <div class="card-title">All Citations</div>
+        ${authority.citations.map(c => `
+          <div class="citation-row">
+            <span style="font-size:10px;color:var(--gold);min-width:24px">B${c.block}</span>
+            <span class="citation-claim">${esc(c.claim)}</span>
+            <span class="citation-source">${esc(c.reference)}${c.page ? ' p.' + c.page : ''}</span>
+          </div>
+        `).join('')}
+      </div>`;
+  }
+
+  // Revenue
+  if (pricing) {
+    const revenueEl = document.getElementById('panel-revenue');
+    const p = pricing;
+    revenueEl.innerHTML = `
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-num">$${p.inputs?.annualPrice || 129}</div><div class="stat-label">Annual Price</div></div>
+        <div class="stat-card"><div class="stat-num">$${p.inputs?.monthlyPrice || '14.99'}</div><div class="stat-label">Monthly Price</div></div>
+        <div class="stat-card"><div class="stat-num">$${(p.summary?.month12MRR || 0).toLocaleString()}</div><div class="stat-label">Month 12 MRR</div></div>
+        <div class="stat-card"><div class="stat-num">${p.summary?.month12Subscribers || 0}</div><div class="stat-label">Month 12 Subs</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">12-Month Projection</div>
+        <div class="revenue-row" style="font-weight:600;color:var(--text)">
+          <span>Month</span><span>Subs</span><span>MRR</span><span>ARR</span>
+        </div>
+        ${(p.projections || []).map(m => `
+          <div class="revenue-row">
+            <span>${m.month}</span>
+            <span>${m.totalSubscribers}</span>
+            <span class="mrr">$${m.totalMRR.toLocaleString()}</span>
+            <span>$${m.annualizedRevenue.toLocaleString()}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="card">
+        <div class="card-title">Summary</div>
+        <div style="font-size:13px;color:var(--text-muted);padding:4px 0">Year 1 total revenue: <strong style="color:var(--green)">$${(p.summary?.year1TotalRevenue || 0).toLocaleString()}</strong></div>
+        <div style="font-size:13px;color:var(--text-muted);padding:4px 0">Break-even: <strong>Month ${p.summary?.breakEvenMonth || '?'}</strong></div>
+        <div style="font-size:13px;color:var(--text-muted);padding:4px 0">Annual costs: $${(p.summary?.estimatedAnnualCosts || 0).toLocaleString()}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Market Position</div>
+        <div style="font-size:13px;color:var(--amber);padding:4px 0;font-weight:600">${esc(p.market?.competitorNote || '')}</div>
+        ${(p.market?.positioning?.differentiators || []).map(d => `<div style="font-size:12px;color:var(--text-muted);padding:2px 0">• ${esc(d)}</div>`).join('')}
+      </div>`;
+  }
+}
+
+function toggleModule(num) {
+  const el = document.getElementById('mod-' + num);
+  el.classList.toggle('open');
+}
+
+async function loadFilming(num) {
+  const el = document.getElementById('filming-' + num);
+  if (el.classList.contains('open')) { el.classList.remove('open'); return; }
+
+  el.innerHTML = '<div class="empty">Loading...</div>';
+  el.classList.add('open');
+
+  try {
+    const res = await fetch('/course/filming/' + num);
+    const data = await res.json();
+    const brief = data.ok ? data.data : data;
+
+    if (!brief || !brief.shots) {
+      el.innerHTML = '<div class="empty">No filming brief yet. Generate via /course filming ' + num + ' on Telegram.</div>';
+      return;
+    }
+
+    el.innerHTML = `
+      <h3>Filming Brief — Module ${brief.module}: ${esc(brief.name)}</h3>
+      <div class="card-meta">Duration: ${brief.durationEstimate} | Status: ${brief.status}</div>
+      <h4>Shots (${brief.shots.length})</h4>
+      ${brief.shots.map(s => `<div class="shot-item"><span class="shot-type">${s.type}</span><span class="shot-desc">${esc(s.desc)}</span></div>`).join('')}
+      <h4>Talking Points</h4>
+      ${brief.talkingPoints.map(t => `<div style="padding:4px 0;font-size:12px"><span style="color:var(--text-muted)">${esc(t.point)}</span> — <span style="color:var(--amber);font-style:italic">${esc(t.citation)}</span></div>`).join('')}
+      <h4>Equipment</h4>
+      <div style="font-size:12px;color:var(--text-dim)">${brief.equipment.join(' | ')}</div>
+      <div style="margin-top:12px;font-size:11px;color:var(--text-dim);font-style:italic">${esc(brief.loganNote)}</div>
+    `;
+  } catch(e) {
+    el.innerHTML = '<div class="empty">Error loading brief: ' + e.message + '</div>';
+  }
+}
+
+load();
+</script>
+</body>
+</html>

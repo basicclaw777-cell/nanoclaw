@@ -2271,6 +2271,279 @@ app.get('/hermes/status', async (req, res) => {
   }
 });
 
+// ── Growth Agent ─────────────────────────────────────────────────────────────
+
+app.get('/growth', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+  try {
+    const html = fs.readFileSync(path.join(NANOCLAW, 'growth-agent', 'growth-ui.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Growth UI not found: ${err.message}`);
+  }
+});
+
+app.get('/growth/calendar', (req, res) => {
+  try {
+    const dir = path.join(NANOCLAW, 'growth-agent', 'reports');
+    const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => f.startsWith('calendar-') && f.endsWith('.json')).sort().reverse() : [];
+    const calendar = files.length > 0 ? JSON.parse(fs.readFileSync(path.join(dir, files[0]), 'utf8')) : null;
+    res.json({ ok: true, calendar });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+app.post('/growth/calendar/generate', (req, res) => {
+  try {
+    const result = require('child_process').execSync(
+      `node -e "import('./growth-agent/content-calendar.js').then(m => m.generateWeeklyCalendar().then(c => console.log(JSON.stringify({ok:true,week:c.week,posts:c.posts?.length||0}))))"`,
+      { cwd: NANOCLAW, timeout: 45000, env: { ...process.env, HOME: process.env.HOME || '/Users/basicclaw777' } }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+app.get('/growth/corporate', (req, res) => {
+  try {
+    const pipePath = path.join(NANOCLAW, 'growth-agent', 'reports', 'corporate-pipeline.json');
+    const pipeline = fs.existsSync(pipePath) ? JSON.parse(fs.readFileSync(pipePath, 'utf8')) : { prospects: [], lastUpdated: null };
+    res.json({ ok: true, pipeline });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+app.get('/growth/newsletter', (req, res) => {
+  try {
+    const dir = path.join(NANOCLAW, 'growth-agent', 'reports');
+    const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => f.startsWith('newsletter-') && f.endsWith('.json')).sort().reverse() : [];
+    const newsletter = files.length > 0 ? JSON.parse(fs.readFileSync(path.join(dir, files[0]), 'utf8')) : null;
+    res.json({ ok: true, newsletter });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+app.post('/growth/newsletter/generate', (req, res) => {
+  try {
+    const result = require('child_process').execSync(
+      `node -e "import('./growth-agent/newsletter-engine.js').then(m => m.generateNewsletter().then(n => console.log(JSON.stringify({ok:true,month:n.monthName}))))"`,
+      { cwd: NANOCLAW, timeout: 45000, env: { ...process.env, HOME: process.env.HOME || '/Users/basicclaw777' } }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+app.get('/growth/seo', (req, res) => {
+  try {
+    const seoPath = path.join(NANOCLAW, 'growth-agent', 'reports', 'seo-checklist.json');
+    if (!fs.existsSync(seoPath)) {
+      // Trigger creation of defaults
+      require('child_process').execSync(
+        `node -e "import('./growth-agent/seo-checklist.js').then(m => { m.getSEOChecklist(); console.log('ok'); })"`,
+        { cwd: NANOCLAW, timeout: 10000, env: { ...process.env, HOME: process.env.HOME || '/Users/basicclaw777' } }
+      );
+    }
+    const seo = JSON.parse(fs.readFileSync(seoPath, 'utf8'));
+    res.json({ ok: true, seo });
+  } catch (err) { res.status(500).json({ ok: false, error: err.message }); }
+});
+
+// ── Command Centre Dashboard ─────────────────────────────────────────────────
+
+app.get('/dashboard', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+  try {
+    const html = fs.readFileSync(path.join(NANOCLAW, 'command-centre', 'index.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Dashboard not found: ${err.message}`);
+  }
+});
+
+app.get('/dashboard/data.js', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'application/javascript' });
+  try {
+    res.sendFile(path.join(NANOCLAW, 'command-centre', 'dashboard-data.js'));
+  } catch (err) {
+    res.status(500).send(`// data not found: ${err.message}`);
+  }
+});
+
+app.get('/dashboard/refresh', (req, res) => {
+  try {
+    require('child_process').execSync('node command-centre/refresh-dashboard.js', { cwd: NANOCLAW, timeout: 15000 });
+    res.json({ ok: true, message: 'Dashboard data refreshed' });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── Comms Engine Web UI ──────────────────────────────────────────────────────
+
+app.get('/comms', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+  try {
+    const html = fs.readFileSync(path.join(NANOCLAW, 'comms-engine', 'comms-ui.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Comms UI not found: ${err.message}`);
+  }
+});
+
+app.get('/comms/queue', (req, res) => {
+  try {
+    const queuePath = path.join(NANOCLAW, 'comms-engine', 'outbox', 'queue.json');
+    const queue = fs.existsSync(queuePath) ? JSON.parse(fs.readFileSync(queuePath, 'utf8')) : [];
+    const summary = { pending: 0, approved: 0, sent: 0, skipped: 0, total: queue.length };
+    for (const item of queue) summary[item.status] = (summary[item.status] || 0) + 1;
+    res.json({ ok: true, summary, queue });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/comms/action', (req, res) => {
+  try {
+    const { id, action } = req.body;
+    if (!id || !action) return res.status(400).json({ ok: false, error: 'id and action required' });
+    const queuePath = path.join(NANOCLAW, 'comms-engine', 'outbox', 'queue.json');
+    const queue = fs.existsSync(queuePath) ? JSON.parse(fs.readFileSync(queuePath, 'utf8')) : [];
+    const item = queue.find(m => m.id === id);
+    if (!item) return res.status(404).json({ ok: false, error: 'Message not found' });
+
+    if (action === 'approve') item.status = 'approved';
+    else if (action === 'send') { item.status = 'sent'; item.sentAt = new Date().toISOString(); }
+    else if (action === 'skip') item.status = 'skipped';
+    else return res.status(400).json({ ok: false, error: `Unknown action: ${action}` });
+
+    fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2));
+    res.json({ ok: true, item });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/comms/scan', (req, res) => {
+  try {
+    const { type } = req.body;
+    if (type === 'expiry') {
+      const result = require('child_process').execSync(
+        `node -e "import('./comms-engine/pass-expiry-trigger.js').then(m => { const r = m.scanPassExpiry(); console.log(JSON.stringify(r)); })"`,
+        { cwd: NANOCLAW, timeout: 15000 }
+      ).toString().trim();
+      res.json({ ok: true, result: JSON.parse(result) });
+    } else if (type === 'lapsed') {
+      const result = require('child_process').execSync(
+        `node -e "import('./comms-engine/lapsed-segmentation.js').then(m => { const r = m.scanLapsed({ segments: ['warm','cool'], limit: 20 }); console.log(JSON.stringify(r)); })"`,
+        { cwd: NANOCLAW, timeout: 15000 }
+      ).toString().trim();
+      res.json({ ok: true, result: JSON.parse(result) });
+    } else if (type === 'birthdays') {
+      const result = require('child_process').execSync(
+        `node -e "import('./comms-engine/birthday-tracker.js').then(m => { const r = m.scanBirthdays(7); console.log(JSON.stringify(r)); })"`,
+        { cwd: NANOCLAW, timeout: 15000 }
+      ).toString().trim();
+      res.json({ ok: true, result: JSON.parse(result) });
+    } else {
+      res.status(400).json({ ok: false, error: `Unknown scan type: ${type}` });
+    }
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── Course Engine ────────────────────────────────────────────────────────────
+
+app.get('/course', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(NANOCLAW, 'course-engine', 'course-ui.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Course UI not found: ${err.message}`);
+  }
+});
+
+app.get('/course/outline', (req, res) => {
+  try {
+    const result = require('child_process').execSync(
+      `node -e "import('./course-engine/course-structure.js').then(m => { const o = m.getCourseOutline(); console.log(JSON.stringify({ ok: true, data: o })); })"`,
+      { cwd: NANOCLAW, timeout: 15000 }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) {
+    res.json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/course/authority', (req, res) => {
+  try {
+    const result = require('child_process').execSync(
+      `node -e "import('./course-engine/authority-engine.js').then(m => { const a = m.getAuthorityMap(); console.log(JSON.stringify({ ok: true, data: a })); })"`,
+      { cwd: NANOCLAW, timeout: 15000 }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) {
+    res.json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/course/pricing', (req, res) => {
+  try {
+    const result = require('child_process').execSync(
+      `node -e "import('./course-engine/pricing-model.js').then(m => { const p = m.getDefaultProjection(); console.log(JSON.stringify({ ok: true, data: p })); })"`,
+      { cwd: NANOCLAW, timeout: 15000 }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) {
+    res.json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/course/filming/:num', (req, res) => {
+  try {
+    const num = parseInt(req.params.num);
+    if (!num || num < 1 || num > 10) return res.status(400).json({ ok: false, error: 'Module 1-10' });
+    const result = require('child_process').execSync(
+      `node -e "import('./course-engine/filming-briefs.js').then(m => { let b = m.getFilmingBrief(${num}); if (!b) b = m.generateFilmingBrief(${num}); console.log(JSON.stringify({ ok: true, data: b })); })"`,
+      { cwd: NANOCLAW, timeout: 15000 }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) {
+    res.json({ ok: false, error: err.message });
+  }
+});
+
+// ── Merch Agent ──────────────────────────────────────────────────────────────
+
+app.get('/merch', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(NANOCLAW, 'merch-agent', 'merch-ui.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Merch UI not found: ${err.message}`);
+  }
+});
+
+app.get('/merch/state', (req, res) => {
+  try {
+    const result = require('child_process').execSync(
+      `node -e "import('./merch-agent/merch-state.js').then(m => { const runs = m.getAllRuns(); const ideas = m.getIdeas(); console.log(JSON.stringify({ ok: true, state: { runs, ideas } })); })"`,
+      { cwd: NANOCLAW, timeout: 10000 }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) {
+    res.json({ ok: false, state: { runs: [], ideas: [] }, error: err.message });
+  }
+});
+
+app.get('/merch/suppliers', (req, res) => {
+  try {
+    const result = require('child_process').execSync(
+      `node -e "import('./merch-agent/supplier-db.js').then(m => { console.log(JSON.stringify({ ok: true, suppliers: m.getSuppliers() })); })"`,
+      { cwd: NANOCLAW, timeout: 10000 }
+    ).toString().trim();
+    res.json(JSON.parse(result));
+  } catch (err) {
+    res.json({ ok: false, suppliers: [], error: err.message });
+  }
+});
+
 // ── Start ─────────────────────────────────────────────────────────────────────
 
 app.listen(PORT, '0.0.0.0', () => {

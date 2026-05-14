@@ -161,6 +161,86 @@ async function diagnoseSenses() {
     });
   } catch { diagnoses.push({ sense: 'ledger', status: 'unreachable' }); }
 
+  // ── EMERGENCE SENSES (9-13) ──────────────────────────────────────────────
+
+  try {
+    const state = JSON.parse(readFileSync(join(CATHEDRAL, 'cath-state.json'), 'utf-8'));
+    const emergence = state.emergence || {};
+    const senses = emergence.senses || {};
+    const lastScan = emergence.last_scan ? new Date(emergence.last_scan) : null;
+    const age = lastScan ? (Date.now() - lastScan.getTime()) / 3600000 : Infinity;
+    const monitorHealthy = age < 36;
+
+    // 9. Vitality sense
+    const vit = senses.vitality || {};
+    const fadingPct = vit.fading_pct || 0;
+    diagnoses.push({
+      sense: 'emergence_vitality',
+      status: vit.status === 'not_run' ? 'not_run' : monitorHealthy ? (fadingPct > 90 ? 'attention' : 'healthy') : 'stale',
+      age_hours: Math.round(age),
+      load_bearing: vit.load_bearing || 0,
+      alive: vit.alive || 0,
+      fading: vit.fading || 0,
+      fading_pct: fadingPct,
+      prescription: fadingPct > 90 ? `${fadingPct}% vault entries fading. Cross-linking severely behind.` :
+                    vit.status === 'not_run' ? 'Vitality scan has never run. Execute emergence/monitor.py.' : null,
+    });
+
+    // 10. Surprise sense
+    const sur = senses.surprise || {};
+    const unresolvedCount = sur.unresolved_surprises || 0;
+    diagnoses.push({
+      sense: 'emergence_surprise',
+      status: sur.status === 'alert' ? 'alert' : monitorHealthy ? 'healthy' : 'stale',
+      age_hours: Math.round(age),
+      total_beliefs: sur.total_beliefs || 0,
+      unresolved: unresolvedCount,
+      flags: unresolvedCount > 0 ? [`${unresolvedCount} unresolved surprises`] : [],
+      prescription: unresolvedCount > 3 ? `${unresolvedCount} surprises unresolved. Beliefs diverging from reality.` :
+                    (sur.total_beliefs || 0) === 0 ? 'No beliefs seeded. Run emergence/surprise.py to initialize.' : null,
+    });
+
+    // 11. Goals sense
+    const gol = senses.goals || {};
+    const pendingGoals = gol.pending_proposals || 0;
+    diagnoses.push({
+      sense: 'emergence_goals',
+      status: gol.status === 'idle' && !gol.total_completed ? 'dormant' : monitorHealthy ? 'active' : 'stale',
+      age_hours: Math.round(age),
+      pending: pendingGoals,
+      active: gol.active_goals || 0,
+      completed: gol.total_completed || 0,
+      agent_accuracy: gol.agent_accuracy || {},
+      prescription: pendingGoals > 5 ? `${pendingGoals} goals pending arbitration. Planner backlog growing.` : null,
+    });
+
+    // 12. Temporal sense
+    const tmp = senses.temporal || {};
+    diagnoses.push({
+      sense: 'emergence_temporal',
+      status: tmp.status === 'not_run' ? 'not_run' : monitorHealthy ? 'healthy' : 'stale',
+      age_hours: Math.round(age),
+      moving_metrics: tmp.moving_metrics || 0,
+      top_mover: tmp.top_movers?.[0] || null,
+      prescription: tmp.status === 'not_run' ? 'Trends have never run. Execute emergence/monitor.py.' : null,
+    });
+
+    // 13. Dialogue sense
+    const dlg = senses.dialogue || {};
+    diagnoses.push({
+      sense: 'emergence_dialogue',
+      status: dlg.total_exchanges > 0 ? 'active' : 'dormant',
+      age_hours: Math.round(age),
+      total_exchanges: dlg.total_exchanges || 0,
+      active_threads: dlg.active_threads || 0,
+      prescription: dlg.total_exchanges === 0 ? 'No inter-agent dialogue yet. Agents can communicate but haven\'t.' : null,
+    });
+
+  } catch {
+    // Emergence not installed or monitor hasn't run yet
+    diagnoses.push({ sense: 'emergence', status: 'not_installed', prescription: 'Emergence monitor not found. Run emergence/monitor.py to initialize.' });
+  }
+
   return diagnoses;
 }
 
@@ -292,6 +372,163 @@ function therapistScan(diagnoses, processHealth) {
   const ledger = diagnoses.find(d => d.sense === 'ledger');
   if (ledger?.unverified > 20) {
     observations.push(`Ledger: ${ledger.unverified} unverified claims accumulating. Claims without verification become false confidence over time.`);
+  }
+
+  // ── Emergence cross-sense checks ──
+
+  // Vitality fading + Densifier not reducing orphans
+  const vitality = diagnoses.find(d => d.sense === 'emergence_vitality');
+  if (vitality?.fading_pct > 80) {
+    observations.push(`${vitality.fading_pct}% vault entries fading. Densifier and cross-linking are not keeping up with vault growth. Ideas are being created faster than connected.`);
+  }
+
+  // Surprise alert but no goals proposed to address it
+  const surprise = diagnoses.find(d => d.sense === 'emergence_surprise');
+  const goals = diagnoses.find(d => d.sense === 'emergence_goals');
+  if (surprise?.unresolved > 0 && (goals?.pending || 0) === 0) {
+    observations.push(`${surprise.unresolved} surprises detected but no agent proposed a goal to investigate. Agents may not be reacting to belief contradictions.`);
+  }
+
+  // Dialogue dormant — agents have capability but aren't using it
+  const dialogue = diagnoses.find(d => d.sense === 'emergence_dialogue');
+  if (dialogue?.status === 'dormant' && vitality?.status === 'healthy') {
+    observations.push('Inter-agent dialogue is wired but dormant. Agents can communicate but none have initiated. Cross-domain signals are being missed.');
+  }
+
+  // Goals accumulating without arbitration
+  if (goals?.pending > 5) {
+    observations.push(`${goals.pending} agent goals awaiting arbitration. Agents are proposing faster than Planner can process. Backlog = delayed intelligence.`);
+  }
+
+  // ── Operations Agent health ──
+  try {
+    const opsConfigPath = join(NANOCLAW, 'ops-agent', 'ops-config.json');
+    if (existsSync(opsConfigPath)) {
+      const opsConfig = JSON.parse(readFileSync(opsConfigPath, 'utf-8'));
+
+      // MPF compliance check
+      const mpfStaff = opsConfig.mpf?.staff || [];
+      const lastMPF = opsConfig.mpf?.lastContributionDate;
+      if (mpfStaff.length > 0 && lastMPF) {
+        const daysSince = Math.ceil((Date.now() - new Date(lastMPF).getTime()) / 86400000);
+        if (daysSince > 40) {
+          observations.push(`MPF contribution last recorded ${daysSince} days ago. Possible missed month. Late surcharge = 5%.`);
+        }
+      }
+
+      // Insurance check
+      const insDate = opsConfig.hr?.insuranceRenewalDate;
+      if (insDate) {
+        const daysLeft = Math.ceil((new Date(insDate).getTime() - Date.now()) / 86400000);
+        if (daysLeft <= 30 && daysLeft > 0) {
+          observations.push(`Insurance renewal in ${daysLeft} days (${insDate}). Contact insurer.`);
+        } else if (daysLeft <= 0) {
+          observations.push(`Insurance EXPIRED on ${insDate}. Gym operating without cover.`);
+        }
+      }
+
+      // P&L check — has this month's report been generated?
+      const month = new Date().toISOString().slice(0, 7);
+      const pnlPath = join(NANOCLAW, 'ops-agent', 'reports', `pnl-${month}.json`);
+      if (!existsSync(pnlPath)) {
+        observations.push(`No P&L generated for ${month} yet. Run /ops finance.`);
+      }
+    }
+  } catch { /* ops-agent not installed yet — skip */ }
+
+  // ── Comms Engine health ──
+  try {
+    const queuePath = join(NANOCLAW, 'comms-engine', 'outbox', 'queue.json');
+    if (existsSync(queuePath)) {
+      const queue = JSON.parse(readFileSync(queuePath, 'utf-8'));
+      const pending = queue.filter(m => m.status === 'pending');
+      if (pending.length > 20) {
+        observations.push(`Comms outbox has ${pending.length} pending messages. Paul hasn't reviewed in a while. Run /comms queue.`);
+      }
+      // Check for stale pending (older than 14 days)
+      const stale = pending.filter(m => (Date.now() - new Date(m.created).getTime()) > 14 * 86400000);
+      if (stale.length > 5) {
+        observations.push(`${stale.length} outbox messages older than 14 days. Stale messages = missed recovery opportunities.`);
+      }
+    }
+  } catch { /* comms-engine not installed yet — skip */ }
+
+  // ── Growth Agent health ──
+  try {
+    const calDir = join(NANOCLAW, 'growth-agent', 'reports');
+    if (existsSync(calDir)) {
+      const calFiles = readdirSync(calDir).filter(f => f.startsWith('calendar-') && f.endsWith('.json'));
+      if (calFiles.length > 0) {
+        const latest = calFiles.sort().reverse()[0];
+        const cal = JSON.parse(readFileSync(join(calDir, latest), 'utf-8'));
+        const age = Math.ceil((Date.now() - new Date(cal.generated).getTime()) / 86400000);
+        if (age > 10) {
+          observations.push(`Content calendar is ${age} days old. No plan for the coming week. Run /growth generate.`);
+        }
+      } else {
+        observations.push('No content calendar ever generated. Growth agent not producing plans.');
+      }
+
+      const nlFiles = readdirSync(calDir).filter(f => f.startsWith('newsletter-') && f.endsWith('.json'));
+      if (nlFiles.length > 0) {
+        const latest = nlFiles.sort().reverse()[0];
+        const nl = JSON.parse(readFileSync(join(calDir, latest), 'utf-8'));
+        const age = Math.ceil((Date.now() - new Date(nl.generated).getTime()) / 86400000);
+        if (age > 35) {
+          observations.push(`No newsletter drafted in ${age} days. Monthly Lab Report overdue.`);
+        }
+      }
+    }
+  } catch { /* growth-agent not installed yet — skip */ }
+
+  // ── Merch Agent health ──
+  try {
+    const merchStatePath = join(NANOCLAW, 'merch-agent', 'merch-state.json');
+    if (existsSync(merchStatePath)) {
+      const merchState = JSON.parse(readFileSync(merchStatePath, 'utf-8'));
+      const active = (merchState.runs || []).filter(r => !['delivered', 'archived'].includes(r.status));
+      const stale = active.filter(r => {
+        if (['idea', 'sampling'].includes(r.status)) {
+          return (Date.now() - new Date(r.updatedAt).getTime()) > 14 * 86400000;
+        }
+        return false;
+      });
+      if (stale.length > 0) {
+        observations.push(`${stale.length} merch run(s) stale >14 days (no supplier follow-up). Check /merch status.`);
+      }
+    }
+  } catch { /* merch-agent not installed yet — skip */ }
+
+  // ── Course Engine health ──
+  try {
+    const outlinePath = join(NANOCLAW, 'course-engine', 'reports', 'course-outline.json');
+    if (existsSync(outlinePath)) {
+      const outline = JSON.parse(readFileSync(outlinePath, 'utf-8'));
+      const emptyModules = outline.modules.filter(m => !m.learningObjectives || m.learningObjectives.length === 0);
+      if (emptyModules.length > 0) {
+        observations.push(`${emptyModules.length} course modules have no learning objectives. Run /course generate.`);
+      }
+    }
+    const authPath = join(NANOCLAW, 'course-engine', 'reports', 'authority-map.json');
+    if (existsSync(authPath)) {
+      const auth = JSON.parse(readFileSync(authPath, 'utf-8'));
+      if (auth.gaps && auth.gaps.length > 0) {
+        observations.push(`Authority map has ${auth.gaps.length} blocks with fewer than 3 citations. Source backing incomplete.`);
+      }
+    }
+    const briefsDir = join(NANOCLAW, 'course-engine', 'reports', 'filming-briefs');
+    if (existsSync(briefsDir)) {
+      const briefs = readdirSync(briefsDir).filter(f => f.endsWith('.json'));
+      if (briefs.length < 10) {
+        observations.push(`Only ${briefs.length}/10 filming briefs generated. Course filming prep incomplete.`);
+      }
+    }
+  } catch { /* course-engine not installed yet — skip */ }
+
+  // Trends show acceleration but no surprise flagged
+  const temporal = diagnoses.find(d => d.sense === 'emergence_temporal');
+  if (temporal?.top_mover?.trend === 'accelerating' && surprise?.unresolved === 0) {
+    observations.push(`${temporal.top_mover.metric} is accelerating but surprise detector hasn't flagged it. Beliefs may be too loose — tighten confidence thresholds.`);
   }
 
   return observations;

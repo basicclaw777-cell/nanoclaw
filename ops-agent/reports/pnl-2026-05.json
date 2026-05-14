@@ -1,0 +1,24 @@
+{
+  "generated": "2026-05-14T12:12:56.216Z",
+  "month": "2026-05",
+  "revenue": {
+    "dataAsOf": "2026-05-04",
+    "staleDays": 0,
+    "groupEstimate": 31680,
+    "ptEstimate": 152250,
+    "activeMembers": 73,
+    "totalEstimate": 183930
+  },
+  "costs": {
+    "rent": 52000,
+    "cleaning": 3000,
+    "insurance": 2000,
+    "mpf": 1500,
+    "utilities": 2000,
+    "misc": 1500
+  },
+  "totalCosts": 62000,
+  "netIncome": 121930,
+  "profitable": true,
+  "note": "Revenue is estimated from member count. For actual P&L, Paul inputs PunchPass revenue report figures."
+}

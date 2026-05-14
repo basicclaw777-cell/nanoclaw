@@ -395,6 +395,109 @@ const ENV = [
       sky: '/looking-glass/sky',
       scan: '/looking-glass/scan'
     }
+  },
+  {
+    id: 'ops',
+    name: 'Operations',
+    icon: '\u{1F4CA}',
+    color: '#C4943A',
+    colorDim: 'rgba(196,148,58,0.12)',
+    desc: 'KPI dashboard, P&L, members, workstreams. Command centre for Basic Reflex.',
+    orc: { name: 'Ops Agent', state: 'Monitoring', desc: 'Finance, HR, MPF compliance, scheduling. Monthly P&L, commission calc, insurance tracking. PM2 crons on autopilot.' },
+    senses: [
+      { icon: '\u{1F4B0}', name: 'Finance', detail: 'Revenue, costs, P&L', active: true },
+      { icon: '\u{1F465}', name: 'Members', detail: '73 active, churn tracking', active: true },
+      { icon: '\u{1F4CB}', name: 'Compliance', detail: 'MPF, insurance, HR', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/dashboard'],
+    dataEndpoints: {
+      refresh: '/dashboard/refresh'
+    }
+  },
+  {
+    id: 'comms',
+    name: 'Client Comms',
+    icon: '\u{1F4AC}',
+    color: '#7B3040',
+    colorDim: 'rgba(123,48,64,0.12)',
+    desc: '566 lapsed members. Pass expiry alerts. Birthday tracker. Nothing auto-sends.',
+    orc: { name: 'Comms Engine', state: 'Queuing', desc: 'Revenue recovery outbox. 11 WhatsApp templates. Scans expiry, lapsed, birthdays. Paul reviews every message before sending.' },
+    senses: [
+      { icon: '\u{1F4E8}', name: 'Outbox', detail: 'Pending messages', active: true },
+      { icon: '\u{1F504}', name: 'Recovery', detail: 'Lapsed reactivation', active: true },
+      { icon: '\u{1F382}', name: 'Birthdays', detail: 'Upcoming celebrations', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/comms'],
+    dataEndpoints: {
+      queue: '/comms/queue'
+    }
+  },
+  {
+    id: 'growth',
+    name: 'Growth',
+    icon: '\u{1F680}',
+    color: '#22c55e',
+    colorDim: 'rgba(34,197,94,0.12)',
+    desc: 'Content calendar, corporate outreach, newsletter, SEO. Maya voices it. Reed visualises it.',
+    orc: { name: 'Growth Agent', state: 'Planning', desc: 'Content strategy engine. Weekly calendar from Kit + curriculum. Corporate pipeline. Monthly Lab Report newsletter. SEO keyword tracking.' },
+    senses: [
+      { icon: '\u{1F4C5}', name: 'Calendar', detail: 'Weekly content plan', active: true },
+      { icon: '\u{1F3E2}', name: 'Corporate', detail: 'Outreach pipeline', active: true },
+      { icon: '\u{1F4F0}', name: 'Newsletter', detail: 'Monthly Lab Report', active: true },
+      { icon: '\u{1F50D}', name: 'SEO', detail: 'Keyword tracking', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/growth'],
+    dataEndpoints: {
+      calendar: '/growth/calendar',
+      corporate: '/growth/corporate',
+      newsletter: '/growth/newsletter',
+      seo: '/growth/seo'
+    }
+  },
+  {
+    id: 'merch',
+    name: 'Merch',
+    icon: '\u{1F455}',
+    color: '#ec4899',
+    colorDim: 'rgba(236,72,153,0.12)',
+    desc: 'Merch runs, supplier DB, sample tracking. 100% cotton. Paul approves everything.',
+    orc: { name: 'Merch Agent', state: 'Ready', desc: 'Tracks merch runs from idea to delivery. Supplier database, sample logging, order tracking. Paul\'s rules baked in.' },
+    senses: [
+      { icon: '\u{1F4E6}', name: 'Runs', detail: 'Active merch runs', active: true },
+      { icon: '\u{1F3ED}', name: 'Suppliers', detail: 'Supplier database', active: true },
+      { icon: '\u{1F4A1}', name: 'Ideas', detail: 'Merch backlog', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/merch'],
+    dataEndpoints: {
+      state: '/merch/state',
+      suppliers: '/merch/suppliers'
+    }
+  },
+  {
+    id: 'course',
+    name: 'Course',
+    icon: '\u{1F393}',
+    color: '#C4943A',
+    colorDim: 'rgba(196,148,58,0.12)',
+    desc: '$99-149/year. 10-module Cuban boxing course. 34 primary sources. Zero competitors.',
+    orc: { name: 'Course Engine', state: 'Building', desc: 'Maps 10 blocks to 10 modules. Authority engine backs every claim with Sagarra + Balmaseda. Filming briefs, pricing model, revenue projector.' },
+    senses: [
+      { icon: '\u{1F4DA}', name: 'Curriculum', detail: '10 modules from 10 blocks', active: true },
+      { icon: '\u{1F4F7}', name: 'Filming', detail: 'Shot lists per module', active: true },
+      { icon: '\u{1F4D6}', name: 'Authority', detail: 'Source citations mapped', active: true },
+      { icon: '\u{1F4B0}', name: 'Revenue', detail: 'Pricing model + projections', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/course'],
+    dataEndpoints: {
+      outline: '/course/outline',
+      authority: '/course/authority',
+      pricing: '/course/pricing'
+    }
   }
 ];
 

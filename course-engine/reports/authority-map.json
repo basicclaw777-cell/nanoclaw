@@ -1,0 +1,534 @@
+{
+  "title": "Authority Map — Basic Reflex Cuban Boxing Course",
+  "totalCitations": 51,
+  "primarySources": [
+    {
+      "id": "balmaseda-2009",
+      "author": "Maykel Balmaseda Alburquerque",
+      "title": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "year": 2009,
+      "publisher": "Wanceulen Editorial",
+      "pages": 182,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md",
+      "grade": "A"
+    },
+    {
+      "id": "sagarra-2007",
+      "author": "Dr.C. Alcides Sagarra Carón & Ms.C. Jesús Domínguez García",
+      "title": "Official Cuban Boxing Development Program",
+      "year": 2007,
+      "publisher": "Comisión Nacional de Boxeo",
+      "pages": 42,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md",
+      "grade": "A"
+    },
+    {
+      "id": "filimonov-1985",
+      "author": "V.I. Filimonov et al.",
+      "title": "Boxing: Means of Physical Development",
+      "year": 1985,
+      "publisher": "Soviet Sports Science",
+      "vaultFile": null,
+      "grade": "B"
+    },
+    {
+      "id": "cross-domain-2026",
+      "author": "Paul Logan / Claude analysis",
+      "title": "Cross-Domain Synthesis — Three Sessions Converge",
+      "year": 2026,
+      "vaultFile": "06_Basic_Reflex_Syllabus/00_Overview/cross-domain-synthesis-2026-04-10.md",
+      "grade": "A"
+    },
+    {
+      "id": "paul-logan-2024-2026",
+      "author": "Paul Logan",
+      "title": "Basic Reflex Original Methodology",
+      "year": "2024-2026",
+      "publisher": "Basic Reflex Limited",
+      "vaultFile": null,
+      "grade": "A"
+    }
+  ],
+  "citationsBySource": {
+    "balmaseda-2009": 19,
+    "sagarra-2007": 22,
+    "filimonov-1985": 1,
+    "paul-logan-2024-2026": 7,
+    "cross-domain-2026": 2
+  },
+  "citationsByBlock": {
+    "1": 5,
+    "2": 4,
+    "3": 9,
+    "4": 6,
+    "5": 6,
+    "6": 4,
+    "7": 4,
+    "8": 4,
+    "9": 4,
+    "10": 5
+  },
+  "citations": [
+    {
+      "block": 1,
+      "claim": "Guard position is a position, not a posture or halt",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II — guard position terminology",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 1,
+      "claim": "Gaze always above knuckles of lead hand",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II — guard specifications",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 1,
+      "claim": "Rear foot metatarsus only, heel 3-5cm off ground",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II — guard position",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 1,
+      "claim": "Guard is resting AND returning state",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "2007 general principles; also Balmaseda Ch.II",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 1,
+      "claim": "Four phases of technical assimilation",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II — Cuban teaching methodology",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 2,
+      "claim": "Flat step is foundation of all movement",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": 34,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 2,
+      "claim": "Double flat steps explicitly rejected",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": 34,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 2,
+      "claim": "Flat step footwork in all 4 directions at 11-12 category",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "11-12 age category technical content",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 2,
+      "claim": "No diagonal steps in early training",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": 37,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 3,
+      "claim": "ONLY straight punches before hooks/crosses",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "11-12 category; also Balmaseda Ch.II",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 3,
+      "claim": "Max 2-punch combinations at beginner level",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "11-12 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 3,
+      "claim": "Jab has no hip rotation, no weight commitment",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II — straight punches",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 3,
+      "claim": "Feints with arm and lead leg only at 11-12",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "11-12 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 3,
+      "claim": "Simple and complex defense at 11-12",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "11-12 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 3,
+      "claim": "Kinetic chain: 38% legs, 37% trunk, 24% arm",
+      "source": "Boxing: Means of Physical Development",
+      "sourceId": "filimonov-1985",
+      "reference": "1985 study",
+      "page": null,
+      "vaultFile": null
+    },
+    {
+      "block": 3,
+      "claim": "Jab is only universal setup action — zero weight commitment",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 3,
+      "claim": "12 observable behaviours for Block 3 gate",
+      "source": "Basic Reflex Original Methodology",
+      "sourceId": "paul-logan-2024-2026",
+      "reference": "Original gate criteria — 2026-05-03",
+      "page": null,
+      "vaultFile": null
+    },
+    {
+      "block": 3,
+      "claim": "Three functions: offensive, defensive, counter-attack",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II — three functions requirement",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 4,
+      "claim": "Hooks and crosses introduced together at 13-14",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "13-14 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 4,
+      "claim": "Max 3-punch combinations after hooks introduced",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "13-14 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 4,
+      "claim": "GAA (lead body hook) is hardest, taught last",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": 52,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 4,
+      "claim": "Short distance and body-to-body added at 13-14",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "13-14 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 4,
+      "claim": "Counterattacks using trunk rotation introduced",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "13-14 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 4,
+      "claim": "No diagonal steps in competition",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": 37,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 5,
+      "claim": "Trunk defenses after upper limb mastered",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II defense taxonomy",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 5,
+      "claim": "Rhythm is defining characteristic of Cuban boxing",
+      "source": "Cross-Domain Synthesis — Three Sessions Converge",
+      "sourceId": "cross-domain-2026",
+      "reference": "Cuban boxing tradition + Paul Logan original",
+      "page": null,
+      "vaultFile": "06_Basic_Reflex_Syllabus/00_Overview/cross-domain-synthesis-2026-04-10.md"
+    },
+    {
+      "block": 5,
+      "claim": "4-5 punch combinations with defense integration",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "15-16 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 5,
+      "claim": "Forward torsion dodge at 45 degrees (DETT)",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II defense taxonomy — DEFT specification",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 5,
+      "claim": "Drumming-brain rudiment-to-combination mappings",
+      "source": "Basic Reflex Original Methodology",
+      "sourceId": "paul-logan-2024-2026",
+      "reference": "Original IP dated 2026-04-28",
+      "page": null,
+      "vaultFile": null
+    },
+    {
+      "block": 5,
+      "claim": "Paradiddle = jab-cross-jab-jab",
+      "source": "Basic Reflex Original Methodology",
+      "sourceId": "paul-logan-2024-2026",
+      "reference": "Rhythm engine original mappings",
+      "page": null,
+      "vaultFile": null
+    },
+    {
+      "block": 6,
+      "claim": "Defense and counter are one merged action",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II; also Sagarra 2007",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 6,
+      "claim": "Step-based evasion after trunk mastered",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II defense order",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 6,
+      "claim": "Shoulder roll NOT Cuban doctrine",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": 67,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 6,
+      "claim": "Four outputs of correct defense",
+      "source": "Basic Reflex Original Methodology",
+      "sourceId": "paul-logan-2024-2026",
+      "reference": "Defense session 2026-04-10; cross-domain synthesis",
+      "page": null,
+      "vaultFile": null
+    },
+    {
+      "block": 7,
+      "claim": "Maneuvering for offensive preparation at 15-16",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "15-16 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 7,
+      "claim": "Complete level with 30-60 official fights",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "15-16 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 7,
+      "claim": "Fatigue degradation: pivots drop first",
+      "source": "Basic Reflex Original Methodology",
+      "sourceId": "paul-logan-2024-2026",
+      "reference": "Coaching observation",
+      "page": null,
+      "vaultFile": null
+    },
+    {
+      "block": 7,
+      "claim": "Discipline-composure-confidence strict order",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "4-stage psychological development arc",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 8,
+      "claim": "Rope/corner escape with lateral movement",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "15-16 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 8,
+      "claim": "All movements must follow circular path",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 8,
+      "claim": "Defense with backward jump",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "15-16 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 8,
+      "claim": "Circular esquiva for cruzado defense",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "15-16 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 9,
+      "claim": "Emphasis from repertoire to tactical application",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "17-18 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 9,
+      "claim": "Combat against different styles catalogued",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "17-18 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 9,
+      "claim": "Disguised guard (guardia camuflada)",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "17-18 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 9,
+      "claim": "~100% coach independence at mastery",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "Psychological development scale",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 10,
+      "claim": "Full integration at 17-18 year 2",
+      "source": "Official Cuban Boxing Development Program",
+      "sourceId": "sagarra-2007",
+      "reference": "17-18 category",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-03_boxing_sagarra-official-program-2007-complete-extraction.md"
+    },
+    {
+      "block": 10,
+      "claim": "Three domains run as continuous algorithm",
+      "source": "Cross-Domain Synthesis — Three Sessions Converge",
+      "sourceId": "cross-domain-2026",
+      "reference": "2026-04-10 synthesis",
+      "page": null,
+      "vaultFile": "06_Basic_Reflex_Syllabus/00_Overview/cross-domain-synthesis-2026-04-10.md"
+    },
+    {
+      "block": 10,
+      "claim": "Obstacle-removal pedagogy — predator frame was always there",
+      "source": "Basic Reflex Original Methodology",
+      "sourceId": "paul-logan-2024-2026",
+      "reference": "Punches session 2026; coaching philosophy",
+      "page": null,
+      "vaultFile": null
+    },
+    {
+      "block": 10,
+      "claim": "Creation phase: invents solutions not previously learned",
+      "source": "Escuela Cubana de Boxeo — Enseñanza y Preparación Técnica",
+      "sourceId": "balmaseda-2009",
+      "reference": "Ch.II — four phases of assimilation",
+      "page": null,
+      "vaultFile": "02_Refined_Gold/boxing/2026-05-02_boxing_balmaseda-complete-extraction-cuban-methodology.md"
+    },
+    {
+      "block": 10,
+      "claim": "Mastery: playful with beginners and killers",
+      "source": "Basic Reflex Original Methodology",
+      "sourceId": "paul-logan-2024-2026",
+      "reference": "Coaching observation",
+      "page": null,
+      "vaultFile": null
+    }
+  ],
+  "gaps": [],
+  "generated": "2026-05-14T13:30:35.922Z"
+}
