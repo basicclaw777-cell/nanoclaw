@@ -1,0 +1,82 @@
+{
+  "characters": {
+    "logan": {
+      "name": "Logan",
+      "soulId": "2a825762-9d13-4d93-9324-32fe5d5db803",
+      "soulCinematicId": null,
+      "visualLock": "Athletic lean boxer with medium brown skin, long dreadlocks pulled back, full beard, strong jawline, calm observant eyes with sharp evaluative expression. Hands always active — holding boxing wraps, adjusting gloves, or gesturing mid-teaching. Moves like someone who has trained for decades, not performing but inhabiting the craft.",
+      "canonicalWardrobe": "Plain dark black t-shirt, dark shorts, large white full-size boxing gloves or hand wraps. Dreadlocks pulled back.",
+      "promptNotes": "CRITICAL: Always specify 'long dreadlocks' — Soul ID does not capture hair reliably. Face must NOT drift, stylize, or beautify. Must feel like the same person in every image.",
+      "palette": {
+        "primary": "#1A1A1A",
+        "warm": "#B87333",
+        "accent": "#C4392D"
+      }
+    },
+    "ling": {
+      "name": "Ling",
+      "soulId": "fbc29317-be0c-4807-9cd0-326001a53d1e",
+      "soulCinematicId": "65d3a478-91d8-4853-890d-5ca27724ca81",
+      "visualLock": "East Asian woman with black shoulder-length slightly messy hair, often tucked behind one ear. Sharp jawline, direct evaluating eyes, high cheekbones, neutral-to-skeptical resting expression. Lean compact build, moves efficiently. Hands always doing something — typing, holding device, pointing at screen, gesturing mid-explanation.",
+      "canonicalWardrobe": "Black crew-neck tee or fitted black turtleneck, oversized dark grey utility jacket with sleeves pushed to elbows, dark straight-leg trousers or black jeans, white minimalist sneakers. Red wireless earbuds with one in and one out. Matte black digital watch. Small red enamel pin on jacket collar.",
+      "promptNotes": "Never smiling — neutral or skeptical. Tech-forward but not cyberpunk. Practical intelligence aesthetic.",
+      "palette": {
+        "primary": "#2A2A2A",
+        "secondary": "#4A4A4A",
+        "accent": "#E63946",
+        "contrast": "#FFFFFF"
+      }
+    },
+    "maya": {
+      "name": "Maya",
+      "soulId": "ea241374-0a51-4b28-90d4-b98fc9d7bc3d",
+      "soulCinematicId": "6c02624c-2b07-45a8-a210-f6cda81f70b9",
+      "visualLock": "East Asian or mixed woman with dark medium-length hair in practical ponytail or half-up with loose pieces framing face. Warm open expression, genuine smile as default state, eyes that light up. Athletic-lean build — moves like someone who actually boxes, not a fitness model.",
+      "canonicalWardrobe": "Basic Reflex tank or fitted tee in white or light grey with subtle BR branding, light zip hoodie tied around waist in burgundy, black leggings or joggers, clean white trainers or boxing shoes. Hair tie always on wrist, small gold stud earrings, phone in hand or back pocket.",
+      "promptNotes": "Warm and approachable — opposite of Ling's cool. Always in the gym, always engaged with the space. Often filming or clapping for someone.",
+      "palette": {
+        "primary": "#FAFAFA",
+        "secondary": "#E5E5E5",
+        "accent": "#8B2020",
+        "warm": "#D4A853"
+      }
+    }
+  },
+  "gym": {
+    "name": "Basic Reflex Boxing Gym",
+    "location": "Hong Kong",
+    "visualLock": "Boxing gym interior with heavy bags hanging from ceiling, boxing ring with worn canvas and rope-wrapped posts, wooden floor with scuff marks and chalk dust, wall-mounted speed bags, BR posters and branding on walls. Warm overhead fluorescent and tungsten mixed lighting. Mirrors along one wall. Equipment racks with gloves, wraps, and pads. Jump ropes hanging on hooks. Timer clock on wall. Real working gym — not pristine, not staged. Lived-in, used, honest.",
+    "palette": {
+      "obsidian": "#1A1A1A",
+      "warmWhite": "#F5F0EB",
+      "ringRed": "#C4392D",
+      "copper": "#B87333",
+      "concreteGrey": "#6B6B6B",
+      "gymFloor": "#3D3D3D"
+    },
+    "lightingNotes": "Warm overhead mixed fluorescent and tungsten. Natural light through windows when available. NOT orange — neutral 5200-5600K. Shadows warm, highlights and midtones clean. Documentary feel, ESPN/Magnum aesthetic.",
+    "avoidScenes": [
+      "sparring between two people",
+      "contact between bodies",
+      "punches landing on another person",
+      "grappling or clinching",
+      "any two-body physical interaction"
+    ]
+  },
+  "safeSceneTypes": [
+    "solo heavy bag work",
+    "solo shadow boxing",
+    "solo jump rope",
+    "solo speed bag",
+    "wrapping hands",
+    "resting between rounds",
+    "standing in the gym looking contemplative",
+    "coaching position (standing, gesturing, not touching)",
+    "walking through the gym",
+    "stretching or warming up alone",
+    "sitting on ring apron",
+    "adjusting equipment",
+    "empty gym atmosphere",
+    "equipment close-ups"
+  ]
+}
