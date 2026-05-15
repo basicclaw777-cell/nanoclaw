@@ -161,9 +161,12 @@ All 6 phases of the cathedral-staff-build-plan.md are COMPLETE.
 
 Key infrastructure:
 - cath-bridge.cjs routes all UIs at localhost:8080
-- environments/lobby.html has 13 rooms
+- environments/lobby.html has 15 rooms
 - the-physician.mjs monitors all agents for staleness
 - CJS-ESM bridge: child_process.execSync with node -e "import(...)"
+- BR Screening Room: ~/Cathedral/control-panel/br-screening-room.html → localhost:8080/screening
+- Maya Asks format: weekly "Maya asks Coach Paul" reel brief, sourced from screening room
+- Content calendar Internal Game pillar (20%) feeds from screening room entries
 
 ## Boxing Video Pipeline
 - **Pipeline script:** ~/Cathedral/boxing-pipeline.sh
@@ -1233,6 +1236,11 @@ the-timekeeper to go offline. Don't repeat it.
 - Origin Transcripts: ~/cathedral-vault/01_Raw_Transcripts/pretta-origin/ (5 files, ~5MB)
 - Sage Books: ~/cathedral-vault/03_The_Sages/pretta-council/ (7 books, sage-extractor.js — autonomous)
 - Harvesters: ~/nanoclaw/pretta-harvester.js + ~/nanoclaw/sage-extractor.js (DeepSeek, 30K chunk size)
+- NOTE: "Pretta" = the girl (hungry ghost), NOT the AI. AI = the wise council. OmissionOS = manipulator's OS, not Paul's. IntegrityOS = Paul's original OS, upgraded with sovereignty.
+- 6 Sage Court Members (#22-27): /yoda, /miyagi, /tao, /marcus, /sun-tzu, /leonardo — contexts in ~/Cathedral/agents/contexts/
+- Cathy Sage Narrations: 6 Volume 1 episodes (edge-tts) at ~/Cathedral/cathy-narration/
+- Villa: "sages" view in control-panel/index.html — cards + audio players
+- Audio route: /audio/* on cath-bridge serves ~/Cathedral/cathy-narration/
 
 ## Terminal Session Harvester (built 2026-05-13)
 - Script: ~/nanoclaw/terminal-harvester.js (ESM)

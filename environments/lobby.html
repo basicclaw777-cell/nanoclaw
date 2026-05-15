@@ -498,6 +498,23 @@ const ENV = [
       authority: '/course/authority',
       pricing: '/course/pricing'
     }
+  },
+  {
+    id: 'screening',
+    name: 'Screening Room',
+    icon: '\u{1F3AC}',
+    color: '#7B3040',
+    colorDim: 'rgba(123,48,64,0.12)',
+    desc: 'Films, docs, songs mapped to blocks. Surface vs real meaning. One-tap share to members.',
+    orc: { name: 'BR Cinema', state: 'Active', desc: 'Curated media corpus — every entry mapped to curriculum blocks and combat principles. Tonight\'s Pick randomizer.' },
+    senses: [
+      { icon: '\u{1F3AC}', name: 'Films', detail: '26 films mapped to blocks', active: true },
+      { icon: '\u{1F4F9}', name: 'Docs', detail: '11 documentaries', active: true },
+      { icon: '\u{1F3B5}', name: 'Songs', detail: '20 songs, surface vs real', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/screening'],
+    dataEndpoints: {}
   }
 ];
 
