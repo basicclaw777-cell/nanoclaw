@@ -173,6 +173,10 @@ Key infrastructure:
 - Merch sourcing: 4-tier strategy in merch-agent/sourcing-strategy.json (Print House HK → Alibaba → DTF in-house → India freight)
 - Cross-terminal handoffs: request files at ~/Cathedral/tools/ for Forge terminal
 - DeepSeek TUI: /opt/homebrew/bin/deepseek exec --auto --profile research "prompt" — web search when WebFetch blocked
+- Emergence system: ~/Cathedral/emergence/ — 6 senses (vitality, surprise, goals, trends, dialogue, smell), monitor.py runs daily 05:15 HKT
+- City planner: ~/Cathedral/city-planner.js — ecosystem audit, district health scoring, /cityplan Telegram command
+- Dialogue-seed: ~/Cathedral/emergence/dialogue-seed.js — daily 02:55 HKT, picks agent pairs by keyword overlap or city planner gaps
+- Vitality formula: capped age penalty (3.0 max), depth bonus (word count), threshold 0.0/8.0
 
 ## Boxing Video Pipeline
 - **Pipeline script:** ~/Cathedral/boxing-pipeline.sh
