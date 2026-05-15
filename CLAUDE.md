@@ -167,6 +167,9 @@ Key infrastructure:
 - BR Screening Room: ~/Cathedral/control-panel/br-screening-room.html → localhost:8080/screening
 - Maya Asks format: weekly "Maya asks Coach Paul" reel brief, sourced from screening room
 - Content calendar Internal Game pillar (20%) feeds from screening room entries
+- Merch sourcing: 4-tier strategy in merch-agent/sourcing-strategy.json (Print House HK → Alibaba → DTF in-house → India freight)
+- Cross-terminal handoffs: request files at ~/Cathedral/tools/ for Forge terminal
+- DeepSeek TUI: /opt/homebrew/bin/deepseek exec --auto --profile research "prompt" — web search when WebFetch blocked
 
 ## Boxing Video Pipeline
 - **Pipeline script:** ~/Cathedral/boxing-pipeline.sh
