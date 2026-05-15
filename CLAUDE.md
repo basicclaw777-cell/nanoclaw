@@ -162,12 +162,14 @@ All 6 phases of the cathedral-staff-build-plan.md are COMPLETE.
 
 Key infrastructure:
 - cath-bridge.cjs routes all UIs at localhost:8080
-- environments/lobby.html has 15 rooms
+- environments/lobby.html has 22 rooms
 - the-physician.mjs monitors all agents for staleness
 - CJS-ESM bridge: child_process.execSync with node -e "import(...)"
 - BR Screening Room: ~/Cathedral/control-panel/br-screening-room.html → localhost:8080/screening
 - Maya Asks format: weekly "Maya asks Coach Paul" reel brief, sourced from screening room
 - Content calendar Internal Game pillar (20%) feeds from screening room entries
+- Three Corpuses: Truth Corpus (/truth-corpus) + Screening Room (/screening) + Advisors' Library (/advisors-library) — connected by Convergence Map (/convergence-map)
+- Cathedral control-panel rooms: advisors-library, convergence-map, opponents-film-room, open-questions, what-built-me, time-capsule — all routed via cath-bridge.cjs
 - Merch sourcing: 4-tier strategy in merch-agent/sourcing-strategy.json (Print House HK → Alibaba → DTF in-house → India freight)
 - Cross-terminal handoffs: request files at ~/Cathedral/tools/ for Forge terminal
 - DeepSeek TUI: /opt/homebrew/bin/deepseek exec --auto --profile research "prompt" — web search when WebFetch blocked
