@@ -5297,7 +5297,7 @@ import { createRequire } from 'module';
 const _require = createRequire(import.meta.url);
 const agentEngine = _require(path.join(process.env.HOME, 'Cathedral', 'agents', 'agent-engine.js'));
 
-const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼', ling: '🔴', maya: '⭐' };
+const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼', ling: '🔴', maya: '⭐', yoda: '🟢', miyagi: '🥋', tao: '🌊', marcus: '🏛️', 'sun-tzu': '⚔️', leonardo: '🎨' };
 
 function registerAgentCommand(agentId, pattern) {
   bot.onText(pattern, async (msg, match) => {
@@ -5333,6 +5333,14 @@ registerAgentCommand('universe', /^\/universe(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('trading', /^\/trading-agent(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('ling', /^\/ling(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('maya', /^\/maya(?:@\w+)?\s+(.+)$/is);
+
+// Pretta Origin Sages — Court Members #22-27
+registerAgentCommand('yoda', /^\/yoda(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('miyagi', /^\/miyagi(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('tao', /^\/tao(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('marcus', /^\/marcus(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('sun-tzu', /^\/sun-tzu(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('leonardo', /^\/leonardo(?:@\w+)?\s+(.+)$/is);
 
 // /agents — list all available agents
 bot.onText(/^\/agents(?:@\w+)?\s*$/i, async (msg) => {
