@@ -1158,6 +1158,17 @@ app.get('/techniques', (req, res) => {
   }
 });
 
+// Serve Cathy narration audio files
+app.get('/audio/:filename', (req, res) => {
+  const filename = path.basename(req.params.filename); // sanitize
+  const audioPath = path.join(HOME, 'Cathedral', 'cathy-narration', filename);
+  if (!fs.existsSync(audioPath)) return res.status(404).send('Audio not found');
+  const ext = path.extname(filename).toLowerCase();
+  const mime = ext === '.mp3' ? 'audio/mpeg' : ext === '.ogg' ? 'audio/ogg' : 'application/octet-stream';
+  res.set({ 'Content-Type': mime, 'Cache-Control': 'public, max-age=86400' });
+  fs.createReadStream(audioPath).pipe(res);
+});
+
 app.get('/villa', (req, res) => {
   const villaPath = path.join(HOME, 'Cathedral', 'control-panel', 'index.html');
   try {
@@ -2506,6 +2517,17 @@ app.get('/course/filming/:num', (req, res) => {
     res.json(JSON.parse(result));
   } catch (err) {
     res.json({ ok: false, error: err.message });
+  }
+});
+
+// ── BR Screening Room ────────────────────────────────────────────────────────
+
+app.get('/screening', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'br-screening-room.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Screening Room not found: ${err.message}`);
   }
 });
 
