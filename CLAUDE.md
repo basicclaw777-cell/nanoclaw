@@ -144,6 +144,7 @@ All six processes must be running. Check with `pm2 list`.
 | the-timekeeper | ~/Cathedral/the-timekeeper.js | — | Cron: */15 min. Rhythm pulse, critical alerts, daily report 07:15 HKT |
 | morning-briefing | ~/Cathedral/morning-briefing.py | — | Cron: 07:30 HKT daily. Voice + text briefing to Telegram |
 | vault-state-refresh | ~/nanoclaw/vault-state-generator.js | — | Cron: 06:00 HKT daily. Regenerates vault state for DeepSeek seed prompt |
+| gym-digest | ~/nanoclaw/gym-digest-cron.js | — | Cron: Sunday 20:00 HKT, no-autorestart |
 
 If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
 
@@ -920,6 +921,21 @@ He will decide when he's done.
 - New exports: checkRhythmGate(), generateForBlock() on rhythm-engine.js (blocks <5 locked out)
 - Visual hub: ~/basic-reflex/visuals/index.html (4 interactive HTML tools)
 - Roadmap: ~/basic-reflex/roadmap/index.html
+
+## BR Gym Eyes — AI Punch & Footwork Tracking (built 2026-05-15/16)
+- Core: ~/basic-reflex/gym-eyes/ (detector.py, fight_lab.py, student_profiles.py, drill_engine.py, commentary_parser.py)
+- Bridge: ~/nanoclaw/gym-eyes-v2.js (ESM, replaces old YOLO gym-eyes.js for Telegram)
+- Detection: MediaPipe PoseLandmarker, velocity-based punch detection, BR syllabus footwork classification
+- 7 build sessions complete (1,2,6,8,9,10,11). Remaining: 3-5 (CNN training), 7 (multi-cam), 12 (polish)
+- Telegram commands: /eyes, /eyes analyze, /eyes last, /eyes student [name], /students, /drill, /drill assign, /drill score, /note, /analyze [f1] vs [f2], /gymdigest
+- Student homework loop: video + caption ("Sarah round 1 bag work") → auto-detect → auto-create student → import → report back
+- Hub: localhost:8080/gym-eyes (BR-branded dashboard)
+- API: /gym-eyes/data, /gym-eyes/student/:name, /gym-eyes/session/:file, /gym-eyes/dashboard/:name
+- Villa: gymEyes in /villa/snapshot
+- Weekly digest: gym-digest-cron.js, PM2 cron Sunday 20:00 HKT
+- Vault doc: ~/cathedral-vault/08_Project_Orchestrator/projects/br-gym-eyes.md
+- Cathedral Sense #9
+- 100 Punches Challenge: gym-challenge.js, /challenge join, /streak, /leaderboard. Auto-wired into homework video handler. State: ~/basic-reflex/gym-eyes/challenge.json
 
 ## Tier 1 Expansion — Built 2026-05-04
 - combo-logger.js — SQLite logging for all validations. combo_log table in metrics.db.
