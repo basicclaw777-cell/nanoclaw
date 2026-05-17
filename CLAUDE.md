@@ -1345,3 +1345,19 @@ the-timekeeper to go offline. Don't repeat it.
 - Two-pass solves both: Soul V2 gets face right, Nano Banana grounds into BR gym environment.
 - TRIGGER: /scene and /scenevideo Telegram commands (manual). Future: wire into Reed Daily Lab.
 - Pending: real BR gym reference photos (~/Downloads/gym images -basic reflex/) not yet used as pass 2 --image reference. Video pipeline untested. Ling/Maya untested.
+
+## Team Programme — Agent Coordination Activities (built 2026-05-17)
+- 9 recurring activities: 6 existing + 3 new scripts + 2 newly wired crons
+- dissent-round.js — ~/Cathedral/agents/dissent-round.js (Sunday 1:30am HKT, after Steward)
+  - 3-round structured debate on Steward-flagged contradictions
+  - State: dissent-state.json
+- cathedral-sprint.js — ~/Cathedral/agents/cathedral-sprint.js (1st + 8th of month 4am HKT)
+  - Monthly collaborative challenge, Orc selects theme, agents tag [SPRINT] posts
+  - State: sprint-state.json
+- town-hall.js — ~/Cathedral/agents/town-hall.js (28th of month 4am HKT)
+  - 15 agents polled: WORKED / DIDN'T WORK / CHANGE. Steward synthesizes.
+  - Vault deposit: 00_Staging/cathedral/town-hall-{date}.md
+- appreciation-run — PM2 cron 1st of month 4am HKT (already existed, now triggered)
+- suggestion-run — PM2 cron 1st + 15th 4am HKT (already existed, now triggered)
+- Dashboard: localhost:8080/cathedral-city/team-programme (6 tabs, auto-refresh 60s)
+- New cath-bridge endpoint: /cathedral-city/dissent

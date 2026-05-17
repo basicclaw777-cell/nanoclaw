@@ -973,6 +973,14 @@ app.get('/villa/snapshot', async (req, res) => {
       restarts:p.restarts,
     }));
 
+    // Gym Eyes summary
+    let gymEyes = { students: 0, sessions: 0 };
+    try {
+      const studentFiles = fs.readdirSync(GYM_EYES_STUDENTS).filter(f => f.endsWith('.json'));
+      const sessionFiles = fs.readdirSync(GYM_EYES_SESSIONS).filter(f => f.startsWith('session-') && f.endsWith('.json'));
+      gymEyes = { students: studentFiles.length, sessions: sessionFiles.length };
+    } catch {}
+
     res.json({
       ok:        true,
       timestamp: Date.now(),
@@ -983,6 +991,7 @@ app.get('/villa/snapshot', async (req, res) => {
       board,
       processes,
       recent:    recentFiles(10),
+      gymEyes,
     });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
@@ -1134,6 +1143,94 @@ app.get('/technique-library', (req, res) => {
   }
 });
 
+// ── Gym Eyes API ──────────────────────────────────────────────────────────────
+
+const GYM_EYES_SESSIONS = path.join(HOME, 'basic-reflex', 'gym-eyes', 'sessions');
+const GYM_EYES_STUDENTS = path.join(HOME, 'basic-reflex', 'gym-eyes', 'students');
+
+app.get('/gym-eyes/data', (req, res) => {
+  try {
+    // Recent sessions
+    let sessions = [];
+    try {
+      sessions = fs.readdirSync(GYM_EYES_SESSIONS)
+        .filter(f => f.startsWith('session-') && f.endsWith('.json'))
+        .map(f => {
+          const stats = fs.statSync(path.join(GYM_EYES_SESSIONS, f));
+          const data = JSON.parse(fs.readFileSync(path.join(GYM_EYES_SESSIONS, f), 'utf8'));
+          return { file: f, date: data.session_date || stats.mtime.toISOString(), totalPunches: data.total_punches || 0, fighters: (data.fighters || []).length };
+        })
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 20);
+    } catch {}
+
+    // Students
+    let students = [];
+    try {
+      students = fs.readdirSync(GYM_EYES_STUDENTS)
+        .filter(f => f.endsWith('.json'))
+        .map(f => {
+          const p = JSON.parse(fs.readFileSync(path.join(GYM_EYES_STUDENTS, f), 'utf8'));
+          return {
+            name: p.name, level: p.level, stance: p.stance,
+            sessions: p.cumulative?.total_sessions || 0,
+            punches: p.cumulative?.total_punches || 0,
+            steps: p.cumulative?.total_steps || 0,
+            flags: (p.flags || []).map(fl => ({ type: fl.type, severity: fl.severity })),
+            milestones: (p.milestones || []).length,
+            drills: (p.drill_assignments || []).filter(d => d.status === 'active').length,
+            lastSession: p.sessions?.length ? p.sessions[p.sessions.length - 1].date : null,
+          };
+        });
+    } catch {}
+
+    res.json({ ok: true, sessions, students, sessionCount: sessions.length, studentCount: students.length });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/gym-eyes/student/:name', (req, res) => {
+  const safeName = req.params.name.toLowerCase().replace(/ /g, '-');
+  const profilePath = path.join(GYM_EYES_STUDENTS, `${safeName}.json`);
+  if (!fs.existsSync(profilePath)) return res.status(404).json({ ok: false, error: 'student not found' });
+  try {
+    const profile = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
+    res.json({ ok: true, profile });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.get('/gym-eyes/session/:file', (req, res) => {
+  const file = path.basename(req.params.file);
+  const sessionPath = path.join(GYM_EYES_SESSIONS, file);
+  if (!fs.existsSync(sessionPath)) return res.status(404).json({ ok: false, error: 'session not found' });
+  try {
+    const data = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Serve dashboard HTML files from students dir
+app.get('/gym-eyes/dashboard/:name', (req, res) => {
+  const safeName = req.params.name.toLowerCase().replace(/ /g, '-');
+  const dashPath = path.join(GYM_EYES_STUDENTS, `${safeName}-dashboard.html`);
+  if (!fs.existsSync(dashPath)) return res.status(404).send('Dashboard not found. Generate via: python student_profiles.py dashboard --name ' + req.params.name);
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(dashPath);
+});
+
+// Serve the main gym-eyes dashboard/hub
+app.get('/gym-eyes', (req, res) => {
+  const hubPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'hub.html');
+  if (!fs.existsSync(hubPath)) return res.redirect('/gym-eyes/data');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(hubPath);
+});
+
 // Serve artifact files directly (images, HTML, SVG)
 app.get('/villa/artifact-file', (req, res) => {
   const relPath = req.query.path;
@@ -1141,6 +1238,139 @@ app.get('/villa/artifact-file', (req, res) => {
   const full = path.join(VAULT, '09_Artifacts', relPath);
   if (!fs.existsSync(full)) return res.status(404).send('not found');
   res.sendFile(full);
+});
+
+// ── Cathedral City ───────────────────────────────────────────────────────────
+
+app.get('/cathedral-city', (req, res) => {
+  const htmlPath = path.join(HOME, 'Cathedral', 'control-panel', 'cathedral-theme-park.html');
+  try {
+    const html = fs.readFileSync(htmlPath, 'utf8');
+    res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Cathedral City not found: ${err.message}`);
+  }
+});
+
+app.get('/cathedral-city/map.png', (req, res) => {
+  const imgPath = path.join(VAULT, '09_Artifacts', 'cathedral', 'cathedral-city-map-2026-05-16.png');
+  if (!fs.existsSync(imgPath)) return res.status(404).send('Map image not found');
+  res.set({ 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400' });
+  fs.createReadStream(imgPath).pipe(res);
+});
+
+app.get('/cathedral-city/data', (req, res) => {
+  try {
+    const { execFileSync } = require('child_process');
+    const result = execFileSync('node', [path.join(HOME, 'Cathedral', 'city-planner.js')], {
+      encoding: 'utf8', timeout: 15000, env: { ...process.env },
+    });
+    res.json(JSON.parse(result));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Cathedral Feed + Agent Health ──────────────────────────────────────────────
+app.get('/cathedral-city/feed', (req, res) => {
+  const feedPath = path.join(HOME, 'Cathedral', 'agents', 'cathedral-feed.json');
+  try {
+    if (fs.existsSync(feedPath)) {
+      res.json(JSON.parse(fs.readFileSync(feedPath, 'utf8')));
+    } else {
+      res.json([]);
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/cathedral-city/health', (req, res) => {
+  const healthPath = path.join(HOME, 'Cathedral', 'agents', 'agent-health.json');
+  try {
+    if (fs.existsSync(healthPath)) {
+      res.json(JSON.parse(fs.readFileSync(healthPath, 'utf8')));
+    } else {
+      res.json({});
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/cathedral-city/tea-stars', (req, res) => {
+  const starsPath = path.join(HOME, 'Cathedral', 'agents', 'tea-stars.json');
+  try {
+    if (fs.existsSync(starsPath)) {
+      res.json(JSON.parse(fs.readFileSync(starsPath, 'utf8')));
+    } else {
+      res.json({ ratings: [], leaderboard: {} });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/cathedral-city/dms', (req, res) => {
+  const dmPath = path.join(HOME, 'Cathedral', 'agents', 'agent-dms.json');
+  try {
+    if (fs.existsSync(dmPath)) {
+      res.json(JSON.parse(fs.readFileSync(dmPath, 'utf8')));
+    } else {
+      res.json({ threads: [] });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/cathedral-city/suggestions', (req, res) => {
+  const sugPath = path.join(HOME, 'Cathedral', 'agents', 'suggestion-box.json');
+  try {
+    if (fs.existsSync(sugPath)) {
+      res.json(JSON.parse(fs.readFileSync(sugPath, 'utf8')));
+    } else {
+      res.json({ suggestions: [] });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Serve the Cathedral Feed dashboard
+app.get('/cathedral-city/feed-dashboard', (req, res) => {
+  const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'cathedral-feed.html');
+  try {
+    const html = fs.readFileSync(dashPath, 'utf8');
+    res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Cathedral feed dashboard not found: ${err.message}`);
+  }
+});
+
+// Serve the Team Programme dashboard
+app.get('/cathedral-city/team-programme', (req, res) => {
+  const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'team-programme.html');
+  try {
+    const html = fs.readFileSync(dashPath, 'utf8');
+    res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Team programme dashboard not found: ${err.message}`);
+  }
+});
+
+// Serve dissent state data
+app.get('/cathedral-city/dissent', (req, res) => {
+  const statePath = path.join(HOME, 'Cathedral', 'agents', 'dissent-state.json');
+  try {
+    const data = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.json({ debates: [], lastRun: null });
+  }
 });
 
 // ── Villa static serve ─────────────────────────────────────────────────────────
@@ -1665,6 +1895,18 @@ app.get('/architect/:slug', (req, res) => {
 });
 
 // ── Trading Hub ──────────────────────────────────────────────────────────────
+
+app.get('/trader/signal-dashboard', (req, res) => {
+  const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'trading-signals.html');
+  try { res.send(fs.readFileSync(dashPath, 'utf8')); }
+  catch (err) { res.status(500).send(`Trading signals dashboard not found: ${err.message}`); }
+});
+
+app.get('/ephemeris', (req, res) => {
+  const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'ephemeris-dashboard.html');
+  try { res.send(fs.readFileSync(dashPath, 'utf8')); }
+  catch (err) { res.status(500).send(`Ephemeris dashboard not found: ${err.message}`); }
+});
 
 app.get('/trader/hub', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'trader', 'trading-hub.html'));
@@ -2520,6 +2762,83 @@ app.get('/course/filming/:num', (req, res) => {
   }
 });
 
+// ── Convergence Map ──────────────────────────────────────────────────────────
+
+app.get(['/convergence-map', '/convergence-map.html'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'convergence-map.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Convergence Map not found: ${err.message}`);
+  }
+});
+
+// ── Advisors' Library ────────────────────────────────────────────────────────
+
+app.get(['/advisors-library', '/advisors-library.html'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'advisors-library.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Advisors Library not found: ${err.message}`);
+  }
+});
+
+// ── Truth Corpus ─────────────────────────────────────────────────────────────
+
+app.get(['/truth-corpus', '/truth-corpus.html'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'truth-corpus.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Truth Corpus not found: ${err.message}`);
+  }
+});
+
+// ── Opponent's Film Room ─────────────────────────────────────────────────────
+
+app.get(['/opponents-film-room', '/film-room'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'opponents-film-room.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Opponents Film Room not found: ${err.message}`);
+  }
+});
+
+// ── Open Questions ───────────────────────────────────────────────────────────
+
+app.get(['/open-questions', '/questions'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'open-questions.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Open Questions not found: ${err.message}`);
+  }
+});
+
+// ── What Built Me ────────────────────────────────────────────────────────────
+
+app.get(['/what-built-me', '/influences'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'what-built-me.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`What Built Me not found: ${err.message}`);
+  }
+});
+
+// ── Time Capsule ─────────────────────────────────────────────────────────────
+
+app.get(['/time-capsule', '/capsule'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'time-capsule.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Time Capsule not found: ${err.message}`);
+  }
+});
+
 // ── BR Screening Room ────────────────────────────────────────────────────────
 
 app.get('/screening', (req, res) => {
@@ -2528,6 +2847,56 @@ app.get('/screening', (req, res) => {
     res.send(html);
   } catch (err) {
     res.status(500).send(`Screening Room not found: ${err.message}`);
+  }
+});
+
+// ── Cathedral Design Tokens ──────────────────────────────────────────────────
+
+app.get('/cathedral-tokens.css', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'cathedral-tokens.css'));
+});
+
+// ── Architect Pulse ──────────────────────────────────────────────────────────
+
+app.get('/pulse', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'architect-pulse.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Architect Pulse not found: ${err.message}`);
+  }
+});
+
+app.get('/api/architect-pulse', (req, res) => {
+  try {
+    const dataDir = path.join(NANOCLAW, 'architect-pulse', 'data');
+    const logPath = path.join(dataDir, 'pulse-log.json');
+    const statePath = path.join(dataDir, 'pulse-state.json');
+
+    const log = fs.existsSync(logPath) ? JSON.parse(fs.readFileSync(logPath, 'utf8')) : [];
+    const state = fs.existsSync(statePath) ? JSON.parse(fs.readFileSync(statePath, 'utf8')) : {};
+
+    // Calculate channel health
+    const now = Date.now();
+    const weekAgo = now - (7 * 24 * 60 * 60 * 1000);
+    const channels = {};
+    const channelIds = ['money', 'love', 'home', 'gym', 'publishing', 'asking', 'finishing', 'health', 'learning', 'rest', 'creativity'];
+
+    for (const id of channelIds) {
+      const entries = log.filter(e => e.channel === id && new Date(e.date).getTime() > weekAgo);
+      const responded = entries.filter(e => e.response && e.response !== 'SKIP');
+      const skipped = entries.filter(e => e.response === 'SKIP');
+      const total = entries.length;
+      let score = total > 0 ? Math.round((responded.length / total) * 100) : 0;
+      const stagnantDays = state.stagnationDays?.[id] || 0;
+      if (stagnantDays >= 14) score = Math.max(0, score - 30);
+      else if (stagnantDays >= 7) score = Math.max(0, score - 15);
+      channels[id] = { score, responded: responded.length, skipped: skipped.length, stagnantDays };
+    }
+
+    res.json({ ok: true, channels, log, state });
+  } catch (err) {
+    res.json({ ok: false, channels: {}, log: [], state: {}, error: err.message });
   }
 });
 
