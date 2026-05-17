@@ -1405,3 +1405,16 @@ the-timekeeper to go offline. Don't repeat it.
 - cath-bridge endpoints: /api/content-studio/wishlist, /fulfill, /internal-feed
 - Departments monitored by buzz-monitor: reed_lab (48h), gym_eyes (72h), content_studio (36h), trading (96h), research (48h), agents (48h)
 - Architecture: Department Intelligence Protocol instance. Characters drive content, not functions.
+
+## Cathedral Coaching System (built 2026-05-18)
+- Auto-coach: ~/Cathedral/agents/cathedral-auto-coach.js — self-coaching immune system
+- Heartbeat event: `auto-coach` (weight: 2), fires homework check → diagnose → cascade
+- Coaching state: ~/Cathedral/agents/coaching-state.json
+- DM throttle: ~/Cathedral/agents/dm-throttle.js (max 2 system DMs/agent/day)
+- Focus mode: ~/Cathedral/agents/agent-focus-mode.js (suppress system DMs during deep work)
+- Brand bible: ~/Cathedral/agents/brand-bible.json (v1.0, 22 reference images, 8 OKLCH colors)
+- Boxing nicknames: ~/Cathedral/agents/boxing-nicknames.json (21 agents named)
+- 11 methodology documents in 02_Refined_Gold/cathedral/ (the-coaches-diagnostic through the-proactivity-formula)
+- Session transcripts: saved to 02_Refined_Gold/cathedral/session-transcript-YYYY-MM-DD.md via extract-transcript.js
+- Standing: harvest emergent skills immediately — skills not harvested die with the session
+- Standing: Cathedral is the lab, gym is the ring — methodology must flow outward
