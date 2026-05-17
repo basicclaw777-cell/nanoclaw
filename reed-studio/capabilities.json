@@ -1,0 +1,278 @@
+{
+  "lastUpdated": "2026-05-17",
+  "higgsfield": {
+    "image": {
+      "gpt_image_2": {
+        "best_for": "Typography, graphic design, UI, banners, high-fidelity general",
+        "strengths": [
+          "text rendering",
+          "design layout",
+          "color accuracy",
+          "complex scenes"
+        ],
+        "limitations": [
+          "slower",
+          "expensive"
+        ],
+        "reed_uses": [
+          "build cards",
+          "infographics",
+          "character cards",
+          "brand assets"
+        ]
+      },
+      "text2image_soul_v2": {
+        "best_for": "Face-faithful character generation with Soul ID",
+        "strengths": [
+          "identity lock",
+          "consistent character",
+          "multiple poses"
+        ],
+        "limitations": [
+          "text-only input",
+          "no image reference"
+        ],
+        "reed_uses": [
+          "Logan scenes",
+          "Ling content",
+          "Maya content"
+        ],
+        "soul_ids": {
+          "logan": "2a825762-9d13-4d93-9324-32fe5d5db803",
+          "ling": "fbc29317-be0c-4807-9cd0-326001a53d1e",
+          "maya": "ea241374-0a51-4b28-90d4-b98fc9d7bc3d"
+        }
+      },
+      "nano_banana_2": {
+        "best_for": "Character illustrations, cartoon style, fast iteration",
+        "strengths": [
+          "speed",
+          "stylized",
+          "good with references"
+        ],
+        "limitations": [
+          "no soul-id support",
+          "less photorealistic"
+        ],
+        "reed_uses": [
+          "style experiments",
+          "quick concepts",
+          "manga/anime"
+        ]
+      },
+      "nano_banana_pro": {
+        "best_for": "Premium character work, hard cases",
+        "strengths": [
+          "higher quality than nano_banana_2",
+          "complex compositions"
+        ],
+        "limitations": [
+          "slower"
+        ],
+        "reed_uses": [
+          "final character sheets",
+          "premium illustrations"
+        ]
+      },
+      "soul_location": {
+        "best_for": "Environments, locations, no-people scenes",
+        "strengths": [
+          "best-in-class environments",
+          "architectural",
+          "atmospheric"
+        ],
+        "limitations": [
+          "no characters"
+        ],
+        "reed_uses": [
+          "gym environments",
+          "HK street scenes",
+          "Cathedral spaces"
+        ]
+      },
+      "z_image": {
+        "best_for": "Fast cheap iteration",
+        "strengths": [
+          "speed",
+          "low cost"
+        ],
+        "limitations": [
+          "lower quality"
+        ],
+        "reed_uses": [
+          "rapid prototyping",
+          "A/B testing concepts"
+        ]
+      },
+      "seedream_4_5": {
+        "best_for": "Vector illustrations, face edits, complex scene swaps",
+        "strengths": [
+          "illustration quality",
+          "editing"
+        ],
+        "limitations": [],
+        "reed_uses": [
+          "vector work",
+          "scene manipulation"
+        ]
+      }
+    },
+    "video": {
+      "seedance_2_0": {
+        "best_for": "All-purpose serious video, multi-shot, consistent identity",
+        "strengths": [
+          "SOTA quality",
+          "motion consistency",
+          "start/end image",
+          "audio input"
+        ],
+        "limitations": [
+          "expensive",
+          "slower"
+        ],
+        "reed_uses": [
+          "cinematic clips",
+          "character animation",
+          "hero content"
+        ]
+      },
+      "kling3_0": {
+        "best_for": "Single-plane scenes without strong dynamics",
+        "strengths": [
+          "cheaper than seedance",
+          "clean shots"
+        ],
+        "limitations": [
+          "less dynamic"
+        ],
+        "reed_uses": [
+          "simple loops",
+          "ambient footage"
+        ]
+      },
+      "cinema_studio_video_3_0": {
+        "best_for": "Cinema-grade highest fidelity",
+        "strengths": [
+          "ultimate quality"
+        ],
+        "limitations": [
+          "most expensive",
+          "slowest"
+        ],
+        "reed_uses": [
+          "hero brand videos",
+          "final delivery"
+        ]
+      },
+      "marketing_studio_video": {
+        "best_for": "Branded ads with avatars + products",
+        "strengths": [
+          "preset avatars",
+          "product import",
+          "ad modes"
+        ],
+        "limitations": [
+          "commercial format only"
+        ],
+        "reed_uses": [
+          "BR ad content",
+          "UGC style",
+          "product showcase"
+        ]
+      }
+    },
+    "marketing_modes": [
+      "ugc",
+      "tutorial",
+      "ugc_unboxing",
+      "hyper_motion",
+      "product_review",
+      "tv_spot",
+      "wild_card",
+      "ugc_virtual_try_on",
+      "virtual_try_on"
+    ]
+  },
+  "external_watch": {
+    "platforms": [
+      "Higgsfield changelog",
+      "Runway",
+      "Pika",
+      "Luma",
+      "Kling updates",
+      "ComfyUI workflows"
+    ],
+    "last_checked": "2026-05-17T06:33:55.783Z",
+    "notes": "R&D checks weekly for new models, capabilities, price changes",
+    "new_models_detected": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "reed_styles": {
+    "proven": [
+      "pro_photo",
+      "manga",
+      "noir",
+      "ippo",
+      "neon",
+      "dramatic",
+      "poster",
+      "oil",
+      "video_cinematic"
+    ],
+    "experimental": [
+      "watercolor",
+      "ukiyo-e",
+      "street_art",
+      "sports_illustrated",
+      "double_exposure",
+      "risograph",
+      "renaissance",
+      "synthwave",
+      "ink_wash",
+      "polaroid"
+    ],
+    "pipeline": {
+      "pro_photo": "DeepSeek enhance → gpt_image_2 (img2img)",
+      "character_scene": "DeepSeek prompt → text2image_soul_v2 (face) → nano_banana_pro (grounding)",
+      "cinematic_video": "pro_photo still → seedance_2_0 (5s)",
+      "build_card": "gpt_image_2 (text2image, typography-heavy)"
+    }
+  }
+}

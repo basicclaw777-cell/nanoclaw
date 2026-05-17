@@ -2130,6 +2130,255 @@ app.get('/reed-slides/catalogue', (req, res) => {
 });
 
 // ── Reed's Studio ────────────────────────────────────────────────────────────
+app.get('/reed-visual-hub', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'reed-visual-hub.html'));
+});
+// Reed Studio Engine API
+app.get('/api/reed-studio', (req, res) => {
+  const studioDir = path.join(NANOCLAW, 'reed-studio');
+  const stateFile = path.join(studioDir, 'state.json');
+  const capsFile = path.join(studioDir, 'capabilities.json');
+  const briefsDir = path.join(studioDir, 'briefs');
+  const stagingDir = path.join(studioDir, 'staging');
+  const state = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile, 'utf8')) : {};
+  const capabilities = fs.existsSync(capsFile) ? JSON.parse(fs.readFileSync(capsFile, 'utf8')) : {};
+  const briefs = fs.existsSync(briefsDir) ? fs.readdirSync(briefsDir).filter(f => f.endsWith('.json')).map(f => {
+    try { return JSON.parse(fs.readFileSync(path.join(briefsDir, f), 'utf8')); } catch { return null; }
+  }).filter(Boolean) : [];
+  const staging = fs.existsSync(stagingDir) ? fs.readdirSync(stagingDir).map(f => {
+    const stat = fs.statSync(path.join(stagingDir, f));
+    return { name: f, size: stat.size, mtime: stat.mtime };
+  }) : [];
+  res.json({ state, capabilities, briefs, staging });
+});
+app.get('/api/reed-studio/metrics', (req, res) => {
+  const metricsFile = path.join(NANOCLAW, 'reed-studio', 'metrics.json');
+  if (fs.existsSync(metricsFile)) {
+    res.json(JSON.parse(fs.readFileSync(metricsFile, 'utf8')));
+  } else {
+    res.json({});
+  }
+});
+app.get('/api/reed-studio/feed', (req, res) => {
+  const feedFile = path.join(NANOCLAW, 'reed-studio', 'studio-feed.json');
+  if (fs.existsSync(feedFile)) {
+    const feed = JSON.parse(fs.readFileSync(feedFile, 'utf8'));
+    const limit = parseInt(req.query.limit) || 30;
+    res.json({ posts: (feed.posts || []).slice(-limit) });
+  } else {
+    res.json({ posts: [] });
+  }
+});
+app.get('/api/reed-studio/memory', (req, res) => {
+  const memFile = path.join(NANOCLAW, 'reed-studio', 'studio-memory.json');
+  if (fs.existsSync(memFile)) res.json(JSON.parse(fs.readFileSync(memFile, 'utf8')));
+  else res.json({});
+});
+app.get('/api/reed-studio/status', (req, res) => {
+  const metricsFile = path.join(NANOCLAW, 'reed-studio', 'metrics.json');
+  const feedFile = path.join(NANOCLAW, 'reed-studio', 'studio-feed.json');
+  const stateFile = path.join(NANOCLAW, 'reed-studio', 'state.json');
+  const metrics = fs.existsSync(metricsFile) ? JSON.parse(fs.readFileSync(metricsFile, 'utf8')) : {};
+  const feed = fs.existsSync(feedFile) ? JSON.parse(fs.readFileSync(feedFile, 'utf8')) : { posts: [] };
+  const state = fs.existsSync(stateFile) ? JSON.parse(fs.readFileSync(stateFile, 'utf8')) : {};
+  res.json({
+    health: (metrics.streaks?.daysActive || 0) > 0 ? 'active' : 'cold',
+    streak: metrics.streaks?.daysActive || 0,
+    lastEvent: state.lastEvent,
+    recentFeed: (feed.posts || []).slice(-5),
+    metrics: { totalAssets: metrics.lifetime?.totalGenerated || 0, thisWeek: metrics.weekly?.generated || 0, briefsQueued: metrics.lifetime?.totalBriefs || 0, execRate: metrics.rates?.briefToExecution || 0 }
+  });
+});
+app.get('/api/reed-studio/briefing', (req, res) => {
+  // Agent-readable KPI summary — inject into agent contexts
+  const metricsFile = path.join(NANOCLAW, 'reed-studio', 'metrics.json');
+  if (!fs.existsSync(metricsFile)) return res.send('No metrics yet.');
+  const m = JSON.parse(fs.readFileSync(metricsFile, 'utf8'));
+  const freshStyles = Object.entries(m.coverage?.styles || {}).filter(([, v]) => v.health === 'fresh').length;
+  const staleStyles = Object.entries(m.coverage?.styles || {}).filter(([, v]) => v.health === 'stale').length;
+  const briefing = `REED STUDIO KPIs:\n- Total assets: ${m.lifetime?.totalGenerated || 0} | This week: ${m.weekly?.generated || 0}\n- Briefs queued: ${m.lifetime?.totalBriefs || 0} | Executed: ${m.lifetime?.briefsExecuted || 0} (${m.rates?.briefToExecution || 0}%)\n- Style coverage: ${freshStyles}/9 fresh, ${staleStyles} stale\n- Characters: Logan(${m.coverage?.characters?.logan || 0}) Ling(${m.coverage?.characters?.ling || 0}) Maya(${m.coverage?.characters?.maya || 0})\n- Feed posts: ${m.lifetime?.feedPostsMade || 0} | Engagement: ${m.rates?.feedEngagement || 0}%\n- Streak: ${m.streaks?.daysActive || 0}d (best: ${m.streaks?.longestStreak || 0}d)\n- Paul picks: ${m.lifetime?.paulSelections || 0} | Replacements: ${m.lifetime?.paulReplacements || 0}`;
+  res.type('text/plain').send(briefing);
+});
+app.get('/reed-studio-asset', (req, res) => {
+  const filePath = req.query.path;
+  const stagingDir = path.join(NANOCLAW, 'reed-studio', 'staging');
+  const fullPath = path.join(stagingDir, filePath || '');
+  if (!fullPath.startsWith(stagingDir) || !fs.existsSync(fullPath)) return res.status(404).send('not found');
+  res.sendFile(fullPath);
+});
+// ── Engineering Studio API ──────────────────────────────────────────────────
+app.get('/api/engineering-studio/metrics', (req, res) => {
+  const f = path.join(NANOCLAW, 'engineering-studio', 'metrics.json');
+  if (!fs.existsSync(f)) return res.json({});
+  res.json(JSON.parse(fs.readFileSync(f, 'utf8')));
+});
+app.get('/api/engineering-studio/feed', (req, res) => {
+  const f = path.join(NANOCLAW, 'engineering-studio', 'studio-feed.json');
+  if (!fs.existsSync(f)) return res.json({ posts: [] });
+  res.json(JSON.parse(fs.readFileSync(f, 'utf8')));
+});
+app.get('/api/engineering-studio/memory', (req, res) => {
+  const f = path.join(NANOCLAW, 'engineering-studio', 'studio-memory.json');
+  if (!fs.existsSync(f)) return res.json({});
+  res.json(JSON.parse(fs.readFileSync(f, 'utf8')));
+});
+app.get('/api/engineering-studio/briefing', (req, res) => {
+  const f = path.join(NANOCLAW, 'engineering-studio', 'metrics.json');
+  if (!fs.existsSync(f)) return res.type('text/plain').send('Engineering Studio: no metrics yet.');
+  const m = JSON.parse(fs.readFileSync(f, 'utf8'));
+  const gym = m.projects?.gym_eyes || {};
+  const ing = m.projects?.ingestion_pipeline || {};
+  const cnn = m.projects?.cnn_training || {};
+  const h = m.lab_health || {};
+  const briefing = `ENGINEERING STUDIO BRIEFING:\n- Gym Eyes: ${gym.sessions_processed_total || 0} sessions, ${gym.students_tracked || 0} students, accuracy: ${gym.detection_accuracy || 'UNMEASURED'}\n- Ingestion: ${ing.status || 'unknown'} — ${ing.days_running_unattended || 0} days autonomous\n- CNN: ${cnn.status || 'unknown'} — ${cnn.frames_collected || 0}/${cnn.target_frames || '?'} frames\n- Lab: ${h.experiments_this_week || 0} experiments, ${h.post_mortems_this_month || 0} post-mortems, ${h.pipeline_failures_week || 0} failures`;
+  res.type('text/plain').send(briefing);
+});
+app.get('/api/engineering-studio/status', (req, res) => {
+  const metricsFile = path.join(NANOCLAW, 'engineering-studio', 'metrics.json');
+  const feedFile = path.join(NANOCLAW, 'engineering-studio', 'studio-feed.json');
+  const metrics = fs.existsSync(metricsFile) ? JSON.parse(fs.readFileSync(metricsFile, 'utf8')) : {};
+  const feed = fs.existsSync(feedFile) ? JSON.parse(fs.readFileSync(feedFile, 'utf8')) : { posts: [] };
+  res.json({
+    health: metrics.projects?.ingestion_pipeline?.days_running_unattended > 0 ? 'active' : 'cold',
+    projects: Object.keys(metrics.projects || {}).length,
+    recentFeed: (feed.posts || []).slice(0, 5),
+    labHealth: metrics.lab_health || {}
+  });
+});
+
+// ── Studio Commons: Progress + Rating API ───────────────────────────────────
+app.get('/api/studio-progress', (req, res) => {
+  // Returns progress for all studios
+  const studios = ['reed-studio', 'engineering-studio'];
+  const results = {};
+  for (const id of studios) {
+    const progressFile = path.join(NANOCLAW, id, 'progress.json');
+    const feedFile = path.join(NANOCLAW, id, 'studio-feed.json');
+    let progress = { snapshots: [] };
+    let feed = { posts: [] };
+    try { progress = JSON.parse(fs.readFileSync(progressFile, 'utf8')); } catch {}
+    try { feed = JSON.parse(fs.readFileSync(feedFile, 'utf8')); } catch {}
+
+    const posts = feed.posts || [];
+    const rated = posts.filter(p => p.outcome).length;
+    const orcPosts = posts.filter(p => p.role === 'orc' && p.outcome);
+    const succeeded = orcPosts.filter(p => p.outcome.result === 'succeeded' || p.outcome.result === 'acted').length;
+
+    // Compute trends from last 2 snapshots
+    const snaps = progress.snapshots || [];
+    let trends = {};
+    if (snaps.length >= 2) {
+      const latest = snaps[snaps.length - 1].metrics || {};
+      const prev = snaps[snaps.length - 2].metrics || {};
+      for (const key of Object.keys(latest)) {
+        if (typeof latest[key] === 'number' && typeof prev[key] === 'number') {
+          trends[key] = latest[key] > prev[key] ? 'up' : latest[key] < prev[key] ? 'down' : 'flat';
+        }
+      }
+    }
+
+    results[id] = {
+      snapshots: snaps.length,
+      latest: snaps[snaps.length - 1] || null,
+      trends,
+      memoryQuality: { total: posts.length, rated, ratedPercent: posts.length > 0 ? Math.round((rated / posts.length) * 100) : 0 },
+      effectiveness: orcPosts.length > 0 ? { rated: orcPosts.length, succeeded, percent: Math.round((succeeded / orcPosts.length) * 100) } : null
+    };
+  }
+  res.json(results);
+});
+
+app.post('/api/studio-rate', (req, res) => {
+  // Rate a feed post outcome
+  const { studio, postId, result, detail } = req.body || {};
+  if (!studio || !postId || !result) return res.status(400).json({ error: 'studio, postId, result required' });
+  const feedPath = path.join(NANOCLAW, studio, 'studio-feed.json');
+  if (!fs.existsSync(feedPath)) return res.status(404).json({ error: 'studio not found' });
+  const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8'));
+  const post = feed.posts.find(p => p.id === postId);
+  if (!post) return res.status(404).json({ error: 'post not found' });
+  post.outcome = { result, detail: detail || '', ratedAt: new Date().toISOString() };
+  fs.writeFileSync(feedPath, JSON.stringify(feed, null, 2));
+
+  // Log to memory
+  const memPath = path.join(NANOCLAW, studio, 'studio-memory.json');
+  if (fs.existsSync(memPath)) {
+    const mem = JSON.parse(fs.readFileSync(memPath, 'utf8'));
+    if (!mem.ratedOutcomes) mem.ratedOutcomes = [];
+    mem.ratedOutcomes.push({ postId: post.id, role: post.role, action: (post.content || '').slice(0, 100), outcome: post.outcome, date: post.outcome.ratedAt });
+    if (mem.ratedOutcomes.length > 100) mem.ratedOutcomes = mem.ratedOutcomes.slice(-100);
+    fs.writeFileSync(memPath, JSON.stringify(mem, null, 2));
+  }
+  res.json({ rated: true, post });
+});
+
+app.post('/api/studio-snapshot', (req, res) => {
+  // Trigger progress snapshot for all studios
+  const studios = [
+    { id: 'reed-studio', dir: path.join(NANOCLAW, 'reed-studio'), metricsFile: 'metrics.json' },
+    { id: 'engineering-studio', dir: path.join(NANOCLAW, 'engineering-studio'), metricsFile: 'metrics.json' }
+  ];
+  const results = [];
+  for (const s of studios) {
+    const mf = path.join(s.dir, s.metricsFile);
+    if (!fs.existsSync(mf)) continue;
+    const metrics = JSON.parse(fs.readFileSync(mf, 'utf8'));
+    const progressFile = path.join(s.dir, 'progress.json');
+    let progress;
+    try { progress = JSON.parse(fs.readFileSync(progressFile, 'utf8')); } catch { progress = { snapshots: [] }; }
+    progress.snapshots.push({ date: new Date().toISOString(), metrics });
+    if (progress.snapshots.length > 90) progress.snapshots = progress.snapshots.slice(-90);
+    fs.writeFileSync(progressFile, JSON.stringify(progress, null, 2));
+    results.push({ id: s.id, snapshotCount: progress.snapshots.length });
+  }
+  res.json({ snapshotted: results });
+});
+
+// Character assets API for visual hub
+app.get('/api/character-assets', (req, res) => {
+  const dirs = [
+    { label: 'Logan (Vault)', path: path.join(HOME, 'cathedral-vault/09_Artifacts/logan') },
+    { label: 'Logan (BR)', path: path.join(HOME, 'cathedral-vault/09_Artifacts/branding/basic-reflex/logan') },
+    { label: 'Logan Sheets', path: path.join(HOME, 'cathedral-vault/09_Artifacts/branding/basic-reflex/logan/character-sheets') },
+    { label: 'Reed Outbox', path: path.join(HOME, 'nanoclaw/reed-scene-outbox') },
+  ];
+  const assets = [];
+  const imgExts = ['.png','.jpg','.jpeg','.webp','.gif','.mp4','.mov'];
+  for (const d of dirs) {
+    try {
+      const files = fs.readdirSync(d.path);
+      for (const f of files) {
+        const ext = path.extname(f).toLowerCase();
+        if (!imgExts.includes(ext)) continue;
+        const fullPath = path.join(d.path, f);
+        try {
+          const stat = fs.statSync(fullPath);
+          if (!stat.isFile()) continue;
+          const character = f.toLowerCase().includes('maya') ? 'Maya' : f.toLowerCase().includes('ling') ? 'Ling' : 'Logan';
+          assets.push({ name: f, character, source: d.label, path: fullPath, size: stat.size, mtime: stat.mtime, type: ext === '.mp4' || ext === '.mov' ? 'video' : 'image' });
+        } catch(e) {}
+      }
+    } catch(e) {}
+  }
+  assets.sort((a,b) => new Date(b.mtime) - new Date(a.mtime));
+  res.json(assets);
+});
+// Serve character asset files
+app.get('/character-asset', (req, res) => {
+  const filePath = req.query.path;
+  if (!filePath || !filePath.startsWith(HOME)) return res.status(400).send('bad path');
+  if (!fs.existsSync(filePath)) return res.status(404).send('not found');
+  res.sendFile(filePath);
+});
+app.get('/reed-treatments', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'assets', 'reed-instagram-treatments.html'));
+});
+// Serve treatment images (relative paths from reed-instagram-treatments.html)
+app.get('/Downloads/:folder/:file', (req, res) => {
+  const filePath = path.join(HOME, 'Downloads', req.params.folder, req.params.file);
+  if (!fs.existsSync(filePath)) return res.status(404).send('not found');
+  res.sendFile(filePath);
+});
 app.get('/reed-studio', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'studio.html'));
 });
@@ -2932,6 +3181,26 @@ app.get('/merch/suppliers', (req, res) => {
     res.json(JSON.parse(result));
   } catch (err) {
     res.json({ ok: false, suppliers: [], error: err.message });
+  }
+});
+
+// ── Higgsfield Feature Map ────────────────────────────────────────────────────
+
+app.get(['/higgsfield', '/higgsfield-map'], (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, 'higgsfield-map.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Higgsfield Map not found: ${err.message}`);
+  }
+});
+
+app.get('/higgsfield-map-data', (req, res) => {
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'higgsfield-map.json'), 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

@@ -1,0 +1,106 @@
+{
+  "snapshots": [
+    {
+      "date": "2026-05-17T07:12:24.641Z",
+      "metrics": {
+        "lastUpdated": "2026-05-17T06:33:24.450Z",
+        "lifetime": {
+          "totalGenerated": 26,
+          "totalBriefs": 4,
+          "briefsExecuted": 0,
+          "feedPostsMade": 0,
+          "feedInspirationsUsed": 0,
+          "experimentsRun": 0,
+          "paulSelections": 0,
+          "paulReplacements": 0
+        },
+        "weekly": {
+          "weekStart": "2026-05-17",
+          "generated": 7,
+          "briefs": 0,
+          "executed": 0,
+          "feedPosts": 0,
+          "experiments": 0,
+          "staleStylesFixed": 0,
+          "characterGapsFilled": 0
+        },
+        "rates": {
+          "briefToExecution": 0,
+          "preVisHitRate": 0,
+          "feedEngagement": 0,
+          "paulApprovalRate": 0,
+          "studioUptime": 100
+        },
+        "coverage": {
+          "styles": {
+            "pro_photo": {
+              "count": 6,
+              "daysSinceLast": 0,
+              "health": "fresh"
+            },
+            "manga": {
+              "count": 1,
+              "daysSinceLast": 0,
+              "health": "fresh"
+            },
+            "noir": {
+              "count": 8,
+              "daysSinceLast": 7,
+              "health": "aging"
+            },
+            "ippo": {
+              "count": 1,
+              "daysSinceLast": 0,
+              "health": "fresh"
+            },
+            "neon": {
+              "count": 1,
+              "daysSinceLast": 0,
+              "health": "fresh"
+            },
+            "dramatic": {
+              "count": 3,
+              "daysSinceLast": 8,
+              "health": "aging"
+            },
+            "poster": {
+              "count": 1,
+              "daysSinceLast": 0,
+              "health": "fresh"
+            },
+            "oil": {
+              "count": 1,
+              "daysSinceLast": 0,
+              "health": "fresh"
+            },
+            "video_cinematic": {
+              "count": 1,
+              "daysSinceLast": 0,
+              "health": "fresh"
+            }
+          },
+          "characters": {
+            "logan": 0,
+            "ling": 0,
+            "maya": 0
+          },
+          "models": {
+            "unknown": 26
+          }
+        },
+        "streaks": {
+          "daysActive": 1,
+          "lastActiveDate": "2026-05-17",
+          "longestStreak": 1
+        },
+        "quality": {
+          "paulUsed": [],
+          "paulReplaced": [],
+          "gradeA": 0,
+          "gradeB": 0,
+          "gradeC": 0
+        }
+      }
+    }
+  ]
+}

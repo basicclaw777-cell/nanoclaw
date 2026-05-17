@@ -291,7 +291,8 @@ const ENV = [
     dashboards: ['/reed-studio'],
     dataEndpoints: {
       catalogue: '/reed-lab/catalogue',
-      shots: '/reed-lab/shots'
+      shots: '/reed-lab/shots',
+      feed: '/api/reed-studio/feed'
     }
   },
   {
@@ -515,6 +516,161 @@ const ENV = [
     deckCards: [],
     dashboards: ['/screening'],
     dataEndpoints: {}
+  },
+  {
+    id: 'advisors-library',
+    name: 'Advisors\' Library',
+    icon: '\u{1F4D6}',
+    color: '#C4943A',
+    colorDim: 'rgba(196,148,58,0.12)',
+    desc: 'What your council thinks you should read, watch, and hear. 13 advisors, personal picks for Paul.',
+    orc: { name: 'The Council', state: 'Active', desc: 'Personal growth recommendations from every Cathedral advisor — books, films, docs, podcasts, lectures. Filter by advisor, medium, theme.' },
+    senses: [
+      { icon: '\u{1F4DA}', name: 'Books', detail: 'Philosophy, strategy, craft', active: true },
+      { icon: '\u{1F3AC}', name: 'Films', detail: 'Visual wisdom, mentorship stories', active: true },
+      { icon: '\u{1F399}', name: 'Podcasts', detail: 'Long-form depth', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/advisors-library'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'convergence-map',
+    name: 'Convergence Map',
+    icon: '\u{1F578}',
+    color: '#6db88f',
+    colorDim: 'rgba(109,184,143,0.12)',
+    desc: 'Where the three corpuses overlap. Force-directed graph of shared themes. The belief architecture made visible.',
+    orc: { name: 'The Cartographer', state: 'Active', desc: 'Network graph of all works across Screening Room, Truth Corpus, and Advisors\' Library. Theme clusters, convergence nodes, connection strength.' },
+    senses: [
+      { icon: '\u{1F310}', name: 'Graph', detail: 'Force-directed network visualization', active: true },
+      { icon: '\u{1F4CA}', name: 'Clusters', detail: '12 theme clusters', active: true },
+      { icon: '\u{1F50D}', name: 'Drill-down', detail: 'Click any node for connections', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/convergence-map'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'opponents-film-room',
+    name: 'Opponent\'s Film Room',
+    icon: '\u{1F3AF}',
+    color: '#c45a5a',
+    colorDim: 'rgba(196,90,90,0.12)',
+    desc: 'Study the IDEAS that compete for your students\' attention. Not gyms — philosophies.',
+    orc: { name: 'Sun Tzu', state: 'Active', desc: '8 competitor philosophies analysed: CrossFit, MMA, AI apps, boutique, yoga, running, home gym, influencers. Each with psychological hook, promise, and where boxing wins.' },
+    senses: [
+      { icon: '\u{2694}', name: 'Competitors', detail: '8 idea-level competitors mapped', active: true },
+      { icon: '\u{1F4A1}', name: 'Hooks', detail: 'Psychological hooks exposed', active: true },
+      { icon: '\u{1F94A}', name: 'Advantages', detail: 'Boxing\'s unsaid wins', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/opponents-film-room'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'open-questions',
+    name: 'Open Questions',
+    icon: '\u{2753}',
+    color: '#7ba3c4',
+    colorDim: 'rgba(123,163,196,0.12)',
+    desc: 'The Cathedral\'s unresolved threads. 17 questions across philosophy, business, infrastructure, creative.',
+    orc: { name: 'The Librarian', state: 'Active', desc: 'Every open question mined from the vault. Tagged by status, category, which advisors have weighed in, which should speak next.' },
+    senses: [
+      { icon: '\u{1F914}', name: 'Questions', detail: '17 open threads', active: true },
+      { icon: '\u{1F6A7}', name: 'Blockers', detail: 'Project-blocking questions flagged', active: true },
+      { icon: '\u{1F9ED}', name: 'Identity', detail: 'Choice-point questions tagged', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/open-questions'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'what-built-me',
+    name: 'What Built Me',
+    icon: '\u{1F3DB}',
+    color: '#d4a043',
+    colorDim: 'rgba(212,160,67,0.12)',
+    desc: 'Paul\'s actual influences. Not recommended — consumed. Evidence-based, mined from the vault.',
+    orc: { name: 'The Archivist', state: 'Active', desc: '23 proven influences across martial arts, philosophy, frontier science, teaching methods, and lived experience. Each with vault evidence.' },
+    senses: [
+      { icon: '\u{1F94B}', name: 'Martial Journey', detail: 'Judo \u2192 Muay Thai \u2192 Cuban', active: true },
+      { icon: '\u{1F4DA}', name: 'Philosophy', detail: 'Stoicism, Taoism, strategy', active: true },
+      { icon: '\u{1F52C}', name: 'Frontier', detail: 'Tesla, Schauberger, cymatics', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/what-built-me'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'time-capsule',
+    name: 'Time Capsule',
+    icon: '\u{23F3}',
+    color: '#d4a043',
+    colorDim: 'rgba(212,160,67,0.12)',
+    desc: 'Letters between present Paul and future Paul. Sealed until the moment is right.',
+    orc: { name: 'Future Paul', state: 'Waiting', desc: 'Locked messages with conditions: dates, milestones, feelings. Open when the time comes. Write new capsules anytime.' },
+    senses: [
+      { icon: '\u{1F512}', name: 'Sealed', detail: 'Capsules waiting for their moment', active: true },
+      { icon: '\u{270F}', name: 'Write', detail: 'Seal new messages to the future', active: true },
+      { icon: '\u{1F4C5}', name: 'Conditions', detail: 'Date, milestone, or feeling triggers', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/time-capsule'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'architect-pulse',
+    name: 'Architect Pulse',
+    icon: '\u{1F4AB}',
+    color: '#10b981',
+    colorDim: 'rgba(16,185,129,0.12)',
+    desc: 'Track the 7 channels. Remove blocks. Upgrade the architect — everything downstream upgrades.',
+    orc: { name: 'Marcus', state: 'Active', desc: 'Daily pulse across 7 life channels. Stagnation detection, nudge system, emergence score. Systems replace willpower.' },
+    senses: [
+      { icon: '\u{1F4B0}', name: 'Money', detail: 'Trading system recalibration', active: true },
+      { icon: '\u{2764}', name: 'Love', detail: 'Connection without armour', active: true },
+      { icon: '\u{1F3E0}', name: 'Home', detail: 'Environment reflects self-respect', active: true },
+      { icon: '\u{1F94A}', name: 'Gym', detail: 'Revenue activation', active: true },
+      { icon: '\u{1F4E1}', name: 'Publishing', detail: 'Be visible, ship work', active: true },
+      { icon: '\u{1F91D}', name: 'Asking', detail: 'Receive without guilt', active: true },
+      { icon: '\u{1F680}', name: 'Finishing', detail: 'Ship imperfect, shrink backlog', active: true },
+      { icon: '\u{1F4AA}', name: 'Health', detail: 'Train your own body, not just others', active: true },
+      { icon: '\u{1F4DA}', name: 'Learning', detail: 'Study without immediate use', active: true },
+      { icon: '\u{1F319}', name: 'Rest', detail: 'Recover without guilt', active: true },
+      { icon: '\u{1F3A8}', name: 'Creativity', detail: 'Make things with no purpose', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/pulse'],
+    dataEndpoints: {
+      pulse: '/api/architect-pulse'
+    }
+  },
+  {
+    id: 'lab',
+    name: 'Engineering Lab',
+    icon: '\u{1F52C}',
+    color: '#f97316',
+    colorDim: 'rgba(249,115,22,0.12)',
+    desc: 'CV detection, hardware R&D, pipeline engineering. Push tools beyond what ships.',
+    orc: { name: 'Scope', state: 'Prioritizing', desc: 'Engineering Orchestrator. Manages Gym Eyes, CNN training, multi-cam fusion, ingestion pipeline. Mediates accuracy vs innovation tension.' },
+    senses: [
+      { icon: '\u{1F441}', name: 'Detection', detail: 'Punch/pose CV accuracy', active: true },
+      { icon: '\u{1F4F7}', name: 'Hardware', detail: 'Cameras, edge compute', active: false },
+      { icon: '\u{1F9EA}', name: 'Research', detail: 'New models, papers, benchmarks', active: true },
+      { icon: '\u{1F4CA}', name: 'Metrics', detail: 'Pipeline health, drift, failures', active: true }
+    ],
+    deckCards: [
+      { id: 8, name: 'Boxing Lab' },
+      { id: 16, name: 'Boxing Engine' }
+    ],
+    dashboards: ['/gym-eyes'],
+    dataEndpoints: {
+      metrics: '/api/engineering-studio/metrics',
+      briefing: '/api/engineering-studio/briefing',
+      feed: '/api/engineering-studio/feed',
+      status: '/api/engineering-studio/status'
+    }
   }
 ];
 
@@ -644,11 +800,12 @@ function openRoom(id) {
       </div>`;
   }
 
-  // Activity panel
+  // Activity / Studio Feed panel
+  const hasFeed = env.dataEndpoints?.feed;
   gridHTML += `
-    <div class="room-panel">
-      <div class="panel-head"><span class="panel-label">Activity</span></div>
-      <div class="panel-body" id="rv-activity"><div class="loading">Loading...</div></div>
+    <div class="room-panel${hasFeed ? ' span-2' : ''}">
+      <div class="panel-head"><span class="panel-label">${hasFeed ? 'Studio Feed' : 'Activity'}</span></div>
+      <div class="panel-body" id="rv-activity" style="${hasFeed ? 'max-height:500px;overflow-y:auto' : ''}"><div class="loading">Loading...</div></div>
     </div>`;
 
   // Chat panel (for rooms with agents)
@@ -714,6 +871,10 @@ async function loadRoomData(env) {
   if (env.id === 'create') return loadCreateRoom(env);
   if (env.id === 'body') return loadBodyRoom(env);
   if (env.id === 'forge') return loadForgeRoom(env);
+  if (env.id === 'lab') return loadLabRoom(env);
+
+  // Check if room has a feed endpoint — generic studio feed loader
+  if (env.dataEndpoints?.feed) return loadStudioFeedRoom(env);
 
   // Default: no live data
   document.getElementById('rv-widgets').innerHTML = '';
@@ -962,12 +1123,14 @@ async function loadBodyRoom(env) {
 
 // ─── CREATE ROOM ───
 async function loadCreateRoom(env) {
-  const [cat, shots] = await Promise.allSettled([
+  const [cat, shots, feed] = await Promise.allSettled([
     fetchJSON('/reed-lab/catalogue'),
-    fetchJSON('/reed-lab/shots')
+    fetchJSON('/reed-lab/shots'),
+    fetchJSON('/api/reed-studio/feed')
   ]);
   const c = cat.value || {};
   const sh = shots.value || {};
+  const f = feed.value || { posts: [] };
   const entries = c.entries || c.photos || [];
   const styles = {};
   entries.forEach(e => { if (e.style) styles[e.style] = (styles[e.style]||0) + 1; });
@@ -988,22 +1151,129 @@ async function loadCreateRoom(env) {
     </div>
   `;
 
-  // Recent generations as activity
-  let actItems = entries.slice(-6).reverse().map(e => ({
-    text: (e.file || '').replace(/\.(jpg|png|jpeg)$/i, ''),
-    color: env.color,
-    time: e.date || ''
-  }));
-  if (!actItems.length) actItems.push({ text: 'No recent generations', color: 'var(--text-dim)', time: '' });
-  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
-    <div class="activity-item">
-      <div class="activity-dot" style="background:${a.color}"></div>
-      <div>
-        <div class="activity-text">${a.text}</div>
-        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+  // Show studio feed if available, otherwise recent generations
+  if (f.posts && f.posts.length > 0) {
+    renderStudioFeed(f.posts, env);
+  } else {
+    let actItems = entries.slice(-6).reverse().map(e => ({
+      text: (e.file || '').replace(/\.(jpg|png|jpeg)$/i, ''),
+      color: env.color,
+      time: e.date || ''
+    }));
+    if (!actItems.length) actItems.push({ text: 'No recent generations', color: 'var(--text-dim)', time: '' });
+    document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+      <div class="activity-item">
+        <div class="activity-dot" style="background:${a.color}"></div>
+        <div>
+          <div class="activity-text">${a.text}</div>
+          ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+        </div>
       </div>
+    `).join('');
+  }
+}
+
+// ─── ENGINEERING LAB ROOM ───
+async function loadLabRoom(env) {
+  const [metrics, feed, progress] = await Promise.allSettled([
+    fetchJSON('/api/engineering-studio/metrics'),
+    fetchJSON('/api/engineering-studio/feed'),
+    fetchJSON('/api/studio-progress')
+  ]);
+  const m = metrics.value || {};
+  const f = feed.value || { posts: [] };
+  const prog = progress.value?.['engineering-studio'] || {};
+  const gym = m.projects?.gym_eyes || {};
+  const ing = m.projects?.ingestion_pipeline || {};
+  const trends = prog.trends || {};
+
+  function arrow(key) {
+    if (!trends[key]) return '';
+    if (trends[key] === 'up') return '<span style="color:var(--green);font-size:11px">&#9650;</span>';
+    if (trends[key] === 'down') return '<span style="color:var(--accent);font-size:11px">&#9660;</span>';
+    return '<span style="color:var(--text-dim);font-size:11px">&#9644;</span>';
+  }
+
+  const eff = prog.effectiveness;
+  const qual = prog.memoryQuality;
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Sessions ${arrow('sessionsTotal')}</div>
+      <div class="widget-value" style="color:${env.color}">${gym.sessions_processed_total || 0}</div>
+      <div class="widget-change">${gym.sessions_processed_week || 0} this week</div>
     </div>
-  `).join('');
+    <div class="widget-box">
+      <div class="widget-label">Students ${arrow('students')}</div>
+      <div class="widget-value" style="color:${env.color}">${gym.students_tracked || 0}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Accuracy</div>
+      <div class="widget-value" style="color:${gym.detection_accuracy === 'unknown' ? 'var(--amber)' : env.color};font-size:16px">${gym.detection_accuracy === 'unknown' ? 'UNMEASURED' : gym.detection_accuracy || '?'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Ingestion ${arrow('ingestionDays')}</div>
+      <div class="widget-value" style="color:${ing.days_running_unattended > 0 ? 'var(--green)' : 'var(--text-dim)'};font-size:16px">${ing.days_running_unattended || 0}d autonomous</div>
+    </div>
+    ${eff ? `<div class="widget-box">
+      <div class="widget-label">Decision Rate</div>
+      <div class="widget-value" style="color:${eff.percent >= 60 ? 'var(--green)' : 'var(--amber)'};font-size:16px">${eff.percent}%</div>
+      <div class="widget-change">${eff.succeeded}/${eff.rated} succeeded</div>
+    </div>` : ''}
+    ${qual ? `<div class="widget-box">
+      <div class="widget-label">Memory</div>
+      <div class="widget-value" style="color:${qual.ratedPercent >= 50 ? 'var(--green)' : 'var(--text-dim)'};font-size:16px">${qual.ratedPercent}%</div>
+      <div class="widget-change">${qual.rated}/${qual.total} rated</div>
+    </div>` : ''}
+  `;
+
+  renderStudioFeed(f.posts || [], env);
+}
+
+// ─── GENERIC STUDIO FEED RENDERER ───
+async function loadStudioFeedRoom(env) {
+  const feed = await fetchJSON(env.dataEndpoints.feed);
+  const f = feed || { posts: [] };
+  document.getElementById('rv-widgets').innerHTML = '';
+  renderStudioFeed(f.posts || [], env);
+}
+
+function renderStudioFeed(posts, env) {
+  if (!posts.length) {
+    document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-dim);font-size:12px;padding:8px">No feed posts yet.</div>';
+    return;
+  }
+  const rated = posts.filter(p => p.outcome).length;
+  const total = posts.length;
+  const header = rated > 0 ? `<div style="padding:8px 0 12px;border-bottom:1px solid var(--border);margin-bottom:8px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:10px;color:var(--text-dim)">MEMORY: ${rated}/${total} rated</span>
+    <div style="flex:1;height:3px;background:var(--surface-2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.round((rated/total)*100)}%;background:${env.color};border-radius:2px"></div></div>
+  </div>` : '';
+
+  document.getElementById('rv-activity').innerHTML = header + posts.slice(0, 20).map(p => {
+    const time = timeAgo(p.timestamp);
+    const roleColor = {
+      orc: 'var(--amber)', programmer: 'var(--cyan)', director: env.color,
+      calibrator: '#a78bfa', tester: 'var(--rose)', researcher: 'var(--green)',
+      deployer: 'var(--blue)', archivist: 'var(--text-muted)',
+      reed: env.color, librarian: 'var(--purple)', watcher: 'var(--green)',
+      editor: 'var(--rose)', rnd: 'var(--cyan)'
+    }[p.role] || 'var(--text-muted)';
+    const outcomeBadge = p.outcome ? `<span style="font-size:9px;padding:1px 6px;border-radius:3px;font-weight:600;background:${
+      p.outcome.result === 'succeeded' || p.outcome.result === 'acted' ? 'rgba(34,197,94,0.15);color:var(--green)' :
+      p.outcome.result === 'failed' ? 'rgba(239,68,68,0.15);color:var(--accent)' :
+      'rgba(255,255,255,0.06);color:var(--text-dim)'
+    }">${p.outcome.result}</span>` : '';
+    return `
+    <div class="activity-item" style="flex-direction:column;gap:4px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:10px;font-weight:600;color:${roleColor};text-transform:uppercase;letter-spacing:0.5px">${p.role}</span>
+        <span style="font-size:10px;color:var(--text-dim)">${time}</span>
+        ${outcomeBadge}
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.5;white-space:pre-wrap;font-family:monospace">${(p.content || '').slice(0, 300)}</div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════ HELPERS ═══════════════════

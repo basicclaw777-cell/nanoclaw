@@ -1,0 +1,78 @@
+{
+  "detection_models": {
+    "mediapipe_pose_landmarker": {
+      "type": "pose_estimation",
+      "runtime": "CPU or MPS",
+      "fps": "30+ on CPU",
+      "strengths": ["real-time", "33 landmarks", "lightweight"],
+      "limitations": ["single person best", "no punch classification built-in"],
+      "current_use": "primary detector in gym-eyes detector.py",
+      "version": "latest (pip mediapipe)"
+    },
+    "yolo11n_pose": {
+      "type": "pose_estimation",
+      "runtime": "MPS GPU",
+      "fps": "25-30",
+      "strengths": ["multi-person", "bounding boxes", "confidence scores"],
+      "limitations": ["heavier than MediaPipe", "less precise wrist tracking"],
+      "current_use": "legacy gym-eyes.js (replaced by v2)",
+      "version": "ultralytics 8.4.34"
+    }
+  },
+  "classification_models": {
+    "velocity_threshold": {
+      "type": "rule-based punch classifier",
+      "method": "wrist velocity spike > threshold (120)",
+      "classes": ["jab", "cross", "hook", "uppercut", "body_shot"],
+      "accuracy": "good for straight punches, weaker on hooks/uppercuts",
+      "current_use": "detector.py punch classification"
+    },
+    "cnn_punch_classifier": {
+      "type": "planned — convolutional neural network",
+      "status": "blocked on data",
+      "target_classes": ["jab", "cross", "lead_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_jab", "body_cross"],
+      "data_needed": "~2000 labelled frames per class",
+      "data_have": 0
+    }
+  },
+  "analysis_capabilities": {
+    "built": [
+      "punch count per round",
+      "punch velocity measurement",
+      "guard height tracking",
+      "guard drop detection",
+      "stance width measurement",
+      "combo detection (temporal grouping)",
+      "footwork classification (BR syllabus)",
+      "student profile tracking",
+      "session comparison (boxing-delta.py)",
+      "clip assembly from detection data"
+    ],
+    "planned": [
+      "fatigue curve (velocity decline over session)",
+      "rhythm analysis (punch timing patterns)",
+      "southpaw detection and adaptation",
+      "multi-person tracking with ID persistence",
+      "real-time coaching cue generation",
+      "combo prediction (what comes next)"
+    ]
+  },
+  "hardware": {
+    "current": {
+      "compute": "Mac Mini M-series, 16GB RAM",
+      "cameras": "iPhone (manual recording)",
+      "storage": "local SSD",
+      "network": "local only"
+    },
+    "planned": {
+      "cameras": "fixed gym cameras (IP cameras or webcams)",
+      "edge": "iPad ringside for real-time feedback",
+      "multi_cam": "2-3 angles for 3D pose reconstruction"
+    }
+  },
+  "external_watch": {
+    "papers": ["Google MediaPipe updates", "Meta Sapiens body model", "NVIDIA pose estimation", "sports analytics CV papers"],
+    "tools": ["OpenPose", "MMPose", "ViTPose", "RTMPose"],
+    "competitors": ["FightCamp (consumer)", "Corner (pro analytics)", "Hykso (wrist sensors)"]
+  }
+}

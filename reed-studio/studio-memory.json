@@ -1,0 +1,170 @@
+{
+  "promptEvolution": {
+    "notes": "Track what prompt changes improved output. Each entry: before, after, result, paulReaction.",
+    "entries": []
+  },
+  "styleLearnings": {
+    "notes": "What works per style. Accumulated from generations + Paul feedback.",
+    "pro_photo": {
+      "works": [
+        "neutral 5200-5600K",
+        "tack-sharp",
+        "anti-orange"
+      ],
+      "avoid": [
+        "warm color cast",
+        "soft focus"
+      ],
+      "paulSignals": []
+    },
+    "manga": {
+      "works": [
+        "sepia ink crosshatch",
+        "golden light rays"
+      ],
+      "avoid": [],
+      "paulSignals": []
+    },
+    "noir": {
+      "works": [
+        "high contrast",
+        "single overhead light"
+      ],
+      "avoid": [
+        "too flat"
+      ],
+      "paulSignals": []
+    },
+    "ippo": {
+      "works": [
+        "speed lines",
+        "impact frames",
+        "screentone"
+      ],
+      "avoid": [],
+      "paulSignals": []
+    },
+    "neon": {
+      "works": [
+        "pink/blue/amber",
+        "rain-slicked",
+        "Chinese characters"
+      ],
+      "avoid": [],
+      "paulSignals": []
+    },
+    "dramatic": {
+      "works": [
+        "volumetric haze",
+        "god rays",
+        "film grain"
+      ],
+      "avoid": [],
+      "paulSignals": []
+    },
+    "poster": {
+      "works": [
+        "halftone",
+        "aged paper",
+        "fold creases"
+      ],
+      "avoid": [],
+      "paulSignals": []
+    },
+    "oil": {
+      "works": [
+        "impasto",
+        "canvas texture"
+      ],
+      "avoid": [],
+      "paulSignals": [
+        "WIP — evolving"
+      ]
+    },
+    "video_cinematic": {
+      "works": [
+        "camera dolly",
+        "atmospheric shift",
+        "5s duration"
+      ],
+      "avoid": [],
+      "paulSignals": []
+    }
+  },
+  "modelLearnings": {
+    "notes": "What each model is actually good at based on our experience, not just docs.",
+    "gpt_image_2": {
+      "strengths_proven": [
+        "typography",
+        "build cards",
+        "complex layouts"
+      ],
+      "weaknesses_found": [],
+      "tips": []
+    },
+    "nano_banana_2": {
+      "strengths_proven": [
+        "fast iteration",
+        "style experiments"
+      ],
+      "weaknesses_found": [
+        "no soul-id"
+      ],
+      "tips": []
+    },
+    "text2image_soul_v2": {
+      "strengths_proven": [
+        "face lock with soul-id"
+      ],
+      "weaknesses_found": [
+        "text-only, no image ref"
+      ],
+      "tips": [
+        "always specify long dreadlocks for Logan"
+      ]
+    },
+    "seedance_2_0": {
+      "strengths_proven": [
+        "cinematic video from stills"
+      ],
+      "weaknesses_found": [
+        "expensive",
+        "can timeout"
+      ],
+      "tips": [
+        "use --wait-timeout 15m"
+      ]
+    }
+  },
+  "paulPreferences": {
+    "notes": "Signals from Paul's selections, replacements, and feedback. The taste map for visuals specifically.",
+    "likes": [
+      "dark backgrounds",
+      "gold accent",
+      "minimal",
+      "cinematic lighting",
+      "BR brand palette"
+    ],
+    "dislikes": [
+      "over-saturated",
+      "generic stock photo feel",
+      "too busy",
+      "orange color cast"
+    ],
+    "replacements": [],
+    "selections": []
+  },
+  "pipelineInsights": {
+    "notes": "What the programmer role has learned about improving the pipeline.",
+    "bottlenecks": [],
+    "optimizations": [
+      {
+        "type": "optimization",
+        "finding": "unknown accounts for 100% of generations. Consider diversifying — other models may produce better results for some tasks.",
+        "suggestion": "diversify-models",
+        "date": "2026-05-17T06:33:55.789Z"
+      }
+    ],
+    "failures": []
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "posts": [
+    {
+      "id": "orc-1778999635787",
+      "role": "orc",
+      "content": "PRIORITY ASSIGNMENT:\n[HIGH] generate-characters → rnd: Character coverage critically low (0 total). Studio needs character content for portfolio.",
+      "timestamp": "2026-05-17T06:33:55.787Z",
+      "tags": [
+        "orc"
+      ]
+    },
+    {
+      "id": "programmer-1778999635788",
+      "role": "programmer",
+      "content": "PIPELINE ANALYSIS:\n- [optimization] unknown accounts for 100% of generations. Consider diversifying — other models may produce better results for some tasks.",
+      "timestamp": "2026-05-17T06:33:55.788Z",
+      "tags": [
+        "programmer",
+        "analysis",
+        "improvement"
+      ]
+    },
+    {
+      "id": "orc-1778999635790",
+      "role": "orc",
+      "content": "PRIORITY ASSIGNMENT:\n[HIGH] generate-characters → rnd: Character coverage critically low (0 total). Studio needs character content for portfolio.",
+      "timestamp": "2026-05-17T06:33:55.790Z",
+      "tags": [
+        "orc"
+      ]
+    },
+    {
+      "id": "watcher-1779004822352",
+      "role": "watcher",
+      "content": "Event detected: roundtable-2026-05-17-brand-drift-check.md (Tier 2)",
+      "timestamp": "2026-05-17T08:00:22.352Z",
+      "tags": [
+        "watcher"
+      ]
+    }
+  ],
+  "meta": {
+    "created": "2026-05-17",
+    "purpose": "Internal studio communication. 5 roles post status, decisions, discoveries, requests. Creates emergence through ambient awareness.",
+    "roles": [
+      "reed",
+      "librarian",
+      "watcher",
+      "editor",
+      "rnd",
+      "programmer",
+      "orc"
+    ]
+  }
+}

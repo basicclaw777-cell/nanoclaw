@@ -1,0 +1,83 @@
+{
+  "modelLearnings": {
+    "notes": "What each model/approach is good at based on lab experience.",
+    "mediapipe_pose": {
+      "strengths_proven": [
+        "real-time on CPU",
+        "wrist/elbow tracking",
+        "single-person reliable"
+      ],
+      "weaknesses_found": [
+        "multi-person ID swap",
+        "southpaw confusion",
+        "low-light degradation"
+      ],
+      "tips": [
+        "person-lock via torso consistency helps",
+        "threshold=120 calibrated on 57-min session"
+      ]
+    },
+    "yolo_pose": {
+      "strengths_proven": [
+        "multi-person",
+        "fast inference"
+      ],
+      "weaknesses_found": [
+        "less accurate wrist positions than MediaPipe",
+        "heavier memory footprint"
+      ],
+      "tips": [
+        "yolo11n-pose.pt is the lightweight variant"
+      ]
+    }
+  },
+  "pipelineLearnings": {
+    "notes": "What the lab has learned about detection pipelines.",
+    "calibration": {
+      "punch_threshold": 120,
+      "cooldown_seconds": 0.3,
+      "benchmark_session": "noodles1.MOV (57 min, ~1008 punches, 138 guard drops)",
+      "false_positive_rate": "unknown — needs ground truth labelling"
+    },
+    "known_edge_cases": [
+      "southpaw stance detection unreliable",
+      "two fighters in frame causes ID swap",
+      "low light reduces detection confidence 30-40%",
+      "fast hooks sometimes missed (velocity spike too brief)"
+    ]
+  },
+  "hardwareLearnings": {
+    "notes": "Hardware constraints and findings.",
+    "mac_mini": {
+      "ram": "16GB",
+      "gpu": "MPS (Metal Performance Shaders)",
+      "constraint": "12GB model leaves only 4GB for system — not viable for large models",
+      "proven_models": [
+        "MediaPipe PoseLandmarker",
+        "YOLO11n-pose",
+        "whisper-medium"
+      ]
+    }
+  },
+  "postMortems": {
+    "notes": "Post's domain. Failures, lessons, decisions.",
+    "entries": []
+  },
+  "researchLog": {
+    "notes": "Fringe's domain. Papers read, models tested, capabilities mapped.",
+    "entries": []
+  },
+  "ratedOutcomes": [
+    {
+      "postId": "orc-1779001090539",
+      "role": "orc",
+      "action": "PRIORITY ASSIGNMENT:\n[HIGH] build-ingestion → deployer: Ingestion pipeline not running. Everything d",
+      "outcome": {
+        "result": "acted",
+        "detail": "Ingestion pipeline design started",
+        "ratedAt": "2026-05-17T07:12:30.274Z"
+      },
+      "date": "2026-05-17T07:12:30.274Z"
+    }
+  ]
+}
