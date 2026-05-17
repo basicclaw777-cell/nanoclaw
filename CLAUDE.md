@@ -1064,6 +1064,18 @@ the-timekeeper to go offline. Don't repeat it.
 - Telegram: /predict <seed>, /gaps, /predict-rebuild
 - Bridge: /predictive/map, /predictive/stats, /predictive/seeds, /predictive/predictions, POST /predictive/rebuild
 
+## Architect Pulse (built 2026-05-17)
+- Engine: ~/nanoclaw/architect-pulse/pulse-engine.js (PM2 cron 07:00 HKT daily)
+- Commands: ~/nanoclaw/architect-pulse/pulse-commands.js (/pulse, /skip, /channels, /streak)
+- Dashboard: localhost:8080/pulse (~/Cathedral/control-panel/architect-pulse.html)
+- API: /api/architect-pulse
+- 11 channels: money, love, home, gym, publishing, asking, finishing, health, learning, rest, creativity
+- Rotation: one channel per day, stagnant channels prioritized (7+ days no movement)
+- Nudge system: <5min actions, auto-shrink on 3 consecutive skips
+- Design tokens: ~/Cathedral/control-panel/cathedral-tokens.css (shared across all dashboards, 5 theme variants)
+- Context: ~/nanoclaw/trader/WHY.md (Paul's trading/investment wound + reframe)
+- Vault: ~/cathedral-vault/08_Project_Orchestrator/projects/architect-emergence.md (target states, sensing framework)
+
 ## Trading Experiment — Phase 0 (built 2026-05-07)
 - Orchestrator: ~/nanoclaw/trader/trading-orchestrator.js (PM2 cron 4h, id 32)
 - 11 strategies in parallel: sentiment, momentum, DCA, Gann, Lunar, Fibonacci, Historical Cycles, Vortex Flow, Suppression, Polymarket, Cymatics/Schumann
