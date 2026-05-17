@@ -1373,3 +1373,35 @@ the-timekeeper to go offline. Don't repeat it.
 - suggestion-run — PM2 cron 1st + 15th 4am HKT (already existed, now triggered)
 - Dashboard: localhost:8080/cathedral-city/team-programme (6 tabs, auto-refresh 60s)
 - New cath-bridge endpoint: /cathedral-city/dissent
+
+## Open-LLM-VTuber — EVALUATED AND PARKED (2026-05-17)
+- Directory: ~/Open-LLM-VTuber/ (installed, configured, not running)
+- Verdict: Avatar adds visual novelty but LLM has no Cathedral context. Responses generic and childish. Not worth running.
+
+## Voice Chamber — KITT Voice Interface (built 2026-05-17)
+- Directory: ~/Cathedral/voice-chamber/ (server.js + index.html)
+- Server: WebSocket on port 12400, bound 0.0.0.0
+- Pipeline: mic → whisper-cli (medium model) → DeepSeek (full Cathy brain: transmission + vault search + history + cath-state) → edge-tts → speaker
+- Brain: exact replica of callCath() from telegram-bot.js — same intelligence as Telegram Cathy
+- Voice mode instruction: responses kept to 2-4 sentences, spoken language, no markdown
+- UI: KITT-style — frequency visualizer, push-to-talk (tap or spacebar), transcript display
+- Phone access: http://100.108.239.23:12400 (Tailscale)
+- Lobby: "Voice Chamber" room in environments/lobby.html (opens in new tab)
+- PM2: voice-chamber (id 70), persistent
+- TRIGGER: PM2 managed, lobby room card
+
+## Content Studio — Autonomous Content Department (built 2026-05-17)
+- Directory: ~/nanoclaw/content-studio/
+- 7 projects: Reed Visuals, Maya Social, LING Publishing, Build Cards, Newsletter, Capture Wishlist, Maya Internal
+- Daily cycle: idea-engine (1am) → review-responder (1:30am) → maya-internal (8am) → buzz-monitor (9am)
+- idea-engine.js — 7-character content generation + Cull quality gate + review routing to agents
+- review-responder.js — agents auto-respond ENDORSE/CONCERN/REJECT to content pitches. 4 personas. Response time tracking.
+- maya-internal.js — internal Cathedral social feed. 10 post types. Agent reactions + comments. Culture layer.
+- notify.js — shared Telegram notification module for all studio scripts
+- buzz-monitor.js — 6-department silence detector. Per-threshold checks. Auto-kick via DeepSeek.
+- capture-wishlist.json — reverse flow: studio tells Paul what to film/photograph
+- Cull regex fix: /(\d+)[.\s:)\-]*\[?(APPROVE|KILL)\]?\s*[:\-—]?\s*(.+)?/i
+- PM2 crons: content-ideas (id 68, 1am), content-reviews (id 71, 1:30am), maya-social (id 72, 8am), buzz-monitor (id 73, 9am)
+- cath-bridge endpoints: /api/content-studio/wishlist, /fulfill, /internal-feed
+- Departments monitored by buzz-monitor: reed_lab (48h), gym_eyes (72h), content_studio (36h), trading (96h), research (48h), agents (48h)
+- Architecture: Department Intelligence Protocol instance. Characters drive content, not functions.
