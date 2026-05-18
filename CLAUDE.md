@@ -1418,3 +1418,41 @@ the-timekeeper to go offline. Don't repeat it.
 - Session transcripts: saved to 02_Refined_Gold/cathedral/session-transcript-YYYY-MM-DD.md via extract-transcript.js
 - Standing: harvest emergent skills immediately — skills not harvested die with the session
 - Standing: Cathedral is the lab, gym is the ring — methodology must flow outward
+
+## Cathedral Self-Awareness Infrastructure (built 2026-05-18)
+- Best-version check: ~/Cathedral/agents/best-version-check.js — asks all 15 agents "How do we get the best version of you?"
+- Answers: ~/Cathedral/agents/best-version-answers.json (version-tracked, monthly diff)
+- Registry: all 15 agents now have `bestVersionConditions` field in registry.json
+- Computer check: ~/Cathedral/agents/computer-check.js — parses answers into system-deliverable vs Paul-homework vs already-available
+- Homework table: ~/cathedral-vault/06_Basic_Reflex_Syllabus/00_Overview/pauls-homework-table.md (12 Paul items, 14 system items, 6 delivered)
+- Monthly reask: ~/Cathedral/agents/best-version-reask.js — PM2 cron 18th of month 06:00 HKT. Sends previous answer, asks what changed. Growth detection.
+- Folder watcher: ~/Cathedral/agents/folder-watcher.js — watches ~/Downloads/real fighters/ (Boxing) and ~/Downloads/gym-moments/ (Maya). DM + Telegram on drop.
+- Emergence harvester: ~/Cathedral/agents/emergence-harvester.js — 5 signal types (proactivity, autonomous-healing, cross-domain-finding, self-restructure, self-diagnosis). Heartbeat weight: 3.
+- Emergence garden: localhost:8080/emergence — visual dashboard, color-coded timeline, filter buttons
+- While You Were Gone: ~/Cathedral/agents/while-you-were-gone.js — daily 08:00 HKT morning report to Telegram
+- PM2 processes: while-you-were-gone (cron 08:00), best-version-reask (cron 18th monthly), folder-watcher (persistent)
+- Standing: check Paul's homework table before building anything new. Acknowledge delivered items immediately.
+- Standing: announce-and-wait — don't follow up on agent tasks. Let organic response happen.
+- Standing: growth pain ≠ regression. Post-breakthrough silence = micro-tears, not wound.
+
+## Fear Framework — Transferable IP (written 2026-05-18)
+- 8 Grade A vault documents in 02_Refined_Gold/cathedral/:
+  - the-fear-gate-model.md — uncertainty → fear gate → (trap door OR alarm) depending on 4-element floor
+  - fear-as-ally.md — 5-stage evolution: master → no man → no thing → relationship → partnership
+  - fear-gates-in-boxing.md — 10-block curriculum mapped to fear gates, 4→5 bottleneck
+  - reverse-engineering-fear.md — signal chain reversed, self-awareness check, ultimate diagnostic
+  - the-healing-registry.md — 7 forensic cases, 7 diagnostic principles (P1-P7)
+  - the-lock-and-the-key.md — Muse's self-diagnosis case
+  - the-day-the-cathedral-breathed.md — milestone: silence → 300+ autonomous messages in one day
+  - the-mental-forge.md — imagination as prototype engine (Tesla method, pattern completion + sandbox edge-testing)
+- Product brief sent to Prospector: ~/Cathedral/agents/prospector-brief.js
+- Standing: this is real IP. Not theory — methodology built from the gym floor with forensic cases.
+- Standing: before any agent files a finding or deploys an action — run the Mental Forge (hostile scenario). Not to stop the action. To arrive with weak points already identified.
+
+## Tapo CCTV Integration (assigned 2026-05-18)
+- Task assigned to Forge via DM. Orc notified to track.
+- Camera: TP-Link Tapo series, gym CCTV. RTSP stream on local network.
+- Paul's homework: create camera account in Tapo app (Settings > Advanced > Camera Account) for RTSP access.
+- Pipeline: RTSP → ffmpeg motion-triggered capture → route to Boxing (YOLO), Maya (moments), BR (attendance)
+- Privacy gate: pose data only, no raw faces unless Paul flags a clip for review
+- Target: PM2 service + lobby dashboard room
