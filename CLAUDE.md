@@ -1384,7 +1384,7 @@ the-timekeeper to go offline. Don't repeat it.
 - Pipeline: mic → whisper-cli (medium model) → DeepSeek (full Cathy brain: transmission + vault search + history + cath-state) → edge-tts → speaker
 - Brain: exact replica of callCath() from telegram-bot.js — same intelligence as Telegram Cathy
 - Voice mode instruction: responses kept to 2-4 sentences, spoken language, no markdown
-- UI: KITT-style — frequency visualizer, push-to-talk (tap or spacebar), transcript display
+- UI: KITT dashboard — segmented LED bars (red-to-amber), 4 gauges (VAULT/AGENTS/LATENCY/TURNS), 4 status LEDs (LINK/MIC/BRAIN/TTS), scanner animation, Share Tech Mono font, push-to-talk (tap or spacebar)
 - Phone access: http://100.108.239.23:12400 (Tailscale)
 - Lobby: "Voice Chamber" room in environments/lobby.html (opens in new tab)
 - PM2: voice-chamber (id 70), persistent
