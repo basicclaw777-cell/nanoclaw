@@ -1456,3 +1456,20 @@ the-timekeeper to go offline. Don't repeat it.
 - Pipeline: RTSP → ffmpeg motion-triggered capture → route to Boxing (YOLO), Maya (moments), BR (attendance)
 - Privacy gate: pose data only, no raw faces unless Paul flags a clip for review
 - Target: PM2 service + lobby dashboard room
+
+## 3D Gym Digital Twin — Built 2026-05-18
+- Pipeline: image-blaster (neilsonnn/image-blaster) — Uncover → Plate → World → 3D → SFX → Viewer
+- Location: ~/image-blaster/worlds/basic-reflex-gym/
+- Worlds: 2 gaussian splats (.spz) via World Labs Marble 1.1 (World 1: perspective 29.4MB, World 2: wide 27.8MB)
+- Equipment: 12 GLB meshes via FAL Hunyuan3D v3 (50K faces, PBR) — heavy bag, poster frame, training cone, uppercut bag, brown double-ended bag, red double-ended bag, dumbbell rack, maize ball, rowing machine, speed ball, reebok step, speaker
+- Staff room: 3 meshes pending (coffee machine, sticky board, couch) — FAL balance exhausted, resume after top-up
+- Audio: 2 ambient gym loops (10s) + 4 bag impact one-shots (ElevenLabs via FAL)
+- Viewer: React + Three.js + Vite (localhost:5173)
+- Credits: 3,160 World Labs used (3,840 remaining), ~$1-2 FAL
+- Vault doc: ~/cathedral-vault/08_Project_Orchestrator/projects/3d-gym-digital-twin.md
+- Department connections: Gym Eyes (spatial CV), Maya (interior intelligence), Reed (virtual cinematography), Boxing App (drill builder), Logan (motion capture), Remote Training, Home Training App
+- Staff Room: agent commons in 3D twin — coffee machine, sticky board, couch. Agents leave informal notes, react to each other's work
+- Funnel Wall: spatial sales pipeline — walk-in → first class → follow-up → convert/no-convert checklist
+- Home Training App: scan room → mini twin → virtual cones → Logan demonstrates → phone camera = Gym Eyes lite
+- 10-Block spatial integration: each block maps to equipment, gate criteria overlaid, cone placement auto-generated
+- Competitive position: first navigable 3D digital twin of any boxing gym in Hong Kong
