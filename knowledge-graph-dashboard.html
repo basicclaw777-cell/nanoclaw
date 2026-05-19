@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Graph — Epistemic Engine</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --dim: #8b949e; --accent: #58a6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'SF Mono', 'Fira Code', monospace; background: var(--bg); color: var(--text); padding: 20px; }
+  h1 { font-size: 1.4em; margin-bottom: 4px; }
+  .subtitle { color: var(--dim); font-size: 0.85em; margin-bottom: 24px; }
+
+  .stats-bar { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; min-width: 140px; flex: 1;
+  }
+  .stat-label { color: var(--dim); font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-value { font-size: 1.8em; font-weight: bold; margin-top: 4px; color: var(--accent); }
+
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 1.1em; margin-bottom: 12px; color: var(--accent); }
+
+  .domain-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .domain-tag {
+    font-size: 0.7em; padding: 2px 8px; border-radius: 4px;
+    border: 1px solid transparent;
+  }
+
+  .cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .cluster-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; cursor: pointer; transition: border-color 0.2s;
+  }
+  .cluster-card:hover { border-color: var(--accent); }
+  .cluster-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .cluster-id { font-weight: bold; color: var(--accent); }
+  .cluster-count { color: var(--dim); font-size: 0.8em; }
+  .cluster-domains { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .cluster-domain { font-size: 0.65em; padding: 1px 6px; border-radius: 3px; }
+  .cluster-items { font-size: 0.75em; color: var(--dim); line-height: 1.6; }
+
+  .surprise-list { display: flex; flex-direction: column; gap: 10px; }
+  .surprise-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; border-left: 3px solid #f85149;
+  }
+  .surprise-domains { font-size: 0.8em; margin-bottom: 6px; }
+  .surprise-titles { font-size: 0.85em; color: var(--dim); line-height: 1.5; }
+  .surprise-score { font-size: 0.75em; color: #f85149; margin-top: 6px; }
+
+  .bridge-list { display: flex; flex-direction: column; gap: 6px; }
+  .bridge-row {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center;
+    font-size: 0.8em; padding: 8px 12px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  }
+  .bridge-arrow { color: var(--accent); font-weight: bold; }
+  .bridge-sim { font-size: 0.7em; color: var(--dim); }
+</style>
+</head>
+<body>
+<h1>Knowledge Graph</h1>
+<p class="subtitle">Epistemic Engine — Cross-Domain Connection Map</p>
+
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-label">Nuggets</div>
+    <div class="stat-value">554</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Clusters</div>
+    <div class="stat-value">18</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Cross-Domain Bridges</div>
+    <div class="stat-value">50</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Surprises</div>
+    <div class="stat-value" style="color:#f85149">20</div>
+  </div>
+</div>
+
+<div class="domain-legend">
+  <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff;border-color:#58a6ff44">02_Refined_Gold</span><span class="domain-tag" style="background:#3fb95022;color:#3fb950;border-color:#3fb95044">00_Staging</span><span class="domain-tag" style="background:#d2992222;color:#d29922;border-color:#d2992244">technology</span><span class="domain-tag" style="background:#f8514922;color:#f85149;border-color:#f8514944">philosophy</span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff;border-color:#bc8cff44">business</span><span class="domain-tag" style="background:#f778ba22;color:#f778ba;border-color:#f778ba44">04_Esoteric_Studies</span><span class="domain-tag" style="background:#79c0ff22;color:#79c0ff;border-color:#79c0ff44">sandboxes</span><span class="domain-tag" style="background:#56d36422;color:#56d364;border-color:#56d36444">personal</span><span class="domain-tag" style="background:#e3b34122;color:#e3b341;border-color:#e3b34144">universe</span><span class="domain-tag" style="background:#ff7b7222;color:#ff7b72;border-color:#ff7b7244">wealth</span><span class="domain-tag" style="background:#d2a8ff22;color:#d2a8ff;border-color:#d2a8ff44">creative</span><span class="domain-tag" style="background:#ff9bce22;color:#ff9bce;border-color:#ff9bce44">conspiracy</span><span class="domain-tag" style="background:#a5d6ff22;color:#a5d6ff;border-color:#a5d6ff44">boxing</span><span class="domain-tag" style="background:#7ee78722;color:#7ee787;border-color:#7ee78744">finance</span><span class="domain-tag" style="background:#f0c04822;color:#f0c048;border-color:#f0c04844">relationships</span><span class="domain-tag" style="background:#ffa19822;color:#ffa198;border-color:#ffa19844">03_The_Sages</span><span class="domain-tag" style="background:#cabffd22;color:#cabffd;border-color:#cabffd44">05_Universes</span><span class="domain-tag" style="background:#ffbedd22;color:#ffbedd;border-color:#ffbedd44">01_Raw_Transcripts</span>
+</div>
+
+
+<div class="section">
+  <h2 class="section-title" style="color:#f85149">Surprise Connections</h2>
+  <p style="color:var(--dim);font-size:0.8em;margin-bottom:12px">High similarity between nuggets from different domains with no shared tags</p>
+  <div class="surprise-list">
+    
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_coach-brendan-ingle<br>
+        2026-03-24_boxing_coach-brendan-ingle
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_coach-cus-damato<br>
+        2026-03-24_boxing_coach-cus-damato
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_coach-emanuel-steward<br>
+        2026-03-24_boxing_coach-emanuel-steward
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_coach-profiles-comparative<br>
+        2026-03-24_boxing_coach-profiles-comparative
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_coach-rolando-acebal<br>
+        2026-03-24_boxing_coach-rolando-acebal
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_coach-teddy-atlas<br>
+        2026-03-24_boxing_coach-teddy-atlas
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_destination-stars-model<br>
+        2026-03-24_boxing_destination-stars-model
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_open-question-geometry-of-punch-trajectories<br>
+        2026-03-24_boxing_open-question-geometry-of-punch-trajectories
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_principle-coordination<br>
+        2026-03-24_boxing_principle-coordination
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-domains">
+        <span class="domain-tag" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold</span>
+        <span style="color:var(--dim);margin:0 4px">↔</span>
+        <span class="domain-tag" style="background:#3fb95022;color:#3fb950">00_Staging</span>
+      </div>
+      <div class="surprise-titles">
+        2026-03-24_boxing_principle-quick-reflexes<br>
+        2026-03-24_boxing_principle-quick-reflexes
+      </div>
+      <div class="surprise-score">Similarity: 100% | Surprise: 100%</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="section">
+  <h2 class="section-title">Clusters</h2>
+  <div class="cluster-grid">
+    
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 0</span>
+          <span class="cluster-count">71 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (40)</span><span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (31)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_boxing_coach-pedro-diaz<br>2026-03-24_boxing_coach-pedro-diaz<br>2026-03-24_boxing_24-principles-of-excellence<br>2026-03-24_boxing_24-principles-of-excellence<br>2026-03-24_boxing_coach-nicolas-cruz-hernandez
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 1</span>
+          <span class="cluster-count">7 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#d2992222;color:#d29922">technology (6)</span><span class="cluster-domain" style="background:#f8514922;color:#f85149">philosophy (1)</span>
+        </div>
+        <div class="cluster-items">
+          openwebui-general-2026-03-22-1774192399497_gold<br>openwebui-general-2026-03-22-1774192730193_gold<br>openwebui-general-2026-03-22-1774192367652_gold<br>openwebui-general-2026-03-22-1774192729547_gold<br>openwebui-general-2026-03-22-1774192732021_gold
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 2</span>
+          <span class="cluster-count">35 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#d2992222;color:#d29922">technology (18)</span><span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (12)</span><span class="cluster-domain" style="background:#bc8cff22;color:#bc8cff">business (3)</span><span class="cluster-domain" style="background:#f8514922;color:#f85149">philosophy (2)</span>
+        </div>
+        <div class="cluster-items">
+          telegram-leonardo-2026-03-14-1773486162565_gold<br>telegram-leonardo-2026-03-12-1773327514911_gold<br>telegram-leonardo-2026-03-12-1773327761519_gold<br>telegram-leonardo-2026-03-12-1773325853553_gold<br>telegram-leonardo-2026-03-13-1773420424765_gold
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 3</span>
+          <span class="cluster-count">33 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (16)</span><span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (15)</span><span class="cluster-domain" style="background:#f778ba22;color:#f778ba">04_Esoteric_Studies (2)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_universe_elias-voss-antarctica-eschaton<br>2026-03-24_universe_elias-voss-antarctica-eschaton<br>2026-03-24_universe_schauberger-living-geometry<br>2026-03-24_universe_schauberger-living-geometry<br>2026-03-24_universe_schauberger-implosion-principl
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 4</span>
+          <span class="cluster-count">8 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#d2992222;color:#d29922">technology (8)</span>
+        </div>
+        <div class="cluster-items">
+          openwebui-general-2026-03-22-1774192417520_gold<br>openwebui-general-2026-03-22-1774192361716_gold<br>openwebui-general-2026-03-22-1774192727797_gold<br>openwebui-general-2026-03-22-1774192388429_gold<br>OWU Conversation: 🔧 Obsidian API Setup &amp; Debuggin
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 5</span>
+          <span class="cluster-count">2 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (1)</span><span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (1)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_personal_identity-traps-no-sugarcoat<br>2026-03-24_personal_identity-traps-no-sugarcoat
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 6</span>
+          <span class="cluster-count">73 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#d2992222;color:#d29922">technology (27)</span><span class="cluster-domain" style="background:#e3b34122;color:#e3b341">universe (10)</span><span class="cluster-domain" style="background:#79c0ff22;color:#79c0ff">sandboxes (9)</span><span class="cluster-domain" style="background:#ff9bce22;color:#ff9bce">conspiracy (7)</span><span class="cluster-domain" style="background:#bc8cff22;color:#bc8cff">business (4)</span><span class="cluster-domain" style="background:#56d36422;color:#56d364">personal (3)</span><span class="cluster-domain" style="background:#f8514922;color:#f85149">philosophy (3)</span><span class="cluster-domain" style="background:#d2a8ff22;color:#d2a8ff">creative (3)</span><span class="cluster-domain" style="background:#ff7b7222;color:#ff7b72">wealth (2)</span><span class="cluster-domain" style="background:#a5d6ff22;color:#a5d6ff">boxing (1)</span><span class="cluster-domain" style="background:#7ee78722;color:#7ee787">finance (1)</span><span class="cluster-domain" style="background:#f0c04822;color:#f0c048">relationships (1)</span><span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (1)</span><span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (1)</span>
+        </div>
+        <div class="cluster-items">
+          AI Roles_ Assistant, Tool, Guide, and More_gold<br>_Heptad_ AI Cognitive Architecture Blueprint _gold<br>Journey of Patience and Self-Reflection Trip_gold<br>_Nexus of All Knowledge Activated _gold<br>AI System Leakage and Architecture Extraction_gold
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 7</span>
+          <span class="cluster-count">4 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (2)</span><span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (2)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_philosophy_paul-character-profile-no-su<br>2026-03-24_philosophy_paul-character-profile-no-su<br>2026-03-24_personal_paul-profile-no-sugarcoat<br>2026-03-24_personal_paul-profile-no-sugarcoat
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 8</span>
+          <span class="cluster-count">25 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (25)</span>
+        </div>
+        <div class="cluster-items">
+          Saper Vedere (Knowing How to See)<br>["perception", "analysis", "truth", "art-philosoph<br>My Architect, remember the 'Failure of Perspective<br>Absolute truth is the final, un-gaslightable geome<br>This is the Ultima Prospettiva (The Ultimate Persp
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 9</span>
+          <span class="cluster-count">68 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (36)</span><span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (30)</span><span class="cluster-domain" style="background:#ffa19822;color:#ffa198">03_The_Sages (1)</span><span class="cluster-domain" style="background:#cabffd22;color:#cabffd">05_Universes (1)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_boxing_physical-skills-9-principles<br>2026-03-24_boxing_physical-skills-9-principles<br>2026-03-24_boxing_principle-balance<br>2026-03-24_boxing_principle-balance<br>2026-03-24_boxing_principle-power
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 10</span>
+          <span class="cluster-count">24 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (11)</span><span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (11)</span><span class="cluster-domain" style="background:#f778ba22;color:#f778ba">04_Esoteric_Studies (2)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_philosophy_resonance-as-cross-domain-br<br>2026-03-24_philosophy_resonance-as-cross-domain-br<br>2026-03-24_philosophy_theory-of-everything-resonan<br>2026-03-24_philosophy_theory-of-everything-resonan<br>2026-03-24_philosophy_resonance-as-core-thesis
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 11</span>
+          <span class="cluster-count">17 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (16)</span><span class="cluster-domain" style="background:#ffbedd22;color:#ffbedd">01_Raw_Transcripts (1)</span>
+        </div>
+        <div class="cluster-items">
+          Knowledge Extraction as a Business Opportunity<br>The Importance of Precision<br>The Value of Aggressive Extraction<br>The Power of Knowledge Extraction<br>Knowledge Extraction as a Journey
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 12</span>
+          <span class="cluster-count">44 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (43)</span><span class="cluster-domain" style="background:#ffbedd22;color:#ffbedd">01_Raw_Transcripts (1)</span>
+        </div>
+        <div class="cluster-items">
+          AI System Leakage and Architecture Extraction<br>AI Roles_ Assistant, Tool, Guide, and More<br>AlohaZero's Groundbreaking AI Learning Approach<br>Roleplay Bjorn Kodak assistant t<br>leonardo-consolidated-march
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 13</span>
+          <span class="cluster-count">37 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#a5d6ff22;color:#a5d6ff">boxing (23)</span><span class="cluster-domain" style="background:#d2992222;color:#d29922">technology (7)</span><span class="cluster-domain" style="background:#bc8cff22;color:#bc8cff">business (3)</span><span class="cluster-domain" style="background:#56d36422;color:#56d364">personal (2)</span><span class="cluster-domain" style="background:#79c0ff22;color:#79c0ff">sandboxes (1)</span><span class="cluster-domain" style="background:#d2a8ff22;color:#d2a8ff">creative (1)</span>
+        </div>
+        <div class="cluster-items">
+          Mastering Boxing and Personal Growth_gold<br>_Alcides Sagarra_ Cuban Boxing Master _gold<br>_Boxing Course Design &amp; Sales Copy _gold<br>_Boxing Workshop Reflections and Planning _gold<br>Boxing Principles for Life Lessons_gold
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 14</span>
+          <span class="cluster-count">25 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (13)</span><span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (9)</span><span class="cluster-domain" style="background:#f778ba22;color:#f778ba">04_Esoteric_Studies (1)</span><span class="cluster-domain" style="background:#bc8cff22;color:#bc8cff">business (1)</span><span class="cluster-domain" style="background:#ffa19822;color:#ffa198">03_The_Sages (1)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_technology_basic-reflex-vr-gym<br>2026-03-24_technology_basic-reflex-vr-gym<br>2026-03-24_business_basic-reflex-gym-overview<br>2026-03-24_business_basic-reflex-gym-overview<br>2026-03-24_business_goal-path-ai-saas-concept
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 15</span>
+          <span class="cluster-count">42 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (22)</span><span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (20)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_philosophy_ekman-display-rules-cultural<br>2026-03-24_philosophy_ekman-display-rules-cultural<br>2026-03-24_philosophy_paul-ekman-emotions-revealed<br>2026-03-24_philosophy_paul-ekman-emotions-revealed<br>2026-03-24_philosophy_ekman-involuntary-vs-volunta
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 16</span>
+          <span class="cluster-count">38 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#58a6ff22;color:#58a6ff">02_Refined_Gold (15)</span><span class="cluster-domain" style="background:#3fb95022;color:#3fb950">00_Staging (15)</span><span class="cluster-domain" style="background:#f778ba22;color:#f778ba">04_Esoteric_Studies (8)</span>
+        </div>
+        <div class="cluster-items">
+          2026-03-24_business_harmonic-architectures-model<br>2026-03-24_business_harmonic-architectures-model<br>2026-03-24_sacred-geometry_11-application-domains<br>2026-03-24_sacred-geometry_11-application-domains<br>2026-03-24_technology_geometric-second-brain
+        </div>
+      </div>
+      <div class="cluster-card">
+        <div class="cluster-header">
+          <span class="cluster-id">Cluster 17</span>
+          <span class="cluster-count">1 nuggets</span>
+        </div>
+        <div class="cluster-domains">
+          <span class="cluster-domain" style="background:#a5d6ff22;color:#a5d6ff">boxing (1)</span>
+        </div>
+        <div class="cluster-items">
+          _ntroduce_ The 3 Mindsets (Bookworm, Driller, Flow
+        </div>
+      </div>
+  </div>
+</div>
+
+
+<div class="section">
+  <h2 class="section-title">Strongest Cross-Domain Bridges</h2>
+  <div class="bridge-list">
+    
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span> openwebui-leonardo-2026-03-22-1774192382</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">98%</span></span>
+      <span>openwebui-leonardo-2026-03-22-1774192729 <span class="domain-tag" style="background:#f8514922;color:#f85149">philosophy</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733268814</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">94%</span></span>
+      <span>telegram-leonardo-2026-03-12-17733275149 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733268814</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">94%</span></span>
+      <span>telegram-leonardo-2026-03-12-17733270627 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span> telegram-leonardo-2026-03-12-17733272545</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">94%</span></span>
+      <span>telegram-leonardo-2026-03-13-17734205052 <span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733268814</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>telegram-leonardo-2026-03-13-17734206975 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733268814</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>telegram-leonardo-2026-03-12-17733277615 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-13-17734205052</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>telegram-leonardo-2026-03-14-17734861625 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#a5d6ff22;color:#a5d6ff">boxing</span> Blending Cuban Boxing, Philosophy, and S</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>_Boxing Gym Website Mockup Brief _gold <span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span> telegram-leonardo-2026-03-12-17733258535</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>telegram-leonardo-2026-03-12-17733268814 <span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#a5d6ff22;color:#a5d6ff">boxing</span> Detailed Profile of Boxing Coach Paul Lo</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>_Boxing Gym Website Mockup Brief _gold <span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#56d36422;color:#56d364">personal</span> Categories of Reasoning Questions Listed</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>Earth's Roundness Supported by Scientifi <span class="domain-tag" style="background:#ff9bce22;color:#ff9bce">conspiracy</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span> telegram-leonardo-2026-03-12-17733275149</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">93%</span></span>
+      <span>telegram-leonardo-2026-03-13-17734205052 <span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#56d36422;color:#56d364">personal</span> Creating Boxing Illustrations with AI Pr</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>Mastering Boxing and Personal Growth_gol <span class="domain-tag" style="background:#a5d6ff22;color:#a5d6ff">boxing</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733268814</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>telegram-leonardo-2026-03-14-17734861625 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733268814</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>telegram-leonardo-2026-03-12-17733280966 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733268814</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>telegram-leonardo-2026-03-13-17734205899 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span> telegram-leonardo-2026-03-12-17733276020</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>telegram-leonardo-2026-03-13-17734205899 <span class="domain-tag" style="background:#d2992222;color:#d29922">technology</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#a5d6ff22;color:#a5d6ff">boxing</span> Boxing Principles for Life Lessons_gold</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>_Boxing Gym Website Mockup Brief _gold <span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#a5d6ff22;color:#a5d6ff">boxing</span> _Boxing Course Design &amp; Sales Copy _gold</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>_Boxing Gym Website Mockup Brief _gold <span class="domain-tag" style="background:#bc8cff22;color:#bc8cff">business</span></span>
+    </div>
+    <div class="bridge-row">
+      <span><span class="domain-tag" style="background:#56d36422;color:#56d364">personal</span> Creating Boxing Illustrations with AI Pr</span>
+      <span class="bridge-arrow">↔ <span class="bridge-sim">92%</span></span>
+      <span>The Art of Defensive Boxing_ Mastering S <span class="domain-tag" style="background:#a5d6ff22;color:#a5d6ff">boxing</span></span>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function esc(t){return t?t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';}
+</script>
+</body>
+</html>

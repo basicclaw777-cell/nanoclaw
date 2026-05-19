@@ -50,6 +50,17 @@ Private sovereign AI research system for Paul (boxing gym owner, Hong Kong). Loc
 ├── growth-agent/              # Growth (Phase 4) — calendar, corporate, newsletter, SEO
 ├── merch-agent/               # Merch (Phase 5) — run lifecycle, supplier DB
 ├── course-engine/             # Digital course (Phase 6) — 10 modules, authority map, filming briefs
+├── ensemble-gate.js           # Epistemic Engine: 3-model claim evaluator
+├── ensemble-feeder.js         # Nightly auto-feeder (PM2 cron 03:00)
+├── knowledge-graph.js         # Knowledge Graph: K-means clustering + bridge detection
+├── causal-net.js              # Causal Net: LLM relationship mapping + blast radius
+├── active-learning.js         # Active Learning: priority queue across all engines
+├── ensemble-dashboard.html    # Ensemble Gate visual dashboard
+├── knowledge-graph-dashboard.html  # Knowledge Graph visual dashboard
+├── causal-net-dashboard.html  # Causal Net visual dashboard
+├── active-learning-dashboard.html  # Active Learning visual dashboard
+├── mind-map.html              # Interactive knowledge graph visualization
+├── mega-surgery-viz.html      # Mega-cluster surgery visualization
 └── vortex_data/
     └── metrics.db             # SQLite — all system metrics + embeddings
 

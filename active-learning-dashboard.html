@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Learning — Epistemic Engine</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --dim: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --yellow: #d29922; --orange: #db6d28; --red: #f85149;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'SF Mono', 'Fira Code', monospace; background: var(--bg); color: var(--text); padding: 20px; }
+  h1 { font-size: 1.4em; margin-bottom: 4px; }
+  .subtitle { color: var(--dim); font-size: 0.85em; margin-bottom: 24px; }
+
+  .stats-bar { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; min-width: 120px; flex: 1; }
+  .stat-label { color: var(--dim); font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-value { font-size: 1.8em; font-weight: bold; margin-top: 4px; color: var(--accent); }
+
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 1.1em; margin-bottom: 12px; color: var(--accent); }
+
+  .q-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; margin-bottom: 8px; position: relative;
+    border-left: 3px solid var(--accent);
+  }
+  .q-priority { position: absolute; top: 10px; right: 14px; font-size: 1.2em; font-weight: bold; color: var(--accent); }
+  .q-text { font-size: 0.85em; line-height: 1.5; padding-right: 50px; }
+  .q-meta { font-size: 0.7em; color: var(--dim); margin-top: 6px; display: flex; gap: 12px; }
+  .q-source { padding: 1px 6px; border-radius: 4px; font-size: 0.65em; }
+  .q-agent { color: var(--green); }
+
+  .health-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .health-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .health-name { font-size: 0.85em; margin-bottom: 6px; }
+  .health-bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .health-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+  .health-count { font-size: 0.7em; color: var(--dim); margin-top: 4px; }
+</style>
+</head>
+<body>
+<h1>Active Learning</h1>
+<p class="subtitle">Epistemic Engine — What Should We Investigate Next?</p>
+
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-label">Pending Questions</div>
+    <div class="stat-value">20</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Resolved</div>
+    <div class="stat-value" style="color:var(--green)">0</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Domains Tracked</div>
+    <div class="stat-value">18</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Weakest Domain</div>
+    <div class="stat-value" style="color:var(--red);font-size:1em">relationships</div>
+  </div>
+</div>
+
+
+<div class="section">
+  <h2 class="section-title">Priority Queue</h2>
+  
+  <div class="q-card" style="border-left-color:#f85149">
+    <div class="q-priority">#1</div>
+    <div class="q-text">Verify contested claim: "The three models used in the Ensemble Gate are qwen3:14b (Alibaba), gemma3:4b (Google), and phi4-mini (Microsoft)."</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#f8514922;color:#f85149">ensemble-gate</span>
+      <span class="q-agent">→ Curiosity Loop</span>
+      <span>Priority: 2.07</span>
+      <span>general</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#f85149">
+    <div class="q-priority">#2</div>
+    <div class="q-text">Verify contested claim: "The vault document 'mandate-without-mechanism.md' was filed on 2026-05-20."</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#f8514922;color:#f85149">ensemble-gate</span>
+      <span class="q-agent">→ Archivist</span>
+      <span>Priority: 2.01</span>
+      <span>general</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#3</div>
+    <div class="q-text">Why are "2026-03-24_boxing_coach-brendan-ingle" (02_Refined_Gold) and "2026-03-24_boxing_coach-brendan-ingle" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#4</div>
+    <div class="q-text">Why are "2026-03-24_boxing_coach-cus-damato" (02_Refined_Gold) and "2026-03-24_boxing_coach-cus-damato" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#5</div>
+    <div class="q-text">Why are "2026-03-24_boxing_coach-emanuel-steward" (02_Refined_Gold) and "2026-03-24_boxing_coach-emanuel-steward" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#6</div>
+    <div class="q-text">Why are "2026-03-24_boxing_coach-profiles-comparative" (02_Refined_Gold) and "2026-03-24_boxing_coach-profiles-comparative" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#7</div>
+    <div class="q-text">Why are "2026-03-24_boxing_coach-rolando-acebal" (02_Refined_Gold) and "2026-03-24_boxing_coach-rolando-acebal" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#8</div>
+    <div class="q-text">Why are "2026-03-24_boxing_coach-teddy-atlas" (02_Refined_Gold) and "2026-03-24_boxing_coach-teddy-atlas" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#9</div>
+    <div class="q-text">Why are "2026-03-24_boxing_destination-stars-model" (02_Refined_Gold) and "2026-03-24_boxing_destination-stars-model" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#10</div>
+    <div class="q-text">Why are "2026-03-24_boxing_open-question-geometry-of-punch-" (02_Refined_Gold) and "2026-03-24_boxing_open-question-geometry-of-punch-" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#11</div>
+    <div class="q-text">Why are "2026-03-24_boxing_principle-coordination" (02_Refined_Gold) and "2026-03-24_boxing_principle-coordination" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#12</div>
+    <div class="q-text">Why are "2026-03-24_boxing_principle-quick-reflexes" (02_Refined_Gold) and "2026-03-24_boxing_principle-quick-reflexes" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#13</div>
+    <div class="q-text">Why are "2026-03-24_boxing_system-diagram-concentric-ring-a" (02_Refined_Gold) and "2026-03-24_boxing_system-diagram-concentric-ring-a" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#14</div>
+    <div class="q-text">Why are "2026-03-24_boxing_three-selves-framework" (02_Refined_Gold) and "2026-03-24_boxing_three-selves-framework" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#15</div>
+    <div class="q-text">Why are "2026-03-24_boxing_universal-problem-solving-framew" (02_Refined_Gold) and "2026-03-24_boxing_universal-problem-solving-framew" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Boxing</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#16</div>
+    <div class="q-text">Why are "2026-03-24_business_basic-reflex-teaching-philosop" (02_Refined_Gold) and "2026-03-24_business_basic-reflex-teaching-philosop" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Trading</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#17</div>
+    <div class="q-text">Why are "2026-03-24_business_goal-path-ai-saas-concept" (02_Refined_Gold) and "2026-03-24_business_goal-path-ai-saas-concept" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Trading</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#18</div>
+    <div class="q-text">Why are "2026-03-24_business_goal-path-website-architecture" (02_Refined_Gold) and "2026-03-24_business_goal-path-website-architecture" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Trading</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#19</div>
+    <div class="q-text">Why are "2026-03-24_business_harmonic-architectures-visual-" (02_Refined_Gold) and "2026-03-24_business_harmonic-architectures-visual-" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Trading</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+  <div class="q-card" style="border-left-color:#bc8cff">
+    <div class="q-priority">#20</div>
+    <div class="q-text">Why are "2026-03-24_characters_7-wise-archetypes" (02_Refined_Gold) and "2026-03-24_characters_7-wise-archetypes" (00_Staging) connected?</div>
+    <div class="q-meta">
+      <span class="q-source" style="background:#bc8cff22;color:#bc8cff">knowledge-graph-surprise</span>
+      <span class="q-agent">→ Curiosity Loop</span>
+      <span>Priority: 2.00</span>
+      <span>02_Refined_Gold</span>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="section">
+  <h2 class="section-title">Domain Health</h2>
+  <div class="health-grid">
+    
+      <div class="health-card">
+        <div class="health-name">relationships</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:3%;background:var(--red)"></div></div>
+        <div class="health-count">1 nuggets — 3% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">finance</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:3%;background:var(--red)"></div></div>
+        <div class="health-count">1 nuggets — 3% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">05_Universes</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:3%;background:var(--red)"></div></div>
+        <div class="health-count">1 nuggets — 3% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">wealth</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:6%;background:var(--red)"></div></div>
+        <div class="health-count">2 nuggets — 6% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">03_The_Sages</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:6%;background:var(--red)"></div></div>
+        <div class="health-count">2 nuggets — 6% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">01_Raw_Transcripts</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:6%;background:var(--red)"></div></div>
+        <div class="health-count">2 nuggets — 6% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">creative</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:13%;background:var(--red)"></div></div>
+        <div class="health-count">4 nuggets — 13% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">personal</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:16%;background:var(--red)"></div></div>
+        <div class="health-count">5 nuggets — 16% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">philosophy</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:19%;background:var(--red)"></div></div>
+        <div class="health-count">6 nuggets — 19% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">conspiracy</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:23%;background:var(--red)"></div></div>
+        <div class="health-count">7 nuggets — 23% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">universe</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:32%;background:var(--orange)"></div></div>
+        <div class="health-count">10 nuggets — 32% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">sandboxes</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:32%;background:var(--orange)"></div></div>
+        <div class="health-count">10 nuggets — 32% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">business</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:36%;background:var(--orange)"></div></div>
+        <div class="health-count">11 nuggets — 36% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">04_Esoteric_Studies</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:42%;background:var(--orange)"></div></div>
+        <div class="health-count">13 nuggets — 42% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">boxing</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:81%;background:var(--green)"></div></div>
+        <div class="health-count">25 nuggets — 81% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">02_Refined_Gold</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:100%;background:var(--green)"></div></div>
+        <div class="health-count">241 nuggets — 100% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">00_Staging</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:100%;background:var(--green)"></div></div>
+        <div class="health-count">147 nuggets — 100% health</div>
+      </div>
+      <div class="health-card">
+        <div class="health-name">technology</div>
+        <div class="health-bar-bg"><div class="health-bar-fill" style="width:100%;background:var(--green)"></div></div>
+        <div class="health-count">66 nuggets — 100% health</div>
+      </div>
+  </div>
+</div>
+
+
+<script>
+function esc(t){return t?t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';}
+</script>
+</body>
+</html>

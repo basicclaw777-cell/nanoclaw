@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mega-Cluster Surgery — Inside Paul's Core</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow-x: hidden; }
+
+  .header {
+    text-align: center; padding: 40px 20px 20px;
+    background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+  }
+  .header h1 { font-size: 28px; color: #58a6ff; margin-bottom: 8px; }
+  .header p { color: #8b949e; font-size: 14px; max-width: 600px; margin: 0 auto; }
+
+  .nucleus {
+    display: flex; justify-content: center; align-items: center;
+    gap: 40px; padding: 40px 20px; flex-wrap: wrap;
+  }
+
+  .lobe {
+    position: relative; border-radius: 20px; padding: 30px;
+    min-width: 320px; max-width: 480px; flex: 1;
+  }
+  .lobe-architect {
+    background: linear-gradient(135deg, rgba(56,139,253,0.12) 0%, rgba(139,92,246,0.08) 100%);
+    border: 1px solid rgba(56,139,253,0.3);
+  }
+  .lobe-seeker {
+    background: linear-gradient(135deg, rgba(238,130,50,0.12) 0%, rgba(218,54,51,0.08) 100%);
+    border: 1px solid rgba(238,130,50,0.3);
+  }
+
+  .lobe-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 6px; opacity: 0.6;
+  }
+  .lobe h2 { font-size: 22px; margin-bottom: 4px; }
+  .lobe-architect h2 { color: #58a6ff; }
+  .lobe-seeker h2 { color: #ee8232; }
+  .lobe .count { font-size: 36px; font-weight: 800; opacity: 0.15; position: absolute; top: 20px; right: 24px; }
+  .lobe-architect .count { color: #58a6ff; }
+  .lobe-seeker .count { color: #ee8232; }
+
+  .lobe .subtitle { color: #8b949e; font-size: 13px; margin-bottom: 16px; }
+
+  .domain-bar {
+    display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .domain-tag {
+    font-size: 11px; padding: 3px 8px; border-radius: 12px;
+    background: rgba(255,255,255,0.06); color: #8b949e;
+  }
+
+  .nugget-list { list-style: none; }
+  .nugget-list li {
+    padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px; line-height: 1.4;
+  }
+  .nugget-list li:last-child { border-bottom: none; }
+  .nugget-domain {
+    font-size: 10px; padding: 1px 6px; border-radius: 8px;
+    background: rgba(255,255,255,0.08); margin-right: 6px;
+    display: inline-block; color: #8b949e;
+  }
+
+  .bridge-zone {
+    text-align: center; padding: 20px;
+    position: relative;
+  }
+  .bridge-line {
+    width: 2px; height: 60px; margin: 0 auto;
+    background: linear-gradient(180deg, rgba(56,139,253,0.4), rgba(238,130,50,0.4));
+  }
+  .bridge-label {
+    font-size: 12px; color: #8b949e; margin-top: 8px;
+    max-width: 300px; margin-left: auto; margin-right: auto;
+  }
+
+  .insight-panel {
+    max-width: 800px; margin: 40px auto; padding: 30px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+  }
+  .insight-panel h3 { color: #58a6ff; font-size: 16px; margin-bottom: 12px; }
+  .insight-panel p { color: #8b949e; font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
+  .insight-panel strong { color: #c9d1d9; }
+
+  .fragments {
+    max-width: 800px; margin: 20px auto; padding: 20px 30px;
+    opacity: 0.5;
+  }
+  .fragments h4 { font-size: 13px; color: #8b949e; margin-bottom: 8px; }
+  .fragments .frag-list { display: flex; gap: 8px; flex-wrap: wrap; }
+  .fragments .frag {
+    font-size: 11px; padding: 4px 10px; border-radius: 8px;
+    background: rgba(255,255,255,0.04); color: #6e7681;
+  }
+
+  .ratio-bar {
+    display: flex; height: 8px; border-radius: 4px; overflow: hidden;
+    margin: 20px 0; max-width: 400px;
+  }
+  .ratio-architect { background: #388bfd; }
+  .ratio-seeker { background: #ee8232; }
+  .ratio-fragment { background: #30363d; }
+
+  .ratio-labels {
+    display: flex; justify-content: space-between; font-size: 11px; color: #8b949e;
+    max-width: 400px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Inside the Mega-Cluster</h1>
+  <p>73 nuggets looked like one mass. They're actually two minds operating through the same person.</p>
+</div>
+
+<div class="nucleus">
+  <!-- LEFT LOBE: The Architect -->
+  <div class="lobe lobe-architect">
+    <div class="count">48</div>
+    <div class="lobe-label">Left Hemisphere</div>
+    <h2>The Architect</h2>
+    <div class="subtitle">AI systems, cognitive architecture, sovereign infrastructure</div>
+    <div class="domain-bar">
+      <span class="domain-tag">technology (25)</span>
+      <span class="domain-tag">universe (9)</span>
+      <span class="domain-tag">philosophy (3)</span>
+      <span class="domain-tag">personal (3)</span>
+      <span class="domain-tag">creative (3)</span>
+      <span class="domain-tag">business (2)</span>
+    </div>
+    <ul class="nugget-list">
+      <li><span class="nugget-domain">tech</span>AI Roles: Assistant, Tool, Guide, and More</li>
+      <li><span class="nugget-domain">tech</span>Heptad: AI Cognitive Architecture Blueprint</li>
+      <li><span class="nugget-domain">tech</span>Building Your Personal Cognitive Agent</li>
+      <li><span class="nugget-domain">tech</span>Building the Multiverse Knowledge System</li>
+      <li><span class="nugget-domain">tech</span>AlphaZero's Groundbreaking AI Learning Approach</li>
+      <li><span class="nugget-domain">tech</span>AI System Leakage and Architecture Extraction</li>
+      <li><span class="nugget-domain">personal</span>From Betrayal to Sovereign Source</li>
+      <li><span class="nugget-domain">tech</span>NZT-48 and AI: Promises and Perils</li>
+    </ul>
+  </div>
+
+  <!-- RIGHT LOBE: The Seeker -->
+  <div class="lobe lobe-seeker">
+    <div class="count">18</div>
+    <div class="lobe-label">Right Hemisphere</div>
+    <h2>The Seeker</h2>
+    <div class="subtitle">Hidden knowledge, suppressed truths, pattern decryption</div>
+    <div class="domain-bar">
+      <span class="domain-tag">conspiracy (7)</span>
+      <span class="domain-tag">sandboxes (6)</span>
+      <span class="domain-tag">universe (1)</span>
+      <span class="domain-tag">boxing (1)</span>
+      <span class="domain-tag">relationships (1)</span>
+    </div>
+    <ul class="nugget-list">
+      <li><span class="nugget-domain">sandbox</span>Detailed Profiles of Conspiracy Theory Figures</li>
+      <li><span class="nugget-domain">conspiracy</span>Unity Unlocks Future's Secrets</li>
+      <li><span class="nugget-domain">conspiracy</span>Expert in Gematria, Cryptography, QAnon Analysis</li>
+      <li><span class="nugget-domain">universe</span>Debunking Robert Edward Grant's Egypt Claims</li>
+      <li><span class="nugget-domain">conspiracy</span>Navigating Hidden Truths in Human Interactions</li>
+      <li><span class="nugget-domain">conspiracy</span>Exploring Declassified Aerospace Technologies</li>
+      <li><span class="nugget-domain">sandbox</span>Roleplay: Bjorn Kodak</li>
+      <li><span class="nugget-domain">boxing</span>Ancient Secrets of Purple and Blue Dye</li>
+    </ul>
+  </div>
+</div>
+
+<div class="bridge-zone">
+  <div class="bridge-line"></div>
+  <div class="bridge-label">These two lobes share one gravity well because <strong>the method is the same</strong> — systematic deconstruction of hidden architectures. Whether it's AI systems or suppressed knowledge, Paul's mind does the same thing: find the structure underneath.</div>
+</div>
+
+<div class="insight-panel">
+  <h3>What the Surgery Reveals</h3>
+
+  <div class="ratio-bar">
+    <div class="ratio-architect" style="width: 65.7%"></div>
+    <div class="ratio-seeker" style="width: 24.7%"></div>
+    <div class="ratio-fragment" style="width: 9.6%"></div>
+  </div>
+  <div class="ratio-labels">
+    <span>Architect 66%</span>
+    <span>Seeker 25%</span>
+    <span>Fragments 9%</span>
+  </div>
+
+  <p><strong>Your core is a builder, not a collector.</strong> 66% of your gravitational center is architecture — building systems, designing cognitive agents, extracting structure from chaos. The Cathedral isn't a hobby. It's the thing your mind does whether you ask it to or not.</p>
+
+  <p><strong>The Seeker feeds the Architect.</strong> Your conspiracy/esoteric research isn't random curiosity — it clusters tightly because it's doing the same cognitive operation: reverse-engineering hidden systems. The Architect deconstructs AI. The Seeker deconstructs power structures. Same skill, different target.</p>
+
+  <p><strong>The dangerous gap:</strong> Boxing (1 nugget), business (2), relationships (1) — in the mega-cluster. Your lived experience is underrepresented in your knowledge core. The things you actually DO for a living barely register in the gravitational center of your mind. This means your vault captures what you THINK about, not what you KNOW from doing.</p>
+
+  <p><strong>Actionable:</strong> The Active Learning engine should weight experience-domains (boxing, business, relationships) higher. Your deepest knowledge is in your body and your gym — it just hasn't been written down yet.</p>
+</div>
+
+<div class="fragments">
+  <h4>Orbital Fragments (7 items — not enough gravity to form their own cluster)</h4>
+  <div class="frag-list">
+    <span class="frag">Cathedral Build Session 001</span>
+    <span class="frag">Cathedral Master Briefing</span>
+    <span class="frag">Online Program Buyers HK</span>
+    <span class="frag">AI 2.0 Finance Summary</span>
+    <span class="frag">Workbook Creation</span>
+    <span class="frag">Cathedral Extraction Report</span>
+    <span class="frag">Business Gen Prompt</span>
+  </div>
+</div>
+
+</body>
+</html>

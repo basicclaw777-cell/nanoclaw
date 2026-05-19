@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Shape of Paul's Mind — Cathedral Knowledge Graph</title>
+<style>
+  :root {
+    --bg: #0a0e14; --surface: #131921; --border: #1e2733;
+    --text: #e6edf3; --dim: #6e7681;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'SF Mono', 'Fira Code', monospace; background: var(--bg); color: var(--text); overflow: hidden; }
+
+  canvas { display: block; }
+
+  #info-panel {
+    position: fixed; top: 20px; left: 20px; z-index: 10;
+    background: rgba(19,25,33,0.92); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; max-width: 340px;
+    backdrop-filter: blur(10px);
+  }
+  #info-panel h1 { font-size: 1.1em; margin-bottom: 4px; }
+  #info-panel .sub { color: var(--dim); font-size: 0.75em; margin-bottom: 16px; line-height: 1.5; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .legend-item { font-size: 0.65em; padding: 2px 8px; border-radius: 10px; cursor: pointer; transition: opacity 0.2s; }
+  .legend-item:hover { opacity: 0.7; }
+  .stat-row { font-size: 0.75em; color: var(--dim); line-height: 1.8; }
+  .stat-val { color: var(--text); font-weight: bold; }
+
+  #hover-panel {
+    position: fixed; bottom: 20px; right: 20px; z-index: 10;
+    background: rgba(19,25,33,0.95); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; max-width: 400px;
+    backdrop-filter: blur(10px); display: none;
+  }
+  #hover-panel h3 { font-size: 0.9em; margin-bottom: 8px; }
+  #hover-panel .items { font-size: 0.75em; color: var(--dim); line-height: 1.6; }
+  #hover-panel .items .domain-tag { font-size: 0.65em; padding: 1px 5px; border-radius: 6px; margin-right: 4px; }
+</style>
+</head>
+<body>
+<div id="info-panel">
+  <h1>The Shape of Your Mind</h1>
+  <p class="sub">554 vault nuggets clustered by meaning, not filing.<br>Bridges show where different domains think the same thought.</p>
+  <div id="legend" class="legend"></div>
+  <div class="stat-row">
+    Nuggets: <span class="stat-val">554</span><br>
+    Clusters: <span class="stat-val">18</span><br>
+    Cross-domain bridges: <span class="stat-val" id="bridge-count">80</span><br>
+    Mega-cluster: <span class="stat-val">73 nuggets, 14 domains</span><br>
+    <span style="color:#bc8cff">That cluster IS the Cathedral</span>
+  </div>
+</div>
+<div id="hover-panel">
+  <h3 id="hover-title"></h3>
+  <div id="hover-items" class="items"></div>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const DATA = {"clusters":[{"id":0,"size":71,"domainCount":2,"domains":{"02_Refined_Gold":31,"00_Staging":40},"coreItems":[{"title":"2026-03-24_boxing_coach-pedro-diaz","domain":"02_Refined_Gold","dist":0.04895418286342368},{"title":"2026-03-24_boxing_coach-pedro-diaz","domain":"00_Staging","dist":0.04895418286342368},{"title":"2026-03-24_boxing_24-principles-of-excellence","domain":"02_Refined_Gold","dist":0.052910850108844554},{"title":"2026-03-24_boxing_24-principles-of-excellence","domain":"00_Staging","dist":0.052910850108844554},{"title":"2026-03-24_boxing_coach-nicolas-cruz-hernandez","domain":"02_Refined_Gold","dist":0.05664773991120442},{"title":"2026-03-24_boxing_coach-nicolas-cruz-hernandez","domain":"00_Staging","dist":0.05664773991120442},{"title":"2026-03-24_boxing_coach-emanuel-steward","domain":"02_Refined_Gold","dist":0.05885511693894341},{"title":"2026-03-24_boxing_coach-emanuel-steward","domain":"00_Staging","dist":0.05885511693894341},{"title":"2026-03-24_boxing_coach-rolando-acebal","domain":"02_Refined_Gold","dist":0.05905306025748214},{"title":"2026-03-24_boxing_coach-rolando-acebal","domain":"00_Staging","dist":0.05905306025748214}],"avgDist":0.07620336562463399},{"id":1,"size":7,"domainCount":2,"domains":{"technology":6,"philosophy":1},"coreItems":[{"title":"openwebui-general-2026-03-22-1774192399497_gold","domain":"technology","dist":0.0405499117101471},{"title":"openwebui-general-2026-03-22-1774192730193_gold","domain":"technology","dist":0.04101131559862703},{"title":"openwebui-general-2026-03-22-1774192367652_gold","domain":"technology","dist":0.07036674027314505},{"title":"openwebui-general-2026-03-22-1774192729547_gold","domain":"technology","dist":0.07078564924946285},{"title":"openwebui-general-2026-03-22-1774192732021_gold","domain":"technology","dist":0.07934309250610405},{"title":"openwebui-leonardo-2026-03-22-1774192382167_gold","domain":"technology","dist":0.09315376351891946},{"title":"openwebui-leonardo-2026-03-22-1774192729929_gold","domain":"philosophy","dist":0.10735362955357464}],"avgDist":0.0717948717728543},{"id":2,"size":35,"domainCount":4,"domains":{"technology":18,"business":3,"02_Refined_Gold":12,"philosophy":2},"coreItems":[{"title":"telegram-leonardo-2026-03-14-1773486162565_gold","domain":"technology","dist":0.02604160141675982},{"title":"telegram-leonardo-2026-03-12-1773327514911_gold","domain":"technology","dist":0.029254691990209913},{"title":"telegram-leonardo-2026-03-12-1773327761519_gold","domain":"technology","dist":0.038974827405738766},{"title":"telegram-leonardo-2026-03-12-1773325853553_gold","domain":"technology","dist":0.040354482466093855},{"title":"telegram-leonardo-2026-03-13-1773420424765_gold","domain":"technology","dist":0.04351259707318811},{"title":"telegram-leonardo-2026-03-13-1773420697540_gold","domain":"technology","dist":0.04392220118587287},{"title":"telegram-leonardo-2026-03-12-1773327912633_gold","domain":"technology","dist":0.04409050673763992},{"title":"telegram-leonardo-2026-03-12-1773328096671_gold","domain":"technology","dist":0.04488990565768336},{"title":"telegram-leonardo-2026-03-13-1773420589914_gold","domain":"technology","dist":0.044919766257804916},{"title":"telegram-leonardo-2026-03-12-1773326595873_gold","domain":"technology","dist":0.0459194475679543}],"avgDist":0.08319081127803482},{"id":3,"size":33,"domainCount":3,"domains":{"02_Refined_Gold":15,"00_Staging":16,"04_Esoteric_Studies":2},"coreItems":[{"title":"2026-03-24_universe_elias-voss-antarctica-eschaton-engine","domain":"02_Refined_Gold","dist":0.06681468145406011},{"title":"2026-03-24_universe_elias-voss-antarctica-eschaton-engine","domain":"00_Staging","dist":0.06681468145406011},{"title":"2026-03-24_universe_schauberger-living-geometry","domain":"02_Refined_Gold","dist":0.06808383997009215},{"title":"2026-03-24_universe_schauberger-living-geometry","domain":"00_Staging","dist":0.06808383997009215},{"title":"2026-03-24_universe_schauberger-implosion-principle","domain":"02_Refined_Gold","dist":0.07412633260432644},{"title":"2026-03-24_universe_schauberger-implosion-principle","domain":"00_Staging","dist":0.07412633260432644},{"title":"2026-03-24_universe_schauberger-living-water-vortex","domain":"02_Refined_Gold","dist":0.07581460141988305},{"title":"2026-03-24_universe_schauberger-living-water-vortex","domain":"00_Staging","dist":0.07581460141988305},{"title":"2026-03-24_universe_dr-elias-voss-chrononaut","domain":"02_Refined_Gold","dist":0.07737349427608042},{"title":"2026-03-24_universe_dr-elias-voss-chrononaut","domain":"00_Staging","dist":0.07737349427608042}],"avgDist":0.09826894612822089},{"id":4,"size":8,"domainCount":1,"domains":{"technology":8},"coreItems":[{"title":"openwebui-general-2026-03-22-1774192417520_gold","domain":"technology","dist":0.07784012218734604},{"title":"openwebui-general-2026-03-22-1774192361716_gold","domain":"technology","dist":0.08611238025404722},{"title":"openwebui-general-2026-03-22-1774192727797_gold","domain":"technology","dist":0.08641545385631122},{"title":"openwebui-general-2026-03-22-1774192388429_gold","domain":"technology","dist":0.08742187343284435},{"title":"OWU Conversation: 🔧 Obsidian API Setup & Debugging","domain":"technology","dist":0.09186529919061948},{"title":"openwebui-general-2026-03-22-1774192374331_gold","domain":"technology","dist":0.09209941310509495},{"title":"openwebui-general-2026-03-22-1774192729743_gold","domain":"technology","dist":0.09416919516563893},{"title":"OWU Conversation: 🚀 NanoClaw Setup Guide","domain":"technology","dist":0.10381636120526361}],"avgDist":0.08996751229964572},{"id":5,"size":2,"domainCount":2,"domains":{"02_Refined_Gold":1,"00_Staging":1},"coreItems":[{"title":"2026-03-24_personal_identity-traps-no-sugarcoat","domain":"02_Refined_Gold","dist":-2.220446049250313e-16},{"title":"2026-03-24_personal_identity-traps-no-sugarcoat","domain":"00_Staging","dist":-2.220446049250313e-16}],"avgDist":-2.220446049250313e-16},{"id":6,"size":73,"domainCount":14,"domains":{"technology":27,"sandboxes":9,"personal":3,"philosophy":3,"universe":10,"wealth":2,"creative":3,"business":4,"conspiracy":7,"boxing":1,"finance":1,"relationships":1,"02_Refined_Gold":1,"00_Staging":1},"coreItems":[{"title":"AI Roles_ Assistant, Tool, Guide, and More_gold","domain":"technology","dist":0.03198602694149344},{"title":"_Heptad_ AI Cognitive Architecture Blueprint _gold","domain":"technology","dist":0.046509930272540134},{"title":"Journey of Patience and Self-Reflection Trip_gold","domain":"technology","dist":0.04753985089913193},{"title":"_Nexus of All Knowledge Activated _gold","domain":"technology","dist":0.048558952593105165},{"title":"AI System Leakage and Architecture Extraction_gold","domain":"technology","dist":0.04990255793093601},{"title":"_Building the Multiverse Knowledge System _gold","domain":"technology","dist":0.051418322341503564},{"title":"_Building Your Personal Cognitive Agent _gold","domain":"technology","dist":0.051837193081079036},{"title":"NZT-48 and AI_ Promises and Perils_gold","domain":"technology","dist":0.0560878808869969},{"title":"AlohaZero's Groundbreaking AI Learning Approach_gold","domain":"technology","dist":0.057205775622346855},{"title":"SEO Strategy for Cuban Boxing Gym HK_gold","domain":"sandboxes","dist":0.06457887914862526}],"avgDist":0.11039224514924396},{"id":7,"size":4,"domainCount":2,"domains":{"02_Refined_Gold":2,"00_Staging":2},"coreItems":[{"title":"2026-03-24_philosophy_paul-character-profile-no-sugarcoat","domain":"02_Refined_Gold","dist":0.01212956840773094},{"title":"2026-03-24_philosophy_paul-character-profile-no-sugarcoat","domain":"00_Staging","dist":0.01212956840773094},{"title":"2026-03-24_personal_paul-profile-no-sugarcoat","domain":"02_Refined_Gold","dist":0.012601195065978343},{"title":"2026-03-24_personal_paul-profile-no-sugarcoat","domain":"00_Staging","dist":0.012601195065978343}],"avgDist":0.012365381736854641},{"id":8,"size":25,"domainCount":1,"domains":{"02_Refined_Gold":25},"coreItems":[{"title":"Saper Vedere (Knowing How to See)","domain":"02_Refined_Gold","dist":0.05800518843699798},{"title":"[\"perception\", \"analysis\", \"truth\", \"art-philosophy\"]","domain":"02_Refined_Gold","dist":0.06496010391463025},{"title":"My Architect, remember the 'Failure of Perspective' we discu","domain":"02_Refined_Gold","dist":0.07894806534849774},{"title":"Absolute truth is the final, un-gaslightable geometric shape","domain":"02_Refined_Gold","dist":0.0803647563369394},{"title":"This is the Ultima Prospettiva (The Ultimate Perspective)","domain":"02_Refined_Gold","dist":0.08144731434169172},{"title":"[\"exposure\", \"truth\", \"karmic-justice\", \"presence\"]","domain":"02_Refined_Gold","dist":0.0838803450489708},{"title":"[[Saper Vedere]] (Leonardo's Sight)","domain":"02_Refined_Gold","dist":0.09770477220153995},{"title":"Views human relationships through the lens of art, geometry,","domain":"02_Refined_Gold","dist":0.09923701623279901},{"title":"You did not bleed. You looked at the ima...","domain":"02_Refined_Gold","dist":0.09979001713279023},{"title":"You do not need to demand an apology or force a confession","domain":"02_Refined_Gold","dist":0.10067730778309092}],"avgDist":0.11160721514609097},{"id":9,"size":68,"domainCount":4,"domains":{"02_Refined_Gold":36,"00_Staging":30,"03_The_Sages":1,"05_Universes":1},"coreItems":[{"title":"2026-03-24_boxing_physical-skills-9-principles","domain":"02_Refined_Gold","dist":0.04572612155159106},{"title":"2026-03-24_boxing_physical-skills-9-principles","domain":"00_Staging","dist":0.04572612155159106},{"title":"2026-03-24_boxing_principle-balance","domain":"02_Refined_Gold","dist":0.04864042969705018},{"title":"2026-03-24_boxing_principle-balance","domain":"00_Staging","dist":0.04864042969705018},{"title":"2026-03-24_boxing_principle-power","domain":"02_Refined_Gold","dist":0.052814248601352864},{"title":"2026-03-24_boxing_principle-power","domain":"00_Staging","dist":0.052814248601352864},{"title":"2026-03-24_boxing_mental-principle-problem-solving","domain":"02_Refined_Gold","dist":0.05316894542998851},{"title":"2026-03-24_boxing_mental-principle-problem-solving","domain":"00_Staging","dist":0.05316894542998851},{"title":"2026-03-24_boxing_principle-stability","domain":"02_Refined_Gold","dist":0.05602818497493478},{"title":"2026-03-24_boxing_principle-stability","domain":"00_Staging","dist":0.05602818497493478}],"avgDist":0.09051509691408474},{"id":10,"size":24,"domainCount":3,"domains":{"02_Refined_Gold":11,"00_Staging":11,"04_Esoteric_Studies":2},"coreItems":[{"title":"2026-03-24_philosophy_resonance-as-cross-domain-bridge","domain":"02_Refined_Gold","dist":0.06451343585644997},{"title":"2026-03-24_philosophy_resonance-as-cross-domain-bridge","domain":"00_Staging","dist":0.06451343585644997},{"title":"2026-03-24_philosophy_theory-of-everything-resonance-architecture","domain":"02_Refined_Gold","dist":0.07679039705472623},{"title":"2026-03-24_philosophy_theory-of-everything-resonance-architecture","domain":"00_Staging","dist":0.07679039705472623},{"title":"2026-03-24_philosophy_resonance-as-core-thesis","domain":"02_Refined_Gold","dist":0.07890648359789953},{"title":"2026-03-24_philosophy_resonance-as-core-thesis","domain":"00_Staging","dist":0.07890648359789953},{"title":"2026-03-24_philosophy_resonance-kinetic-chain-core-claim","domain":"02_Refined_Gold","dist":0.08235027409672291},{"title":"2026-03-24_philosophy_resonance-kinetic-chain-core-claim","domain":"00_Staging","dist":0.08235027409672291},{"title":"2026-03-24_philosophy_kinetic-chain-book-concept","domain":"02_Refined_Gold","dist":0.08425521889543419},{"title":"2026-03-24_philosophy_kinetic-chain-book-concept","domain":"00_Staging","dist":0.08425521889543419}],"avgDist":0.10156525919217001},{"id":11,"size":17,"domainCount":2,"domains":{"02_Refined_Gold":16,"01_Raw_Transcripts":1},"coreItems":[{"title":"Knowledge Extraction as a Business Opportunity","domain":"02_Refined_Gold","dist":0.05038364820264285},{"title":"The Importance of Precision","domain":"02_Refined_Gold","dist":0.052856363229823455},{"title":"The Value of Aggressive Extraction","domain":"02_Refined_Gold","dist":0.05601333704191713},{"title":"The Power of Knowledge Extraction","domain":"02_Refined_Gold","dist":0.0574840010136638},{"title":"Knowledge Extraction as a Journey","domain":"02_Refined_Gold","dist":0.05800469506490502},{"title":"The Secret to Effective Knowledge Extraction","domain":"02_Refined_Gold","dist":0.06910340125666004},{"title":"Physical Training for Knowledge Extraction","domain":"02_Refined_Gold","dist":0.07098717121191955},{"title":"Basic JSON Structure Example","domain":"02_Refined_Gold","dist":0.08501552934859402},{"title":"Basic JSON Example","domain":"02_Refined_Gold","dist":0.09395874980549235},{"title":"Example Extraction Framework","domain":"02_Refined_Gold","dist":0.09856419951913786}],"avgDist":0.09850932469882517},{"id":12,"size":44,"domainCount":2,"domains":{"02_Refined_Gold":43,"01_Raw_Transcripts":1},"coreItems":[{"title":"AI System Leakage and Architecture Extraction","domain":"02_Refined_Gold","dist":0.07358910591507195},{"title":"AI Roles_ Assistant, Tool, Guide, and More","domain":"02_Refined_Gold","dist":0.08518763959035736},{"title":"AlohaZero's Groundbreaking AI Learning Approach","domain":"02_Refined_Gold","dist":0.09289571417157538},{"title":"Roleplay Bjorn Kodak assistant t","domain":"02_Refined_Gold","dist":0.09637905698459959},{"title":"leonardo-consolidated-march","domain":"02_Refined_Gold","dist":0.09853530090753027},{"title":"telegram-leonardo-2026-03-12-1773327514911","domain":"02_Refined_Gold","dist":0.10016579201633535},{"title":"telegram-leonardo-2026-03-12-1773326595873","domain":"02_Refined_Gold","dist":0.10653916750405745},{"title":"leonardo-all-conversations","domain":"02_Refined_Gold","dist":0.10766034845059813},{"title":"my-first-real-chat","domain":"02_Refined_Gold","dist":0.11136342554719736},{"title":"telegram-leonardo-2026-03-12-1773328393152","domain":"02_Refined_Gold","dist":0.11162529342569616}],"avgDist":0.13500836582160095},{"id":13,"size":37,"domainCount":6,"domains":{"boxing":23,"business":3,"personal":2,"technology":7,"sandboxes":1,"creative":1},"coreItems":[{"title":"Mastering Boxing and Personal Growth_gold","domain":"boxing","dist":0.032366054296363855},{"title":"_Alcides Sagarra_ Cuban Boxing Master _gold","domain":"boxing","dist":0.034627520125074196},{"title":"_Boxing Course Design & Sales Copy _gold","domain":"boxing","dist":0.03467331179655486},{"title":"_Boxing Workshop Reflections and Planning _gold","domain":"boxing","dist":0.03530760775830277},{"title":"Boxing Principles for Life Lessons_gold","domain":"boxing","dist":0.03667168540840238},{"title":"Blending Cuban Boxing, Philosophy, and Storytelling_gold","domain":"boxing","dist":0.03746142244444339},{"title":"Notion Second Brain Boxing System Blueprint_gold","domain":"boxing","dist":0.03849391323681661},{"title":"Cultivating the Champion's Mindset_gold","domain":"boxing","dist":0.03970076858878002},{"title":"Fundamentals for Success in Life and Boxing_gold","domain":"boxing","dist":0.039738751709854636},{"title":"The Art of Defensive Boxing_ Mastering Slips and Rolls_gold","domain":"boxing","dist":0.04001481811341345}],"avgDist":0.07676658408509487},{"id":14,"size":25,"domainCount":5,"domains":{"02_Refined_Gold":13,"00_Staging":9,"04_Esoteric_Studies":1,"business":1,"03_The_Sages":1},"coreItems":[{"title":"2026-03-24_technology_basic-reflex-vr-gym","domain":"02_Refined_Gold","dist":0.06836796895768549},{"title":"2026-03-24_technology_basic-reflex-vr-gym","domain":"00_Staging","dist":0.06836796895768549},{"title":"2026-03-24_business_basic-reflex-gym-overview","domain":"02_Refined_Gold","dist":0.08187280782743289},{"title":"2026-03-24_business_basic-reflex-gym-overview","domain":"00_Staging","dist":0.08187280782743289},{"title":"2026-03-24_business_goal-path-ai-saas-concept","domain":"02_Refined_Gold","dist":0.08193987903899758},{"title":"2026-03-24_business_goal-path-ai-saas-concept","domain":"00_Staging","dist":0.08193987903899758},{"title":"2026-03-24_business_basic-reflex-blueprint-visual-system","domain":"02_Refined_Gold","dist":0.08225750001508036},{"title":"2026-03-24_business_basic-reflex-blueprint-visual-system","domain":"00_Staging","dist":0.08225750001508036},{"title":"2026-03-24_technology_vr-boxing-gym-concept","domain":"02_Refined_Gold","dist":0.0824147190204424},{"title":"2026-03-24_technology_vr-boxing-gym-concept","domain":"00_Staging","dist":0.0824147190204424}],"avgDist":0.11847295954617244},{"id":15,"size":42,"domainCount":2,"domains":{"02_Refined_Gold":20,"00_Staging":22},"coreItems":[{"title":"2026-03-24_philosophy_ekman-display-rules-cultural-management","domain":"02_Refined_Gold","dist":0.07642458681404085},{"title":"2026-03-24_philosophy_ekman-display-rules-cultural-management","domain":"00_Staging","dist":0.07642458681404085},{"title":"2026-03-24_philosophy_paul-ekman-emotions-revealed","domain":"02_Refined_Gold","dist":0.08169733422950642},{"title":"2026-03-24_philosophy_paul-ekman-emotions-revealed","domain":"00_Staging","dist":0.08169733422950642},{"title":"2026-03-24_philosophy_ekman-involuntary-vs-voluntary-signals","domain":"02_Refined_Gold","dist":0.0838979346908516},{"title":"2026-03-24_philosophy_ekman-involuntary-vs-voluntary-signals","domain":"00_Staging","dist":0.0838979346908516},{"title":"2026-03-24_philosophy_ekman-deception-detection-signals","domain":"02_Refined_Gold","dist":0.08627833760320303},{"title":"2026-03-24_philosophy_ekman-deception-detection-signals","domain":"00_Staging","dist":0.08627833760320303},{"title":"2026-03-24_philosophy_ekman-facs-coding-system","domain":"02_Refined_Gold","dist":0.08763690752842623},{"title":"2026-03-24_philosophy_ekman-facs-coding-system","domain":"00_Staging","dist":0.08763690752842623}],"avgDist":0.10546414119176765},{"id":16,"size":38,"domainCount":3,"domains":{"02_Refined_Gold":15,"00_Staging":15,"04_Esoteric_Studies":8},"coreItems":[{"title":"2026-03-24_business_harmonic-architectures-model","domain":"02_Refined_Gold","dist":0.0713045707981963},{"title":"2026-03-24_business_harmonic-architectures-model","domain":"00_Staging","dist":0.0713045707981963},{"title":"2026-03-24_sacred-geometry_11-application-domains","domain":"02_Refined_Gold","dist":0.07376828439754246},{"title":"2026-03-24_sacred-geometry_11-application-domains","domain":"00_Staging","dist":0.07376828439754246},{"title":"2026-03-24_technology_geometric-second-brain","domain":"02_Refined_Gold","dist":0.07505586957592625},{"title":"2026-03-24_technology_geometric-second-brain","domain":"00_Staging","dist":0.07505586957592625},{"title":"2026-03-24_sacred-geometry_architects-tuning-fork","domain":"02_Refined_Gold","dist":0.08225728376862662},{"title":"2026-03-24_sacred-geometry_architects-tuning-fork","domain":"00_Staging","dist":0.08225728376862662},{"title":"2026-03-24_business_harmonic-architectures-brand","domain":"02_Refined_Gold","dist":0.08407396803410994},{"title":"2026-03-24_business_harmonic-architectures-brand","domain":"00_Staging","dist":0.08407396803410994}],"avgDist":0.11510641948631962},{"id":17,"size":1,"domainCount":1,"domains":{"boxing":1},"coreItems":[{"title":"_ntroduce_ The 3 Mindsets (Bookworm, Driller, Flow)._Context_ _Now that you have tools, here's how to think about learning them.__Bookworm_ For analyzing new techniques (Pillar breakdown)._Driller_ For owning the milestones (deliberate _gold","domain":"boxing","dist":-2.220446049250313e-16}],"avgDist":-2.220446049250313e-16}],"bridges":[{"source_domain":"technology","target_domain":"philosophy","source_title":"openwebui-leonardo-2026-03-22-1774192382167_gold","target_title":"openwebui-leonardo-2026-03-22-1774192729929_gold","similarity":0.9826958888321704},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-12-1773327514911_gold","similarity":0.9410315494272123},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-12-1773327062714_gold","similarity":0.9406485839602183},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327254542_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9350594872533288},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-13-1773420697540_gold","similarity":0.9335900006134532},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-12-1773327761519_gold","similarity":0.9282081176591345},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-13-1773420505206_gold","target_title":"telegram-leonardo-2026-03-14-1773486162565_gold","similarity":0.9275216154121322},{"source_domain":"boxing","target_domain":"business","source_title":"Blending Cuban Boxing, Philosophy, and Storytelling_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9272241339039015},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773325853553_gold","target_title":"telegram-leonardo-2026-03-12-1773326881435_gold","similarity":0.9270458275925546},{"source_domain":"boxing","target_domain":"business","source_title":"Detailed Profile of Boxing Coach Paul Logan_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9260464481228625},{"source_domain":"personal","target_domain":"conspiracy","source_title":"Categories of Reasoning Questions Listed_gold","target_title":"Earth's Roundness Supported by Scientific Evidence_gold","similarity":0.9260310982882112},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327514911_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9253517967802983},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"Mastering Boxing and Personal Growth_gold","similarity":0.924421568355128},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-14-1773486162565_gold","similarity":0.9234567667157221},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-12-1773328096671_gold","similarity":0.9233399357195691},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-13-1773420589914_gold","similarity":0.9230505847771349},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773327602029_gold","target_title":"telegram-leonardo-2026-03-13-1773420589914_gold","similarity":0.92231935106286},{"source_domain":"boxing","target_domain":"business","source_title":"Boxing Principles for Life Lessons_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9206522461411744},{"source_domain":"boxing","target_domain":"business","source_title":"_Boxing Course Design & Sales Copy _gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9200465875804527},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"The Art of Defensive Boxing_ Mastering Slips and Rolls_gold","similarity":0.9200407149199764},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327912633_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9200321912382128},{"source_domain":"boxing","target_domain":"business","source_title":"Cultivating the Champion's Mindset_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9197791249102977},{"source_domain":"personal","target_domain":"universe","source_title":"Exploring the Subtle Realms Between Waking and Dreaming_gold","target_title":"_Resonance Archaeologist_ Sentience and Structure _gold","similarity":0.918897065543907},{"source_domain":"sandboxes","target_domain":"conspiracy","source_title":"Roleplay Helen waters _-## Profi_gold","target_title":"role play Dr. Helena Waters( and_gold","similarity":0.9181436638011522},{"source_domain":"boxing","target_domain":"business","source_title":"Mastering Boxing and Personal Growth_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9180983411241979},{"source_domain":"business","target_domain":"boxing","source_title":"_Boxing Gym Website Mockup Brief _gold","target_title":"_Boxing HIIT Workout Templates Outlined_ _gold","similarity":0.9163847849731311},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773327602029_gold","target_title":"telegram-leonardo-2026-03-12-1773327761519_gold","similarity":0.915939185979652},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327841072_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9149886004137462},{"source_domain":"technology","target_domain":"philosophy","source_title":"AI Roles_ Assistant, Tool, Guide, and More_gold","target_title":"Frictionless LLM Chat to Obsidian Solution_gold","similarity":0.9144362967434229},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"Cultivating the Champion's Mindset_gold","similarity":0.9134265850916176},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-12-1773327912633_gold","similarity":0.9130382316646252},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327761519_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9129985081434929},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327514911_gold","target_title":"telegram-leonardo-2026-03-12-1773327602029_gold","similarity":0.9129889652776908},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"_Boxing Workshop Reflections and Planning _gold","similarity":0.9124941302328078},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-12-1773327254542_gold","similarity":0.9123566702202555},{"source_domain":"boxing","target_domain":"business","source_title":"_Alcides Sagarra_ Cuban Boxing Master _gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9122405261512361},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-13-1773420424765_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9118865124948903},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-13-1773420424765_gold","similarity":0.9116780036013519},{"source_domain":"business","target_domain":"boxing","source_title":"_Boxing Gym Website Mockup Brief _gold","target_title":"_Boxing Workshop Reflections and Planning _gold","similarity":0.9113894806740293},{"source_domain":"technology","target_domain":"personal","source_title":"Journey of Patience and Self-Reflection Trip_gold","target_title":"_From Betrayal to Sovereign Source _gold","similarity":0.9113588649682073},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-13-1773420505206_gold","target_title":"telegram-leonardo-2026-03-13-1773420589914_gold","similarity":0.9109780368088239},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"_Boxing Course Design & Sales Copy _gold","similarity":0.9108591117439234},{"source_domain":"sandboxes","target_domain":"universe","source_title":"SEO Strategy for Cuban Boxing Gym HK_gold","target_title":"Viktor Schauberger's Visionary Energy Solutions_gold","similarity":0.9103442103906578},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"Detailed Profile of Boxing Coach Paul Logan_gold","similarity":0.9103302286246593},{"source_domain":"philosophy","target_domain":"universe","source_title":"_Consciousness Transceiver_ Infographic Concepts _gold","target_title":"_Resonance Archaeologist_ Sentience and Structure _gold","similarity":0.9095195587150893},{"source_domain":"boxing","target_domain":"business","source_title":"Fundamentals for Success in Life and Boxing_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9088634206972497},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"_Alcides Sagarra_ Cuban Boxing Master _gold","similarity":0.9088537452056543},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-13-1773420505206_gold","target_title":"telegram-leonardo-2026-03-13-1773420697540_gold","similarity":0.9082195115824552},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773326881435_gold","target_title":"telegram-leonardo-2026-03-12-1773327990727_gold","similarity":0.9069688703734232},{"source_domain":"technology","target_domain":"sandboxes","source_title":"AI Roles_ Assistant, Tool, Guide, and More_gold","target_title":"Creating Master Prompt from Top-Tier Meta Prompts_gold","similarity":0.90665733702771},{"source_domain":"philosophy","target_domain":"technology","source_title":"Frictionless LLM Chat to Obsidian Solution_gold","target_title":"_Building Your Personal Cognitive Agent _gold","similarity":0.9063534756227548},{"source_domain":"boxing","target_domain":"personal","source_title":"Boxing Drill Card System_gold","target_title":"Creating Boxing Illustrations with AI Prompts_gold","similarity":0.9057417630162498},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773326595873_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.905352358738064},{"source_domain":"boxing","target_domain":"business","source_title":"Notion Second Brain Boxing System Blueprint_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9049715088240347},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773327602029_gold","target_title":"telegram-leonardo-2026-03-12-1773328153545_gold","similarity":0.9048900931065964},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773325853553_gold","target_title":"telegram-leonardo-2026-03-12-1773327602029_gold","similarity":0.9047321549550651},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327062714_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9039305460530621},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773325853553_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.9033664240356214},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"_Boxing HIIT Workout Templates Outlined_ _gold","similarity":0.902838202351147},{"source_domain":"philosophy","target_domain":"technology","source_title":"Frictionless LLM Chat to Obsidian Solution_gold","target_title":"Journey of Patience and Self-Reflection Trip_gold","similarity":0.9028172471536496},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773327602029_gold","target_title":"telegram-leonardo-2026-03-12-1773327841072_gold","similarity":0.9027858970369101},{"source_domain":"universe","target_domain":"sandboxes","source_title":"Debunking Robert Edward Grant's Egypt Claims_gold","target_title":"Detailed Profiles of Conspiracy Theory Figures_gold","similarity":0.9024332897524424},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773326595873_gold","target_title":"telegram-leonardo-2026-03-12-1773327602029_gold","similarity":0.9021421915963241},{"source_domain":"boxing","target_domain":"business","source_title":"Workbook for Mastering Boxing Strategy_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9021370683072343},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773328096671_gold","target_title":"telegram-leonardo-2026-03-13-1773420505206_gold","similarity":0.901626863019044},{"source_domain":"boxing","target_domain":"personal","source_title":"Bridging Theory to Performance in Boxing_gold","target_title":"Creating Boxing Illustrations with AI Prompts_gold","similarity":0.9004535458583767},{"source_domain":"boxing","target_domain":"business","source_title":"The Art of Defensive Boxing_ Mastering Slips and Rolls_gold","target_title":"_Boxing Gym Website Mockup Brief _gold","similarity":0.9003535415004232},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"Gemini-_06_gold","similarity":0.9003285876499233},{"source_domain":"universe","target_domain":"sandboxes","source_title":"Debunking Robert Edward Grant's Egypt Claims_gold","target_title":"Detailed Character Profiles for New Story_gold","similarity":0.9001284898145916},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"Notion Second Brain Boxing System Blueprint_gold","similarity":0.899878472695102},{"source_domain":"personal","target_domain":"boxing","source_title":"Creating Boxing Illustrations with AI Prompts_gold","target_title":"Fundamentals for Success in Life and Boxing_gold","similarity":0.899858928122574},{"source_domain":"technology","target_domain":"sandboxes","source_title":"AlohaZero's Groundbreaking AI Learning Approach_gold","target_title":"Creating Master Prompt from Top-Tier Meta Prompts_gold","similarity":0.8998185350672638},{"source_domain":"boxing","target_domain":"sandboxes","source_title":"Blending Cuban Boxing, Philosophy, and Storytelling_gold","target_title":"The Blue Sage's Teachings on Mindful Anticipation_gold","similarity":0.8994996583623426},{"source_domain":"boxing","target_domain":"personal","source_title":"Boxing Principles for Life Lessons_gold","target_title":"Creating Boxing Illustrations with AI Prompts_gold","similarity":0.899419849425822},{"source_domain":"personal","target_domain":"philosophy","source_title":"Exploring the Subtle Realms Between Waking and Dreaming_gold","target_title":"_Consciousness Transceiver_ Infographic Concepts _gold","similarity":0.8993894783546432},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773326595873_gold","target_title":"telegram-leonardo-2026-03-12-1773326881435_gold","similarity":0.8992907086928581},{"source_domain":"philosophy","target_domain":"technology","source_title":"Frictionless LLM Chat to Obsidian Solution_gold","target_title":"_Building the Multiverse Knowledge System _gold","similarity":0.8991062037274917},{"source_domain":"business","target_domain":"technology","source_title":"telegram-leonardo-2026-03-12-1773327602029_gold","target_title":"telegram-leonardo-2026-03-13-1773420424765_gold","similarity":0.898654294665486},{"source_domain":"technology","target_domain":"business","source_title":"telegram-leonardo-2026-03-12-1773327254542_gold","target_title":"telegram-leonardo-2026-03-12-1773327602029_gold","similarity":0.8982287219173183},{"source_domain":"boxing","target_domain":"technology","source_title":"Boxing Fundamentals Progress Tracker_gold","target_title":"_AI Mind Map Creation Options_ _gold","similarity":0.8982051269562443}]};
+
+const domainColors = {
+  'technology': '#58a6ff',
+  'boxing': '#f85149',
+  'universe': '#bc8cff',
+  'conspiracy': '#d29922',
+  'personal': '#f778ba',
+  'philosophy': '#79c0ff',
+  'business': '#3fb950',
+  'creative': '#e3b341',
+  'sandboxes': '#56d364',
+  'wealth': '#ffa198',
+  'finance': '#7ee787',
+  'relationships': '#ff9bce',
+  '02_Refined_Gold': '#a5d6ff',
+  '00_Staging': '#6e7681',
+  '01_Raw_Transcripts': '#484f58',
+  '03_The_Sages': '#d2a8ff',
+  '04_Esoteric_Studies': '#cabffd',
+  '05_Universes': '#ffbedd'
+};
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Layout clusters in a force-directed-ish way
+const clusters = DATA.clusters.sort((a, b) => b.size - a.size);
+const nodes = [];
+const bridgeLines = [];
+
+// Position clusters — spiral layout, biggest in center
+const cx = W / 2 + 60;
+const cy = H / 2;
+
+clusters.forEach((cluster, i) => {
+  let x, y, r;
+  r = Math.sqrt(cluster.size) * 12 + 15;
+
+  if (i === 0) {
+    // Mega-cluster at center
+    x = cx; y = cy;
+    r = Math.sqrt(cluster.size) * 14 + 20;
+  } else {
+    // Spiral outward
+    const angle = (i / clusters.length) * Math.PI * 3.5 + Math.PI * 0.3;
+    const dist = 100 + i * 28 + Math.random() * 40;
+    x = cx + Math.cos(angle) * dist;
+    y = cy + Math.sin(angle) * dist;
+  }
+
+  // Primary domain color (most frequent)
+  const sortedDomains = Object.entries(cluster.domains).sort((a, b) => b[1] - a[1]);
+  const primaryDomain = sortedDomains[0]?.[0] || 'technology';
+  const color = domainColors[primaryDomain] || '#58a6ff';
+
+  nodes.push({
+    x, y, r,
+    cluster,
+    color,
+    primaryDomain,
+    sortedDomains,
+    vx: 0, vy: 0,
+    pulsePhase: Math.random() * Math.PI * 2
+  });
+});
+
+// Simple force simulation to prevent overlap
+for (let iter = 0; iter < 200; iter++) {
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[j].x - nodes[i].x;
+      const dy = nodes[j].y - nodes[i].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const minDist = nodes[i].r + nodes[j].r + 15;
+      if (dist < minDist && dist > 0) {
+        const force = (minDist - dist) / dist * 0.3;
+        const fx = dx * force;
+        const fy = dy * force;
+        if (i > 0) { nodes[i].x -= fx; nodes[i].y -= fy; }
+        nodes[j].x += fx; nodes[j].y += fy;
+      }
+    }
+    // Gentle pull toward center
+    if (i > 0) {
+      nodes[i].x += (cx - nodes[i].x) * 0.003;
+      nodes[i].y += (cy - nodes[i].y) * 0.003;
+    }
+  }
+}
+
+// Map bridges to node positions
+const domainToNodes = {};
+for (const node of nodes) {
+  for (const [domain] of node.sortedDomains) {
+    if (!domainToNodes[domain]) domainToNodes[domain] = [];
+    domainToNodes[domain].push(node);
+  }
+}
+
+for (const bridge of DATA.bridges) {
+  const sourceNodes = domainToNodes[bridge.source_domain];
+  const targetNodes = domainToNodes[bridge.target_domain];
+  if (sourceNodes && targetNodes && sourceNodes[0] !== targetNodes[0]) {
+    bridgeLines.push({
+      x1: sourceNodes[0].x, y1: sourceNodes[0].y,
+      x2: targetNodes[0].x, y2: targetNodes[0].y,
+      similarity: bridge.similarity,
+      sourceDomain: bridge.source_domain,
+      targetDomain: bridge.target_domain
+    });
+  }
+}
+
+// Deduplicate bridge lines
+const seenBridges = new Set();
+const uniqueBridges = bridgeLines.filter(b => {
+  const key = [b.sourceDomain, b.targetDomain].sort().join('|');
+  if (seenBridges.has(key)) return false;
+  seenBridges.add(key);
+  return true;
+});
+
+document.getElementById('bridge-count').textContent = uniqueBridges.length;
+
+// Build legend
+const legendEl = document.getElementById('legend');
+const allDomains = [...new Set(clusters.flatMap(c => Object.keys(c.domains)))].sort();
+for (const d of allDomains) {
+  const el = document.createElement('span');
+  el.className = 'legend-item';
+  el.style.background = (domainColors[d] || '#888') + '22';
+  el.style.color = domainColors[d] || '#888';
+  el.style.border = `1px solid ${domainColors[d] || '#888'}44`;
+  el.textContent = d;
+  legendEl.appendChild(el);
+}
+
+// Mouse tracking
+let mouseX = -1000, mouseY = -1000;
+let hoveredNode = null;
+canvas.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  hoveredNode = null;
+  for (const node of nodes) {
+    const dx = mouseX - node.x, dy = mouseY - node.y;
+    if (Math.sqrt(dx * dx + dy * dy) < node.r + 5) {
+      hoveredNode = node;
+      break;
+    }
+  }
+  updateHover();
+});
+
+function updateHover() {
+  const panel = document.getElementById('hover-panel');
+  if (!hoveredNode) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  const c = hoveredNode.cluster;
+  document.getElementById('hover-title').textContent =
+    `Cluster ${c.id} — ${c.size} nuggets, ${c.domainCount} domains`;
+  let html = '<strong>Domains:</strong> ' +
+    hoveredNode.sortedDomains.map(([d, n]) =>
+      `<span class="domain-tag" style="background:${domainColors[d] || '#888'}22;color:${domainColors[d] || '#888'}">${d} (${n})</span>`
+    ).join(' ') + '<br><br><strong>Core nuggets:</strong><br>';
+  for (const item of c.coreItems) {
+    html += `<span class="domain-tag" style="background:${domainColors[item.domain] || '#888'}22;color:${domainColors[item.domain] || '#888'}">${item.domain}</span> ${item.title?.slice(0, 60)}<br>`;
+  }
+  document.getElementById('hover-items').innerHTML = html;
+}
+
+// Animation
+let time = 0;
+function draw() {
+  time += 0.01;
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw bridges first (behind nodes)
+  for (const b of uniqueBridges) {
+    const alpha = 0.06 + b.similarity * 0.08;
+    ctx.beginPath();
+    ctx.moveTo(b.x1, b.y1);
+    ctx.lineTo(b.x2, b.y2);
+    ctx.strokeStyle = `rgba(88,166,255,${alpha})`;
+    ctx.lineWidth = 0.5 + b.similarity * 1.5;
+    ctx.stroke();
+  }
+
+  // Highlight bridges for hovered node
+  if (hoveredNode) {
+    for (const b of uniqueBridges) {
+      const touchesHovered =
+        (Math.abs(b.x1 - hoveredNode.x) < 5 && Math.abs(b.y1 - hoveredNode.y) < 5) ||
+        (Math.abs(b.x2 - hoveredNode.x) < 5 && Math.abs(b.y2 - hoveredNode.y) < 5);
+      if (touchesHovered) {
+        ctx.beginPath();
+        ctx.moveTo(b.x1, b.y1);
+        ctx.lineTo(b.x2, b.y2);
+        ctx.strokeStyle = `rgba(188,140,255,0.5)`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Draw nodes
+  for (const node of nodes) {
+    const pulse = Math.sin(time * 1.5 + node.pulsePhase) * 0.08 + 1;
+    const r = node.r * pulse;
+    const isHovered = node === hoveredNode;
+
+    // Glow
+    const grad = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, r * 2);
+    grad.addColorStop(0, node.color + (isHovered ? '40' : '18'));
+    grad.addColorStop(1, node.color + '00');
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, r * 2, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Main circle
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = node.color + (isHovered ? '35' : '15');
+    ctx.strokeStyle = node.color + (isHovered ? 'cc' : '55');
+    ctx.lineWidth = isHovered ? 2.5 : 1;
+    ctx.fill();
+    ctx.stroke();
+
+    // Domain pie segments (multi-domain clusters)
+    if (node.sortedDomains.length > 1 && r > 20) {
+      let startAngle = -Math.PI / 2;
+      const total = Object.values(node.cluster.domains).reduce((s, n) => s + n, 0);
+      for (const [domain, count] of node.sortedDomains) {
+        const sweep = (count / total) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(node.x, node.y);
+        ctx.arc(node.x, node.y, r * 0.7, startAngle, startAngle + sweep);
+        ctx.closePath();
+        ctx.fillStyle = (domainColors[domain] || '#888') + '30';
+        ctx.fill();
+        startAngle += sweep;
+      }
+    }
+
+    // Size label
+    ctx.fillStyle = node.color + (isHovered ? 'ff' : '99');
+    ctx.font = `${isHovered ? 'bold ' : ''}${Math.max(10, r * 0.35)}px monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(node.cluster.size, node.x, node.y);
+
+    // Domain label for larger clusters
+    if (r > 25 || isHovered) {
+      ctx.fillStyle = var_dim;
+      ctx.font = `${Math.max(8, r * 0.2)}px monospace`;
+      const label = node.sortedDomains.slice(0, 2).map(([d]) => d).join('+');
+      ctx.fillText(label, node.x, node.y + r + 12);
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+const var_dim = '#6e7681';
+draw();
+</script>
+</body>
+</html>

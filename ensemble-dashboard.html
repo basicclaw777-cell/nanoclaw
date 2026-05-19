@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ensemble Gate — Epistemic Engine</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --dim: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --yellow: #d29922; --orange: #db6d28; --red: #f85149;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'SF Mono', 'Fira Code', monospace; background: var(--bg); color: var(--text); padding: 20px; }
+  h1 { font-size: 1.4em; margin-bottom: 4px; }
+  .subtitle { color: var(--dim); font-size: 0.85em; margin-bottom: 24px; }
+
+  .stats-bar {
+    display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; min-width: 140px; flex: 1;
+  }
+  .stat-label { color: var(--dim); font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-value { font-size: 1.8em; font-weight: bold; margin-top: 4px; }
+  .stat-value.green { color: var(--green); }
+  .stat-value.yellow { color: var(--yellow); }
+  .stat-value.orange { color: var(--orange); }
+  .stat-value.red { color: var(--red); }
+
+  .chart-container {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .chart-title { font-size: 0.9em; color: var(--dim); margin-bottom: 12px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 3px; height: 120px; }
+  .bar {
+    flex: 1; min-width: 8px; max-width: 24px; border-radius: 2px 2px 0 0;
+    position: relative; cursor: pointer; transition: opacity 0.2s;
+  }
+  .bar:hover { opacity: 0.8; }
+  .bar .tooltip {
+    display: none; position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    padding: 8px 10px; font-size: 0.7em; white-space: nowrap; z-index: 10;
+    color: var(--text);
+  }
+  .bar:hover .tooltip { display: block; }
+
+  .run-list { display: flex; flex-direction: column; gap: 8px; }
+  .run-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; cursor: pointer; transition: border-color 0.2s;
+  }
+  .run-card:hover { border-color: var(--accent); }
+  .run-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .run-signal { font-size: 0.8em; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+  .signal-CONSENSUS { background: rgba(63,185,80,0.15); color: var(--green); }
+  .signal-MILD_DIVERGENCE { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .signal-SIGNIFICANT_DIVERGENCE { background: rgba(219,109,40,0.15); color: var(--orange); }
+  .signal-HIGH_DIVERGENCE { background: rgba(248,81,73,0.15); color: var(--red); }
+  .run-claim { font-size: 0.85em; color: var(--dim); line-height: 1.4; }
+  .run-meta { font-size: 0.7em; color: var(--dim); margin-top: 6px; }
+
+  .score-grid {
+    display: grid; grid-template-columns: auto repeat(3, 1fr); gap: 4px 12px;
+    font-size: 0.8em; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+    display: none;
+  }
+  .run-card.expanded .score-grid { display: grid; }
+  .score-header { color: var(--accent); font-weight: bold; }
+  .score-dim { color: var(--dim); }
+  .score-val { text-align: center; }
+  .score-val.high { color: var(--green); }
+  .score-val.mid { color: var(--yellow); }
+  .score-val.low { color: var(--red); }
+
+  .empty-state { text-align: center; padding: 60px; color: var(--dim); }
+  .empty-state p { margin-top: 8px; font-size: 0.85em; }
+</style>
+</head>
+<body>
+<h1>Ensemble Gate</h1>
+<p class="subtitle">Epistemic Engine — Divergence Tracker</p>
+
+
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-label">Total Runs</div>
+    <div class="stat-value">18</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Avg Divergence</div>
+    <div class="stat-value yellow">3.5</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">High Divergence</div>
+    <div class="stat-value red">2</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Consensus</div>
+    <div class="stat-value green">3</div>
+  </div>
+</div>
+
+<div class="chart-container">
+  <div class="chart-title">Divergence History (most recent right)</div>
+  <div class="bar-chart">
+    <div class="bar" style="height:27.999999999999996%;background:var(--yellow)"><div class="tooltip">Cold exposure (ice baths) significantly boosts testosterone ...<br>Div: 2.8</div></div><div class="bar" style="height:22.000000000000004%;background:var(--yellow)"><div class="tooltip">The Ensemble Gate was built on 2026-05-20 and uses three mod...<br>Div: 2.2</div></div><div class="bar" style="height:41%;background:var(--orange)"><div class="tooltip">The Ensemble Gate core engine is located at ~/nanoclaw/ensem...<br>Div: 4.1</div></div><div class="bar" style="height:31%;background:var(--yellow)"><div class="tooltip">The first test run of the Ensemble Gate on a cold exposure a...<br>Div: 3.1</div></div><div class="bar" style="height:39%;background:var(--yellow)"><div class="tooltip">The Ensemble Gate uses three diverse models: qwen3:14b (Alib...<br>Div: 3.9</div></div><div class="bar" style="height:40%;background:var(--yellow)"><div class="tooltip">The Ensemble Gate auto-feeder runs via PM2 cron at 03:00 HKT...<br>Div: 4</div></div><div class="bar" style="height:40%;background:var(--yellow)"><div class="tooltip">The Ensemble Gate auto-feeder runs nightly at 03:00 HKT via ...<br>Div: 4</div></div><div class="bar" style="height:34%;background:var(--yellow)"><div class="tooltip">The first test run of the Ensemble Gate on a cold exposure a...<br>Div: 3.4</div></div><div class="bar" style="height:22.000000000000004%;background:var(--yellow)"><div class="tooltip">The first test run of the Ensemble Gate on a cold exposure a...<br>Div: 2.2</div></div><div class="bar" style="height:6.999999999999999%;background:var(--green)"><div class="tooltip">The gemma3:4b model is 3.3GB in size....<br>Div: 0.7</div></div><div class="bar" style="height:67%;background:var(--red)"><div class="tooltip">The vault document 'mandate-without-mechanism.md' was filed ...<br>Div: 6.7</div></div><div class="bar" style="height:69%;background:var(--red)"><div class="tooltip">The three models used in the Ensemble Gate are qwen3:14b (Al...<br>Div: 6.9</div></div><div class="bar" style="height:30%;background:var(--yellow)"><div class="tooltip">The Ensemble Gate auto-feeder runs nightly at 03:00 HKT via ...<br>Div: 3</div></div><div class="bar" style="height:18%;background:var(--green)"><div class="tooltip">The vault concentration is 40% technology....<br>Div: 1.8</div></div><div class="bar" style="height:46%;background:var(--orange)"><div class="tooltip">The cognitive bridge has not run in over a week....<br>Div: 4.6</div></div><div class="bar" style="height:23%;background:var(--yellow)"><div class="tooltip">13 surprises are unresolved....<br>Div: 2.3</div></div><div class="bar" style="height:20%;background:var(--green)"><div class="tooltip">Lymphatic shows 53% bloat....<br>Div: 2</div></div><div class="bar" style="height:52%;background:var(--orange)"><div class="tooltip">41 processes are stopped versus 34 online....<br>Div: 5.2</div></div>
+  </div>
+</div>
+
+<div class="run-list">
+  
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-SIGNIFICANT_DIVERGENCE">SIGNIFICANT DIVERGENCE (5.2)</span>
+        <span class="run-meta">20/5/2026 12:58:12 am</span>
+      </div>
+      <div class="run-claim">41 processes are stopped versus 34 online.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val mid">5</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">STRONG</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-CONSENSUS">CONSENSUS (2)</span>
+        <span class="run-meta">20/5/2026 12:55:21 am</span>
+      </div>
+      <div class="run-claim">Lymphatic shows 53% bloat.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val low">2</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">0</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">0</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (2.3)</span>
+        <span class="run-meta">20/5/2026 12:53:07 am</span>
+      </div>
+      <div class="run-claim">13 surprises are unresolved.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val mid">5</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">0</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-SIGNIFICANT_DIVERGENCE">SIGNIFICANT DIVERGENCE (4.6)</span>
+        <span class="run-meta">20/5/2026 12:50:36 am</span>
+      </div>
+      <div class="run-claim">The cognitive bridge has not run in over a week.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val mid">4</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">WEAK</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-CONSENSUS">CONSENSUS (1.8)</span>
+        <span class="run-meta">20/5/2026 12:48:16 am</span>
+      </div>
+      <div class="run-claim">The vault concentration is 40% technology.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val low">2</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">0</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (3)</span>
+        <span class="run-meta">20/5/2026 12:46:57 am</span>
+      </div>
+      <div class="run-claim">The Ensemble Gate auto-feeder runs nightly at 03:00 HKT via a PM2 cron job.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val mid">4</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val high">9</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">10</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">ERROR</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-HIGH_DIVERGENCE">HIGH DIVERGENCE (6.9)</span>
+        <span class="run-meta">20/5/2026 12:39:31 am</span>
+      </div>
+      <div class="run-claim">The three models used in the Ensemble Gate are qwen3:14b (Alibaba), gemma3:4b (Google), and phi4-mini (Microsoft).</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val high">8</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val mid">5</div><div class="score-val high">9</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">2</div><div class="score-val high">7</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">7</div><div class="score-val mid">6</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">2</div><div class="score-val high">8</div><div class="score-val high">10</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">MODERATE</div><div class="score-val" style="font-weight:bold">STRONG</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-HIGH_DIVERGENCE">HIGH DIVERGENCE (6.7)</span>
+        <span class="run-meta">20/5/2026 12:39:22 am</span>
+      </div>
+      <div class="run-claim">The vault document 'mandate-without-mechanism.md' was filed on 2026-05-20.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">1</div><div class="score-val high">10</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">3</div><div class="score-val high">9</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val low">2</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">7</div><div class="score-val high">8</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val low">3</div><div class="score-val ">?</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">WEAK</div><div class="score-val" style="font-weight:bold">CONTESTED</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-CONSENSUS">CONSENSUS (0.7)</span>
+        <span class="run-meta">20/5/2026 12:39:13 am</span>
+      </div>
+      <div class="run-claim">The gemma3:4b model is 3.3GB in size.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val high">10</div><div class="score-val high">9</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val high">10</div><div class="score-val high">10</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val high">8</div><div class="score-val high">10</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">10</div><div class="score-val high">7</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val high">10</div><div class="score-val high">10</div><div class="score-val high">9</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">STRONG</div><div class="score-val" style="font-weight:bold">STRONG</div><div class="score-val" style="font-weight:bold">STRONG</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (2.2)</span>
+        <span class="run-meta">20/5/2026 12:34:17 am</span>
+      </div>
+      <div class="run-claim">The first test run of the Ensemble Gate on a cold exposure and testosterone claim resulted in a MILD DIVERGENCE score of 2.8 out of 10.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val mid">6</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val mid">4</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (3.4)</span>
+        <span class="run-meta">20/5/2026 12:34:08 am</span>
+      </div>
+      <div class="run-claim">The first test run of the Ensemble Gate on a cold exposure and testosterone claim produced a divergence score of 2.8 out of 10.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val low">2</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val mid">4</div><div class="score-val high">7</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val low">1</div><div class="score-val low">2</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val mid">5</div><div class="score-val low">3</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val low">1</div><div class="score-val low">1</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">WEAK</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (4)</span>
+        <span class="run-meta">20/5/2026 12:34:01 am</span>
+      </div>
+      <div class="run-claim">The Ensemble Gate auto-feeder runs nightly at 03:00 HKT via a PM2 cron job.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val mid">5</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val high">9</div><div class="score-val ">?</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val high">8</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">10</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val high">7</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">STRONG</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (4)</span>
+        <span class="run-meta">20/5/2026 12:30:29 am</span>
+      </div>
+      <div class="run-claim">The Ensemble Gate auto-feeder runs via PM2 cron at 03:00 HKT.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val mid">6</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">7</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">CONTESTED</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (3.9)</span>
+        <span class="run-meta">20/5/2026 12:30:23 am</span>
+      </div>
+      <div class="run-claim">The Ensemble Gate uses three diverse models: qwen3:14b (Alibaba), gemma3:4b (Google), and phi4-mini (Microsoft).</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">3</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val high">7</div><div class="score-val ">?</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val high">8</div><div class="score-val ">?</div><div class="score-val high">8</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">9</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val mid">6</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">WEAK</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">CONTESTED</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (3.1)</span>
+        <span class="run-meta">20/5/2026 12:30:15 am</span>
+      </div>
+      <div class="run-claim">The first test run of the Ensemble Gate on a cold exposure and testosterone claim produced a divergence score of 2.8 out of 10.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val low">2</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val low">3</div><div class="score-val high">7</div><div class="score-val mid">5</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val low">1</div><div class="score-val low">2</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val mid">6</div><div class="score-val low">3</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val low">1</div><div class="score-val low">1</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">WEAK</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-SIGNIFICANT_DIVERGENCE">SIGNIFICANT DIVERGENCE (4.1)</span>
+        <span class="run-meta">20/5/2026 12:26:34 am</span>
+      </div>
+      <div class="run-claim">The Ensemble Gate core engine is located at ~/nanoclaw/ensemble-gate.js.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">2</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val high">8</div><div class="score-val ">?</div><div class="score-val high">9</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">9</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val ">?</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">WEAK</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (2.2)</span>
+        <span class="run-meta">20/5/2026 12:26:25 am</span>
+      </div>
+      <div class="run-claim">The Ensemble Gate was built on 2026-05-20 and uses three models: qwen3:14b, gemma3:4b, and phi4-mini.</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val mid">6</div><div class="score-val ">?</div><div class="score-val low">2</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">0</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val mid">5</div><div class="score-val ">?</div><div class="score-val high">10</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val low">1</div><div class="score-val ">?</div><div class="score-val low">1</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">INSUFFICIENT</div><div class="score-val" style="font-weight:bold">UNKNOWN</div><div class="score-val" style="font-weight:bold">INSUFFICIENT</div>
+      </div>
+    </div>
+    <div class="run-card" onclick="this.classList.toggle('expanded')">
+      <div class="run-header">
+        <span class="run-signal signal-MILD_DIVERGENCE">MILD DIVERGENCE (2.8)</span>
+        <span class="run-meta">20/5/2026 12:02:47 am</span>
+      </div>
+      <div class="run-claim">Cold exposure (ice baths) significantly boosts testosterone levels in men</div>
+      <div class="score-grid">
+        <div class="score-header"></div>
+        <div class="score-header">qwen3</div><div class="score-header">gemma3</div><div class="score-header">phi4-mini</div>
+        
+          <div class="score-dim">EMPIRICAL</div>
+          <div class="score-val mid">6</div><div class="score-val mid">6</div><div class="score-val low">3</div>
+        
+          <div class="score-dim">LOGICAL</div>
+          <div class="score-val high">7</div><div class="score-val high">7</div><div class="score-val high">7</div>
+        
+          <div class="score-dim">SOURCE</div>
+          <div class="score-val high">7</div><div class="score-val mid">5</div><div class="score-val mid">4</div>
+        
+          <div class="score-dim">FALSIFIABLE</div>
+          <div class="score-val high">9</div><div class="score-val high">7</div><div class="score-val high">8</div>
+        
+          <div class="score-dim">CONSENSUS</div>
+          <div class="score-val mid">5</div><div class="score-val mid">4</div><div class="score-val low">3</div>
+        
+        <div class="score-dim" style="font-weight:bold">VERDICT</div>
+        <div class="score-val" style="font-weight:bold">CONTESTED</div><div class="score-val" style="font-weight:bold">MODERATE</div><div class="score-val" style="font-weight:bold">CONTESTED</div>
+      </div>
+    </div>
+</div>
+
+
+<script>
+function escapeHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+</body>
+</html>
