@@ -1473,3 +1473,16 @@ the-timekeeper to go offline. Don't repeat it.
 - Home Training App: scan room → mini twin → virtual cones → Logan demonstrates → phone camera = Gym Eyes lite
 - 10-Block spatial integration: each block maps to equipment, gate criteria overlaid, cone placement auto-generated
 - Competitive position: first navigable 3D digital twin of any boxing gym in Hong Kong
+
+## Fear Framework Expansion — P10 (filed 2026-05-19)
+- P10: The Builder's Betrayal Gate — Paul's own healing registry entry
+- Path: ~/cathedral-vault/02_Refined_Gold/cathedral/p10-the-builders-betrayal-gate.md
+- Fear: undeserving person takes rewards from builder's work. Two threads: practical (solvable) + existential (gate)
+- Connected to Pretta origin, OmissionOS framework, Fear Gate Model
+
+## Diagnostic Empathy with Surgical Naming — Core Skill (articulated 2026-05-19)
+- Path: ~/cathedral-vault/02_Refined_Gold/cathedral/diagnostic-empathy-with-surgical-naming.md
+- Paul's core coaching skill: 6 components, Grade A, two live cases documented
+- Trojan Horse Principle: skill works because people came for boxing. Marketing it directly kills it.
+- Connected to Fear Gate Model, Healing Registry, Paul Kernel, 4-to-8 Question
+- Standing: this is transferable IP — repeatable, structured, measurable outcomes
