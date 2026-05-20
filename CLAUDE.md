@@ -1535,3 +1535,11 @@ the-timekeeper to go offline. Don't repeat it.
 - Vault output: ~/cathedral-vault/00_Staging/archaeologist/
 - Telegram: /archaeologist
 - 38 discoveries first full run (gemma3:4b). Some duplicates — smaller model less precise.
+- Dashboard: localhost:8080/archaeologist (archaeologist-explorer.html, FTS5 search, domain pills, split-panel)
+- API: /api/archaeologist (full list, ?q=search, ?domain=filter), /api/archaeologist/inspire (?count=N, ?domain=X — random discoveries)
+- Agent inspiration: agent-engine.js injects 3 random forgotten techniques (with cathedral applications) into every agent's system prompt
+- Lobby doors: Mind Map (/mind-map.html), Mega Surgery (/mega-surgery-viz.html), The Forgotten Shelf (/archaeologist) — all with back-to-lobby buttons
+- Lobby now has 25 rooms
+- $20 DeepSeek accident produced 5,080 unique techniques (97.9% unique rate) — more than months of controlled scanning would have
+- Domain cleanup: 3,195 messy domain names normalized to 8 canonical via SQL. 111 dupes removed. FTS5 index built.
+- cathy-swarm-watcher.js: immune system plumbing, watches outcome tuples, flags large bandit shifts to Telegram. Loaded via dm-processor.js ESM dynamic import.
