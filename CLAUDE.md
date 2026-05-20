@@ -953,6 +953,12 @@ He will decide when he's done.
 - Vault doc: ~/cathedral-vault/08_Project_Orchestrator/projects/br-gym-eyes.md
 - Cathedral Sense #9
 - 100 Punches Challenge: gym-challenge.js, /challenge join, /streak, /leaderboard. Auto-wired into homework video handler. State: ~/basic-reflex/gym-eyes/challenge.json
+- Forgotten Shelf techniques (built 2026-05-21): 4 standalone modules at ~/basic-reflex/gym-eyes/
+  - chamfer_matcher.py — Chamfer Distance punch type matching (Borgefors 1988). Arm silhouette vs geometric templates. No training needed.
+  - elm_classifier.py — Extreme Learning Machine (Huang 2006). Stance/guard/fatigue classification. Trains in ms. 30 MediaPipe features + heuristic fallbacks.
+  - fscl_codebook.py — Frequency-Sensitive Competitive Learning (Ahalt 1990). Visual concept codebook with conscience mechanism. Catches rare patterns.
+  - hausdorff_form.py — Hausdorff Distance form scorer (Huttenlocher 1993). Pose vs ideal template. Per-joint deviation + coaching hints.
+  - NOT YET WIRED into detector.py pipeline — standalone modules ready for integration
 
 ## Tier 1 Expansion — Built 2026-05-04
 - combo-logger.js — SQLite logging for all validations. combo_log table in metrics.db.
