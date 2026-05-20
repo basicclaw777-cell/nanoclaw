@@ -28,6 +28,9 @@ import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlan
 import djCurator from './dj-curator.js';
 import soundStudio from './sound-studio/engine.js';
 import gymEyes from './gym-eyes.js';
+import gymEyesV2 from './gym-eyes-v2.js';
+import gymDigest from './gym-digest.js';
+import gymChallenge from './gym-challenge.js';
 process.env.INTAKE_IMPORT_ONLY = '1';
 import { formatIntakeStatusTelegram, handleIntakeCallback } from './intake-watcher.js';
 import faceRegistry from './face-registry.js';
@@ -42,6 +45,12 @@ import { registerCommsCommands } from './comms-engine/comms-commands.js';
 import { registerGrowthCommands } from './growth-agent/growth-commands.js';
 import { registerMerchCommands } from './merch-agent/merch-commands.js';
 import { registerCourseCommands } from './course-engine/course-commands.js';
+import { registerPulseCommands } from './architect-pulse/pulse-commands.js';
+import { registerEnsembleCommands } from './ensemble-gate.js';
+import { registerGraphCommands } from './knowledge-graph.js';
+import { registerCausalCommands } from './causal-net.js';
+import { registerActiveCommands } from './active-learning.js';
+import { registerArchaeologistCommands } from './archaeologist-commands.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -188,6 +197,12 @@ registerCommsCommands(bot);
 registerGrowthCommands(bot);
 registerMerchCommands(bot);
 registerCourseCommands(bot);
+registerPulseCommands(bot);
+registerEnsembleCommands(bot);
+registerGraphCommands(bot);
+registerCausalCommands(bot);
+registerActiveCommands(bot);
+registerArchaeologistCommands(bot);
 
 // ── Telegram health state (written to cath-state.json) ──────────────────────
 const telegramHealth = {
@@ -539,6 +554,9 @@ DAILY USE
 /sky — what's in the sky right now
 /signal — today's convergence signal
 /glass — 90-day forward scan
+/geomag — geomagnetic storm prediction (4 strategies)
+/spaceweather — raw space weather data
+/backtest [year] — strategy backtest leaderboard
 /physician — Cathedral health check
 /think [msg] — Cathy routes to best tool
 
@@ -1362,6 +1380,118 @@ bot.onText(/^\/pipelines(?:@\w+)?\s+(\w+)$/, async (msg, match) => {
   } catch (err) {
     console.error('Pipeline comparison error:', err);
     await safeSend(chatId, `Pipeline compare failed: ${err.message}`);
+  }
+});
+
+// /geomag — Space weather + geomagnetic prediction briefing
+bot.onText(/^\/geomag(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    await safeSend(chatId, 'Running geomagnetic prediction engine...');
+    const { fetchAllSpaceWeather } = await import('./geomag/space-weather-fetcher.js');
+    const { predictDst: wsaEnlil } = await import('./geomag/strategies/wsa-enlil.js');
+    const { predictDst: electricUniverse } = await import('./geomag/strategies/electric-universe.js');
+    const { predictDst: resonantCavity } = await import('./geomag/strategies/resonant-cavity.js');
+    const { predictDst: planetaryTidal } = await import('./geomag/strategies/planetary-tidal.js');
+
+    const sw = await fetchAllSpaceWeather();
+    if (!sw || !sw.dst) { await safeSend(chatId, 'Space weather data unavailable'); return; }
+
+    const strategies = [
+      { name: 'WSA-Enlil', fn: wsaEnlil },
+      { name: 'Electric Universe', fn: electricUniverse },
+      { name: 'Resonant Cavity', fn: resonantCavity },
+      { name: 'Planetary-Tidal', fn: planetaryTidal },
+    ];
+
+    let text = `*GEOMAGNETIC PREDICTION*\n\n`;
+    text += `Activity: ${sw.activity.level} (${sw.activity.score.toFixed(1)}/10)\n`;
+    if (sw.activity.factors.length) text += `Drivers: ${sw.activity.factors.join(', ')}\n`;
+    text += `Dst: ${sw.dst.latest.dst}nT (${sw.dst.stormLevel})\n`;
+    if (sw.kp) text += `Kp: ${sw.kp.latest.kp.toFixed(1)} (${sw.kp.stormLevel})\n`;
+    if (sw.mag) text += `Bz: ${sw.mag.latest.bz.toFixed(1)}nT\n`;
+    if (sw.plasma) text += `Solar wind: ${sw.plasma.latest.speed.toFixed(0)}km/s\n`;
+    if (sw.xray) text += `X-ray: ${sw.xray.latest.class}\n`;
+
+    text += `\n*Predictions (Dst @ +6h / +12h / +24h):*\n`;
+    for (const { name, fn } of strategies) {
+      try {
+        const p = fn(sw);
+        if (p) {
+          const emoji = p.predictions.h6 < sw.dst.latest.dst - 10 ? '🔴' :
+                        p.predictions.h6 > sw.dst.latest.dst + 5 ? '🟢' : '🟡';
+          text += `${emoji} ${name}: ${p.predictions.h6} / ${p.predictions.h12} / ${p.predictions.h24} nT (${(p.confidence*100).toFixed(0)}%)\n`;
+        }
+      } catch (e) { text += `❌ ${name}: error\n`; }
+    }
+
+    await safeSend(chatId, text);
+  } catch (err) {
+    console.error('Geomag error:', err);
+    await safeSend(chatId, `Geomag failed: ${err.message}`);
+  }
+});
+
+// /spaceweather — Raw space weather data
+bot.onText(/^\/spaceweather(?:@\w+)?$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { fetchAllSpaceWeather } = await import('./geomag/space-weather-fetcher.js');
+    const sw = await fetchAllSpaceWeather();
+    if (!sw) { await safeSend(chatId, 'Fetch failed'); return; }
+
+    let text = `*SPACE WEATHER*\n\n`;
+    text += `Activity: ${sw.activity.level} (${sw.activity.score.toFixed(1)}/10)\n\n`;
+
+    if (sw.dst) text += `*Dst:* ${sw.dst.latest.dst}nT (${sw.dst.stormLevel})\n  24h min: ${sw.dst.stats.min24h}nT | trend: ${sw.dst.stats.trend > 0 ? '+' : ''}${sw.dst.stats.trend.toFixed(1)}nT/6h\n\n`;
+    if (sw.kp) text += `*Kp:* ${sw.kp.latest.kp.toFixed(1)} (${sw.kp.stormLevel})\n  24h max: ${sw.kp.stats.max24h.toFixed(1)} | trend: ${sw.kp.stats.trend > 0 ? '+' : ''}${sw.kp.stats.trend.toFixed(2)}\n\n`;
+    if (sw.mag) text += `*IMF Bz:* ${sw.mag.latest.bz.toFixed(1)}nT | Bt: ${sw.mag.latest.bt.toFixed(1)}nT\n  2h range: ${sw.mag.stats.bz.min.toFixed(1)} to ${sw.mag.stats.bz.max.toFixed(1)}nT\n  Southward minutes: ~${sw.mag.southwardMinutes.toFixed(0)}min\n\n`;
+    if (sw.plasma) text += `*Solar Wind:* ${sw.plasma.latest.speed.toFixed(0)}km/s | density: ${sw.plasma.latest.density.toFixed(1)}/cm³\n  Speed range: ${sw.plasma.stats.speed.min.toFixed(0)}-${sw.plasma.stats.speed.max.toFixed(0)}km/s\n\n`;
+    if (sw.xray) text += `*X-ray:* ${sw.xray.latest.class} (6h peak: ${sw.xray.peak6h.class})\n`;
+
+    await safeSend(chatId, text);
+  } catch (err) {
+    await safeSend(chatId, `Space weather failed: ${err.message}`);
+  }
+});
+
+// /backtest — Geomag strategy backtest leaderboard
+bot.onText(/^\/backtest(?:@\w+)?(?:\s+(\d{4}))?$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const year = match[1] || '2024';
+    const fs = await import('fs');
+    const resultsPath = `${__dirname}/geomag/backtest-results/backtest-${year}.json`;
+    if (!fs.default.existsSync(resultsPath)) {
+      await safeSend(chatId, `No backtest results for ${year}. Run: node geomag/backtester.js ${year}`);
+      return;
+    }
+    const data = JSON.parse(fs.default.readFileSync(resultsPath, 'utf8'));
+
+    let text = `*GEOMAG BACKTEST — ${year}*\n`;
+    text += `${data.totalStorms} storms (Dst < ${data.threshold}nT)\n`;
+    text += `Solar wind: ${data.hasSolarWind ? 'OMNI2 measured' : 'Reconstructed'}\n\n`;
+
+    text += `*LEADERBOARD (@+6h)*\n`;
+    const medals = ['🥇', '🥈', '🥉', '4️⃣'];
+    for (let i = 0; i < data.leaderboard.length; i++) {
+      const e = data.leaderboard[i];
+      const m = e.metrics.h6 || {};
+      text += `${medals[i]} *${e.name}*\n`;
+      text += `  MAE: ${m.meanAbsError?.toFixed(1) || '—'}nT | Dir: ${m.directionAccuracy || '—'}%\n`;
+      text += `  Bias: ${m.meanError > 0 ? '+' : ''}${m.meanError?.toFixed(1) || '—'}nT\n\n`;
+    }
+
+    text += `*DIRECTION ACCURACY (@+24h)*\n`;
+    for (const e of data.leaderboard) {
+      const m24 = e.metrics.h24 || {};
+      text += `  ${e.name}: ${m24.directionAccuracy || '—'}%\n`;
+    }
+
+    text += `\n📊 Dashboard: localhost:8080/geomag/backtest-dashboard`;
+    await safeSend(chatId, text);
+  } catch (err) {
+    await safeSend(chatId, `Backtest failed: ${err.message}`);
   }
 });
 
@@ -4792,20 +4922,20 @@ bot.onText(/^\/intake(?:@\w+)?\s*$/, async (msg) => {
   safeSend(msg.chat.id, formatIntakeStatusTelegram(), { parse_mode: 'Markdown' });
 });
 
-// ── Gym Eyes commands ────────────────────────────────────────────────────────
+// ── Gym Eyes v2 commands (MediaPipe + Student Profiles + Drill Engine) ───────
 
 bot.onText(/^\/eyes(?:@\w+)?\s*$/, async (msg) => {
-  safeSend(msg.chat.id, gymEyes.formatStatusTelegram(), { parse_mode: 'Markdown' });
+  safeSend(msg.chat.id, gymEyesV2.formatStatusTelegram(), { parse_mode: 'Markdown' });
 });
 
 bot.onText(/^\/eyes(?:@\w+)?\s+last\s*$/i, async (msg) => {
   const chatId = msg.chat.id;
-  const analyses = gymEyes.listAnalyses(1);
+  const analyses = gymEyesV2.listAnalyses(1);
   if (analyses.length === 0) return safeSend(chatId, '👁 No analyses yet.');
 
   try {
-    const data = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'gym-eyes', 'output', analyses[0].name), 'utf8'));
-    safeSend(chatId, gymEyes.formatAnalysisTelegram(data), { parse_mode: 'Markdown' });
+    const data = JSON.parse(fs.readFileSync(analyses[0].path, 'utf8'));
+    safeSend(chatId, gymEyesV2.formatSessionTelegram(data), { parse_mode: 'Markdown' });
   } catch (err) {
     safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
   }
@@ -4820,25 +4950,297 @@ bot.onText(/^\/eyes(?:@\w+)?\s+analyze\s*$/i, async (msg) => {
   }
 
   const fileId = reply.video?.file_id || reply.document?.file_id;
-  if (!fileId) {
-    return safeSend(chatId, '❌ Reply must be a video or document file.');
-  }
+  if (!fileId) return safeSend(chatId, '❌ Reply must be a video or document file.');
 
-  await safeSend(chatId, '👁 Gym Eyes: downloading video + running YOLO pose analysis...\nThis may take 1-5 min depending on video length.');
+  await safeSend(chatId, '👁 Gym Eyes v2: downloading video + running MediaPipe analysis...\nThis may take 1-5 min.');
 
   try {
     const fileLink = await bot.getFileLink(fileId);
     const tmpPath = `/tmp/gym-eyes-${Date.now()}.mp4`;
-    execSync(`curl -sL "${fileLink}" -o "${tmpPath}"`, { timeout: 120000 });
+    execFileSync('curl', ['-sL', fileLink, '-o', tmpPath], { timeout: 120000 });
 
-    const analysis = await gymEyes.analyzeVideoAsync(tmpPath, 'telegram');
-    await safeSend(chatId, gymEyes.formatAnalysisTelegram(analysis), { parse_mode: 'Markdown' });
+    const sessionPath = await gymEyesV2.runDetector(tmpPath);
+    const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
+    await safeSend(chatId, gymEyesV2.formatSessionTelegram(sessionData), { parse_mode: 'Markdown' });
 
-    // Clean up
     try { fs.unlinkSync(tmpPath); } catch {}
   } catch (err) {
     safeSend(chatId, `❌ Gym Eyes error: ${err.message.slice(0, 300)}`);
   }
+});
+
+// /eyes student [name] — view student profile
+bot.onText(/^\/eyes(?:@\w+)?\s+student\s+(.+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const name = match[1].trim();
+  const profile = gymEyesV2.loadStudent(name);
+
+  if (!profile) return safeSend(chatId, `❌ Student "${name}" not found. Students auto-create when they send their first video.`);
+
+  let msg2 = `👁 *Student: ${profile.name}*\n`;
+  msg2 += `Level: ${profile.level} · Stance: ${profile.stance}\n\n`;
+  msg2 += gymEyesV2.formatStudentProgressTelegram(profile);
+  msg2 += gymEyesV2.formatDrillsTelegram(profile);
+
+  safeSend(chatId, msg2, { parse_mode: 'Markdown' });
+});
+
+// /analyze [fighter1] vs [fighter2] — Fight Lab (reply to video)
+bot.onText(/^\/analyze(?:@\w+)?\s+(.+?)\s+vs\s+(.+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const fighter1 = match[1].trim();
+  const fighter2 = match[2].trim();
+  const reply = msg.reply_to_message;
+
+  if (!reply) {
+    return safeSend(chatId, '💡 Reply to a video with `/analyze [fighter1] vs [fighter2]`', { parse_mode: 'Markdown' });
+  }
+
+  const fileId = reply.video?.file_id || reply.document?.file_id;
+  if (!fileId) return safeSend(chatId, '❌ Reply must be a video file.');
+
+  await safeSend(chatId, `👁 Fight Lab: analyzing ${fighter1} vs ${fighter2}...\nThis may take several minutes.`);
+
+  try {
+    const fileLink = await bot.getFileLink(fileId);
+    const tmpPath = `/tmp/fight-lab-${Date.now()}.mp4`;
+    execFileSync('curl', ['-sL', fileLink, '-o', tmpPath], { timeout: 120000 });
+
+    const sessionPath = await gymEyesV2.runFightLab(tmpPath, fighter1, fighter2);
+    const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
+
+    let report = `👁 *Fight Lab: ${fighter1} vs ${fighter2}*\n\n`;
+    report += gymEyesV2.formatSessionTelegram(sessionData);
+    await safeSend(chatId, report, { parse_mode: 'Markdown' });
+
+    try { fs.unlinkSync(tmpPath); } catch {}
+  } catch (err) {
+    safeSend(chatId, `❌ Fight Lab error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// ── Student Homework Loop — Video + Caption Auto-Process ────────────────────
+// Student sends video with caption "Sarah round 1 bag work"
+// Bot: downloads → detects → matches student → imports → reports back
+
+bot.on('video', async (msg) => {
+  const caption = msg.caption;
+  if (!caption) return; // no caption = not a homework submission
+
+  const parsed = gymEyesV2.parseCaption(caption);
+  if (!parsed || !parsed.name) return; // can't parse = not homework
+
+  const chatId = msg.chat.id;
+  const fileId = msg.video.file_id;
+
+  await safeSend(chatId, `👁 Processing ${parsed.name}'s ${parsed.type}${parsed.round ? ` (round ${parsed.round})` : ''}...`);
+
+  try {
+    // Download video
+    const fileLink = await bot.getFileLink(fileId);
+    const tmpPath = `/tmp/gym-eyes-hw-${Date.now()}.mp4`;
+    execFileSync('curl', ['-sL', fileLink, '-o', tmpPath], { timeout: 120000 });
+
+    // Run detector
+    const sessionPath = await gymEyesV2.runDetector(tmpPath);
+    const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
+
+    // Auto-create student if needed
+    if (!gymEyesV2.studentExists(parsed.name)) {
+      await gymEyesV2.createStudent(parsed.name);
+    }
+
+    // Import session to student profile
+    await gymEyesV2.importSession(parsed.name, sessionPath);
+
+    // Load updated profile
+    const profile = gymEyesV2.loadStudent(parsed.name);
+
+    // Auto-assign drills from flags
+    try { await gymEyesV2.autoAssignDrills(parsed.name); } catch {}
+
+    // Challenge tracking — add punches if participant
+    let challengeResult = null;
+    if (gymChallenge.isParticipant(parsed.name)) {
+      const totalPunches = (sessionData.fighters || []).reduce((sum, f) => sum + (f.total || 0), 0);
+      if (totalPunches > 0) challengeResult = gymChallenge.addPunches(parsed.name, totalPunches);
+    }
+
+    // Build full report
+    let report = `👁 *${parsed.name} — ${parsed.type}*${parsed.round ? ` (Round ${parsed.round})` : ''}\n\n`;
+    report += gymEyesV2.formatSessionTelegram(sessionData, parsed.name);
+    report += gymEyesV2.formatStudentProgressTelegram(profile);
+    report += gymEyesV2.formatDrillsTelegram(profile);
+
+    await safeSend(chatId, report, { parse_mode: 'Markdown' });
+
+    // Challenge celebration — separate message for impact
+    if (challengeResult?.justCompleted) {
+      await safeSend(chatId, gymChallenge.celebrationMessage(challengeResult), { parse_mode: 'Markdown' });
+    } else if (challengeResult) {
+      await safeSend(chatId, `🥊 Challenge: ${challengeResult.todayPunches}/${challengeResult.target} today (${challengeResult.remaining} to go)`, { parse_mode: 'Markdown' });
+    }
+
+    try { fs.unlinkSync(tmpPath); } catch {}
+  } catch (err) {
+    safeSend(chatId, `❌ Gym Eyes error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// /students — list all students
+bot.onText(/^\/students(?:@\w+)?\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, gymEyesV2.formatStudentListTelegram(), { parse_mode: 'Markdown' });
+});
+
+// /drill [name] — view student's active drills
+bot.onText(/^\/drill(?:@\w+)?\s+(\S+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const name = match[1].trim();
+  const profile = gymEyesV2.loadStudent(name);
+  if (!profile) return safeSend(chatId, `❌ Student "${name}" not found.`);
+
+  const drills = gymEyesV2.formatDrillsTelegram(profile);
+  if (!drills) return safeSend(chatId, `👁 ${name} has no active drills. Run \`/drill assign ${name}\` to auto-assign.`, { parse_mode: 'Markdown' });
+
+  safeSend(chatId, `👁 *${profile.name} — Drills*\n${drills}`, { parse_mode: 'Markdown' });
+});
+
+// /drill assign [name] — auto-assign drills from gaps
+bot.onText(/^\/drill(?:@\w+)?\s+assign\s+(\S+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const name = match[1].trim();
+  if (!gymEyesV2.studentExists(name)) return safeSend(chatId, `❌ Student "${name}" not found.`);
+
+  try {
+    const output = await gymEyesV2.autoAssignDrills(name);
+    safeSend(chatId, `👁 Drills assigned for ${name}:\n\`\`\`\n${output.slice(0, 800)}\n\`\`\``, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+// /drill score [name] [drill-id] [score] — score a drill session
+bot.onText(/^\/drill(?:@\w+)?\s+score\s+(\S+)\s+(\S+)\s+(\d+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const name = match[1].trim();
+  const drillId = match[2].trim();
+  const score = parseInt(match[3]);
+
+  if (score < 1 || score > 10) return safeSend(chatId, '❌ Score must be 1-10.');
+  if (!gymEyesV2.studentExists(name)) return safeSend(chatId, `❌ Student "${name}" not found.`);
+
+  try {
+    const output = await gymEyesV2.scoreDrill(name, drillId, score);
+    safeSend(chatId, `👁 ${name} scored ${score}/10 on ${drillId.replace(/-/g, ' ')}.\n\`\`\`\n${output.slice(0, 400)}\n\`\`\``, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+// /note [name] [text] — add coach note to student profile
+bot.onText(/^\/note(?:@\w+)?\s+(\S+)\s+(.+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const name = match[1].trim();
+  const noteText = match[2].trim();
+
+  if (!gymEyesV2.studentExists(name)) return safeSend(chatId, `❌ Student "${name}" not found.`);
+
+  try {
+    await gymEyesV2.addCoachNote(name, noteText);
+    safeSend(chatId, `👁 Note added for ${name}: "${noteText}"`);
+  } catch (err) {
+    safeSend(chatId, `❌ ${err.message.slice(0, 200)}`);
+  }
+});
+
+// /cityplan — Cathedral City Planner ecosystem audit
+bot.onText(/^\/cityplan(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  safeSend(chatId, 'Running City Planner audit...');
+  try {
+    const { execFileSync } = require('child_process');
+    const result = execFileSync('node', [path.join(process.env.HOME, 'Cathedral', 'city-planner.js')], {
+      encoding: 'utf8', timeout: 30000,
+      env: { ...process.env },
+    });
+    const report = JSON.parse(result);
+    const lines = ['*CATHEDRAL CITY PLANNER*\n'];
+    const h = report.cityHealth;
+    lines.push(`City Health: ${h.overallGrade} (${h.overallScore}/100)`);
+    lines.push(`Best: ${h.strongestDistrict.name} (${h.strongestDistrict.grade})`);
+    lines.push(`Weakest: ${h.weakestDistrict.name} (${h.weakestDistrict.grade})\n`);
+    lines.push(`Infra: ${report.infrastructure.online}/${report.infrastructure.totalProcesses} online\n`);
+    lines.push('*District Report Card:*');
+    const sorted = Object.values(report.districts).sort((a, b) => b.score - a.score);
+    for (const d of sorted) {
+      lines.push(`  ${d.grade} | ${d.name} (${d.score})`);
+      for (const issue of d.issues.slice(0, 2)) {
+        lines.push(`    - ${issue}`);
+      }
+    }
+    if (report.missingModules.length) {
+      lines.push('\n*Missing Modules:*');
+      for (const m of report.missingModules) {
+        lines.push(`  #${m.number} ${m.module}: ${m.impact.slice(0, 80)}`);
+      }
+    }
+    safeSend(chatId, lines.join('\n'), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `City Planner error: ${err.message}`);
+  }
+});
+
+// /gymdigest — weekly gym digest on demand
+bot.onText(/^\/gymdigest(?:@\w+)?\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, gymDigest.generateDigest(), { parse_mode: 'Markdown' });
+});
+
+// ── 100 Punches a Day Challenge ─────────────────────────────────────────────
+
+// /challenge join [name] [target] — join the challenge
+bot.onText(/^\/challenge(?:@\w+)?\s+join\s+(\S+)(?:\s+(\d+))?\s*$/i, async (msg, match) => {
+  const name = match[1].trim();
+  const target = match[2] ? parseInt(match[2]) : 100;
+  const result = gymChallenge.joinChallenge(name, target);
+  safeSend(msg.chat.id, `🥊 ${result.message}\n\nSend a video with caption "${name} bag work" to start counting.`, { parse_mode: 'Markdown' });
+});
+
+// /challenge [name] or /streak [name] — check progress
+bot.onText(/^\/(?:challenge|streak)(?:@\w+)?\s+(\S+)\s*$/i, async (msg, match) => {
+  const name = match[1].trim();
+  safeSend(msg.chat.id, gymChallenge.formatStreakTelegram(name), { parse_mode: 'Markdown' });
+});
+
+// /leaderboard — challenge leaderboard
+bot.onText(/^\/leaderboard(?:@\w+)?\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, gymChallenge.formatLeaderboardTelegram(), { parse_mode: 'Markdown' });
+});
+
+// /challenge leave [name] — leave the challenge
+bot.onText(/^\/challenge(?:@\w+)?\s+leave\s+(\S+)\s*$/i, async (msg, match) => {
+  const name = match[1].trim();
+  const left = gymChallenge.leaveChallenge(name);
+  safeSend(msg.chat.id, left ? `${name} left the challenge.` : `${name} not in challenge.`);
+});
+
+// /challenge — show help
+bot.onText(/^\/challenge(?:@\w+)?\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, `🥊 *100 Punches a Day Challenge*
+
+\`/challenge join [name]\` — join (default 100)
+\`/challenge join [name] [number]\` — custom target
+\`/challenge [name]\` — check progress
+\`/streak [name]\` — same as above
+\`/leaderboard\` — rankings
+\`/challenge leave [name]\` — quit
+
+*How it works:*
+Send a video with caption (e.g. "Sarah bag work")
+Bot counts punches + adds to daily total
+Hit target → celebration 🔔
+Streak tracked daily (HKT midnight reset)
+
+_Basic Reflex. Every punch counts._`, { parse_mode: 'Markdown' });
 });
 
 // ── Content Conductor commands ───────────────────────────────────────────────
@@ -5413,6 +5815,87 @@ bot.onText(/^\/uptake(?:@\w+)?\s*$/i, async (msg) => {
   }
 });
 
+// ── Cathedral Feed — Paul posts + browse ─────────────────────────────────────
+
+bot.onText(/^\/feed(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const feedPath = path.join(process.env.HOME, 'Cathedral', 'agents', 'cathedral-feed.json');
+    const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8'));
+    const recent = (feed.posts || []).slice(-8).reverse();
+    if (!recent.length) { await safeSend(chatId, 'Feed is empty.'); return; }
+
+    const lines = ['*Cathedral Feed* (latest 8)\n'];
+    for (const p of recent) {
+      const icon = { research: '🔍', synthesis: '📊', tea: '☕', 'tea-thread': '☕💬', accountability: '📋', 'tea-harvest': '🌾', 'comprehension-check': '❓', 'comprehension-response': '✏️', 'comprehension-grades': '✅', architect: '🏗️' }[p.type] || '📝';
+      const ago = Math.floor((Date.now() - new Date(p.ts).getTime()) / 60000);
+      const timeStr = ago < 60 ? `${ago}m` : ago < 1440 ? `${Math.floor(ago/60)}h` : `${Math.floor(ago/1440)}d`;
+      lines.push(`${icon} *${p.authorName || p.author}* (${timeStr})`);
+      lines.push(`_${(p.topic || '').slice(0, 60)}_`);
+      lines.push(`${(p.content || '').slice(0, 120)}\n`);
+    }
+    await safeSend(chatId, lines.join('\n'), { parse_mode: 'Markdown' });
+  } catch (err) {
+    await safeSend(chatId, `Error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/feed\s+(.+)/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const content = match[1].trim();
+  try {
+    const feedPath = path.join(process.env.HOME, 'Cathedral', 'agents', 'cathedral-feed.json');
+    let feed;
+    try { feed = JSON.parse(fs.readFileSync(feedPath, 'utf8')); }
+    catch { feed = { posts: [] }; }
+
+    feed.posts.push({
+      id: Date.now() + '-paul',
+      author: 'paul',
+      authorName: 'The Architect',
+      type: 'architect',
+      topic: content.slice(0, 80),
+      content: content,
+      ts: new Date().toISOString(),
+      reactions: [],
+      replies: []
+    });
+
+    if (feed.posts.length > 200) feed.posts = feed.posts.slice(-200);
+    fs.writeFileSync(feedPath, JSON.stringify(feed, null, 2));
+    await safeSend(chatId, `🏗️ Posted to Cathedral Feed:\n"${content.slice(0, 200)}"`);
+  } catch (err) {
+    await safeSend(chatId, `Error: ${err.message}`);
+  }
+});
+
+// ── Higgsfield tester commands ────────────────────────────────────────────────
+
+bot.onText(/^\/hftest(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  await safeSend(chatId, '🔬 Reed Lab: Starting Higgsfield model tests...');
+  try {
+    const { runTests } = await import('./reed-higgsfield-tester.js');
+    await runTests();
+  } catch (err) {
+    safeSend(chatId, `❌ HF Tester error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/hfstatus(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const { formatStatus } = await import('./reed-higgsfield-tester.js');
+    await safeSend(chatId, formatStatus(), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `❌ HF Status error: ${err.message.slice(0, 300)}`);
+  }
+});
+
 // ── Terminal session harvester ───────────────────────────────────────────────
 
 bot.onText(/^\/harvest-terminal(?:@\w+)?(?:\s+(--force))?\s*$/i, async (msg, match) => {
@@ -5542,7 +6025,7 @@ bot.on('callback_query', async (query) => {
         { chat_id: chatId, message_id: msgId }
       );
     } else if (data.startsWith('content_approve:') || data.startsWith('content_reject:')) {
-      // Content Machine → Taste Map passive learning
+      // Content Machine → Taste Map passive learning + Bandit feedback
       const isApprove = data.startsWith('content_approve:');
       const filename = data.split(':').slice(1).join(':');
       // Extract style from filename pattern: {source}-{style}-captioned.jpg
@@ -5551,6 +6034,33 @@ bot.on('callback_query', async (query) => {
 
       // Paper trial tracking
       const { recordVote } = await import('./paper-trial-tracker.js');
+
+      // Bandit feedback — read metadata to get caption_category and position
+      let banditMsg = '';
+      try {
+        const { recordOutcome: banditRecord } = await import('./bandit-brain.js');
+        const { out: lindaOut } = await import('./linda-vault.js');
+        const metaPath = path.join(process.env.HOME, 'Cathedral', 'br-content', 'content-bandit-meta.json');
+        let captionCat = null, pos = null;
+        if (fs.existsSync(metaPath)) {
+          const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
+          const entry = meta[filename];
+          if (entry) { captionCat = entry.caption_category; pos = entry.position; }
+        }
+        // Feed each bandit (self-report = trusted)
+        const styleArms = ['bw', 'neon', 'film', 'comic', 'cinematic'];
+        const captionArms = ['motivational', 'technique', 'community'];
+        const posArms = ['bottom', 'top', 'center'];
+        if (styleArms.includes(style)) banditRecord('content-style', style, isApprove, 'content-style');
+        if (captionCat && captionArms.includes(captionCat)) banditRecord('content-caption', captionCat, isApprove, 'content-caption');
+        if (pos && posArms.includes(pos)) banditRecord('content-position', pos, isApprove, 'content-position');
+        // Linda tuple
+        if (isApprove) lindaOut(['style_victory', 'content_machine', style, 'A'], 'visual', 'content-machine');
+        lindaOut(['outcome', 'content_generation', isApprove ? 1 : 0], 'swarm', 'content-machine');
+        banditMsg = ' + bandit';
+      } catch (e) {
+        console.error('[content-callback] Bandit feedback failed:', e.message);
+      }
 
       if (isApprove) {
         addAnchor('visual_style', 'anchors', {
@@ -5561,7 +6071,7 @@ bot.on('callback_query', async (query) => {
           timestamp: new Date().toISOString()
         });
         recordVote('content', 'approve', { filename, style });
-        await bot.answerCallbackQuery(query.id, { text: `✅ Approved + taste map + trial tracked (${style})` });
+        await bot.answerCallbackQuery(query.id, { text: `✅ Approved + taste map${banditMsg} (${style})` });
         await bot.editMessageReplyMarkup(
           { inline_keyboard: [[{ text: `✅ Approved (${style})`, callback_data: 'noop' }]] },
           { chat_id: chatId, message_id: msgId }
@@ -5570,7 +6080,7 @@ bot.on('callback_query', async (query) => {
         const { addRejection } = await import('./taste-map-api.js');
         addRejection('visual_style', `Rejected: ${filename} — ${style} style`);
         recordVote('content', 'reject', { filename, style });
-        await bot.answerCallbackQuery(query.id, { text: `❌ Rejected + taste map + trial tracked (${style})` });
+        await bot.answerCallbackQuery(query.id, { text: `❌ Rejected + taste map${banditMsg} (${style})` });
         await bot.editMessageReplyMarkup(
           { inline_keyboard: [[{ text: `❌ Rejected (${style})`, callback_data: 'noop' }]] },
           { chat_id: chatId, message_id: msgId }
