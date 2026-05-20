@@ -6086,6 +6086,39 @@ bot.on('callback_query', async (query) => {
           { chat_id: chatId, message_id: msgId }
         );
       }
+    } else if (data.startsWith('muse_useful:') || data.startsWith('muse_meh:')) {
+      // Muse bandit feedback — Paul rates the nightly finding
+      const isUseful = data.startsWith('muse_useful:');
+      const parts = data.split(':');
+      // Format: muse_useful:thinking:focus:source
+      const thinkingMode = parts[1];
+      const focusMode = parts[2];
+      const sourceMode = parts[3];
+
+      let banditMsg = '';
+      try {
+        const { recordOutcome: banditRecord } = await import('./bandit-brain.js');
+        const { out: lindaOutFn } = await import('./linda-vault.js');
+
+        // Feed each bandit (self-report = trusted)
+        if (thinkingMode) banditRecord('muse-thinking', thinkingMode, isUseful, 'muse-thinking');
+        if (focusMode) banditRecord('muse-focus', focusMode, isUseful, 'muse-focus');
+        if (sourceMode) banditRecord('muse-source', sourceMode, isUseful, 'muse-source');
+
+        // Linda tuple
+        lindaOutFn(['outcome', 'muse_feedback', isUseful ? 1 : 0], 'swarm', 'the-muse');
+        banditMsg = ' + bandit';
+      } catch (e) {
+        console.error('[muse-callback] Bandit feedback failed:', e.message);
+      }
+
+      const label = isUseful ? '\uD83D\uDD25 Useful' : '\uD83D\uDE34 Meh';
+      await bot.answerCallbackQuery(query.id, { text: `${label}${banditMsg}` });
+      await bot.editMessageReplyMarkup(
+        { inline_keyboard: [[{ text: `${label} (noted)`, callback_data: 'noop' }]] },
+        { chat_id: chatId, message_id: msgId }
+      );
+
     } else if (data.startsWith('content_edit:')) {
       // Edit flow — just acknowledge, no taste map update (ambiguous signal)
       await bot.answerCallbackQuery(query.id, { text: 'Edit noted — no taste map update (ambiguous)' });
