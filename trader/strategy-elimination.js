@@ -166,7 +166,14 @@ export function runElimination() {
     return { message: 'No eligible strategies for elimination this week', results };
   }
 
-  const worst = eligible[0]; // Already sorted worst-first
+  // Protect the top cumulative earner — can't eliminate what's working overall
+  const topCumulative = [...eligible].sort((a, b) => b.cumulative_pnl - a.cumulative_pnl)[0];
+  let worst = eligible[0]; // Already sorted worst-first by weekly P&L
+
+  if (worst.strategy === topCumulative.strategy && eligible.length > 1) {
+    console.log(`[elimination] ${worst.strategy} is worst this week but TOP overall earner ($${worst.cumulative_pnl.toFixed(2)}) — protected, targeting next worst`);
+    worst = eligible[1];
+  }
 
   // Give strike
   const newStrikes = worst.strikes + 1;

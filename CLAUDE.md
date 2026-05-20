@@ -1238,6 +1238,18 @@ the-timekeeper to go offline. Don't repeat it.
 - Event-driven notifications: only sends Telegram on new trades or position closes. Quiet runs = silence.
 - No watchdog, no resurrector, no guardian. Simpler = more reliable.
 
+## Trading Elimination Protection (fixed 2026-05-21)
+- strategy-elimination.js: top cumulative earner now protected from weekly elimination
+- relative_strength reinstated after wrongful elimination (was top earner at $152.25)
+- Protection logic: if worst weekly performer is also top overall, skip to next worst
+
+## Cathedral Planner — DeepSeek Upgrade (fixed 2026-05-21)
+- cathedral-planner.py: DeepSeek primary, Claude fallback (was Claude-only with wrong model ID)
+- Auto-arbitrates all pending agent goals on every run
+- Goals sent to Telegram as confirmation
+- Goal ID bug fixed in goals.py: millisecond + index suffix prevents duplicates
+- arbitrate_goal() now targets proposed-only status
+
 ## X/Twitter Integration (built 2026-05-13)
 - Library: @the-convocation/twitter-scraper (npm, free, no API key)
 - Auth: Chrome cookie extraction (not programmatic login — X blocks that with Cloudflare 403)
