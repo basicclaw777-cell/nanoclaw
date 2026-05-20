@@ -22,10 +22,13 @@ const OUTBOX = join(__dirname, 'reed-lab', 'hf-test-outbox');
 const COOKBOOK_PATH = join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'higgsfield-style-cookbook.md');
 const TASTE_PATH = join(__dirname, 'taste-map.json');
 const CALIBRATION_DIR = '/Users/basicclaw777/Downloads/upgraded standard';
-const MAX_TESTS_PER_RUN = 10;
-const DELAY_BETWEEN_TESTS_MS = 10000;
+const MAX_TESTS_PER_RUN = 50;       // unlimited sub — go hard
+const DELAY_BETWEEN_TESTS_MS = 3000; // just enough to not hammer API
 const HF_TIMEOUT = 600000;
 const WAIT_TIMEOUT = '15m';
+const CONTINUOUS_LOOP = true;         // keep running, don't exit after one batch
+const LOOP_INTERVAL_MS = 60000;       // 60s between loop iterations
+const ERROR_MEMORY_PATH = join(__dirname, 'reed-lab', 'error-memory.json');
 
 // Models that accept --resolution param (checked via `higgsfield model get`)
 const RESOLUTION_MODELS = new Set([
@@ -40,6 +43,32 @@ const ASPECT_OVERRIDES = {
 
 // Grade mapping: A=1.0, B=0.7, C=0.3, D=0.0
 const GRADE_REWARD = { A: 1.0, B: 0.7, C: 0.3, D: 0.0, untested: 0.0 };
+
+// ── Error Memory — Reed learns from failures ──
+function loadErrorMemory() {
+  try { return JSON.parse(readFileSync(ERROR_MEMORY_PATH, 'utf-8')); } catch { return {}; }
+}
+function saveErrorMemory(mem) {
+  writeFileSync(ERROR_MEMORY_PATH, JSON.stringify(mem, null, 2));
+}
+function recordError(modelJst, errorMsg, fix) {
+  const mem = loadErrorMemory();
+  if (!mem[modelJst]) mem[modelJst] = { errors: [], skipUntil: null };
+  mem[modelJst].errors.push({ error: errorMsg.slice(0, 200), fix, date: new Date().toISOString() });
+  // After 3 consecutive failures, skip model for 24h
+  const recentErrors = mem[modelJst].errors.slice(-3);
+  if (recentErrors.length >= 3 && recentErrors.every(e => !e.fix)) {
+    mem[modelJst].skipUntil = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    console.log(`[hftest] Model ${modelJst} quarantined for 24h after 3 failures`);
+  }
+  saveErrorMemory(mem);
+}
+function isModelQuarantined(modelJst) {
+  const mem = loadErrorMemory();
+  const entry = mem[modelJst];
+  if (!entry?.skipUntil) return false;
+  return new Date(entry.skipUntil) > new Date();
+}
 
 // ── Bandit agent IDs ──
 const BANDIT_MODEL = 'reed-model';
@@ -86,9 +115,9 @@ const STYLE_TEMPLATES = {
     template: (subject) => `Camera slowly orbits ${subject}, golden light shifts across textures, gym atmosphere, shallow depth of field, anamorphic 35mm, warm amber tone on surfaces with cool steel-blue shadows, ARRI ALEXA aesthetic, film grain, dust particles in light beams\nTotal: 5s / 1 shot / 16:9`
   },
   hyper_motion: {
-    name: 'Hyper Motion CGI',
+    name: 'Hyper Motion',
     type: 'video',
-    template: (subject) => `Vertical 9:16 cinematic shot. ${subject} floating in dark void with soft amber underglow. Sudden hyper-speed shatter: elements explode outward in extreme slow motion, fragments flying past camera with golden light streaks. Camera orbits as elements converge. Cinematic premium aesthetic, deep blacks, hyperrealistic detail, 9:16 vertical.`
+    template: (subject) => `Vertical 9:16 cinematic shot. ${subject}, extreme slow motion capture at 1000fps. Sweat droplets frozen mid-air, fabric rippling in slow wave, dust particles suspended in golden light shafts. Camera tracks smoothly through the motion. Deep blacks, hyperrealistic skin texture, shallow depth of field, cinematic premium aesthetic, 9:16 vertical.`
   },
   sports_documentary: {
     name: 'Sports Documentary',
@@ -394,13 +423,31 @@ function banditSelect(map, tasteAnchors) {
 
 // BR-themed subjects for template injection
 const SUBJECTS = [
+  // Equipment
   'worn leather heavy bag hanging from chains, patina showing years of use',
-  'empty boxing ring corner, red ropes, canvas floor worn from footwork',
   'row of speed bags, dramatic side lighting',
   'boxing gloves and hand wraps on wooden bench',
   'heavy bag mid-swing, chain tension visible',
+  'skipping rope coiled on gym floor, worn wooden handles',
+  'boxing timer on wall showing round 3, red light glowing',
+  // Gym atmosphere
+  'empty boxing ring corner, red ropes, canvas floor worn from footwork',
   'gym entrance, morning light flooding through door',
-  'concrete wall with colorful BASIC REFLEX posters'
+  'industrial gym interior, concrete pillars, mirrors reflecting heavy bags',
+  'chalk dust floating in afternoon light between heavy bags',
+  'water bottle and towel on ring apron between rounds',
+  // People training (no faces — style/silhouette focus)
+  'silhouette of boxer shadow boxing, backlit by window light',
+  'hands being wrapped in tape, close-up of knuckles and cotton',
+  'two fighters touching gloves before sparring, mutual respect',
+  'coach holding pads, focused stance, gym out of focus behind',
+  'group class mid-combination, motion blur on punches, energy visible',
+  'kid in oversized gloves hitting pads, huge grin, parent watching',
+  // Hong Kong context
+  'Hong Kong industrial building stairwell leading to hidden gym',
+  'neon signs reflected in rain puddle outside boxing gym entrance',
+  'rooftop training area overlooking Kowloon skyline at dusk',
+  'narrow Mong Kok street with gym signage glowing at night',
 ];
 
 function buildPrompt(selection, archaeologistMod) {
@@ -501,11 +548,12 @@ async function runTest(modelJst, modelName, type, prompt, extraMeta = {}) {
     const errMsg = err.stderr ? err.stderr.toString().slice(0, 500) : (err.message || 'Unknown').slice(0, 500);
     result.error = errMsg;
 
-    if (/timeout/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Timed out. Retry later.'; }
-    else if (/not found|invalid|unknown/i.test(errMsg)) { result.grade = 'D'; result.notes = 'Model not available via CLI.'; }
-    else if (/nsfw|safety|content.policy/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Safety filter. Try different prompt.'; }
+    if (/timeout/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Timed out.'; }
+    else if (/not found|invalid|unknown param/i.test(errMsg)) { result.grade = 'D'; result.notes = 'Model/param not available.'; recordError(modelJst, errMsg, null); }
+    else if (/nsfw|safety|content.policy/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Safety filter.'; }
     else if (/credit|quota|limit/i.test(errMsg)) { result.grade = 'untested'; result.notes = 'Credits exhausted.'; }
-    else { result.grade = 'D'; result.notes = `Error: ${errMsg.slice(0, 200)}`; }
+    else if (/EPIPE|ECONNRESET|fetch failed|network/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Network error — will retry next loop.'; }
+    else { result.grade = 'D'; result.notes = `Error: ${errMsg.slice(0, 200)}`; recordError(modelJst, errMsg, null); }
     console.log(`[hftest] ERROR: ${modelName} -- ${result.notes}`);
   }
   return result;
@@ -588,24 +636,33 @@ function updateMap(map, result) {
 // ══════════════════════════════════════════════════════════════════════
 
 async function sendReport(result) {
-  const emoji = { A: '\u2705', B: '\u{1F7E1}', C: '\u{1F7E0}', D: '\u274C', untested: '\u26AA' }[result.grade] || '\u26AA';
-  const dur = result.duration_ms ? `${(result.duration_ms / 1000).toFixed(1)}s` : 'n/a';
-  const lines = [
-    `${emoji} *Reed Mastery Loop*`,
-    `Model: \`${result.name}\` (${result.model})`,
-    `Style: ${result.styleName || 'auto'} | Taste: ${result.tasteName || 'auto'}`,
-    `Type: ${result.type} | Grade: ${result.grade} | ${dur}`,
-  ];
-  if (result.probeMode) lines.push(`\u{1F9EA} Creative probe: ${result.probeMode}`);
-  if (result.notes) lines.push(result.notes);
-  if (result.error && result.grade === 'D') lines.push(`Error: ${result.error.slice(0, 150)}`);
-  lines.push(`\n_${result.prompt.slice(0, 100)}_`);
-  await sendTelegram(lines.join('\n'));
+  // D grades: log error, record in error memory, do NOT spam Paul
+  if (result.grade === 'D') {
+    console.log(`[hftest] FAIL: ${result.name} — ${(result.error || result.notes || '').slice(0, 150)}`);
+    recordError(result.model, result.error || result.notes || 'unknown', null);
+    return;
+  }
 
+  // C grades: timeout/safety — log only, don't send
+  if (result.grade === 'C') {
+    console.log(`[hftest] WARN: ${result.name} — ${result.notes}`);
+    return;
+  }
+
+  // A/B grades: send the actual media to Paul, minimal text
   if (result.telegramFile && existsSync(result.telegramFile)) {
-    const cap = `Reed: ${result.name} / ${result.styleName || 'auto'} — Grade ${result.grade}`;
-    if (result.type === 'video') await sendTelegramVideo(result.telegramFile, cap);
-    else await sendTelegramPhoto(result.telegramFile, cap);
+    const cap = `${result.name} / ${result.styleName || 'auto'} — ${result.grade}`;
+    try {
+      if (result.type === 'video') await sendTelegramVideo(result.telegramFile, cap);
+      else await sendTelegramPhoto(result.telegramFile, cap);
+    } catch (e) {
+      // Photo too large or connection issue — send text fallback
+      console.log(`[hftest] Telegram media send failed: ${e.message}`);
+      if (result.output) await sendTelegram(`${cap}\n${result.output}`);
+    }
+  } else if (result.output) {
+    // No local file but we have a URL
+    await sendTelegram(`${result.name} / ${result.styleName || 'auto'} — ${result.grade}\n${result.output}`);
   }
 }
 
@@ -714,15 +771,17 @@ async function main() {
   // ── MODE: Untested backlog exists → bandit-guided testing ──
   if (untested.length > 0) {
     const batch = untested.slice(0, MAX_TESTS_PER_RUN);
-    await sendTelegram(
-      `*Reed Mastery Loop Starting*\nMode: Bandit-guided testing\n${batch.length} of ${untested.length} untested:\n` +
-      batch.map((c, i) => `${i + 1}. ${c.name} (${c.type})`).join('\n') +
-      `\nTaste anchors: ${tasteAnchors.length} | Arch: ${archTechniques.length}`
-    );
+    console.log(`[hftest] Bandit-guided testing: ${batch.length} of ${untested.length} untested`);
 
     let ran = 0;
     for (const candidate of batch) {
       if (ran > 0) await new Promise(r => setTimeout(r, DELAY_BETWEEN_TESTS_MS));
+
+      // Skip quarantined models (3+ consecutive failures)
+      if (isModelQuarantined(candidate.jst)) {
+        console.log(`[hftest] Skipping quarantined model: ${candidate.name}`);
+        continue;
+      }
 
       // Bandit selects style + taste for this untested model
       const selection = banditSelect(map, tasteAnchors);
@@ -769,7 +828,6 @@ async function main() {
     }
 
     const remaining = getUntestedCandidates(loadMap()).length;
-    await sendTelegram(`*Reed Mastery Loop Complete*\nTested: ${ran} | Remaining: ${remaining}`);
     console.log(`[hftest] Done. ${ran} tested, ${remaining} remaining`);
     return;
   }
@@ -795,10 +853,7 @@ async function main() {
   }
 
   const probeBatch = probes.slice(0, MAX_TESTS_PER_RUN);
-  await sendTelegram(
-    `*Reed Mastery Loop — Creative Probe*\n${probeBatch.length} experiments:\n` +
-    probeBatch.map((p, i) => `${i + 1}. ${p.modelName} / ${p.styleName} — ${p.probeMode}`).join('\n')
-  );
+  console.log(`[hftest] Creative Probe: ${probeBatch.length} experiments`);
 
   let ran = 0;
   for (const probe of probeBatch) {
@@ -833,8 +888,48 @@ async function main() {
     }
   }
 
-  await sendTelegram(`*Reed Mastery Loop — Probe Complete*\n${ran} experiments run.`);
   console.log(`[hftest] Probe done. ${ran} experiments.`);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// CONTINUOUS LOOP — keep generating, don't exit
+// ══════════════════════════════════════════════════════════════════════
+
+async function continuousLoop() {
+  let totalGenerated = 0;
+  let loopCount = 0;
+
+  console.log('[hftest] Reed Continuous Mode — generating until stopped');
+  await sendTelegram('*Reed Mastery Loop — Continuous Mode Started*');
+
+  while (CONTINUOUS_LOOP) {
+    loopCount++;
+    try {
+      await main();
+    } catch (err) {
+      console.error(`[hftest] Loop ${loopCount} error:`, err.message);
+      // Don't exit on error, wait and retry
+    }
+
+    // Tally what we've made
+    const log = loadLog();
+    const newTotal = log.length;
+    const delta = newTotal - totalGenerated;
+    totalGenerated = newTotal;
+
+    if (delta > 0) {
+      console.log(`[hftest] Loop ${loopCount}: +${delta} generations (total: ${totalGenerated})`);
+    }
+
+    // Send hourly summary (every ~60 loops at 60s interval)
+    if (loopCount % 60 === 0) {
+      const successes = log.filter(e => e.grade === 'A' || e.grade === 'B').length;
+      await sendTelegram(`*Reed — Hourly*\nTotal: ${totalGenerated} | Successes: ${successes}`);
+    }
+
+    // Wait before next loop
+    await new Promise(r => setTimeout(r, LOOP_INTERVAL_MS));
+  }
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -915,11 +1010,18 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const s = getStatus();
     console.log(JSON.stringify(s.bandits, null, 2));
   }
-  else main().catch(err => {
-    console.error('[hftest] Fatal:', err);
-    sendTelegram(`*Reed Mastery Loop -- CRASHED*\n${err.message?.slice(0, 300)}`);
-    process.exit(1);
-  });
+  else if (process.argv[2] === '--once') {
+    // Single batch run (old behavior)
+    main().catch(err => { console.error('[hftest] Fatal:', err); process.exit(1); });
+  }
+  else {
+    // Default: continuous loop — keep generating
+    continuousLoop().catch(err => {
+      console.error('[hftest] Fatal:', err);
+      sendTelegram(`*Reed Mastery Loop -- CRASHED*\n${err.message?.slice(0, 300)}`);
+      process.exit(1);
+    });
+  }
 }
 
 export { main as runTests, getUntestedCandidates as getTestCandidates, loadMap };
