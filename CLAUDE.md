@@ -1511,3 +1511,27 @@ the-timekeeper to go offline. Don't repeat it.
 - Standing: three-layer diagnostic for blocks: (1) name the fear, (2) imagine past it, (3) audit the auditor.
 - Standing: friction between agents is training, not dysfunction. Encourage productive disagreement.
 - Scripts: fear-gate-questions.js, fear-gate-mirror.js, internship-trials.js, appreciation-ritual.js, dm-processor.js
+
+## Swarm Learning Loop — Linda Tuples + Bandit Brain (built 2026-05-20)
+- Architecture doc: ~/cathedral-vault/06_Methods/swarm-learning-loop.md
+- Origin: DeepSeek forensic audit → Forge reality-checked → kept 2 of 4 proposed technologies
+- linda-vault.js — tuple space (out/rd/inp/scan/watch), JSONL per namespace at ~/cathedral-vault/09_Artifacts/linda/
+- bandit-brain.js — Thompson sampling, SQLite at ~/nanoclaw/vortex_data/bandit-brain.db
+  - Temporal decay (τ=7 days), two-source confirmation (24h window), trusted agent list
+- swarm-loop.js — composition layer, joinLoop(agentId, domains) → choose/reportDiscovery/reportOutcome
+- Archaeologist wired: bandit picks domain on watcher trigger, reports discoveries + outcomes
+- Cathy: immune filter for outcome tuples (flags significant bandit shifts before applying)
+- Trusted agents: cathy, sage, archaeologist, prospector, forge
+- Standing: watchers that call external APIs MUST have rate limiters. $20 DeepSeek burn from 6019 unthrottled calls.
+
+## The Archaeologist — Court Member #28 (built 2026-05-20)
+- Script: ~/nanoclaw/archaeologist.js
+- PM2: archaeologist (watcher) + archaeologist-weekly (Sunday cron)
+- Mines forgotten techniques across 8 domains via Forgotten Shelf method
+- Level 3 (file watcher) + Level 2 (weekly cron). Rate limiter: 10 API calls/hr on watcher.
+- DeepSeek primary, gemma3:4b fallback (qwen3:14b broken — thinking mode eats output with stream:false)
+- Swarm loop integrated: bandit selects domain, reports discoveries + ensemble outcomes
+- DB: ~/nanoclaw/vortex_data/archaeologist.db
+- Vault output: ~/cathedral-vault/00_Staging/archaeologist/
+- Telegram: /archaeologist
+- 38 discoveries first full run (gemma3:4b). Some duplicates — smaller model less precise.
