@@ -960,6 +960,20 @@ He will decide when he's done.
   - hausdorff_form.py — Hausdorff Distance form scorer (Huttenlocher 1993). Pose vs ideal template. Per-joint deviation + coaching hints.
   - NOT YET WIRED into detector.py pipeline — standalone modules ready for integration
 
+## BR Gym Eyes Glasses — AI Boxing Coach on Smart Glasses (researched 2026-05-21)
+- Project cards: ~/cathedral-vault/08_Project_Orchestrator/projects/br-gym-eyes-glasses.md + br-gym-eyes-glasses-business-model.md
+- Core product: 3rd person Station (wall camera, tracks 6-12 people, live leaderboard on TV, $99/mo per gym)
+- Premium add-on: POV glasses with combo prompter in lens ($129 per member)
+- Home tier: webcam/phone, $9.99/mo subscription
+- Killer feature: combos appear on display, boxer throws them, glasses detect execution
+- Stereo compound: POV (glasses) + 3rd person (tripod) = complete coaching picture
+- Six class formats: Punch Race, Form Fight, Combo Challenge, Endurance Ladder, Team Battle, Personal Best
+- Hardware: Oakley Meta HSTN (sport, $350, Meta SDK) or DIY OpenGlass ($20, ESP32-S3)
+- White-label path: Shenzhen OEM at $30-50/unit, 300 MOQ (Joysee, Supertek, Jingyun IoT)
+- Investment ladder: $30 prototype → $350 gym test → $600 samples → $14,400 first batch
+- Multi-person tracking gap: need persistent person ID across frames (DeepSORT/ByteTrack or position-based)
+- Status: researched + filed. Next: acquire prototype hardware.
+
 ## Tier 1 Expansion — Built 2026-05-04
 - combo-logger.js — SQLite logging for all validations. combo_log table in metrics.db.
 - audio-generator.js — Pure PCM WAV click tracks. 44100 Hz 16-bit mono. ~/nanoclaw/click-tracks/
