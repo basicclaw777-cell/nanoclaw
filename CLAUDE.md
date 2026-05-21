@@ -1165,7 +1165,9 @@ the-timekeeper to go offline. Don't repeat it.
 - 57,595 files, 59 collections, 34,951 image + 3,818 video candidates
 - Collections: Cuba trips, Pedrosso, fighters, BR clients/coaches/boxers, origin-era (camera rolls, iPhone 6, hired spaces)
 - Index: ~/nanoclaw/kingston-media-index.json (symlinked from reed-lab/)
-- Reed integration: getCalibrationImage() 70/30 Kingston-weighted, 27 priority collections
+- Reed integration: IMAGE_ONLY mode, 100% Kingston, restricted to Pedrosso + BB + gym pics (Paul directive 2026-05-21)
+- EXTRA_DIRS: scans BB folder, new gym pics, gym images directly outside JSON index
+- Credits exhausted 2026-05-21 (0.08 remaining). Reed stopped. Resumes on credit refresh.
 - Training frames: 425 extracted via ffmpeg at /Volumes/KINGSTON2/reed-training-frames/
 - Standing: Kingston drives = Cathedral visual memory. Origin-era content = founding story, not old files.
 - Requires KINGSTON1 + KINGSTON2 mounted at /Volumes/
