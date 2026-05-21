@@ -4,7 +4,7 @@
 // PM2 cron: Mon/Wed/Fri 3am HKT (0 19 * * 0,2,4 UTC)
 // Manual: /hftest on Telegram, or: node reed-higgsfield-tester.js
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, readdirSync } from 'fs';
 import { execFileSync } from 'child_process';
 import { join, basename } from 'path';
 import { fileURLToPath } from 'url';
@@ -346,30 +346,35 @@ function getKingstonImages() {
   try {
     const idx = JSON.parse(readFileSync(KINGSTON_INDEX_PATH, 'utf-8'));
     // Prefer boxing-relevant collections
-    const priority = [
-      // KINGSTON2 — Cuba trips, fighters
-      'cuba_2014', 'cuba_2015', 'boxer_portraits', 'pedrosso', 'yoandris', 'crimildo', 'mozambique',
-      // KINGSTON1 — BR history, Paul's journey
-      'br_clients', 'br_coaches', 'br_boxers', 'br_sparring', 'cuban_boxers', 'pauls_story',
-      'training_visuals', 'boxing_principles', 'br_social', 'br_instagram', 'cognitive_boxing',
-      'br_merch', 'br_flyers', 'fibonacci_boxer', 'neon_beats', 'vortex_boxing',
-      // Origin era — original gym, hired spaces, earliest footage
-      'origin_cuba', 'origin_fights', 'origin_training', 'origin_iphone6',
-      'origin_camera_rolls', 'origin_daikichi', 'origin_daniell', 'origin_diego',
-      'origin_final_cut', 'saj'
+    // Paul's directive: focus on BB (black basic reflex), Pedrosso, and new gym pics only
+    const priority = ['pedrosso'];
+    // Also check direct folders outside the index
+    const EXTRA_DIRS = [
+      '/Volumes/KINGSTON2/external drives/black basic reflex/',  // BB folder
+      join(process.env.HOME || '/Users/basicclaw777', 'Downloads/new gym pics/'),  // new gym pics
+      join(process.env.HOME || '/Users/basicclaw777', 'Downloads/gym images -basic reflex/'),  // existing gym pics
     ];
     _kingstonImages = idx.reedCandidates.images
       .filter(f => priority.includes(f.collection))
       .map(f => f.path);
-    reedLog(`[hftest] Kingston media loaded: ${_kingstonImages.length} boxing/Cuba images`);
+    // Scan extra directories directly (BB, new gym pics, gym images)
+    for (const dir of EXTRA_DIRS) {
+      try {
+        if (!existsSync(dir)) continue;
+        const files = readdirSync(dir).filter(f => /\.(jpg|jpeg|png|webp|heic)$/i.test(f));
+        _kingstonImages.push(...files.map(f => join(dir, f)));
+        if (files.length) reedLog(`[hftest] Extra dir ${dir}: ${files.length} images`);
+      } catch {}
+    }
+    reedLog(`[hftest] Kingston media loaded: ${_kingstonImages.length} images (Pedrosso + BB + gym pics)`);
   } catch { _kingstonImages = []; }
   return _kingstonImages;
 }
 
 function getCalibrationImage() {
-  // 70% chance: use real Kingston media if available
+  // 100% Kingston — Paul wants only BB, Pedrosso, new gym pics
   const kingston = getKingstonImages();
-  if (kingston.length > 0 && Math.random() < 0.7) {
+  if (kingston.length > 0) {
     const pick = kingston[Math.floor(Math.random() * kingston.length)];
     if (existsSync(pick)) return pick;
   }
