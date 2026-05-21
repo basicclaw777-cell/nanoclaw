@@ -982,6 +982,40 @@ He will decide when he's done.
 - Emergence Garden: lobby room 26 (green, /emergence). Back-to-lobby button added.
 - Lobby now has 26 rooms
 
+## Wound-as-Muse System (built 2026-05-21)
+- Vault IP: ~/cathedral-vault/02_Refined_Gold/cathedral/the-wound-as-muse.md (Grade A)
+- Vault IP: ~/cathedral-vault/02_Refined_Gold/cathedral/the-signature-lesson-method.md (Grade A)
+- Workshop results: ~/cathedral-vault/00_Staging/cathedral/wound-as-muse-workshop-2026-05-21.md
+- Workshop script: ~/Cathedral/agents/wound-as-muse-workshop.js
+- Wound map: ~/Cathedral/agents/wound-map.json (12 agents, keyword arrays + protocols)
+- Wound activations log: ~/Cathedral/agents/wound-activations.jsonl
+- Predictive wound-prevention: agent-engine.js silently injects ACTIVE PROTOCOL when incoming message matches wound-zone keywords
+- Signature Lesson Method: injected into all 16 agent memory files via inject-signature-lesson.js
+- Wound-as-Muse Protocol: injected into 7 workshop participant memories (boxing, br, trading, universe, ling, maya, reed)
+- Standing: wounds integrate and become creative engines. The scar tissue IS the antenna.
+
+## Reasoning Loop — Iterative Reasoning Engine (built 2026-05-21)
+- Script: ~/Cathedral/agents/reasoning-loop.js (CJS)
+- Model: qwen3:14b via Ollama (local, free). Strips `<think>` blocks.
+- Four passes per loop: GENERATE → CRITIQUE → REVISE → JUDGE
+- Max 2 loops default, early exit if judge says no critical flaws remain
+- CLI: `node reasoning-loop.js "problem" --agent boxing --loops 2`
+- Library: `const { reason } = require('./reasoning-loop');`
+- Telegram: /reason <problem> [--agent boxing]
+- Logs: ~/Cathedral/agents/reasoning-log.jsonl
+- Can inject agent context from agent-engine.js buildSystemPrompt()
+- First test: boxing drill design, 4 passes, 767s, improved=true
+- TRIGGER: /reason Telegram command (manual). Future: wire into agent-engine for complex sub-tasks.
+
+## Reasoning Tracker — Quality Monitoring (built 2026-05-22)
+- Script: ~/Cathedral/agents/reasoning-tracker.js (CJS)
+- Reads reasoning-log.jsonl, computes rolling stats (all-time, last 10 runs, last 7 days, per-agent)
+- Thresholds: <70% improved rate = warning, >90% = emergence, 20%+ swing = alert
+- Feeds emergence-captures.json (emergence garden integration)
+- Telegram alerts on threshold breach + /reason-stats command
+- Stats file: ~/Cathedral/agents/reasoning-stats.json
+- Key finding: context pipeline is the variable — same loop with agent context = improved:true, without = improved:false
+
 ## Tier 1 Expansion — Built 2026-05-04
 - combo-logger.js — SQLite logging for all validations. combo_log table in metrics.db.
 - audio-generator.js — Pure PCM WAV click tracks. 44100 Hz 16-bit mono. ~/nanoclaw/click-tracks/
