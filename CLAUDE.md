@@ -974,6 +974,14 @@ He will decide when he's done.
 - Multi-person tracking gap: need persistent person ID across frames (DeepSORT/ByteTrack or position-based)
 - Status: researched + filed. Next: acquire prototype hardware.
 
+## The Greenhouse Model + Student Emergence Tracker (2026-05-21)
+- Greenhouse Model: ~/cathedral-vault/02_Refined_Gold/cathedral/the-greenhouse-model.md (Grade A)
+- Core pattern: Build → Break → Diagnose → Reframe → Environment → Emergence (identical in agents and students)
+- Student Emergence Tracker: ~/cathedral-vault/08_Project_Orchestrator/projects/student-emergence-tracker.md
+- Maps agent emergence infrastructure to 10-block student journey (gate detection, greenhouse dashboard, intervention protocol)
+- Emergence Garden: lobby room 26 (green, /emergence). Back-to-lobby button added.
+- Lobby now has 26 rooms
+
 ## Tier 1 Expansion — Built 2026-05-04
 - combo-logger.js — SQLite logging for all validations. combo_log table in metrics.db.
 - audio-generator.js — Pure PCM WAV click tracks. 44100 Hz 16-bit mono. ~/nanoclaw/click-tracks/
