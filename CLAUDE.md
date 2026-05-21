@@ -1160,6 +1160,21 @@ the-timekeeper to go offline. Don't repeat it.
 - Catalogue: ~/nanoclaw/reed-lab/catalogue.json
 - Shot assignments: 16 subjects, /shots command, 7:30am cron
 
+### Kingston Unified Media Library (built 2026-05-21)
+- Indexer: reed-lab/index-kingston-media.js — indexes KINGSTON1 + KINGSTON2
+- 57,595 files, 59 collections, 34,951 image + 3,818 video candidates
+- Collections: Cuba trips, Pedrosso, fighters, BR clients/coaches/boxers, origin-era (camera rolls, iPhone 6, hired spaces)
+- Index: ~/nanoclaw/kingston-media-index.json (symlinked from reed-lab/)
+- Reed integration: getCalibrationImage() 70/30 Kingston-weighted, 27 priority collections
+- Training frames: 425 extracted via ffmpeg at /Volumes/KINGSTON2/reed-training-frames/
+- Standing: Kingston drives = Cathedral visual memory. Origin-era content = founding story, not old files.
+- Requires KINGSTON1 + KINGSTON2 mounted at /Volumes/
+
+### Gym Eyes Logo Suite (built 2026-05-21)
+- 3 variants: combo lockup, app icon, typographic wordmark (GPT Image 2)
+- 2 reveal videos: ring explodes → logo (Seedance 2.0, 8s)
+- Assets: ~/nanoclaw/gym-eyes/ + ~/cathedral-vault/09_Artifacts/gym-eyes/
+
 ### Reed's Studio — localhost:8080/reed-studio
 - Style Library, Gallery, Shot List, Experiments views
 - Added to Basic Reflex home page

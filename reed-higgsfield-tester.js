@@ -29,6 +29,14 @@ const WAIT_TIMEOUT = '15m';
 const CONTINUOUS_LOOP = true;         // keep running, don't exit after one batch
 const LOOP_INTERVAL_MS = 60000;       // 60s between loop iterations
 const ERROR_MEMORY_PATH = join(__dirname, 'reed-lab', 'error-memory.json');
+const REED_LOG_FILE = join(__dirname, 'reed-lab', 'reed-continuous.log');
+
+// Force-log to file (PM2 on macOS buffers stdout, logs show 0 bytes)
+function reedLog(msg) {
+  const line = `[${new Date().toISOString()}] ${msg}\n`;
+  process.stdout.write(line);
+  try { appendFileSync(REED_LOG_FILE, line); } catch {}
+}
 
 // Models that accept --resolution param (checked via `higgsfield model get`)
 const RESOLUTION_MODELS = new Set([
@@ -330,7 +338,42 @@ function loadLog() {
 }
 function saveLog(log) { writeFileSync(LOG_PATH, JSON.stringify(log, null, 2)); }
 
+// Kingston media index — real Cuba/boxing photos for start-image
+const KINGSTON_INDEX_PATH = join(__dirname, 'reed-lab', 'kingston-media-index.json');
+let _kingstonImages = null;
+function getKingstonImages() {
+  if (_kingstonImages !== null) return _kingstonImages;
+  try {
+    const idx = JSON.parse(readFileSync(KINGSTON_INDEX_PATH, 'utf-8'));
+    // Prefer boxing-relevant collections
+    const priority = [
+      // KINGSTON2 — Cuba trips, fighters
+      'cuba_2014', 'cuba_2015', 'boxer_portraits', 'pedrosso', 'yoandris', 'crimildo', 'mozambique',
+      // KINGSTON1 — BR history, Paul's journey
+      'br_clients', 'br_coaches', 'br_boxers', 'br_sparring', 'cuban_boxers', 'pauls_story',
+      'training_visuals', 'boxing_principles', 'br_social', 'br_instagram', 'cognitive_boxing',
+      'br_merch', 'br_flyers', 'fibonacci_boxer', 'neon_beats', 'vortex_boxing',
+      // Origin era — original gym, hired spaces, earliest footage
+      'origin_cuba', 'origin_fights', 'origin_training', 'origin_iphone6',
+      'origin_camera_rolls', 'origin_daikichi', 'origin_daniell', 'origin_diego',
+      'origin_final_cut', 'saj'
+    ];
+    _kingstonImages = idx.reedCandidates.images
+      .filter(f => priority.includes(f.collection))
+      .map(f => f.path);
+    reedLog(`[hftest] Kingston media loaded: ${_kingstonImages.length} boxing/Cuba images`);
+  } catch { _kingstonImages = []; }
+  return _kingstonImages;
+}
+
 function getCalibrationImage() {
+  // 70% chance: use real Kingston media if available
+  const kingston = getKingstonImages();
+  if (kingston.length > 0 && Math.random() < 0.7) {
+    const pick = kingston[Math.floor(Math.random() * kingston.length)];
+    if (existsSync(pick)) return pick;
+  }
+  // Fallback: calibration dir
   if (!existsSync(CALIBRATION_DIR)) return null;
   const files = execFileSync('ls', [CALIBRATION_DIR], { encoding: 'utf-8' })
     .split('\n').filter(f => /\.(jpg|jpeg|png)$/i.test(f));
@@ -536,7 +579,7 @@ async function runTest(modelJst, modelName, type, prompt, extraMeta = {}) {
 
       result.grade = 'B';
       result.notes = 'Generated successfully. Awaiting Paul review for final grade.';
-      console.log(`[hftest] SUCCESS: ${modelName} -- saved to ${outFile}`);
+      reedLog(`[hftest] SUCCESS: ${modelName} -- saved to ${outFile}`);
     } else if (/error|fail/i.test(output)) {
       result.grade = 'D'; result.error = output.slice(0, 300);
       result.notes = `Generation failed: ${output.slice(0, 200)}`;
@@ -554,7 +597,7 @@ async function runTest(modelJst, modelName, type, prompt, extraMeta = {}) {
     else if (/credit|quota|limit/i.test(errMsg)) { result.grade = 'untested'; result.notes = 'Credits exhausted.'; }
     else if (/EPIPE|ECONNRESET|fetch failed|network/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Network error — will retry next loop.'; }
     else { result.grade = 'D'; result.notes = `Error: ${errMsg.slice(0, 200)}`; recordError(modelJst, errMsg, null); }
-    console.log(`[hftest] ERROR: ${modelName} -- ${result.notes}`);
+    reedLog(`[hftest] ERROR: ${modelName} -- ${result.notes}`);
   }
   return result;
 }
@@ -750,6 +793,38 @@ function buildProbeTests(map, tasteAnchors) {
     }
   }
 
+  // Probe 4: Image models — ensure images not drowned out by video
+  const imageModels = getAvailableModels(map)
+    .filter(jst => { const e = findModelEntry(jst, map); return e && e.section === 'image_models'; });
+  if (imageModels.length > 0) {
+    const imageStyles = ['sports_documentary', 'dramatic_cinema', 'editorial_portrait', 'cuban_gym_raw'];
+    for (let i = 0; i < Math.min(3, imageModels.length); i++) {
+      const jst = imageModels[Math.floor(Math.random() * imageModels.length)];
+      const entry = findModelEntry(jst, map);
+      if (entry) {
+        const styleKey = imageStyles[Math.floor(Math.random() * imageStyles.length)];
+        const style = STYLE_TEMPLATES[styleKey] || STYLE_TEMPLATES.sports_documentary;
+        const subject = SUBJECTS[Math.floor(Math.random() * SUBJECTS.length)];
+        const prompt = style.template(subject);
+        probes.push({
+          modelJst: jst,
+          modelName: entry.model.name,
+          type: 'image',
+          prompt,
+          probeMode: `image_balance (${entry.model.name})`,
+          styleName: styleKey,
+          tasteName: 'none'
+        });
+      }
+    }
+  }
+
+  // Shuffle so image probes aren't always last
+  for (let i = probes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [probes[i], probes[j]] = [probes[j], probes[i]];
+  }
+
   return probes;
 }
 
@@ -758,7 +833,7 @@ function buildProbeTests(map, tasteAnchors) {
 // ══════════════════════════════════════════════════════════════════════
 
 async function main() {
-  console.log('[hftest] Reed Mastery Loop starting...');
+  reedLog('[hftest] Reed Mastery Loop starting...');
   const map = loadMap();
   const log = loadLog();
   const tasteAnchors = loadTasteAnchors();
@@ -833,7 +908,7 @@ async function main() {
   }
 
   // ── MODE: Creative Probe — all models tested, explore combinations ──
-  console.log('[hftest] All models tested. Entering Creative Probe mode.');
+  reedLog('[hftest] All models tested. Entering Creative Probe mode.');
   const probes = buildProbeTests(map, tasteAnchors);
 
   if (!probes.length) {
@@ -852,8 +927,11 @@ async function main() {
     });
   }
 
-  const probeBatch = probes.slice(0, MAX_TESTS_PER_RUN);
-  console.log(`[hftest] Creative Probe: ${probeBatch.length} experiments`);
+  // IMAGE_ONLY mode: video output is generic, focus on images with real Kingston source material
+  const IMAGE_ONLY = true;
+  const filteredProbes = IMAGE_ONLY ? probes.filter(p => p.type === 'image') : probes;
+  const probeBatch = filteredProbes.slice(0, MAX_TESTS_PER_RUN);
+  reedLog(`[hftest] Creative Probe: ${probeBatch.length} experiments${IMAGE_ONLY ? ' (IMAGE_ONLY)' : ''}`);
 
   let ran = 0;
   for (const probe of probeBatch) {
@@ -888,7 +966,7 @@ async function main() {
     }
   }
 
-  console.log(`[hftest] Probe done. ${ran} experiments.`);
+  reedLog(`[hftest] Probe done. ${ran} experiments.`);
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -899,7 +977,7 @@ async function continuousLoop() {
   let totalGenerated = 0;
   let loopCount = 0;
 
-  console.log('[hftest] Reed Continuous Mode — generating until stopped');
+  reedLog('[hftest] Reed Continuous Mode — generating until stopped');
   await sendTelegram('*Reed Mastery Loop — Continuous Mode Started*');
 
   while (CONTINUOUS_LOOP) {
@@ -907,7 +985,7 @@ async function continuousLoop() {
     try {
       await main();
     } catch (err) {
-      console.error(`[hftest] Loop ${loopCount} error:`, err.message);
+      reedLog(`[hftest] Loop ${loopCount} error: ${err.message}`);
       // Don't exit on error, wait and retry
     }
 
@@ -918,7 +996,7 @@ async function continuousLoop() {
     totalGenerated = newTotal;
 
     if (delta > 0) {
-      console.log(`[hftest] Loop ${loopCount}: +${delta} generations (total: ${totalGenerated})`);
+      reedLog(`[hftest] Loop ${loopCount}: +${delta} generations (total: ${totalGenerated})`);
     }
 
     // Send hourly summary (every ~60 loops at 60s interval)
@@ -1004,7 +1082,10 @@ export function formatStatus() {
 }
 
 // ── CLI ──
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+// PM2 sets argv[1] to ProcessContainerFork.js, not the script path
+const isMainModule = process.argv[1] === fileURLToPath(import.meta.url) ||
+  process.argv[1]?.includes('ProcessContainer');
+if (isMainModule) {
   if (process.argv[2] === '--status') console.log(formatStatus());
   else if (process.argv[2] === '--weights') {
     const s = getStatus();
