@@ -960,6 +960,20 @@ He will decide when he's done.
   - hausdorff_form.py — Hausdorff Distance form scorer (Huttenlocher 1993). Pose vs ideal template. Per-joint deviation + coaching hints.
   - NOT YET WIRED into detector.py pipeline — standalone modules ready for integration
 
+## Cuba Combo Library + Intelligence Modules (built 2026-05-22)
+- Extractor: ~/basic-reflex/gym-eyes/cuba-combo-extractor.py
+- Library: ~/basic-reflex/gym-eyes/cuba-library/ (34 combos, clips, peak frames, combo-library.json)
+- Dashboard: localhost:8080/cuba-combos (animated timeline, skeleton replay, peak frames)
+- Lobby: Room 27 — Cuba Combo Library
+- 4 intelligence modules (all local, zero API cost):
+  - person_tracker.py — biometric fingerprinting, identity swap detection
+  - counter_detector.py — defense-offense linking, Cuban counter mapping, response time tracking
+  - pattern_intelligence.py — 8 behavioral patterns (combo preference, hand bias, guard drops, fatigue, predictability, extension quality)
+  - comparative_analysis.py — coach template comparison (timing/velocity/extension scores), session delta tracking
+  - full_analysis.py — unified pipeline, one command = complete intelligence report
+- Cuba coach clips = gold standard templates. Students scored against coach's form.
+- Source videos: ~/Downloads/gym eyes drop/cuba/ (CIMG7286/7287/7288.MOV, Havana Jan 2018)
+
 ## BR Gym Eyes Glasses — AI Boxing Coach on Smart Glasses (researched 2026-05-21)
 - Project cards: ~/cathedral-vault/08_Project_Orchestrator/projects/br-gym-eyes-glasses.md + br-gym-eyes-glasses-business-model.md
 - Core product: 3rd person Station (wall camera, tracks 6-12 people, live leaderboard on TV, $99/mo per gym)
