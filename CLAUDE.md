@@ -1632,7 +1632,7 @@ the-timekeeper to go offline. Don't repeat it.
 ## The Archaeologist — Court Member #28 (built 2026-05-20)
 - Script: ~/nanoclaw/archaeologist.js
 - PM2: archaeologist (watcher) + archaeologist-weekly (Sunday cron)
-- Mines forgotten techniques across 8 domains via Forgotten Shelf method
+- Mines forgotten techniques across 9 domains via Forgotten Shelf method (includes researcher_suppression since 2026-05-22)
 - Level 3 (file watcher) + Level 2 (weekly cron). Rate limiter: 10 API calls/hr on watcher.
 - DeepSeek primary, gemma3:4b fallback (qwen3:14b broken — thinking mode eats output with stream:false)
 - Swarm loop integrated: bandit selects domain, reports discoveries + ensemble outcomes
