@@ -173,6 +173,17 @@ If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
 - Cron: daily 20:00 HKT (0 12 * * * UTC)
 - Runtime: ~27s, sends two voice messages to Telegram
 
+## Logan Universe Dashboard — Built 2026-05-24
+- Dashboard: ~/nanoclaw/logan-universe.html — localhost:8080/logan-universe
+- 10 tabs: Overview, Cast, Frequency States, 10-Block Spine, HK Locations, Story Seeds, Visual Language, Rules & Ceiling, Assets, Source Docs
+- Lobby: Room 30 in environments/lobby.html
+- Assets API: /logan-universe/assets (scans both vault Logan directories)
+- Story bible: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/logan/logan-story-map.md (living document)
+- Frequency states: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/logan/logan-frequency-states.md
+- Three states: Lapis Mode (measurement, GI.SHID), Black Light Mode (truth detection), Fluorescent Mode (creation, 3-5s max)
+- 14 story seeds from 6 Cathedral research sources, protocol for organic growth
+- Auditor Res Report #003: ~/cathedral-vault/00_Staging/universe/auditor-res-003-nisaba-investigation-2026-05-24.md
+
 ## Cathedral Staff Agents (Phases 1-6)
 All 6 phases of the cathedral-staff-build-plan.md are COMPLETE.
 24/24 Clara functions replaced. All agents serve from localhost:8080.

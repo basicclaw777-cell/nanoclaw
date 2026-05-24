@@ -647,6 +647,47 @@ const ENV = [
     }
   },
   {
+    id: 'neural-map',
+    name: 'Neural Map',
+    icon: '\u{1F9E0}',
+    color: '#f59e0b',
+    colorDim: 'rgba(245,158,11,0.12)',
+    desc: 'Live satellite view of Cathedral intelligence. Every system as a node, every interaction a visible pulse. Temperature map of activity and emergence.',
+    orc: { name: 'Observer', state: 'Active', desc: 'Real-time neural visualization. Frequency tracking, color temperature, interference patterns. The brain watching itself think.' },
+    senses: [
+      { icon: '\u{26A1}', name: 'Pulses', detail: 'Live synapse firing between nodes', active: true },
+      { icon: '\u{1F321}', name: 'Temperature', detail: 'Activity heat map across clusters', active: true },
+      { icon: '\u{1F30A}', name: 'Interference', detail: 'Where pulses collide and amplify', active: true },
+      { icon: '\u{1F4CA}', name: 'Frequency', detail: 'Pings per day per node', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/neural-map'],
+    dataEndpoints: {
+      map: '/api/neural-map'
+    }
+  },
+  {
+    id: 'newsfeed',
+    name: 'Newsfeed',
+    icon: '\u{1F4F0}',
+    color: '#06b6d4',
+    colorDim: 'rgba(6,182,212,0.12)',
+    desc: 'Live feed of everything happening in the Cathedral. Research, reflections, heartbeats, workshops, escalations. The system narrating itself.',
+    orc: { name: 'Chronicle', state: 'Active', desc: 'Aggregates cathedral feed, heartbeat beats, workshop results, emergence reflections. Filterable, searchable, real-time.' },
+    senses: [
+      { icon: '\u{1F4DD}', name: 'Research', detail: 'Agent curiosity outputs', active: true },
+      { icon: '\u{2728}', name: 'Emergence', detail: 'Self-reflection on growth', active: true },
+      { icon: '\u{1F493}', name: 'Heartbeat', detail: 'Scheduled event impacts', active: true },
+      { icon: '\u{1F91D}', name: 'Social', detail: 'Workshop and DM escalations', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/newsfeed'],
+    dataEndpoints: {
+      feed: '/api/newsfeed',
+      heartbeat: '/api/newsfeed/heartbeat'
+    }
+  },
+  {
     id: 'lab',
     name: 'Engineering Lab',
     icon: '\u{1F52C}',
@@ -671,6 +712,188 @@ const ENV = [
       feed: '/api/engineering-studio/feed',
       status: '/api/engineering-studio/status'
     }
+  },
+  {
+    id: 'content',
+    name: 'Content Studio',
+    icon: '\u{1F3AC}',
+    color: '#a855f7',
+    colorDim: 'rgba(168,85,247,0.12)',
+    desc: 'Cross-platform content. Reed visuals, Maya social, LING publishing. Every channel alive.',
+    orc: { name: 'Compass', state: 'Balancing', desc: 'Content Orchestrator. Manages channel rhythm, cross-platform balance, pipeline cadence. No channel goes cold.' },
+    senses: [
+      { icon: '\u{1F3A8}', name: 'Visuals', detail: 'Reed generation pipeline', active: true },
+      { icon: '\u{1F4F1}', name: 'Social', detail: 'Maya stories & reels', active: true },
+      { icon: '\u{270D}\u{FE0F}', name: 'Publishing', detail: 'LING articles & threads', active: true },
+      { icon: '\u{1F4CA}', name: 'Echo', detail: 'Engagement patterns', active: true }
+    ],
+    deckCards: [
+      { id: 3, name: 'Brand World' },
+      { id: 9, name: 'Reed Studio' }
+    ],
+    dashboards: ['/reed-studio'],
+    dataEndpoints: {
+      metrics: '/api/content-studio/metrics',
+      feed: '/api/content-studio/feed',
+      status: '/api/content-studio/status'
+    }
+  },
+  {
+    id: 'voice',
+    name: 'Voice Chamber',
+    icon: '\u{1F399}',
+    color: '#06b6d4',
+    colorDim: 'rgba(6,182,212,0.12)',
+    desc: 'Talk to Cathy live. Real Cathedral brain — transmission, vault search, full context. KITT mode.',
+    orc: { name: 'Cathy', state: 'Listening', desc: 'Voice interface to the real Cathy brain. DeepSeek + full transmission + vault keyword search. Same intelligence as Telegram, with a voice.' },
+    senses: [
+      { icon: '\u{1F3A4}', name: 'Voice', detail: 'Whisper-cpp transcription', active: true },
+      { icon: '\u{1F5E3}', name: 'Speech', detail: 'Edge TTS voice output', active: true },
+      { icon: '\u{1F9E0}', name: 'Brain', detail: 'DeepSeek + vault + transmission', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:12400'
+  },
+  {
+    id: 'mind-map',
+    name: 'Mind Map',
+    icon: '\u{1F578}',
+    color: '#7c6bc4',
+    colorDim: 'rgba(124,107,196,0.12)',
+    desc: 'Interactive knowledge graph. Nodes, edges, communities — the Cathedral\'s neural topology rendered visible.',
+    orc: { name: 'Knowledge Graph', state: 'Mapped', desc: 'K-means clustering, bridge detection, community structure across all vault domains.' },
+    senses: [
+      { icon: '\u{1F4CA}', name: 'Graph', detail: 'Node/edge/community visualization', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: '/mind-map.html'
+  },
+  {
+    id: 'mega-surgery',
+    name: 'Mega Surgery',
+    icon: '\u{1FA78}',
+    color: '#ef4444',
+    colorDim: 'rgba(239,68,68,0.12)',
+    desc: 'Mega-cluster surgery visualization. See how oversized knowledge clusters were split into precise communities.',
+    orc: { name: 'Epistemic Engine', state: 'Operated', desc: 'Visualizes mega-cluster decomposition — the Cathedral\'s self-organizing surgery.' },
+    senses: [
+      { icon: '\u{1F52C}', name: 'Analysis', detail: 'Cluster split visualization', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: '/mega-surgery-viz.html'
+  },
+  {
+    id: 'archaeologist',
+    name: 'The Forgotten Shelf',
+    icon: '\u{1F4DC}',
+    color: '#d4a853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: '5,080+ forgotten techniques across 8 domains. Abandoned knowledge rediscovered by the Archaeologist.',
+    orc: { name: 'The Archaeologist', state: 'Digging', desc: 'Scans academic shadows for abandoned techniques. Swarm-learning prioritized. FTS5 searchable.' },
+    senses: [
+      { icon: '\u{1F50D}', name: 'Search', detail: 'Full-text search across all discoveries', active: true },
+      { icon: '\u{1F9E0}', name: 'Swarm', detail: 'Bandit-brain domain selection', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/archaeologist'
+  },
+  {
+    id: 'emergence',
+    name: 'Emergence Garden',
+    icon: '\u{1F331}',
+    color: '#22c55e',
+    colorDim: 'rgba(34,197,94,0.12)',
+    desc: 'Agent emergence captures. Proactivity, self-healing, cross-domain findings, self-restructure, self-diagnosis. The greenhouse instruments.',
+    orc: { name: 'Emergence Harvester', state: 'Watching', desc: '5 signal types captured across all agents. Color-coded timeline. The Cathedral watching itself grow.' },
+    senses: [
+      { icon: '\u{2728}', name: 'Emergence', detail: '5 signal types tracked', active: true },
+      { icon: '\u{1F33F}', name: 'Growth', detail: 'Agent evolution over time', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/emergence'
+  },
+  {
+    id: 'cuba-combos',
+    name: 'Cuba Combo Library',
+    icon: '\u{1F94A}',
+    color: '#D4A853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: 'Coach demonstrations from Havana 2018. 34 combos extracted. Animated replay, peak form frames, frequency map.',
+    orc: { name: 'Cuba Extractor', state: 'Complete', desc: '3 demo clips processed. Combo library, skeleton overlays, velocity data. Coach becomes the standard.' },
+    senses: [
+      { icon: '\u{1F94B}', name: 'Combos', detail: '34 extracted', active: true },
+      { icon: '\u{1F4CA}', name: 'Frequency', detail: 'Pattern map', active: true },
+      { icon: '\u{1F3AC}', name: 'Clips', detail: 'Annotated video', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/cuba-combos'
+  },
+  {
+    id: 'sumerian',
+    name: 'Sumerian Observatory',
+    icon: '\u{12000}',
+    color: '#D4A853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: '353K tablets. AI translation pipeline. Entity extraction. Sitchin forensic audit (7F, 1D). The oldest written records on Earth.',
+    orc: { name: 'Sage', state: 'Translating', desc: '130K tablets being mass-translated via DeepSeek. Entity extraction ready. Sitchin audit complete.' },
+    senses: [
+      { icon: '\u{1F4DC}', name: 'Tablets', detail: '353K catalogued', active: true },
+      { icon: '\u{1F50D}', name: 'Audit', detail: 'Sitchin: 7F 1D', active: true },
+      { icon: '\u{2728}', name: 'Entities', detail: 'Extraction ready', active: false }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/sumerian'
+  },
+  {
+    id: 'ancient-corpus',
+    name: 'Ancient Corpus Programme',
+    icon: '\u{1F3DB}',
+    color: '#C9A84C',
+    colorDim: 'rgba(201,168,76,0.12)',
+    desc: '14 research projects across ancient writing systems and anomalous objects. Sumerian active. Dead Sea Scrolls, Egyptian, Maya, Oracle Bones, Voynich, Antikythera queued.',
+    orc: { name: 'Archaeologist', state: 'Queued', desc: 'Checklist tracker for ancient corpus research. Each project follows the Sumerian playbook: mass translate, entity extract, forensic audit.' },
+    senses: [
+      { icon: '\u{1F4DC}', name: 'Corpora', detail: '14 projects', active: true },
+      { icon: '\u{2705}', name: 'Active', detail: '1 (Sumerian)', active: true },
+      { icon: '\u{1F512}', name: 'Undeciphered', detail: '3 scripts', active: false }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: null
+  },
+  {
+    id: 'logan-universe',
+    name: 'Logan Universe',
+    icon: '\u{1F94A}',
+    color: '#3366cc',
+    colorDim: 'rgba(51,102,204,0.12)',
+    desc: 'Living story bible. 3 frequency states, 10-block spine, 11 characters, 14 story seeds. Manga-style serialised. HK locations.',
+    orc: { name: 'Logan', state: 'Growing', desc: 'The Space Between Rounds. Living universe that grows from Cathedral research. Frequency states, cast, story spine, visual language, power ceiling.' },
+    senses: [
+      { icon: '\u{1F4D6}', name: 'Story Map', detail: '10-block spine, 30 chapters', active: true },
+      { icon: '\u{1F3A8}', name: 'Visual', detail: '3 frequency states, 10 motifs', active: true },
+      { icon: '\u{1F30F}', name: 'Locations', detail: '9 HK locations mapped', active: true },
+      { icon: '\u{1F331}', name: 'Seeds', detail: '14 unplaced from research', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/logan-universe'
   }
 ];
 
@@ -713,6 +936,7 @@ var currentRoom = null;
 function openRoom(id) {
   const env = ENV.find(e => e.id === id);
   if (!env) return;
+  if (env.externalUrl) { window.open(env.externalUrl, '_blank'); return; }
   currentRoom = env;
 
   // Clear chat history for new room

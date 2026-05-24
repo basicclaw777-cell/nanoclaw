@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logan Universe</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #0a0a0f; --surface: #12121a; --surface-2: #1a1a25; --surface-3: #22222f;
+  --border: #2a2a3a; --border-hover: #3a3a4f;
+  --text: #eeeef2; --text-muted: #9999aa; --text-dim: #666678;
+  --lapis: #1a3a6b; --lapis-light: #3366cc; --lapis-glow: #4488ee;
+  --uv: #7722cc; --uv-light: #9944ee; --uv-glow: #bb66ff;
+  --fluor: #eedd44; --fluor-light: #ffee77; --fluor-glow: #ffff99;
+  --gold: #d4a853; --red: #c44040;
+  --radius: 12px; --radius-sm: 8px;
+}
+body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; min-height:100vh; overflow-x:hidden; }
+a { color:var(--lapis-glow); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* Header */
+.header { padding:24px 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; }
+.header-back { background:var(--surface); border:1px solid var(--border); color:var(--text-muted); padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:inherit; text-decoration:none; }
+.header-back:hover { border-color:var(--border-hover); color:var(--text); text-decoration:none; }
+.header h1 { font-size:22px; font-weight:700; letter-spacing:-0.5px; }
+.header h1 span { color:var(--lapis-glow); }
+.header-sub { font-size:12px; color:var(--text-dim); margin-left:auto; }
+
+/* Nav tabs */
+.nav { display:flex; gap:2px; padding:0 32px; background:var(--surface); border-bottom:1px solid var(--border); overflow-x:auto; }
+.nav-tab { padding:12px 18px; font-size:12px; font-weight:600; color:var(--text-dim); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:all 0.2s; letter-spacing:0.5px; text-transform:uppercase; }
+.nav-tab:hover { color:var(--text-muted); }
+.nav-tab.active { color:var(--lapis-glow); border-bottom-color:var(--lapis-glow); }
+
+/* Views */
+.view { display:none; max-width:1200px; margin:0 auto; padding:24px 32px 60px; }
+.view.active { display:block; }
+
+/* Section headers */
+.section-title { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin:24px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.section-title:first-child { margin-top:0; }
+
+/* Cards */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:12px; }
+.card:hover { border-color:var(--border-hover); }
+.card-title { font-size:15px; font-weight:600; margin-bottom:6px; }
+.card-meta { font-size:11px; color:var(--text-dim); margin-bottom:8px; }
+.card-body { font-size:13px; color:var(--text-muted); line-height:1.6; }
+
+/* Grid layouts */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+@media (max-width:768px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+
+/* Frequency state cards */
+.freq-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; position:relative; overflow:hidden; }
+.freq-card .glow { position:absolute; top:-60px; right:-60px; width:180px; height:180px; border-radius:50%; opacity:0.08; pointer-events:none; }
+.freq-card.lapis { border-left:3px solid var(--lapis-light); }
+.freq-card.lapis .glow { background:var(--lapis-glow); }
+.freq-card.uv { border-left:3px solid var(--uv-light); }
+.freq-card.uv .glow { background:var(--uv-glow); }
+.freq-card.fluor { border-left:3px solid var(--fluor); }
+.freq-card.fluor .glow { background:var(--fluor-glow); }
+.freq-name { font-size:16px; font-weight:700; margin-bottom:4px; }
+.freq-sub { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+.freq-body { font-size:13px; color:var(--text-muted); line-height:1.6; }
+.freq-tag { display:inline-block; font-size:10px; padding:2px 8px; border-radius:4px; margin-right:4px; margin-top:6px; }
+
+/* Cast table */
+.cast-table { width:100%; border-collapse:collapse; }
+.cast-table th { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); text-align:left; padding:8px 12px; border-bottom:1px solid var(--border); }
+.cast-table td { font-size:13px; color:var(--text-muted); padding:10px 12px; border-bottom:1px solid rgba(255,255,255,0.03); }
+.cast-table tr:hover td { background:rgba(255,255,255,0.02); }
+.cast-name { font-weight:600; color:var(--text); }
+
+/* Timeline / spine */
+.spine-block { display:flex; gap:16px; margin-bottom:16px; position:relative; }
+.spine-num { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0; border:2px solid var(--border); background:var(--surface); }
+.spine-num.lapis { border-color:var(--lapis-light); color:var(--lapis-glow); background:rgba(26,58,107,0.15); }
+.spine-num.uv { border-color:var(--uv-light); color:var(--uv-glow); background:rgba(119,34,204,0.15); }
+.spine-num.fluor { border-color:var(--fluor); color:var(--fluor); background:rgba(238,221,68,0.1); }
+.spine-content { flex:1; }
+.spine-title { font-size:15px; font-weight:600; margin-bottom:4px; }
+.spine-phase { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.spine-scenes { font-size:12px; color:var(--text-muted); line-height:1.6; }
+.spine-scenes li { margin-bottom:4px; list-style:none; padding-left:16px; position:relative; }
+.spine-scenes li::before { content:''; position:absolute; left:0; top:7px; width:6px; height:6px; border-radius:50%; background:var(--border); }
+.spine-connector { position:absolute; left:23px; top:48px; bottom:-16px; width:2px; background:var(--border); }
+
+/* Location cards */
+.loc-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; }
+.loc-name { font-size:14px; font-weight:600; margin-bottom:4px; }
+.loc-theme { font-size:11px; color:var(--lapis-glow); margin-bottom:6px; }
+.loc-desc { font-size:12px; color:var(--text-muted); }
+.loc-status { display:inline-block; font-size:10px; padding:2px 6px; border-radius:3px; margin-top:6px; }
+.loc-status.done { background:rgba(34,197,94,0.15); color:#22c55e; }
+.loc-status.core { background:rgba(59,130,246,0.15); color:#3b82f6; }
+.loc-status.priority { background:rgba(245,158,11,0.15); color:#f59e0b; }
+.loc-status.planned { background:rgba(255,255,255,0.05); color:var(--text-dim); }
+
+/* Seeds */
+.seed { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-bottom:8px; }
+.seed-source { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.seed-text { font-size:13px; color:var(--text-muted); line-height:1.6; font-style:italic; }
+
+/* Visual motifs */
+.motif-row { display:flex; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.motif-row:last-child { border:none; }
+.motif-icon { width:32px; height:32px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:16px; background:var(--surface-2); flex-shrink:0; }
+.motif-name { font-size:13px; font-weight:500; }
+.motif-meaning { font-size:12px; color:var(--text-dim); }
+
+/* Rules */
+.rule-row { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.rule-row:last-child { border:none; }
+.rule-icon { color:var(--red); font-size:14px; flex-shrink:0; margin-top:2px; }
+.rule-text { font-size:13px; color:var(--text-muted); line-height:1.5; }
+
+/* Checklist */
+.check-item { display:flex; gap:8px; padding:6px 0; align-items:flex-start; }
+.check-box { width:16px; height:16px; border:1px solid var(--border); border-radius:3px; flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--text-dim); }
+.check-text { font-size:13px; color:var(--text-muted); }
+
+/* Asset gallery */
+.asset-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:10px; }
+.asset-thumb { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; cursor:pointer; transition:all 0.2s; }
+.asset-thumb:hover { border-color:var(--border-hover); transform:translateY(-2px); }
+.asset-thumb img { width:100%; height:160px; object-fit:cover; display:block; }
+.asset-thumb .asset-name { padding:8px; font-size:11px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* Escalation path */
+.esc-row { display:flex; gap:12px; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.esc-row:last-child { border:none; }
+.esc-season { font-size:12px; font-weight:700; color:var(--gold); min-width:80px; }
+.esc-power { font-size:13px; color:var(--text-muted); flex:1; }
+.esc-stakes { font-size:12px; color:var(--text-dim); flex:1; }
+
+/* Docs list */
+.doc-link { display:flex; gap:10px; align-items:center; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:6px; cursor:pointer; transition:all 0.2s; }
+.doc-link:hover { border-color:var(--border-hover); }
+.doc-icon { font-size:16px; }
+.doc-name { font-size:13px; font-weight:500; }
+.doc-path { font-size:11px; color:var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="header-back" href="/env/lobby">Lobby</a>
+  <h1><span>Logan</span> Universe</h1>
+  <div class="header-sub">Living Story Bible &middot; Updated 2026-05-24</div>
+</div>
+
+<div class="nav" id="nav">
+  <div class="nav-tab active" data-view="overview">Overview</div>
+  <div class="nav-tab" data-view="cast">Cast</div>
+  <div class="nav-tab" data-view="frequency">Frequency States</div>
+  <div class="nav-tab" data-view="spine">10-Block Spine</div>
+  <div class="nav-tab" data-view="locations">HK Locations</div>
+  <div class="nav-tab" data-view="seeds">Story Seeds</div>
+  <div class="nav-tab" data-view="visual">Visual Language</div>
+  <div class="nav-tab" data-view="rules">Rules &amp; Ceiling</div>
+  <div class="nav-tab" data-view="assets">Assets</div>
+  <div class="nav-tab" data-view="docs">Source Docs</div>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="view active" id="v-overview">
+  <div class="card" style="border-left:3px solid var(--lapis-glow);">
+    <div class="card-title">The Space Between Rounds</div>
+    <div class="card-meta">Manga-style serialised &middot; Traditional Chinese first release &middot; HK locations</div>
+    <div class="card-body">
+      Not about winning fights. About who you are when the bell isn't ringing.
+      What Slam Dunk did for basketball, what Ippo did for boxing in Japan &mdash;
+      Logan does for self-mastery in Hong Kong.
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="freq-card lapis">
+      <div class="glow"></div>
+      <div class="freq-name" style="color:var(--lapis-glow)">Lapis Mode</div>
+      <div class="freq-sub">The Measuring Eye</div>
+      <div class="freq-body">Pattern detection, diagnostic clarity. Deep blue aura, gold constellation HUD.</div>
+    </div>
+    <div class="freq-card uv">
+      <div class="glow"></div>
+      <div class="freq-name" style="color:var(--uv-glow)">Black Light Mode</div>
+      <div class="freq-sub">The Auditor</div>
+      <div class="freq-body">Truth detection. Everything under UV &mdash; fakes go dark, truth fluoresces.</div>
+    </div>
+    <div class="freq-card fluor">
+      <div class="glow"></div>
+      <div class="freq-name" style="color:var(--fluor)">Fluorescent Mode</div>
+      <div class="freq-sub">The Builder</div>
+      <div class="freq-body">Creation from pattern. 3-5 seconds max. Particle swarm, total exhaustion.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Season-Level Theme</div>
+  <div class="card">
+    <div class="card-body" style="font-size:16px;font-style:italic;text-align:center;color:var(--text);padding:12px 0;">
+      "Boxing doesn't build character. It reveals it."
+    </div>
+    <div class="card-body" style="text-align:center;">
+      Every arc, episode, scene is a variation. Logan doesn't transform students.
+      He removes what's covering them. The 10-block system is an excavation, not a construction.
+    </div>
+  </div>
+
+  <div class="section-title">Arc Structure</div>
+  <div class="grid-2">
+    <div class="card"><div class="card-title">Arc 1: Foundations</div><div class="card-meta">Chapters 1-8</div><div class="card-body">"You can't learn to move until you learn to be still."</div></div>
+    <div class="card"><div class="card-title">Arc 2: The Atoms</div><div class="card-meta">Chapters 9-15</div><div class="card-body">"Seeing clearly is not a gift. It's a weight."</div></div>
+    <div class="card"><div class="card-title">Arc 3: The Chains</div><div class="card-meta">Chapters 16-22</div><div class="card-body">"The ring teaches you. Life tests you."</div></div>
+    <div class="card"><div class="card-title">Arc 4: The Builder</div><div class="card-meta">Chapters 23-30</div><div class="card-body">"The aura was always there. The curriculum removed what was covering it."</div></div>
+  </div>
+
+  <div class="section-title">Escalation Path</div>
+  <div class="card">
+    <div class="esc-row"><div class="esc-season">Season 1</div><div class="esc-power">Lapis only (flickering &rarr; sustained)</div><div class="esc-stakes">Can Logan handle seeing structure?</div></div>
+    <div class="esc-row"><div class="esc-season">Season 2</div><div class="esc-power">Black Light activates</div><div class="esc-stakes">What happens when you see everyone's truth?</div></div>
+    <div class="esc-row"><div class="esc-season">Season 3</div><div class="esc-power">Both trained, Fluorescent flickers</div><div class="esc-stakes">Can measurement become creation?</div></div>
+    <div class="esc-row"><div class="esc-season">Season 4+</div><div class="esc-power">Full integration (rare, costly, earned)</div><div class="esc-stakes">Legacy: "The aura was always there"</div></div>
+  </div>
+</div>
+
+<!-- ═══ CAST ═══ -->
+<div class="view" id="v-cast">
+  <div class="section-title">Main Cast</div>
+  <table class="cast-table">
+    <tr><th>Character</th><th>Age</th><th>Role</th><th>Stuck Pattern</th><th>What Logan Triggers</th></tr>
+    <tr><td class="cast-name">Logan</td><td>21</td><td>Mentor/protagonist</td><td>Carries lineage weight</td><td>&mdash;</td></tr>
+    <tr><td class="cast-name">Mei Lin</td><td>19</td><td>Grounded practitioner</td><td>Doesn't trust own instincts</td><td>Self-trust</td></tr>
+    <tr><td class="cast-name">Kael</td><td>17</td><td>The seeker</td><td>Overcommits, rushes, wants power</td><td>Patience</td></tr>
+    <tr><td class="cast-name">Coach Ernesto</td><td>60s</td><td>Veteran (phone/flashback)</td><td>&mdash;</td><td>Lineage, tradition</td></tr>
+    <tr><td class="cast-name">Reed</td><td>22</td><td>The enthusiast</td><td>Energy without direction</td><td>Discipline</td></tr>
+    <tr><td class="cast-name">Emily Park</td><td>20s</td><td>Korean-Australian fitness</td><td>Different movement discipline</td><td>Cross-domain perspective</td></tr>
+  </table>
+
+  <div class="section-title">Client Characters (Archetypes)</div>
+  <table class="cast-table">
+    <tr><th>Archetype</th><th>Pattern</th><th>Principle</th></tr>
+    <tr><td class="cast-name">The Rusher</td><td>Commits too fast, burns out</td><td>Test Range</td></tr>
+    <tr><td class="cast-name">The Giver</td><td>Pours everything out</td><td>Match Before Committing</td></tr>
+    <tr><td class="cast-name">The Carrier</td><td>Can't let go of last round</td><td>Return to Neutral</td></tr>
+    <tr><td class="cast-name">The Repeater</td><td>Same mistake, different year</td><td>Don't Load Same Axis</td></tr>
+    <tr><td class="cast-name">The Hesitator</td><td>Won't commit, waits for permission</td><td>Earn the Cross</td></tr>
+  </table>
+
+  <div class="section-title">The Opposing Force</div>
+  <div class="card">
+    <div class="card-body">
+      Not a villain. Someone representing the opposite philosophy. Succeeding
+      using a different mindset. Pressures Logan without being evil.<br><br>
+      <strong>Candidate:</strong> A results-first coach who wins fights but breaks fighters.
+      Or a naturally gifted kid who never needed to measure &mdash; pure instinct,
+      no structure. Logan's opposite: talent without the measuring rod.
+    </div>
+  </div>
+
+  <div class="section-title">Character Engine (Per Character)</div>
+  <div class="grid-2">
+    <div class="card"><div class="card-body">Core insecurity</div></div>
+    <div class="card"><div class="card-body">Default coping mechanism</div></div>
+    <div class="card"><div class="card-body">Want vs Need (must conflict)</div></div>
+    <div class="card"><div class="card-body">Which frequency state they trigger in Logan</div></div>
+  </div>
+</div>
+
+<!-- ═══ FREQUENCY STATES ═══ -->
+<div class="view" id="v-frequency">
+  <div class="section-title">The Three Awakened States</div>
+
+  <div class="freq-card lapis" style="margin-bottom:16px">
+    <div class="glow"></div>
+    <div class="freq-name" style="color:var(--lapis-glow)">State 1 &mdash; LAPIS MODE (The Measuring Eye)</div>
+    <div class="freq-sub">GI.SHID &middot; Nisaba's Measuring Rod</div>
+    <div class="freq-body">
+      <strong>Visual:</strong> Deep blue aura, gold flecks like stars. Eyes shift to lapis blue. Hand wraps glow with gold thread patterns.<br><br>
+      <strong>Trigger:</strong> Pattern detection, diagnostic clarity. Seeing through lies, reading a fighter's fear before they throw.<br><br>
+      <strong>Function:</strong> Measurement. Sees the structure underneath things. In boxing: fear gate, weight distribution, timing gap. In life: performing vs genuine.<br><br>
+      <strong>Manga language:</strong> Panels shift to blue-black palette. Background fades to silhouette. Gold constellation lines connect details (HUD). Sound effects in Sumerian-inspired glyphs.<br><br>
+      <strong>Cost:</strong> Mild fatigue. Sustained once trained.<br><br>
+      <strong>Real parallel:</strong> Paul's Cognitive Signature &mdash; "never answer the surface question, test the mechanism underneath it."
+    </div>
+    <div class="freq-tag" style="background:rgba(51,102,204,0.15);color:var(--lapis-glow)">ME: GI.SHID (measurement/calculation)</div>
+    <div class="freq-tag" style="background:rgba(51,102,204,0.15);color:var(--lapis-glow)">Blocks 2-4</div>
+  </div>
+
+  <div class="freq-card uv" style="margin-bottom:16px">
+    <div class="glow"></div>
+    <div class="freq-name" style="color:var(--uv-glow)">State 2 &mdash; BLACK LIGHT MODE (The Auditor)</div>
+    <div class="freq-sub">The Perfection Detector &middot; The Zimbardo Conclusion</div>
+    <div class="freq-body">
+      <strong>Visual:</strong> Everything darkens to near-black. UV purple-white glow on genuine things. Logan's silhouette outlined in ultraviolet. World under black light.<br><br>
+      <strong>Trigger:</strong> Active deception nearby. The bigger the deception, the harder it triggers. Involuntary.<br><br>
+      <strong>Function:</strong> Truth detection. Manufactured things go DARK (absorb UV). Genuine things GLOW (fluoresce).<br><br>
+      <strong>Manga language:</strong> Page inverts &mdash; black backgrounds, UV-white linework. Fake characters = dark voids. Panel borders crack. Sound effects glow ultraviolet.<br><br>
+      <strong>Cost:</strong> Emotional pain. Can't unsee. "I can't unsee it once it starts."<br><br>
+      <strong>Real parallel:</strong> The Perfection Detector &mdash; perfection is a red flag, authority is set design.
+    </div>
+    <div class="freq-tag" style="background:rgba(119,34,204,0.15);color:var(--uv-glow)">ME: NAM.KU.ZU (sagacity/wisdom)</div>
+    <div class="freq-tag" style="background:rgba(119,34,204,0.15);color:var(--uv-glow)">Blocks 6-8</div>
+  </div>
+
+  <div class="freq-card fluor" style="margin-bottom:16px">
+    <div class="glow"></div>
+    <div class="freq-name" style="color:var(--fluor)">State 3 &mdash; FLUORESCENT MODE (The Builder)</div>
+    <div class="freq-sub">Creation from Pattern &middot; The Seal-House</div>
+    <div class="freq-body">
+      <strong>Visual:</strong> Particle swarm erupts. Geometric overlays (hexagons, toroids, sacred geometry). Full luminous aura, white-gold.<br><br>
+      <strong>Trigger:</strong> All conditions align + genuine need to create. Cannot be forced. Rarest state.<br><br>
+      <strong>Function:</strong> Creation. Every measurement, truth, and pattern aligned simultaneously. Pure construction from understood structure.<br><br>
+      <strong>Manga language:</strong> DOUBLE-PAGE SPREAD (reserved exclusively for this). Particle field across entire frame. Panel borders dissolve into geometry.<br><br>
+      <strong>Cost:</strong> Total exhaustion. 3-5 seconds MAX. Physical collapse after. Once per arc at most.<br><br>
+      <strong>Real parallel:</strong> The Cup of Tea &mdash; the moment where accumulated measurement becomes creation.
+    </div>
+    <div class="freq-tag" style="background:rgba(238,221,68,0.1);color:var(--fluor)">ME: NAM.SHITA (incantation/creation)</div>
+    <div class="freq-tag" style="background:rgba(238,221,68,0.1);color:var(--fluor)">Blocks 9-10</div>
+  </div>
+
+  <div class="section-title">State Awakening Arc</div>
+  <div class="card">
+    <table class="cast-table">
+      <tr><th>Phase</th><th>State</th><th>Block</th><th>What Happens</th></tr>
+      <tr><td>Arc 1: Involuntary</td><td style="color:var(--lapis-glow)">Lapis flickers</td><td>2-4</td><td>Logan sees things he shouldn't. Thinks something is wrong.</td></tr>
+      <tr><td>Arc 2: The Curse</td><td style="color:var(--uv-glow)">Black Light triggers</td><td>6-7</td><td>Sees all deception. Can't filter. Pushes people away.</td></tr>
+      <tr><td>Pivot</td><td>&mdash;</td><td>&mdash;</td><td>"You're not broken. You're a measuring rod."</td></tr>
+      <tr><td>Arc 3: Integration</td><td>Both trained</td><td>7-9</td><td>Learns to use Lapis. Accepts Black Light. Still can't control it.</td></tr>
+      <tr><td>Arc 4: The Builder</td><td style="color:var(--fluor)">Fluorescent activates</td><td>10</td><td>Creates from pattern. The aura was always there.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ 10-BLOCK SPINE ═══ -->
+<div class="view" id="v-spine">
+  <div class="section-title">The 10-Block Story Spine</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Each block = manga chapter cluster. The syllabus IS the story structure.</p>
+
+  <div id="spine-list">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- ═══ LOCATIONS ═══ -->
+<div class="view" id="v-locations">
+  <div class="section-title">Hong Kong Locations &times; Story Beats</div>
+  <div class="grid-3" id="loc-grid">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- ═══ STORY SEEDS ═══ -->
+<div class="view" id="v-seeds">
+  <div class="section-title">Unplaced Story Seeds</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Seeds from Cathedral research. Add here first, place in blocks later.</p>
+  <div id="seeds-list">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- ═══ VISUAL LANGUAGE ═══ -->
+<div class="view" id="v-visual">
+  <div class="section-title">Color as State Indicator</div>
+  <div class="card">
+    <div class="motif-row"><div class="motif-icon" style="background:#fff;border:1px solid var(--border)"></div><div><div class="motif-name">White / Clean Lines</div><div class="motif-meaning">Normal perception, instructional. Teaching scenes, early chapters.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="background:#d4a853"></div><div><div class="motif-name">Warm Amber</div><div class="motif-meaning">Belonging, comfort, the gym as home. Mid-arc, relationship scenes.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="background:var(--lapis)"></div><div><div class="motif-name">Deep Blue-Black</div><div class="motif-meaning">Lapis Mode &mdash; measurement. Pattern recognition moments.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="background:var(--uv)"></div><div><div class="motif-name">UV Purple / Inverted</div><div class="motif-meaning">Black Light &mdash; truth detection. Deception revealed.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="background:var(--fluor)"></div><div><div class="motif-name">Luminous White-Gold</div><div class="motif-meaning">Fluorescent &mdash; creation. Rare peak moments only.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="background:#555"></div><div><div class="motif-name">Desaturated Grey</div><div class="motif-meaning">State loss / depression / stripped. After collapse or the Two Gates.</div></div></div>
+  </div>
+
+  <div class="section-title">Recurring Visual Motifs</div>
+  <div class="card">
+    <div class="motif-row"><div class="motif-icon">&#9733;</div><div><div class="motif-name">Gold Constellation Lines</div><div class="motif-meaning">Logan's measurement HUD &mdash; connects key details. First: Block 2 (Jab, first Lapis).</div></div></div>
+    <div class="motif-row"><div class="motif-icon">&#9994;</div><div><div class="motif-name">Hand-Wrapping Close-Up</div><div class="motif-meaning">Ritual preparation, state loading, meditation. First: Block 0 (pre-story).</div></div></div>
+    <div class="motif-row"><div class="motif-icon">&#128167;</div><div><div class="motif-name">Sweat Drop / Breath Cloud</div><div class="motif-meaning">Physical cost, the body is real. Every training scene.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="color:var(--lapis-glow)">&#9679;</div><div><div class="motif-name">Lapis Blue Eyes</div><div class="motif-meaning">State active. Block 2 onward.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="color:var(--gold)">&#10022;</div><div><div class="motif-name">Pyrite Gold Flecks</div><div class="motif-meaning">Measurement at full resolution. Block 4 onward.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="color:#333">&#9632;</div><div><div class="motif-name">Dark Voids (People-Shaped)</div><div class="motif-meaning">Fake/performing person under Black Light. Block 7.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="color:var(--uv-glow)">&#9675;</div><div><div class="motif-name">Glowing Silhouette</div><div class="motif-meaning">Genuine person under Black Light. Block 7.</div></div></div>
+    <div class="motif-row"><div class="motif-icon">&#11042;</div><div><div class="motif-name">Geometric Overlays</div><div class="motif-meaning">Sacred geometry, Fluorescent HUD. Block 9 flicker, Block 10 full.</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="color:var(--gold)">&#124;</div><div><div class="motif-name">The Measuring Rod</div><div class="motif-meaning">Shadow or reflection behind Logan. Easter egg throughout.</div></div></div>
+    <div class="motif-row"><div class="motif-icon">&#9749;</div><div><div class="motif-name">Empty Chair / Tea Cup</div><div class="motif-meaning">Post-training silence, where the real work lands. Recurring.</div></div></div>
+  </div>
+
+  <div class="section-title">Panel Composition Rules</div>
+  <div class="card">
+    <div class="motif-row"><div class="motif-icon">&#9632;&#9632;</div><div><div class="motif-name">Clean Grid, Even Panels</div><div class="motif-meaning">Order, control, teaching</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="font-size:10px">&#9632;&#9632;&#9632;</div><div><div class="motif-name">Panels Shrinking</div><div class="motif-meaning">Pressure, claustrophobia, Black Light overwhelm</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="font-size:24px">&#9633;</div><div><div class="motif-name">Panels Expanding / Borderless</div><div class="motif-meaning">Freedom, breakthrough, Lapis clarity</div></div></div>
+    <div class="motif-row"><div class="motif-icon">&#10070;</div><div><div class="motif-name">Panel Borders Cracking</div><div class="motif-meaning">Reality being audited (Black Light)</div></div></div>
+    <div class="motif-row"><div class="motif-icon" style="font-size:22px">&#9641;</div><div><div class="motif-name">Double-Page Spread</div><div class="motif-meaning">Fluorescent activation ONLY</div></div></div>
+    <div class="motif-row"><div class="motif-icon">&#8214;</div><div><div class="motif-name">Single Tall Vertical</div><div class="motif-meaning">Isolation, stillness, the stance</div></div></div>
+  </div>
+</div>
+
+<!-- ═══ RULES & CEILING ═══ -->
+<div class="view" id="v-rules">
+  <div class="section-title">Power Ceiling &mdash; Hard Rules</div>
+  <div class="card">
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">States don't make him stronger, faster, or tougher. He's still 165 lbs throwing regular punches.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">Lapis = passive perception (no duration limit once trained). Measurement is sustained, not burst.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">Black Light = involuntary, can't turn OFF once triggered. The cost is permanent &mdash; you can't unsee truth.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">Fluorescent = 3-5 seconds MAX, then physical collapse. Creation at this level is unsustainable.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">Fluorescent fires once per arc at most. Rarity = impact. Overuse = Dragon Ball Z inflation.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">No state works on himself voluntarily. Black Light on self = involuntary (the mirror scene).</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">States don't stack cleanly. Lapis + Black Light = migraine. All three = near-death.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">Other characters cannot see the states. Only the reader. Logan looks normal. This is the isolation.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">States cannot be taught. You carry the ME or you don't.</div></div>
+    <div class="rule-row"><div class="rule-icon">&#10005;</div><div class="rule-text">States can be LOST. Inanna's Two Gates. Trauma, exhaustion, or betrayal strips them temporarily.</div></div>
+  </div>
+
+  <div class="section-title">The Ceiling Definition</div>
+  <div class="card">
+    <div class="card-body">
+      Fluorescent Mode doesn't make Logan superhuman. It makes him <strong>perfectly
+      coherent</strong> for 3-5 seconds &mdash; every measurement, every truth, every pattern
+      aligned and available simultaneously. Then his nervous system crashes.
+      He's not a superhero. He's a human whose perception temporarily operates
+      at a frequency most people never access. The difference isn't power &mdash; it's <strong>resolution</strong>.
+    </div>
+  </div>
+
+  <div class="section-title">Tonal Rules</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">What This Show IS NOT</div>
+      <div class="card-body">
+        No inspirational speeches mid-fight<br>
+        No instant redemption<br>
+        No "training montage fixes everything"<br>
+        No villain &mdash; opposing forces, not evil<br>
+        No explanation of frequency states to other characters<br>
+        No mystical guru. Logan is confused by his states too.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--lapis-glow)">What This Show IS</div>
+      <div class="card-body">
+        Silence > speeches<br>
+        Body language > dialogue<br>
+        Relationships drive growth<br>
+        Failure evolves (one type &rarr; more sophisticated type)<br>
+        The fight is never the climax. The choice is.<br>
+        HK is a character, not a backdrop<br>
+        Frequency states are private &mdash; reader's privilege
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Signature Moments (Must-Have Scenes)</div>
+  <div class="card">
+    <div class="check-item"><div class="check-box"></div><div class="check-text">Sitting alone in locker room after a quiet loss</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">Laughing with someone &rarr; realising something painful</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">Choosing NOT to throw a punch</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">Hand-wrapping sequence &mdash; full ritual, silent, meditative</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">First Lapis flicker &mdash; confusion, not power</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">First Black Light &mdash; overwhelming, wants it to stop</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">"You're not broken. You're a measuring rod."</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">The cup of tea scene &mdash; after training, two people, silence</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">Logan looks at his hands &mdash; sees the gold constellation lines</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">Fluorescent Mode &mdash; 3 seconds of creation, then collapse</div></div>
+    <div class="check-item"><div class="check-box"></div><div class="check-text">The final choice (not the final fight)</div></div>
+  </div>
+</div>
+
+<!-- ═══ ASSETS ═══ -->
+<div class="view" id="v-assets">
+  <div class="section-title">Character Sheets &amp; Art</div>
+  <div class="asset-grid" id="asset-grid">
+    <div style="color:var(--text-dim);font-size:13px;padding:20px;">Loading assets...</div>
+  </div>
+</div>
+
+<!-- ═══ DOCS ═══ -->
+<div class="view" id="v-docs">
+  <div class="section-title">Source Documents</div>
+  <div class="doc-link"><div class="doc-icon">&#128214;</div><div><div class="doc-name">Logan Story Map</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/logan-story-map.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#127912;</div><div><div class="doc-name">Frequency States</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/logan-frequency-states.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#128100;</div><div><div class="doc-name">Character Spec</div><div class="doc-path">09_Artifacts/logan/logan-character-spec.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#127758;</div><div><div class="doc-name">Brand Universe</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/logan-brand-universe.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#128220;</div><div><div class="doc-name">Universe Vision</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/LOGAN_UNIVERSE_VISION.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#127916;</div><div><div class="doc-name">Generation Playbook</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/LOGAN_GENERATION_PLAYBOOK.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#128274;</div><div><div class="doc-name">IP System</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/LOGAN_IP_SYSTEM.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#128218;</div><div><div class="doc-name">Syllabus Bridge</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/logan-syllabus-bridge.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#127911;</div><div><div class="doc-name">Voice Bank</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/logan-voice-bank.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#128203;</div><div><div class="doc-name">Principles Integration</div><div class="doc-path">09_Artifacts/logan/logan-principles-integration.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#128221;</div><div><div class="doc-name">Animation Brief</div><div class="doc-path">09_Artifacts/logan/logan-brief.md</div></div></div>
+</div>
+
+<script>
+// ═══ NAV ═══
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('v-' + tab.dataset.view).classList.add('active');
+  });
+});
+
+// ═══ SPINE DATA ═══
+const SPINE = [
+  { num: 0, title: 'The Physical Foundation', phase: 'Origin', chapters: 'Pre-story', cls: '', feeling: '', scenes: ['Logan alone in empty gym, pre-dawn. Hand wrapping sequence.'] },
+  { num: 1, title: 'Neutral Stance and Guard', phase: 'Origin', chapters: '1-3', cls: '', feeling: 'Looking right', scenes: ["Kael's First Session \u2014 wants to fight, Logan makes him stand still", "Mei Lin's First Session \u2014 already moves well, Logan barely corrects", 'Ernesto Phone Call \u2014 "You\'re not teaching boxing. You\'re teaching them to see."'] },
+  { num: 2, title: 'The Jab', phase: 'Foundation', chapters: '4-5', cls: 'lapis', feeling: 'Looking right \u2192 Feeling right', scenes: ["Mei Lin's revelation \u2014 one punch, eight purposes", "Logan's first Lapis flicker \u2014 throws a jab, suddenly SEES all 8 simultaneously"] },
+  { num: 3, title: 'Straight Punches', phase: 'Foundation', chapters: '6-8', cls: '', feeling: 'Feeling right', scenes: ['Kael overcommits \u2014 throws everything with max power, falls forward', '"Nobody knocks anyone out with effort. They do it with timing."'] },
+  { num: 4, title: 'Hook Family', phase: 'Atoms', chapters: '9-11', cls: 'lapis', feeling: 'Feeling right \u2192 Belonging', scenes: ['Finding angles = seeing what\'s hidden. Pivot = changing perspective.'] },
+  { num: 5, title: 'Uppercut Family', phase: 'Atoms', chapters: '12-13', cls: '', feeling: 'Belonging', scenes: ['"Works only when you\'re close enough to be in danger" \u2014 metaphor lands'] },
+  { num: 6, title: 'Full Vocabulary', phase: 'Atoms', chapters: '14-15', cls: 'uv', feeling: 'Belonging', scenes: ['First moment Logan reads an opponent \u2014 Black Light flickers'] },
+  { num: 7, title: 'Combinations', phase: 'Chains', chapters: '16-19', cls: 'uv', feeling: 'Belonging \u2192 Ownership', scenes: ['Commitment Gap Drill \u2014 partner commits, gap glows UV-white', 'Logan sees a coach performing authority (Black Light). Can\'t unsee it.', '"I can see everyone\'s lie. Including my own."'] },
+  { num: 8, title: 'Power Combinations', phase: 'Chains', chapters: '20-22', cls: 'uv', feeling: 'Ownership', scenes: ['Body-Head Ladder \u2014 panels dissolve into particle geometry for one beat'] },
+  { num: 9, title: 'Ring General', phase: 'Integration', chapters: '23-26', cls: 'fluor', feeling: 'Ownership \u2192 Mastery', scenes: ['First live sparring as Ring General \u2014 building combos in real-time', 'Fluorescent flicker \u2014 one moment of pure creation, then collapse', '"What was that?" (Logan, on his knees, exhausted, after 3 seconds)'] },
+  { num: 10, title: 'Mastery and the Aura', phase: 'Integration', chapters: '27-30', cls: 'fluor', feeling: 'Mastery felt', scenes: ['The final fight is NOT the climax. The choice Logan makes is.', '"The aura was always there. The curriculum removed what was covering it."', 'The measuring rod was always in his hands.'] }
+];
+
+const spineEl = document.getElementById('spine-list');
+spineEl.innerHTML = SPINE.map((b, i) => `
+  <div class="spine-block">
+    ${i < SPINE.length - 1 ? '<div class="spine-connector"></div>' : ''}
+    <div class="spine-num ${b.cls}">${b.num}</div>
+    <div class="spine-content">
+      <div class="spine-title">Block ${b.num} \u2014 ${b.title}</div>
+      <div class="spine-phase">${b.phase} \u00B7 Chapters ${b.chapters}${b.feeling ? ' \u00B7 ' + b.feeling : ''}</div>
+      <ul class="spine-scenes">${b.scenes.map(s => `<li>${s}</li>`).join('')}</ul>
+    </div>
+  </div>
+`).join('');
+
+// ═══ LOCATIONS ═══
+const LOCS = [
+  { name: 'Sheung Wan', theme: 'Discipline', desc: "Logan's gym. Home base. Dawn training.", status: 'core' },
+  { name: 'Central', theme: 'Control vs Pressure', desc: 'Logan in the crowd. Black Light triggers.', status: 'done' },
+  { name: 'Temple Street Night Market', theme: 'Adaptability', desc: 'Night training, improvisation, chaos.', status: 'done' },
+  { name: 'Victoria Peak', theme: 'Purpose / Perspective', desc: 'Exhausted but calm. Fluorescent flicker looking at the city.', status: 'priority' },
+  { name: 'Repulse Bay', theme: 'Recovery / Breathing', desc: 'After the loss. Quiet. Water.', status: 'planned' },
+  { name: 'Chungking Mansions', theme: 'Chaos / Discomfort', desc: 'Sensory overload. Black Light overwhelm.', status: 'planned' },
+  { name: 'Sham Shui Po', theme: 'Grounded Reality', desc: 'Where the real people are. No performance.', status: 'planned' },
+  { name: 'Monster Building', theme: 'Pressure / Scale', desc: 'The walls closing in. Geometric patterns.', status: 'planned' },
+  { name: 'TST Promenade', theme: 'Duality', desc: 'Hong Kong skyline. Two sides. Lapis blue water.', status: 'planned' }
+];
+
+document.getElementById('loc-grid').innerHTML = LOCS.map(l => `
+  <div class="loc-card">
+    <div class="loc-name">${l.name}</div>
+    <div class="loc-theme">${l.theme}</div>
+    <div class="loc-desc">${l.desc}</div>
+    <div class="loc-status ${l.status}">${l.status}</div>
+  </div>
+`).join('');
+
+// ═══ SEEDS ═══
+const SEEDS = [
+  { source: 'Sumerian Research (2026-05-24)', text: '"You\'re not broken. You\'re a measuring rod." \u2014 The mentor line. GI.SHID/Nisaba. The measuring rod ME = the capacity was always there.' },
+  { source: 'Sumerian Research', text: 'The Seal-House \u2014 Logan\'s gym IS Nisaba\'s seal-house. Records, data, measurement, archive.' },
+  { source: 'Sumerian Research', text: 'The Two Gates \u2014 Gate 2 (loss of precision) and Gate 6 (loss of judgment) from Inanna\'s Descent. Logan loses his states temporarily.' },
+  { source: 'Sumerian Research', text: 'The Three Readings \u2014 Multiple people independently recognise something in Logan before he recognises it himself.' },
+  { source: 'Sumerian Research', text: 'NAM.KU.ZU \u2014 Logan watches a new student throw 3 punches and knows everything about their fear gate.' },
+  { source: 'Sumerian Research', text: 'The Destruction of the Seal-House \u2014 Logan\'s gym threatened. What happens when the archive falls?' },
+  { source: 'Diagnostic Empathy (2026-05-19)', text: 'The Trojan Horse Principle \u2014 Diagnostic empathy works because students came for boxing. Marketing it kills it.' },
+  { source: 'Diagnostic Empathy', text: 'Surgical Naming \u2014 Logan gives students one word for their pattern. "You\'re a Carrier." The word changes them.' },
+  { source: 'Diagnostic Empathy', text: 'The Fear Gate \u2014 Logan sees the moment someone\'s about to quit before they know it. "I saw you leave 30 seconds before you did."' },
+  { source: 'Pretta/OmissionOS (2026-05-15)', text: 'Black Light on Self \u2014 Logan\'s Black Light applies to himself. The mirror scene. Most painful trigger.' },
+  { source: 'Pretta/OmissionOS', text: 'The Extractor \u2014 An antagonist who takes from builders. Goes dark under Black Light.' },
+  { source: 'Cognitive Signature (2026-05-19)', text: 'The Underlying Pattern \u2014 "never answer the surface question, test the mechanism underneath it." Student asks "how do I throw harder?" Logan: "Show me your feet."' },
+  { source: 'Perfection Detector (2026-05-22)', text: 'The Perfect Fighter \u2014 Someone walks in who looks perfect. Logan\'s Black Light triggers hard. "Perfect" IS the flaw.' },
+  { source: 'Cup of Tea (2026-05-07)', text: 'After Training \u2014 The real scenes happen after the session ends. Tea or water. No technique. Just presence.' }
+];
+
+document.getElementById('seeds-list').innerHTML = SEEDS.map(s => `
+  <div class="seed">
+    <div class="seed-source">${s.source}</div>
+    <div class="seed-text">${s.text}</div>
+  </div>
+`).join('');
+
+// ═══ ASSETS ═══
+async function loadAssets() {
+  try {
+    const res = await fetch('/logan-universe/assets');
+    const data = await res.json();
+    const grid = document.getElementById('asset-grid');
+    if (!data.length) { grid.innerHTML = '<div style="color:var(--text-dim);font-size:13px">No image assets found.</div>'; return; }
+    grid.innerHTML = data.map(a => `
+      <div class="asset-thumb" onclick="window.open('${a.url}','_blank')">
+        <img src="${a.url}" loading="lazy" alt="${a.name}">
+        <div class="asset-name">${a.name}</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('asset-grid').innerHTML = '<div style="color:var(--text-dim);font-size:13px">Could not load assets.</div>';
+  }
+}
+loadAssets();
+</script>
+</body>
+</html>

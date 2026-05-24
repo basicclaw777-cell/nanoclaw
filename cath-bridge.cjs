@@ -16,6 +16,58 @@ const VAULT    = path.join(HOME, 'cathedral-vault');
 
 app.use(express.json());
 
+// ── Neural Bus event emitter ─────────────────────────────────────────────────
+// Fire-and-forget POST to neural-bus on every request (non-blocking)
+const NEURAL_BUS_URL = 'http://127.0.0.1:8078/event';
+const SKIP_NEURAL = new Set(['/api/neural-map', '/neural-map', '/api/newsfeed', '/api/newsfeed/heartbeat', '/newsfeed', '/favicon.ico', '/cathedral-tokens.css']);
+
+app.use((req, res, next) => {
+  const url = req.url.split('?')[0];
+  if (!SKIP_NEURAL.has(url) && !url.startsWith('/env/icon')) {
+    const routeNodes = neuralRouteToNodes(url);
+    const payload = JSON.stringify({
+      source: 'http',
+      method: req.method,
+      url: url,
+      path: routeNodes,
+      label: `${req.method} ${url}`,
+    });
+    const busReq = require('http').request(NEURAL_BUS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
+      timeout: 500,
+    });
+    busReq.on('error', () => {}); // silent fail — bus might be down
+    busReq.end(payload);
+  }
+  next();
+});
+
+function neuralRouteToNodes(url) {
+  const map = {
+    '/chat': ['telegram', 'bridge'], '/chat/local': ['telegram', 'bridge'],
+    '/env/chat': ['bridge', 'dispatch'], '/command': ['telegram', 'bridge'],
+    '/vault': ['bridge', 'vault'], '/reed-studio': ['bridge', 'reed'],
+    '/api/reed-studio': ['bridge', 'reed'], '/api/content-studio': ['bridge', 'content'],
+    '/api/engineering-studio': ['bridge', 'engineering'], '/growth': ['bridge', 'growth'],
+    '/comms': ['bridge', 'comms'], '/merch': ['bridge', 'merch'],
+    '/course': ['bridge', 'course'], '/publisher': ['bridge', 'publisher'],
+    '/trader': ['bridge', 'trading'], '/looking-glass': ['bridge', 'looking-glass'], '/geomag': ['bridge', 'geomag'],
+    '/cosmology': ['bridge', 'cosmology'], '/scraper': ['bridge', 'scraper'],
+    '/gym-eyes': ['bridge', 'gym-eyes'], '/techniques': ['bridge', 'techniques'],
+    '/screening': ['bridge', 'screening'], '/cathedral-city': ['bridge', 'city'],
+    '/constellation': ['bridge', 'constellation'], '/pulse': ['bridge', 'pulse'],
+    '/api/architect-pulse': ['bridge', 'pulse'], '/agents': ['bridge', 'dialogue'],
+    '/villa': ['bridge', 'monitor'], '/control': ['bridge', 'sentinel'],
+    '/hermes': ['bridge', 'dispatch'],
+  };
+  if (map[url]) return map[url];
+  for (const [route, nodes] of Object.entries(map)) {
+    if (url.startsWith(route)) return nodes;
+  }
+  return ['bridge'];
+}
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
@@ -1223,12 +1275,177 @@ app.get('/gym-eyes/dashboard/:name', (req, res) => {
   res.sendFile(dashPath);
 });
 
+// Cuba Combo Library dashboard + assets
+const CUBA_LIB = path.join(HOME, 'basic-reflex', 'gym-eyes', 'cuba-library');
+app.get('/cuba-combos', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(path.join(CUBA_LIB, 'cuba-dashboard.html'));
+});
+app.get('/cuba-combos/:file', (req, res) => {
+  const filePath = path.join(CUBA_LIB, req.params.file);
+  if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+  res.sendFile(filePath);
+});
+app.get('/cuba-combos/clips/:file', (req, res) => {
+  const filePath = path.join(CUBA_LIB, 'clips', req.params.file);
+  if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+  res.sendFile(filePath);
+});
+app.get('/cuba-combos/frames/:file', (req, res) => {
+  const filePath = path.join(CUBA_LIB, 'frames', req.params.file);
+  if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+  res.sendFile(filePath);
+});
+
 // Serve the main gym-eyes dashboard/hub
 app.get('/gym-eyes', (req, res) => {
   const hubPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'hub.html');
   if (!fs.existsSync(hubPath)) return res.redirect('/gym-eyes/data');
   res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
   res.sendFile(hubPath);
+});
+
+// Serve PCA cluster visualization
+app.get('/gym-eyes/clusters', (req, res) => {
+  const pcaPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'pca_clusters.html');
+  if (!fs.existsSync(pcaPath)) return res.status(404).send('No PCA visualization yet. Run: python3 pose_classifier.py viz');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(pcaPath);
+});
+
+// Classifier status
+app.get('/gym-eyes/classifier', (req, res) => {
+  const modelPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'models', 'punch_classifier.pkl');
+  const trainingDir = path.join(HOME, 'basic-reflex', 'gym-eyes', 'training_data');
+  const modelExists = fs.existsSync(modelPath);
+  let trainingFiles = 0, totalSamples = 0;
+  if (fs.existsSync(trainingDir)) {
+    const files = fs.readdirSync(trainingDir).filter(f => f.endsWith('.json'));
+    trainingFiles = files.length;
+    for (const f of files) {
+      try {
+        const d = JSON.parse(fs.readFileSync(path.join(trainingDir, f), 'utf-8'));
+        totalSamples += (d.samples || []).length;
+      } catch {}
+    }
+  }
+  res.json({
+    model_trained: modelExists,
+    model_path: modelExists ? modelPath : null,
+    training_files: trainingFiles,
+    total_samples: totalSamples,
+    pca_available: fs.existsSync(path.join(HOME, 'basic-reflex', 'gym-eyes', 'pca_clusters.html')),
+  });
+});
+
+// List annotated videos
+app.get('/gym-eyes/videos', (req, res) => {
+  const sessDir = path.join(HOME, 'basic-reflex', 'gym-eyes', 'sessions');
+  if (!fs.existsSync(sessDir)) return res.json({ videos: [] });
+  const vids = fs.readdirSync(sessDir)
+    .filter(f => f.startsWith('annotated-') && f.endsWith('.mp4'))
+    .sort().reverse()
+    .slice(0, 10)
+    .map(f => {
+      const stat = fs.statSync(path.join(sessDir, f));
+      return { file: f, size: stat.size, date: stat.mtime.toISOString() };
+    });
+  res.json({ videos: vids });
+});
+
+// Serve video files
+app.get('/gym-eyes/video/:file', (req, res) => {
+  const file = req.params.file;
+  if (!file || file.includes('..') || !file.endsWith('.mp4')) return res.status(400).send('bad request');
+  const vidPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'sessions', file);
+  if (!fs.existsSync(vidPath)) return res.status(404).send('not found');
+  res.sendFile(vidPath);
+});
+
+// Gym Eyes Showcase report
+app.get('/gym-eyes/showcase', (req, res) => {
+  const reportPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'showcase_report.html');
+  if (!fs.existsSync(reportPath)) return res.status(404).send('No showcase report yet. Run: python3 showcase.py');
+  res.sendFile(reportPath);
+});
+
+// Dataset explorer
+app.get('/datasets', (req, res) => {
+  const explorerPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'dataset_explorer.html');
+  if (!fs.existsSync(explorerPath)) return res.status(404).send('Dataset explorer not found');
+  res.sendFile(explorerPath);
+});
+
+// Dataset image serving
+const DATASETS_DIR = path.join(HOME, 'basic-reflex', 'datasets');
+app.get('/datasets/image/:split/:file', (req, res) => {
+  const { split, file } = req.params;
+  if (!split || !file || split.includes('..') || file.includes('..')) return res.status(400).send('bad');
+  const imgPath = path.join(DATASETS_DIR, 'spinetrack', 'images', split, file);
+  if (!fs.existsSync(imgPath)) return res.status(404).send('not found');
+  res.sendFile(imgPath);
+});
+
+// Dataset annotations API
+let _stAnnoCache = null;
+app.get('/datasets/api/spinetrack', (req, res) => {
+  try {
+    if (!_stAnnoCache) {
+      const splits = ['train-real-coco', 'train-real-yoga', 'train-unreal'];
+      const result = { splits: {} };
+      for (const split of splits) {
+        const annoFile = split === 'train-real-coco'
+          ? 'person_keypoints_train-real-coco.json'
+          : split === 'train-real-yoga'
+          ? 'person_keypoints_train-real-yoga.json'
+          : 'person_keypoints_train-unreal.json';
+        const annoPath = path.join(DATASETS_DIR, 'spinetrack', 'annotations', annoFile);
+        if (!fs.existsSync(annoPath)) { result.splits[split] = { count: 0 }; continue; }
+        const data = JSON.parse(fs.readFileSync(annoPath, 'utf8'));
+        const imgMap = {};
+        for (const img of data.images) imgMap[img.id] = img;
+        // Group annotations by image
+        const byImage = {};
+        for (const ann of data.annotations) {
+          const img = imgMap[ann.image_id];
+          if (!img) continue;
+          if (!byImage[img.file_name]) byImage[img.file_name] = { w: img.width, h: img.height, anns: [] };
+          byImage[img.file_name].anns.push(ann.keypoints);
+        }
+        const imgDir = path.join(DATASETS_DIR, 'spinetrack', 'images', split);
+        const hasImages = fs.existsSync(imgDir);
+        result.splits[split] = {
+          count: Object.keys(byImage).length,
+          totalAnnotations: data.annotations.length,
+          keypoints: data.categories?.[0]?.keypoints || [],
+          hasImages,
+          images: byImage
+        };
+      }
+      _stAnnoCache = result;
+    }
+    // Pagination
+    const split = req.query.split || 'train-real-coco';
+    const page = parseInt(req.query.page) || 0;
+    const perPage = parseInt(req.query.per_page) || 48;
+    const splitData = _stAnnoCache.splits[split];
+    if (!splitData) return res.json({ error: 'unknown split' });
+    const allFiles = Object.keys(splitData.images);
+    const slice = allFiles.slice(page * perPage, (page + 1) * perPage);
+    const pageData = {};
+    for (const f of slice) pageData[f] = splitData.images[f];
+    res.json({
+      split, page, perPage, totalImages: allFiles.length,
+      totalAnnotations: splitData.totalAnnotations,
+      keypoints: splitData.keypoints,
+      hasImages: splitData.hasImages,
+      totalPages: Math.ceil(allFiles.length / perPage),
+      images: pageData,
+      availableSplits: Object.entries(_stAnnoCache.splits).map(([k,v]) => ({ name: k, count: v.count, annotations: v.totalAnnotations }))
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // Serve artifact files directly (images, HTML, SVG)
@@ -2207,6 +2424,118 @@ app.get('/reed-studio-asset', (req, res) => {
   res.sendFile(fullPath);
 });
 // ── Engineering Studio API ──────────────────────────────────────────────────
+// ── Content Studio API ───────────────────────────────────────────────────────
+app.get('/api/content-studio/metrics', (req, res) => {
+  const f = path.join(NANOCLAW, 'content-studio', 'metrics.json');
+  try { res.json(JSON.parse(fs.readFileSync(f, 'utf8'))); } catch { res.json({}); }
+});
+app.get('/api/content-studio/feed', (req, res) => {
+  const f = path.join(NANOCLAW, 'content-studio', 'studio-feed.json');
+  try { res.json(JSON.parse(fs.readFileSync(f, 'utf8'))); } catch { res.json({ posts: [] }); }
+});
+app.get('/api/content-studio/memory', (req, res) => {
+  const f = path.join(NANOCLAW, 'content-studio', 'studio-memory.json');
+  try { res.json(JSON.parse(fs.readFileSync(f, 'utf8'))); } catch { res.json({}); }
+});
+app.get('/api/content-studio/characters', (req, res) => {
+  const f = path.join(NANOCLAW, 'content-studio', 'characters.json');
+  try { res.json(JSON.parse(fs.readFileSync(f, 'utf8'))); } catch { res.json({}); }
+});
+app.get('/api/content-studio/status', (req, res) => {
+  const metricsFile = path.join(NANOCLAW, 'content-studio', 'metrics.json');
+  const feedFile = path.join(NANOCLAW, 'content-studio', 'studio-feed.json');
+  let metrics = {}, feed = { posts: [] };
+  try { metrics = JSON.parse(fs.readFileSync(metricsFile, 'utf8')); } catch {}
+  try { feed = JSON.parse(fs.readFileSync(feedFile, 'utf8')); } catch {}
+  res.json({ healthy: true, projects: Object.keys(metrics.projects || {}), feedPosts: (feed.posts || []).length });
+});
+app.get('/api/content-studio/queue', (req, res) => {
+  const f = path.join(NANOCLAW, 'content-studio', 'content-queue.json');
+  try { res.json(JSON.parse(fs.readFileSync(f, 'utf8'))); } catch { res.json({ items: [] }); }
+});
+app.get('/api/content-studio/character-stats', (req, res) => {
+  const memDir = path.join(NANOCLAW, 'content-studio', 'character-memory');
+  const stats = {};
+  for (const charId of ['reed', 'maya', 'ling', 'echo']) {
+    const f = path.join(memDir, `${charId}.json`);
+    try {
+      const mem = JSON.parse(fs.readFileSync(f, 'utf8'));
+      stats[charId] = { totalPitches: (mem.pitches || []).length, selected: mem.selected || 0, ignored: mem.ignored || 0, rejected: mem.rejected || 0, selectionRate: mem.selectionRate, lastPitch: mem.lastPitch };
+    } catch { stats[charId] = { totalPitches: 0, selected: 0, ignored: 0, rejected: 0, selectionRate: null, lastPitch: null }; }
+  }
+  res.json(stats);
+});
+app.post('/api/content-studio/select', (req, res) => {
+  const { ideaId } = req.body || {};
+  if (!ideaId) return res.status(400).json({ error: 'ideaId required' });
+  const f = path.join(NANOCLAW, 'content-studio', 'content-queue.json');
+  try {
+    const queue = JSON.parse(fs.readFileSync(f, 'utf8'));
+    const item = queue.items.find(i => i.id === ideaId);
+    if (!item) return res.status(404).json({ error: 'idea not found' });
+    item.status = 'selected'; item.selectedAt = new Date().toISOString();
+    fs.writeFileSync(f, JSON.stringify(queue, null, 2));
+    // Update character memory
+    const memFile = path.join(NANOCLAW, 'content-studio', 'character-memory', `${item.character}.json`);
+    try {
+      const mem = JSON.parse(fs.readFileSync(memFile, 'utf8'));
+      mem.selected = (mem.selected || 0) + 1;
+      const total = mem.selected + (mem.ignored || 0) + (mem.rejected || 0);
+      mem.selectionRate = total > 0 ? mem.selected / total : null;
+      fs.writeFileSync(memFile, JSON.stringify(mem, null, 2));
+    } catch {}
+    res.json({ selected: true, item });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.post('/api/content-studio/reject', (req, res) => {
+  const { ideaId, reason } = req.body || {};
+  if (!ideaId) return res.status(400).json({ error: 'ideaId required' });
+  const f = path.join(NANOCLAW, 'content-studio', 'content-queue.json');
+  try {
+    const queue = JSON.parse(fs.readFileSync(f, 'utf8'));
+    const item = queue.items.find(i => i.id === ideaId);
+    if (!item) return res.status(404).json({ error: 'idea not found' });
+    item.status = 'rejected'; item.rejectedAt = new Date().toISOString(); item.reason = reason || '';
+    fs.writeFileSync(f, JSON.stringify(queue, null, 2));
+    // Update character memory
+    const memFile = path.join(NANOCLAW, 'content-studio', 'character-memory', `${item.character}.json`);
+    try {
+      const mem = JSON.parse(fs.readFileSync(memFile, 'utf8'));
+      mem.rejected = (mem.rejected || 0) + 1;
+      const total = (mem.selected || 0) + (mem.ignored || 0) + mem.rejected;
+      mem.selectionRate = total > 0 ? (mem.selected || 0) / total : null;
+      fs.writeFileSync(memFile, JSON.stringify(mem, null, 2));
+    } catch {}
+    res.json({ rejected: true, item });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/content-studio/internal-feed', (req, res) => {
+  const f = path.join(NANOCLAW, 'content-studio', 'maya-internal-feed.json');
+  try { res.json(JSON.parse(fs.readFileSync(f, 'utf8'))); } catch { res.json({ posts: [] }); }
+});
+app.get('/api/content-studio/wishlist', (req, res) => {
+  const f = path.join(NANOCLAW, 'content-studio', 'capture-wishlist.json');
+  try { res.json(JSON.parse(fs.readFileSync(f, 'utf8'))); } catch { res.json({ requests: [], fulfilled: [] }); }
+});
+app.post('/api/content-studio/fulfill', (req, res) => {
+  const { requestId } = req.body || {};
+  if (!requestId) return res.status(400).json({ error: 'requestId required' });
+  const f = path.join(NANOCLAW, 'content-studio', 'capture-wishlist.json');
+  try {
+    const wishlist = JSON.parse(fs.readFileSync(f, 'utf8'));
+    const idx = wishlist.requests.findIndex(r => r.id === requestId);
+    if (idx === -1) return res.status(404).json({ error: 'request not found' });
+    const [request] = wishlist.requests.splice(idx, 1);
+    request.fulfilledAt = new Date().toISOString();
+    wishlist.fulfilled.push(request);
+    wishlist.lastUpdated = new Date().toISOString();
+    fs.writeFileSync(f, JSON.stringify(wishlist, null, 2));
+    res.json({ fulfilled: true, request });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── Engineering Studio API ───────────────────────────────────────────────────
 app.get('/api/engineering-studio/metrics', (req, res) => {
   const f = path.join(NANOCLAW, 'engineering-studio', 'metrics.json');
   if (!fs.existsSync(f)) return res.json({});
@@ -2249,7 +2578,7 @@ app.get('/api/engineering-studio/status', (req, res) => {
 // ── Studio Commons: Progress + Rating API ───────────────────────────────────
 app.get('/api/studio-progress', (req, res) => {
   // Returns progress for all studios
-  const studios = ['reed-studio', 'engineering-studio'];
+  const studios = ['reed-studio', 'engineering-studio', 'content-studio'];
   const results = {};
   for (const id of studios) {
     const progressFile = path.join(NANOCLAW, id, 'progress.json');
@@ -2316,7 +2645,8 @@ app.post('/api/studio-snapshot', (req, res) => {
   // Trigger progress snapshot for all studios
   const studios = [
     { id: 'reed-studio', dir: path.join(NANOCLAW, 'reed-studio'), metricsFile: 'metrics.json' },
-    { id: 'engineering-studio', dir: path.join(NANOCLAW, 'engineering-studio'), metricsFile: 'metrics.json' }
+    { id: 'engineering-studio', dir: path.join(NANOCLAW, 'engineering-studio'), metricsFile: 'metrics.json' },
+    { id: 'content-studio', dir: path.join(NANOCLAW, 'content-studio'), metricsFile: 'metrics.json' }
   ];
   const results = [];
   for (const s of studios) {
@@ -2411,6 +2741,10 @@ app.get('/simpsons', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'simpsons-forensics', 'dashboard.html'));
 });
 
+app.get('/sumerian', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'sumerian-observatory.html'));
+});
+
 app.get('/publisher', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'publisher-studio.html'));
 });
@@ -2448,6 +2782,10 @@ app.get('/env/:domain', (req, res) => {
 });
 
 // ── Looking Glass (Sky Sense) ────────────────────────────────────────────────
+
+app.get('/cathedral-deck', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'cathedral-deck.html'));
+});
 
 app.get('/looking-glass', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'looking-glass.html'));
@@ -2639,6 +2977,48 @@ app.get('/looking-glass/events', async (req, res) => {
     const days = parseInt(req.query.days) || 90;
     res.json(findEvents(new Date(), days));
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── Geomagnetic Prediction Engine ────────────────────────────────────────────
+
+app.get('/geomag', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'geomag', 'geomag-dashboard.html'));
+});
+
+app.get('/geomag/data', async (req, res) => {
+  try {
+    const { fetchAllSpaceWeather } = await import('./geomag/space-weather-fetcher.js');
+    const sw = await fetchAllSpaceWeather();
+
+    // Run strategies
+    const { predictDst: wsaEnlil } = await import('./geomag/strategies/wsa-enlil.js');
+    const { predictDst: electricUniverse } = await import('./geomag/strategies/electric-universe.js');
+    const { predictDst: resonantCavity } = await import('./geomag/strategies/resonant-cavity.js');
+    const { predictDst: planetaryTidal } = await import('./geomag/strategies/planetary-tidal.js');
+
+    const predictions = [wsaEnlil, electricUniverse, resonantCavity, planetaryTidal]
+      .map(fn => { try { return fn(sw); } catch { return null; } })
+      .filter(Boolean);
+
+    res.json({ timestamp: new Date().toISOString(), spaceWeather: sw, predictions });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── Geomag Backtest ──────────────────────────────────────────────────────────
+
+app.get('/geomag/backtest-dashboard', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'geomag', 'backtest-dashboard.html'));
+});
+
+app.get('/geomag/backtest', (req, res) => {
+  const fs = require('fs');
+  const year = req.query.year || '2024';
+  const resultsPath = path.join(NANOCLAW, 'geomag', 'backtest-results', `backtest-${year}.json`);
+  if (fs.existsSync(resultsPath)) {
+    res.json(JSON.parse(fs.readFileSync(resultsPath, 'utf8')));
+  } else {
+    res.status(404).json({ error: `No backtest results for ${year}` });
+  }
 });
 
 // ── Cathedral Control ────────────────────────────────────────────────────────
@@ -3105,6 +3485,30 @@ app.get('/cathedral-tokens.css', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'cathedral-tokens.css'));
 });
 
+// ── Emergence Garden ─────────────────────────────────────────────────────────
+
+app.get('/emergence', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'Cathedral', 'control-panel', 'emergence-garden.html'), 'utf8');
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Emergence Garden not found: ${err.message}`);
+  }
+});
+
+app.get('/api/emergence-captures', (req, res) => {
+  try {
+    const capturePath = path.join(HOME, 'Cathedral', 'agents', 'emergence-captures.json');
+    if (fs.existsSync(capturePath)) {
+      res.json(JSON.parse(fs.readFileSync(capturePath, 'utf8')));
+    } else {
+      res.json({ captures: [], lastScanTs: null });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── Architect Pulse ──────────────────────────────────────────────────────────
 
 app.get('/pulse', (req, res) => {
@@ -3186,6 +3590,34 @@ app.get('/merch/suppliers', (req, res) => {
 
 // ── Higgsfield Feature Map ────────────────────────────────────────────────────
 
+app.get('/hf-gallery', (req, res) => {
+  res.sendFile(path.join(__dirname, 'reed-lab', 'hf-gallery.html'));
+});
+
+// Serve test log + outbox files for gallery
+app.get('/reed-lab/test-log.json', (req, res) => {
+  try { res.json(JSON.parse(fs.readFileSync(path.join(__dirname, 'reed-lab', 'test-log.json'), 'utf8'))); }
+  catch { res.json([]); }
+});
+app.use('/reed-lab/hf-test-outbox', require('express').static(path.join(__dirname, 'reed-lab', 'hf-test-outbox')));
+
+// ── Gemini Lab ────────────────────────────────────────────────────────────────
+app.get('/reed-lab/gemini-log.json', (req, res) => {
+  try { res.json(JSON.parse(fs.readFileSync(path.join(__dirname, 'reed-lab', 'gemini-log.json'), 'utf8'))); }
+  catch { res.json([]); }
+});
+app.use('/reed-lab/gemini-outbox', require('express').static(path.join(__dirname, 'reed-lab', 'gemini-outbox')));
+app.get('/api/reed-curator', (req, res) => {
+  try {
+    const state = JSON.parse(fs.readFileSync(path.join(__dirname, 'reed-lab', 'curator-state.json'), 'utf8'));
+    const total = Object.keys(state.images).length;
+    const neverUsed = Object.values(state.images).filter(i => i.timesUsed === 0).length;
+    const bySource = {};
+    for (const img of Object.values(state.images)) bySource[img.source] = (bySource[img.source] || 0) + 1;
+    res.json({ total, neverUsed, totalPicks: state.totalPicks, bySource, lastScan: state.lastScan });
+  } catch { res.json({ total: 0, error: 'no curator state' }); }
+});
+
 app.get(['/higgsfield', '/higgsfield-map'], (req, res) => {
   try {
     const html = fs.readFileSync(path.join(__dirname, 'higgsfield-map.html'), 'utf8');
@@ -3199,6 +3631,263 @@ app.get('/higgsfield-map-data', (req, res) => {
   try {
     const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'higgsfield-map.json'), 'utf8'));
     res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Neural Map ────────────────────────────────────────────────────────────────
+
+app.get('/neural-map', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'neural-map.html'));
+});
+
+// ── Cathedral Newsfeed ────────────────────────────────────────────────────
+
+app.get('/newsfeed', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'cathedral-newsfeed.html'));
+});
+
+app.get('/api/newsfeed', (req, res) => {
+  try {
+    const items = [];
+    // Cathedral feed (research, DMs, emergence reflections)
+    const feedPath = path.join(HOME, 'Cathedral', 'agents', 'cathedral-feed.json');
+    if (fs.existsSync(feedPath)) {
+      const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8'));
+      if (feed.posts) items.push(...feed.posts);
+    }
+    // Heartbeat history as feed items
+    const hbPath = path.join(HOME, 'nanoclaw', 'heartbeat-state.json');
+    if (fs.existsSync(hbPath)) {
+      const hb = JSON.parse(fs.readFileSync(hbPath, 'utf8'));
+      for (const beat of (hb.beats || []).slice(-20)) {
+        items.push({
+          id: beat.id,
+          author: 'heartbeat',
+          authorName: 'Cathedral Heartbeat',
+          type: 'heartbeat',
+          topic: `${beat.eventName} — ${beat.classification}`,
+          content: `Impact: ${beat.impact} across ${beat.nodesAffected} nodes (${beat.duration}s). ${beat.outputPreview || ''}`,
+          ts: beat.date,
+          reactions: [],
+        });
+      }
+    }
+    // Workshop results
+    const wsPath = path.join(HOME, 'nanoclaw', 'maya-workshop-state.json');
+    if (fs.existsSync(wsPath)) {
+      const ws = JSON.parse(fs.readFileSync(wsPath, 'utf8'));
+      for (const run of (ws.runs || [])) {
+        if (run.completedAt) {
+          items.push({
+            id: 'workshop-' + run.run,
+            author: 'maya',
+            authorName: 'Maya Workshop',
+            type: 'workshop',
+            topic: `Run ${run.run}: ${run.name}`,
+            content: `${run.messagesSent || 0} messages sent. ${run.summary || ''}`,
+            ts: run.completedAt,
+            reactions: [],
+          });
+        }
+      }
+    }
+    // Sort by timestamp descending (newest first)
+    items.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+    res.json({ items: items.slice(0, 100) });
+  } catch (e) {
+    res.json({ items: [], error: e.message });
+  }
+});
+
+app.get('/api/newsfeed/heartbeat', (req, res) => {
+  try {
+    const hbPath = path.join(HOME, 'nanoclaw', 'heartbeat-state.json');
+    if (!fs.existsSync(hbPath)) return res.json({});
+    const hb = JSON.parse(fs.readFileSync(hbPath, 'utf8'));
+    const last = (hb.beats || []).slice(-1)[0];
+    res.json({
+      beatCount: hb.beatCount,
+      lastBeat: hb.lastBeat,
+      lastEventType: last?.eventType,
+      lastEventName: last?.eventName,
+      lastClassification: last?.classification,
+      lastImpact: last?.impact,
+    });
+  } catch (e) {
+    res.json({ error: e.message });
+  }
+});
+
+app.get('/api/neural-map', async (req, res) => {
+  try {
+    const result = { processes: [], emergence: null, dialogue: null, activity: {} };
+
+    // 1. PM2 process states
+    try {
+      const pm2Out = await run('pm2', ['jlist'], 15000);
+      const pm2List = JSON.parse(pm2Out);
+      result.processes = pm2List.map(p => ({
+        name: p.name,
+        status: p.pm2_env?.status || 'unknown',
+        restarts: p.pm2_env?.restart_time || 0,
+        uptime: p.pm2_env?.pm_uptime || 0,
+        cpu: p.monit?.cpu || 0,
+        memory: p.monit?.memory || 0,
+      }));
+    } catch (e) { /* pm2 unavailable */ }
+
+    // 2. Emergence monitor state
+    try {
+      const monitorPath = path.join(HOME, 'Cathedral', 'emergence', 'monitor-state.json');
+      const monitor = JSON.parse(fs.readFileSync(monitorPath, 'utf8'));
+      result.emergence = {
+        score: monitor.score,
+        lastRun: monitor.last_run,
+        senses: monitor.senses_summary || {},
+      };
+    } catch (e) { /* no emergence data */ }
+
+    // 3. Dialogue state (inter-agent threads)
+    try {
+      const dialoguePath = path.join(HOME, 'Cathedral', 'emergence', 'dialogue-state.json');
+      const dialogue = JSON.parse(fs.readFileSync(dialoguePath, 'utf8'));
+      const threads = dialogue.threads || [];
+      result.dialogue = {
+        totalThreads: threads.length,
+        activeThreads: threads.filter(t => !t.resolved).length,
+        totalMessages: threads.reduce((s, t) => s + (t.messageCount || 0), 0),
+        participants: [...new Set(threads.flatMap(t => t.participants || []))],
+      };
+    } catch (e) { /* no dialogue data */ }
+
+    // 4. Activity frequency estimates from file mod times
+    const activityChecks = {
+      'trading': path.join(__dirname, 'trader'),
+      'reed': path.join(__dirname, 'reed-studio-engine.cjs'),
+      'content': path.join(HOME, 'cathedral-vault', '10_Agents', 'growth', 'content'),
+      'growth': path.join(HOME, 'cathedral-vault', '10_Agents', 'growth', 'content'),
+      'gym-eyes': path.join(__dirname, 'student-intelligence'),
+      'screening': path.join(HOME, 'Cathedral', 'control-panel', 'br-screening-room.html'),
+      'merch': path.join(HOME, 'cathedral-vault', '10_Agents', 'merch'),
+      'comms': path.join(HOME, 'cathedral-vault', '10_Agents', 'ops', 'comms'),
+    };
+    const now = Date.now();
+    const DAY = 86400000;
+    for (const [id, checkPath] of Object.entries(activityChecks)) {
+      try {
+        const stat = fs.statSync(checkPath);
+        const age = now - stat.mtimeMs;
+        if (age < DAY) result.activity[id] = 8;
+        else if (age < DAY * 3) result.activity[id] = 4;
+        else if (age < DAY * 7) result.activity[id] = 2;
+        else result.activity[id] = 0;
+      } catch (e) { /* path doesn't exist */ }
+    }
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Static visualizations ────────────────────────────────────────────────────
+
+app.get('/mega-surgery-viz.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'mega-surgery-viz.html'));
+});
+
+app.get('/mind-map.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'mind-map.html'));
+});
+
+// ── Logan Universe Dashboard ──────────────────────────────────────────────────
+
+app.get('/logan-universe', (req, res) => {
+  res.sendFile(path.join(__dirname, 'logan-universe.html'));
+});
+
+app.get('/logan-universe/assets', (req, res) => {
+  const dirs = [
+    { label: 'Logan (Vault)', dir: path.join(HOME, 'cathedral-vault/09_Artifacts/logan') },
+    { label: 'Logan (BR)', dir: path.join(HOME, 'cathedral-vault/09_Artifacts/branding/basic-reflex/logan') },
+    { label: 'Character Sheets', dir: path.join(HOME, 'cathedral-vault/09_Artifacts/branding/basic-reflex/logan/character-sheets') }
+  ];
+  const exts = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+  const assets = [];
+  for (const { label, dir } of dirs) {
+    try {
+      if (!fs.existsSync(dir)) continue;
+      for (const f of fs.readdirSync(dir)) {
+        const ext = path.extname(f).toLowerCase();
+        if (exts.includes(ext)) {
+          assets.push({ name: f, source: label, url: `/logan-universe/image?dir=${encodeURIComponent(dir)}&file=${encodeURIComponent(f)}` });
+        }
+      }
+    } catch(e) { /* skip */ }
+  }
+  res.json(assets);
+});
+
+app.get('/logan-universe/image', (req, res) => {
+  const { dir, file } = req.query;
+  if (!dir || !file) return res.status(400).send('Missing params');
+  const filePath = path.join(dir, file);
+  if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+  res.sendFile(filePath);
+});
+
+// ── Archaeologist Explorer ────────────────────────────────────────────────────
+
+app.get('/archaeologist', (req, res) => {
+  res.sendFile(path.join(__dirname, 'archaeologist-explorer.html'));
+});
+
+app.get('/api/archaeologist', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(__dirname, 'vortex_data', 'archaeologist.db'), { readonly: true });
+    const q = req.query.q;
+    let discoveries;
+    if (q) {
+      discoveries = db.prepare(`
+        SELECT d.* FROM discoveries_fts f
+        JOIN discoveries d ON d.id = f.rowid
+        WHERE discoveries_fts MATCH ?
+        ORDER BY rank LIMIT 500
+      `).all(q);
+    } else {
+      const domain = req.query.domain;
+      if (domain) {
+        discoveries = db.prepare('SELECT * FROM discoveries WHERE domain = ? ORDER BY id DESC').all(domain);
+      } else {
+        discoveries = db.prepare('SELECT * FROM discoveries ORDER BY id DESC').all();
+      }
+    }
+    db.close();
+    res.json({ discoveries, total: discoveries.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Archaeologist Agent Inspiration ───────────────────────────────────────────
+
+app.get('/api/archaeologist/inspire', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(__dirname, 'vortex_data', 'archaeologist.db'), { readonly: true });
+    const domain = req.query.domain;
+    const count = Math.min(parseInt(req.query.count) || 5, 20);
+    let rows;
+    if (domain) {
+      rows = db.prepare('SELECT technique, domain, origin, abandoned_reason, valid_reason, cathedral_application FROM discoveries WHERE domain = ? ORDER BY RANDOM() LIMIT ?').all(domain, count);
+    } else {
+      rows = db.prepare('SELECT technique, domain, origin, abandoned_reason, valid_reason, cathedral_application FROM discoveries ORDER BY RANDOM() LIMIT ?').all(count);
+    }
+    db.close();
+    res.json({ discoveries: rows });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
