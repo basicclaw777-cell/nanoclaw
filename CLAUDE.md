@@ -159,6 +159,20 @@ All six processes must be running. Check with `pm2 list`.
 
 If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
 
+## Cathedral Manifest — Process Source of Truth (built 2026-05-24)
+- Manifest: ~/nanoclaw/cathedral-manifest.js — defines intended state for all 78 PM2 processes
+- Watcher: ~/nanoclaw/cathedral-manifest-watcher.js — auto-reconcile on boot + 2h periodic audit
+- PM2: manifest-watcher (always online)
+- Modes: `node cathedral-manifest.js` (audit), `--reconcile` (fix drift), `--json` (export)
+- Telegram: auto-alerts on drift detected + fixed
+- Vault backup: migrated to /Volumes/KINGSTON2/cathedral-backups/ (was ~/cathedral-backups/)
+
+## Evening Reflection — Fixed 2026-05-24
+- Script: ~/Cathedral/evening-reflection.py — TTS switched from supertonic (missing) to edge-tts
+- Voices: Cathedral (en-GB-RyanNeural), Cathy (en-GB-SoniaNeural)
+- Cron: daily 20:00 HKT (0 12 * * * UTC)
+- Runtime: ~27s, sends two voice messages to Telegram
+
 ## Cathedral Staff Agents (Phases 1-6)
 All 6 phases of the cathedral-staff-build-plan.md are COMPLETE.
 24/24 Clara functions replaced. All agents serve from localhost:8080.
