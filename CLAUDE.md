@@ -1673,3 +1673,21 @@ the-timekeeper to go offline. Don't repeat it.
 - $20 DeepSeek accident produced 5,080 unique techniques (97.9% unique rate) — more than months of controlled scanning would have
 - Domain cleanup: 3,195 messy domain names normalized to 8 canonical via SQL. 111 dupes removed. FTS5 index built.
 - cathy-swarm-watcher.js: immune system plumbing, watches outcome tuples, flags large bandit shifts to Telegram. Loaded via dm-processor.js ESM dynamic import.
+
+## Q Forensic Research Programme (completed 2026-05-25)
+- Programme scope: ~/cathedral-vault/08_Project_Orchestrator/projects/q-forensic-research-programme.md
+- 11 phases complete. Scripts: ~/nanoclaw/qanon-phase{1-11}.js
+- Reports + data: ~/cathedral-vault/00_Staging/qanon-forensics/
+- Ancient Corpus Pipeline pattern (same as Sumerian Observatory)
+- Corpus: 4,966 Q drops, 9 tripcodes, Oct 2017 - Nov 2022
+- Key findings:
+  - 2,708 claims: 49.3% testable accuracy
+  - 1,845 entities in single interconnected knowledge graph
+  - 25.5x temporal correlation above random baseline (20 predictive+specific matches)
+  - 2+ authors, intelligence/military profile, 3 voice clusters
+  - Constructed code system (85% confidence), not genuine military comms
+  - Q gaps = Cathedral strengths (ancient, consciousness, energy, cosmology)
+  - Overall Cathedral Grade: B
+  - Classification: Hybrid information system — pedagogical weapon with partial insider access
+- DeepSeek cost: ~$15-20 total
+- posts.json: wrapper object `{ posts: [...] }`, some null text fields, metadata nested under post_metadata
