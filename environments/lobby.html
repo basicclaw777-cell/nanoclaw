@@ -301,20 +301,21 @@ const ENV = [
     icon: '💼',
     color: '#06b6d4',
     colorDim: 'rgba(6,182,212,0.12)',
-    desc: 'Basic Reflex operations, clients, content, communication.',
-    orc: { name: 'Conductor', state: 'Coordinating', desc: 'Manages BR operations. Members, content, revenue, retention. Coordinates gym floor data and business metrics.' },
+    desc: 'Basic Reflex operations, clients, content, communication. Punchpass data pipeline.',
+    orc: { name: 'Conductor', state: 'Coordinating', desc: 'Manages BR operations. Members, content, revenue, retention. Punchpass auto-scrape daily. Coordinates gym floor data and business metrics.' },
     senses: [
       { icon: '⌨', name: 'Input', detail: 'Comms & tasks', active: true },
-      { icon: '📊', name: 'Data', detail: 'Members & clients', active: true },
+      { icon: '📊', name: 'Data', detail: 'Members & Punchpass', active: true },
       { icon: '📍', name: 'Location', detail: 'On-site / remote', active: false }
     ],
     deckCards: [
       { id: 1, name: 'Cathedral' },
       { id: 13, name: 'Morning Briefing' },
       { id: 11, name: 'Cartographer' },
-      { id: 3, name: 'Experiment Lab' }
+      { id: 3, name: 'Experiment Lab' },
+      { id: 19, name: 'Punchpass' }
     ],
-    dashboards: ['/scraper/hub'],
+    dashboards: ['/scraper/hub', '/punchpass'],
     dataEndpoints: {
       snapshot: '/villa/snapshot',
       projects: '/villa/projects'
@@ -894,6 +895,78 @@ const ENV = [
     dashboards: [],
     dataEndpoints: {},
     externalUrl: 'http://localhost:8080/logan-universe'
+  },
+  {
+    id: 'br-command',
+    name: 'BR Command Centre',
+    icon: '\u{1F3DF}',
+    color: '#8B2020',
+    colorDim: 'rgba(139,32,32,0.12)',
+    desc: 'Solo coach survival kit. Pre-class brief, content autopilot, kids class, open gym, ClassPass, lapsed campaign. Everything BR in one place.',
+    orc: { name: 'Maya + Reed', state: 'Active', desc: 'Content autopilot daily. Maya filming briefs. Reed visuals. Pre-class brief 7am. Sprint: 12 items, 3 done.' },
+    senses: [
+      { icon: '\u{1F4CB}', name: 'Brief', detail: 'Pre-class daily', active: true },
+      { icon: '\u{1F3AC}', name: 'Content', detail: 'Autopilot 2:30am', active: true },
+      { icon: '\u{1F476}', name: 'Kids', detail: '$250/class, 3 leads', active: true },
+      { icon: '\u{1F4B0}', name: 'Revenue', detail: '566 lapsed queued', active: false }
+    ],
+    deckCards: [],
+    dashboards: ['/br-brief', '/kids-class'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/br-command'
+  },
+  {
+    id: 'cathedral-rosetta',
+    name: 'Cathedral Rosetta',
+    icon: '\u{1F52C}',
+    color: '#a855f7',
+    colorDim: 'rgba(168,85,247,0.12)',
+    desc: '59 internal convergences across 14 vault domains. The Cathedral seeing its own patterns.',
+    orc: { name: 'Rosetta Engine', state: 'Complete', desc: '149K concepts extracted, 817 cross-domain, 59 convergences (33A, 26B). 14 domains: boxing, cathedral, agents, cosmology, physics, consciousness, suppression, business, personal, epistemology, mathematics, ancient, methods, creative.' },
+    senses: [
+      { icon: '\u{1F310}', name: 'Domains', detail: '14 mapped', active: true },
+      { icon: '\u{1F517}', name: 'Links', detail: '817 cross-domain', active: true },
+      { icon: '\u{2B50}', name: 'Grade', detail: '33A + 26B', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/cathedral-rosetta'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/cathedral-rosetta'
+  },
+  {
+    id: 'rosetta-bridge',
+    name: 'Rosetta Bridge',
+    icon: '\u{1F309}',
+    color: '#d4a853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: 'Ancient civilisations meet Cathedral patterns. 30 structural bridges, 4/5 universal moves confirmed, 10 predictions.',
+    orc: { name: 'Bridge Detector', state: 'Complete', desc: '39 ancient convergences (5 civilisations, 612K entities) cross-referenced against 59 Cathedral convergences. 12 Grade A bridges. Flood = Broken Loop. Sacred Kingship = Self-hosting Sovereignty. Base-60 = Base-60.' },
+    senses: [
+      { icon: '\u{1F3DB}', name: 'Ancient', detail: '5 civilisations', active: true },
+      { icon: '\u{1F3F0}', name: 'Modern', detail: '14 Cathedral domains', active: true },
+      { icon: '\u{1F52E}', name: 'Moves', detail: '4/5 universal', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/rosetta-bridge'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/rosetta-bridge'
+  },
+  {
+    id: 'move-detector',
+    name: 'Move Detector',
+    icon: '\u{1F9E0}',
+    color: '#22d3ee',
+    colorDim: 'rgba(34,211,238,0.12)',
+    desc: '5 universal cognitive moves detected in real-time. Cross-domain parallels injected into every agent.',
+    orc: { name: 'Move Detector', state: 'Live', desc: 'THE GATE, THE BROKEN LOOP, SIGNAL IN NOISE, CALIBRATE-EXECUTE-OBSERVE, PHI AS RULER. Wired into agent-engine + Cathy. /moves command on Telegram.' },
+    senses: [
+      { icon: '\u{1F3AF}', name: 'Detection', detail: 'Keyword + regex scoring', active: true },
+      { icon: '\u{1F500}', name: 'Parallels', detail: 'Both Rosettae', active: true },
+      { icon: '\u{1F916}', name: 'Agents', detail: 'Auto-injected', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {}
   }
 ];
 

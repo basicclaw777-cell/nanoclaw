@@ -1691,3 +1691,16 @@ the-timekeeper to go offline. Don't repeat it.
   - Classification: Hybrid information system — pedagogical weapon with partial insider access
 - DeepSeek cost: ~$15-20 total
 - posts.json: wrapper object `{ posts: [...] }`, some null text fields, metadata nested under post_metadata
+
+## Rosetta Convergence System (built 2026-05-25)
+- Ancient Rosetta: ~/nanoclaw/rosetta-convergence.js — 5 civilisations (Sumerian, Egyptian, DSS, Oracle Bones, Maya), 612K entities, 39 convergences (17A, 15B, 7C)
+- Cathedral Rosetta: ~/nanoclaw/cathedral-rosetta.js — 14 vault domains, 149K concepts, 59 convergences (33A, 26B)
+- Rosetta Bridge: ~/nanoclaw/rosetta-bridge.js — cross-references ancient + Cathedral convergences. 30 bridges (12A), 4/5 moves universal, 10 predictions
+- Move Detector: ~/nanoclaw/move-detector.js (ESM) + ~/nanoclaw/move-detector.cjs (CJS bridge)
+  - 5 universal cognitive moves: THE GATE, THE BROKEN LOOP, SIGNAL IN NOISE, CALIBRATE-EXECUTE-OBSERVE, PHI AS RULER
+  - Wired into agent-engine.js (all agents) and telegram-bot.js (Cathy)
+  - Telegram: /moves <text> — test detection directly
+- Dashboards: localhost:8080/cathedral-rosetta, localhost:8080/rosetta-bridge
+- Data: cathedral-vault/00_Staging/cathedral/cathedral-convergences.json, rosetta-bridge.json, cathedral-cross-domain.json
+- Ancient data: /Volumes/KINGSTON2/cathedral-archive/rosetta/convergences.json
+- Lobby rooms: Cathedral Rosetta (purple), Rosetta Bridge (gold), Move Detector (cyan)
