@@ -1704,3 +1704,13 @@ the-timekeeper to go offline. Don't repeat it.
 - Data: cathedral-vault/00_Staging/cathedral/cathedral-convergences.json, rosetta-bridge.json, cathedral-cross-domain.json
 - Ancient data: /Volumes/KINGSTON2/cathedral-archive/rosetta/convergences.json
 - Lobby rooms: Cathedral Rosetta (purple), Rosetta Bridge (gold), Move Detector (cyan)
+
+## Skills Scout + Bridge (wired 2026-05-27)
+- Scout: ~/Cathedral/skills-scout.js — daily 7am HKT cron, scans GitHub/arXiv/HN for Cathedral-relevant tools
+- Bridge: ~/Cathedral/agents/skills-scout-bridge.js — weekly Sunday 10am HKT cron
+- Picks top 5 candidates from last 7 days, DMs Forge + Orc, posts to feed, Telegram
+- 302 candidates accumulated in vault at 06_Methods/skills/candidates/
+- State: ~/Cathedral/agents/scout-bridge-state.json
+- PM2: skills-scout (daily cron, no-autorestart), scout-bridge (weekly cron, no-autorestart)
+- QUEUED: Scout Rating Room (interactive lobby room for Paul to rate hot/warm/cold)
+- Cathedral Infographic: localhost:8080/cathedral-infographic (3-column: Does/Want/Blown, live data)
