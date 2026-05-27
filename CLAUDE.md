@@ -1076,10 +1076,16 @@ He will decide when he's done.
 - SETUP REQUIRED: gcal-credentials.json from Google Cloud Console, then node gcal-reader.js --setup
 - Outputs to ~/br-gm-agent/reports/paul-schedule.json for Kit morning briefing
 
-## PunchPass Pipeline — Verified 2026-05-04
-- Export: python3 ~/br-gm-agent/scripts/punchpass-export.py (72 members, 5 high churn, 26 expiring)
-- CSVs at ~/Desktop/punchpass/various/ (exported 2026-03-30, 35 days stale)
-- /health Telegram command reads member-data.json for gym dashboard
+## Punchpass Pipeline — AUTOMATED 2026-05-27
+- Scraper: ~/nanoclaw/punchpass-scraper.cjs (browser-harness, connects to Chrome via CDP)
+- Profiler: ~/nanoclaw/punchpass-profiler.cjs (10 archetypes, curriculum block mapping)
+- Dashboard: ~/nanoclaw/punchpass-dashboard.cjs (localhost:8080/punchpass)
+- DB: ~/nanoclaw/vortex_data/punchpass.db
+- PM2 cron: punchpass-scraper, daily 06:00 HKT (requires Chrome running)
+- Lobby: Gym Floor room with live stats + archetype breakdown
+- Telegram: /br (hub), /punchpass, /members, /member <name>
+- 10 archetypes: Core Regular, PT Warrior, Trainer Client, Fresh Trial, Drop-In Drifter, Private Crew, Sparring Ready, Fading Member, High Roller, Ghost
+- 7 sparring class members profiled with coaching notes + drill prescriptions
 
 ## Intelligence Hub — Built 2026-05-04
 - Directory: ~/nanoclaw/scraper/ (config.json, scraper-engine.js, 7 Python targets, intelligence-hub.html)

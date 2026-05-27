@@ -322,6 +322,28 @@ const ENV = [
     }
   },
   {
+    id: 'gym',
+    name: 'Gym Floor',
+    icon: '🥊',
+    color: '#f0a030',
+    colorDim: 'rgba(240,160,48,0.12)',
+    desc: 'Members, attendance, profiles, curriculum. Punchpass data pipeline.',
+    orc: { name: 'Corner', state: 'Active', desc: 'Member archetypes, coaching notes, curriculum blocks, attendance tracking. Auto-scrapes Punchpass daily 06:00.' },
+    senses: [
+      { icon: '📊', name: 'Data', detail: 'Punchpass scraper', active: true },
+      { icon: '👥', name: 'Members', detail: '72 active', active: true },
+      { icon: '🎯', name: 'Profiles', detail: '10 archetypes', active: true }
+    ],
+    deckCards: [
+      { id: 19, name: 'Punchpass' }
+    ],
+    dashboards: ['/punchpass'],
+    dataEndpoints: {
+      snapshot: '/api/punchpass/summary',
+      profiles: '/api/punchpass/profiles'
+    }
+  },
+  {
     id: 'forge',
     name: 'Forge',
     icon: '\u2692',
@@ -706,7 +728,7 @@ const ENV = [
       { id: 8, name: 'Boxing Lab' },
       { id: 16, name: 'Boxing Engine' }
     ],
-    dashboards: ['/gym-eyes'],
+    dashboards: ['/gym-eyes', '/gym-eyes/analytics'],
     dataEndpoints: {
       metrics: '/api/engineering-studio/metrics',
       briefing: '/api/engineering-studio/briefing',
@@ -847,17 +869,17 @@ const ENV = [
     icon: '\u{12000}',
     color: '#D4A853',
     colorDim: 'rgba(212,168,83,0.12)',
-    desc: '353K tablets. AI translation pipeline. Entity extraction. Sitchin forensic audit (7F, 1D). The oldest written records on Earth.',
-    orc: { name: 'Sage', state: 'Translating', desc: '130K tablets being mass-translated via DeepSeek. Entity extraction ready. Sitchin audit complete.' },
+    desc: '135K tablets translated. 620K+ entities extracted across 68 categories. Sitchin forensic audit (7F, 1D). The oldest written records on Earth.',
+    orc: { name: 'Sage', state: 'Extracting', desc: '135K tablets translated via DeepSeek. 620K entities extracted (persons, deities, cities, trade goods, astronomical). Knowledge graph next.' },
     senses: [
-      { icon: '\u{1F4DC}', name: 'Tablets', detail: '353K catalogued', active: true },
+      { icon: '\u{1F4DC}', name: 'Tablets', detail: '135K translated', active: true },
       { icon: '\u{1F50D}', name: 'Audit', detail: 'Sitchin: 7F 1D', active: true },
-      { icon: '\u{2728}', name: 'Entities', detail: 'Extraction ready', active: false }
+      { icon: '\u{2728}', name: 'Entities', detail: '620K+ extracted', active: true }
     ],
     deckCards: [],
-    dashboards: [],
+    dashboards: ['sumerian-observatory'],
     dataEndpoints: {},
-    externalUrl: 'http://localhost:8080/sumerian'
+    externalUrl: '/sumerian-observatory.html'
   },
   {
     id: 'ancient-corpus',
@@ -916,6 +938,24 @@ const ENV = [
     externalUrl: 'http://localhost:8080/br-command'
   },
   {
+    id: 'property-scout',
+    name: 'Property Scout',
+    icon: '\u{1F3E2}',
+    color: '#f59e0b',
+    colorDim: 'rgba(245,158,11,0.12)',
+    desc: 'HK industrial property intelligence. 5 golden zones, 16 units found, leverage calculator.',
+    orc: { name: 'Scout', state: 'Weekly', desc: 'Sunday scan → Wednesday unit search → Thursday due diligence. Yau Tong, Kwun Tong, San Po Kong, Cheung Sha Wan, Fo Tan.' },
+    senses: [
+      { icon: '\u{1F4CD}', name: 'Zones', detail: '5 golden zones mapped', active: true },
+      { icon: '\u{1F4B0}', name: 'Units', detail: '16 found', active: true },
+      { icon: '\u{1F4CA}', name: 'Calculator', detail: 'Leverage scenarios', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/property-scout'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/property-scout'
+  },
+  {
     id: 'cathedral-rosetta',
     name: 'Cathedral Rosetta',
     icon: '\u{1F52C}',
@@ -967,6 +1007,43 @@ const ENV = [
     deckCards: [],
     dashboards: [],
     dataEndpoints: {}
+  },
+  {
+    id: 'pipeline-control',
+    name: 'Pipeline Control',
+    icon: '\u{1F504}',
+    color: '#378ADD',
+    colorDim: 'rgba(55,138,221,0.12)',
+    desc: 'Multi-agent review chains. Agents produce, review, refine, and gate each other\'s work. Token economics tracked.',
+    orc: { name: 'Pipeline Runner', state: 'Live', desc: 'Content pipeline (Muse\u2192Maya\u2192Reed\u2192Orc) and Research pipeline (Archaeologist\u2192Muse\u2192Archivist). /pipeline on Telegram.' },
+    senses: [
+      { icon: '\u{1F3AD}', name: 'Content', detail: '4-stage review', active: true },
+      { icon: '\u{1F50D}', name: 'Research', detail: '3-stage review', active: true },
+      { icon: '\u{1F4B0}', name: 'Token Spend', detail: 'JSONL tracking', active: true },
+      { icon: '\u{1F443}', name: 'Smell', detail: 'Rubber-stamp detection', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/pipeline'],
+    dataEndpoints: { runs: '/api/pipeline/runs', tokens: '/api/pipeline/tokens' },
+    externalUrl: 'http://localhost:8080/pipeline'
+  },
+  {
+    id: 'class-planner',
+    name: 'Class Planner',
+    icon: '\u{1F4C5}',
+    color: '#8B2020',
+    colorDim: 'rgba(139,32,32,0.12)',
+    desc: 'Weekly class planning command board. 6 domains, heat maps, drill bank, AI neglect detection.',
+    orc: { name: 'Coach Intelligence', state: 'Live', desc: 'Plan weekly classes across footwork, defense, combos, strategy, mindset, conditioning. AI flags neglected domains and coverage gaps.' },
+    senses: [
+      { icon: '\u{1F525}', name: 'Heat Map', detail: '6 domains', active: true },
+      { icon: '\u{1F94A}', name: 'Drill Bank', detail: '38 drills', active: true },
+      { icon: '\u{1F9E0}', name: 'AI Coach', detail: 'Neglect detection', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/class-planner'],
+    dataEndpoints: { plan: '/class-planner/data/plan', drills: '/class-planner/data/drills' },
+    externalUrl: 'http://localhost:8080/class-planner'
   }
 ];
 
@@ -1088,7 +1165,7 @@ function openRoom(id) {
         <div class="panel-body">
           <div class="deck-cards">
             ${env.deckCards.map(c => {
-              const dashMap = { 7:'/trader/hub', 8:'/techniques', 16:'/techniques', 4:'/trader/hub', 10:'/reed-studio', 9:'/reed-studio', 17:'/reed-slides' };
+              const dashMap = { 7:'/trader/hub', 8:'/techniques', 16:'/techniques', 4:'/trader/hub', 10:'/reed-studio', 9:'/reed-studio', 17:'/reed-slides', 19:'/punchpass' };
               const href = dashMap[c.id] || '/reed-slides';
               return `<a class="deck-chip" href="${href}" target="_blank" style="color:${env.color}">#${String(c.id).padStart(3,'0')} ${c.name}</a>`;
             }).join('')}
@@ -1162,6 +1239,7 @@ function switchDash(url, btn) {
 
 // ═══════════════════ LOAD LIVE DATA ═══════════════════
 async function loadRoomData(env) {
+  if (env.id === 'gym') return loadGymRoom(env);
   if (env.id === 'money') return loadMoneyRoom(env);
   if (env.id === 'mind') return loadMindRoom(env);
   if (env.id === 'work') return loadWorkRoom(env);
@@ -1288,6 +1366,67 @@ async function loadMindRoom(env) {
     </div>
   `;
   document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-dim);font-size:12px;padding:8px">Vault activity feed coming soon.</div>';
+}
+
+// ─── GYM FLOOR ROOM ───
+async function loadGymRoom(env) {
+  const [snap, profiles] = await Promise.allSettled([
+    fetchJSON('/api/punchpass/summary'),
+    fetchJSON('/api/punchpass/profiles')
+  ]);
+  const s = snap.value || {};
+  const p = profiles.value || [];
+
+  // Widgets: key gym stats
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Active Members</div>
+      <div class="widget-value" style="color:${env.color}">${s.total_customers || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Active Passes</div>
+      <div class="widget-value" style="color:${env.color}">${s.active_passes || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Month Revenue</div>
+      <div class="widget-value" style="color:var(--green)">${s.month_revenue || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Attendances</div>
+      <div class="widget-value" style="color:${env.color}">${s.month_attendances || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Expiring Soon</div>
+      <div class="widget-value" style="color:var(--amber)">${s.passes_expiring_soon || 0}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">No Active Pass</div>
+      <div class="widget-value" style="color:var(--accent)">${s.no_active_pass || 0}</div>
+    </div>
+  `;
+
+  // Activity: archetype breakdown
+  const activeProfiles = p.filter(a => a.archetype_id !== 'fading_member');
+  const fadingCount = p.find(a => a.archetype_id === 'fading_member')?.count || 0;
+  let actItems = activeProfiles.map(a => ({
+    text: `${a.emoji} ${a.name}: ${a.count} members (avg ${a.avg_attended}/mo)`,
+    color: env.color,
+    time: `Blocks ${a.blockRange?.[0] || '?'}-${a.blockRange?.[1] || '?'}`
+  }));
+  if (fadingCount > 0) {
+    actItems.push({ text: `📉 Fading: ${fadingCount} former members`, color: 'var(--text-dim)', time: '' });
+  }
+  if (!actItems.length) actItems.push({ text: 'No profiles yet. Run /members build', color: 'var(--text-dim)', time: '' });
+
+  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
 }
 
 // ─── WORK ROOM ───

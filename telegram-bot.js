@@ -2538,6 +2538,12 @@ function buildCathDynamic(query, history) {
       parts.push(lines.join('\n'));
     }
   } catch {}
+  // Move Detector: inject cross-domain parallels when Paul's cognitive move is detected
+  try {
+    const { buildMoveContext } = require('./move-detector.cjs');
+    const moveCtx = buildMoveContext(query);
+    if (moveCtx) parts.push('## COGNITIVE MOVE DETECTED' + moveCtx);
+  } catch {}
   return parts.join('\n\n');
 }
 
@@ -4264,6 +4270,38 @@ bot.onText(/^\/predict-rebuild(?:@\w+)?$/i, async (msg) => {
   }
 });
 
+// ── /moves — Detect cognitive moves in a message ────────────────────────────
+bot.onText(/^\/moves(?:@\w+)?\s+(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const { detectMoves, getParallels } = require('./move-detector.cjs');
+    const text = match[1].trim();
+    const moves = detectMoves(text);
+    if (moves.length === 0) {
+      safeSend(chatId, 'No cognitive move detected in that message.');
+      return;
+    }
+    const lines = ['*Cognitive Moves Detected:*\n'];
+    for (const m of moves) {
+      lines.push(`*${m.name}* (${m.confidence}, score ${m.score})`);
+      lines.push(`${m.description}`);
+      if (m.keywords.length) lines.push(`Keywords: ${m.keywords.join(', ')}`);
+      const pars = getParallels(m.move, null, 2);
+      for (const p of pars) {
+        if (p.source === 'cathedral') {
+          lines.push(`  -> ${p.pattern} [${(p.domains || []).join(', ')}]`);
+        } else if (p.source === 'bridge') {
+          lines.push(`  -> ANCIENT: "${p.ancient}" = MODERN: "${p.modern}"`);
+        }
+      }
+      lines.push('');
+    }
+    safeSend(chatId, lines.join('\n'), { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `Error: ${err.message.slice(0, 200)}`);
+  }
+});
+
 // ── /ling — Ling AI Tech Reviewer (advisory + content pipeline) ─────────────
 bot.onText(/^\/ling(?:@\w+)?(?:\s+(.*))?$/s, async (msg, match) => {
   const chatId = msg.chat.id;
@@ -5195,6 +5233,158 @@ bot.onText(/^\/gymdigest(?:@\w+)?\s*$/i, async (msg) => {
   safeSend(msg.chat.id, gymDigest.generateDigest(), { parse_mode: 'Markdown' });
 });
 
+// ── Pre-Class Brief ─────────────────────────────────────────────────────────
+
+bot.onText(/^\/brief(?:@\w+)?\s*$/i, async (msg) => {
+  try {
+    const { execFileSync } = await import('child_process');
+    execFileSync('node', [path.join(__dirname, 'br-preclass-brief.js')], {
+      timeout: 30000,
+      env: { ...process.env, HOME: process.env.HOME }
+    });
+    safeSend(msg.chat.id, 'Brief sent. Visual: localhost:8080/br-brief');
+  } catch (err) {
+    safeSend(msg.chat.id, `Brief error: ${err.message?.slice(0, 200)}`);
+  }
+});
+
+// ── Maya Filming Brief ──────────────────────────────────────────────────────
+
+bot.onText(/^\/filmbrief(?:@\w+)?\s*$/i, async (msg) => {
+  try {
+    const wishlist = JSON.parse(fs.readFileSync(path.join(__dirname, 'content-studio', 'capture-wishlist.json'), 'utf-8'));
+    const pending = wishlist.requests || [];
+    if (pending.length === 0) {
+      safeSend(msg.chat.id, 'No filming briefs pending. Run /autopilot to generate.');
+      return;
+    }
+    const brief = pending[0];
+    let text = `*Maya's Filming Brief*\n\n`;
+    text += `${brief.request}\n\n`;
+    if (brief.storyAngle) text += `*Story:* ${brief.storyAngle}\n`;
+    if (brief.verbalHook) text += `*Hook:* "${brief.verbalHook}"\n`;
+    if (brief.visualHook) text += `*Thumbnail:* ${brief.visualHook}\n`;
+    if (brief.duration) text += `*Duration:* ${brief.duration}\n`;
+    if (brief.editingNotes) text += `*Editing:* ${brief.editingNotes}\n`;
+    if (brief.trialReel) text += `*Trial Reel* — non-followers first\n`;
+    if (brief.example) text += `*Reference:* ${brief.example}\n`;
+    text += `\n${pending.length} brief${pending.length > 1 ? 's' : ''} in queue`;
+    safeSend(msg.chat.id, text, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(msg.chat.id, `Film brief error: ${err.message?.slice(0, 200)}`);
+  }
+});
+
+// ── Content Autopilot ───────────────────────────────────────────────────────
+
+bot.onText(/^\/autopilot(?:@\w+)?\s*(.*)$/i, async (msg, match) => {
+  const arg = (match[1] || '').trim();
+  const force = arg === 'force' ? '--force' : '';
+  safeSend(msg.chat.id, 'Running content autopilot...');
+  try {
+    const { execFileSync } = await import('child_process');
+    const args = [path.join(__dirname, 'content-autopilot.js')];
+    if (force) args.push('--force');
+    const result = execFileSync('node', args, {
+      encoding: 'utf8', timeout: 660000,
+      env: { ...process.env, HOME: process.env.HOME }
+    });
+    const match2 = result.match(/Result:\s*(\{.*\})/);
+    if (match2) {
+      const r = JSON.parse(match2[1]);
+      safeSend(msg.chat.id, `Autopilot done: ${r.processed} posts generated${r.total ? ` (${r.total} candidates)` : ''}`);
+    } else {
+      safeSend(msg.chat.id, 'Autopilot complete. Check Telegram for ready posts.');
+    }
+  } catch (err) {
+    safeSend(msg.chat.id, `Autopilot error: ${err.message?.slice(0, 200)}`);
+  }
+});
+
+// ── BR Auto-Responder ──────────────────────────────────────────────────────
+
+// /reply <type> [name] [details] — generate a reply draft
+bot.onText(/^\/reply(?:@\w+)?\s+(\S+)\s*(.*)?$/i, async (msg, match) => {
+  const type = match[1].toLowerCase();
+  const rest = (match[2] || '').trim();
+  // Parse: first word after type = name, rest = details
+  const parts = rest.split(/\s+/);
+  const name = parts[0] || null;
+  const details = parts.slice(1).join(' ') || null;
+
+  try {
+    const { getReply } = await import('./br-auto-responder.js');
+    const result = await getReply(type, name, details);
+    const header = `📋 *Reply Draft* (${type}${name ? ', ' + name : ''})
+Source: ${result.source}
+─────────────────`;
+    safeSend(msg.chat.id, header, { parse_mode: 'Markdown' });
+    // Send reply text as plain copyable message
+    safeSend(msg.chat.id, result.text);
+  } catch (err) {
+    safeSend(msg.chat.id, `Reply error: ${err.message?.slice(0, 200)}`);
+  }
+});
+
+// /quickreply — show available reply types
+bot.onText(/^\/quickreply(?:@\w+)?\s*$/i, async (msg) => {
+  const types = `📱 *Quick Reply Types*
+
+/reply kids [name] — Kids class inquiry
+/reply adult [name] — Adult inquiry
+/reply classpass [name] — ClassPass visitor
+/reply opengym [name] — Open gym inquiry
+/reply trial [name] — Trial class booking
+/reply pricing [name] — All pricing
+/reply schedule [name] — Schedule info
+/reply custom [name] [details] — AI-generated custom reply
+
+Example: /reply kids Sarah
+Example: /reply custom Tom wants to do private training`;
+  safeSend(msg.chat.id, types, { parse_mode: 'Markdown' });
+});
+
+// ── 566 Lapsed Campaign ──────────────────────────────────────────────────────
+
+// /campaign — status, launch, force
+bot.onText(/^\/campaign(?:@\w+)?\s*(.*)?$/i, async (msg, match) => {
+  const arg = (match[1] || '').trim().toLowerCase();
+  try {
+    const { launchBatch, formatCampaignTelegram } = await import('./comms-engine/lapsed-campaign.js');
+    if (arg === 'launch' || arg === 'force') {
+      const result = launchBatch(arg === 'force');
+      if (result.blocked) {
+        safeSend(msg.chat.id, result.reason);
+      } else if (result.error) {
+        safeSend(msg.chat.id, `Campaign error: ${result.error}`);
+      } else {
+        let text = `📢 Batch queued: ${result.queued} messages\n`;
+        text += `Remaining: ${result.remaining}\n`;
+        text += `Total: ${result.totalSent}\n`;
+        if (result.complete) text += `\n✅ Campaign complete!`;
+        safeSend(msg.chat.id, text);
+      }
+    } else {
+      safeSend(msg.chat.id, formatCampaignTelegram(), { parse_mode: 'Markdown' });
+    }
+  } catch (err) {
+    safeSend(msg.chat.id, `Campaign error: ${err.message?.slice(0, 200)}`);
+  }
+});
+
+// ── BR Revenue Digest ─────────────────────────────────────────────────────────
+
+// /revenue — generate and send revenue digest
+bot.onText(/^\/revenue(?:@\w+)?\s*$/i, async (msg) => {
+  try {
+    const { generateRevenueDigest } = await import('./br-revenue-digest.js');
+    const digest = generateRevenueDigest();
+    safeSend(msg.chat.id, digest, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(msg.chat.id, `Revenue digest error: ${err.message?.slice(0, 200)}`);
+  }
+});
+
 // ── 100 Punches a Day Challenge ─────────────────────────────────────────────
 
 // /challenge join [name] [target] — join the challenge
@@ -5699,7 +5889,7 @@ import { createRequire } from 'module';
 const _require = createRequire(import.meta.url);
 const agentEngine = _require(path.join(process.env.HOME, 'Cathedral', 'agents', 'agent-engine.js'));
 
-const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼', ling: '🔴', maya: '⭐', yoda: '🟢', miyagi: '🥋', tao: '🌊', marcus: '🏛️', 'sun-tzu': '⚔️', leonardo: '🎨' };
+const AGENT_ICONS = { orc: '🏛️', boxing: '🥊', br: '💼', ling: '🔴', maya: '⭐', yoda: '🟢', miyagi: '🥋', tao: '🌊', marcus: '🏛️', 'sun-tzu': '⚔️', leonardo: '🎨', 'reed-director': '🎬' };
 
 function registerAgentCommand(agentId, pattern) {
   bot.onText(pattern, async (msg, match) => {
@@ -5743,6 +5933,7 @@ registerAgentCommand('tao', /^\/tao(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('marcus', /^\/marcus(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('sun-tzu', /^\/sun-tzu(?:@\w+)?\s+(.+)$/is);
 registerAgentCommand('leonardo', /^\/leonardo(?:@\w+)?\s+(.+)$/is);
+registerAgentCommand('reed-director', /^\/reed-director(?:@\w+)?\s+(.+)$/is);
 
 // /agents — list all available agents
 bot.onText(/^\/agents(?:@\w+)?\s*$/i, async (msg) => {
@@ -5752,6 +5943,54 @@ bot.onText(/^\/agents(?:@\w+)?\s*$/i, async (msg) => {
   const agents = agentEngine.listAgents();
   const lines = agents.map(a => `${AGENT_ICONS[a.id] || '🤖'} *${a.command}* — ${a.name}\n   ${a.description}`);
   await safeSend(chatId, `*Cathedral Agents*\n\n${lines.join('\n\n')}\n\nAll commands support multi-turn conversation. Send \`reset\` to clear.`, { parse_mode: 'Markdown' });
+});
+
+// ── Reasoning loop ──────────────────────────────────────────────────────────
+
+bot.onText(/^\/reason(?:@\w+)?\s+(.+)$/is, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+
+  const input = match[1].trim();
+  // Parse optional --agent flag
+  const agentMatch = input.match(/--agent\s+(\S+)/i);
+  const agentId = agentMatch ? agentMatch[1] : undefined;
+  const problem = input.replace(/--agent\s+\S+/i, '').trim();
+
+  if (!problem) {
+    await safeSend(chatId, '⚠️ Usage: /reason <problem> [--agent boxing]');
+    return;
+  }
+
+  await safeSend(chatId, `🧠 Reasoning loop started${agentId ? ` (agent: ${agentId})` : ''}...\nThis takes several minutes (4 passes × LLM).`);
+
+  try {
+    const reasoningLoop = require(path.join(process.env.HOME, 'Cathedral', 'agents', 'reasoning-loop.js'));
+    const result = await reasoningLoop.reason(problem, { agentId, maxLoops: 2 });
+
+    const summary = `🧠 *Reasoning Loop Complete*\nLoops: ${result.loopCount} | Passes: ${result.passes.length} | Improved: ${result.improved} | Time: ${(result.elapsed / 1000).toFixed(0)}s`;
+    const answer = result.answer.length > 3500
+      ? result.answer.slice(0, 3500) + '\n\n... (truncated)'
+      : result.answer;
+
+    await safeSend(chatId, `${summary}\n\n${answer}`);
+  } catch (err) {
+    await safeSend(chatId, `❌ Reasoning loop failed: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/reason-stats(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+
+  try {
+    const tracker = require(path.join(process.env.HOME, 'Cathedral', 'agents', 'reasoning-tracker.js'));
+    const { stats, alerts } = await tracker.main();
+    const text = tracker.formatStats(stats);
+    await safeSend(chatId, text, { parse_mode: 'Markdown' });
+  } catch (err) {
+    await safeSend(chatId, `Failed: ${err.message}`);
+  }
 });
 
 // ── Cross-domain sync ───────────────────────────────────────────────────────
@@ -5896,6 +6135,94 @@ bot.onText(/^\/hfstatus(?:@\w+)?\s*$/i, async (msg) => {
   }
 });
 
+// ── Grok Paper Trial ─────────────────────────────────────────────────────────
+
+bot.onText(/^\/groktrial(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const { execSync: es } = await import('child_process');
+    const status = es('node /Users/basicclaw777/nanoclaw/grok-trial.js status', { encoding: 'utf-8', timeout: 10000 });
+    await safeSend(chatId, status);
+  } catch (err) {
+    safeSend(chatId, `Error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/grokrate\s+(\w+)\s+([1-5])(?:\s+(.+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const type = match[1].toLowerCase(); // image, video, llm
+  const score = parseInt(match[2]);
+  const notes = match[3] || '';
+  try {
+    const { logRating } = await import('./grok-trial.js');
+    logRating(type, score, notes);
+    await safeSend(chatId, `Grok ${type} rated ${score}/5${notes ? ': ' + notes : ''}`);
+  } catch (err) {
+    safeSend(chatId, `Error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/grokimage\s+(.+)$/is, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const prompt = match[1].trim();
+  await safeSend(chatId, 'Grok Imagine generating...');
+  try {
+    const { grokImage } = await import('./grok-trial.js');
+    const result = await grokImage(prompt);
+    if (result.url) {
+      await bot.sendPhoto(chatId, result.url, {
+        caption: `Grok Imagine — $${result.costUsd} in ${(result.duration / 1000).toFixed(1)}s\nRate: /grokrate image [1-5]`
+      });
+    }
+  } catch (err) {
+    safeSend(chatId, `Grok error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+bot.onText(/^\/grokvideo\s+(.+)$/is, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const prompt = match[1].trim();
+  await safeSend(chatId, 'Grok Video generating (may take 30-60s)...');
+  try {
+    const { grokVideo } = await import('./grok-trial.js');
+    const result = await grokVideo(prompt);
+    if (result.url) {
+      const tmpPath = `/tmp/grok-video-${Date.now()}.mp4`;
+      const { execSync: es } = await import('child_process');
+      es(`curl -sL "${result.url}" -o "${tmpPath}"`, { timeout: 120000 });
+      await bot.sendVideo(chatId, tmpPath, {
+        caption: `Grok Video — ${result.videoDuration}s, $${result.costUsd} in ${(result.duration / 1000).toFixed(0)}s\nRate: /grokrate video [1-5]`
+      });
+    }
+  } catch (err) {
+    safeSend(chatId, `Grok error: ${err.message.slice(0, 300)}`);
+  }
+});
+
+// ── fal.ai spend tracker ────────────────────────────────────────────────────
+
+bot.onText(/^\/falspend(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const { getSpend } = await import('./fal-client.js');
+    const s = getSpend();
+    const lines = [
+      '💰 fal.ai Spend Tracker',
+      `  Today: $${s.today.toFixed(3)} / $${s.cap} cap ($${s.remaining.toFixed(3)} remaining)`,
+      `  This week: $${s.week.toFixed(3)}`,
+      `  All time: $${s.allTime.toFixed(3)} (${s.callCount} calls)`
+    ];
+    await safeSend(chatId, lines.join('\n'));
+  } catch (err) {
+    safeSend(chatId, `Error: ${err.message.slice(0, 300)}`);
+  }
+});
+
 // ── Terminal session harvester ───────────────────────────────────────────────
 
 bot.onText(/^\/harvest-terminal(?:@\w+)?(?:\s+(--force))?\s*$/i, async (msg, match) => {
@@ -6001,6 +6328,392 @@ bot.onText(/^\/xstatus(?:@\w+)?\s*$/i, async (msg) => {
     await safeSend(chatId, `🐦 X: @${parsed.username} (${parsed.name})\nFollowers: ${parsed.followers} | Following: ${parsed.following}`);
   } catch (err) {
     safeSend(chatId, `❌ X auth check failed: ${err.message.slice(0, 300)}\n\nRun: node ~/nanoclaw/x-post.js login USERNAME PASSWORD EMAIL`);
+  }
+});
+
+// ── /br — Basic Reflex hub command ───────────────────────────────────────────
+bot.onText(/^\/br(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+
+  try {
+    const [snapResp, profilesResp, expiringResp] = await Promise.all([
+      fetch('http://localhost:8080/api/punchpass/summary').catch(() => null),
+      fetch('http://localhost:8080/api/punchpass/profiles').catch(() => null),
+      fetch('http://localhost:8080/api/punchpass/expiring').catch(() => null)
+    ]);
+
+    const snap = snapResp ? await snapResp.json() : {};
+    const profiles = profilesResp ? await profilesResp.json() : [];
+    const expiring = expiringResp ? await expiringResp.json() : [];
+
+    let txt = '<b>Basic Reflex HQ</b>\n\n';
+
+    // Punchpass snapshot
+    if (snap.date) {
+      txt += `<b>Gym Data</b> (${snap.date})\n`;
+      txt += `  Members: ${snap.total_customers} | Passes: ${snap.active_passes}\n`;
+      txt += `  Revenue: ${snap.month_revenue} | Attendances: ${snap.month_attendances}\n`;
+      txt += `  No-shows: ${snap.month_no_shows}\n\n`;
+    }
+
+    // Member profiles
+    if (profiles.length) {
+      const active = profiles.filter(p => p.archetype_id !== 'fading_member');
+      const fading = profiles.find(p => p.archetype_id === 'fading_member');
+      txt += '<b>Members</b>\n';
+      for (const p of active) {
+        txt += `  ${p.emoji} ${p.name}: ${p.count}\n`;
+      }
+      if (fading) txt += `  ${fading.emoji} Fading: ${fading.count}\n`;
+      txt += '\n';
+    }
+
+    // Alerts
+    const alerts = [];
+    if (snap.passes_expiring_soon > 0) {
+      alerts.push(`${snap.passes_expiring_soon} passes expiring soon`);
+    }
+    if (snap.no_active_pass > 10) {
+      alerts.push(`${snap.no_active_pass} members without active pass`);
+    }
+    if (alerts.length) {
+      txt += '<b>Alerts</b>\n';
+      for (const a of alerts) txt += `  - ${a}\n`;
+      txt += '\n';
+    }
+
+    // Quick links
+    txt += '<b>Quick Links</b>\n';
+    txt += '  /punchpass — gym data + scrape\n';
+    txt += '  /members — profiles + archetypes\n';
+    txt += '  /member &lt;name&gt; — individual profile\n';
+    txt += '  /brief — daily brief\n';
+    txt += '  /ops — operations + compliance\n';
+    txt += '  /student — student intel\n';
+    txt += '\n  Dashboard: localhost:8080/punchpass';
+
+    await safeSend(chatId, txt, { parse_mode: 'HTML' });
+  } catch (err) {
+    await safeSend(chatId, `BR error: ${err.message}`);
+  }
+});
+
+// ── Punchpass Commands ──────────────────────────────────────────────────────
+// /punchpass       → daily summary from latest scrape
+// /punchpass run   → force a scrape now
+// /punchpass expiring → show expiring passes
+// /punchpass nopass   → show customers without active pass
+bot.onText(/^\/punchpass(?:@\w+)?(?:\s+(.*))?$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const arg = (match[1] || '').trim().toLowerCase();
+
+  try {
+    if (arg === 'run') {
+      await safeSend(chatId, '🔄 Starting Punchpass scrape... (takes 1-2 minutes)');
+      const proc = spawn('node', [
+        path.join(process.env.HOME, 'nanoclaw', 'punchpass-scraper.cjs'),
+      ], { env: process.env, cwd: path.join(process.env.HOME, 'nanoclaw'), timeout: 300000 });
+      let stdout = '';
+      proc.stdout.on('data', d => { stdout += d.toString(); });
+      proc.stderr.on('data', d => { console.log('[punchpass]', d.toString().trim()); });
+      proc.on('close', async (code) => {
+        if (code === 0) {
+          await safeSend(chatId, `✅ Punchpass scrape complete.\n\n${stdout.trim()}\n\n📊 Dashboard: http://localhost:8080/punchpass`);
+        } else {
+          await safeSend(chatId, `❌ Punchpass scrape failed (code ${code}).\n${stdout.trim()}`);
+        }
+      });
+      proc.on('error', async (err) => {
+        await safeSend(chatId, `❌ Punchpass error: ${err.message}`);
+      });
+    } else if (arg === 'expiring') {
+      const resp = await fetch('http://localhost:8080/api/punchpass/expiring');
+      const data = await resp.json();
+      if (data.length === 0) {
+        await safeSend(chatId, '✅ No passes expiring soon.');
+      } else {
+        const list = data.slice(0, 10).map(e =>
+          `  • ${e.first_name} ${e.last_name} — ${e.pass} (${e.punches_left} left, exp ${e.expires_on})`
+        ).join('\n');
+        await safeSend(chatId, `⏰ <b>${data.length} passes expiring:</b>\n${list}`, { parse_mode: 'HTML' });
+      }
+    } else if (arg === 'nopass') {
+      const resp = await fetch('http://localhost:8080/api/punchpass/no-pass');
+      const data = await resp.json();
+      if (data.length === 0) {
+        await safeSend(chatId, '✅ All customers have an active pass!');
+      } else {
+        const list = data.slice(0, 10).map(n =>
+          `  • ${n.first_name} ${n.last_name} — last: ${n.last_attendance || 'never'} (${n.total_attended || 0} total)`
+        ).join('\n');
+        await safeSend(chatId, `🚫 <b>${data.length} without active pass:</b>\n${list}`, { parse_mode: 'HTML' });
+      }
+    } else {
+      // Default: show latest summary
+      const resp = await fetch('http://localhost:8080/api/punchpass/summary');
+      const snap = await resp.json();
+      if (snap.error) {
+        await safeSend(chatId, `No Punchpass data yet. Run: /punchpass run`);
+      } else {
+        let msg = `📊 <b>Punchpass — ${snap.date}</b>\n`;
+        msg += `👥 Customers: ${snap.total_customers}\n`;
+        msg += `🎫 Active passes: ${snap.active_passes}\n`;
+        msg += `💰 Month revenue: ${snap.month_revenue}\n`;
+        msg += `📈 Attendances: ${snap.month_attendances}\n`;
+        msg += `❌ No-shows: ${snap.month_no_shows}\n`;
+        msg += `⏰ Expiring: ${snap.passes_expiring_soon}\n`;
+        msg += `🚫 No pass: ${snap.no_active_pass}\n`;
+        msg += `\n📊 Dashboard: http://localhost:8080/punchpass`;
+        await safeSend(chatId, msg, { parse_mode: 'HTML' });
+      }
+    }
+  } catch (err) {
+    await safeSend(chatId, `❌ Punchpass error: ${err.message}`);
+  }
+});
+
+// ── /members — Member profiles from Punchpass ────────────────────────────────
+// /members         → archetype breakdown
+// /members build   → rebuild profiles from latest scrape
+// /members search <name> → find member
+// /members <archetype>   → list members in archetype
+bot.onText(/^\/members(?:@\w+)?(?:\s+(.*))?$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const sub = (match[1] || '').trim();
+
+  try {
+    if (sub === 'build') {
+      const resp = await fetch('http://localhost:8080/api/punchpass/profiles/build', { method: 'POST' });
+      const data = await resp.json();
+      if (data.ok) {
+        await safeSend(chatId, `Built ${data.profiles_built} member profiles.`);
+        // Show summary after build
+        const sumResp = await fetch('http://localhost:8080/api/punchpass/profiles');
+        const summary = await sumResp.json();
+        let txt = '<b>Archetype Breakdown:</b>\n';
+        for (const s of summary) {
+          txt += `${s.emoji} <b>${s.name}</b>: ${s.count} members (avg ${s.avg_attended} sessions)\n`;
+        }
+        await safeSend(chatId, txt, { parse_mode: 'HTML' });
+      }
+
+    } else if (sub.startsWith('search ')) {
+      const query = sub.replace('search ', '');
+      const resp = await fetch(`http://localhost:8080/api/punchpass/members/search?q=${encodeURIComponent(query)}`);
+      const results = await resp.json();
+      if (results.length === 0) {
+        await safeSend(chatId, `No members matching "${query}".`);
+      } else {
+        let txt = `<b>Search: "${query}"</b>\n\n`;
+        for (const m of results.slice(0, 15)) {
+          const arch = m.archetype;
+          const emoji = arch ? arch.emoji : '?';
+          const archName = arch ? arch.name : m.archetype_id;
+          const block = m.block || m.current_block || 1;
+          const blockInfo = m.blockInfo;
+          txt += `${emoji} <b>${m.first_name} ${m.last_name}</b>\n`;
+          txt += `   ${archName} | ${m.total_attended} sessions | Block ${block}${blockInfo ? ' (' + blockInfo.name + ')' : ''}\n`;
+          if (m.pass_type && m.pass_type !== 'none') txt += `   Pass: ${m.pass_type.split(' | ')[0]}\n`;
+          if (m.notes) txt += `   Note: ${m.notes}\n`;
+          txt += '\n';
+        }
+        if (results.length > 15) txt += `... and ${results.length - 15} more`;
+        await safeSend(chatId, txt, { parse_mode: 'HTML' });
+      }
+
+    } else if (sub && !sub.includes(' ')) {
+      // Archetype listing
+      const resp = await fetch(`http://localhost:8080/api/punchpass/profiles/${encodeURIComponent(sub)}`);
+      const data = await resp.json();
+      const arch = data.archetype;
+      if (!arch && data.members.length === 0) {
+        await safeSend(chatId, `Unknown archetype: ${sub}\n\nValid: core_regular, pt_warrior, trainer_client, fresh_trial, drop_in_drifter, private_crew, sparring_ready, fading_member, high_roller, ghost`);
+        return;
+      }
+      let txt = `${arch?.emoji || '?'} <b>${arch?.name || sub}</b>\n`;
+      txt += `${arch?.desc || ''}\n`;
+      txt += `Blocks ${arch?.blockRange?.[0] || '?'}-${arch?.blockRange?.[1] || '?'} | ${arch?.classNeeds || ''}\n`;
+      txt += `Coach: ${arch?.coachNote || ''}\n\n`;
+      txt += `<b>${data.members.length} members:</b>\n`;
+      for (const m of data.members.slice(0, 20)) {
+        txt += `  ${m.first_name} ${m.last_name} — ${m.total_attended} sessions\n`;
+      }
+      if (data.members.length > 20) txt += `  ... and ${data.members.length - 20} more`;
+      await safeSend(chatId, txt, { parse_mode: 'HTML' });
+
+    } else {
+      // Default: summary
+      const resp = await fetch('http://localhost:8080/api/punchpass/profiles');
+      const summary = await resp.json();
+      if (summary.length === 0) {
+        await safeSend(chatId, 'No profiles yet. Run: /members build');
+        return;
+      }
+      let txt = '<b>Member Profiles</b>\n\n';
+      let totalActive = 0;
+      for (const s of summary) {
+        if (s.archetype_id !== 'fading_member') totalActive += s.count;
+        txt += `${s.emoji} <b>${s.name}</b>: ${s.count}`;
+        if (s.avg_attended > 0) txt += ` (avg ${s.avg_attended}/mo)`;
+        txt += '\n';
+      }
+      txt += `\n<b>Active: ${totalActive}</b> | Fading: ${summary.find(s => s.archetype_id === 'fading_member')?.count || 0}`;
+      txt += '\n\nCommands:\n/members build — rebuild from latest scrape\n/members search &lt;name&gt;\n/members &lt;archetype_id&gt;';
+      await safeSend(chatId, txt, { parse_mode: 'HTML' });
+    }
+  } catch (err) {
+    await safeSend(chatId, `Members error: ${err.message}`);
+  }
+});
+
+// ── /member — Individual member profile management ───────────────────────────
+// /member <name>                    → show full profile
+// /member <name> block <n>          → set curriculum block
+// /member <name> type <archetype>   → override archetype
+// /member <name> note <text>        → set coaching notes
+// /member <name> tag <text>         → add tag
+// /member <name> untag <text>       → remove tag
+bot.onText(/^\/member(?:@\w+)?\s+(.+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const input = match[1].trim();
+
+  try {
+    // Parse: check for sub-commands at end
+    let name, action, value;
+    const blockMatch = input.match(/^(.+?)\s+block\s+(\d+)$/i);
+    const typeMatch = input.match(/^(.+?)\s+type\s+(\S+)$/i);
+    const noteMatch = input.match(/^(.+?)\s+note\s+(.+)$/i);
+    const tagMatch = input.match(/^(.+?)\s+tag\s+(.+)$/i);
+    const untagMatch = input.match(/^(.+?)\s+untag\s+(.+)$/i);
+
+    if (blockMatch) { name = blockMatch[1]; action = 'block'; value = parseInt(blockMatch[2]); }
+    else if (typeMatch) { name = typeMatch[1]; action = 'type'; value = typeMatch[2]; }
+    else if (noteMatch) { name = noteMatch[1]; action = 'note'; value = noteMatch[2]; }
+    else if (untagMatch) { name = untagMatch[1]; action = 'untag'; value = untagMatch[2]; }
+    else if (tagMatch) { name = tagMatch[1]; action = 'tag'; value = tagMatch[2]; }
+    else { name = input; action = 'show'; }
+
+    // Search for member
+    const searchResp = await fetch(`http://localhost:8080/api/punchpass/members/search?q=${encodeURIComponent(name)}`);
+    const results = await searchResp.json();
+
+    if (results.length === 0) {
+      await safeSend(chatId, `No member matching "${name}".`);
+      return;
+    }
+
+    const member = results[0]; // Best match
+    const cid = member.customer_id;
+
+    if (action === 'block') {
+      if (value < 1 || value > 10) { await safeSend(chatId, 'Block must be 1-10.'); return; }
+      await fetch(`http://localhost:8080/api/punchpass/member/${cid}/block`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ block: value })
+      });
+      const blockInfo = require('./block-config.json').blocks[value - 1];
+      await safeSend(chatId, `${member.first_name} ${member.last_name} → Block ${value} (${blockInfo.name}: ${blockInfo.focus})`, { parse_mode: 'HTML' });
+
+    } else if (action === 'type') {
+      await fetch(`http://localhost:8080/api/punchpass/member/${cid}/archetype`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ archetype_id: value })
+      });
+      await safeSend(chatId, `${member.first_name} ${member.last_name} → archetype: ${value}`);
+
+    } else if (action === 'note') {
+      await fetch(`http://localhost:8080/api/punchpass/member/${cid}/notes`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notes: value })
+      });
+      await safeSend(chatId, `${member.first_name} ${member.last_name} — note saved.`);
+
+    } else if (action === 'tag') {
+      await fetch(`http://localhost:8080/api/punchpass/member/${cid}/tag`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tag: value })
+      });
+      await safeSend(chatId, `${member.first_name} ${member.last_name} +tag: ${value}`);
+
+    } else if (action === 'untag') {
+      await fetch(`http://localhost:8080/api/punchpass/member/${cid}/tag`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tag: value, action: 'remove' })
+      });
+      await safeSend(chatId, `${member.first_name} ${member.last_name} -tag: ${value}`);
+
+    } else {
+      // Show full profile
+      const arch = member.archetype;
+      const blockNum = member.block || member.current_block || 1;
+      const blockInfo = member.blockInfo;
+      const tags = JSON.parse(member.tags || '[]');
+
+      let txt = `<b>${member.first_name} ${member.last_name}</b>\n`;
+      txt += `${arch?.emoji || '?'} ${arch?.name || member.archetype_id}`;
+      if (member.archetype_override) txt += ' (manual)';
+      txt += '\n\n';
+      txt += `<b>Block:</b> ${blockNum}`;
+      if (blockInfo) txt += ` — ${blockInfo.name} (${blockInfo.focus})`;
+      if (member.block_override) txt += ' (manual)';
+      txt += '\n';
+      txt += `<b>Sessions:</b> ${member.total_attended} | No-show: ${Math.round(member.no_show_rate * 100)}%\n`;
+      txt += `<b>Pass:</b> ${member.pass_type || 'none'}\n`;
+      if (member.last_attendance) txt += `<b>Last seen:</b> ${member.last_attendance}\n`;
+      if (tags.length) txt += `<b>Tags:</b> ${tags.join(', ')}\n`;
+      if (member.notes) txt += `\n<b>Notes:</b> ${member.notes}\n`;
+
+      if (arch) {
+        txt += `\n<b>Class needs:</b> ${arch.classNeeds}`;
+        txt += `\n<b>Coach note:</b> ${arch.coachNote}`;
+      }
+
+      txt += '\n\nEdit: /member Name block N | note text | tag text | type archetype_id';
+      await safeSend(chatId, txt, { parse_mode: 'HTML' });
+    }
+  } catch (err) {
+    await safeSend(chatId, `Member error: ${err.message}`);
+  }
+});
+
+// ── /pipeline — Multi-agent review pipeline ─────────────────────────────────
+bot.onText(/\/pipeline(?:\s+(\S+))?\s*([\s\S]*)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+
+  const pipelineName = (match[1] || '').trim().toLowerCase();
+  const seed = (match[2] || '').trim();
+
+  if (!pipelineName || !['content', 'research'].includes(pipelineName)) {
+    return safeSend(chatId, 'Usage: /pipeline content [seed text]\n       /pipeline research [seed text]\n\nPipelines: content (Muse→Maya→Reed→Orc), research (Archaeologist→Muse→Archivist)');
+  }
+
+  await safeSend(chatId, `Running ${pipelineName} pipeline...`);
+
+  try {
+    const { runPipeline } = require(path.join(process.env.HOME, 'Cathedral', 'agents', 'pipeline-runner'));
+    const result = await runPipeline(pipelineName, { seed: seed || undefined });
+
+    // Send stage-by-stage results
+    for (const stage of result.stages) {
+      const header = `<b>${stage.agent.toUpperCase()}</b> (${stage.role}) — ${Math.round(stage.duration_ms / 1000)}s`;
+      if (stage.error) {
+        await safeSend(chatId, `${header}\n❌ ${stage.error}`, { parse_mode: 'HTML' });
+      } else {
+        const output = (stage.output || '').slice(0, 3500);
+        await safeSend(chatId, `${header}\n\n${output}`, { parse_mode: 'HTML' });
+      }
+    }
+
+    // Final verdict
+    const verdictEmoji = result.verdict === 'PASS' ? '✅' : result.verdict === 'REJECT' ? '❌' : result.verdict === 'ITERATE' ? '🔄' : '⚪';
+    await safeSend(chatId, `${verdictEmoji} <b>${pipelineName.toUpperCase()} PIPELINE</b>: ${result.verdict} (${Math.round(result.duration_ms / 1000)}s)`, { parse_mode: 'HTML' });
+  } catch (err) {
+    await safeSend(chatId, `Pipeline error: ${err.message}`);
   }
 });
 

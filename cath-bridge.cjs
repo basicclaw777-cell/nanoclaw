@@ -87,6 +87,14 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'cathedral-home.html'));
 });
 
+app.get('/emergence-map', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'paul-emergence.html'));
+});
+
+app.get('/workshop-results', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'workshop-results.html'));
+});
+
 // ── Auth middleware ────────────────────────────────────────────────────────────
 
 function requireApiKey(req, res, next) {
@@ -338,9 +346,33 @@ app.post('/vault/write', requireApiKey, (req, res) => {
 // ── GET /vault/search ─────────────────────────────────────────────────────────
 
 app.get('/vault/search', requireApiKey, async (req, res) => {
-  const { q, top_k = '10', limit } = req.query;
-  const k = limit || top_k;
+  const { q, top_k = '10', limit, mode } = req.query;
+  const k = parseInt(limit || top_k, 10) || 10;
   if (!q) return res.status(400).json({ error: 'q query param required' });
+
+  // Semantic search (default) with keyword fallback
+  if (mode !== 'keyword') {
+    try {
+      const vaultSearch = require(path.join(NANOCLAW, 'vault-search-bridge.cjs'));
+      const stats = vaultSearch.getEmbeddingStats();
+      if (stats.total > 100) {
+        const results = await vaultSearch.semanticSearch(q, k);
+        return res.json(results.map(r => ({
+          path: r.file_path.replace(process.env.HOME + '/cathedral-vault/', ''),
+          title: r.title,
+          domain: r.domain,
+          score: r.score,
+          first_line: r.first_line,
+          tags: r.tags,
+          mode: 'semantic'
+        })));
+      }
+    } catch (err) {
+      console.error('[vault/search] semantic fallback to keyword:', err.message);
+    }
+  }
+
+  // Keyword fallback
   try {
     const output = await run('python3', [
       path.join(NANOCLAW, 'vault_reader.py'),
@@ -348,6 +380,32 @@ app.get('/vault/search', requireApiKey, async (req, res) => {
     ], 30_000);
     const results = JSON.parse(output);
     res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── GET /vault/related ──────────────────────────────────────────────────────
+
+app.get('/vault/related', requireApiKey, async (req, res) => {
+  const { path: filePath, top_k = '10' } = req.query;
+  if (!filePath) return res.status(400).json({ error: 'path query param required' });
+  const k = parseInt(top_k, 10) || 10;
+  const fullPath = filePath.startsWith('/') ? filePath : path.join(process.env.HOME, 'cathedral-vault', filePath);
+  try {
+    const vaultSearch = require(path.join(NANOCLAW, 'vault-search-bridge.cjs'));
+    const results = await vaultSearch.getRelated(fullPath, k);
+    res.json(results.map(r => ({
+      path: r.file_path.replace(process.env.HOME + '/cathedral-vault/', ''),
+      title: r.title,
+      domain: r.domain,
+      score: r.score,
+      semantic_score: r.semantic_score,
+      link_boost: r.link_boost,
+      tag_boost: r.tag_boost,
+      first_line: r.first_line,
+      tags: r.tags
+    })));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1295,6 +1353,201 @@ app.get('/cuba-combos/frames/:file', (req, res) => {
   const filePath = path.join(CUBA_LIB, 'frames', req.params.file);
   if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
   res.sendFile(filePath);
+});
+
+// Serve BR daily brief dashboard
+app.get('/br-brief', (req, res) => {
+  const briefPath = path.join(__dirname, 'br-briefs', 'latest-brief.html');
+  if (!fs.existsSync(briefPath)) return res.status(404).send('No brief generated yet. Run: node br-preclass-brief.js');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(briefPath);
+});
+
+// Serve BR Command Centre
+app.get('/br-command', (req, res) => {
+  const p = path.join(process.env.HOME, 'basic-reflex', 'br-command.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+// Serve Class Planner
+const CLASS_PLANNER_DIR = path.join(process.env.HOME, 'basic-reflex', 'class-planner');
+
+app.get('/class-planner', (req, res) => {
+  const p = path.join(CLASS_PLANNER_DIR, 'class-planner.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+app.get('/class-planner/data/plan', (req, res) => {
+  const p = path.join(CLASS_PLANNER_DIR, 'week-plan.json');
+  if (!fs.existsSync(p)) return res.json({});
+  res.set('Cache-Control', 'no-store');
+  res.json(JSON.parse(fs.readFileSync(p, 'utf-8')));
+});
+
+app.post('/class-planner/data/plan', (req, res) => {
+  const p = path.join(CLASS_PLANNER_DIR, 'week-plan.json');
+  fs.writeFileSync(p, JSON.stringify(req.body, null, 2));
+  res.json({ ok: true });
+});
+
+app.get('/class-planner/data/drills', (req, res) => {
+  const p = path.join(CLASS_PLANNER_DIR, 'drill-bank.json');
+  if (!fs.existsSync(p)) return res.json([]);
+  res.set('Cache-Control', 'no-store');
+  res.json(JSON.parse(fs.readFileSync(p, 'utf-8')));
+});
+
+app.get('/class-planner/data/history', (req, res) => {
+  const p = path.join(CLASS_PLANNER_DIR, 'planner-history.json');
+  if (!fs.existsSync(p)) return res.json([]);
+  res.set('Cache-Control', 'no-store');
+  res.json(JSON.parse(fs.readFileSync(p, 'utf-8')));
+});
+
+app.post('/class-planner/archive', (req, res) => {
+  const planPath = path.join(CLASS_PLANNER_DIR, 'week-plan.json');
+  const histPath = path.join(CLASS_PLANNER_DIR, 'planner-history.json');
+  if (!fs.existsSync(planPath)) return res.status(404).json({ error: 'No plan to archive' });
+  const plan = JSON.parse(fs.readFileSync(planPath, 'utf-8'));
+  const history = fs.existsSync(histPath) ? JSON.parse(fs.readFileSync(histPath, 'utf-8')) : [];
+  history.unshift({ ...plan, archivedAt: new Date().toISOString() });
+  fs.writeFileSync(histPath, JSON.stringify(history, null, 2));
+  // Reset plan for new week
+  const today = new Date();
+  const nextMon = new Date(today);
+  nextMon.setDate(today.getDate() + ((8 - today.getDay()) % 7 || 7));
+  plan.weekOf = nextMon.toISOString().split('T')[0];
+  plan.theme = 'Set your theme for the week';
+  for (const d of Object.values(plan.domains)) { d.heat = 'medium'; d.drills = []; d.notes = ''; }
+  for (const c of Object.values(plan.classes)) { c.notes = ''; }
+  fs.writeFileSync(planPath, JSON.stringify(plan, null, 2));
+  res.json({ ok: true, archived: history.length });
+});
+
+// Serve open gym card
+app.get('/open-gym', (req, res) => {
+  const p = path.join(process.env.HOME, 'basic-reflex', 'open-gym', 'open-gym-card.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+// Serve kids class card
+app.get('/kids-class', (req, res) => {
+  const cardPath = path.join(process.env.HOME, 'basic-reflex', 'kids-class', 'kids-class-card.html');
+  if (!fs.existsSync(cardPath)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(cardPath);
+});
+
+app.get('/10-block', (req, res) => {
+  const p = path.join(process.env.HOME, 'basic-reflex', '10-block-pathway', '10-block-card.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+// === Gym Eyes Analytics Tier 1 API ===
+const GYM_EYES_DIR = path.join(HOME, 'basic-reflex', 'gym-eyes');
+
+// Analytics dashboard
+app.get('/gym-eyes/analytics', (req, res) => {
+  const dashPath = path.join(GYM_EYES_DIR, 'analytics-dashboard.html');
+  if (!fs.existsSync(dashPath)) return res.status(404).send('Analytics dashboard not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(dashPath);
+});
+
+// List sessions for analytics dropdown
+app.get('/gym-eyes/analytics/sessions', (req, res) => {
+  const sessDir = path.join(GYM_EYES_DIR, 'sessions');
+  if (!fs.existsSync(sessDir)) return res.json([]);
+  const files = fs.readdirSync(sessDir)
+    .filter(f => f.startsWith('session-') && f.endsWith('.json'))
+    .sort();
+  const sessions = files.map(f => {
+    try {
+      const d = JSON.parse(fs.readFileSync(path.join(sessDir, f), 'utf-8'));
+      return { file: f, date: (d.session_date || '').split('T')[0], punches: d.total_punches || 0 };
+    } catch { return { file: f, date: '', punches: 0 }; }
+  });
+  res.json(sessions);
+});
+
+// Run Python analytics on a session file
+function runPyAnalytics(script, sessionFile) {
+  const sessPath = path.join(GYM_EYES_DIR, 'sessions', sessionFile);
+  if (!fs.existsSync(sessPath)) return { error: 'Session not found' };
+  try {
+    const { execFileSync } = require('child_process');
+    const result = execFileSync('python3', [
+      '-c',
+      `import json, sys; sys.path.insert(0, '${GYM_EYES_DIR}'); from ${script} import *; ` +
+      `d = json.load(open('${sessPath}')); ` +
+      (script === 'punch_power' ? `print(json.dumps(PowerScorer().analyze_session(d)))` :
+       script === 'combo_matcher' ? `print(json.dumps(ComboMatcher().analyze_session(d)))` :
+       script === 'session_analytics' ? `print(json.dumps(SessionAnalytics().analyze(d)))` :
+       script === 'auto_highlights' ? `print(json.dumps(HighlightEngine().extract(d)))` : '{}')
+    ], { timeout: 15000, encoding: 'utf-8' });
+    return JSON.parse(result.trim());
+  } catch (err) {
+    return { error: err.message?.substring(0, 200) || 'Analysis failed' };
+  }
+}
+
+app.get('/gym-eyes/analytics/session/:file', (req, res) => {
+  res.json(runPyAnalytics('session_analytics', req.params.file));
+});
+
+app.get('/gym-eyes/analytics/power/:file', (req, res) => {
+  res.json(runPyAnalytics('punch_power', req.params.file));
+});
+
+app.get('/gym-eyes/analytics/combos/:file', (req, res) => {
+  res.json(runPyAnalytics('combo_matcher', req.params.file));
+});
+
+app.get('/gym-eyes/analytics/highlights/:file', (req, res) => {
+  res.json(runPyAnalytics('auto_highlights', req.params.file));
+});
+
+// Trends: compare all sessions
+app.get('/gym-eyes/analytics/trends', (req, res) => {
+  const sessDir = path.join(GYM_EYES_DIR, 'sessions');
+  if (!fs.existsSync(sessDir)) return res.json({ error: 'No sessions' });
+  try {
+    const { execFileSync } = require('child_process');
+    const result = execFileSync('python3', [
+      '-c',
+      `import json, sys; sys.path.insert(0, '${GYM_EYES_DIR}'); from session_analytics import SessionAnalytics; ` +
+      `a = SessionAnalytics(); sessions = a.load_all_sessions(); print(json.dumps(a.compare_sessions(sessions)))`
+    ], { timeout: 30000, encoding: 'utf-8' });
+    res.json(JSON.parse(result.trim()));
+  } catch (err) {
+    res.json({ error: err.message?.substring(0, 200) || 'Trend analysis failed' });
+  }
+});
+
+// Competitions: formats + history
+app.get('/gym-eyes/analytics/competitions', (req, res) => {
+  const statePath = path.join(GYM_EYES_DIR, 'competition-state.json');
+  let history = [];
+  try { history = JSON.parse(fs.readFileSync(statePath, 'utf-8')).history || []; } catch {}
+  res.json({
+    formats: {
+      punch_race: { name: 'Punch Race', description: 'Most punches in time window', metric: 'total_punches', duration_default: 60 },
+      form_fight: { name: 'Form Fight', description: 'Best average form score', metric: 'avg_form_score', duration_default: 120 },
+      combo_challenge: { name: 'Combo Challenge', description: 'Most Cuba library combo matches', metric: 'matched_combos', duration_default: 120 },
+      power_king: { name: 'Power King', description: 'Highest average power score', metric: 'avg_power', duration_default: 90 },
+      endurance_ladder: { name: 'Endurance Ladder', description: 'Most consistent punch rate', metric: 'consistency_score', duration_default: 180 },
+      combo_bingo: { name: 'Combo Bingo', description: 'Hit specific Cuba combo sequences', metric: 'bingo_hits', duration_default: 180 },
+    },
+    history,
+  });
 });
 
 // Serve the main gym-eyes dashboard/hub
@@ -2787,6 +3040,25 @@ app.get('/cathedral-deck', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'cathedral-deck.html'));
 });
 
+app.get('/property-scout', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'property-scout.html'));
+});
+app.get('/property-scout/:file', (req, res) => {
+  const f = path.basename(req.params.file);
+  const p = path.join(HOME, 'nanoclaw', 'property-scout', f);
+  if (!fs.existsSync(p)) return res.status(404).json({ error: 'not found' });
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(p);
+});
+
+app.get('/cathedral-rosetta', (req, res) => {
+  res.sendFile(path.join(__dirname, 'cathedral-rosetta-dashboard.html'));
+});
+
+app.get('/rosetta-bridge', (req, res) => {
+  res.sendFile(path.join(__dirname, 'rosetta-bridge-dashboard.html'));
+});
+
 app.get('/looking-glass', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'looking-glass.html'));
 });
@@ -3509,6 +3781,33 @@ app.get('/api/emergence-captures', (req, res) => {
   }
 });
 
+app.get('/api/emergence-scores', (req, res) => {
+  try {
+    const scorePath = path.join(HOME, 'Cathedral', 'agents', 'emergence-scores.json');
+    if (fs.existsSync(scorePath)) {
+      const scores = JSON.parse(fs.readFileSync(scorePath, 'utf8'));
+      const tiers = {
+        1: 'Responsive', 2: 'Proactive', 3: 'Cross-pollinating',
+        4: 'Self-correcting', 5: 'Generative'
+      };
+      const result = Object.entries(scores).map(([id, p]) => ({
+        id, tier: p.tier, tierName: tiers[p.tier] || 'Unknown',
+        level: p.level, xp: Math.round((p.xp || 0) * 10) / 10,
+        totalClimbed: p.totalClimbed || 0,
+        history: (p.history || []).slice(-10),
+        penalties: (p.penalties || []).slice(-5),
+        tierHistory: p.tierHistory || [],
+        lastAssessed: p.lastAssessed
+      }));
+      res.json({ agents: result, tiers });
+    } else {
+      res.json({ agents: [], tiers: {} });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── Architect Pulse ──────────────────────────────────────────────────────────
 
 app.get('/pulse', (req, res) => {
@@ -3588,6 +3887,15 @@ app.get('/merch/suppliers', (req, res) => {
   }
 });
 
+app.get('/merch/sourcing', (req, res) => {
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(NANOCLAW, 'merch-agent', 'sourcing-leads.json'), 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.json([]);
+  }
+});
+
 // ── Higgsfield Feature Map ────────────────────────────────────────────────────
 
 app.get('/hf-gallery', (req, res) => {
@@ -3640,6 +3948,117 @@ app.get('/higgsfield-map-data', (req, res) => {
 
 app.get('/neural-map', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'neural-map.html'));
+});
+
+// ── Cathedral Infographic ────────────────────────────────────────────────────
+app.get('/cathedral-infographic', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'cathedral-infographic.html'));
+});
+
+// ── Scout Room ───────────────────────────────────────────────────────────────
+
+app.get('/scout-room', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'scout-room.html'));
+});
+
+const SCOUT_CANDIDATES_DIR = path.join(HOME, 'cathedral-vault', '06_Methods', 'skills', 'candidates');
+const SCOUT_RATINGS_PATH = path.join(HOME, 'Cathedral', 'agents', 'scout-ratings.json');
+
+app.get('/api/scout-room/candidates', (req, res) => {
+  try {
+    const files = fs.readdirSync(SCOUT_CANDIDATES_DIR).filter(f => f.endsWith('.md'));
+    const candidates = [];
+    for (const file of files) {
+      const content = fs.readFileSync(path.join(SCOUT_CANDIDATES_DIR, file), 'utf8');
+      if (!content.startsWith('---')) continue;
+      const fmEnd = content.indexOf('\n---', 3);
+      if (fmEnd === -1) continue;
+      const fm = {};
+      for (const line of content.slice(3, fmEnd).split('\n')) {
+        const m = line.match(/^(\w+):\s*(.+)$/);
+        if (m) fm[m[1]] = m[2].trim();
+      }
+      // Extract pitch from content
+      const pitchMatch = content.match(/## Pitch\n\n([\s\S]*?)(?=\n##|\n---|\Z)/);
+      candidates.push({
+        file,
+        name: fm.name || file.replace('.md', ''),
+        source: fm.source || 'github',
+        url: fm.github_url || fm.url || '',
+        score: parseInt(fm.score) || 0,
+        score_gap_fit: fm.score_gap_fit || '?',
+        score_mac_compatible: fm.score_mac_compatible || '?',
+        score_active: fm.score_active || '?',
+        score_integration_cost: fm.score_integration_cost || '?',
+        score_cathedral_align: fm.score_cathedral_align || '?',
+        language: fm.language || 'unknown',
+        stars: fm.stars || '0',
+        scouted: fm.scouted || 'unknown',
+        pitch: pitchMatch ? pitchMatch[1].trim().slice(0, 200) : (fm.name || '')
+      });
+    }
+    candidates.sort((a, b) => b.score - a.score);
+    res.json(candidates);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/scout-room/ratings', (req, res) => {
+  try {
+    const ratings = fs.existsSync(SCOUT_RATINGS_PATH)
+      ? JSON.parse(fs.readFileSync(SCOUT_RATINGS_PATH, 'utf8'))
+      : {};
+    res.json(ratings);
+  } catch (err) {
+    res.json({});
+  }
+});
+
+app.post('/api/scout-room/rate', (req, res) => {
+  try {
+    const { file, rating } = req.body;
+    if (!file || !['hot', 'warm', 'cold'].includes(rating)) {
+      return res.status(400).json({ error: 'Invalid file or rating' });
+    }
+    let ratings = {};
+    try { ratings = JSON.parse(fs.readFileSync(SCOUT_RATINGS_PATH, 'utf8')); } catch (_) {}
+    ratings[file] = rating;
+    fs.writeFileSync(SCOUT_RATINGS_PATH, JSON.stringify(ratings, null, 2));
+
+    // If hot, DM Forge
+    if (rating === 'hot') {
+      const DM_PATH = path.join(HOME, 'Cathedral', 'agents', 'agent-dms.json');
+      let dms = {};
+      try { dms = JSON.parse(fs.readFileSync(DM_PATH, 'utf8')); } catch (_) {}
+      if (!dms.forge) dms.forge = [];
+      // Read candidate for context
+      const content = fs.readFileSync(path.join(SCOUT_CANDIDATES_DIR, file), 'utf8');
+      const nameMatch = content.match(/^name:\s*(.+)$/m);
+      const urlMatch = content.match(/^(?:github_url|url):\s*(.+)$/m);
+      const name = nameMatch ? nameMatch[1].trim() : file;
+      const url = urlMatch ? urlMatch[1].trim() : '';
+      dms.forge.push({
+        from: 'paul',
+        text: `HOT SCOUT FINDING — Paul wants this evaluated for Cathedral integration: ${name}\n${url}\nFull candidate file: 06_Methods/skills/candidates/${file}`,
+        ts: new Date().toISOString(),
+        read: false
+      });
+      fs.writeFileSync(DM_PATH, JSON.stringify(dms, null, 2));
+    }
+
+    // Update candidate frontmatter status
+    const candidatePath = path.join(SCOUT_CANDIDATES_DIR, file);
+    if (fs.existsSync(candidatePath)) {
+      let content = fs.readFileSync(candidatePath, 'utf8');
+      content = content.replace(/^status:\s*.+$/m, `status: ${rating}`);
+      fs.writeFileSync(candidatePath, content);
+    }
+
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ── Cathedral Newsfeed ────────────────────────────────────────────────────
@@ -3892,6 +4311,62 @@ app.get('/api/archaeologist/inspire', (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// ── Pipeline Dashboard + API ─────────────────────────────────────────────────
+app.get('/pipeline', (req, res) => {
+  res.sendFile(path.join(process.env.HOME, 'Cathedral', 'agents', 'pipeline-dashboard.html'));
+});
+
+app.get('/api/pipeline/runs', (req, res) => {
+  try {
+    const runsPath = path.join(process.env.HOME, 'Cathedral', 'agents', 'pipeline-runs.json');
+    const runs = fs.existsSync(runsPath) ? JSON.parse(fs.readFileSync(runsPath, 'utf8')) : [];
+    res.json(runs);
+  } catch (err) { res.json([]); }
+});
+
+app.get('/api/pipeline/tokens', (req, res) => {
+  try {
+    const logPath = path.join(process.env.HOME, 'Cathedral', 'agents', 'token-spend-log.jsonl');
+    if (!fs.existsSync(logPath)) return res.json({ agents: {}, daily: [] });
+
+    const lines = fs.readFileSync(logPath, 'utf8').trim().split('\n').filter(Boolean);
+    const agents = {};
+    const INPUT_COST = 0.14 / 1e6;  // DeepSeek $/token
+    const OUTPUT_COST = 0.28 / 1e6;
+
+    for (const line of lines) {
+      try {
+        const e = JSON.parse(line);
+        const a = e.agent || 'unknown';
+        if (!agents[a]) agents[a] = { calls: 0, input_tokens: 0, output_tokens: 0, cost: 0 };
+        agents[a].calls++;
+        agents[a].input_tokens += e.input_tokens || 0;
+        agents[a].output_tokens += e.output_tokens || 0;
+        agents[a].cost += (e.input_tokens || 0) * INPUT_COST + (e.output_tokens || 0) * OUTPUT_COST;
+      } catch (_) {}
+    }
+    res.json({ agents });
+  } catch (err) { res.json({ agents: {} }); }
+});
+
+// ── Punchpass Dashboard ──────────────────────────────────────────────────────
+try {
+  const punchpass = require('./punchpass-dashboard.cjs');
+  app.use(punchpass.createRouter());
+  console.log('[cath-bridge] Punchpass dashboard loaded → /punchpass');
+} catch (e) {
+  console.log('[cath-bridge] Punchpass dashboard not available:', e.message);
+}
+
+// ── Punchpass Profiler API ───────────────────────────────────────────────────
+try {
+  const profiler = require('./punchpass-profiler.cjs');
+  app.use(profiler.createRouter());
+  console.log('[cath-bridge] Punchpass profiler API loaded');
+} catch (e) {
+  console.log('[cath-bridge] Punchpass profiler not available:', e.message);
+}
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 
