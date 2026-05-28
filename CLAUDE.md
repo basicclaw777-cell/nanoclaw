@@ -1720,3 +1720,24 @@ the-timekeeper to go offline. Don't repeat it.
 - PM2: skills-scout (daily cron, no-autorestart), scout-bridge (weekly cron, no-autorestart)
 - QUEUED: Scout Rating Room (interactive lobby room for Paul to rate hot/warm/cold)
 - Cathedral Infographic: localhost:8080/cathedral-infographic (3-column: Does/Want/Blown, live data)
+
+## Agent Pipeline System — Multi-Agent Review Chains (built 2026-05-27)
+- Runner: ~/Cathedral/agents/pipeline-runner.js (CJS)
+- Token logger: ~/Cathedral/agents/token-logger.js (JSONL at token-spend-log.jsonl)
+- Run log: ~/Cathedral/agents/pipeline-runs.json (last 200 runs)
+- Dashboard: ~/Cathedral/agents/pipeline-dashboard.html → localhost:8080/pipeline
+- API: /api/pipeline/runs, /api/pipeline/tokens on cath-bridge
+- Telegram: /pipeline content [seed], /pipeline research [seed]
+- Content pipeline: Muse → Maya → Reed → Orc (4 stages, ~60s)
+- Research pipeline: Archaeologist → Muse → Archivist (3 stages, no gate)
+- Full cumulative context: each stage sees ALL previous stages
+- Verdicts: PASS / ITERATE / REJECT / NO_GATE
+- Smell sense: reads token-spend-log.jsonl + pipeline-runs.json for rubber-stamp detection
+- Lobby: Pipeline Control room (blue)
+- Architecture: ~/cathedral-vault/08_Project_Orchestrator/projects/agent-pipeline-architecture.md
+
+## Mnemonic Library — Agent Memory Devices (built 2026-05-29)
+- Reference: ~/Cathedral/agents/mnemonic-library.html → localhost:8080/mnemonic-library
+- 40 devices across 13 agents, 7 technique types
+- Searchable, filterable by agent and type
+- Lobby: Mnemonic Library room (purple)
