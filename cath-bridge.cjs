@@ -1622,6 +1622,13 @@ app.get('/gym-eyes/showcase', (req, res) => {
   res.sendFile(reportPath);
 });
 
+// Drill Player — 3D skeleton boxer visualization
+app.get('/gym-eyes/drill-player', (req, res) => {
+  const drillPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'drill-player.html');
+  if (!fs.existsSync(drillPath)) return res.status(404).send('Drill player not found');
+  res.sendFile(drillPath);
+});
+
 // Dataset explorer
 app.get('/datasets', (req, res) => {
   const explorerPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'dataset_explorer.html');
@@ -2471,6 +2478,82 @@ app.get('/trader/performance', (req, res) => {
   } catch(e) {
     res.json({ perf: null, decisions: [], signals: [], strategies: [], decisionStats: [] });
   }
+});
+
+// ── Daily Pick: Paul vs Machine ──────────────────────────────────────────────
+
+app.get('/trader/picks/scoreboard', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const paul = db.prepare('SELECT * FROM pick_portfolio WHERE player = ?').get('paul');
+    const ai = db.prepare('SELECT * FROM pick_portfolio WHERE player = ?').get('ai');
+    const picks = db.prepare('SELECT * FROM daily_picks ORDER BY date DESC LIMIT 30').all();
+    const lessons = db.prepare('SELECT * FROM trading_lessons ORDER BY created_at DESC').all();
+    const categories = db.prepare('SELECT category, COUNT(*) as count FROM trading_lessons GROUP BY category').all();
+    db.close();
+    res.json({ paul: paul || { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 },
+               ai: ai || { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 },
+               picks, lessons, categories });
+  } catch(e) {
+    res.json({ paul: { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 },
+               ai: { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 },
+               picks: [], lessons: [], categories: [] });
+  }
+});
+
+app.get('/trader/picks/lessons', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const cat = req.query.category;
+    const lessons = cat
+      ? db.prepare('SELECT * FROM trading_lessons WHERE category = ? ORDER BY created_at DESC').all(cat)
+      : db.prepare('SELECT * FROM trading_lessons ORDER BY created_at DESC').all();
+    db.close();
+    res.json(lessons);
+  } catch(e) { res.json([]); }
+});
+
+app.get('/trader/picks/today', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const today = new Date().toISOString().slice(0, 10);
+    const row = db.prepare('SELECT * FROM daily_picks WHERE date = ? ORDER BY id DESC LIMIT 1').get(today);
+    db.close();
+    if (!row) return res.json({ quiz: null });
+    res.json({ quiz: {
+      date: row.date,
+      asset: row.asset,
+      price: row.price_at_pick,
+      option_a: row.option_a,
+      option_b: row.option_b,
+      option_c: row.option_c,
+      context: row.context,
+      picked: !!row.paul_pick,
+      paul_pick: row.paul_pick,
+      ai_pick: row.paul_pick ? row.ai_pick : null, // only reveal after pick
+      ai_reasoning: row.paul_pick ? row.ai_reasoning : null,
+    }});
+  } catch(e) { res.json({ quiz: null }); }
+});
+
+app.post('/trader/picks/pick', (req, res) => {
+  try {
+    const { pick } = req.body || {};
+    if (!pick || !['A', 'B', 'C'].includes(pick)) return res.status(400).json({ error: 'Invalid pick' });
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const today = new Date().toISOString().slice(0, 10);
+    const row = db.prepare('SELECT * FROM daily_picks WHERE date = ? AND paul_pick IS NULL ORDER BY id DESC LIMIT 1').get(today);
+    if (!row) { db.close(); return res.json({ error: 'Already picked or no quiz today' }); }
+    db.prepare('UPDATE daily_picks SET paul_pick = ?, paul_picked_at = datetime("now") WHERE id = ?').run(pick, row.id);
+    db.close();
+    const pickLabel = pick === 'A' ? 'LONG' : pick === 'B' ? 'SHORT' : 'SIT OUT';
+    const aiLabel = row.ai_pick === 'A' ? 'LONG' : row.ai_pick === 'B' ? 'SHORT' : 'SIT OUT';
+    res.json({ success: true, asset: row.asset, paulPick: pickLabel, aiPick: aiLabel, agree: pick === row.ai_pick });
+  } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
 // ── Intelligence Hub: Scraper endpoints ──────────────────────────────────────
@@ -4367,6 +4450,11 @@ try {
 } catch (e) {
   console.log('[cath-bridge] Punchpass profiler not available:', e.message);
 }
+
+// ── Mnemonic Library ──────────────────────────────────────────────────────────
+app.get('/mnemonic-library', (req, res) => {
+  res.sendFile(path.join(process.env.HOME, 'Cathedral', 'agents', 'mnemonic-library.html'));
+});
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 

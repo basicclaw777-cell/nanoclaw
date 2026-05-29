@@ -221,7 +221,8 @@ const ENV = [
       portfolio: '/trader/portfolio',
       positions: '/trader/positions',
       performance: '/trader/performance',
-      debate: '/trader/latest-debate'
+      debate: '/trader/latest-debate',
+      scoreboard: '/trader/picks/scoreboard'
     }
   },
   {
@@ -728,7 +729,7 @@ const ENV = [
       { id: 8, name: 'Boxing Lab' },
       { id: 16, name: 'Boxing Engine' }
     ],
-    dashboards: ['/gym-eyes', '/gym-eyes/analytics'],
+    dashboards: ['/gym-eyes', '/gym-eyes/analytics', '/gym-eyes/drill-player', '/cuba-combos', '/gym-eyes/showcase', '/gym-eyes/clusters'],
     dataEndpoints: {
       metrics: '/api/engineering-studio/metrics',
       briefing: '/api/engineering-studio/briefing',
@@ -862,6 +863,24 @@ const ENV = [
     dashboards: [],
     dataEndpoints: {},
     externalUrl: 'http://localhost:8080/cuba-combos'
+  },
+  {
+    id: 'drill-player',
+    name: 'Drill Player',
+    icon: '\u{1F3CB}',
+    color: '#8b1a1a',
+    colorDim: 'rgba(139,26,26,0.12)',
+    desc: '3D skeleton boxer visualization. Plays drill sequences from YouTube trainer. Solo combos, partner exchanges, defense moves. Drop JSON to load.',
+    orc: { name: 'Gym Eyes', state: 'Active', desc: 'Skeleton boxers replay detected drills. 6 punch types, slips, rolls. Partner drill turn-based action-reaction.' },
+    senses: [
+      { icon: '\u{1F94A}', name: 'Punches', detail: '6 types + defense', active: true },
+      { icon: '\u{1F46F}', name: 'Partner', detail: 'A attacks, B defends', active: true },
+      { icon: '\u{1F3AC}', name: 'Replay', detail: 'Keyframe animation', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/gym-eyes/drill-player'
   },
   {
     id: 'sumerian',
@@ -1026,6 +1045,24 @@ const ENV = [
     dashboards: ['/pipeline'],
     dataEndpoints: { runs: '/api/pipeline/runs', tokens: '/api/pipeline/tokens' },
     externalUrl: 'http://localhost:8080/pipeline'
+  },
+  {
+    id: 'mnemonic-library',
+    name: 'Mnemonic Library',
+    icon: '\u{1F9E0}',
+    color: '#9B59B6',
+    colorDim: 'rgba(155,89,182,0.12)',
+    desc: '40 mnemonic devices across 13 agents. Anchors, pegs, loci, stories, dinghy tests, acronym chains. The compressed knowledge layer.',
+    orc: { name: 'Memory Architecture', state: 'Reference', desc: 'Interactive reference for all agent mnemonic devices. Search, filter by agent or type. Each device: name, type, encodes, trigger, self-test.' },
+    senses: [
+      { icon: '\u{2693}', name: 'Anchors', detail: '12 devices', active: true },
+      { icon: '\u{1F4CC}', name: 'Pegs', detail: '8 devices', active: true },
+      { icon: '\u{1F3DB}', name: 'Loci', detail: '5 devices', active: true },
+      { icon: '\u{1F4D6}', name: 'Stories', detail: '6 devices', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/mnemonic-library'],
+    externalUrl: 'http://localhost:8080/mnemonic-library'
   },
   {
     id: 'class-planner',
@@ -1237,6 +1274,38 @@ function switchDash(url, btn) {
   btn.classList.add('active');
 }
 
+// ─── Submit daily pick from lobby ───
+async function submitPick(choice) {
+  const btns = document.querySelectorAll('[onclick^="submitPick"]');
+  btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+  try {
+    const resp = await fetch('/trader/picks/pick', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pick: choice })
+    });
+    const data = await resp.json();
+    const resultEl = document.getElementById('pick-result');
+    if (data.success) {
+      const agree = data.agree;
+      resultEl.style.display = 'block';
+      resultEl.style.background = agree ? 'rgba(34,197,94,0.15)' : 'rgba(245,158,11,0.15)';
+      resultEl.style.color = agree ? 'var(--green)' : 'var(--amber)';
+      resultEl.innerHTML = agree
+        ? `You and AI both picked ${data.paulPick} on ${data.asset}. Great minds...`
+        : `You: ${data.paulPick} | AI: ${data.aiPick} on ${data.asset}. Let's see who's right tomorrow.`;
+      btns.forEach(b => b.style.display = 'none');
+    } else {
+      resultEl.style.display = 'block';
+      resultEl.style.background = 'rgba(239,68,68,0.15)';
+      resultEl.style.color = 'var(--accent)';
+      resultEl.textContent = data.error || 'Already picked or no quiz today';
+    }
+  } catch(e) {
+    btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+  }
+}
+
 // ═══════════════════ LOAD LIVE DATA ═══════════════════
 async function loadRoomData(env) {
   if (env.id === 'gym') return loadGymRoom(env);
@@ -1258,12 +1327,13 @@ async function loadRoomData(env) {
 
 // ─── MONEY ROOM ───
 async function loadMoneyRoom(env) {
-  const [portfolio, positions, performance, debate, signals] = await Promise.allSettled([
+  const [portfolio, positions, performance, debate, signals, scoreboard] = await Promise.allSettled([
     fetchJSON('/trader/portfolio'),
     fetchJSON('/trader/positions'),
     fetchJSON('/trader/performance'),
     fetchJSON('/trader/latest-debate'),
-    fetchJSON('/trader/signals')
+    fetchJSON('/trader/signals'),
+    fetchJSON('/trader/picks/scoreboard')
   ]);
 
   const p = portfolio.value || {};
@@ -1336,6 +1406,145 @@ async function loadMoneyRoom(env) {
       </div>
     </div>
   `).join('');
+
+  // ─── TRADING ACADEMY (Paul vs Machine + Lessons) ───
+  const sb = scoreboard.value || {};
+  const paul = sb.paul || { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 };
+  const ai = sb.ai || { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 };
+  const picks = sb.picks || [];
+  const lessons = sb.lessons || [];
+  const categories = sb.categories || [];
+
+  const paulWinRate = paul.total_picks ? Math.round((paul.correct / paul.total_picks) * 100) : 0;
+  const aiWinRate = ai.total_picks ? Math.round((ai.correct / ai.total_picks) * 100) : 0;
+  const paulAhead = paul.total_pnl >= ai.total_pnl;
+
+  // Fetch today's quiz
+  let quizHTML = '';
+  try {
+    const quizResp = await fetchJSON('/trader/picks/today');
+    const q = quizResp?.quiz;
+    if (q && !q.picked) {
+      quizHTML = `
+      <div class="room-panel span-2" style="margin-top:16px;border:1px solid ${env.color}40">
+        <div class="panel-head" style="background:${env.colorDim}">
+          <span class="panel-label">TODAY'S PICK — ${q.date}</span>
+          <span style="font-size:12px;font-weight:600;color:${env.color}">${q.asset} @ $${Number(q.price).toLocaleString()}</span>
+        </div>
+        <div class="panel-body" style="padding:16px">
+          <div style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:16px;white-space:pre-line">${q.context || ''}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <button onclick="submitPick('A')" style="background:rgba(34,197,94,0.1);border:1px solid var(--green);color:var(--green);padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
+              A) LONG<br><span style="font-size:11px;font-weight:400">${q.option_a}</span>
+            </button>
+            <button onclick="submitPick('B')" style="background:rgba(239,68,68,0.1);border:1px solid var(--accent);color:var(--accent);padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
+              B) SHORT<br><span style="font-size:11px;font-weight:400">${q.option_b}</span>
+            </button>
+            <button onclick="submitPick('C')" style="background:rgba(156,163,175,0.1);border:1px solid var(--text-dim);color:var(--text);padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
+              C) SIT OUT<br><span style="font-size:11px;font-weight:400">${q.option_c}</span>
+            </button>
+          </div>
+          <div id="pick-result" style="display:none;margin-top:12px;padding:12px;border-radius:8px;text-align:center;font-weight:600"></div>
+        </div>
+      </div>`;
+    } else if (q && q.picked) {
+      const pickLabel = q.paul_pick === 'A' ? 'LONG' : q.paul_pick === 'B' ? 'SHORT' : 'SIT OUT';
+      const aiLabel = q.ai_pick === 'A' ? 'LONG' : q.ai_pick === 'B' ? 'SHORT' : 'SIT OUT';
+      quizHTML = `
+      <div class="room-panel span-2" style="margin-top:16px;opacity:0.8">
+        <div class="panel-head">
+          <span class="panel-label">TODAY'S PICK — ${q.date}</span>
+          <span style="font-size:12px;color:var(--green)">PICKED</span>
+        </div>
+        <div class="panel-body" style="text-align:center;padding:20px">
+          <div style="font-size:16px;font-weight:700;color:${env.color};margin-bottom:8px">${q.asset} @ $${Number(q.price).toLocaleString()}</div>
+          <div style="display:flex;justify-content:center;gap:40px;margin:12px 0">
+            <div><span style="font-size:11px;color:var(--text-dim)">YOU</span><div style="font-size:18px;font-weight:700">${pickLabel}</div></div>
+            <div style="font-size:18px;color:var(--text-dim);align-self:center">vs</div>
+            <div><span style="font-size:11px;color:var(--text-dim)">AI</span><div style="font-size:18px;font-weight:700">${aiLabel}</div></div>
+          </div>
+          ${q.ai_reasoning ? `<div style="font-size:12px;color:var(--text-dim);margin-top:8px;font-style:italic">${q.ai_reasoning}</div>` : ''}
+          <div style="font-size:11px;color:var(--text-dim);margin-top:8px">Resolves tomorrow when price updates</div>
+        </div>
+      </div>`;
+    }
+  } catch(e) {}
+
+  let academyHTML = quizHTML + `
+    <div class="room-panel span-2" style="margin-top:16px">
+      <div class="panel-head">
+        <span class="panel-label">Trading Academy — Paul vs Machine</span>
+        <span style="font-size:10px;color:var(--text-dim)">${paul.total_picks} picks played</span>
+      </div>
+      <div class="panel-body">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;padding:12px 0">
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Paul</div>
+            <div style="font-size:28px;font-weight:700;color:${paulAhead ? 'var(--green)' : 'var(--text)'};margin:4px 0">$${Number(paul.balance).toLocaleString()}</div>
+            <div style="font-size:12px;color:${paul.total_pnl >= 0 ? 'var(--green)' : 'var(--accent)'}">${paul.total_pnl >= 0 ? '+' : ''}$${Number(paul.total_pnl).toFixed(2)}</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:4px">${paulWinRate}% accuracy (${paul.correct}/${paul.total_picks})</div>
+          </div>
+          <div style="font-size:20px;font-weight:700;color:var(--text-dim)">VS</div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Machine</div>
+            <div style="font-size:28px;font-weight:700;color:${!paulAhead ? 'var(--green)' : 'var(--text)'};margin:4px 0">$${Number(ai.balance).toLocaleString()}</div>
+            <div style="font-size:12px;color:${ai.total_pnl >= 0 ? 'var(--green)' : 'var(--accent)'}">${ai.total_pnl >= 0 ? '+' : ''}$${Number(ai.total_pnl).toFixed(2)}</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:4px">${aiWinRate}% accuracy (${ai.correct}/${ai.total_picks})</div>
+          </div>
+        </div>
+        ${picks.length ? `
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:8px">
+          <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Recent Picks</div>
+          <div style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto">
+            ${picks.slice(0, 10).map(pk => {
+              const resolved = pk.resolved_at != null;
+              const paulRight = pk.paul_pnl > 0;
+              const aiRight = pk.ai_pnl > 0;
+              return `<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--bg);border-radius:6px;font-size:12px">
+                <span style="color:var(--text-dim);min-width:70px">${pk.date}</span>
+                <span style="flex:1">${pk.paul_pick || '?'} vs ${pk.ai_pick || '?'}</span>
+                ${resolved ? `
+                  <span style="color:${paulRight ? 'var(--green)' : 'var(--accent)'};min-width:55px">P: ${pk.paul_pnl >= 0 ? '+' : ''}$${Number(pk.paul_pnl || 0).toFixed(0)}</span>
+                  <span style="color:${aiRight ? 'var(--green)' : 'var(--accent)'};min-width:55px">AI: ${pk.ai_pnl >= 0 ? '+' : ''}$${Number(pk.ai_pnl || 0).toFixed(0)}</span>
+                ` : '<span style="color:var(--amber)">Pending</span>'}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>` : '<div style="color:var(--text-dim);font-size:12px;padding:12px 0">No picks yet. First quiz arrives via Telegram.</div>'}
+      </div>
+    </div>`;
+
+  // Lesson cards
+  if (lessons.length) {
+    const catIcons = { momentum: '🚀', contrarian: '🔄', risk: '🛡', sentiment: '📊', patience: '⏳', confluence: '🤝' };
+    academyHTML += `
+    <div class="room-panel span-2">
+      <div class="panel-head">
+        <span class="panel-label">Lessons Learned</span>
+        <div class="deck-cards">
+          ${categories.map(c => `<span class="deck-chip" style="color:${env.color};cursor:default">${catIcons[c.category] || '📚'} ${c.category} (${c.count})</span>`).join('')}
+        </div>
+      </div>
+      <div class="panel-body" style="max-height:400px;overflow-y:auto">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+          ${lessons.slice(0, 12).map(l => `
+            <div style="background:var(--bg);border-radius:8px;padding:12px;border-left:3px solid ${env.color}">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                <span style="font-size:14px">${catIcons[l.category] || '📚'}</span>
+                <span style="font-size:11px;text-transform:uppercase;color:${env.color};letter-spacing:0.5px">${l.category || 'general'}</span>
+                <span style="font-size:10px;color:var(--text-dim);margin-left:auto">${l.created_at ? l.created_at.slice(0, 10) : ''}</span>
+              </div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">${l.title || 'Lesson'}</div>
+              <div style="font-size:12px;color:var(--text-dim);line-height:1.4">${(l.content || '').substring(0, 150)}${(l.content || '').length > 150 ? '...' : ''}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Inject academy after existing grid
+  document.getElementById('rv-grid').insertAdjacentHTML('beforeend', academyHTML);
 }
 
 // ─── MIND ROOM ───

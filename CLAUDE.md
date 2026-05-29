@@ -1114,6 +1114,30 @@ He will decide when he's done.
 - **Vault docs updated:** LOGAN_GENERATION_PLAYBOOK.md + LOGAN_IP_SYSTEM.md
 - **Next:** Reed Visual Director sage (Telegram + Code), harvest image gen tips from raw chats
 
+## Visual Platform Strategy — Revised 2026-05-29
+- **Higgsfield $84/mo cancelled.** Downgrade to Starter $15/mo when billing resets.
+  - Starter: 1,200 Nano Banana Pro images, 20K Soul 2.0, Seedance 2.0 Fast (not Full), 533 Kling 3.0 videos
+  - Pay-as-you-go: $12 for 200 credits = 100 Nano Banana Pro images (no Seedance)
+- **Interim stack:**
+  - fal.ai for Seedance 2.0 video (pay-per-use, ~$1.20/4sec, API wired)
+  - OpenArt for Nano Banana images ($7/mo starter, Paul testing)
+  - Gemini API for free text2img (infographics, storyboards) — blocked by spending cap, raise at ai.studio/spend
+- **Nano Banana Pro on Gemini API:** model `nano-banana-pro-preview`, $0.13/img
+- **Key finding:** All generative models regenerate pixels, not adjust them. Higgsfield's value was custom preservation pipeline wrapping models. Gemini web app > API because reasoning model rewrites prompts.
+- **Test battery:** ~/nanoclaw/test-gemini-images.js — 8 tests, multi-model, ready but cap-blocked
+- **Reed Gemini Lab:** STOPPED. 605 API calls on May 21 burned ~$13. 96 images at reed-lab/gemini-outbox/. Process killed.
+
+### Standing Instruction 31 — Autonomous API Callers Must Have Budget Caps
+Any PM2 process or cron that calls paid external APIs must have:
+1. A per-run spending cap (max N calls per execution)
+2. A daily/weekly budget ceiling
+3. Telegram notification of spend after each run
+WHY: Two separate $13-20 burns from unthrottled autonomous processes (Archaeologist DeepSeek + Reed Gemini Lab).
+
+### Standing Instruction 32 — Autonomous Visual Output Must Be Surfaced
+Any process that generates images/videos autonomously must send a sample or summary to Telegram. Output sitting in an outbox unseen is wasted money.
+WHY: 96 Gemini images generated at cost, never reviewed. Paul discovered them 8 days later by accident.
+
 ## Principle Extraction Engine — Built 2026-05-05
 - Script: ~/nanoclaw/principle-extractor.py (hermes3 via Ollama, cathedral-venv)
 - Reads all nuggets in 02_Refined_Gold, extracts universal principle from each
@@ -1741,3 +1765,23 @@ the-timekeeper to go offline. Don't repeat it.
 - 40 devices across 13 agents, 7 technique types
 - Searchable, filterable by agent and type
 - Lobby: Mnemonic Library room (purple)
+
+## Gym Eyes — Ensemble Classifier + YouTube Pipeline (built 2026-05-29)
+- Ensemble classifier: temporal_classifier.py wraps KNN (W=0.5) + ELM (W=0.3) + FSCL (W=0.2) with weighted voting
+- Wired into detector.py _classify_punch() — cascade: ensemble -> KNN -> heuristic (with uppercut detection)
+- Cuba training: cuba_trainer.py trains all 3 classifiers from 744 samples (3 Cuba coach videos)
+- YouTube trainer: youtube_trainer.py — download (yt-dlp), detect, review (keyboard correction), extract drills, retrain
+  - CLI: python3 youtube_trainer.py "URL", --review latest, --retrain, --drills latest, --video path
+  - Zero cost: yt-dlp + MediaPipe + numpy, all local
+  - Bootstrap loop: detect -> correct -> retrain -> smarter
+- Drill extraction: groups punches by timing gaps (<1.5s), 3 types (pad, bag, partner)
+- Partner drill detection: multi-pose (2 fighters), DefenseDetector integration, turn-based action-reaction (0.8s window)
+- Shorthand: J=jab, C=cross, H=hook, U=uppercut, S=slip, R=roll. Partner: `A:J-C -> B:S-H`
+- 3D Drill Player: ~/basic-reflex/gym-eyes/drill-player.html
+  - Three.js skeleton boxer (16 joints, geometric primitives), 6 punch types, slip/roll
+  - Partner support (2 boxers), speed control (0.25x-2x), file drop for drill JSON
+  - Route: localhost:8080/gym-eyes/drill-player
+  - Lobby room: Drill Player (burgundy)
+- Hub rebuilt: localhost:8080/gym-eyes — command center with 7 sections (dashboards, pipeline, intelligence, forgotten shelf, telegram, setup guides, data locations)
+- Known issues: ELM numerical overflow (needs feature normalization), FSCL codebook collapse (1/48 active neurons)
+- Data dirs: sessions/, students/, models/, training_data/, youtube_downloads/, youtube_results/, cuba-library/
