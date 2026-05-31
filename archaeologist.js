@@ -68,6 +68,7 @@ function getDb() {
       ensemble_verdict TEXT,
       status TEXT DEFAULT 'DISCOVERY',
       source_trigger TEXT,
+      unverified_citations TEXT,
       timestamp TEXT DEFAULT (datetime('now'))
     );
     CREATE TABLE IF NOT EXISTS scans (
@@ -82,6 +83,11 @@ function getDb() {
     CREATE INDEX IF NOT EXISTS idx_disc_status ON discoveries(status);
     CREATE INDEX IF NOT EXISTS idx_disc_technique ON discoveries(technique);
   `);
+  // Migration: add unverified_citations to pre-existing DBs (CREATE IF NOT EXISTS won't)
+  const cols = db.prepare("PRAGMA table_info(discoveries)").all();
+  if (!cols.some(c => c.name === 'unverified_citations')) {
+    db.exec('ALTER TABLE discoveries ADD COLUMN unverified_citations TEXT');
+  }
   return db;
 }
 
@@ -302,10 +308,17 @@ Be specific. Name real researchers, real papers, real techniques. No hand-waving
 
   // Check for --no-ensemble flag or skip ensemble when system is low on memory
   const skipEnsemble = process.argv.includes('--no-ensemble') || process.env.ARCHAEOLOGIST_SKIP_ENSEMBLE === '1';
+  // Opt-in citation verification (Semantic Scholar). OFF by default so the
+  // rate-limited watcher never makes extra network calls. Tagging always runs.
+  const verifyCitations = process.argv.includes('--verify') || process.env.ARCHAEOLOGIST_VERIFY === '1';
 
   for (const disc of discoveries) {
     // Skip if already exists
     if (existingNames.includes(disc.technique.toLowerCase())) continue;
+
+    // Citation honesty: tag fabricated-looking citations [UNVERIFIED] inline
+    // (or [VERIFIED: src] with --verify) and record unverified list on the record.
+    await tagDiscoveryCitations(disc, { verify: verifyCitations });
 
     if (!skipEnsemble) {
       // Run through Ensemble Gate
@@ -328,11 +341,13 @@ Be specific. Name real researchers, real papers, real techniques. No hand-waving
 
     // Store in DB
     db.prepare(`INSERT INTO discoveries (technique, domain, origin, abandoned_reason, valid_reason,
-      cathedral_application, build_estimate, uniqueness, ensemble_score, ensemble_verdict, source_trigger)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
+      cathedral_application, build_estimate, uniqueness, ensemble_score, ensemble_verdict, source_trigger,
+      unverified_citations)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
       disc.technique, disc.domain, disc.origin, disc.abandoned_reason, disc.valid_reason,
       disc.cathedral_application, disc.build_estimate, disc.uniqueness,
-      disc.ensemble_score, disc.ensemble_verdict, triggerContext.slice(0, 200)
+      disc.ensemble_score, disc.ensemble_verdict, triggerContext.slice(0, 200),
+      JSON.stringify(disc.unverified_citations || [])
     );
 
     // File brief to vault — truncate filename to 80 chars max
@@ -344,11 +359,15 @@ domain: ${disc.domain}
 status: DISCOVERY
 ensemble_score: ${disc.ensemble_score ?? 'pending'}
 ensemble_verdict: ${disc.ensemble_verdict}
+unverified_citations: ${(disc.unverified_citations || []).length}
 date: ${new Date().toISOString().split('T')[0]}
 ---
 
 # ${disc.technique}
-
+${(disc.unverified_citations || []).length > 0 ? `
+> ⚠️ **Unverified citations** — DO NOT build on these without checking the source:
+${disc.unverified_citations.map(c => `> - ${c} \`[UNVERIFIED]\``).join('\n')}
+` : ''}
 ## Origin
 ${disc.origin}
 
@@ -391,6 +410,125 @@ ${disc.uniqueness}
 
   db.close();
   return discoveries.filter(d => !existingNames.includes(d.technique.toLowerCase()));
+}
+
+// ── Citation Honesty ──────────────────────────────────────────────────────────
+// DeepSeek invents researchers, papers, and "Protocols" with confidence. A
+// training protocol built on a fabricated study collapses Cathedral credibility.
+// Every citation-like claim gets detected and tagged [UNVERIFIED] inline by
+// default. Optional opt-in verification (--verify) checks against Semantic
+// Scholar (free, no key) and upgrades confirmed citations to [VERIFIED: <source>].
+// Verification NEVER runs inside the rate-limited watcher — opt-in only.
+
+// Detect citation-like spans: "Author 1989", "Smith & Jones 2002", "et al.",
+// "X Protocol/Method/Technique/Study", "Dr. Name". Returns deduped list of
+// { text, type } where text is the exact substring to tag.
+function extractCitations(text) {
+  if (!text || typeof text !== 'string') return [];
+  const found = new Map(); // text -> type (first match wins)
+  const add = (raw, type) => {
+    const t = raw.trim().replace(/[.,;:]+$/, '');
+    if (t.length < 3) return;
+    if (!found.has(t)) found.set(t, type);
+  };
+
+  // Author(s) + year: "Kuznetsov 1989", "Rosenberger & Lachin, 2002", "Minsky (1986)"
+  const authorYear = /\b([A-Z][a-zà-ÿ]+(?:\s*(?:&|and|,)\s*[A-Z][a-zà-ÿ]+)*)\s*[,(]?\s*(1[89]\d{2}|20\d{2})\)?/g;
+  for (const m of text.matchAll(authorYear)) add(m[0], 'author_year');
+
+  // "et al." constructions: "Garvican-Lewis et al. 2015"
+  const etAl = /\b[A-Z][a-zà-ÿ-]+\s+et\s+al\.?(?:\s*,?\s*(?:1[89]\d{2}|20\d{2}))?/g;
+  for (const m of text.matchAll(etAl)) add(m[0], 'et_al');
+
+  // Named Protocol/Method/Technique/Study/Model/Effect: "Skorikov Protocol",
+  // "Snap-Reset Protocol", "Dynamic Baseline Protocol" (leading token may be hyphenated)
+  const namedThing = /\b((?:[A-Z][A-Za-zà-ÿ-]+\s+){1,3}(?:Protocol|Method|Technique|Study|Model|Effect|Principle|Law|Theorem|Equation))\b/g;
+  for (const m of text.matchAll(namedThing)) add(m[1], 'named_method');
+
+  // Titled researcher: "Dr. Elena Vos", "Professor Bernstein"
+  const titled = /\b(?:Dr\.?|Prof(?:essor)?\.?)\s+[A-Z][a-zà-ÿ-]+(?:\s+[A-Z][a-zà-ÿ-]+)?/g;
+  for (const m of text.matchAll(titled)) add(m[0], 'titled_person');
+
+  // Named institutes/labs: "Soviet Boxing Science Institute"
+  const institute = /\b((?:[A-Z][a-zà-ÿ-]+\s+){1,4}(?:Institute|Laboratory|University|Academy))\b/g;
+  for (const m of text.matchAll(institute)) add(m[1], 'institution');
+
+  return Array.from(found, ([text, type]) => ({ text, type }));
+}
+
+// Verify a single citation against Semantic Scholar (free, keyless).
+// Returns { verified: bool, source: string|null }. Opt-in only.
+async function verifyCitation(citation) {
+  try {
+    const params = new URLSearchParams({ query: citation.text, limit: '3', fields: 'title,authors,year,externalIds' });
+    const res = await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?${params}`);
+    if (!res.ok) return { verified: false, source: null };
+    const data = await res.json();
+    const hits = data.data || [];
+    if (hits.length === 0) return { verified: false, source: null };
+    // Confirm an author surname or named-method token actually appears in a result
+    const tokens = citation.text.split(/[\s,&.()]+/).filter(w => w.length > 3 && /^[A-Z]/.test(w));
+    for (const p of hits) {
+      const hay = `${p.title || ''} ${(p.authors || []).map(a => a.name).join(' ')}`.toLowerCase();
+      if (tokens.some(t => hay.includes(t.toLowerCase()))) {
+        const doi = p.externalIds?.DOI;
+        const src = doi ? `Semantic Scholar DOI:${doi}` : `Semantic Scholar: ${(p.title || '').slice(0, 60)}`;
+        return { verified: true, source: src };
+      }
+    }
+    return { verified: false, source: null };
+  } catch {
+    return { verified: false, source: null };
+  }
+}
+
+// Tag citation spans inline. verifications: Map<citationText, {verified, source}>.
+// Untracked / unverified spans get [UNVERIFIED]; confirmed get [VERIFIED: src].
+// Idempotent: skips spans already followed by a tag.
+function tagCitations(text, citations, verifications) {
+  if (!text) return text;
+  let out = text;
+  // Longest first so "Rosenberger & Lachin 2002" tags before "Lachin 2002"
+  const sorted = [...citations].sort((a, b) => b.text.length - a.text.length);
+  for (const c of sorted) {
+    const v = verifications && verifications.get(c.text);
+    const tag = v && v.verified ? ` [VERIFIED: ${v.source}]` : ' [UNVERIFIED]';
+    // Escape regex metachars, match the span when NOT already followed by a tag
+    const esc = c.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`(${esc})(?!\\s*\\[(?:UNVERIFIED|VERIFIED))`, 'g');
+    out = out.replace(re, `$1${tag}`);
+  }
+  return out;
+}
+
+// Process one discovery: tag origin + valid_reason fields, attach citation list.
+// verify=true performs opt-in Semantic Scholar checks (slow, opt-in only).
+async function tagDiscoveryCitations(disc, { verify = false } = {}) {
+  const fields = ['origin', 'valid_reason', 'cathedral_application', 'abandoned_reason'];
+  const all = new Map();
+  for (const f of fields) {
+    for (const c of extractCitations(disc[f] || '')) {
+      if (!all.has(c.text)) all.set(c.text, c);
+    }
+  }
+  const citations = Array.from(all.values());
+
+  const verifications = new Map();
+  if (verify) {
+    for (const c of citations) {
+      verifications.set(c.text, await verifyCitation(c));
+      await new Promise(r => setTimeout(r, 350)); // gentle on the free endpoint
+    }
+  }
+
+  for (const f of fields) {
+    if (disc[f]) disc[f] = tagCitations(disc[f], citations, verifications);
+  }
+
+  disc.unverified_citations = citations
+    .filter(c => !(verifications.get(c.text)?.verified))
+    .map(c => c.text);
+  return disc;
 }
 
 function parseDiscoveries(text, defaultDomain) {
@@ -586,6 +724,37 @@ function getStats() {
   return { total, byDomain, byStatus, recent, scans };
 }
 
+// ── Backfill (one-shot) ───────────────────────────────────────────────────────
+// Tag citations on existing discovery records. Cheap and safe: tagging only
+// (no API calls) unless --verify is passed. Updates origin/valid_reason/etc
+// in-place and populates unverified_citations.
+
+async function backfillCitations({ verify = false } = {}) {
+  const db = getDb();
+  const rows = db.prepare(
+    'SELECT id, origin, valid_reason, cathedral_application, abandoned_reason, unverified_citations FROM discoveries'
+  ).all();
+  const update = db.prepare(`UPDATE discoveries SET origin = ?, valid_reason = ?,
+    cathedral_application = ?, abandoned_reason = ?, unverified_citations = ? WHERE id = ?`);
+
+  let tagged = 0;
+  for (const row of rows) {
+    // Skip rows already processed (avoid double-tagging on re-run)
+    if (row.unverified_citations != null) continue;
+    const disc = {
+      origin: row.origin, valid_reason: row.valid_reason,
+      cathedral_application: row.cathedral_application, abandoned_reason: row.abandoned_reason
+    };
+    await tagDiscoveryCitations(disc, { verify });
+    update.run(disc.origin, disc.valid_reason, disc.cathedral_application,
+      disc.abandoned_reason, JSON.stringify(disc.unverified_citations || []), row.id);
+    if ((disc.unverified_citations || []).length > 0) tagged++;
+  }
+  db.close();
+  console.log(`[Archaeologist] Backfill complete. ${rows.length} records scanned, ${tagged} carry unverified citations.`);
+  return { scanned: rows.length, withCitations: tagged };
+}
+
 // ── CLI / Telegram interface ────────────────────────────────────────────────
 
 const args = process.argv.slice(2);
@@ -622,6 +791,9 @@ if (args[0] === '--scan') {
 } else if (args[0] === '--weekly') {
   // Called by PM2 cron
   weeklyFullScan().then(() => process.exit(0));
+} else if (args[0] === '--backfill') {
+  // One-shot: tag citations on existing records. Add --verify for live checks.
+  backfillCitations({ verify: process.argv.includes('--verify') }).then(() => process.exit(0));
 } else {
   // Default: start watcher (persistent PM2 process)
   console.log('[Archaeologist] Starting file watchers (Level 3)...');
@@ -657,4 +829,7 @@ if (args[0] === '--scan') {
 
 // ── Exports for Telegram bot integration ────────────────────────────────────
 
-export { researchDomain, weeklyFullScan, getStats, runEnsembleGate, parseDiscoveries };
+export {
+  researchDomain, weeklyFullScan, getStats, runEnsembleGate, parseDiscoveries,
+  extractCitations, tagCitations, verifyCitation, tagDiscoveryCitations, backfillCitations
+};
