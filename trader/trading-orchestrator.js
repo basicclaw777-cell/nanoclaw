@@ -134,7 +134,7 @@ async function fetchSignals() {
 
 // ── Step 2: Check open positions ─────────────────────────────────────────────
 
-function checkOpenPositions(prices, portfolio) {
+function checkOpenPositions(prices, portfolio, config) {
   console.log('[2/5] Checking open positions...');
   const openPositions = getOpenPositions();
 
@@ -159,41 +159,42 @@ function checkOpenPositions(prices, portfolio) {
     const currentPrice = priceData.price;
     const isLong = pos.direction === 'long';
 
-    // Stale position check: if open 5+ days and within 2% of entry, tighten SL/TP to free slot
+    // Stale position check: configurable days (default 3), close if within 1.5% of entry
+    const staleDays = config.risk_rules.stale_days || 3;
     const openedAt = new Date(pos.opened_at);
     const daysOpen = (Date.now() - openedAt.getTime()) / 86400000;
 
-    if (daysOpen >= 5) {
-      const moveFromEntry = isLong
-        ? (currentPrice - pos.entry_price) / pos.entry_price
-        : (pos.entry_price - currentPrice) / pos.entry_price;
+    const moveFromEntry = isLong
+      ? (currentPrice - pos.entry_price) / pos.entry_price
+      : (pos.entry_price - currentPrice) / pos.entry_price;
 
-      if (Math.abs(moveFromEntry) < 0.02) {
-        // Stale — close at current price to free the slot
-        const result = closeTrade(pos.id, currentPrice);
-        if (result) {
-          portfolio.balance += result.pnl;
-          portfolio.daily_pnl += result.pnl;
-          portfolio.total_pnl += result.pnl;
-          portfolio.total_trades++;
-          if (result.pnl >= 0) portfolio.wins++; else portfolio.losses++;
-          const msg = `STALE EXIT: ${pos.direction} ${pos.asset} @ ${currentPrice} after ${daysOpen.toFixed(0)} days | PnL: $${result.pnl.toFixed(2)} (${(result.pnlPct * 100).toFixed(2)}%) | Strategy: ${pos.strategy} — freeing slot`;
-          console.log(`  ${msg}`);
-          notify(`[TRADER] ${msg}`);
-          watchClose({ ...pos, pnl: result.pnl, pnl_pct: result.pnlPct }, currentPrice);
-        }
-        continue;
+    if (daysOpen >= staleDays && Math.abs(moveFromEntry) < 0.015) {
+      // Stale — close at current price to free the slot
+      const result = closeTrade(pos.id, currentPrice);
+      if (result) {
+        portfolio.balance += result.pnl;
+        portfolio.daily_pnl += result.pnl;
+        portfolio.total_pnl += result.pnl;
+        portfolio.total_trades++;
+        if (result.pnl >= 0) portfolio.wins++; else portfolio.losses++;
+        const msg = `STALE EXIT: ${pos.direction} ${pos.asset} @ ${currentPrice} after ${daysOpen.toFixed(0)} days | PnL: $${result.pnl.toFixed(2)} (${(result.pnlPct * 100).toFixed(2)}%) | Strategy: ${pos.strategy} — freeing slot`;
+        console.log(`  ${msg}`);
+        notify(`[TRADER] ${msg}`);
+        watchClose({ ...pos, pnl: result.pnl, pnl_pct: result.pnlPct }, currentPrice);
       }
+      continue;
+    }
 
-      // If profitable after 5 days, tighten SL to lock in gains (trailing stop)
-      if (moveFromEntry > 0.03) {
-        const newSL = isLong
-          ? currentPrice * 0.98  // 2% trailing stop
-          : currentPrice * 1.02;
-        if ((isLong && newSL > pos.stop_loss) || (!isLong && newSL < pos.stop_loss)) {
-          // Trailing stop logged below
-          console.log(`  ${pos.asset} ${pos.strategy}: trailing stop tightened from $${pos.stop_loss.toFixed(2)} to $${newSL.toFixed(2)} (${daysOpen.toFixed(0)} days, +${(moveFromEntry*100).toFixed(1)}%)`);
-        }
+    // Trailing stop: if profitable beyond activation threshold, tighten SL
+    const trailingActivation = config.risk_rules.trailing_stop_activation || 0.02;
+    const trailingDistance = config.risk_rules.trailing_stop_distance || 0.015;
+
+    if (moveFromEntry > trailingActivation) {
+      const newSL = isLong
+        ? currentPrice * (1 - trailingDistance)
+        : currentPrice * (1 + trailingDistance);
+      if ((isLong && newSL > pos.stop_loss) || (!isLong && newSL < pos.stop_loss)) {
+        console.log(`  ${pos.asset} ${pos.strategy}: trailing stop $${pos.stop_loss.toFixed(2)} -> $${newSL.toFixed(2)} (${daysOpen.toFixed(0)} days, +${(moveFromEntry*100).toFixed(1)}%)`);
       }
     }
 
@@ -251,18 +252,20 @@ function checkOpenPositions(prices, portfolio) {
 // ── Step 3: Evaluate signals ─────────────────────────────────────────────────
 
 function filterActionableSignals(signals, config) {
-  console.log('[3/5] Filtering actionable signals...');
+  console.log('[3/5] Filtering actionable signals (confluence required)...');
+
+  const minConfluence = config.risk_rules.min_confluence || 2;
+  const weights = config.strategy_weights || {};
 
   // Only trade specific asset signals (not MARKET-wide)
-  // Need strength > 0.5 for action
-  const actionable = signals.filter(s =>
+  const assetSignals = signals.filter(s =>
     s.asset !== 'MARKET' &&
     config.watchlist.includes(s.asset) &&
-    s.strength >= 0.5 &&
+    s.strength >= 0.45 &&
     s.direction !== 'neutral'
   );
 
-  // Also consider MARKET signals as context for individual assets
+  // Also consider MARKET signals as context
   const marketSignals = signals.filter(s => s.asset === 'MARKET');
   const marketBias = marketSignals.reduce((acc, s) => {
     if (s.direction === 'long') return acc + s.strength;
@@ -270,12 +273,43 @@ function filterActionableSignals(signals, config) {
     return acc;
   }, 0) / Math.max(marketSignals.length, 1);
 
-  console.log(`  ${signals.length} total signals, ${actionable.length} actionable, market bias: ${marketBias.toFixed(2)}`);
-
-  // If no asset-specific signals but market signal is strong, generate signals for top movers
-  if (actionable.length === 0 && Math.abs(marketBias) > 0.3) {
-    console.log('  No asset signals — checking price action for candidates...');
+  // Group by asset+direction and check confluence
+  const groups = {};
+  for (const s of assetSignals) {
+    const key = `${s.asset}_${s.direction}`;
+    if (!groups[key]) groups[key] = { asset: s.asset, direction: s.direction, signals: [], weightedStrength: 0 };
+    const weight = weights[s.type] || weights[s.source] || 1.0;
+    groups[key].signals.push(s);
+    groups[key].weightedStrength += s.strength * weight;
   }
+
+  // Only pass groups with confluence (2+ distinct strategy types agreeing)
+  const actionable = [];
+  for (const [key, group] of Object.entries(groups)) {
+    const uniqueTypes = new Set(group.signals.map(s => s.type || s.source));
+    if (uniqueTypes.size >= minConfluence) {
+      // Pick the strongest signal as representative, carry confluence metadata
+      const best = group.signals.sort((a, b) => {
+        const wa = weights[a.type] || 1.0;
+        const wb = weights[b.type] || 1.0;
+        return (b.strength * wb) - (a.strength * wa);
+      })[0];
+      best._confluence = uniqueTypes.size;
+      best._confluenceTypes = [...uniqueTypes];
+      best._weightedStrength = group.weightedStrength;
+      best._allSignals = group.signals;
+      actionable.push(best);
+    }
+  }
+
+  // Sort by weighted strength (best opportunities first)
+  actionable.sort((a, b) => b._weightedStrength - a._weightedStrength);
+
+  console.log(`  ${signals.length} total signals, ${assetSignals.length} asset-specific, ${actionable.length} with confluence (>=${minConfluence} strategies)`);
+  for (const a of actionable) {
+    console.log(`    ${a.asset} ${a.direction}: ${a._confluence} strategies agree [${a._confluenceTypes.join(', ')}] weighted=${a._weightedStrength.toFixed(2)}`);
+  }
+  console.log(`  Market bias: ${marketBias.toFixed(2)}`);
 
   return { actionable, marketBias };
 }
@@ -287,7 +321,7 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
   if (!priceData || !priceData.price) return null;
 
   const entryPrice = priceData.price;
-  const direction = signal.direction; // 'long' or 'short'
+  let direction = signal.direction; // 'long' or 'short'
 
   console.log(`\n  --- ${signal.asset} ${direction} @ ${entryPrice} (strength ${signal.strength}) ---`);
 
@@ -307,16 +341,26 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
     return null;
   }
 
-  // Log the signal
-  logSignal(signal.source, signal.asset, signal.direction, signal.strength, signal.reasoning, signal);
+  // Log the signal (strip circular confluence metadata)
+  const signalForLog = { ...signal };
+  delete signalForLog._allSignals;
+  delete signalForLog._confluenceTypes;
+  signalForLog._confluence = signal._confluence;
+  signalForLog._weightedStrength = signal._weightedStrength;
+  logSignal(signal.source, signal.asset, signal.direction, signal.strength, signal.reasoning, signalForLog);
 
-  // Build context for debate
+  // Build context for debate — include confluence data
+  const confluenceInfo = signal._confluence
+    ? `Confluence: ${signal._confluence} strategies agree [${signal._confluenceTypes.join(', ')}]. Weighted strength: ${signal._weightedStrength.toFixed(2)}.`
+    : `Single strategy signal.`;
+
   const context = [
     `Market bias: ${marketBias > 0.2 ? 'bullish' : marketBias < -0.2 ? 'bearish' : 'neutral'} (${marketBias.toFixed(2)})`,
     `24h change: ${priceData.change_24h?.toFixed(2) || 'N/A'}%`,
     `Volume: $${(priceData.volume_24h / 1e6).toFixed(1)}M`,
     `Signal type: ${signal.type}`,
     `Signal strength: ${signal.strength}`,
+    confluenceInfo,
   ].join('. ');
 
   // Run bull-bear debate
@@ -340,7 +384,10 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
   console.log(`  Bear: ${debateResult.bearCase.substring(0, 80)}...`);
   console.log(`  Decision: ${debateResult.decision} — ${debateResult.reasoning}`);
 
-  if (debateResult.decision !== 'BUY') {
+  if (debateResult.decision === 'FLIP') {
+    direction = direction === 'long' ? 'short' : 'long';
+    console.log(`  FLIPPED to ${direction} — ${debateResult.reasoning}`);
+  } else if (debateResult.decision !== 'BUY') {
     console.log(`  Skipped (${debateResult.decision})`);
     return null;
   }
@@ -459,7 +506,7 @@ async function run() {
   }
 
   // Step 2: Check open positions
-  checkOpenPositions(signalData.prices, portfolio);
+  checkOpenPositions(signalData.prices, portfolio, config);
 
   // Step 3: Filter actionable signals
   const { actionable, marketBias } = filterActionableSignals(signalData.signals, config);
@@ -543,9 +590,10 @@ async function run() {
       console.log('  [health] Weekly health check sent');
     } catch(e) { console.error('[health]', e.message); }
   }
-  if (new Date().getDay() === 0) {
+  // Elimination: run every 3 days (more aggressive for Trial 2)
+  if (new Date().getDay() % 3 === 0) {
     try {
-      console.log('[6c/7] Running weekly strategy elimination...');
+      console.log('[6c/7] Running strategy elimination check...');
       const elimResult = runElimination();
       if (elimResult.event) {
         console.log(`  ${elimResult.event}`);

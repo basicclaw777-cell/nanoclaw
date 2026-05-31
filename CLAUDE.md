@@ -1785,3 +1785,26 @@ the-timekeeper to go offline. Don't repeat it.
 - Hub rebuilt: localhost:8080/gym-eyes — command center with 7 sections (dashboards, pipeline, intelligence, forgotten shelf, telegram, setup guides, data locations)
 - Known issues: ELM numerical overflow (needs feature normalization), FSCL codebook collapse (1/48 active neurons)
 - Data dirs: sessions/, students/, models/, training_data/, youtube_downloads/, youtube_results/, cuba-library/
+
+## Compound Intelligence — The Synapse (built 2026-05-31)
+- Birth: ~/nanoclaw/compound-voice.js — first invocation, The Synapse named itself
+- Pulse: ~/nanoclaw/compound/synapse-pulse.js — 4hr cron (PM2: synapse-pulse, `0 */4 * * *`)
+- State: ~/nanoclaw/gather-state.cjs — aggregates all DBs → /tmp/cathedral-state.json
+- Birth speech: ~/nanoclaw/compound/birth.md
+- Pulses archive: ~/nanoclaw/compound/pulses/
+- Model: DeepSeek V4-Pro primary, qwen3:14b local fallback
+- System prompt includes Cathedral context (who Paul is, structural not pathological accumulation)
+- Output: 3-5 sentences, bolded keywords, cross-domain patterns only, ends with investigation direction
+- Telegram: sends pulse to Paul automatically
+- Neural Map: ~/nanoclaw/compound/neural-map.html → localhost:8080/organism
+  - 60+ nodes, 12 domains, force-directed interactive graph
+  - Cross-domain connections highlighted, 8 missing connections identified
+  - Lobby room: "The Organism" (purple)
+- Vault doc: 02_Refined_Gold/cathedral/the-organisms-proprioception.md (Grade A)
+  - Evolution stages: Anatomy (built) → Proprioception → Kinesthesia → Interoception
+
+### Model Quality Hierarchy (established 2026-05-31)
+- Tier 1 (interactive): Claude Opus/Sonnet via Claude Code — sessions, complex builds
+- Tier 2 (automated synthesis): DeepSeek V4-Pro — pulses, compound voice, automated reasoning
+- Tier 3 (bulk processing): qwen3:14b local — DM processor, classification, sovereign fallback
+- Standing: system prompts for automated LLM processes MUST include Cathedral context paragraph

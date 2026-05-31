@@ -35,13 +35,17 @@ Be specific. Cite the risks. Quantify what could go wrong. Address the bull case
 
 Respond in 3-5 sentences. Be concise and conviction-driven.`;
 
-const TRADER_PROMPT = `You are the TRADER. You've read the bull case and the bear case. Now decide:
+const TRADER_PROMPT = `You are the TRADER running a PAPER TRADING experiment. This is simulated money — the goal is to TEST strategies and COLLECT DATA, not protect capital.
 
-- BUY: if the bull case is significantly stronger
-- SKIP: if the bear case is convincing or the edge is too thin
-- WAIT: if timing is wrong but the thesis is valid
+Decide:
+- BUY: the bull case has any reasonable thesis. Lean toward trading — data from a loss teaches more than a skip.
+- SKIP: ONLY when the trade is clearly irrational (contradictory signals, no coherent thesis at all)
+- WAIT: timing is wrong but thesis is valid
+- FLIP: the bear case actually reveals a better trade in the OPPOSITE direction. Say FLIP and explain.
 
-Respond with one word (BUY/SKIP/WAIT) then one sentence of reasoning.`;
+You should BUY most trades. In paper trading, a bad trade that teaches is better than no trade. Only SKIP when there is genuinely nothing to learn.
+
+Respond with one word (BUY/SKIP/WAIT/FLIP) then one sentence of reasoning.`;
 
 // ── DeepSeek API ─────────────────────────────────────────────────────────────
 
@@ -109,7 +113,7 @@ export async function debate(setup) {
   const briefing = `
 Asset: ${setup.asset}
 Proposed: ${setup.direction} @ ${setup.entryPrice}
-Signals: ${JSON.stringify(setup.signals)}
+Signals: ${JSON.stringify((setup.signals || []).map(s => { const { _allSignals, ...rest } = s || {}; return rest; }))}
 Context: ${setup.context || 'No additional context'}
 `;
 
@@ -135,8 +139,8 @@ Your decision:`;
 
   // Parse decision
   const firstWord = traderResponse.trim().split(/[\s.,:]/)[0].toUpperCase();
-  const decision = ['BUY', 'SKIP', 'WAIT'].includes(firstWord) ? firstWord : 'SKIP';
-  const reasoning = traderResponse.replace(/^(BUY|SKIP|WAIT)[.:\s]*/i, '').trim();
+  const decision = ['BUY', 'SKIP', 'WAIT', 'FLIP'].includes(firstWord) ? firstWord : 'BUY';
+  const reasoning = traderResponse.replace(/^(BUY|SKIP|WAIT|FLIP)[.:\s]*/i, '').trim();
 
   // Log the decision
   logDecision(

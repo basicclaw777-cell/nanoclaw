@@ -88,10 +88,15 @@ function getDb() {
 
 export function logSignal(source, asset, direction, strength, reasoning, rawData = null) {
   const d = getDb();
+  let raw = null;
+  if (rawData) {
+    const { _allSignals, ...clean } = rawData;
+    raw = JSON.stringify(clean);
+  }
   return d.prepare(`
     INSERT INTO signals (source, asset, direction, strength, reasoning, raw_data)
     VALUES (?, ?, ?, ?, ?, ?)
-  `).run(source, asset, direction, strength, reasoning, rawData ? JSON.stringify(rawData) : null);
+  `).run(source, asset, direction, strength, reasoning, raw);
 }
 
 // ── Trade logging ────────────────────────────────────────────────────────────
@@ -128,10 +133,14 @@ export function closeTrade(tradeId, exitPrice) {
 
 export function logDecision(asset, action, reasoning, signalsUsed, bullSummary, bearSummary, riskCheck, outcome) {
   const d = getDb();
+  const cleanSignals = (Array.isArray(signalsUsed) ? signalsUsed : [signalsUsed]).map(s => {
+    const { _allSignals, ...rest } = s || {};
+    return rest;
+  });
   return d.prepare(`
     INSERT INTO decisions (asset, action, reasoning, signals_used, bull_summary, bear_summary, risk_check, outcome)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(asset, action, reasoning, JSON.stringify(signalsUsed), bullSummary, bearSummary, riskCheck, outcome);
+  `).run(asset, action, reasoning, JSON.stringify(cleanSignals), bullSummary, bearSummary, riskCheck, outcome);
 }
 
 // ── Analytics ────────────────────────────────────────────────────────────────

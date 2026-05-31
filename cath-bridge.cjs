@@ -2519,35 +2519,32 @@ app.get('/trader/picks/today', (req, res) => {
   try {
     const Database = require('better-sqlite3');
     const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
-    const today = new Date().toISOString().slice(0, 10);
-    const row = db.prepare('SELECT * FROM daily_picks WHERE date = ? ORDER BY id DESC LIMIT 1').get(today);
-    db.close();
-    if (!row) return res.json({ quiz: null });
-    res.json({ quiz: {
-      date: row.date,
-      asset: row.asset,
-      price: row.price_at_pick,
-      option_a: row.option_a,
-      option_b: row.option_b,
-      option_c: row.option_c,
+    const fmt = (row) => ({
+      date: row.date, asset: row.asset, price: row.price_at_pick,
+      option_a: row.option_a, option_b: row.option_b, option_c: row.option_c,
       context: row.context,
-      picked: !!row.paul_pick,
-      paul_pick: row.paul_pick,
-      ai_pick: row.paul_pick ? row.ai_pick : null, // only reveal after pick
-      ai_reasoning: row.paul_pick ? row.ai_reasoning : null,
-    }});
-  } catch(e) { res.json({ quiz: null }); }
+      picked: !!row.paul_pick && row.paul_pick !== 'MISS',
+      paul_pick: (row.paul_pick && row.paul_pick !== 'MISS') ? row.paul_pick : null,
+      ai_pick: (row.paul_pick && row.paul_pick !== 'MISS') ? row.ai_pick : null,
+      ai_reasoning: (row.paul_pick && row.paul_pick !== 'MISS') ? row.ai_reasoning : null,
+    });
+    const today = new Date().toISOString().slice(0, 10);
+    const todayRow = db.prepare('SELECT * FROM daily_picks WHERE date = ? ORDER BY id DESC LIMIT 1').get(today);
+    const pending = db.prepare("SELECT * FROM daily_picks WHERE (paul_pick IS NULL OR paul_pick = 'MISS') ORDER BY date DESC").all();
+    db.close();
+    res.json({ quiz: todayRow ? fmt(todayRow) : null, pending: pending.map(fmt) });
+  } catch(e) { res.json({ quiz: null, pending: [] }); }
 });
 
 app.post('/trader/picks/pick', (req, res) => {
   try {
     const { pick } = req.body || {};
     if (!pick || !['A', 'B', 'C'].includes(pick)) return res.status(400).json({ error: 'Invalid pick' });
+    const date = req.body.date || new Date().toISOString().slice(0, 10);
     const Database = require('better-sqlite3');
     const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
-    const today = new Date().toISOString().slice(0, 10);
-    const row = db.prepare('SELECT * FROM daily_picks WHERE date = ? AND paul_pick IS NULL ORDER BY id DESC LIMIT 1').get(today);
-    if (!row) { db.close(); return res.json({ error: 'Already picked or no quiz today' }); }
+    let row = db.prepare("SELECT * FROM daily_picks WHERE date = ? AND (paul_pick IS NULL OR paul_pick = 'MISS') ORDER BY id DESC LIMIT 1").get(date);
+    if (!row) { db.close(); return res.json({ error: 'Already picked or no quiz for that date' }); }
     db.prepare('UPDATE daily_picks SET paul_pick = ?, paul_picked_at = datetime("now") WHERE id = ?').run(pick, row.id);
     db.close();
     const pickLabel = pick === 'A' ? 'LONG' : pick === 'B' ? 'SHORT' : 'SIT OUT';
@@ -4033,6 +4030,10 @@ app.get('/neural-map', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'neural-map.html'));
 });
 
+app.get('/organism', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'compound', 'neural-map.html'));
+});
+
 // ── Cathedral Infographic ────────────────────────────────────────────────────
 app.get('/cathedral-infographic', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'cathedral-infographic.html'));
@@ -4342,6 +4343,74 @@ app.get('/logan-universe/image', (req, res) => {
 
 // ── Archaeologist Explorer ────────────────────────────────────────────────────
 
+// ── Taste Curator Dashboard + API ──────────────────────────────────────────
+
+app.get('/curator', (req, res) => {
+  res.sendFile(path.join(__dirname, 'taste-curator-dashboard.html'));
+});
+
+app.get('/api/taste-curator', (req, res) => {
+  try {
+    const candidatesPath = path.join(__dirname, 'taste-candidates.json');
+    if (!fs.existsSync(candidatesPath)) {
+      return res.json({ candidates: [], stats: { scanned: 0, queued: 0, accepted: 0, rejected: 0 } });
+    }
+    const data = JSON.parse(fs.readFileSync(candidatesPath, 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/taste-curator/review', async (req, res) => {
+  try {
+    const { videoId, decision } = req.body;
+    if (!videoId || !['accepted', 'rejected', 'skipped'].includes(decision)) {
+      return res.status(400).json({ error: 'Need videoId + decision (accepted/rejected/skipped)' });
+    }
+    const candidatesPath = path.join(__dirname, 'taste-candidates.json');
+    const data = JSON.parse(fs.readFileSync(candidatesPath, 'utf8'));
+    const candidate = data.candidates.find(c => c.videoId === videoId);
+    if (!candidate) return res.status(404).json({ error: 'Candidate not found' });
+
+    candidate.status = decision;
+    candidate.reviewedAt = new Date().toISOString();
+    if (decision === 'accepted') {
+      data.stats.accepted = (data.stats.accepted || 0) + 1;
+      // Add to taste map
+      try {
+        const { addAnchor } = await import('./taste-map-api.js');
+        addAnchor('boxing_drills', 'anchors', {
+          item: candidate.drillName || candidate.title,
+          status: 'YES',
+          reason: candidate.oneLiner || `Curator import from ${candidate.channel}`,
+          dimensions: Object.entries(candidate.scores || {}).filter(([_, v]) => v >= 6).map(([k]) => k),
+          source: candidate.url,
+          added: new Date().toISOString().split('T')[0]
+        });
+      } catch (e) { console.error('[curator] addAnchor failed:', e.message); }
+    } else if (decision === 'rejected') {
+      data.stats.rejected = (data.stats.rejected || 0) + 1;
+    }
+    fs.writeFileSync(candidatesPath, JSON.stringify(data, null, 2));
+    res.json({ ok: true, candidate });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/taste-curator/scan', async (req, res) => {
+  try {
+    const source = req.query.source || 'boxing_yt';
+    // Dynamic ESM import
+    const curator = await import('./taste-curator.js');
+    const result = await curator.scanSource(source, 5);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/archaeologist', (req, res) => {
   res.sendFile(path.join(__dirname, 'archaeologist-explorer.html'));
 });
@@ -4454,6 +4523,10 @@ try {
 // ── Mnemonic Library ──────────────────────────────────────────────────────────
 app.get('/mnemonic-library', (req, res) => {
   res.sendFile(path.join(process.env.HOME, 'Cathedral', 'agents', 'mnemonic-library.html'));
+});
+
+app.get('/goldmines', (req, res) => {
+  res.sendFile(path.join(process.env.HOME, 'basic-reflex', 'visuals', 'goldmine-dashboard.html'));
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

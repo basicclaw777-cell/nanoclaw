@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cathedral Neural Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #c8c8d4; font-family: 'SF Mono', 'Fira Code', monospace; overflow: hidden; }
+  canvas { display: block; }
+  #info {
+    position: fixed; top: 16px; left: 16px; z-index: 10;
+    background: rgba(10,10,20,0.9); border: 1px solid #2a2a3a; border-radius: 8px;
+    padding: 16px; max-width: 340px; font-size: 12px; line-height: 1.6;
+  }
+  #info h1 { font-size: 16px; color: #a78bfa; margin-bottom: 8px; }
+  #info .stat { color: #6b7280; }
+  #info .stat span { color: #e2e8f0; }
+  #tooltip {
+    position: fixed; z-index: 20; display: none;
+    background: rgba(10,10,20,0.95); border: 1px solid #a78bfa; border-radius: 6px;
+    padding: 12px; font-size: 11px; max-width: 300px; pointer-events: none;
+  }
+  #tooltip .name { color: #a78bfa; font-size: 14px; font-weight: bold; }
+  #tooltip .detail { color: #9ca3af; margin-top: 4px; }
+  #tooltip .connections { color: #60a5fa; margin-top: 6px; }
+  #legend {
+    position: fixed; bottom: 16px; left: 16px; z-index: 10;
+    background: rgba(10,10,20,0.9); border: 1px solid #2a2a3a; border-radius: 8px;
+    padding: 12px; font-size: 11px;
+  }
+  #legend .item { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  #legend .dot { width: 10px; height: 10px; border-radius: 50%; }
+  #gaps {
+    position: fixed; top: 16px; right: 16px; z-index: 10;
+    background: rgba(10,10,20,0.9); border: 1px solid #f59e0b; border-radius: 8px;
+    padding: 16px; max-width: 320px; font-size: 11px; line-height: 1.6;
+  }
+  #gaps h2 { color: #f59e0b; font-size: 14px; margin-bottom: 8px; }
+  #gaps .gap { color: #fbbf24; margin: 6px 0; }
+  #gaps .suggestion { color: #6b7280; font-style: italic; }
+</style>
+</head>
+<body>
+<div id="info">
+  <h1>CATHEDRAL NEURAL MAP</h1>
+  <div class="stat">Nodes: <span id="nodeCount">0</span></div>
+  <div class="stat">Connections: <span id="edgeCount">0</span></div>
+  <div class="stat">Domains: <span id="domainCount">0</span></div>
+  <div class="stat">Cross-domain links: <span id="crossCount">0</span></div>
+  <div class="stat">Dead ends: <span id="deadCount">0</span></div>
+  <div class="stat" style="margin-top:8px;color:#a78bfa;">Drag to pan. Scroll to zoom. Hover nodes.</div>
+</div>
+<div id="tooltip"></div>
+<div id="legend"></div>
+<div id="gaps"></div>
+<canvas id="canvas"></canvas>
+
+<script>
+// ═══ CATHEDRAL TOPOLOGY ═══
+// Every node, every edge, traced from actual code
+
+const DOMAINS = {
+  vault:     { color: '#a78bfa', label: 'Knowledge Vault' },
+  epistemic: { color: '#60a5fa', label: 'Epistemic Engine' },
+  trading:   { color: '#34d399', label: 'Trading System' },
+  coaching:  { color: '#f472b6', label: 'Coaching System' },
+  content:   { color: '#fb923c', label: 'Content Studio' },
+  reed:      { color: '#facc15', label: 'Reed Lab (Visual)' },
+  business:  { color: '#a3e635', label: 'Business (Gym)' },
+  infra:     { color: '#94a3b8', label: 'Infrastructure' },
+  compound:  { color: '#c084fc', label: 'Compound Intelligence' },
+  research:  { color: '#38bdf8', label: 'Deep Research' },
+  ancient:   { color: '#e879f9', label: 'Ancient Knowledge' },
+  property:  { color: '#2dd4bf', label: 'Property Scout' },
+};
+
+const nodes = [
+  // ── VAULT ──
+  { id: 'vault', domain: 'vault', label: 'Obsidian Vault', type: 'store', status: 'active', detail: '7,765+ nuggets, 12 domains' },
+  { id: 'vault-watcher', domain: 'vault', label: 'Vault Watcher', type: 'process', status: 'online' },
+  { id: 'vault-promoter', domain: 'vault', label: 'Vault Promoter', type: 'process', status: 'online' },
+  { id: 'vault-state', domain: 'vault', label: 'Vault State Generator', type: 'process', status: 'online' },
+  { id: 'intake-watcher', domain: 'vault', label: 'Intake Watcher', type: 'process', status: 'online', detail: 'raw-chats → vault pipeline' },
+  { id: 'harvester', domain: 'vault', label: 'Vortex Harvester', type: 'process', status: 'manual' },
+  { id: 'terminal-harvester', domain: 'vault', label: 'Terminal Harvester', type: 'process', status: 'online' },
+  { id: 'vault-metabolism', domain: 'vault', label: 'Vault Metabolism', type: 'process', status: 'manual', detail: 'Aging, archival, health states' },
+
+  // ── EPISTEMIC ENGINE ──
+  { id: 'ensemble-db', domain: 'epistemic', label: 'Ensemble Gate DB', type: 'store', status: 'active', detail: '5,636 runs' },
+  { id: 'ensemble-feeder', domain: 'epistemic', label: 'Ensemble Feeder', type: 'process', status: 'cron', detail: '03:00 daily' },
+  { id: 'knowledge-graph-db', domain: 'epistemic', label: 'Knowledge Graph DB', type: 'store', status: 'active' },
+  { id: 'knowledge-graph', domain: 'epistemic', label: 'KG Builder', type: 'process', status: 'cron', detail: '03:30 daily' },
+  { id: 'causal-net-db', domain: 'epistemic', label: 'Causal Net DB', type: 'store', status: 'active' },
+  { id: 'causal-net', domain: 'epistemic', label: 'Causal Net Builder', type: 'process', status: 'cron' },
+  { id: 'active-learning-db', domain: 'epistemic', label: 'Active Learning DB', type: 'store', status: 'active' },
+  { id: 'active-learning', domain: 'epistemic', label: 'Active Learning', type: 'process', status: 'cron' },
+  { id: 'cognitive-scanner', domain: 'epistemic', label: 'Cognitive Scanner', type: 'process', status: 'online' },
+
+  // ── TRADING ──
+  { id: 'trades-db', domain: 'trading', label: 'Trades DB', type: 'store', status: 'active' },
+  { id: 'trader', domain: 'trading', label: 'Trading Orchestrator', type: 'process', status: 'cron' },
+  { id: 'signals', domain: 'trading', label: 'Crypto Signals', type: 'store', status: 'active', detail: '10 signals, 7 deep sources' },
+  { id: 'daily-pick', domain: 'trading', label: 'Daily Pick Quiz', type: 'process', status: 'cron' },
+  { id: 'position-guardian', domain: 'trading', label: 'Position Guardian', type: 'process', status: 'cron' },
+  { id: 'long-term', domain: 'trading', label: 'Long Term Portfolio', type: 'process', status: 'stopped' },
+  { id: 'debate', domain: 'trading', label: 'Bull-Bear Debate', type: 'module', status: 'active', detail: 'BUY-biased + FLIP' },
+
+  // ── COACHING ──
+  { id: 'dm-processor', domain: 'coaching', label: 'DM Processor', type: 'process', status: 'online', detail: '15 agents, 10min cycle' },
+  { id: 'agents', domain: 'coaching', label: '15 AI Agents', type: 'store', status: 'active', detail: 'Boxing, Cathy, Muse, Orc, etc.' },
+  { id: 'appreciation', domain: 'coaching', label: 'Appreciation Ritual', type: 'process', status: 'cron', detail: '07:00 HKT daily' },
+  { id: 'auto-coach', domain: 'coaching', label: 'Auto Coach', type: 'process', status: 'manual' },
+  { id: 'folder-watcher', domain: 'coaching', label: 'Folder Watcher', type: 'process', status: 'online', detail: 'Downloads → agents' },
+
+  // ── CONTENT STUDIO ──
+  { id: 'content-ideas', domain: 'content', label: 'Idea Engine', type: 'process', status: 'online' },
+  { id: 'content-reviews', domain: 'content', label: 'Review Responder', type: 'process', status: 'online' },
+  { id: 'content-autopilot', domain: 'content', label: 'Content Autopilot', type: 'process', status: 'online' },
+  { id: 'maya-social', domain: 'content', label: 'Maya Social', type: 'process', status: 'online' },
+  { id: 'buzz-monitor', domain: 'content', label: 'Buzz Monitor', type: 'process', status: 'online' },
+  { id: 'comms-engine', domain: 'content', label: 'Comms Engine', type: 'process', status: 'cron' },
+
+  // ── REED LAB ──
+  { id: 'reed-director', domain: 'reed', label: 'Reed Director', type: 'process', status: 'online' },
+  { id: 'reed-studio', domain: 'reed', label: 'Reed Studio Engine', type: 'process', status: 'online' },
+  { id: 'reed-gemini', domain: 'reed', label: 'Reed Gemini Lab', type: 'process', status: 'online' },
+  { id: 'hf-tester', domain: 'reed', label: 'Higgsfield Tester', type: 'process', status: 'online' },
+
+  // ── BUSINESS ──
+  { id: 'punchpass', domain: 'business', label: 'PunchPass Scraper', type: 'process', status: 'cron' },
+  { id: 'gym-digest', domain: 'business', label: 'Gym Digest', type: 'process', status: 'cron' },
+  { id: 'br-brief', domain: 'business', label: 'BR Pre-Class Brief', type: 'process', status: 'cron' },
+  { id: 'br-revenue', domain: 'business', label: 'BR Revenue Digest', type: 'process', status: 'cron' },
+  { id: 'lapsed', domain: 'business', label: 'Lapsed Campaign', type: 'process', status: 'cron' },
+
+  // ── INFRASTRUCTURE ──
+  { id: 'telegram', domain: 'infra', label: 'Telegram Bot', type: 'process', status: 'online', detail: 'Primary interface' },
+  { id: 'cath-bridge', domain: 'infra', label: 'Cathedral Bridge', type: 'process', status: 'online', detail: 'HTTP API layer' },
+  { id: 'lobby', domain: 'infra', label: 'Lobby (Desktop)', type: 'process', status: 'online' },
+  { id: 'neural-bus', domain: 'infra', label: 'Neural Bus', type: 'process', status: 'online', detail: 'Event routing backbone' },
+  { id: 'heartbeat', domain: 'infra', label: 'Cathedral Heartbeat', type: 'process', status: 'stopped' },
+  { id: 'lymphatic', domain: 'infra', label: 'Lymphatic System', type: 'process', status: 'online', detail: 'Waste removal, cleanup' },
+  { id: 'sentinel', domain: 'infra', label: 'Sentinel Watchdog', type: 'process', status: 'online' },
+  { id: 'metrics-db', domain: 'infra', label: 'Metrics DB', type: 'store', status: 'active' },
+
+  // ── COMPOUND INTELLIGENCE ──
+  { id: 'synapse', domain: 'compound', label: 'The Synapse', type: 'process', status: 'cron', detail: '4hr pulse, DeepSeek V4' },
+  { id: 'gather-state', domain: 'compound', label: 'State Gatherer', type: 'module', status: 'active', detail: 'All DBs → JSON' },
+  { id: 'cathedral-state', domain: 'compound', label: 'Cathedral State', type: 'store', status: 'active', detail: '/tmp/cathedral-state.json' },
+
+  // ── DEEP RESEARCH ──
+  { id: 'archaeologist', domain: 'research', label: 'Archaeologist', type: 'process', status: 'online' },
+  { id: 'goldmine-patents', domain: 'research', label: 'Patent Miner', type: 'process', status: 'cron' },
+  { id: 'goldmine-phds', domain: 'research', label: 'PhD Miner', type: 'process', status: 'cron' },
+  { id: 'goldmine-soviet', domain: 'research', label: 'Soviet Archive Miner', type: 'process', status: 'cron' },
+  { id: 'goldmine-trials', domain: 'research', label: 'Clinical Trial Miner', type: 'process', status: 'cron' },
+  { id: 'whisperer', domain: 'research', label: 'Whisperer', type: 'process', status: 'stopped', detail: 'Suppressed patterns' },
+
+  // ── ANCIENT KNOWLEDGE ──
+  { id: 'cosmology', domain: 'ancient', label: 'Cosmology Researcher', type: 'process', status: 'stopped' },
+  { id: 'archaeologist-db', domain: 'ancient', label: 'Archaeologist DB', type: 'store', status: 'active' },
+
+  // ── PROPERTY ──
+  { id: 'property-scout', domain: 'property', label: 'Property Scout', type: 'process', status: 'stopped' },
+  { id: 'golden-zone', domain: 'property', label: 'Golden Zone Units', type: 'process', status: 'stopped' },
+];
+
+// ═══ EDGES — actual data flows traced from code ═══
+const edges = [
+  // Vault flows
+  { from: 'intake-watcher', to: 'vault', label: 'raw → nuggets' },
+  { from: 'harvester', to: 'vault', label: 'chats → nuggets' },
+  { from: 'terminal-harvester', to: 'vault', label: 'terminals → nuggets' },
+  { from: 'vault-watcher', to: 'neural-bus', label: 'change events' },
+  { from: 'vault-state', to: 'vault', label: 'reads state' },
+  { from: 'vault-promoter', to: 'vault', label: 'promotes nuggets' },
+  { from: 'vault-metabolism', to: 'vault', label: 'ages/archives' },
+
+  // Epistemic flows
+  { from: 'vault', to: 'ensemble-feeder', label: 'claims to evaluate' },
+  { from: 'ensemble-feeder', to: 'ensemble-db', label: 'evaluations' },
+  { from: 'vault', to: 'knowledge-graph', label: 'concepts' },
+  { from: 'knowledge-graph', to: 'knowledge-graph-db', label: 'clusters' },
+  { from: 'vault', to: 'causal-net', label: 'causal claims' },
+  { from: 'causal-net', to: 'causal-net-db', label: 'edges' },
+  { from: 'ensemble-db', to: 'active-learning', label: 'uncertainty gaps' },
+  { from: 'knowledge-graph-db', to: 'active-learning', label: 'sparse areas' },
+  { from: 'causal-net-db', to: 'active-learning', label: 'weak links' },
+  { from: 'active-learning', to: 'active-learning-db', label: 'priority queue' },
+  { from: 'cognitive-scanner', to: 'vault', label: 'scans patterns' },
+
+  // Trading flows
+  { from: 'signals', to: 'trader', label: 'trade signals' },
+  { from: 'debate', to: 'trader', label: 'BUY/SKIP/FLIP' },
+  { from: 'trader', to: 'trades-db', label: 'executions' },
+  { from: 'trades-db', to: 'position-guardian', label: 'open positions' },
+  { from: 'trades-db', to: 'daily-pick', label: 'quiz generation' },
+  { from: 'daily-pick', to: 'telegram', label: 'quiz to Paul' },
+  { from: 'daily-pick', to: 'cath-bridge', label: 'quiz API' },
+
+  // Coaching flows
+  { from: 'dm-processor', to: 'agents', label: 'reads/writes DMs' },
+  { from: 'agents', to: 'telegram', label: 'agent messages' },
+  { from: 'folder-watcher', to: 'agents', label: 'file triggers' },
+  { from: 'auto-coach', to: 'agents', label: 'diagnose blocks' },
+  { from: 'appreciation', to: 'agents', label: 'daily ritual' },
+
+  // Content flows
+  { from: 'content-ideas', to: 'telegram', label: 'ideas' },
+  { from: 'buzz-monitor', to: 'content-ideas', label: 'trends' },
+  { from: 'content-autopilot', to: 'telegram', label: 'auto content' },
+  { from: 'maya-social', to: 'content-ideas', label: 'social signals' },
+  { from: 'content-reviews', to: 'telegram', label: 'reviews' },
+
+  // Reed Lab flows
+  { from: 'reed-director', to: 'reed-studio', label: 'direction' },
+  { from: 'reed-studio', to: 'hf-tester', label: 'test shots' },
+  { from: 'reed-gemini', to: 'reed-studio', label: 'gemini analysis' },
+
+  // Business flows
+  { from: 'punchpass', to: 'metrics-db', label: 'gym data' },
+  { from: 'punchpass', to: 'gym-digest', label: 'member data' },
+  { from: 'gym-digest', to: 'telegram', label: 'digest' },
+  { from: 'br-brief', to: 'telegram', label: 'pre-class' },
+  { from: 'lapsed', to: 'comms-engine', label: 'lapsed members' },
+
+  // Infrastructure
+  { from: 'neural-bus', to: 'telegram', label: 'event routing' },
+  { from: 'cath-bridge', to: 'lobby', label: 'HTTP API' },
+  { from: 'heartbeat', to: 'neural-bus', label: 'health checks' },
+  { from: 'lymphatic', to: 'vault', label: 'cleanup' },
+  { from: 'sentinel', to: 'telegram', label: 'alerts' },
+
+  // ═══ COMPOUND — The Synapse's reach ═══
+  { from: 'ensemble-db', to: 'gather-state', label: 'runs count' },
+  { from: 'knowledge-graph-db', to: 'gather-state', label: 'concepts' },
+  { from: 'causal-net-db', to: 'gather-state', label: 'edges' },
+  { from: 'active-learning-db', to: 'gather-state', label: 'questions' },
+  { from: 'trades-db', to: 'gather-state', label: 'positions' },
+  { from: 'signals', to: 'gather-state', label: 'deep signals' },
+  { from: 'vault', to: 'gather-state', label: 'nugget count' },
+  { from: 'gather-state', to: 'cathedral-state', label: 'full state JSON' },
+  { from: 'cathedral-state', to: 'synapse', label: 'compound reads all' },
+  { from: 'synapse', to: 'telegram', label: '4hr pulse' },
+
+  // Research flows
+  { from: 'archaeologist', to: 'vault', label: 'discoveries' },
+  { from: 'goldmine-patents', to: 'vault', label: 'patents' },
+  { from: 'goldmine-phds', to: 'vault', label: 'dissertations' },
+  { from: 'goldmine-soviet', to: 'vault', label: 'soviet archives' },
+  { from: 'goldmine-trials', to: 'vault', label: 'clinical data' },
+  { from: 'whisperer', to: 'vault', label: 'suppressed patterns' },
+  { from: 'cosmology', to: 'vault', label: 'ancient patterns' },
+  { from: 'cosmology', to: 'archaeologist-db', label: 'translations' },
+
+  // ═══ CROSS-DOMAIN (the compound connections) ═══
+  { from: 'signals', to: 'content-ideas', label: 'market → content', cross: true },
+  { from: 'vault', to: 'debate', label: 'knowledge → trading', cross: true },
+  { from: 'agents', to: 'vault', label: 'coaching → knowledge', cross: true },
+  { from: 'punchpass', to: 'content-autopilot', label: 'gym → content', cross: true },
+  { from: 'archaeologist', to: 'knowledge-graph', label: 'research → epistemic', cross: true },
+  { from: 'buzz-monitor', to: 'vault', label: 'social → knowledge', cross: true },
+];
+
+// ═══ GAPS — missing connections the organism needs ═══
+const gaps = [
+  { title: 'Trading ↔ Epistemic', desc: 'Trading signals not evaluated by Ensemble Gate. No epistemic verification of signal quality.' },
+  { title: 'Coaching → Trading', desc: 'Agent insights (fear patterns, bias detection) not feeding risk management.' },
+  { title: 'Ancient → Trading', desc: 'Sumerian cycle patterns not tested against market cycles. Cosmology is isolated.' },
+  { title: 'Business → Coaching', desc: 'Gym member retention data not informing agent coaching patterns (same dynamics).' },
+  { title: 'Content ← Synapse', desc: 'Synapse sees cross-domain but cannot direct content production based on patterns.' },
+  { title: 'Heartbeat: STOPPED', desc: 'Central health monitoring offline. Organism has no immune system currently.' },
+  { title: 'Active Learning → Agents', desc: 'Priority questions not assigned to agents. Knowledge gaps sit idle.' },
+  { title: 'Reed ← Trading', desc: 'Visual production has no market-awareness. Missed opportunity for data visualization content.' },
+];
+
+// ═══ PHYSICS ENGINE ═══
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+// Domain cluster positions (radial layout)
+const domainAngles = {};
+const domainKeys = Object.keys(DOMAINS);
+domainKeys.forEach((d, i) => {
+  domainAngles[d] = (i / domainKeys.length) * Math.PI * 2 - Math.PI/2;
+});
+
+// Initialize node positions in domain clusters
+const R = Math.min(W, H) * 0.32;
+nodes.forEach(n => {
+  const angle = domainAngles[n.domain] || 0;
+  const domainNodes = nodes.filter(x => x.domain === n.domain);
+  const idx = domainNodes.indexOf(n);
+  const spread = 0.3 + idx * 0.12;
+  const jitter = (Math.random() - 0.5) * 80;
+  n.x = W/2 + Math.cos(angle) * R * spread + jitter;
+  n.y = H/2 + Math.sin(angle) * R * spread + jitter;
+  n.vx = 0; n.vy = 0;
+  n.radius = n.type === 'store' ? 12 : (n.type === 'module' ? 8 : 10);
+});
+
+// Camera
+let camX = 0, camY = 0, zoom = 1;
+let dragging = false, lastMX = 0, lastMY = 0;
+
+canvas.addEventListener('mousedown', e => { dragging = true; lastMX = e.clientX; lastMY = e.clientY; });
+canvas.addEventListener('mousemove', e => {
+  if (dragging) {
+    camX += (e.clientX - lastMX) / zoom;
+    camY += (e.clientY - lastMY) / zoom;
+    lastMX = e.clientX; lastMY = e.clientY;
+  }
+  handleHover(e);
+});
+canvas.addEventListener('mouseup', () => dragging = false);
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoom *= e.deltaY > 0 ? 0.92 : 1.08;
+  zoom = Math.max(0.3, Math.min(3, zoom));
+}, { passive: false });
+
+// Tooltip
+const tooltip = document.getElementById('tooltip');
+let hoveredNode = null;
+
+function handleHover(e) {
+  const mx = (e.clientX - W/2) / zoom - camX + W/2;
+  const my = (e.clientY - H/2) / zoom - camY + H/2;
+  hoveredNode = null;
+  for (const n of nodes) {
+    const dx = n.x - mx, dy = n.y - my;
+    if (dx*dx + dy*dy < (n.radius+5)*(n.radius+5)) {
+      hoveredNode = n;
+      break;
+    }
+  }
+  if (hoveredNode) {
+    const n = hoveredNode;
+    const conns = edges.filter(e => e.from === n.id || e.to === n.id);
+    const inputs = conns.filter(e => e.to === n.id).map(e => `← ${e.from} (${e.label})`);
+    const outputs = conns.filter(e => e.from === n.id).map(e => `→ ${e.to} (${e.label})`);
+    tooltip.innerHTML = `
+      <div class="name">${n.label}</div>
+      <div class="detail">${n.domain} | ${n.type} | ${n.status}</div>
+      ${n.detail ? `<div class="detail">${n.detail}</div>` : ''}
+      <div class="connections">
+        ${inputs.length ? '<b>Inputs:</b><br>' + inputs.join('<br>') : '<b>No inputs</b> (source node)'}
+        <br>
+        ${outputs.length ? '<b>Outputs:</b><br>' + outputs.join('<br>') : '<b>No outputs</b> (dead end)'}
+      </div>
+    `;
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 15) + 'px';
+    tooltip.style.top = (e.clientY - 10) + 'px';
+  } else {
+    tooltip.style.display = 'none';
+  }
+}
+
+// Force simulation
+function simulate() {
+  const nodeMap = {};
+  nodes.forEach(n => nodeMap[n.id] = n);
+
+  // Repulsion
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i+1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j];
+      let dx = b.x - a.x, dy = b.y - a.y;
+      let d2 = dx*dx + dy*dy;
+      if (d2 < 1) d2 = 1;
+      const f = 800 / d2;
+      a.vx -= dx * f; a.vy -= dy * f;
+      b.vx += dx * f; b.vy += dy * f;
+    }
+  }
+
+  // Attraction along edges
+  edges.forEach(e => {
+    const a = nodeMap[e.from], b = nodeMap[e.to];
+    if (!a || !b) return;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < 1) return;
+    const f = (d - 120) * 0.003;
+    a.vx += dx/d * f; a.vy += dy/d * f;
+    b.vx -= dx/d * f; b.vy -= dy/d * f;
+  });
+
+  // Domain clustering
+  nodes.forEach(n => {
+    const angle = domainAngles[n.domain];
+    const cx = W/2 + Math.cos(angle) * R * 0.6;
+    const cy = H/2 + Math.sin(angle) * R * 0.6;
+    n.vx += (cx - n.x) * 0.002;
+    n.vy += (cy - n.y) * 0.002;
+  });
+
+  // Apply velocity with damping
+  nodes.forEach(n => {
+    n.vx *= 0.85; n.vy *= 0.85;
+    n.x += n.vx; n.y += n.vy;
+  });
+}
+
+// Render
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.save();
+  ctx.translate(W/2, H/2);
+  ctx.scale(zoom, zoom);
+  ctx.translate(-W/2 + camX, -H/2 + camY);
+
+  const nodeMap = {};
+  nodes.forEach(n => nodeMap[n.id] = n);
+  const time = Date.now() * 0.001;
+
+  // Draw edges
+  edges.forEach(e => {
+    const a = nodeMap[e.from], b = nodeMap[e.to];
+    if (!a || !b) return;
+
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+
+    if (e.cross) {
+      ctx.strokeStyle = `rgba(250, 204, 21, ${0.15 + Math.sin(time * 2) * 0.1})`;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 4]);
+    } else if (hoveredNode && (e.from === hoveredNode.id || e.to === hoveredNode.id)) {
+      ctx.strokeStyle = 'rgba(167, 139, 250, 0.7)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+    } else {
+      ctx.strokeStyle = 'rgba(100, 100, 130, 0.15)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Arrow
+    const angle = Math.atan2(b.y - a.y, b.x - a.x);
+    const mx = (a.x + b.x)/2, my = (a.y + b.y)/2;
+    ctx.save();
+    ctx.translate(mx, my);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(6, 0);
+    ctx.lineTo(-3, -3);
+    ctx.lineTo(-3, 3);
+    ctx.closePath();
+    ctx.fillStyle = e.cross ? 'rgba(250, 204, 21, 0.4)' : 'rgba(100, 100, 130, 0.3)';
+    ctx.fill();
+    ctx.restore();
+  });
+
+  // Draw nodes
+  nodes.forEach(n => {
+    const color = DOMAINS[n.domain]?.color || '#666';
+    const isHovered = hoveredNode === n;
+    const isConnected = hoveredNode && edges.some(e =>
+      (e.from === hoveredNode.id && e.to === n.id) ||
+      (e.to === hoveredNode.id && e.from === n.id)
+    );
+
+    // Glow
+    if (isHovered || isConnected) {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.radius + 8, 0, Math.PI * 2);
+      const grad = ctx.createRadialGradient(n.x, n.y, n.radius, n.x, n.y, n.radius + 8);
+      grad.addColorStop(0, color + '40');
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    // Pulse for active stores
+    if (n.type === 'store') {
+      const pulse = Math.sin(time * 1.5 + n.x * 0.01) * 3;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.radius + pulse, 0, Math.PI * 2);
+      ctx.fillStyle = color + '15';
+      ctx.fill();
+    }
+
+    // Node
+    ctx.beginPath();
+    if (n.type === 'store') {
+      // Diamond for stores
+      ctx.moveTo(n.x, n.y - n.radius);
+      ctx.lineTo(n.x + n.radius, n.y);
+      ctx.lineTo(n.x, n.y + n.radius);
+      ctx.lineTo(n.x - n.radius, n.y);
+      ctx.closePath();
+    } else {
+      ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+    }
+
+    const alpha = n.status === 'stopped' ? '40' : (n.status === 'online' ? 'cc' : '88');
+    ctx.fillStyle = color + alpha;
+    ctx.fill();
+    ctx.strokeStyle = isHovered ? '#fff' : color;
+    ctx.lineWidth = isHovered ? 2 : 1;
+    ctx.stroke();
+
+    // Status dot
+    if (n.status === 'online') {
+      ctx.beginPath();
+      ctx.arc(n.x + n.radius * 0.7, n.y - n.radius * 0.7, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#34d399';
+      ctx.fill();
+    } else if (n.status === 'stopped') {
+      ctx.beginPath();
+      ctx.arc(n.x + n.radius * 0.7, n.y - n.radius * 0.7, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+    }
+
+    // Label
+    if (zoom > 0.6 || isHovered || isConnected) {
+      ctx.font = `${isHovered ? 'bold ' : ''}${11/Math.max(zoom,0.8)}px 'SF Mono', monospace`;
+      ctx.fillStyle = isHovered ? '#fff' : (n.status === 'stopped' ? '#555' : '#999');
+      ctx.textAlign = 'center';
+      ctx.fillText(n.label, n.x, n.y + n.radius + 14);
+    }
+  });
+
+  // Domain labels
+  if (zoom > 0.4) {
+    domainKeys.forEach(d => {
+      const angle = domainAngles[d];
+      const lx = W/2 + Math.cos(angle) * R * 1.15;
+      const ly = H/2 + Math.sin(angle) * R * 1.15;
+      ctx.font = `bold ${13/Math.max(zoom,0.6)}px 'SF Mono', monospace`;
+      ctx.fillStyle = DOMAINS[d].color + '88';
+      ctx.textAlign = 'center';
+      ctx.fillText(DOMAINS[d].label, lx, ly);
+    });
+  }
+
+  ctx.restore();
+}
+
+// Stats
+const crossEdges = edges.filter(e => e.cross);
+const deadEnds = nodes.filter(n => !edges.some(e => e.from === n.id));
+document.getElementById('nodeCount').textContent = nodes.length;
+document.getElementById('edgeCount').textContent = edges.length;
+document.getElementById('domainCount').textContent = domainKeys.length;
+document.getElementById('crossCount').textContent = crossEdges.length;
+document.getElementById('deadCount').textContent = deadEnds.length;
+
+// Legend
+const legendEl = document.getElementById('legend');
+legendEl.innerHTML = Object.entries(DOMAINS).map(([k, v]) =>
+  `<div class="item"><div class="dot" style="background:${v.color}"></div>${v.label}</div>`
+).join('') + `
+<div class="item" style="margin-top:8px"><div class="dot" style="background:#34d399"></div> Online</div>
+<div class="item"><div class="dot" style="background:#ef4444"></div> Stopped</div>
+<div class="item" style="margin-top:4px;color:#facc15">--- Cross-domain link</div>
+`;
+
+// Gaps panel
+const gapsEl = document.getElementById('gaps');
+gapsEl.innerHTML = '<h2>MISSING CONNECTIONS</h2>' + gaps.map(g =>
+  `<div class="gap">${g.title}</div><div class="suggestion">${g.desc}</div>`
+).join('');
+
+// Animation loop
+function loop() {
+  simulate();
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
