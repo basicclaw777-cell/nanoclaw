@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taste Curator</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #141420;
+    --surface2: #1a1a2e;
+    --border: #2a2a3e;
+    --text: #e0e0e8;
+    --text-dim: #8888a0;
+    --accent: #7c6ef0;
+    --green: #4ade80;
+    --red: #f87171;
+    --amber: #fbbf24;
+    --blue: #60a5fa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 { font-size: 18px; font-weight: 600; letter-spacing: 1px; }
+  .stats-bar {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .stats-bar .num { color: var(--accent); font-weight: 700; }
+
+  .controls {
+    padding: 16px 24px;
+    display: flex;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .controls button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .controls button:hover { border-color: var(--accent); color: var(--accent); }
+  .controls button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .controls button.scan { background: var(--accent); color: #fff; }
+  .controls button.scan:hover { opacity: 0.85; }
+  .controls select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+  }
+
+  .cards-container {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card.accepted { border-color: var(--green); opacity: 0.6; }
+  .card.rejected { border-color: var(--red); opacity: 0.4; }
+  .card.skipped { border-color: var(--amber); opacity: 0.5; }
+
+  .card-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    background: #000;
+  }
+  .card-video iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+  .card-video .thumb-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-video .play-btn {
+    width: 60px; height: 60px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-video .play-btn::after {
+    content: '';
+    border-left: 20px solid #fff;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 4px;
+  }
+
+  .card-body { padding: 16px; }
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .card-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .card-meta span { margin-right: 12px; }
+
+  .card-principle {
+    font-size: 12px;
+    color: var(--blue);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .card-oneliner {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .dimensions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+    margin-bottom: 14px;
+  }
+  .dim-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+  }
+  .dim-label { color: var(--text-dim); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dim-bar-bg {
+    width: 50px;
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .dim-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .dim-bar.high { background: var(--green); }
+  .dim-bar.mid { background: var(--amber); }
+  .dim-bar.low { background: var(--red); }
+  .dim-val { width: 18px; text-align: right; font-size: 10px; }
+
+  .verdict-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .verdict-badge.STRONG_MATCH { background: rgba(74,222,128,0.15); color: var(--green); }
+  .verdict-badge.PARTIAL_MATCH { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .verdict-badge.WEAK_MATCH { background: rgba(248,113,113,0.15); color: var(--red); }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .card-actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity 0.15s;
+  }
+  .card-actions button:hover { opacity: 0.85; }
+  .btn-yes { background: var(--green); color: #000; }
+  .btn-no { background: var(--red); color: #fff; }
+  .btn-skip { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border) !important; }
+
+  .card-decided {
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    border-top: 1px solid var(--border);
+  }
+  .card-decided.accepted { color: var(--green); }
+  .card-decided.rejected { color: var(--red); }
+  .card-decided.skipped { color: var(--amber); }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--text-dim);
+  }
+  .empty-state h2 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+
+  .scanning-indicator {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .scanning-indicator.active { display: flex; }
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .back-link {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 8px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-family: inherit;
+  }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>TASTE CURATOR</h1>
+  <div class="stats-bar">
+    <div>Pending: <span class="num" id="stat-pending">0</span></div>
+    <div>Accepted: <span class="num" id="stat-accepted">0</span></div>
+    <div>Rejected: <span class="num" id="stat-rejected">0</span></div>
+    <div>Total: <span class="num" id="stat-total">0</span></div>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="scan" onclick="runScan()">Scan Sources</button>
+  <select id="source-select">
+    <option value="boxing_yt">Boxing Analysis (YT)</option>
+    <option value="boxing_methodology">Boxing Methodology</option>
+  </select>
+  <div class="scanning-indicator" id="scanning">
+    <div class="spinner"></div>
+    <span>Scanning...</span>
+  </div>
+  <div style="flex:1"></div>
+  <button class="filter-btn active" data-filter="pending" onclick="setFilter('pending')">Pending</button>
+  <button class="filter-btn" data-filter="accepted" onclick="setFilter('accepted')">Accepted</button>
+  <button class="filter-btn" data-filter="rejected" onclick="setFilter('rejected')">Rejected</button>
+  <button class="filter-btn" data-filter="all" onclick="setFilter('all')">All</button>
+</div>
+
+<div class="cards-container" id="cards"></div>
+<div class="empty-state" id="empty" style="display:none">
+  <h2>No candidates yet</h2>
+  <p>Hit "Scan Sources" to pull drill content from YouTube channels</p>
+</div>
+
+<a href="/lobby" class="back-link">Lobby</a>
+
+<script>
+let candidates = [];
+let currentFilter = 'pending';
+
+async function loadData() {
+  try {
+    const res = await fetch('/api/taste-curator');
+    const data = await res.json();
+    candidates = data.candidates || [];
+    updateStats(data);
+    renderCards();
+  } catch (err) {
+    console.error('Load failed:', err);
+  }
+}
+
+function updateStats(data) {
+  const byStatus = { pending: 0, accepted: 0, rejected: 0, skipped: 0 };
+  (data.candidates || []).forEach(c => { byStatus[c.status] = (byStatus[c.status] || 0) + 1; });
+  document.getElementById('stat-pending').textContent = byStatus.pending;
+  document.getElementById('stat-accepted').textContent = byStatus.accepted;
+  document.getElementById('stat-rejected').textContent = byStatus.rejected;
+  document.getElementById('stat-total').textContent = (data.candidates || []).length;
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderCards();
+}
+
+function renderCards() {
+  const container = document.getElementById('cards');
+  const empty = document.getElementById('empty');
+  let filtered = candidates;
+  if (currentFilter !== 'all') filtered = candidates.filter(c => c.status === currentFilter);
+
+  // Sort: highest score first
+  filtered.sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0));
+
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  container.innerHTML = filtered.map(c => cardHTML(c)).join('');
+}
+
+function cardHTML(c) {
+  const videoId = extractYouTubeId(c.url || c.videoId);
+  const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : '';
+
+  const dims = Object.entries(c.scores || {})
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, v]) => {
+      const pct = (v / 10) * 100;
+      const cls = v >= 7 ? 'high' : v >= 4 ? 'mid' : 'low';
+      return `<div class="dim-row">
+        <span class="dim-label">${k.replace(/_/g, ' ')}</span>
+        <div class="dim-bar-bg"><div class="dim-bar ${cls}" style="width:${pct}%"></div></div>
+        <span class="dim-val">${v}</span>
+      </div>`;
+    }).join('');
+
+  const actions = c.status === 'pending'
+    ? `<div class="card-actions">
+        <button class="btn-yes" onclick="decide('${c.videoId}','accepted')">YES</button>
+        <button class="btn-no" onclick="decide('${c.videoId}','rejected')">NO</button>
+        <button class="btn-skip" onclick="decide('${c.videoId}','skipped')">SKIP</button>
+      </div>`
+    : `<div class="card-decided ${c.status}">${c.status.toUpperCase()}</div>`;
+
+  return `<div class="card ${c.status}" id="card-${c.videoId}">
+    <div class="card-video">
+      <div class="thumb-overlay" style="background-image:url(${thumbUrl})" onclick="loadVideo(this,'${videoId}')">
+        <div class="play-btn"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${esc(c.drillName || c.title)}</div>
+      <div class="card-meta">
+        <span>${esc(c.channel)}</span>
+        ${c.duration ? `<span>${Math.round(c.duration/60)}min</span>` : ''}
+        <span class="verdict-badge ${c.verdict}">${c.verdict.replace('_',' ')}</span>
+      </div>
+      ${c.principle ? `<div class="card-principle">Principle: ${esc(c.principle)}</div>` : ''}
+      ${c.oneLiner ? `<div class="card-oneliner">${esc(c.oneLiner)}</div>` : ''}
+      <div class="dimensions-grid">${dims}</div>
+      ${actions}
+    </div>
+  </div>`;
+}
+
+function loadVideo(el, videoId) {
+  if (!videoId) return;
+  const container = el.parentElement;
+  container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+}
+
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:watch\?v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+  if (m) return m[1];
+  // Might be just an ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+  return url; // fallback: use as-is
+}
+
+async function decide(videoId, decision) {
+  try {
+    const res = await fetch('/api/taste-curator/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ videoId, decision })
+    });
+    const data = await res.json();
+    // Update local state
+    const c = candidates.find(x => x.videoId === videoId);
+    if (c) c.status = decision;
+    renderCards();
+    // Update stats
+    updateStats({ candidates });
+  } catch (err) {
+    console.error('Review failed:', err);
+  }
+}
+
+async function runScan() {
+  const source = document.getElementById('source-select').value;
+  const indicator = document.getElementById('scanning');
+  indicator.classList.add('active');
+
+  try {
+    const res = await fetch(`/api/taste-curator/scan?source=${source}`, { method: 'POST' });
+    const data = await res.json();
+    indicator.classList.remove('active');
+    // Reload data
+    await loadData();
+    alert(`Scan complete: ${data.newCandidates} new candidates found`);
+  } catch (err) {
+    indicator.classList.remove('active');
+    alert('Scan failed: ' + err.message);
+  }
+}
+
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Initial load
+loadData();
+// Auto-refresh every 30s
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>

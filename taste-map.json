@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-05-14",
+  "lastUpdated": "2026-05-30",
   "source": "Paul direct input — first real seed data",
   "domains": {
     "music": {
@@ -974,6 +974,213 @@
           "reason": "A single question can generate five major architectural concepts. Default mode.",
           "source": "user_paul_cognition.md",
           "added": "2026-05-10"
+        }
+      ]
+    },
+    "boxing_drills": {
+      "dimensions": [
+        "principle_teaching",
+        "loopability",
+        "consciousness_forcing",
+        "chunkability",
+        "partner_flow",
+        "patience_reward",
+        "principle_embodiment",
+        "self_regulating",
+        "rhythm_agility"
+      ],
+      "confirmed_qualities": [
+        "teaches a principle in unexpected and unignorable way",
+        "sequences that can loop — get into a rhythm",
+        "makes people conscious of their thinking",
+        "can break into segments and put together at end — chunking",
+        "partner drills that loop and flow",
+        "rewards patience and correct technique over speed/power",
+        "teaches abstract principle through physical experience",
+        "built-in scoring or reset mechanics — drill governs itself",
+        "gear/level progression within the drill",
+        "restriction rounds that force weakness confrontation",
+        "rhythm and agility through play — skipping, tag, races, keep-ups",
+        "drills that force combination throwing — not just singles",
+        "hitting moving targets — pads moving, angles changing",
+        "changing angles — footwork + punch selection under spatial pressure"
+      ],
+      "rejections": [
+        "mindless repetition without awareness",
+        "drills that only reward speed or power",
+        "one-directional — coach does, student copies",
+        "cannot be broken down or built up progressively",
+        "drills with no underlying principle — just exercise",
+        "pure conditioning with no skill transfer",
+        "drills that only work with constant coach direction"
+      ],
+      "anchors": [
+        {
+          "item": "medicine ball balance + tennis ball catch",
+          "status": "YES",
+          "reason": "Teaches foot awareness and balance in unexpected, unignorable way",
+          "dimensions": [
+            "principle_teaching",
+            "principle_embodiment",
+            "consciousness_forcing"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "left/right hand tennis ball catch",
+          "status": "YES",
+          "reason": "Forces conscious decision making — says left or right, student catches with that hand",
+          "dimensions": [
+            "consciousness_forcing",
+            "principle_teaching"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "chunked slip combo: jab-slip → slip-1-2-slip → slip-cross → combine",
+          "status": "YES",
+          "reason": "Perfect chunkability — segments that build, then assemble",
+          "dimensions": [
+            "chunkability",
+            "loopability"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "push hands",
+          "status": "YES",
+          "reason": "Partner flow, teaches balance, size is not everything. Loopable.",
+          "dimensions": [
+            "partner_flow",
+            "principle_embodiment",
+            "patience_reward"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "looping partner attack-defend drills",
+          "status": "YES",
+          "reason": "Both partners active, flows naturally, rhythmic",
+          "dimensions": [
+            "partner_flow",
+            "loopability",
+            "rhythm_and_flow"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "10 consecutive wall catches — drop resets to zero",
+          "status": "YES",
+          "reason": "Self-regulating. Built-in consequence. Student manages own standard.",
+          "dimensions": [
+            "self_regulating",
+            "patience_reward",
+            "consciousness_forcing"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "point scoring: jab=1, hook=2, uppercut=3, combo=4",
+          "status": "YES",
+          "reason": "Self-rewarding system. Encourages variety and complexity naturally.",
+          "dimensions": [
+            "self_regulating",
+            "chunkability"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "gears: 1=singles, 2=doubles/triples, 3=3-4 punch, 4=all out",
+          "status": "YES",
+          "reason": "Built-in progression. Student controls own intensity curve.",
+          "dimensions": [
+            "self_regulating",
+            "chunkability",
+            "loopability"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "restriction drills: left only, footwork only, body only",
+          "status": "YES",
+          "reason": "Forces weakness confrontation. Removes crutches.",
+          "dimensions": [
+            "consciousness_forcing",
+            "principle_teaching"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "skipping",
+          "status": "YES",
+          "reason": "Rhythm + coordination. Foundation for all boxing footwork.",
+          "dimensions": [
+            "rhythm_agility",
+            "loopability"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "tag games",
+          "status": "YES",
+          "reason": "Agility + reaction trained through play. Students forget theyre training.",
+          "dimensions": [
+            "rhythm_agility",
+            "principle_embodiment"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "keep-ups",
+          "status": "YES",
+          "reason": "Hand-eye coordination + rhythm. Self-regulating (ball drops = feedback).",
+          "dimensions": [
+            "rhythm_agility",
+            "self_regulating"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "races with movement constraints",
+          "status": "YES",
+          "reason": "Agility under constraint. Competitive element adds energy.",
+          "dimensions": [
+            "rhythm_agility",
+            "consciousness_forcing"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "combination throwing drills — must string punches together",
+          "status": "YES",
+          "reason": "Forces fluency. Singles are alphabet, combos are sentences.",
+          "dimensions": [
+            "chunkability",
+            "loopability",
+            "principle_teaching"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "moving target pads — coach moves, student adjusts",
+          "status": "YES",
+          "reason": "Real fighting is hitting things that move. Static pads teach static habits.",
+          "dimensions": [
+            "consciousness_forcing",
+            "principle_embodiment"
+          ],
+          "added": "2026-05-30"
+        },
+        {
+          "item": "angle-changing drills — footwork + punch selection under spatial pressure",
+          "status": "YES",
+          "reason": "Forces spatial awareness. Student must read distance and choose shots.",
+          "dimensions": [
+            "consciousness_forcing",
+            "principle_teaching",
+            "rhythm_agility"
+          ],
+          "added": "2026-05-30"
         }
       ]
     }

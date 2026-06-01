@@ -73,6 +73,18 @@ Private sovereign AI research system for Paul (boxing gym owner, Hong Kong). Loc
 - Voice pattern: "Miyagi substance, Brady energy, Carlton filter"
 - Music: 2 modes — War Mode (class peaks, BPM 120-160) + Vibe Mode (cooldown, BPM 85-120)
 - All agents should import taste-map-api.js before generating Paul-facing content
+- Dimensions: ~/nanoclaw/taste-dimensions.js — 10 core + 9 drill dimensions, cross-domain coherence, health diagnostic
+- Telegram: /taste health, /taste dimensions, /taste coherence, /taste drills
+
+## Taste Curator Engine — Phase 2 Curator Inheritance (built 2026-05-31)
+- Engine: ~/nanoclaw/taste-curator.js — scrapes YouTube, scores against taste dimensions via DeepSeek, queues candidates
+- Dashboard: localhost:8080/curator (taste-curator-dashboard.html) — visual review with YouTube embeds, YES/NO/SKIP
+- API: /api/taste-curator, /api/taste-curator/review, /api/taste-curator/scan on cath-bridge
+- Candidates: ~/nanoclaw/taste-candidates.json (auto-generated)
+- Sources: 6 YouTube channels (Lee Wylie, Jack Slack, Modern Martial Artist, Liam Harrison, Sylvie von Duuglas-Ittu, Lawrence Kenshin) + global search (Cus D'Amato, Cuban boxing)
+- Budget cap: 25 DeepSeek calls per scan
+- Telegram: /curator, /curator scan, /curator review, /curator sources (secondary — dashboard is primary)
+- Accepted candidates auto-add to taste-map.json as anchors
 
 ## Architect Layer — Intent to Structured Plan (built 2026-05-08)
 - Engine: ~/nanoclaw/architect.js — intent → structured JSON plan via DeepSeek
@@ -1785,6 +1797,14 @@ the-timekeeper to go offline. Don't repeat it.
 - Hub rebuilt: localhost:8080/gym-eyes — command center with 7 sections (dashboards, pipeline, intelligence, forgotten shelf, telegram, setup guides, data locations)
 - Known issues: ELM numerical overflow (needs feature normalization), FSCL codebook collapse (1/48 active neurons)
 - Data dirs: sessions/, students/, models/, training_data/, youtube_downloads/, youtube_results/, cuba-library/
+
+## Gym Eyes — Punch-Count Calibration + Detection Profiles (built 2026-06-01)
+- Benchmark: ~/basic-reflex/gym-eyes/calibrate.py — runs detector on labeled cuba-library/clips (true count in filename) → detected vs truth + factor. Flags: --profile solo|sparring, --sweep, --max, --json. RE-RUN after any detector punch-trigger change (regression guard).
+- detector.py: extension-peak re-arm latch (one outward extension peak = one punch; kills held-arm metronome re-fire) + DETECTION_PROFILES.
+- Profiles: solo (velocity floor 0.50 — LOCKED, 1.00x exact on 213-punch labeled set) | sparring (0.80). --profile CLI flag; PunchDetector(profile=...); run_video/run_webcam pass-through.
+- gym-eyes-v2.js runDetector(path, profile='solo') — single-person homework loop defaults to solo. Fight Lab (two-fighter) stays sparring.
+- KEY: sparring floor (0.80) under-counts single-person video 28% (0.72x); technique footage returns 0 at 0.80 (punches too slow for floor). Solo is correct default for ANY 1-person clip.
+- OPEN: sparring over-count (IMG_4174: 94 detected vs ~15 actual) = person-tracking problem (occlusion, small/far fighters, pose-slot thrash, normalized-velocity spikes to 562), NOT thresholds. Next lever.
 
 ## Compound Intelligence — The Synapse (built 2026-05-31)
 - Birth: ~/nanoclaw/compound-voice.js — first invocation, The Synapse named itself
