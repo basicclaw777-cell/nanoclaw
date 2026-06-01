@@ -1828,3 +1828,37 @@ the-timekeeper to go offline. Don't repeat it.
 - Tier 2 (automated synthesis): DeepSeek V4-Pro — pulses, compound voice, automated reasoning
 - Tier 3 (bulk processing): qwen3:14b local — DM processor, classification, sovereign fallback
 - Standing: system prompts for automated LLM processes MUST include Cathedral context paragraph
+
+## Opus Escalation System — Selective Spec-Consistency Audits (built 2026-06-01)
+- Empirical finding (vault: 02_Refined_Gold/cathedral/lucy-protocol-agent-recognition.md): Opus
+  beats DeepSeek on ONE class — cross-section/cross-file spec-consistency contradictions (config
+  drift, code-vs-memory, version/citation, the db/sqlite bug class). 5-trial blind test, hidden
+  key: Opus 20/20 recall vs DeepSeek 17/20; DeepSeek's misses ALL distant technical-spec
+  contradictions. At parity on semantic-negation, cheaper, 0/5 false positives. Don't blanket-escalate.
+- ~/Cathedral/opus-tasks.js — persistent queue (create/list/pending/complete). The old [OPUS]
+  hook required this module which never existed → every escalation silently no-op'd in a catch.
+- agent-engine.js — auto-escalates spec-consistency audits to the queue (two-signal gate: audit
+  verb + spec noun, 8/8 tested). Fires only on consistency audits, not every task.
+- ~/Cathedral/opus-drain.js — drains via `claude -p --model opus` (Max plan, free; ANTHROPIC_API_KEY
+  present but ZERO credit balance, so CLI is load-bearing; API fallback). File-aware: inlines files
+  named in a task so Opus can find real contradictions. CLI: node opus-drain.js [--cap N] [--dry].
+- Telegram: /opus-drain | /opus-drain list | /opus-drain <N>. User-triggered, NOT autonomous
+  (a PM2 cron caller could make it hands-off later).
+- Bug fixed same session: bandit reward writers (production-engine.js ship/fail + referenced,
+  feed-steward.js grades) pointed at non-existent ~/nanoclaw/bandit-brain.sqlite table bandits →
+  repointed to real vortex_data/bandit-brain.db table arms(agent_id, action, …). Two reward loops
+  had never fired (pretty-over-effective: guarded by fs.existsSync, silently no-op).
+- Lucy report fixes this session: Cathedral/smoke-test.js (177-check health, distinguishes cron
+  one-shots from autorestart crash loops), br-freshness-check.js (STALE verdict, data 27d old),
+  emergence/orc-sequencer.js (05:20 cron), agents/dm-followup.js (Sun 01:00 cron), product-pipeline.js
+  (10 briefs seeded), agents/state/forge-quality.json, the-cartographer.mjs dup-import fix,
+  archaeologist [UNVERIFIED] citation tagging (backfill: 4,640/5,719 records tagged).
+
+## nanoclaw Git Push — Fixed 2026-06-01
+- Bare `git push` fails 403: the branch tracks `upstream` (qwibitai/nanoclaw, no write access).
+  The fork basicclaw777-cell/nanoclaw exists (created 2026-05-29). Use `git push origin main`.
+
+## TODO — MEMORY.md compression pass
+- ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
+  Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
+  index line <200 chars. Separate cleanup task — flagged 2026-06-01.
