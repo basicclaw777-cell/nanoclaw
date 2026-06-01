@@ -24,6 +24,7 @@ import { runTarget, runAll, getDashboardData, formatTelegramSummary } from './sc
 import { debate } from './trader/bull-bear-debate.js';
 import tasteMap from './taste-elicitation.js';
 import { getTasteProfile, getVoiceReferences, getVoicePattern, addAnchor, checkRejection } from './taste-map-api.js';
+import tasteCurator from './taste-curator.js';
 import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlanTelegram, listPlans } from './architect.js';
 import djCurator from './dj-curator.js';
 import soundStudio from './sound-studio/engine.js';
@@ -1011,6 +1012,41 @@ bot.onText(/^\/rhythm(?:@\w+)?$/, async (msg) => {
   } catch (err) {
     console.error('Rhythm report error:', err);
     await safeSend(chatId, `⚠️ Rhythm report failed: ${err.message}`);
+  }
+});
+
+// /opus-drain — run pending spec-consistency audits through Opus (Max plan CLI).
+// Queue is filled by agent-engine.js auto-escalation; Opus is the one model that
+// reliably catches cross-section spec contradictions (vault: lucy-protocol-agent-
+// recognition.md). Usage: /opus-drain | /opus-drain list | /opus-drain <N>
+bot.onText(/^\/opus-drain(?:@\w+)?\s*(.*)$/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = (match[1] || '').trim();
+  try {
+    const opusTasks = require(path.join(process.env.HOME, 'Cathedral', 'opus-tasks'));
+    const pending = opusTasks.pending();
+    if (arg === 'list') {
+      if (!pending.length) return safeSend(chatId, '📭 Opus queue empty.');
+      const lines = pending.map(t => `#${t.id} [${t.kind}] ${t.agent}: ${t.task.slice(0, 80)}`).join('\n');
+      return safeSend(chatId, `🧠 *${pending.length} pending Opus task(s):*\n${lines}`, { parse_mode: 'Markdown' });
+    }
+    if (!pending.length) return safeSend(chatId, '📭 Opus queue empty — nothing to drain.');
+    const cap = Math.min(parseInt(arg, 10) || 5, pending.length);
+    await safeSend(chatId, `🧠 Draining ${cap} Opus task(s) via Max plan — spec-consistency audits…`);
+    const { drain } = require(path.join(process.env.HOME, 'Cathedral', 'opus-drain'));
+    const r = await drain({ cap });
+    for (const x of r.results) {
+      if (x.ok) {
+        const files = x.filesUsed && x.filesUsed.length ? `\n_files: ${x.filesUsed.join(', ')}_` : '';
+        await safeSend(chatId, `✅ *Opus #${x.id}* (${x.agent})${files}\n\n${x.result}`, { parse_mode: 'Markdown' });
+      } else {
+        await safeSend(chatId, `❌ *Opus #${x.id}* (${x.agent}) failed: ${x.error}`, { parse_mode: 'Markdown' });
+      }
+    }
+    await safeSend(chatId, `🧠 Drained ${r.drained}/${r.total}. Queue now ${opusTasks.pending().length} pending.`);
+  } catch (err) {
+    console.error('opus-drain error:', err);
+    await safeSend(chatId, `⚠️ opus-drain failed: ${err.message}`);
   }
 });
 
@@ -4558,6 +4594,76 @@ bot.onText(/^\/taste(?:@\w+)?\s+stop\s*$/i, async (msg) => {
   safeSend(msg.chat.id, result);
 });
 
+// ── Taste Dimensions commands ────────────────────────────────────────────────
+
+bot.onText(/^\/taste(?:@\w+)?\s+health\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatHealth());
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+dimensions\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatDimensions());
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+coherence\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatCoherence());
+});
+
+bot.onText(/^\/taste(?:@\w+)?\s+drills\s*$/i, async (msg) => {
+  safeSend(msg.chat.id, tasteMap.formatProfile('boxing_drills'));
+});
+
+// ── Curator commands ──────────────────────────────────────────────────────
+
+bot.onText(/^\/curator(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, tasteCurator.formatStats(), { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/curator(?:@\w+)?\s+scan(?:\s+(\w+))?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const source = match[1] || 'boxing_yt';
+  safeSend(chatId, `Scanning source: ${source}...`);
+
+  try {
+    const result = await tasteCurator.scanSource(source);
+    safeSend(chatId, `*Curator Scan Complete*\n\nSource: ${result.source}\nAPI calls: ${result.apiCalls}\nNew candidates: ${result.newCandidates}\nTotal pending: ${result.totalPending}`, { parse_mode: 'Markdown' });
+  } catch (err) {
+    safeSend(chatId, `Curator scan failed: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/curator(?:@\w+)?\s+review\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const candidate = tasteCurator.getNextCandidate();
+  if (!candidate) {
+    return safeSend(chatId, 'No pending candidates. Run /curator scan first.');
+  }
+
+  const text = tasteCurator.formatCandidate(candidate);
+  safeSend(chatId, text, {
+    parse_mode: 'Markdown',
+    reply_markup: {
+      inline_keyboard: [[
+        { text: 'YES', callback_data: `curator_yes:${candidate.videoId}` },
+        { text: 'NO', callback_data: `curator_no:${candidate.videoId}` },
+        { text: 'SKIP', callback_data: `curator_skip:${candidate.videoId}` }
+      ]]
+    }
+  });
+});
+
+bot.onText(/^\/curator(?:@\w+)?\s+sources\s*$/i, async (msg) => {
+  const sources = tasteCurator.getSources();
+  let text = '*Curator Sources*\n\n';
+  for (const [key, src] of Object.entries(sources)) {
+    text += `*${key}* (${src.type})\n`;
+    if (src.channels) {
+      src.channels.forEach(ch => { text += `  - ${ch.name}\n`; });
+    }
+    text += '\n';
+  }
+  safeSend(msg.chat.id, text, { parse_mode: 'Markdown' });
+});
+
 // ── Architect commands ──────────────────────────────────────────────────────
 
 bot.onText(/^\/architect(?:@\w+)?\s*$/, async (msg) => {
@@ -6844,6 +6950,64 @@ bot.on('callback_query', async (query) => {
       const filename = parts.slice(2).join(':');
       handleIntakeCallback({ callback_query: query });
       await bot.answerCallbackQuery(query.id, { text: `${category} selected` });
+    } else if (data.startsWith('pick_')) {
+      // Daily Pick — Paul vs Machine
+      const parts = data.split('_');
+      const pick = parts[1]; // A, B, or C
+      const date = parts.slice(2).join('_'); // YYYY-MM-DD
+      try {
+        const { handlePick } = await import('./trader/daily-pick.js');
+        const result = handlePick(pick, date);
+        if (result) {
+          const response = `${result.message}\n\nAI revealed after you pick — no cheating.`;
+          await bot.answerCallbackQuery(query.id, { text: `Picked: ${result.paulPick}` });
+          await bot.sendMessage(chatId, response);
+          await bot.editMessageReplyMarkup(
+            { inline_keyboard: [[{ text: `You: ${result.paulPick} | AI: ${result.aiPick}`, callback_data: 'noop' }]] },
+            { chat_id: chatId, message_id: msgId }
+          );
+        } else {
+          await bot.answerCallbackQuery(query.id, { text: 'Already picked or expired' });
+        }
+      } catch (e) {
+        console.error('Pick callback error:', e.message);
+        await bot.answerCallbackQuery(query.id, { text: 'Pick handler error' });
+      }
+    } else if (data.startsWith('curator_yes:') || data.startsWith('curator_no:') || data.startsWith('curator_skip:')) {
+      const parts = data.split(':');
+      const action = parts[0].replace('curator_', '');
+      const videoId = parts.slice(1).join(':');
+      const decision = action === 'yes' ? 'accepted' : action === 'no' ? 'rejected' : 'skipped';
+
+      tasteCurator.reviewCandidate(videoId, decision);
+
+      const label = action === 'yes' ? 'YES — added to taste map' : action === 'no' ? 'NO — rejected' : 'SKIP — for later';
+      await bot.answerCallbackQuery(query.id, { text: label });
+      await bot.editMessageReplyMarkup(
+        { inline_keyboard: [[{ text: label, callback_data: 'noop' }]] },
+        { chat_id: chatId, message_id: msgId }
+      );
+
+      // Auto-show next candidate
+      const next = tasteCurator.getNextCandidate();
+      if (next) {
+        const pending = tasteCurator.getPendingCount();
+        setTimeout(() => {
+          const text = tasteCurator.formatCandidate(next);
+          safeSend(chatId, `(${pending} remaining)\n\n${text}`, {
+            parse_mode: 'Markdown',
+            reply_markup: {
+              inline_keyboard: [[
+                { text: 'YES', callback_data: `curator_yes:${next.videoId}` },
+                { text: 'NO', callback_data: `curator_no:${next.videoId}` },
+                { text: 'SKIP', callback_data: `curator_skip:${next.videoId}` }
+              ]]
+            }
+          });
+        }, 500);
+      } else {
+        safeSend(chatId, 'All candidates reviewed.');
+      }
     } else if (data === 'noop') {
       await bot.answerCallbackQuery(query.id);
     }
