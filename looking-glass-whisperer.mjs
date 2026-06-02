@@ -366,6 +366,7 @@ async function run() {
 
   // Signal tracker — watch for number patterns, Fibonacci, solfeggio in sky
   try {
+    const now = new Date();
     const scan = fullScan(now);
     recordScan(scan);
     if (scan.summary.high > 0 || scan.summary.medium >= 2) {

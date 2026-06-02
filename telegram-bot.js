@@ -1050,6 +1050,31 @@ bot.onText(/^\/opus-drain(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   }
 });
 
+// /liveness — silent-death check ("online != working"). Runs the immune layer
+// on demand: which agents/watchers have stopped producing real output.
+bot.onText(/^\/liveness(?:@\w+)?\s*$/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'Cathedral', 'liveness.js'), '--all', '--quiet'],
+      { timeout: 60000 }, async () => {
+        // liveness.js writes liveness-state.json; read it for the report.
+        let state = {};
+        try { state = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'Cathedral', 'liveness-state.json'), 'utf8')); } catch {}
+        const stale = state.stale || [];
+        const cfg = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'Cathedral', 'liveness-targets.json'), 'utf8'));
+        if (!stale.length) return safeSend(chatId, '🟢 *Liveness:* all targets producing output. Nothing silently dead.', { parse_mode: 'Markdown' });
+        const lines = stale.map(n => {
+          const t = (cfg.targets || []).find(x => x.name === n);
+          return `🔴 ${n}${t && t.note ? ` — _${t.note}_` : ''}`;
+        }).join('\n');
+        await safeSend(chatId, `🫀 *Liveness — ${stale.length} silently dead (online≠working):*\n${lines}`, { parse_mode: 'Markdown' });
+      });
+  } catch (err) {
+    await safeSend(chatId, `⚠️ liveness failed: ${err.message}`);
+  }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;
