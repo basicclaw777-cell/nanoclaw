@@ -1906,6 +1906,17 @@ the-timekeeper to go offline. Don't repeat it.
   lobby-legacy.html). Excalidraw map: ~/reed-dump/cathedral-map.excalidraw. Aesthetic: CLEAN/
   BRIGHT, never dark-gothic (Paul's stated taste).
 
+## The Elicitor — Standing-Question Engine (built 2026-06-02)
+- ~/nanoclaw/elicitor/elicitor.js (CJS, local package.json) — the unified elicitation layer
+  from the elicitation-threshold insight (vault: 02_Refined_Gold/cathedral/the-elicitation-threshold.md).
+  Pull→push: gathers Paul's context (planner-tasks, cath-state, recent harvests, sprint-plan, board)
+  → DeepSeek generates N sharp standing questions → vault-grounded answers → GOLD gate (score≥8,
+  value×novelty×actionability) + dedup by question-hash + FABRICATION PENALTY (don't invent
+  paths/benchmarks) → gold-feed.json + Telegram digest of gold only. Budget cap 60 calls/day.
+  Routing hooks (muse/prospector/archaeologist/patent-miner) stubbed for later.
+- Unified, not a silo: Gold tab on the status board /board + cath-bridge /api/gold + acted-on toggle.
+- Telegram: /elicit [N] (run now), /gold (latest). PM2 weekly cron suggested (Mon 09:00 HKT, not started).
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
