@@ -67,5 +67,21 @@
     "4. Next 10 days: image brief -> write paste-ready OpenArt prompt (no spend); video brief -> fal Seedance (capped).",
     "5. Never regenerate an identical brief — check the cache.",
     "6. After any PAID run, post spend to Telegram and decrement the daily budget."
-  ]
+  ],
+  "research": {
+    "motion_control": {
+      "what": "Transfer motion from a reference clip onto a STATIC image (animate a photo with a real movement). Use case: animate a still Coach Paul / Logan / technique frame with real boxing motion. Distinct from text-to-video.",
+      "status": "evaluate",
+      "open_question": "Does Higgsfield Kling 3.0 (Starter, renews ~2026-06-12) expose a motion-control mode (reference-video -> static-image transfer)? If YES we already have it. If NO, that's the real gap.",
+      "candidates": {
+        "higgsfield_kling3": "CHECK FIRST — already paid under Starter ($15, ~533 Kling videos/mo = ~50x the volume of Kling-official Standard). Verify whether it exposes a motion-control mode (not in Reed's bible/map — likely a gap). If it does, we already have motion-control, buy nothing.",
+        "kling_official_standard": "klingai.com first-party (Kuaishou). $6.99/mo = 660 credits/mo. Kling 3.0 costs 6-12 cr/sec (720p-1080p+audio) -> ~10 good 1080p clips/mo after the documented 3-5x regen wastage. UNCONFIRMED: whether Standard includes Kling 3.0 + motion-control or those are Pro-gated ($25.99). NO API in consumer tier (web-app manual). VERDICT: do NOT buy for plain video (overlaps Higgsfield ~50x worse on volume). ONLY worth it if (a) Higgsfield lacks motion-control AND (b) Standard tier actually includes 3.0+motion-control. Verify both on live klingai.com before spending. (pricing per 2026 third-party blogs, not first-party-confirmed)",
+        "luma_kling3": "reseller free tier (~3000 cr = ~6 1080p clips), real account + phone verify. LEGIT, zero ToS risk. STATUS: HELD per Paul 2026-06-02 — do not act until Paul confirms.",
+        "anijam_kling26": "free tier (Kling 2.6, 600 cr = ~3 clips), Google login. Legit free-tier candidate, lower model than 3.0.",
+        "pixverse": "REJECTED 2026-06-02 — the 'unlimited' path is temp-email + incognito + cross-referral credit-minting = ToS violation, fragile (vendor actively patches it), account-ban risk, anti-sovereignty. Valid technique (motion control), sketchy delivery. Forgotten-Shelf rule: keep the technique, drop the delivery."
+      },
+      "source": "YouTube 'free Kling 3.0 motion control' (sponsored/funnel video, PicLumen). Signal = the motion-control capability; noise = the free-credits hype + the loophole.",
+      "note": "Reality: Paul already gets ~533 Kling videos/mo via Higgsfield Starter ($15). Free tiers only matter for (1) the depleted pre-renewal gap, (2) motion-control mode IF Higgsfield lacks it."
+    }
+  }
 }
