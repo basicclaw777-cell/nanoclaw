@@ -18,7 +18,16 @@
  *  - VIDEO: fal Seedance (paid, capped) — the only live auto path right now.
  *
  * CLI:  node reed-generate.js "<brief>" [--video] [--subject X] [--go]
- *       node reed-generate.js --budget        # show today's spend vs cap
+ *       node reed-generate.js --budget               # show today's spend vs cap
+ *       node reed-generate.js --from-request <id>    # pull a brief from Maya's
+ *       node reed-generate.js --next-request         # image-request queue and run it
+ *                                                      through the SAME gated spine.
+ *
+ * Maya->Reed PULL loop: maya-plan.js writes image-requests.json (Maya the content
+ * director). --from-request / --next-request reads one, runs the normal spine
+ * (taste gate, tool pick, budget, DRY-by-default), and on completion marks the
+ * request status:"generated" + records the output path. Generating from a request
+ * is NOT auto-spend — it is the same gated path. --go is still required to spend.
  */
 
 const fs = require('fs');
@@ -31,6 +40,7 @@ const TOOLS = JSON.parse(fs.readFileSync(path.join(REED, 'tools.json'), 'utf8'))
 const ATTEMPTS = path.join(REED, 'attempts.jsonl');
 const CACHE = path.join(REED, 'brief-cache.json');
 const BUDGET_STATE = path.join(REED, 'budget-state.json');
+const REQUESTS = path.join(REED, 'image-requests.json'); // Maya's image-request queue (the pull half of the loop)
 
 // .env (FAL_KEY, Telegram)
 try {
@@ -44,6 +54,31 @@ function loadBudget() { try { const b = JSON.parse(fs.readFileSync(BUDGET_STATE,
 function saveBudget(b) { fs.writeFileSync(BUDGET_STATE, JSON.stringify(b, null, 2)); }
 function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50); }
 function briefHash(b) { return crypto.createHash('sha1').update(b).digest('hex').slice(0, 10); }
+
+// ── Maya request queue (image-requests.json) ───────────────────────────────
+function loadRequests() { try { return JSON.parse(fs.readFileSync(REQUESTS, 'utf8')); } catch { return []; } }
+function saveRequests(q) { fs.writeFileSync(REQUESTS, JSON.stringify(q, null, 2)); }
+// Resolve a request to { req, brief, subject }. id===null -> next pending.
+function resolveRequest(id) {
+  const q = loadRequests();
+  const req = id
+    ? q.find(r => String(r.id) === String(id))
+    : q.find(r => r.status === 'requested');
+  if (!req) return null;
+  const subject = slug(req.pillar || 'maya').replace(/-/g, '') || 'maya';
+  return { req, brief: req.brief, subject };
+}
+// Mark a request generated and record where the output landed.
+function markRequestGenerated(id, out, tool) {
+  const q = loadRequests();
+  const r = q.find(x => String(x.id) === String(id));
+  if (!r) return;
+  r.status = 'generated';
+  r.output = out;
+  r.tool = tool;
+  r.generatedTs = new Date().toISOString();
+  saveRequests(q);
+}
 
 // ── Taste gate ───────────────────────────────────────────────────────────────
 // Consult the BR Taste Map; reject rejected styles; apply BR color science + voice.
@@ -106,11 +141,31 @@ async function falSeedance(prompt) {
 async function main() {
   const args = process.argv.slice(2);
   if (args.includes('--budget')) { const b = loadBudget(); console.log(`Today (${b.date}): $${b.spent.toFixed(2)} / $${TOOLS.budget.daily_usd_cap} cap`); return; }
-  const brief = args.find(a => !a.startsWith('--'));
-  if (!brief) { console.log('Usage: node reed-generate.js "<brief>" [--video] [--subject X] [--go]'); return; }
+
+  // Maya->Reed PULL: resolve a brief from the image-request queue (same gated spine).
+  let activeRequestId = null;
+  let brief = args.find(a => !a.startsWith('--'));
+  let subjectFromReq = null;
+  const fromReqFlag = args.includes('--from-request');
+  const nextReqFlag = args.includes('--next-request');
+  if (fromReqFlag || nextReqFlag) {
+    const reqId = fromReqFlag ? args[args.indexOf('--from-request') + 1] : null;
+    const resolved = resolveRequest(reqId || null);
+    if (!resolved) {
+      console.log(reqId ? `No image-request with id "${reqId}" in ${REQUESTS}.` : `No pending image-request in ${REQUESTS}. (maya-plan.js plan N to create some.)`);
+      return;
+    }
+    activeRequestId = resolved.req.id;
+    brief = resolved.brief;
+    subjectFromReq = resolved.subject;
+    console.log(`📥 Pulling Maya request [${resolved.req.id}] (${resolved.req.pillar} · ${resolved.req.format}):\n   ${brief}\n`);
+  }
+
+  if (!brief) { console.log('Usage: node reed-generate.js "<brief>" [--video] [--subject X] [--go]\n       node reed-generate.js --from-request <id> | --next-request'); return; }
   const kind = args.includes('--video') ? 'video' : 'image';
   const go = args.includes('--go');
-  const subject = (args[args.indexOf('--subject') + 1] && args.includes('--subject')) ? args[args.indexOf('--subject') + 1] : 'general';
+  const subject = (args[args.indexOf('--subject') + 1] && args.includes('--subject')) ? args[args.indexOf('--subject') + 1]
+    : (subjectFromReq || 'general');
   const h = briefHash(`${kind}:${brief}`);
 
   // Cache: never regenerate an identical brief.
@@ -129,7 +184,8 @@ async function main() {
     const file = path.join(DUMP, 'prompts', `${today()}-${subject}-${slug(brief)}.md`);
     fs.writeFileSync(file, `# Reed prompt — ${subject}\n_${new Date().toISOString()} · paste into OpenArt (Nano Banana) — Higgsfield renews ~${TOOLS.renewal.higgsfield_starter}_\n\n## Prompt\n\n${tasted}\n\n## Tool\nOpenArt / Nano Banana (manual). After ${TOOLS.renewal.higgsfield_starter}: Reed auto-generates via Higgsfield.\n`);
     cache[h] = file; fs.writeFileSync(CACHE, JSON.stringify(cache, null, 2));
-    logAttempt({ ts: new Date().toISOString(), brief, kind, tool: 'openart(prompt)', out: file });
+    logAttempt({ ts: new Date().toISOString(), brief, kind, tool: 'openart(prompt)', out: file, requestId: activeRequestId });
+    if (activeRequestId) markRequestGenerated(activeRequestId, file, 'openart(prompt)');
     console.log(`📝 Paste-ready prompt -> ${file}`);
     await tg(`📝 *Reed* — taste-gated prompt ready (paste into OpenArt):\n\`${path.basename(file)}\`\n\n${tasted.slice(0, 500)}`);
     return;
@@ -154,7 +210,8 @@ async function main() {
       fs.writeFileSync(out, JSON.stringify({ brief, tasted, tool: tool.id, response: r, ts: new Date().toISOString() }, null, 2));
       b.spent += cost; saveBudget(b);
       cache[h] = out; fs.writeFileSync(CACHE, JSON.stringify(cache, null, 2));
-      logAttempt({ ts: new Date().toISOString(), brief, kind, tool: tool.id, cost, out });
+      logAttempt({ ts: new Date().toISOString(), brief, kind, tool: tool.id, cost, out, requestId: activeRequestId });
+      if (activeRequestId) markRequestGenerated(activeRequestId, out, tool.id);
       await tg(`🎬 *Reed* generated a clip via ${tool.id}. Spend today: $${b.spent.toFixed(2)}/$${TOOLS.budget.daily_usd_cap}. Result queued -> ready/clips/. _${path.basename(out)}_`);
       console.log(`-> ${out}  (spent $${b.spent.toFixed(2)} today)`);
     } catch (e) { console.error('Generation failed:', e.message); await tg(`⚠️ Reed generation failed: ${e.message}`); }

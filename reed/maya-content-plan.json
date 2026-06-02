@@ -1,0 +1,60 @@
+{
+  "_comment": "Maya's content plan — the spine of the Maya->Reed pull loop. Maya (the content DIRECTOR) reads this plan + her recent output, then emits concrete IMAGE REQUESTS (briefs) to Reed via maya-plan.js. This closes the loop: Reed used to PUSH images that Maya only captioned; now Maya PULLS the images she actually needs for the plan. Pillars + cadence are a Basic Reflex seed — Paul edits this file, Maya obeys it.",
+  "status": "seed — Paul to confirm pillars + cadence",
+  "brand": "Basic Reflex",
+  "voice": "warm, enthusiastic, genuine, celebrates members, never salesy. 'Coach Paul' to the public, never 'Reed'. Under 200 words, mobile-first, hook in the first line.",
+  "bridge_test": [
+    "Would a member send this to a friend?",
+    "Relationship, not technique?",
+    "Could it be shot on a phone?",
+    "Does the moment belong to the member, not the camera?"
+  ],
+  "cadence": {
+    "posts_per_week": 7,
+    "note": "5-7 posts/week, member-spotlight dominant. One reel anchor per week ('Maya Asks Coach Paul'). Internal Game ~20% of mix sourced from the Screening Room. Reels under 15s, hook in first 1.5s, member voiceover audio over trending audio.",
+    "weekly_shape": {
+      "member_celebration": 2,
+      "technique": 2,
+      "internal_game": 1,
+      "maya_asks_coach_paul": 1,
+      "motivation_mindset": 1
+    }
+  },
+  "pillars": [
+    {
+      "name": "Member Celebration",
+      "weekly_target": "2/week",
+      "share_of_mix": "~30%",
+      "description": "Real members, real milestones. First jab, first sparring round, 5lb PR, showing up after a long week. Make the small thing feel big. The member is the story, never the prop. 'The Bell Rings for Everyone' lives here.",
+      "example_post_type": "Member spotlight reel or carousel — a member mid-moment, caption that names the win without making them perform it"
+    },
+    {
+      "name": "Technique",
+      "weekly_target": "2/week",
+      "share_of_mix": "~25%",
+      "description": "The 6 punches, the defense, footwork — Coach Paul's substance. Basics-are-everything. Cuban 'learn to see, not just to fight'. Tack-sharp, real gym light, no stock-photo flatness.",
+      "example_post_type": "Technique scroll / close-up still of a punch or guard, demonstrated cleanly, with a one-line coaching truth"
+    },
+    {
+      "name": "Internal Game",
+      "weekly_target": "1/week",
+      "share_of_mix": "~20%",
+      "description": "Mindset, fear, the inner work — sourced from the Screening Room. Boxing principles that build lives, not just fighters. The bag doesn't lie. The quiet, true stuff that makes BR a home, not a fitness chain.",
+      "example_post_type": "Quote-over-image or atmospheric still — a screening-room idea turned into one honest line about the internal game"
+    },
+    {
+      "name": "Maya Asks Coach Paul",
+      "weekly_target": "1/week",
+      "share_of_mix": "~15%",
+      "description": "Weekly reel anchor. Maya poses a real member question; Coach Paul answers on camera, patient and present. Miyagi substance, Brady energy. The signature recurring format.",
+      "example_post_type": "Reel — Coach Paul mid-answer in the gym, question as text overlay, member voiceover or his own voice"
+    },
+    {
+      "name": "Motivation / Mindset",
+      "weekly_target": "1/week",
+      "share_of_mix": "~10%",
+      "description": "Energy and momentum without the salesy fitness-template cliches. Never 'crushing it' / 'beast mode' / 'no excuses'. Sounds like BR — warm, gritty, for everyone. Make the quiet person feel included.",
+      "example_post_type": "Atmospheric gym still or short loop — a line that lands like a friend talking, not a billboard"
+    }
+  ]
+}
