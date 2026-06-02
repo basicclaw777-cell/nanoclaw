@@ -1134,6 +1134,19 @@ bot.onText(/^\/reedready(?:@\w+)?\s+(\S+)\s*$/i, async (msg, match) => {
   } catch (e) { safeSend(chatId, `⚠️ reedready failed: ${e.message}`); }
 });
 
+// /capture — your gym shooting list (capture-wishlist). What the pipeline needs
+// you to film/photograph. Auto-clears when you drop matching files in reed-dump/inbox/.
+bot.onText(/^\/capture(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'reed', 'capture-wishlist.js'), 'list'],
+      { timeout: 30000 }, (err, stdout) => {
+        safeSend(chatId, err && !stdout ? `⚠️ capture: ${err.message}` : `📸 *Capture wishlist* (shoot these → drop in reed-dump/inbox/)\n\`\`\`\n${(stdout || '').slice(0, 3200)}\n\`\`\``, { parse_mode: 'Markdown' });
+      });
+  } catch (e) { safeSend(chatId, `⚠️ capture failed: ${e.message}`); }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;

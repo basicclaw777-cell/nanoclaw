@@ -1,0 +1,195 @@
+{
+  "_doc": "Reed CAPTURE-WISHLIST — what Paul should shoot. Front of the Reed->Maya pipeline. Paul is the capture point: he shoots/photographs the raw material, drops it into ~/reed-dump/inbox/, inbox-watcher.js organizes it, and it becomes motion-reference / raw material for Reed. reconcileInbox() in capture-wishlist.js auto-marks items captured when a matching file lands in the inbox. Edit via CLI (capture-wishlist.js add/done) — code obeys this file.",
+  "version": 1,
+  "lastUpdated": "2026-06-02T04:48:00.017Z",
+  "conventions": {
+    "filenameHint": "Drop files into ~/reed-dump/inbox/ named like the item's suggestedName (e.g. logan-ref-jab.mov). inbox-watcher.js derives subject tags from the hyphen-split filename, and reconcileInbox() matches a wishlist item when the dropped filename contains the item's suggestedName stem OR all of its matchKeywords.",
+    "formats": [
+      "clip",
+      "photo"
+    ],
+    "priorities": [
+      "P1",
+      "P2"
+    ]
+  },
+  "requests": [
+    {
+      "id": "logan-ref-jab",
+      "priority": "P1",
+      "format": "clip",
+      "what": "Boxing motion-reference: a single clean JAB. 4 seconds, one fighter only, side-on or 3/4 angle, full body in frame, plain/uncluttered background, even light.",
+      "for": "Logan animated asset — Kling motion-control source. Drives the jab onto the Logan character.",
+      "suggestedName": "logan-ref-jab.mov",
+      "matchKeywords": [
+        "logan",
+        "jab"
+      ],
+      "corpusNote": "BR/Cuba corpus may already have a clean jab — check ~/boxing-corpus/technique/ and shadowboxing/ before reshooting. Existing clip can substitute.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-ref-cross",
+      "priority": "P1",
+      "format": "clip",
+      "what": "Boxing motion-reference: a single clean CROSS (straight rear hand). 4 seconds, one fighter, side-on/3-4, full body, clean background.",
+      "for": "Logan animated asset — Kling motion-control source for the cross.",
+      "suggestedName": "logan-ref-cross.mov",
+      "matchKeywords": [
+        "logan",
+        "cross"
+      ],
+      "corpusNote": "Check ~/boxing-corpus/ for an existing isolated cross before shooting.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-ref-hook",
+      "priority": "P1",
+      "format": "clip",
+      "what": "Boxing motion-reference: a single clean HOOK (lead hand). 4 seconds, one fighter, clean background, full body.",
+      "for": "Logan animated asset — Kling motion-control source for the hook.",
+      "suggestedName": "logan-ref-hook.mov",
+      "matchKeywords": [
+        "logan",
+        "hook"
+      ],
+      "corpusNote": "Corpus substitute possible — check technique/ folder.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-ref-slip",
+      "priority": "P1",
+      "format": "clip",
+      "what": "Boxing motion-reference: a single clean SLIP (defensive head movement off-line). 4 seconds, one fighter, side-on, full body.",
+      "for": "Logan animated asset — Kling motion-control source for the slip / defensive motion.",
+      "suggestedName": "logan-ref-slip.mov",
+      "matchKeywords": [
+        "logan",
+        "slip"
+      ],
+      "corpusNote": "Corpus substitute possible — defensive movement clips in movement/ or technique/.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-ref-guard-recovery",
+      "priority": "P1",
+      "format": "clip",
+      "what": "Boxing motion-reference: GUARD-RECOVERY — hands snapping back to high guard after a punch. 4 seconds, one fighter, clean background.",
+      "for": "Logan animated asset — Kling motion-control source for the reset-to-guard beat that ends most combinations.",
+      "suggestedName": "logan-ref-guard-recovery.mov",
+      "matchKeywords": [
+        "logan",
+        "guard"
+      ],
+      "corpusNote": "Likely embedded in existing padwork — may need a deliberate clean take.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-ref-combo",
+      "priority": "P1",
+      "format": "clip",
+      "what": "Boxing motion-reference: a short COMBINATION (e.g. jab-cross-hook, ending in guard recovery). 4 seconds, one fighter, clean background, full body in frame the whole time.",
+      "for": "Logan animated asset — Kling motion-control source for a full combination beat (the signature 'action' shot).",
+      "suggestedName": "logan-ref-combo.mov",
+      "matchKeywords": [
+        "logan",
+        "combo"
+      ],
+      "corpusNote": "Shadowboxing clip 'punches shadow technique.mov' in corpus may already serve — review first.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-ref-idle",
+      "priority": "P1",
+      "format": "clip",
+      "what": "Clean IDLE / breathing reference: fighter in stance, high guard, subtle weight-shift and breathing, NO punches. 4-6 seconds, one fighter, locked-off framing, clean background.",
+      "for": "Logan signature loop — the idle/breathing animation that plays when Logan is at rest (the seamless loop base).",
+      "suggestedName": "logan-ref-idle.mov",
+      "matchKeywords": [
+        "logan",
+        "idle"
+      ],
+      "corpusNote": "Unlikely in corpus (everyone is working) — probably a fresh deliberate take. Keep it very still.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-walk-hk",
+      "priority": "P2",
+      "format": "clip",
+      "what": "HK-location WALK: subject walking toward/across camera in a recognisable Hong Kong street/setting. 4-6 seconds, steady, full body.",
+      "for": "Logan universe — HK-location establishing motion for environment composites.",
+      "suggestedName": "logan-walk-hk.mov",
+      "matchKeywords": [
+        "logan",
+        "walk"
+      ],
+      "corpusNote": "No corpus equivalent — street capture, shoot when out.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "logan-presence",
+      "priority": "P2",
+      "format": "clip",
+      "what": "PRESENCE clip: subject standing still, looking to camera / off-camera, minimal motion, strong eye line. 4 seconds, chest-up or full body, controlled light.",
+      "for": "Logan universe — 'presence' beat for character reveals and title moments.",
+      "suggestedName": "logan-presence.mov",
+      "matchKeywords": [
+        "logan",
+        "presence"
+      ],
+      "corpusNote": "No corpus equivalent — deliberate portrait-style capture.",
+      "status": "open",
+      "requestedBy": "reed",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "br-handwrap-closeup",
+      "priority": "P2",
+      "format": "photo",
+      "what": "Hand-wrap CLOSEUP: tight on the wrap going around the knuckles/wrist, fabric texture visible, gym softly out of focus behind. Stills, a few angles.",
+      "for": "Maya BR content — fresh hand-wrap still for the 'ritual before the fight' content pillar.",
+      "suggestedName": "br-handwrap-closeup.jpg",
+      "matchKeywords": [
+        "br",
+        "handwrap"
+      ],
+      "corpusNote": "Content still, not motion — shoot fresh.",
+      "status": "open",
+      "requestedBy": "maya",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    },
+    {
+      "id": "br-heavybag-lowlight",
+      "priority": "P2",
+      "format": "photo",
+      "what": "Heavy-bag in LOW WARM LIGHT: the bag hanging (or mid-swing) lit with one warm low source, deep shadows, BR-grade mood. Stills.",
+      "for": "Maya BR content — atmospheric heavy-bag still for feed/hero use.",
+      "suggestedName": "br-heavybag-lowlight.jpg",
+      "matchKeywords": [
+        "br",
+        "heavybag"
+      ],
+      "corpusNote": "Content still — shoot fresh, warm low light.",
+      "status": "open",
+      "requestedBy": "maya",
+      "timestamp": "2026-06-02T00:00:00.000Z"
+    }
+  ],
+  "captured": []
+}
