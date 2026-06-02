@@ -1880,6 +1880,32 @@ the-timekeeper to go offline. Don't repeat it.
 - Bare `git push` fails 403: the branch tracks `upstream` (qwibitai/nanoclaw, no write access).
   The fork basicclaw777-cell/nanoclaw exists (created 2026-05-29). Use `git push origin main`.
 
+## Reed v2 + Content Pipelines + Status Board (built 2026-06-02)
+- Reed v2: ~/nanoclaw/reed/ (CJS) — reed-generate.js (taste-gated spine, DRY-default,
+  budget caps, cheapest-tool), reed-rate.js (feedback→bandit+shots), inbox-watcher.js +
+  dump-manifest.js, tools.json (grounded tool registry), sprint-plan.json. Dumps at
+  ~/reed-dump/{inbox,ready/{clips,images,prompts},logan-stills}. Telegram: /reedmake,
+  /reedrate, /reedready, /reeddump, /capture.
+- Pipelines: Flow 1 reed-to-maya.js (rate instagram-ready → Maya caption → publish-ready);
+  Flow 2 maya-plan.js + maya-content-plan.json (Maya = content director, emits image-requests
+  → reed-generate --from-request).
+- Logan motion-control via Higgsfield CLI: `higgsfield generate create kling3_0 --image
+  <still> --wait`. Recipe: SOLO framing (no opponent/"incoming"), plain gloves (no logos),
+  PRO mode (face holds). image-to-video = good for dynamic actions, filter-weak for idle;
+  motion-transfer (corpus ref clip) = the moat. ~10cr/Kling clip. Logan stills: ~/reed-dump/logan-stills/.
+- Voice Chamber v2: ~/Cathedral/voice-chamber-v2/ (port 12401, PM2). Gemini Live realtime
+  (gemini-3.1-flash-live-preview, ~300ms) + Cathy persona + vault-search tool. Phone needs
+  HTTPS (tailscale serve) for mic. Old chamber (12400) kept.
+- STATUS BOARD ("Amazon for your work"): localhost:8080/board (Services|In Progress|Delivered|
+  Spend) + /services. subscriptions.json (+ real-world bills), delivered-index.js, spend-feed.js
+  (live higgsfield transactions, autonomous-burst flag), in-progress-index.js. Product brief:
+  08_Project_Orchestrator/products/product-brief-amazon-for-your-work.md.
+- Credit leak caught: ~40cr/day autonomous Higgsfield gens. PAUSED (sprint protection):
+  hf-tester, content-autopilot, reed-studio-engine, reed-director, reed-gemini. Resume post-sprint.
+- Lobby v2: environments/lobby.html rebuilt — 9 bright districts, search, 42 rooms (old →
+  lobby-legacy.html). Excalidraw map: ~/reed-dump/cathedral-map.excalidraw. Aesthetic: CLEAN/
+  BRIGHT, never dark-gothic (Paul's stated taste).
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
