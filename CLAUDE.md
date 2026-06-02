@@ -1917,6 +1917,21 @@ the-timekeeper to go offline. Don't repeat it.
 - Unified, not a silo: Gold tab on the status board /board + cath-bridge /api/gold + acted-on toggle.
 - Telegram: /elicit [N] (run now), /gold (latest). PM2 weekly cron suggested (Mon 09:00 HKT, not started).
 
+## Standing Agency v1 — safe autonomous executor (built 2026-06-02)
+- ~/nanoclaw/agency/executor.js (CJS) — the frontier after the Elicitor: it FINDS gold, Agency
+  SPENDS it. Reads A-grade items from elicitor/gold-feed.json → classifies action + safety →
+  AUTO-executes only a narrow reversible whitelist (new vault note / queue task / new report /
+  pause a flagged leaking PM2 proc) → PROPOSES everything with a side effect (spend, external
+  message, delete, code change) for one-tap /approve.
+- Governance IN CODE: kill switch (touch ~/nanoclaw/agency/PAUSED or AGENCY_PAUSED=1, checked
+  before every action); assertSafe() re-verifies no-spend/no-external/no-delete/no-code-edit even
+  when the classifier says auto (9/9 incl. 'delete gold-feed.json' → REFUSED); per-run auto cap;
+  action-ledger.jsonl; reversibility recorded; Telegram per action. v1 CANNOT spend/message/
+  delete/edit-code. Widen the auto-whitelist only as trust builds (trust-gradient).
+- Board Agency tab + /api/agency. Telegram: /agency, /approve <id>, /skip <id>. PM2 cron agency
+  Mon 09:15 HKT (after elicitor-brief). Vault: 02_Refined_Gold/cathedral/the-elicitation-threshold.md,
+  the-master-game.md.
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
