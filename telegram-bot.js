@@ -1206,6 +1206,20 @@ bot.onText(/^\/skip(?:@\w+)?\s+(\S+)\s*$/i, async (msg, match) => {
   } catch (e) { await safeSend(chatId, `⚠️ skip: ${e.message}`); }
 });
 
+// /organism — run the self-eliciting swarm: every agent elicits gold in its lane,
+// the meta-ranker surfaces only the gold-of-gold. Gated (budget cap + kill switch).
+bot.onText(/^\/organism(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  await safeSend(chatId, '🧬 The Organism running — each mind eliciting its lane, meta-ranking to gold-of-gold…');
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'organism', 'swarm.js'), '--cap-agents', '6', '--cap-q', '3', '--top-k', '5'],
+      { timeout: 600000 }, (err, stdout) => {
+        safeSend(chatId, err && !stdout ? `⚠️ organism: ${err.message}` : `🧬 ${(stdout || 'done').slice(0, 900)}\n\n_Board → Organism tab · /agency for what's proposed_`);
+      });
+  } catch (e) { await safeSend(chatId, `⚠️ organism failed: ${e.message}`); }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;

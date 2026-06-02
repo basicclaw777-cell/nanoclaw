@@ -178,9 +178,10 @@ const TABS = [
   { id:'delivered',   label:'Delivered',   icon:'📦', c:'var(--green)'  },
   { id:'spend',       label:'Spend',       icon:'💳', c:'var(--purple)' },
   { id:'gold',        label:'Gold',        icon:'🪙', c:'#b8860b'        },
+  { id:'organism',    label:'Organism',    icon:'🧬', c:'#0ea5a4'        },
   { id:'agency',      label:'Agency',      icon:'🤖', c:'#9333ea'        },
 ];
-const STATE = { services:null, inprogress:null, delivered:null, spend:null, gold:null, agency:null };
+const STATE = { services:null, inprogress:null, delivered:null, spend:null, gold:null, organism:null, agency:null };
 let ACTIVE = location.hash.replace('#','') || 'delivered';
 if (!TABS.find(t=>t.id===ACTIVE)) ACTIVE = 'delivered';
 
@@ -202,6 +203,7 @@ function renderTabs(){
     delivered: STATE.delivered ? STATE.delivered.counts.total : '',
     spend: STATE.spend ? STATE.spend.totals.lines : '',
     gold: STATE.gold ? STATE.gold.counts.total : '',
+    organism: STATE.organism ? STATE.organism.counts.latest_count : '',
     agency: STATE.agency ? STATE.agency.status.pending_approvals : '',
   };
   document.getElementById('tabs').innerHTML = TABS.map(t=>{
@@ -223,9 +225,10 @@ async function route(){
     if (ACTIVE==='delivered'  && !STATE.delivered)  STATE.delivered  = await getJSON('/api/delivered');
     if (ACTIVE==='spend'      && !STATE.spend)      STATE.spend      = await getJSON('/api/spend');
     if (ACTIVE==='gold'       && !STATE.gold)       STATE.gold       = await getJSON('/api/gold');
+    if (ACTIVE==='organism'   && !STATE.organism)   STATE.organism   = await getJSON('/api/organism');
     if (ACTIVE==='agency'     && !STATE.agency)     STATE.agency     = await getJSON('/api/agency');
     renderTabs();
-    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend, gold:renderGold, agency:renderAgency }[ACTIVE])();
+    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend, gold:renderGold, organism:renderOrganism, agency:renderAgency }[ACTIVE])();
   } catch(e){
     panel.innerHTML = `<div class="empty">Could not load <b>${esc(ACTIVE)}</b> — ${esc(e.message)}.<br>Is cath-bridge running on :8080?</div>`;
   }
@@ -555,6 +558,63 @@ async function toggleGold(id, acted){
     await fetch('/api/gold/acted',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,acted})});
     STATE.gold=null; await route();
   }catch(e){ alert('Could not update: '+e.message); }
+}
+
+// ── ORGANISM (The Self-Eliciting Organism — gold-of-gold from N minds) ─────────
+const MIND_C = {
+  boxing:'#8B2020', trading:'#0e9f6e', universe:'#534AB7',
+  reed:'#e8742a', archaeologist:'#b8860b', prospector:'#2f6fed',
+};
+function mindColor(a){ return MIND_C[a] || '#0ea5a4'; }
+function renderOrganism(){
+  const d = STATE.organism;
+  const items = (d.items||[]).slice().sort((a,b)=>b.score-a.score);
+  const ks = d.kill_switch;
+  const c = d.counts || {};
+
+  const ksColor = ks ? '#c0392b' : '#0ea5a4';
+  const ksLabel = ks ? `PAUSED · ${esc(ks)}` : 'ARMED';
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:#0ea5a4"><div class="label">Gold-of-gold (latest)</div>
+      <div class="value">${c.latest_count||0}</div><div class="note">the cream from ${c.minds||0} agent-minds · ${c.latest_run||'—'}</div></div>
+    <div class="stat" style="--stat-c:#0e9f6e"><div class="label">Worth acting on (A)</div>
+      <div class="value">${c.A||0}</div><div class="note">all-time, routed to Standing Agency</div></div>
+    <div class="stat" style="--stat-c:#b8860b"><div class="label">Surfaced all-time</div>
+      <div class="value">${c.total||0}</div><div class="note">pooled · deduped · top-K only reach Paul</div></div>
+    <div class="stat" style="--stat-c:${ksColor}"><div class="label">Kill switch</div>
+      <div class="value" style="font-size:20px">${ks?'⏸':'▶'} ${ksLabel}</div>
+      <div class="note">${ks?'no elicitation, no spend':'eliciting on schedule'}</div></div>
+  </div>`;
+
+  if (!items.length){
+    html += `<div class="empty">The organism hasn't surfaced gold-of-gold yet. Every agent elicits in its own lane (boxing→embodied mastery, trading→wealth, universe→truth, reed→content, archaeologist→forgotten techniques, prospector→products); a meta-ranker pools, dedups, and surfaces only the top-K.<br><br>Run a cycle: <code>node ~/nanoclaw/organism/swarm.js --cap-agents 3 --cap-q 2</code> · dry: <code>--dry</code> · kill switch: <code>touch ~/nanoclaw/organism/PAUSED</code></div>`;
+    document.getElementById('panel').innerHTML = html;
+    return;
+  }
+
+  const A = items.filter(g=>g.grade==='A');
+  const B = items.filter(g=>g.grade==='B');
+  const C = items.filter(g=>g.grade==='C');
+  html += section('🧬 A — do this','#0e9f6e','#e7f7f0', A.length?`<div class="grid">${A.map(g=>organismCard(g,true)).join('')}</div>`:emptyMini('No A-grade gold this run.'));
+  if (B.length) html += section('🧬 B — worth knowing','#b8860b','#f8f0d9',`<div class="grid">${B.map(g=>organismCard(g,false)).join('')}</div>`);
+  if (C.length) html += section('🧬 C — fun, but skip','#9aa0a6','#f3f3f3',`<div class="grid">${C.map(g=>organismCard(g,false)).join('')}</div>`);
+  document.getElementById('panel').innerHTML = html;
+}
+function organismCard(g,full){
+  const mc = mindColor(g.agent);
+  const GRADE_C = {A:'#0e9f6e',B:'#b8860b',C:'#9aa0a6'};
+  const gradeBadge = g.grade ? `<span class="badge" title="A=act on · B=worth knowing · C=skip" style="--st-t:#f3f3f3;color:${GRADE_C[g.grade]||'#666'};margin-right:6px;font-weight:700">${g.grade}</span>` : '';
+  const xlinks = (g.cross_lane&&g.cross_lane.length)
+    ? `<div class="detail" style="color:#0ea5a4;border-left:3px solid #0ea5a4;padding-left:8px">🔗 <b>Cross-lane:</b> also feeds ${g.cross_lane.map(esc).join(', ')}</div>` : '';
+  return `<div class="card" style="--st-c:${mc}">
+    <div class="card-top"><div><div class="card-name">${esc(g.question)}</div>
+      <div class="card-plan"><span class="badge" style="--st-t:#e0f7f6;color:${mc};margin-right:4px">🧬 ${esc(g.agent)}</span>${esc(g.domain)}${g.ts?' · '+ago(g.ts):''}</div></div>
+      <span class="badge" style="--st-t:#e0f7f6;color:#0ea5a4">${gradeBadge}${g.score}/10</span></div>
+    ${full?`<div class="detail" style="white-space:pre-wrap;line-height:1.5">${esc(g.answer)}</div>`:''}
+    ${g.why_gold?`<div class="detail" style="color:var(--ink-faint);border-left:3px solid ${mc};padding-left:8px"><b>Why gold:</b> ${esc(g.why_gold)}</div>`:''}
+    ${xlinks}
+  </div>`;
 }
 
 // ── AGENCY (Standing Agency — the SAFE autonomous executor) ───────────────────

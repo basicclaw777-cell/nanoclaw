@@ -833,6 +833,103 @@ async function sendDigest(briefMd, brief, state) {
   await sendTelegram(msg);
 }
 
+// ── SHARED CAPABILITY: elicitForDomain ──────────────────────────────────────────
+// Elicitation as a reusable library call. Given a domain {name, focus, contextHint}
+// and a per-call cap, it (1) generates sharp questions FOR THAT DOMAIN, (2) elicits
+// vault-grounded answers, (3) scores them by the SAME forensic gold rubric used by
+// the personal Elicitor (SCORE_SYSTEM — leverage × fit × durability/truth, fabrication
+// penalty, value≠novelty). Returns scored items. It does NOT push to Telegram, write
+// the gold-feed, or touch the trajectory — those stay the personal Elicitor's job.
+//
+// THE ORGANISM (~/nanoclaw/organism/swarm.js) calls this once per agent-domain so
+// every agent elicits gold in its own lane; the personal Elicitor's run() keeps using
+// generateQuestions/elicitAnswer/scoreAnswer directly and is untouched. The shared
+// core (callDeepSeek, vaultGrounding, ELICIT_SYSTEM, SCORE_SYSTEM, gradeForScore,
+// questionHash) is reused, not duplicated — one gold definition for the whole swarm.
+//
+// IMPORTANT (budget): this respects the SAME per-run PER_RUN_CALL_CAP counter as the
+// personal run when invoked in-process. When the organism imports the module without
+// calling run(), the counter starts at 0; the organism enforces its OWN hard caps
+// (max agents × max questions) on top. Pass opts.callBudget to hard-stop early.
+const DOMAIN_GEN_SYSTEM = `You are THE ELICITOR operating IN ONE AGENT'S DOMAIN inside Paul's Cathedral (a sovereign AI research system).
+
+THE CORE IDEA: a model's realized value equals the sharpness of the question asked of it. Most of what a model can do is never elicited. You flip pull -> push: you ask the sharp questions an expert agent in THIS domain WOULD ask, continuously, against Paul's master game.
+
+THE MASTER GAME (the standing aim — gold must advance some facet of it): finding universal truth · making money / wealth leverage · creating + running businesses · building AI systems · building tools · healing · consciousness · embodied mastery (boxing/Basic Reflex is ONE instrument). This agent's domain is ONE LANE of that game — ask the sharp questions that, answered well, would move Paul disproportionately in this lane AND feed the master game.
+
+WHAT MAKES A QUESTION SHARP (vs vague):
+- VAGUE: "How can this domain improve?" -> a 2/10 answer.
+- SHARP: names a real specific thing, is answerable, and has a clear gold outcome (a decision, a build, a connection, a finding). Like the patent miner's 70 targeted seed queries — each one a lever.
+
+Generate exactly {N} sharp standing questions FOR THIS AGENT'S DOMAIN ONLY. Stay in the lane (do not drift to other agents' domains — the swarm covers those separately). Each must be a question Paul would genuinely want answered in this lane, where a good answer would be GOLD (high leverage, advances the master game, durable — obvious-but-undone counts). Do NOT ask questions designed to flatter what Paul already believes.
+
+Return JSON ONLY: {"questions":[{"q":"...","why":"one line: why this is the sharp question to ask in this domain now"}]}`;
+
+async function generateDomainQuestions(domainSpec, n) {
+  const sys = DOMAIN_GEN_SYSTEM.replace('{N}', String(n));
+  const user =
+    `AGENT DOMAIN: ${domainSpec.name}\n` +
+    `LANE OF THE MASTER GAME: ${domainSpec.lane || domainSpec.name}\n` +
+    `FOCUS (what this agent's elicitation should target): ${domainSpec.focus || ''}\n` +
+    (domainSpec.contextHint ? `CONTEXT HINT: ${domainSpec.contextHint}\n` : '') +
+    (Array.isArray(domainSpec.seeds) && domainSpec.seeds.length
+      ? `\nSEEDS FROM PRIOR GOLD (let these inform — sharpen or follow up, don't just repeat):\n${domainSpec.seeds.map(s => `- ${s}`).join('\n')}\n`
+      : '') +
+    `\nGenerate ${n} sharp standing questions for THIS domain as JSON.`;
+  const raw = await callDeepSeek(sys, user, { temperature: 0.6, maxTokens: 1600, json: true });
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { parsed = { questions: [] }; }
+  const qs = Array.isArray(parsed.questions) ? parsed.questions : [];
+  return qs.slice(0, n).filter(x => x && x.q).map(x => ({ ...x, domain: domainSpec.name }));
+}
+
+/**
+ * elicitForDomain(domainSpec, opts) — the shared elicitation capability.
+ * @param {{name:string, focus?:string, contextHint?:string, lane?:string, seeds?:string[]}} domainSpec
+ * @param {{cap?:number, agent?:string, callBudget?:number}} [opts]
+ * @returns {Promise<{agent:string, domain:string, items:Array, calls:number, error?:string}>}
+ *   items: [{ id, question, answer, score, grade, why_gold, why_question, domain, agent }]
+ */
+async function elicitForDomain(domainSpec, opts = {}) {
+  if (!domainSpec || !domainSpec.name) throw new Error('elicitForDomain: domainSpec.name required');
+  const cap = Math.max(1, Math.min(6, parseInt(opts.cap, 10) || 3));
+  const agent = opts.agent || domainSpec.agent || domainSpec.name;
+  const startCalls = callsThisRun;
+  const items = [];
+  let error;
+
+  try {
+    const questions = await generateDomainQuestions(domainSpec, cap);
+    for (const q of questions) {
+      // honour an explicit per-domain call budget if given (elicit+score = 2 calls)
+      if (opts.callBudget && (callsThisRun - startCalls) + 2 > opts.callBudget) break;
+      try {
+        const { answer } = await elicitAnswer(q);
+        const { score, why_gold } = await scoreAnswer(q, answer);
+        items.push({
+          id: questionHash(q.q),
+          question: q.q,
+          answer: answer.trim(),
+          score,
+          grade: gradeForScore(score),
+          why_gold,
+          why_question: q.why || '',
+          domain: domainSpec.name,
+          agent,
+        });
+      } catch (e) {
+        if (/call cap/.test(e.message)) { error = e.message; break; }
+        log(`elicitForDomain(${agent}): one question failed — ${e.message}`);
+      }
+    }
+  } catch (e) {
+    error = e.message;
+    log(`elicitForDomain(${agent}) generation failed: ${e.message}`);
+  }
+
+  return { agent, domain: domainSpec.name, items, calls: callsThisRun - startCalls, error };
+}
+
 // ── entry ────────────────────────────────────────────────────────────────────
 // Only auto-run when invoked directly (so the module can be required for testing
 // individual functions like updateTrajectory without triggering a full cycle).
@@ -840,4 +937,4 @@ if (require.main === module) {
   run().catch(e => { console.error('[elicitor] fatal:', e.message); process.exit(1); });
 }
 
-module.exports = { run, gatherContext, loadTrajectory, updateTrajectory, generateBlindSpotQuestions, buildMorningBrief, gradeForScore };
+module.exports = { run, gatherContext, loadTrajectory, updateTrajectory, generateBlindSpotQuestions, buildMorningBrief, gradeForScore, elicitForDomain };

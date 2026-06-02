@@ -186,6 +186,58 @@ app.get('/api/agency', (req, res) => {
   };
   res.json({ generated_at: new Date().toISOString(), status, ledger, queue });
 });
+// The Self-Eliciting Organism — every agent elicits gold in its own domain, a
+// meta-ranker surfaces only the gold-of-gold. Static read of the organism's
+// jsonl + brief, shaped like the gold tab. The swarm writes on its own (weekly)
+// schedule, not on page load.
+const ORGANISM_DIR = path.join(NANOCLAW, 'organism');
+app.get('/api/organism', (req, res) => {
+  const fsx = require('fs');
+  // read the gold-of-gold jsonl (one row per surfaced item, most recent run last)
+  let rows = [];
+  try {
+    const p = path.join(ORGANISM_DIR, 'organism-gold.jsonl');
+    if (fsx.existsSync(p)) {
+      rows = fsx.readFileSync(p, 'utf8').split('\n').filter(Boolean)
+        .map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+    }
+  } catch (e) { return res.status(503).json({ error: 'organism feed unreadable', detail: e.message }); }
+
+  // group by run date; surface the most recent run as the headline, keep all for history.
+  const runs = {};
+  for (const r of rows) { (runs[r.run] = runs[r.run] || []).push(r); }
+  const runDates = Object.keys(runs).sort();           // ascending
+  const latestRun = runDates.length ? runDates[runDates.length - 1] : null;
+  const latest = latestRun ? runs[latestRun].slice().sort((a, b) => b.score - a.score) : [];
+
+  // kill switch state (mirror the swarm's gate)
+  const killSwitch = process.env.ORGANISM_PAUSED === '1'
+    ? 'env ORGANISM_PAUSED=1'
+    : (fsx.existsSync(path.join(ORGANISM_DIR, 'PAUSED')) ? 'PAUSED file present' : null);
+
+  // distinct minds that have ever surfaced gold-of-gold
+  const minds = [...new Set(rows.map(r => r.agent))];
+
+  const counts = {
+    total: rows.length,
+    latest_run: latestRun,
+    latest_count: latest.length,
+    A: rows.filter(r => r.grade === 'A').length,
+    B: rows.filter(r => r.grade === 'B').length,
+    minds: minds.length,
+  };
+
+  res.json({
+    generated_at: new Date().toISOString(),
+    kill_switch: killSwitch,
+    counts,
+    minds,
+    latest_run: latestRun,
+    items: latest,        // the latest run's gold-of-gold (headline)
+    history: rows.slice().reverse(),  // all surfaced gold, newest first
+  });
+});
+
 // Toggle the "acted on" flag on a gold item (board interaction).
 app.post('/api/gold/acted', express.json(), (req, res) => {
   const id = req.body && req.body.id;

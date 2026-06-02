@@ -1,0 +1,48 @@
+{
+  "_comment": "THE ORGANISM'S DOMAIN REGISTRY. Each Cathedral agent is itself a frozen question (Muse='what connects?', Archaeologist='what's forgotten?', Prospector='what's a product?'). Here each agent is mapped to ONE master-game LANE and given a focus + contextHint that aims its elicitation. The swarm calls elicitForDomain() once per entry so every agent elicits gold in its own lane; the meta-ranker then surfaces only the gold-of-gold to Paul. KEEP THIS 5-6 ENTRIES — the count IS the primary budget gate (max agents × max questions = the DeepSeek call ceiling). Adding agents widens the blast/noise surface, so widen only on trust.",
+  "_master_game": "truth · wealth/leverage · business · AI systems · tools · healing · consciousness · embodied mastery. Each agent below owns one lane.",
+  "agents": [
+    {
+      "agent": "boxing",
+      "domain": "Embodied Mastery",
+      "lane": "embodied mastery — boxing/Basic Reflex as one instrument of mastery, the body as a site of truth",
+      "focus": "the diagnostic instinct, the 10-block curriculum, fear gates in the body, detection/coaching IP that turns embodied mastery into transferable, teachable method",
+      "contextHint": "Paul is a boxing gym owner (Basic Reflex, Hong Kong) building Gym Eyes (AI punch/footwork detection) toward a shippable product. Boxing is ONE lane of the master game, not the whole game — surface gold that connects embodied mastery to truth, leverage, or healing."
+    },
+    {
+      "agent": "trading",
+      "domain": "Wealth & Leverage",
+      "lane": "making money / wealth leverage — infrastructure ownership + vertical integration; the meta-product is the method itself",
+      "focus": "asymmetric leverage moves, wealth as infrastructure ownership, paper-trial → graduation discipline, the meta-product (the method) as the real asset, durable edges that survive examination (not hype)",
+      "contextHint": "Paul runs a 10-strategy paper-trading experiment and treats AI models as team candidates. Wealth = Infrastructure Owner + Vertical Integrator. Surface gold about durable leverage, not market noise or unfalsifiable signals."
+    },
+    {
+      "agent": "universe",
+      "domain": "Truth & Research",
+      "lane": "finding universal truth — science, suppressed/forgotten techniques, cosmology, the master logic underneath settled questions",
+      "focus": "truth that survives forensic examination, cross-domain convergences, the master logic underneath 'settled' questions, the Forgotten Shelf, claims that are valid + ignored + buildable + unique",
+      "contextHint": "Paul's Cathedral is a forensic research instrument (cosmology, Sumerian/Rosetta corpora, suppressed science). The bar is durability under audit, never confident fiction. Value ≠ novelty — an obvious-but-undone truth can be the highest gold."
+    },
+    {
+      "agent": "reed",
+      "domain": "Visual & Content Creation",
+      "lane": "building tools + creating businesses — visual production and content that holds up to Paul's taste and converts mastery/IP into reach and revenue",
+      "focus": "visual production that holds Paul's likeness and taste, content that earns attention without cheese, the moat in motion-control / character consistency, content systems that compound (beat templates, pipelines)",
+      "contextHint": "Reed is Paul's internal visual director (Higgsfield, Logan motion-control, Basic Reflex content). Customer-facing the coach is always 'Coach Paul'. Budget discipline: calibrate before batch, no autonomous credit burn. Surface gold about leverage in content, not one-off prompts."
+    },
+    {
+      "agent": "archaeologist",
+      "domain": "Forgotten Techniques",
+      "lane": "building tools + finding truth — mining abandoned/forgotten valid techniques across all domains into Cathedral advantage",
+      "focus": "valid + ignored + buildable + unique techniques across AI, fitness, finance, coaching, science; the Forgotten Shelf method; naming the mechanism under what Paul already does intuitively",
+      "contextHint": "The Archaeologist mines forgotten techniques (expired patents, PhD dissertations, Soviet sports science, failed trials). Best result is finding the scientific name/mechanism for something Paul already does intuitively — that's buildable advantage, not just trivia."
+    },
+    {
+      "agent": "prospector",
+      "domain": "Products & Business",
+      "lane": "creating + running businesses — turning truth/IP/mastery into shippable products and revenue engines",
+      "focus": "what here is a product, the bridge from IP (Diagnostic Empathy, Fear Gate Model, Gym Eyes, the method itself) to revenue, infrastructure-owner + vertical-integrator moves, the meta-product (Fifth Gear / Paper Trials / Frame Collapse)",
+      "contextHint": "The Prospector detects product potential. Paul is already Infrastructure Owner + Vertical Integrator; the meta-product is the method itself. Surface gold about durable, buildable business moves — not vague 'you could monetize this'."
+    }
+  ]
+}
