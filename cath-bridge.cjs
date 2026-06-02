@@ -104,6 +104,54 @@ app.get('/api/subscriptions', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'subscriptions.json'));
 });
 
+// ── Cathedral Status Board (Module B) ───────────────────────────────────────
+// Tabbed board: Services | In Progress | Delivered | Spend.
+// The *-index.js scripts (ESM) regenerate their JSON on load so the board is
+// always fresh; PM2 crons are optional (see each script's header).
+const { execFileSync: _bExec } = require('child_process');
+const REED_READY = path.join(HOME, 'reed-dump', 'ready');
+
+// Regenerate an ESM index script, then return its JSON. Falls back to the
+// last-written JSON if regeneration fails (e.g. higgsfield offline).
+function boardRegen(res, script, jsonFile, label) {
+  const jsonPath = path.join(NANOCLAW, jsonFile);
+  try {
+    _bExec(process.execPath, [path.join(NANOCLAW, script), '--quiet'], {
+      cwd: NANOCLAW, timeout: 70000, stdio: 'ignore'
+    });
+  } catch (e) {
+    console.error(`[board] ${label} regen failed, serving last JSON:`, e.message);
+  }
+  if (require('fs').existsSync(jsonPath)) return res.sendFile(jsonPath);
+  return res.status(503).json({ error: `${label} index not available` });
+}
+
+app.get('/board', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'board.html'));
+});
+app.get('/api/delivered', (req, res) => {
+  boardRegen(res, 'delivered-index.js', 'delivered-index.json', 'delivered');
+});
+app.get('/api/spend', (req, res) => {
+  boardRegen(res, 'spend-feed.js', 'spend-feed.json', 'spend');
+});
+app.get('/api/in-progress', (req, res) => {
+  boardRegen(res, 'in-progress-index.js', 'in-progress-index.json', 'in-progress');
+});
+
+// Static file server for Reed deliverables (images / videos / caption .md).
+// Whitelisted to ~/reed-dump/ready/ — path is validated to stay inside it so
+// the route can't be used to read arbitrary files.
+app.get('/board/file', (req, res) => {
+  const rel = String(req.query.path || '');
+  const full = path.resolve(REED_READY, rel);
+  if (full !== REED_READY && !full.startsWith(REED_READY + path.sep)) {
+    return res.status(403).send('forbidden');
+  }
+  if (!require('fs').existsSync(full)) return res.status(404).send('not found');
+  res.sendFile(full);
+});
+
 // ── Auth middleware ────────────────────────────────────────────────────────────
 
 function requireApiKey(req, res, next) {

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8fa">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Status Board — The Cathedral</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f1f3f6; --border:#e4e7ec;
+  --border-hover:#d0d5dd; --ink:#1a1d24; --ink-soft:#475067; --ink-faint:#8a93a6;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+  --shadow-hover:0 6px 20px rgba(16,24,40,.10);
+  --green:#0e9f6e; --green-t:#e7f7f0; --amber:#d9870b; --amber-t:#fdf3df;
+  --red:#e0484d; --red-t:#fdecec; --grey:#8a93a6; --grey-t:#eef0f4;
+  --blue:#2f6fed; --blue-t:#eaf1fe; --purple:#9333ea; --purple-t:#f4e9fe;
+  --orange:#e8742a; --orange-t:#fdeede;
+}
+body { background:var(--bg); color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.45; }
+a { color:inherit; text-decoration:none; }
+.wrap { max-width:1180px; margin:0 auto; padding:28px 20px 80px; }
+
+/* HEADER */
+.masthead { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
+.masthead h1 { font-size:26px; font-weight:800; letter-spacing:-.6px; }
+.masthead .sub { font-size:13.5px; color:var(--ink-faint); font-weight:500; margin-top:3px; }
+.back { margin-left:auto; font-size:12.5px; font-weight:600; color:var(--ink-soft);
+  background:var(--surface); border:1.5px solid var(--border); border-radius:999px; padding:7px 14px; transition:all .15s; }
+.back:hover { border-color:var(--border-hover); transform:translateY(-1px); }
+
+/* TABS */
+.tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:22px;
+  background:var(--surface); border:1.5px solid var(--border); border-radius:999px;
+  padding:5px; box-shadow:var(--shadow); width:fit-content; max-width:100%; }
+.tab { font-size:13.5px; font-weight:600; color:var(--ink-soft); cursor:pointer;
+  padding:8px 16px; border-radius:999px; border:none; background:transparent;
+  display:flex; align-items:center; gap:7px; transition:all .15s; white-space:nowrap; }
+.tab:hover { color:var(--ink); }
+.tab.active { background:var(--tab-c,var(--blue)); color:#fff; }
+.tab .pill { font-size:11px; font-weight:700; padding:1px 7px; border-radius:999px;
+  background:var(--surface-2); color:var(--ink-faint); }
+.tab.active .pill { background:rgba(255,255,255,.25); color:#fff; }
+
+/* SUMMARY */
+.summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.stat { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
+  padding:16px 18px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.stat::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--stat-c,var(--blue)); }
+.stat .label { font-size:11.5px; font-weight:600; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.5px; }
+.stat .value { font-size:26px; font-weight:800; letter-spacing:-.5px; margin-top:4px; }
+.stat .value small { font-size:14px; font-weight:600; color:var(--ink-faint); }
+.stat .note { font-size:11.5px; color:var(--ink-faint); margin-top:3px; font-weight:500; }
+
+/* SECTION HEAD */
+.cat { margin-bottom:30px; }
+.cat-head { display:flex; align-items:center; gap:11px; margin-bottom:13px; padding-bottom:9px;
+  border-bottom:2px solid var(--cat-c,var(--border)); }
+.cat-bar { width:5px; height:22px; border-radius:3px; background:var(--cat-c); }
+.cat-title { font-size:16px; font-weight:700; letter-spacing:-.2px; }
+.cat-note { font-size:12px; color:var(--ink-faint); font-weight:500; }
+.cat-count { margin-left:auto; font-size:12px; font-weight:700; padding:3px 11px; border-radius:999px;
+  background:var(--cat-t); color:var(--cat-c); }
+
+/* GRIDS */
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:13px; }
+.media-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px; }
+
+/* CARD */
+.card { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
+  padding:16px 17px 15px; box-shadow:var(--shadow); transition:all .18s; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; }
+.card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--st-c,var(--blue)); opacity:.9; }
+.card:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); }
+.card-top { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; padding-left:4px; }
+.card-name { font-size:15px; font-weight:700; letter-spacing:-.2px; }
+.card-plan { font-size:12px; color:var(--ink-faint); font-weight:500; margin-top:1px; }
+.badge { margin-left:auto; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px;
+  padding:4px 9px; border-radius:999px; white-space:nowrap; background:var(--st-t); color:var(--st-c); }
+.rows { padding-left:4px; display:flex; flex-direction:column; gap:7px; margin-bottom:6px; }
+.row { display:flex; align-items:baseline; gap:8px; font-size:13px; }
+.row .k { font-size:11px; font-weight:600; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.4px; width:74px; flex-shrink:0; }
+.row .v { color:var(--ink); font-weight:600; }
+.row .v.faint { color:var(--ink-faint); font-weight:500; }
+.detail { padding-left:4px; font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin-top:6px; }
+.verify-tag { font-size:10px; font-weight:700; color:var(--amber); background:var(--amber-t);
+  border-radius:5px; padding:1px 6px; margin-left:6px; }
+.chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; padding-left:4px; }
+.chip { font-size:11.5px; font-weight:500; color:var(--ink-soft); background:var(--surface-2);
+  border:1px solid var(--border); border-radius:6px; padding:3px 8px; }
+
+/* MEDIA TILE (delivered) */
+.tile { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); overflow:hidden; transition:all .18s; display:flex; flex-direction:column; }
+.tile:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); }
+.tile .thumb { width:100%; aspect-ratio:16/10; background:var(--surface-2); object-fit:cover; display:block; }
+.tile video.thumb { background:#000; }
+.tile .promptbox { aspect-ratio:16/10; padding:13px; font-size:12px; color:var(--ink-soft);
+  background:linear-gradient(135deg,#fafbfc,#f1f3f6); overflow:hidden; line-height:1.5;
+  display:flex; flex-direction:column; gap:6px; }
+.tile .promptbox .ptag { font-size:10px; font-weight:700; color:var(--purple); text-transform:uppercase; letter-spacing:.5px; }
+.tile .tbody { padding:11px 13px 13px; display:flex; flex-direction:column; gap:5px; flex:1; }
+.tile .tname { font-size:13px; font-weight:700; word-break:break-word; }
+.tile .tmeta { font-size:11px; color:var(--ink-faint); font-weight:500; }
+.tile .tpath { font-size:10.5px; font-family:'SF Mono',ui-monospace,monospace; color:var(--ink-faint);
+  word-break:break-all; background:var(--surface-2); border-radius:6px; padding:4px 7px; margin-top:auto; }
+.tile .tfoot { display:flex; align-items:center; gap:6px; margin-top:7px; flex-wrap:wrap; }
+.typetag { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding:3px 7px; border-radius:5px; }
+.typetag.clip { color:var(--orange); background:var(--orange-t); }
+.typetag.image { color:var(--purple); background:var(--purple-t); }
+.typetag.prompt { color:var(--blue); background:var(--blue-t); }
+.typetag.research { color:var(--amber); background:var(--amber-t); }
+.typetag.pointer { color:var(--grey); background:var(--grey-t); }
+.pubtag { font-size:9.5px; font-weight:700; color:var(--green); background:var(--green-t); padding:3px 7px; border-radius:5px; }
+.tlink { margin-left:auto; font-size:11px; font-weight:600; color:var(--ink-faint); }
+.tile:hover .tlink { color:var(--blue); }
+
+/* SPEND */
+.spend-day { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); margin-bottom:14px; overflow:hidden; }
+.spend-day-head { display:flex; align-items:center; gap:12px; padding:13px 18px; border-bottom:1px solid var(--border); background:var(--surface-2); }
+.spend-day-head .d { font-size:14px; font-weight:700; }
+.spend-day-head .n { font-size:12px; color:var(--ink-faint); font-weight:500; }
+.spend-day-head .total { margin-left:auto; font-size:15px; font-weight:800; color:var(--red); }
+.spend-day-head .total small { font-size:11px; font-weight:600; color:var(--ink-faint); }
+.spend-line { display:flex; align-items:center; gap:12px; padding:9px 18px; font-size:13px; border-bottom:1px solid var(--surface-2); }
+.spend-line:last-child { border-bottom:none; }
+.spend-line .time { font-family:'SF Mono',ui-monospace,monospace; font-size:12px; color:var(--ink-faint); width:48px; flex-shrink:0; }
+.spend-line .model { font-weight:600; flex:1; }
+.spend-line .cr { font-weight:700; font-variant-numeric:tabular-nums; }
+.spend-line .cr.spend { color:var(--red); }
+.spend-line .cr.refund { color:var(--green); }
+.burst { background:var(--surface); border:1.5px solid var(--amber); border-radius:var(--radius);
+  padding:14px 18px; box-shadow:var(--shadow); margin-bottom:16px; position:relative; overflow:hidden; }
+.burst::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--amber); }
+.burst h3 { font-size:12.5px; font-weight:700; color:var(--amber); text-transform:uppercase; letter-spacing:.5px; margin-bottom:9px; }
+.burst-item { font-size:13px; color:var(--ink-soft); margin-bottom:5px; }
+.burst-item b { color:var(--ink); }
+
+.empty { text-align:center; padding:50px 20px; color:var(--ink-faint); font-size:14px;
+  background:var(--surface); border:1.5px dashed var(--border); border-radius:var(--radius); }
+.foot { margin-top:30px; padding-top:16px; border-top:1px solid var(--border); font-size:12px; color:var(--ink-faint); text-align:center; }
+.loading { text-align:center; padding:60px 20px; color:var(--ink-faint); font-size:14px; }
+.hidden { display:none; }
+
+@media (max-width:640px) {
+  .wrap { padding:20px 14px 70px; }
+  .grid,.media-grid { grid-template-columns:1fr; }
+  .masthead h1 { font-size:22px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <h1>Status Board</h1>
+      <div class="sub" id="sub">Amazon for your work — basket, shipped, delivered, account.</div>
+    </div>
+    <a class="back" href="/">← Lobby</a>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panel"><div class="loading">Loading the board…</div></div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+// ── config ───────────────────────────────────────────────────────────────────
+const TABS = [
+  { id:'services',    label:'Services',    icon:'🧾', c:'var(--blue)'   },
+  { id:'inprogress',  label:'In Progress', icon:'🛠', c:'var(--orange)' },
+  { id:'delivered',   label:'Delivered',   icon:'📦', c:'var(--green)'  },
+  { id:'spend',       label:'Spend',       icon:'💳', c:'var(--purple)' },
+];
+const STATE = { services:null, inprogress:null, delivered:null, spend:null };
+let ACTIVE = location.hash.replace('#','') || 'delivered';
+if (!TABS.find(t=>t.id===ACTIVE)) ACTIVE = 'delivered';
+
+// ── helpers ──────────────────────────────────────────────────────────────────
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function ago(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return '';
+  const m=Math.floor((Date.now()-d)/60000); if(m<1) return 'just now'; if(m<60) return m+'m ago';
+  const h=Math.floor(m/60); if(h<24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
+function daysUntil(d){ if(!d) return null; const t=new Date(d+'T00:00:00'); if(isNaN(t)) return null;
+  return Math.ceil((t-new Date(new Date().toDateString()))/86400000); }
+function bytes(n){ if(!n) return ''; if(n<1024) return n+'B'; if(n<1048576) return (n/1024).toFixed(0)+'KB'; return (n/1048576).toFixed(1)+'MB'; }
+async function getJSON(url){ const r=await fetch(url); if(!r.ok) throw new Error(url+' '+r.status); return r.json(); }
+
+// ── tabs ─────────────────────────────────────────────────────────────────────
+function renderTabs(){
+  const counts = {
+    services: STATE.services ? STATE.services.services.length : '',
+    inprogress: STATE.inprogress ? (STATE.inprogress.counts.to_make + STATE.inprogress.counts.running) : '',
+    delivered: STATE.delivered ? STATE.delivered.counts.total : '',
+    spend: STATE.spend ? STATE.spend.totals.lines : '',
+  };
+  document.getElementById('tabs').innerHTML = TABS.map(t=>{
+    const active = t.id===ACTIVE ? 'active':'';
+    const pill = counts[t.id]!=='' ? `<span class="pill">${counts[t.id]}</span>` : '';
+    return `<button class="tab ${active}" style="--tab-c:${t.c}" data-tab="${t.id}">${t.icon} ${t.label}${pill}</button>`;
+  }).join('');
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{ ACTIVE=b.dataset.tab; location.hash=ACTIVE; route(); });
+}
+
+// ── router ───────────────────────────────────────────────────────────────────
+async function route(){
+  renderTabs();
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `<div class="loading">Loading ${ACTIVE}…</div>`;
+  try {
+    if (ACTIVE==='services'   && !STATE.services)   STATE.services   = await getJSON('/api/subscriptions');
+    if (ACTIVE==='inprogress' && !STATE.inprogress) STATE.inprogress = await getJSON('/api/in-progress');
+    if (ACTIVE==='delivered'  && !STATE.delivered)  STATE.delivered  = await getJSON('/api/delivered');
+    if (ACTIVE==='spend'      && !STATE.spend)      STATE.spend      = await getJSON('/api/spend');
+    renderTabs();
+    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend }[ACTIVE])();
+  } catch(e){
+    panel.innerHTML = `<div class="empty">Could not load <b>${esc(ACTIVE)}</b> — ${esc(e.message)}.<br>Is cath-bridge running on :8080?</div>`;
+  }
+}
+
+// ── SERVICES (incl Personal / Bills) ─────────────────────────────────────────
+const SVC_STATUS = {
+  active:{c:'var(--green)',t:'var(--green-t)',l:'Active'}, free:{c:'var(--grey)',t:'var(--grey-t)',l:'Free'},
+  capped:{c:'var(--amber)',t:'var(--amber-t)',l:'Capped'}, depleted:{c:'var(--amber)',t:'var(--amber-t)',l:'Depleted'},
+  'zero-balance':{c:'var(--red)',t:'var(--red-t)',l:'Zero balance'},
+};
+const CAT_META = {
+  llm:{name:'LLM — Agent Brains',c:'#2f6fed',t:'#eaf1fe'}, image:{name:'Image Generation',c:'#9333ea',t:'#f4e9fe'},
+  video:{name:'Video & Animation',c:'#e8742a',t:'#fdeede'}, research:{name:'Research Data',c:'#b8860b',t:'#f8f0d9'},
+  infra:{name:'Compute & Infrastructure',c:'#0e9f6e',t:'#e7f7f0'}, networking:{name:'Networking',c:'#0d9488',t:'#e2f5f2'},
+  interface:{name:'Interface',c:'#d4506b',t:'#fbe9ee'},
+};
+const CAT_ORDER = ['llm','image','video','research','infra','networking','interface'];
+
+function renderServices(){
+  const data = STATE.services;
+  const svcs = data.services.filter(s=>s.type!=='bill');
+  const bills = data.services.filter(s=>s.type==='bill');
+  const dueSoon = bills.filter(b=>{ const n=daysUntil(b.due_date); return !b.paid && n!==null && n<=7; });
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:var(--blue)"><div class="label">Fixed monthly spend</div>
+      <div class="value">$${data.monthly_total_usd} <small>/mo</small></div><div class="note">AI services · ⚠ verify prices</div></div>
+    <div class="stat" style="--stat-c:var(--green)"><div class="label">AI services</div>
+      <div class="value">${svcs.length}</div><div class="note">${svcs.filter(s=>s.has_key).length} with API key in .env</div></div>
+    <div class="stat" style="--stat-c:var(--purple)"><div class="label">Real-world bills</div>
+      <div class="value">${bills.length}</div><div class="note">${bills.filter(b=>b.paid).length} paid · ${bills.filter(b=>!b.paid).length} outstanding</div></div>
+    <div class="stat" style="--stat-c:${dueSoon.length?'var(--red)':'var(--green)'}"><div class="label">Bills due soon</div>
+      <div class="value">${dueSoon.length}</div><div class="note">within 7 days, unpaid</div></div>
+  </div>`;
+
+  // AI service categories
+  const byCat = {}; svcs.forEach(s=>{(byCat[s.category]||=[]).push(s);});
+  CAT_ORDER.forEach(cat=>{
+    const list = byCat[cat]; if(!list||!list.length) return;
+    const m = CAT_META[cat]||{name:cat,c:'#888',t:'#eee'};
+    html += `<section class="cat" style="--cat-c:${m.c};--cat-t:${m.t}">
+      <div class="cat-head"><div class="cat-bar"></div><div class="cat-title">${m.name}</div>
+      <div class="cat-count">${list.length}</div></div>
+      <div class="grid">${list.map(svcCard).join('')}</div></section>`;
+  });
+
+  // Personal / Bills
+  html += `<section class="cat" style="--cat-c:#9333ea;--cat-t:#f4e9fe">
+    <div class="cat-head"><div class="cat-bar"></div><div class="cat-title">Personal / Bills</div>
+    <div class="cat-note">Real-life subscriptions &amp; recurring bills — Paul adds his own.</div>
+    <div class="cat-count">${bills.length}</div></div>
+    <div class="grid">${bills.length?bills.map(billCard).join(''):'<div class="empty">No bills yet. Add entries with category:\"personal\", type:\"bill\" to subscriptions.json.</div>'}</div></section>`;
+
+  document.getElementById('panel').innerHTML = html;
+}
+
+function svcCard(s){
+  const st = SVC_STATUS[s.status]||SVC_STATUS.active;
+  const cost = (typeof s.cost_usd==='number') ? (s.cost_usd===0?'Free':`$${s.cost_usd}/mo`)
+    : (s.cycle==='payg'?'Pay-as-you-go':s.cycle==='credits'?'Credits':'—');
+  const bal = s.balance ? esc(s.balance) : '—';
+  return `<div class="card" style="--st-c:${st.c};--st-t:${st.t}">
+    <div class="card-top"><div><div class="card-name">${esc(s.name)}</div><div class="card-plan">${esc(s.plan||'')}</div></div>
+      <span class="badge">${st.l}</span></div>
+    <div class="rows">
+      <div class="row"><span class="k">Cost</span><span class="v">${cost}</span></div>
+      <div class="row"><span class="k">Balance</span><span class="v ${s.balance?'':'faint'}">${bal}</span></div>
+    </div>
+    ${s.url?`<div class="chips"><a class="chip" href="${esc(s.url)}" target="_blank" rel="noopener">Open ↗</a></div>`:''}
+  </div>`;
+}
+
+function billCard(b){
+  const n = daysUntil(b.due_date);
+  const overdue = !b.paid && n!==null && n<0;
+  const due = !b.paid && n!==null && n<=7;
+  const st = b.paid ? {c:'var(--green)',t:'var(--green-t)',l:'Paid'}
+    : overdue ? {c:'var(--red)',t:'var(--red-t)',l:'Overdue'}
+    : due ? {c:'var(--amber)',t:'var(--amber-t)',l:'Due soon'}
+    : {c:'var(--grey)',t:'var(--grey-t)',l:'Unpaid'};
+  const amt = b.amount ? `${esc(b.currency||'')} ${b.amount}` : '—';
+  const amtV = (!b.amount||b.placeholder) ? ' <span class="verify-tag">⚠ verify</span>' : '';
+  const dueStr = b.due_date ? `${b.due_date}${n!==null?` (${n>=0?'in '+n+'d':Math.abs(n)+'d ago'})`:''}` : '—';
+  return `<div class="card" style="--st-c:${st.c};--st-t:${st.t}">
+    <div class="card-top"><div><div class="card-name">${esc(b.name)}</div><div class="card-plan">${esc(b.plan||'Bill')}</div></div>
+      <span class="badge">${st.l}</span></div>
+    <div class="rows">
+      <div class="row"><span class="k">Amount</span><span class="v">${amt}${amtV}</span></div>
+      <div class="row"><span class="k">Due</span><span class="v ${b.due_date?'':'faint'}">${dueStr}</span></div>
+      <div class="row"><span class="k">Cycle</span><span class="v faint">${esc(b.cycle||'—')}</span></div>
+    </div>
+    ${b.placeholder?'<div class="detail"><b>Placeholder</b> — edit subscriptions.json with your real values.</div>':''}
+  </div>`;
+}
+
+// ── IN PROGRESS ──────────────────────────────────────────────────────────────
+function renderInProgress(){
+  const d = STATE.inprogress;
+  const all = [...d.image_requests, ...d.capture_wishlist];
+  const toMake = all.filter(x=>x.bucket==='to_make');
+  const running = all.filter(x=>x.bucket==='running');
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:var(--amber)"><div class="label">To make (basket)</div>
+      <div class="value">${toMake.length}</div><div class="note">requested, not produced yet</div></div>
+    <div class="stat" style="--stat-c:var(--blue)"><div class="label">Running</div>
+      <div class="value">${running.length}</div><div class="note">generation underway / pending review</div></div>
+    <div class="stat" style="--stat-c:var(--purple)"><div class="label">Capture shots</div>
+      <div class="value">${d.counts.capture_wishlist}</div><div class="note">things Paul must film</div></div>
+    <div class="stat" style="--stat-c:var(--green)"><div class="label">Sprint tracks</div>
+      <div class="value">${d.counts.sprint_tracks}</div><div class="note">Logan + Maya credit allocation</div></div>
+  </div>`;
+
+  html += section('🧺 To make','#d9870b','#fdf3df',toMake.map(taskCard).join('')||emptyMini('Nothing waiting to be made.'));
+  html += section('🚚 Running','#2f6fed','#eaf1fe',running.map(taskCard).join('')||emptyMini('Nothing currently running.'));
+
+  // sprint
+  const tracks = d.sprint.tracks.filter(t=>t.kind==='sprint-track');
+  let sprintHtml = '';
+  if (d.sprint.status) sprintHtml += `<div class="detail" style="padding:0 0 12px"><b>Sprint status:</b> ${esc(d.sprint.status)}</div>`;
+  sprintHtml += `<div class="grid">${tracks.map(sprintCard).join('')}</div>`;
+  html += section('🎯 Logan Sprint Plan','#0e9f6e','#e7f7f0',sprintHtml);
+
+  document.getElementById('panel').innerHTML = html;
+}
+
+function section(title,c,t,inner){
+  return `<section class="cat" style="--cat-c:${c};--cat-t:${t}">
+    <div class="cat-head"><div class="cat-bar"></div><div class="cat-title">${title}</div></div>
+    <div>${inner}</div></section>`;
+}
+function emptyMini(msg){ return `<div class="empty">${esc(msg)}</div>`; }
+
+function taskCard(x){
+  const isCapture = x.kind==='capture';
+  const c = isCapture ? 'var(--purple)' : 'var(--blue)';
+  const badge = isCapture ? (x.priority||'Shoot') : esc(x.status);
+  let html = `<div class="card" style="--st-c:${c}">
+    <div class="card-top"><div><div class="card-name">${esc(x.title)}</div>
+      <div class="card-plan">${isCapture?'📹 Capture · '+esc(x.format||'clip'):'🖼 '+esc(x.kind)}</div></div>
+      <span class="badge" style="--st-t:var(--surface-2);color:${c}">${badge}</span></div>
+    <div class="detail">${esc((x.detail||'').slice(0,220))}</div>`;
+  if (isCapture && x.purpose) html += `<div class="detail" style="color:var(--ink-faint)"><b>For:</b> ${esc(x.purpose.slice(0,140))}</div>`;
+  if (x.output) html += `<div class="chips"><span class="chip">→ ${esc(x.tool||'generated')}</span></div>`;
+  html += `</div>`;
+  return html;
+}
+
+function sprintCard(t){
+  const items = (t.items||[]).map(i=>`<div class="row"><span class="v faint" style="font-size:12px">${esc(i.item).slice(0,90)}</span>
+    <span class="v" style="margin-left:auto;font-size:12px">${i.gens||'?'}× / ${i.credits||'?'}cr</span></div>`).join('');
+  return `<div class="card" style="--st-c:var(--green)">
+    <div class="card-top"><div><div class="card-name">${esc(t.title)}</div>
+      <div class="card-plan">${t.credits?t.credits+' credits':''}</div></div></div>
+    ${t.focus?`<div class="detail">${esc(t.focus.slice(0,180))}</div>`:''}
+    ${items?`<div class="rows" style="margin-top:8px">${items}</div>`:''}
+  </div>`;
+}
+
+// ── DELIVERED ────────────────────────────────────────────────────────────────
+function renderDelivered(){
+  const d = STATE.delivered;
+  const c = d.counts;
+  const items = d.items;
+  const media = items.filter(i=>['clip','image','prompt'].includes(i.type));
+  const research = items.filter(i=>i.type==='research');
+  const pointers = items.filter(i=>i.type==='pointer');
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:var(--green)"><div class="label">Total delivered</div>
+      <div class="value">${c.total}</div><div class="note">${c.publish_ready} publish-ready (captioned)</div></div>
+    <div class="stat" style="--stat-c:var(--orange)"><div class="label">Clips / Images</div>
+      <div class="value">${c.clips} <small>/ ${c.images}</small></div><div class="note">playable + viewable media</div></div>
+    <div class="stat" style="--stat-c:var(--blue)"><div class="label">Prompts</div>
+      <div class="value">${c.prompts}</div><div class="note">Reed prompt drafts ready</div></div>
+    <div class="stat" style="--stat-c:var(--amber)"><div class="label">Research outputs</div>
+      <div class="value">${c.research}</div><div class="note">recent vault reports + ${c.pointers} archive</div></div>
+  </div>`;
+
+  html += `<section class="cat" style="--cat-c:#0e9f6e;--cat-t:#e7f7f0">
+    <div class="cat-head"><div class="cat-bar"></div><div class="cat-title">📦 Visual outputs (Reed dump)</div>
+    <div class="cat-note">Images, clips and prompts — your stuff, here, viewable.</div>
+    <div class="cat-count">${media.length}</div></div>
+    <div class="media-grid">${media.length?media.map(tile).join(''):emptyMini('Nothing in ~/reed-dump/ready/ yet.')}</div></section>`;
+
+  html += `<section class="cat" style="--cat-c:#b8860b;--cat-t:#f8f0d9">
+    <div class="cat-head"><div class="cat-bar"></div><div class="cat-title">🔬 Research outputs</div>
+    <div class="cat-note">Pointers into the vault &amp; archives — open in Obsidian / on the drive.</div>
+    <div class="cat-count">${research.length+pointers.length}</div></div>
+    <div class="media-grid">${[...research,...pointers].map(tile).join('')}</div></section>`;
+
+  document.getElementById('panel').innerHTML = html;
+  // play-on-hover for clips
+  document.querySelectorAll('video.thumb').forEach(v=>{
+    v.addEventListener('mouseenter',()=>v.play().catch(()=>{}));
+    v.addEventListener('mouseleave',()=>{ v.pause(); v.currentTime=0; });
+  });
+}
+
+function tile(it){
+  let head;
+  if (it.type==='clip' && it.url){
+    head = `<video class="thumb" src="${esc(it.url)}" muted loop playsinline preload="metadata"></video>`;
+  } else if (it.type==='image' && it.url){
+    head = `<img class="thumb" src="${esc(it.url)}" loading="lazy" alt="${esc(it.name)}">`;
+  } else if (it.type==='prompt'){
+    head = `<div class="promptbox"><div class="ptag">Prompt</div><div>${esc((it.prompt_text||'').slice(0,260))}</div></div>`;
+  } else if (it.type==='research'){
+    head = `<div class="promptbox"><div class="ptag" style="color:var(--amber)">Research · ${esc(it.subject)}</div><div>Vault report — open in Obsidian.</div></div>`;
+  } else {
+    head = `<div class="promptbox"><div class="ptag" style="color:var(--grey)">Archive</div><div>${esc(it.note||it.name)}</div></div>`;
+  }
+  const link = it.url ? `<a class="tlink" href="${esc(it.url)}" target="_blank" rel="noopener">Open ↗</a>` : '';
+  const pub = it.publish_ready ? '<span class="pubtag">✓ publish-ready</span>' : '';
+  return `<div class="tile">${head}
+    <div class="tbody">
+      <div class="tname">${esc(it.name)}</div>
+      <div class="tmeta">${it.made_at?ago(it.made_at):''}${it.size?' · '+bytes(it.size):''}${it.subject&&it.type!=='research'?' · '+esc(it.subject).slice(0,40):''}</div>
+      ${it.caption_headline?`<div class="tmeta" style="color:var(--green)">“${esc(it.caption_headline)}”</div>`:''}
+      <div class="tpath">${esc(it.path)}</div>
+      <div class="tfoot"><span class="typetag ${it.type}">${it.type}</span>${pub}${link}</div>
+    </div></div>`;
+}
+
+// ── SPEND ────────────────────────────────────────────────────────────────────
+function renderSpend(){
+  const d = STATE.spend;
+  const st = d.status;
+  const today = d.days[0];
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:var(--green)"><div class="label">Current balance</div>
+      <div class="value">${st.balance!=null?st.balance:'—'} <small>cr</small></div>
+      <div class="note">Higgsfield · ${esc(st.plan||'?')} plan</div></div>
+    <div class="stat" style="--stat-c:var(--red)"><div class="label">Today's spend</div>
+      <div class="value">${today?today.net:0} <small>cr</small></div>
+      <div class="note">${today?today.count+' transactions':'no activity'}</div></div>
+    <div class="stat" style="--stat-c:var(--purple)"><div class="label">Feed total</div>
+      <div class="value">${d.totals.net} <small>cr</small></div>
+      <div class="note">${d.totals.spend} spent − ${d.totals.refund} refunded</div></div>
+    <div class="stat" style="--stat-c:${d.bursts.length?'var(--red)':'var(--green)'}"><div class="label">Bursts flagged</div>
+      <div class="value">${d.bursts.length}</div><div class="note">autonomous-looking clusters</div></div>
+  </div>`;
+
+  if (!d.transactions_ok){
+    html += `<div class="burst"><h3>⚠ Could not read transactions</h3><div class="burst-item">${esc(d.transactions_error||'higgsfield CLI error')}</div></div>`;
+  }
+
+  if (d.bursts.length){
+    html += `<div class="burst"><h3>⚠ Autonomous-looking bursts</h3>`;
+    d.bursts.forEach(b=>{ html += `<div class="burst-item"><b>${b.date} ${b.from}–${b.to}</b> · ${b.count} spends · <b style="color:var(--red)">${b.credits}cr</b> · ${esc(b.models.join(', '))}</div>`; });
+    html += `</div>`;
+  }
+
+  d.days.forEach(day=>{
+    html += `<div class="spend-day">
+      <div class="spend-day-head"><span class="d">${day.date}</span><span class="n">${day.count} transactions</span>
+        <span class="total">${day.net}<small> cr</small></span></div>
+      ${day.lines.map(l=>`<div class="spend-line">
+        <span class="time">${l.time}</span><span class="model">${esc(l.model)}</span>
+        <span class="cr ${l.action}">${l.action==='refund'?'+':''}${Math.abs(l.credits)}${l.action==='refund'?' ↩':''}</span></div>`).join('')}
+    </div>`;
+  });
+  if (!d.days.length) html += emptyMini('No transactions found.');
+
+  document.getElementById('panel').innerHTML = html;
+}
+
+// ── boot ─────────────────────────────────────────────────────────────────────
+function footer(){
+  document.getElementById('foot').textContent =
+    `Status Board — basket → shipped → delivered → account · regenerated on load`;
+}
+route().then(footer);
+</script>
+</body>
+</html>
