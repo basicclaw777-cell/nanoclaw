@@ -65,9 +65,14 @@ function subjectOf(a) {
   return a.kind || 'general';
 }
 
-// Normalise a rating into { label: 'good'|'bad', score: 1-5 }.
+// Normalise a rating into { label: 'good'|'bad'|'neutral', score: 1-5, igReady? }.
+// `instagram-ready` (alias `ig`) is a POSITIVE rating: it implies "good" (so it
+// rewards the bandit/shots exactly like good) AND flags the Maya handoff.
 function normalizeRating(raw) {
   const s = String(raw).trim().toLowerCase();
+  if (s === 'instagram-ready' || s === 'instagram' || s === 'ig' || s === 'ig-ready' || s === 'igready') {
+    return { label: 'good', score: 5, igReady: true };
+  }
   if (s === 'good' || s === 'g' || s === '+' || s === 'yes') return { label: 'good', score: 4 };
   if (s === 'bad' || s === 'b' || s === '-' || s === 'no') return { label: 'bad', score: 2 };
   const n = parseInt(s, 10);
@@ -197,7 +202,7 @@ function rewardArm(agentId, action, good) {
 // ── the loop: record a rating, teach shots + bandit ──────────────────────────
 function recordRating(idOrName, rawRating) {
   const norm = normalizeRating(rawRating);
-  if (!norm) return { ok: false, error: `bad rating "${rawRating}" — use good|bad|1-5` };
+  if (!norm) return { ok: false, error: `bad rating "${rawRating}" — use good|bad|1-5|instagram-ready` };
   const resolved = resolveItem(idOrName);
   if (!resolved) return { ok: false, error: `item not found: ${idOrName}. Run \`node reed-rate.js list\`.` };
 
@@ -223,7 +228,22 @@ function recordRating(idOrName, rawRating) {
     arms.subject = rewardArm('reed-subject', subject, good);
   }
 
-  return { ok: true, item, subject, tool, rating: norm.label, score: norm.score, ts, shot, arms, banditTaught: teachBandit };
+  const result = { ok: true, item, subject, tool, rating: norm.label, score: norm.score, ts, shot, arms, banditTaught: teachBandit };
+
+  // instagram-ready → auto-route to Maya for caption + headline. The handoff is
+  // async (DeepSeek call); we expose a promise so callers can await the sidecar
+  // without changing recordRating's synchronous contract for plain good/bad/1-5.
+  if (norm.igReady) {
+    result.igReady = true;
+    try {
+      const { handoff } = require('./reed-to-maya');
+      result.handoffPromise = handoff(item).catch(e => ({ ok: false, error: e.message }));
+    } catch (e) {
+      result.handoffPromise = Promise.resolve({ ok: false, error: `reed-to-maya unavailable: ${e.message}` });
+    }
+  }
+
+  return result;
 }
 
 // ── list ─────────────────────────────────────────────────────────────────────
@@ -257,13 +277,15 @@ function listUnrated(limit = 20) {
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
-function main() {
+async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
 
   if (!cmd || cmd === 'help' || cmd === '-h' || cmd === '--help') {
     console.log('Reed feedback loop — close the blind-generation gap.\n');
     console.log('  node reed-rate.js list');
-    console.log('  node reed-rate.js <item-id|filename> <good|bad|1-5>');
+    console.log('  node reed-rate.js <item-id|filename> <good|bad|1-5|instagram-ready>');
+    console.log('\n  instagram-ready (alias: ig) — rates good AND hands off to Maya');
+    console.log('  for a caption + headline sidecar (publish-ready).');
     return;
   }
 
@@ -298,6 +320,20 @@ function main() {
   } else {
     console.log(`    bandit: neutral (3) — arms untouched`);
   }
+
+  // instagram-ready: await the Maya handoff and report the sidecar.
+  if (res.igReady && res.handoffPromise) {
+    console.log(`\n  📲 instagram-ready → handing off to Maya for caption + headline...`);
+    const h = await res.handoffPromise;
+    if (h && h.ok) {
+      console.log(`    ✓ Maya ${h.placeholder ? 'PLACEHOLDER (offline)' : 'captioned'}: "${h.headline}"`);
+      console.log(`    sidecar: ${h.sidecar}`);
+      if (h.placeholder) console.log(`    ⚠ Maya offline: ${h.reason}`);
+    } else {
+      console.log(`    ✗ Maya handoff failed: ${h && h.error}`);
+    }
+  }
+
   console.log(`\n  Loop closed: rating -> ratings.jsonl + shots.json + bandit-brain. Next gen picks better.`);
 }
 

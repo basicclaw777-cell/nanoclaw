@@ -75,12 +75,18 @@ function suggestSubject(file) {
   return parts.length ? parts.join(', ') : 'untagged';
 }
 
-// List real files in a dir (skip dirs, hidden, sidecars).
+// A Maya caption sidecar sits next to its item: <basename>.caption.md
+function captionSidecar(itemPath) { return `${itemPath}.caption.md`; }
+function hasCaption(itemPath) { return existsSync(captionSidecar(itemPath)); }
+
+// List real files in a dir (skip dirs, hidden, AND .caption.md sidecars — the
+// sidecar is metadata for its item, not a queue item in its own right).
 function listFiles(dir) {
   if (!existsSync(dir)) return [];
   const out = [];
   for (const entry of readdirSync(dir)) {
     if (entry.startsWith('.')) continue;
+    if (entry.endsWith('.caption.md')) continue;
     const full = join(dir, entry);
     let st;
     try { st = statSync(full); } catch { continue; }
@@ -88,6 +94,16 @@ function listFiles(dir) {
     out.push({ name: entry, path: full, mtime: st.mtime, size: st.size });
   }
   return out;
+}
+
+// Pull the headline (first '# ' line) from a caption sidecar, for the manifest.
+function captionHeadline(itemPath) {
+  try {
+    const raw = readFileSync(captionSidecar(itemPath), 'utf8')
+      .replace(/^---[\s\S]*?---\n/, '');
+    const line = raw.split(/\r?\n/).find((l) => l.trim().startsWith('# '));
+    return line ? line.replace(/^#\s+/, '').trim().slice(0, 80) : '';
+  } catch { return ''; }
 }
 
 function firstLine(filePath) {
@@ -143,6 +159,7 @@ function archiveOld() {
 function buildItems(dir, type, withPrompt) {
   return listFiles(dir)
     .map((f) => {
+      const captioned = hasCaption(f.path);
       const item = {
         type,
         filename: f.name,
@@ -150,7 +167,10 @@ function buildItems(dir, type, withPrompt) {
         date: ymd(f.mtime),
         mtime: f.mtime.toISOString(),
         size: f.size,
-        path: f.path
+        path: f.path,
+        publish_ready: captioned,
+        caption_sidecar: captioned ? captionSidecar(f.path) : null,
+        headline: captioned ? captionHeadline(f.path) : ''
       };
       if (withPrompt) item.prompt_first_line = firstLine(f.path);
       return item;
@@ -160,16 +180,38 @@ function buildItems(dir, type, withPrompt) {
 
 function renderMarkdown(clips, images, prompts) {
   const total = clips.length + images.length + prompts.length;
+  const publishReady = [...clips, ...images, ...prompts]
+    .filter((it) => it.publish_ready)
+    .sort((a, b) => new Date(b.mtime) - new Date(a.mtime));
+
   const lines = [];
   lines.push('# Reed Offload Queue');
   lines.push('');
   lines.push(
     `> Offload queue: **${total} items ready** ` +
-    `(${clips.length} clips, ${images.length} images, ${prompts.length} prompts)`
+    `(${clips.length} clips, ${images.length} images, ${prompts.length} prompts) · ` +
+    `**${publishReady.length} publish-ready (captioned)**`
   );
   lines.push('');
   lines.push(`_Generated ${new Date().toISOString()}_`);
   lines.push('');
+
+  // ── Publish-ready section (top): item + caption sidecar, grab together ──
+  lines.push(`## ✅ Publish-ready (captioned) (${publishReady.length})`);
+  lines.push('');
+  if (publishReady.length === 0) {
+    lines.push('_none yet — rate an item `instagram-ready` to route it through Maya._');
+    lines.push('');
+  } else {
+    for (const it of publishReady) {
+      lines.push(`- **${it.filename}** — ${it.subject} — ${it.date}`);
+      if (it.headline) lines.push(`  > “${it.headline}”`);
+      lines.push(`  caption: \`${basename(it.caption_sidecar)}\``);
+    }
+    lines.push('');
+  }
+
+  const status = (it) => (it.publish_ready ? '✅ publish-ready (captioned)' : '○ needs caption');
 
   const section = (title, items, isPrompt) => {
     lines.push(`## ${title} (${items.length})`);
@@ -180,7 +222,7 @@ function renderMarkdown(clips, images, prompts) {
       return;
     }
     for (const it of items) {
-      let line = `- **${it.filename}** — ${it.subject} — ${it.date}`;
+      let line = `- **${it.filename}** — ${it.subject} — ${it.date} — ${status(it)}`;
       if (isPrompt && it.prompt_first_line) line += `\n  > ${it.prompt_first_line}`;
       lines.push(line);
     }
@@ -207,16 +249,25 @@ async function main() {
   const md = renderMarkdown(clips, images, prompts);
   writeFileSync(MANIFEST_MD, md);
 
+  const publishReadyCount = [...clips, ...images, ...prompts].filter((it) => it.publish_ready).length;
+
   const json = {
     generated_at: new Date().toISOString(),
-    counts: { total, clips: clips.length, images: images.length, prompts: prompts.length },
+    counts: {
+      total,
+      clips: clips.length,
+      images: images.length,
+      prompts: prompts.length,
+      publish_ready: publishReadyCount
+    },
     items: { clips, images, prompts }
   };
   writeFileSync(MANIFEST_JSON, JSON.stringify(json, null, 2));
 
   const summary =
     `📤 Reed offload queue: ${total} items ready ` +
-    `(${clips.length} clips, ${images.length} images, ${prompts.length} prompts)`;
+    `(${clips.length} clips, ${images.length} images, ${prompts.length} prompts) · ` +
+    `${publishReadyCount} publish-ready ✅`;
   console.log('[reed-manifest]', summary);
   console.log('[reed-manifest] wrote', MANIFEST_MD);
   console.log('[reed-manifest] wrote', MANIFEST_JSON);

@@ -1120,6 +1120,20 @@ bot.onText(/^\/reed(?:dump|queue)(?:@\w+)?\s*$/i, async (msg) => {
   } catch (e) { safeSend(chatId, `⚠️ reeddump failed: ${e.message}`); }
 });
 
+// /reedready <id|filename> — the Instagram-standard GATE. Flags an item
+// instagram-ready, which auto-routes it to Maya for caption+headline and turns it
+// publish-ready. (Same as `/reedrate <id> ig`, friendlier name.)
+bot.onText(/^\/reedready(?:@\w+)?\s+(\S+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'reed', 'reed-rate.js'), match[1], 'instagram-ready'],
+      { timeout: 120000 }, (err, stdout) => {
+        safeSend(chatId, err && !stdout ? `⚠️ reedready: ${err.message}` : `✅ *Instagram-standard → Maya*\n${(stdout || '').slice(0, 1200)}`, { parse_mode: 'Markdown' });
+      });
+  } catch (e) { safeSend(chatId, `⚠️ reedready failed: ${e.message}`); }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;
