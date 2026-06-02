@@ -154,6 +154,38 @@ app.get('/api/gold', (req, res) => {
   };
   res.json({ generated_at: new Date().toISOString(), counts, items });
 });
+
+// Standing Agency — the SAFE autonomous executor (governance-first). Surfaces
+// the action ledger (what it did), the approval queue (what needs Paul), and the
+// kill-switch state. Static read of agency files — same shape pattern as gold.
+const AGENCY_DIR = path.join(NANOCLAW, 'agency');
+app.get('/api/agency', (req, res) => {
+  const fsx = require('fs');
+  const readJsonl = (p) => { try { return fsx.readFileSync(p, 'utf8').split('\n').filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { return []; } };
+  const readJson = (p, d) => { try { const v = JSON.parse(fsx.readFileSync(p, 'utf8')); return v; } catch { return d; } };
+
+  const ledger = readJsonl(path.join(AGENCY_DIR, 'action-ledger.jsonl'));
+  let queue = readJson(path.join(AGENCY_DIR, 'approval-queue.json'), []);
+  if (!Array.isArray(queue)) queue = [];
+  const state = readJson(path.join(AGENCY_DIR, 'agency-state.json'), {});
+
+  const killSwitch = process.env.AGENCY_PAUSED === '1'
+    ? 'env AGENCY_PAUSED=1'
+    : (fsx.existsSync(path.join(AGENCY_DIR, 'PAUSED')) ? 'PAUSED file present' : null);
+
+  const today = new Date().toISOString().slice(0, 10);
+  const autoToday = ledger.filter(e => e.executed && (e.ts || '').slice(0, 10) === today).length;
+  const pending = queue.filter(p => p.status === 'pending');
+
+  const status = {
+    kill_switch: killSwitch,
+    auto_done_today: autoToday,
+    auto_done_total: ledger.filter(e => e.executed).length,
+    pending_approvals: pending.length,
+    last_run: state.last_run || null,
+  };
+  res.json({ generated_at: new Date().toISOString(), status, ledger, queue });
+});
 // Toggle the "acted on" flag on a gold item (board interaction).
 app.post('/api/gold/acted', express.json(), (req, res) => {
   const id = req.body && req.body.id;

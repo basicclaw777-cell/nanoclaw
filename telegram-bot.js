@@ -1174,6 +1174,38 @@ bot.onText(/^\/elicit(?:@\w+)?\s*(\d+)?\s*$/i, async (msg, match) => {
   } catch (e) { await safeSend(chatId, `⚠️ elicit failed: ${e.message}`); }
 });
 
+// /agency — Standing Agency status (auto-done / pending approvals / kill switch).
+bot.onText(/^\/agency(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const ag = require(path.join(process.env.HOME, 'nanoclaw', 'agency', 'executor.js'));
+    const s = await ag.status();
+    const q = (typeof ag.readQueue === 'function' ? ag.readQueue() : []).filter(x => x.status === 'pending');
+    const pend = q.map(p => `• \`${p.id}\` ${(p.action || '').slice(0, 90)}`).join('\n') || '_none_';
+    await safeSend(chatId, `🤖 *Standing Agency*\nKill switch: ${s && s.paused ? '⏸ PAUSED' : '▶️ active'}\nAuto-done today: ${(s && s.auto_done_today) || 0}\nPending your approval:\n${pend}\n\n_/approve <id> · /skip <id> · pause: touch ~/nanoclaw/agency/PAUSED · board /board → Agency_`, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ agency: ${e.message}`); }
+});
+
+// /approve <id> — execute a proposed Agency action (runs the SAME assertSafe gate).
+bot.onText(/^\/approve(?:@\w+)?\s+(\S+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const ag = require(path.join(process.env.HOME, 'nanoclaw', 'agency', 'executor.js'));
+    const r = await ag.approve(match[1]);
+    await safeSend(chatId, (r && (r.ok || r.executed)) ? `✅ Approved + executed.\n${(r.action || '').slice(0, 200)}${r.reversible_via ? `\n_reversible via ${r.reversible_via}_` : ''}` : `⚠️ ${(r && (r.error || r.reason)) || 'not found / refused'}`);
+  } catch (e) { await safeSend(chatId, `⚠️ approve: ${e.message}`); }
+});
+
+// /skip <id> — dismiss a proposed Agency action.
+bot.onText(/^\/skip(?:@\w+)?\s+(\S+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const ag = require(path.join(process.env.HOME, 'nanoclaw', 'agency', 'executor.js'));
+    await ag.skip(match[1]);
+    await safeSend(chatId, `⏭ skipped \`${match[1]}\``, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ skip: ${e.message}`); }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;

@@ -178,8 +178,9 @@ const TABS = [
   { id:'delivered',   label:'Delivered',   icon:'📦', c:'var(--green)'  },
   { id:'spend',       label:'Spend',       icon:'💳', c:'var(--purple)' },
   { id:'gold',        label:'Gold',        icon:'🪙', c:'#b8860b'        },
+  { id:'agency',      label:'Agency',      icon:'🤖', c:'#9333ea'        },
 ];
-const STATE = { services:null, inprogress:null, delivered:null, spend:null, gold:null };
+const STATE = { services:null, inprogress:null, delivered:null, spend:null, gold:null, agency:null };
 let ACTIVE = location.hash.replace('#','') || 'delivered';
 if (!TABS.find(t=>t.id===ACTIVE)) ACTIVE = 'delivered';
 
@@ -201,6 +202,7 @@ function renderTabs(){
     delivered: STATE.delivered ? STATE.delivered.counts.total : '',
     spend: STATE.spend ? STATE.spend.totals.lines : '',
     gold: STATE.gold ? STATE.gold.counts.total : '',
+    agency: STATE.agency ? STATE.agency.status.pending_approvals : '',
   };
   document.getElementById('tabs').innerHTML = TABS.map(t=>{
     const active = t.id===ACTIVE ? 'active':'';
@@ -221,8 +223,9 @@ async function route(){
     if (ACTIVE==='delivered'  && !STATE.delivered)  STATE.delivered  = await getJSON('/api/delivered');
     if (ACTIVE==='spend'      && !STATE.spend)      STATE.spend      = await getJSON('/api/spend');
     if (ACTIVE==='gold'       && !STATE.gold)       STATE.gold       = await getJSON('/api/gold');
+    if (ACTIVE==='agency'     && !STATE.agency)     STATE.agency     = await getJSON('/api/agency');
     renderTabs();
-    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend, gold:renderGold }[ACTIVE])();
+    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend, gold:renderGold, agency:renderAgency }[ACTIVE])();
   } catch(e){
     panel.innerHTML = `<div class="empty">Could not load <b>${esc(ACTIVE)}</b> — ${esc(e.message)}.<br>Is cath-bridge running on :8080?</div>`;
   }
@@ -552,6 +555,68 @@ async function toggleGold(id, acted){
     await fetch('/api/gold/acted',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,acted})});
     STATE.gold=null; await route();
   }catch(e){ alert('Could not update: '+e.message); }
+}
+
+// ── AGENCY (Standing Agency — the SAFE autonomous executor) ───────────────────
+function renderAgency(){
+  const d = STATE.agency;
+  const s = d.status || {};
+  const ledger = (d.ledger||[]).slice().reverse();   // newest first
+  const queue = d.queue || [];
+  const pending = queue.filter(p=>p.status==='pending');
+  const ks = s.kill_switch;
+
+  const ksColor = ks ? '#c0392b' : '#0e9f6e';
+  const ksLabel = ks ? `PAUSED · ${esc(ks)}` : 'ARMED';
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:${ksColor}"><div class="label">Kill switch</div>
+      <div class="value" style="font-size:20px">${ks?'⏸':'▶'} ${ksLabel}</div>
+      <div class="note">${ks?'executing nothing — propose only':'auto-executing safe whitelisted actions'}</div></div>
+    <div class="stat" style="--stat-c:#9333ea"><div class="label">Auto-done today</div>
+      <div class="value">${s.auto_done_today||0}</div><div class="note">reversible, additive, internal only</div></div>
+    <div class="stat" style="--stat-c:var(--amber)"><div class="label">Needs you</div>
+      <div class="value">${s.pending_approvals||0}</div><div class="note">/approve &lt;id&gt; or /skip &lt;id&gt;</div></div>
+    <div class="stat" style="--stat-c:var(--green)"><div class="label">Auto-done total</div>
+      <div class="value">${s.auto_done_total||0}</div><div class="note">full ledger below</div></div>
+  </div>`;
+
+  // Pending approvals
+  if (pending.length){
+    html += section('🔔 Needs you','#d97706','#fff7e6',`<div class="grid">${pending.map(agencyProposeCard).join('')}</div>`);
+  }
+  // Action ledger
+  if (ledger.length){
+    html += section('📒 Action ledger','#9333ea','#f5edff',`<div class="grid">${ledger.slice(0,60).map(agencyLedgerCard).join('')}</div>`);
+  }
+  if (!pending.length && !ledger.length){
+    html += `<div class="empty">Standing Agency is idle. It reads A-grade Elicitor gold, auto-executes only the narrowly-safe items (new vault note / queue task / read-only report / pause a leaking PM2 process), and proposes everything else.<br><br>Run a cycle: <code>node ~/nanoclaw/agency/executor.js</code> · dry: <code>--dry</code> · kill switch: <code>touch ~/nanoclaw/agency/PAUSED</code></div>`;
+  }
+  document.getElementById('panel').innerHTML = html;
+}
+function agencyProposeCard(p){
+  return `<div class="card" style="--st-c:#d97706">
+    <div class="card-top"><div><div class="card-name">${esc(p.action)}</div>
+      <div class="card-plan">${esc(p.a_item&&p.a_item.domain||'')} · ${ago(p.ts)} · kind: ${esc(p.kind||'?')}</div></div>
+      <span class="badge" style="--st-t:#fff7e6;color:#d97706">pending</span></div>
+    ${p.risk_notes?`<div class="detail" style="color:var(--ink-faint)"><b>Why proposed:</b> ${esc(p.risk_notes)}</div>`:''}
+    <div class="chips"><span class="chip" style="font-family:monospace">/approve ${esc(p.id)}</span>
+      <span class="chip" style="font-family:monospace">/skip ${esc(p.id)}</span>
+      ${p.reversible_via?`<span class="v faint" style="font-size:12px">↩ ${esc(p.reversible_via)}</span>`:''}</div>
+  </div>`;
+}
+function agencyLedgerCard(e){
+  const ok = e.executed;
+  const refused = /REFUSED/i.test(e.result||'');
+  const c = refused ? '#c0392b' : (ok ? '#0e9f6e' : '#9aa0a6');
+  const tag = refused ? '⛔ refused' : (ok ? '✅ executed' : '↪ proposed');
+  return `<div class="card" style="--st-c:${c}">
+    <div class="card-top"><div><div class="card-name">${esc(e.action)}</div>
+      <div class="card-plan">${esc(e.class||'')} · ${ago(e.ts)}</div></div>
+      <span class="badge" style="--st-t:#f3f3f3;color:${c};font-weight:700">${tag}</span></div>
+    <div class="detail" style="color:var(--ink-faint)">${esc(e.result||'')}</div>
+    ${e.reversible_via?`<div class="chips"><span class="v faint" style="font-size:12px">↩ reversible via: <code>${esc(e.reversible_via)}</code></span></div>`:''}
+  </div>`;
 }
 
 // ── boot ─────────────────────────────────────────────────────────────────────
