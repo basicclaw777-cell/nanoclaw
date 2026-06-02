@@ -1932,6 +1932,22 @@ the-timekeeper to go offline. Don't repeat it.
   Mon 09:15 HKT (after elicitor-brief). Vault: 02_Refined_Gold/cathedral/the-elicitation-threshold.md,
   the-master-game.md.
 
+## The Self-Eliciting Organism (gated, built 2026-06-02)
+- ~/nanoclaw/organism/swarm.js + agent-domains.json — the frontier after Standing Agency: every
+  agent elicits gold in its own master-game lane (6 agents → embodied/wealth/truth/visual/
+  forgotten/business), a META-RANKER pools + cross-dedups + takes top-K = the gold-of-gold (the
+  noise×N gate), and A-gold routes to the ONE governed Standing-Agency executor (agents propose,
+  never N executors). Light cross-lane links + seed carryover.
+- elicitor.js exports elicitForDomain(domainSpec) — the SHARED gold capability (one definition
+  for the whole swarm); personal Elicitor + morning brief unchanged.
+- GATES (code-enforced): hard budget cap (6 agents × 3q), 80-call/day ceiling, kill switch
+  (organism/PAUSED or ORGANISM_PAUSED=1), manual-first (weekly cron Mon 09:00 HKT suggested, NOT
+  started — widen on trust). Board Organism tab + /api/organism. Telegram: /organism.
+- Full stack now: Elicitor (finds Paul's gold) → morning brief → Standing Agency (executes safe,
+  proposes risky) → Organism (every mind elicits → gold-of-gold → one governed hand). The
+  Cathedral interrogates itself. Vault: the-elicitation-threshold.md, the-master-game.md,
+  idea-the-self-eliciting-organism.
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
