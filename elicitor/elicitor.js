@@ -67,7 +67,25 @@ const IN_PROGRESS = path.join(NANOCLAW, 'in-progress-index.json');
 
 // ── config / budget caps (SI-31) ──────────────────────────────────────────────
 const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
-const GOLD_BAR = 8;              // score >= 8 (out of 10) reaches the gold feed
+const GOLD_BAR = 8;              // score >= 8 (out of 10) = an A (genuinely worth acting on)
+// RANKED BRIEF (Paul's correction 2026-06-03): no longer a silent hard gate that hides
+// everything below 8. Paul has strong taste and filters himself — he wants the COLLECTION
+// with an honest RANKING. Top items get a letter grade from their score:
+//   A = genuinely worth acting on (the best — high leverage × fit × truth)   score >= 8
+//   B = solid / so-so, worth knowing                                          score 6-7
+//   C = fun or interesting but low value / skip it                            score <= 5
+// B and C appear in the brief WITH their honest grade (the low grade is signal, not noise:
+// Paul wants to see what was considered and rejected, and why). Fabrication penalty still
+// caps a fabricated answer at 5 → it cannot grade above C. If NOTHING is A or B this run,
+// the brief says so plainly ("No gold today — mined this seam out, move on"). Never
+// manufacture an A to fill space.
+const BRIEF_TOP_N = 7;           // how many ranked items the morning brief carries (A→B→C)
+const MORNING_BRIEF = path.join(HERE, 'morning-brief.md');
+function gradeForScore(score) {
+  if (score >= GOLD_BAR) return 'A';   // >= 8
+  if (score >= 6) return 'B';          // 6-7
+  return 'C';                          // <= 5 (fabrication-penalty answers cap at 5 → C ceiling)
+}
 const DEFAULT_N = 8;             // questions per run (default)
 const BLIND_SPOT_N = 2;          // blind-spot questions per run (the ones that may sting)
 const DAILY_CALL_CEILING = 60;   // hard daily DeepSeek call ceiling
@@ -443,7 +461,7 @@ function questionHash(q) {
 
 // ── 5/6. RUN ────────────────────────────────────────────────────────────────────
 async function run() {
-  log(`run start — N=${N}, gold bar>=${GOLD_BAR}, per-run call cap=${PER_RUN_CALL_CAP}${DRY ? ', DRY' : ''}`);
+  log(`run start — N=${N}, ranked brief (A>=${GOLD_BAR} · B 6-7 · C<=5), per-run call cap=${PER_RUN_CALL_CAP}${DRY ? ', DRY' : ''}`);
 
   // daily ceiling check (SI-31)
   const state = readJSON(RUN_STATE, { date: today(), calls: 0, runs: 0 });
@@ -503,31 +521,55 @@ async function run() {
     if (logStream) fs.appendFileSync(QUESTIONS_LOG, logStream + '\n');
   }
 
-  // 5. GOLD GATE + dedup
-  const newGold = [];
-  for (const s of scored) {
-    if (s.score < GOLD_BAR) continue;            // hard gate
-    const id = questionHash(s.q.q);
-    if (existingHashes.has(id)) { log(`  dedup: skipping already-pushed gold ${id}`); continue; }
-    existingHashes.add(id);
-    newGold.push({
-      id,
+  // 5. RANK (not gate) + grade + dedup
+  // Rank the whole scored set, assign honest letter grades, take the top BRIEF_TOP_N for
+  // the brief. A and B items are the gold worth knowing → appended to gold-feed.json (with
+  // a `grade` field). C items ride along in the brief (the honest low grade IS the signal —
+  // "considered and rejected, and why") but are NOT persisted to the feed.
+  const ranked = scored
+    .map(s => ({
+      id: questionHash(s.q.q),
       question: s.q.q,
       answer: s.answer,
       score: s.score,
+      grade: gradeForScore(s.score),
       why_gold: s.why_gold,
       domain: s.q.domain || 'general',
       route: s.q.route,
-      // tag the class so the board / Telegram can flag blind spots distinctly
       class: s.q.qclass === 'blind-spot' ? 'blind-spot' : 'normal',
-      ts: nowISO(),
-      acted_on: null,
-    });
+    }))
+    .sort((a, b) => b.score - a.score); // best first; A→B→C falls out of score order
+
+  const brief = ranked.slice(0, BRIEF_TOP_N);
+  const aCount = brief.filter(g => g.grade === 'A').length;
+  const bCount = brief.filter(g => g.grade === 'B').length;
+  const cCount = brief.filter(g => g.grade === 'C').length;
+  const blindCount = brief.filter(g => g.class === 'blind-spot').length;
+  // Honest-empty day: nothing genuinely A or B. This is correct and builds trust.
+  const noGold = (aCount + bCount) === 0;
+
+  // gold-feed gets the A/B items (worth acting on / worth knowing), deduped, with grade.
+  const newGold = [];
+  for (const g of brief) {
+    if (g.grade === 'C') continue;               // C is brief-only, not persisted
+    if (existingHashes.has(g.id)) { log(`  dedup: skipping already-fed gold ${g.id}`); continue; }
+    existingHashes.add(g.id);
+    newGold.push({ ...g, ts: nowISO(), acted_on: null });
   }
 
-  log(`scored ${scored.length}, gold>=${GOLD_BAR}: ${scored.filter(s => s.score >= GOLD_BAR).length}, new (after dedup): ${newGold.length}`);
+  log(`scored ${scored.length} → brief top ${brief.length}: ${aCount}A ${bCount}B ${cCount}C` +
+      `${blindCount ? ` (${blindCount}🔦)` : ''}; new to feed (A/B, after dedup): ${newGold.length}` +
+      `${noGold ? ' — NO GOLD (honest empty day)' : ''}`);
 
-  // 6. push
+  // 6. write the ranked morning brief (latest) + push A/B to the feed
+  const briefMd = buildMorningBrief(brief, { aCount, bCount, cCount, blindCount, noGold, askedCount: scored.length });
+  if (!DRY) {
+    fs.writeFileSync(MORNING_BRIEF, briefMd);
+    log(`wrote morning-brief.md (${briefMd.length} chars)`);
+  } else {
+    log('DRY run — not writing morning-brief.md');
+  }
+
   if (newGold.length && !DRY) {
     const updated = [...newGold, ...feed]; // newest first
     writeJSON(GOLD_FEED, updated);
@@ -550,19 +592,16 @@ async function run() {
     catch (e) { log(`updateTrajectory skipped: ${e.message}`); }
   }
 
-  // Telegram digest of ONLY the new gold + spend awareness (SI-31)
-  await sendDigest(newGold, scored, state);
+  // Telegram morning brief (ranked A/B/C, honest) + spend awareness (SI-31)
+  await sendDigest(briefMd, brief, state);
 
-  // also surface for DRY preview
+  // also surface for DRY preview — show the verbatim brief
   if (DRY) {
-    console.log('\n──── DRY PREVIEW: would-be gold ────');
-    newGold.forEach(g => {
-      const tag = g.class === 'blind-spot' ? ' 🔦BLIND-SPOT' : '';
-      console.log(`\n[${g.score}/10]${tag} (${g.domain}) ${g.question}\n→ ${g.answer}\nWHY GOLD: ${g.why_gold}`);
-    });
+    console.log('\n──── DRY PREVIEW: morning-brief.md ────\n');
+    console.log(briefMd);
   }
 
-  return { newGold, scored, calls: callsThisRun };
+  return { newGold, brief, briefMd, scored, calls: callsThisRun };
 }
 
 // ── SHARPEN THE AIM (updateTrajectory) ──────────────────────────────────────────
@@ -651,37 +690,146 @@ async function sendTelegram(message) {
   } catch (e) { log('Telegram send failed:', e.message); }
 }
 
-async function sendDigest(newGold, scored, state) {
-  // High-signal only: if no new gold, stay silent on the gold (event-driven), but
-  // still give a one-line spend pulse so a run is never invisible-but-costly.
+// ── THE MORNING BRIEF ───────────────────────────────────────────────────────────
+// The deliverable. A short, ranked, conversational brief in MY voice — the ranking IS
+// the value. Grouped A→B→C, each with the question, an honest one-line take, and (for A)
+// the concrete next move. Blind spots flagged (🔦). Honest empty days say so plainly.
+// Written to morning-brief.md (markdown, phone-scannable) and sent to Telegram.
+//
+// "A — the best, do this; B — so-so; C — fun but worthless." And an honest
+// "no gold today, we mined it, move on" when true.
+function gradeHeader(g) {
+  const blind = g.class === 'blind-spot' ? '🔦 ' : '';
+  return `${blind}**${g.grade} · ${g.score}/10 · ${g.domain}**`;
+}
+
+// The take is the honest one-liner. why_gold already carries the gate's read; for C we
+// frame it as the dismissal ("fun, but worthless because…").
+function takeLine(g) {
+  const w = (g.why_gold || '').trim();
+  if (g.grade === 'C') return `Skip it — ${w || 'low leverage; nothing here you can act on.'}`;
+  return w || (g.grade === 'A' ? 'Worth acting on.' : 'Worth knowing.');
+}
+
+function buildMorningBrief(brief, meta) {
+  const { aCount, bCount, cCount, blindCount, noGold, askedCount } = meta;
+  const date = today();
+  const L = [];
+
+  L.push(`# Standing Intelligence — morning brief`);
+  L.push(`*${date}*`);
+  L.push('');
+
+  // one-line state of the run
+  if (noGold) {
+    L.push(`**No gold today — I mined this seam out. Move on.** I asked ${askedCount} sharp questions and nothing came back genuinely A or B. That's an honest empty day, not a miss — better to tell you the seam's quiet than manufacture an A to fill space.`);
+  } else {
+    const bits = [];
+    if (aCount) bits.push(`${aCount} worth your time`);
+    if (bCount) bits.push(`${bCount} worth knowing`);
+    if (cCount) bits.push(`${cCount} I'd skip`);
+    if (blindCount) bits.push(`${blindCount} blind spot${blindCount > 1 ? 's' : ''} 🔦`);
+    L.push(`**${bits.join(' · ')}.** (${askedCount} questions asked; here's my honest ranking.)`);
+  }
+  L.push('');
+
+  const A = brief.filter(g => g.grade === 'A');
+  const B = brief.filter(g => g.grade === 'B');
+  const C = brief.filter(g => g.grade === 'C');
+
+  if (A.length) {
+    L.push(`## A — do this`);
+    A.forEach(g => {
+      L.push(`### ${gradeHeader(g)}`);
+      L.push(g.question);
+      L.push('');
+      L.push(g.answer.trim());
+      L.push('');
+      L.push(`> **My take:** ${takeLine(g)}`);
+      L.push('');
+    });
+  }
+
+  if (B.length) {
+    L.push(`## B — worth knowing`);
+    B.forEach(g => {
+      L.push(`${gradeHeader(g)} — ${g.question}`);
+      L.push(`> ${takeLine(g)}`);
+      L.push('');
+    });
+  }
+
+  if (C.length) {
+    L.push(`## C — fun, but I'd skip`);
+    C.forEach(g => {
+      L.push(`${gradeHeader(g)} — ${g.question}`);
+      L.push(`> ${takeLine(g)}`);
+      L.push('');
+    });
+  }
+
+  L.push(`---`);
+  L.push(`*Full cards + "acted on" toggle → localhost:8080/board#gold*`);
+  return L.join('\n') + '\n';
+}
+
+// Telegram delivery: a trimmed version of the same brief (phone-scannable, opinionated).
+async function sendDigest(briefMd, brief, state) {
   const spendLine = `_~${callsThisRun} DeepSeek calls this run · ${state.calls}/${DAILY_CALL_CEILING} today_`;
 
-  if (!newGold.length) {
-    // Per Paul: "same numbers repeated is tiring." No gold = quiet. One terse pulse only.
-    await sendTelegram(`🪙 *Elicitor* ran — no new gold cleared the bar (≥${GOLD_BAR}/10) from ${scored.length} questions.\n${spendLine}`);
+  const A = brief.filter(g => g.grade === 'A');
+  const B = brief.filter(g => g.grade === 'B');
+  const C = brief.filter(g => g.grade === 'C');
+  const noGold = (A.length + B.length) === 0;
+  const blindCount = brief.filter(g => g.class === 'blind-spot').length;
+
+  let msg = `🪙 *Standing Intelligence — morning brief* · ${today()}\n`;
+
+  if (noGold) {
+    msg += `\n*No gold today — mined this seam out, move on.* ${brief.length} questions, nothing genuinely A or B. Honest empty day.\n`;
+    if (C.length) {
+      msg += `\n_What I considered and rejected:_\n`;
+      C.slice(0, 3).forEach(g => {
+        const blind = g.class === 'blind-spot' ? '🔦 ' : '';
+        msg += `• ${blind}*C ·* ${g.question.slice(0, 110)}\n`;
+      });
+    }
+    msg += `\n${spendLine}`;
+    await sendTelegram(msg);
     return;
   }
 
-  // Separate normal gold from blind-spot gold — the blind spots get flagged
-  // distinctly ("🔦 Blind spot:") because by definition they may sting.
-  const normalGold = newGold.filter(g => g.class !== 'blind-spot');
-  const blindGold = newGold.filter(g => g.class === 'blind-spot');
+  const stateBits = [];
+  if (A.length) stateBits.push(`${A.length} worth your time`);
+  if (B.length) stateBits.push(`${B.length} worth knowing`);
+  if (blindCount) stateBits.push(`${blindCount} blind spot${blindCount > 1 ? 's' : ''} 🔦`);
+  msg += `_${stateBits.join(' · ')}._\n`;
 
-  let msg = `🪙 *What I'd have asked this week — and what came back*\n_(${newGold.length} cleared the gold bar of ${scored.length} asked)_\n`;
-  normalGold.forEach((g, i) => {
-    msg += `\n*${i + 1}. [${g.score}/10 · ${g.domain}]* ${g.question}\n`;
-    msg += `${g.answer.slice(0, 600)}\n`;
-    msg += `_Why gold: ${g.why_gold}_\n`;
-  });
-  if (blindGold.length) {
-    msg += `\n— — —\n*🔦 Blind spots* _(the questions you're not asking — these may sting; that's the point)_\n`;
-    blindGold.forEach((g, i) => {
-      msg += `\n*🔦 Blind spot ${i + 1}. [${g.score}/10 · ${g.domain}]* ${g.question}\n`;
-      msg += `${g.answer.slice(0, 600)}\n`;
-      msg += `_Why gold: ${g.why_gold}_\n`;
+  if (A.length) {
+    msg += `\n*A — do this*\n`;
+    A.forEach(g => {
+      const blind = g.class === 'blind-spot' ? '🔦 ' : '';
+      msg += `\n${blind}*[A · ${g.score}/10 · ${g.domain}]* ${g.question}\n`;
+      msg += `${g.answer.slice(0, 560)}\n`;
+      msg += `_My take: ${takeLine(g)}_\n`;
     });
   }
-  msg += `\nFull cards + "acted on" toggle → localhost:8080/board#gold\n${spendLine}`;
+  if (B.length) {
+    msg += `\n*B — worth knowing*\n`;
+    B.forEach(g => {
+      const blind = g.class === 'blind-spot' ? '🔦 ' : '';
+      msg += `\n${blind}*[B · ${g.score}/10 · ${g.domain}]* ${g.question}\n_${takeLine(g)}_\n`;
+    });
+  }
+  if (C.length) {
+    msg += `\n*C — fun, but I'd skip*\n`;
+    C.forEach(g => {
+      const blind = g.class === 'blind-spot' ? '🔦 ' : '';
+      msg += `${blind}_C · ${g.question.slice(0, 110)} — ${takeLine(g).slice(0, 120)}_\n`;
+    });
+  }
+
+  msg += `\nFull cards → localhost:8080/board#gold\n${spendLine}`;
   await sendTelegram(msg);
 }
 
@@ -692,4 +840,4 @@ if (require.main === module) {
   run().catch(e => { console.error('[elicitor] fatal:', e.message); process.exit(1); });
 }
 
-module.exports = { run, gatherContext, loadTrajectory, updateTrajectory, generateBlindSpotQuestions };
+module.exports = { run, gatherContext, loadTrajectory, updateTrajectory, generateBlindSpotQuestions, buildMorningBrief, gradeForScore };
