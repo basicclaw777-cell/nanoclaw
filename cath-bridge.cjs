@@ -138,6 +138,37 @@ app.get('/api/spend', (req, res) => {
 app.get('/api/in-progress', (req, res) => {
   boardRegen(res, 'in-progress-index.js', 'in-progress-index.json', 'in-progress');
 });
+// The Elicitor's gold feed — standing-question engine output (gold-gated).
+// Static read (the elicitor writes the feed on its own weekly schedule, not on
+// page load), shaped to match the board's tab loaders.
+const GOLD_FEED = path.join(NANOCLAW, 'elicitor', 'gold-feed.json');
+app.get('/api/gold', (req, res) => {
+  let items = [];
+  try { if (require('fs').existsSync(GOLD_FEED)) items = JSON.parse(require('fs').readFileSync(GOLD_FEED, 'utf8')); }
+  catch (e) { return res.status(503).json({ error: 'gold feed unreadable', detail: e.message }); }
+  if (!Array.isArray(items)) items = [];
+  const counts = {
+    total: items.length,
+    acted_on: items.filter(g => g.acted_on).length,
+    open: items.filter(g => !g.acted_on).length,
+  };
+  res.json({ generated_at: new Date().toISOString(), counts, items });
+});
+// Toggle the "acted on" flag on a gold item (board interaction).
+app.post('/api/gold/acted', express.json(), (req, res) => {
+  const id = req.body && req.body.id;
+  const acted = req.body && req.body.acted;
+  if (!id) return res.status(400).json({ error: 'id required' });
+  try {
+    const fsx = require('fs');
+    let items = fsx.existsSync(GOLD_FEED) ? JSON.parse(fsx.readFileSync(GOLD_FEED, 'utf8')) : [];
+    const it = items.find(g => g.id === id);
+    if (!it) return res.status(404).json({ error: 'not found' });
+    it.acted_on = acted ? new Date().toISOString() : null;
+    fsx.writeFileSync(GOLD_FEED, JSON.stringify(items, null, 2) + '\n');
+    res.json({ ok: true, id, acted_on: it.acted_on });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
 
 // Static file server for Reed deliverables (images / videos / caption .md).
 // Whitelisted to ~/reed-dump/ready/ — path is validated to stay inside it so

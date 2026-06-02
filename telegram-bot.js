@@ -1147,6 +1147,33 @@ bot.onText(/^\/capture(?:@\w+)?\s*$/i, async (msg) => {
   } catch (e) { safeSend(chatId, `⚠️ capture failed: ${e.message}`); }
 });
 
+// /gold — show the latest gold from the Elicitor (standing-question engine).
+bot.onText(/^\/gold(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    let feed = []; try { feed = JSON.parse(fs.readFileSync(path.join(process.env.HOME, 'nanoclaw', 'elicitor', 'gold-feed.json'), 'utf8')); } catch {}
+    const items = (Array.isArray(feed) ? feed : feed.items || []).slice(-8).reverse();
+    if (!items.length) return safeSend(chatId, '🪙 No gold yet — run /elicit to ask the standing questions.');
+    const body = items.map(g => `🪙 *${g.score}/10* ${g.question}\n${(g.answer || '').slice(0, 280)}`).join('\n\n');
+    await safeSend(chatId, `🪙 *Gold* (what I'd have asked + what came back)\n\n${body}\n\n_Full board: /board → Gold tab_`, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ gold failed: ${e.message}`); }
+});
+
+// /elicit [N] — run the Standing-Question Engine now: generate sharp questions,
+// elicit vault-grounded answers, push only the gold (gated). Default 8.
+bot.onText(/^\/elicit(?:@\w+)?\s*(\d+)?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const cap = Math.min(parseInt(match[1], 10) || 8, 12);
+  await safeSend(chatId, `🛎️ Elicitor running — generating ${cap} standing questions, eliciting, gold-gating…`);
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'elicitor', 'elicitor.js'), '--cap', String(cap)],
+      { timeout: 300000 }, (err, stdout) => {
+        safeSend(chatId, err && !stdout ? `⚠️ elicit: ${err.message}` : `🛎️ ${(stdout || 'done').slice(0, 800)}\n\n_See gold: /gold_`);
+      });
+  } catch (e) { await safeSend(chatId, `⚠️ elicit failed: ${e.message}`); }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;

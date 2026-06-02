@@ -177,8 +177,9 @@ const TABS = [
   { id:'inprogress',  label:'In Progress', icon:'🛠', c:'var(--orange)' },
   { id:'delivered',   label:'Delivered',   icon:'📦', c:'var(--green)'  },
   { id:'spend',       label:'Spend',       icon:'💳', c:'var(--purple)' },
+  { id:'gold',        label:'Gold',        icon:'🪙', c:'#b8860b'        },
 ];
-const STATE = { services:null, inprogress:null, delivered:null, spend:null };
+const STATE = { services:null, inprogress:null, delivered:null, spend:null, gold:null };
 let ACTIVE = location.hash.replace('#','') || 'delivered';
 if (!TABS.find(t=>t.id===ACTIVE)) ACTIVE = 'delivered';
 
@@ -199,6 +200,7 @@ function renderTabs(){
     inprogress: STATE.inprogress ? (STATE.inprogress.counts.to_make + STATE.inprogress.counts.running) : '',
     delivered: STATE.delivered ? STATE.delivered.counts.total : '',
     spend: STATE.spend ? STATE.spend.totals.lines : '',
+    gold: STATE.gold ? STATE.gold.counts.total : '',
   };
   document.getElementById('tabs').innerHTML = TABS.map(t=>{
     const active = t.id===ACTIVE ? 'active':'';
@@ -218,8 +220,9 @@ async function route(){
     if (ACTIVE==='inprogress' && !STATE.inprogress) STATE.inprogress = await getJSON('/api/in-progress');
     if (ACTIVE==='delivered'  && !STATE.delivered)  STATE.delivered  = await getJSON('/api/delivered');
     if (ACTIVE==='spend'      && !STATE.spend)      STATE.spend      = await getJSON('/api/spend');
+    if (ACTIVE==='gold'       && !STATE.gold)       STATE.gold       = await getJSON('/api/gold');
     renderTabs();
-    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend }[ACTIVE])();
+    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend, gold:renderGold }[ACTIVE])();
   } catch(e){
     panel.innerHTML = `<div class="empty">Could not load <b>${esc(ACTIVE)}</b> — ${esc(e.message)}.<br>Is cath-bridge running on :8080?</div>`;
   }
@@ -487,6 +490,64 @@ function renderSpend(){
   if (!d.days.length) html += emptyMini('No transactions found.');
 
   document.getElementById('panel').innerHTML = html;
+}
+
+// ── GOLD (The Elicitor) ───────────────────────────────────────────────────────
+const GOLD_DOMAIN = {
+  gym:{l:'Gym / Gym Eyes',c:'#8B2020'}, cathedral:{l:'Cathedral research',c:'#534AB7'},
+  ai:{l:'AI architecture',c:'#2f6fed'}, wealth:{l:'Wealth / property',c:'#0e9f6e'},
+  content:{l:'Content',c:'#e8742a'}, general:{l:'General',c:'#888'},
+};
+function renderGold(){
+  const d = STATE.gold;
+  const items = d.items || [];
+  const open = items.filter(g=>!g.acted_on);
+  const acted = items.filter(g=>g.acted_on);
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:#b8860b"><div class="label">Gold delivered</div>
+      <div class="value">${d.counts.total}</div><div class="note">questions Paul never asked — answered as gold</div></div>
+    <div class="stat" style="--stat-c:var(--amber)"><div class="label">Open</div>
+      <div class="value">${d.counts.open}</div><div class="note">not yet acted on</div></div>
+    <div class="stat" style="--stat-c:var(--green)"><div class="label">Acted on</div>
+      <div class="value">${d.counts.acted_on}</div><div class="note">turned into a move</div></div>
+    <div class="stat" style="--stat-c:var(--purple)"><div class="label">Gold bar</div>
+      <div class="value">≥8<small>/10</small></div><div class="note">value × novelty × actionability</div></div>
+  </div>`;
+
+  if (!items.length){
+    html += `<div class="empty">No gold yet. The Elicitor generates Paul's sharp questions, answers them vault-grounded, scores them, and only ≥8/10 lands here.<br><br>Run a cycle: <code>node ~/nanoclaw/elicitor/elicitor.js --cap 8</code></div>`;
+    document.getElementById('panel').innerHTML = html;
+    return;
+  }
+
+  html += section('🪙 Open gold','#b8860b','#f8f0d9', open.length?`<div class="grid">${open.map(goldCard).join('')}</div>`:emptyMini('All gold acted on. Nice.'));
+  if (acted.length) html += section('✅ Acted on','#0e9f6e','#e7f7f0',`<div class="grid">${acted.map(goldCard).join('')}</div>`);
+  document.getElementById('panel').innerHTML = html;
+  document.querySelectorAll('.gold-toggle').forEach(b=>b.onclick=()=>toggleGold(b.dataset.id, b.dataset.acted!=='1'));
+}
+function goldCard(g){
+  const dm = GOLD_DOMAIN[g.domain]||GOLD_DOMAIN.general;
+  const actedNote = g.acted_on ? `acted ${ago(g.acted_on)}` : '';
+  return `<div class="card" style="--st-c:${dm.c}">
+    <div class="card-top"><div><div class="card-name">${esc(g.question)}</div>
+      <div class="card-plan">${dm.l} · ${ago(g.ts)}${g.route&&g.route!=='vault+deepseek'?' · via '+esc(g.route):''}</div></div>
+      <span class="badge" style="--st-t:#f8f0d9;color:#b8860b">${g.score}/10</span></div>
+    <div class="detail" style="white-space:pre-wrap;line-height:1.5">${esc(g.answer)}</div>
+    ${g.why_gold?`<div class="detail" style="color:var(--ink-faint);border-left:3px solid ${dm.c};padding-left:8px"><b>Why gold:</b> ${esc(g.why_gold)}</div>`:''}
+    <div class="chips" style="align-items:center">
+      <button class="chip gold-toggle" data-id="${esc(g.id)}" data-acted="${g.acted_on?'1':'0'}"
+        style="cursor:pointer;border:1px solid ${g.acted_on?'var(--green)':'#b8860b'};color:${g.acted_on?'var(--green)':'#b8860b'}">
+        ${g.acted_on?'✓ Acted on':'Mark acted on'}</button>
+      ${actedNote?`<span class="v faint" style="font-size:12px">${actedNote}</span>`:''}
+    </div>
+  </div>`;
+}
+async function toggleGold(id, acted){
+  try{
+    await fetch('/api/gold/acted',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,acted})});
+    STATE.gold=null; await route();
+  }catch(e){ alert('Could not update: '+e.message); }
 }
 
 // ── boot ─────────────────────────────────────────────────────────────────────
