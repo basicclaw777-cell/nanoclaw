@@ -95,6 +95,15 @@ app.get('/workshop-results', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'workshop-results.html'));
 });
 
+// ── Subscriptions & Services Registry ───────────────────────────────────────
+app.get('/services', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'subscriptions-dashboard.html'));
+});
+
+app.get('/api/subscriptions', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'subscriptions.json'));
+});
+
 // ── Auth middleware ────────────────────────────────────────────────────────────
 
 function requireApiKey(req, res, next) {

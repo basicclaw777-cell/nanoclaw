@@ -199,7 +199,8 @@ const DISTRICTS = [
   { id:'maps',     name:'Knowledge Graphs & Maps',      note:'Graph/cluster visualizations and convergence engines over the vault.',     c:'#7c6bd6', tint:'#eeebfb' },
   { id:'research', name:'Research & Corpora',           note:'Forensic research, ancient corpora, forgotten techniques, the sky.',       c:'#b8860b', tint:'#f8f0d9' },
   { id:'property', name:'Property & Finance',           note:'Non-trading property and asset intelligence.',                             c:'#0d9488', tint:'#e2f5f2' },
-  { id:'personal', name:'Council, Reflection & Personal', note:'Curated corpora, identity instruments, the architect-tracking layer.', c:'#d4506b', tint:'#fbe9ee' }
+  { id:'personal', name:'Council, Reflection & Personal', note:'Curated corpora, identity instruments, the architect-tracking layer.', c:'#d4506b', tint:'#fbe9ee' },
+  { id:'ops',      name:'Ops & Infrastructure',          note:'The plumbing: what Paul pays for, what each service covers, balances and renewals.', c:'#475067', tint:'#eef0f4' }
 ];
 
 // Each room: name, orc, purpose, route, district. ext:true = open in new tab.
@@ -264,7 +265,10 @@ const ROOMS = [
   { d:'personal', icon:'🏛', name:'What Built Me',        orc:'The Archivist',   desc:'Paul\'s actual influences (consumed, not recommended). 23 evidence-based, mined from vault.', route:'/what-built-me' },
   { d:'personal', icon:'⏳', name:'Time Capsule',         orc:'Future Paul',     desc:'Sealed letters between present Paul and future Paul. Date / milestone / feeling triggers.', route:'/time-capsule' },
   { d:'personal', icon:'💫', name:'Architect Pulse',      orc:'Marcus',          desc:'Daily pulse across 7–11 life channels. Stagnation detection, nudges, emergence score.', route:'/pulse' },
-  { d:'personal', icon:'🎙', name:'Voice Chamber',        orc:'Cathy',           desc:'Talk to Cathy live. Real Cathedral brain (DeepSeek + vault + transmission). KITT mode.', route:'http://localhost:12400', ext:true }
+  { d:'personal', icon:'🎙', name:'Voice Chamber',        orc:'Cathy',           desc:'Talk to Cathy live. Real Cathedral brain (DeepSeek + vault + transmission). KITT mode.', route:'http://localhost:12400', ext:true },
+
+  // ── Ops & Infrastructure ──
+  { d:'ops', icon:'🧾', name:'Subscriptions & Services', orc:'The Registry', desc:'Status board for everything Paul pays for: Higgsfield, fal.ai, DeepSeek, Gemini and more. Plan, cost, cycle, renewal, credit balance, what each covers, and a needs-attention strip.', route:'/services' }
 ];
 
 // Retired rooms — dead links / no UI. Kept here, clearly marked.

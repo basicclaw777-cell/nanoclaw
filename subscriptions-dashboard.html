@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8fa">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Subscriptions &amp; Services — The Cathedral</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --border: #e4e7ec;
+  --border-hover: #d0d5dd;
+  --ink: #1a1d24;
+  --ink-soft: #475067;
+  --ink-faint: #8a93a6;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+  --shadow-hover: 0 6px 20px rgba(16,24,40,0.10);
+
+  --green: #0e9f6e;  --green-t: #e7f7f0;
+  --amber: #d9870b;  --amber-t: #fdf3df;
+  --red:   #e0484d;  --red-t:   #fdecec;
+  --grey:  #8a93a6;  --grey-t:  #eef0f4;
+  --blue:  #2f6fed;  --blue-t:  #eaf1fe;
+}
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh; -webkit-font-smoothing: antialiased; line-height: 1.45;
+}
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+
+/* HEADER */
+.masthead { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; margin-bottom: 20px; }
+.masthead h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.6px; }
+.masthead .sub { font-size: 13.5px; color: var(--ink-faint); font-weight: 500; margin-top:3px; }
+.back { margin-left:auto; font-size:12.5px; font-weight:600; color:var(--ink-soft);
+  background:var(--surface); border:1.5px solid var(--border); border-radius:999px; padding:7px 14px; transition:all .15s; }
+.back:hover { border-color:var(--border-hover); transform:translateY(-1px); }
+
+/* SUMMARY STRIP */
+.summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+.stat { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
+  padding:16px 18px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.stat::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--stat-c,var(--blue)); }
+.stat .label { font-size:11.5px; font-weight:600; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.5px; }
+.stat .value { font-size:26px; font-weight:800; letter-spacing:-0.5px; margin-top:4px; }
+.stat .value small { font-size:14px; font-weight:600; color:var(--ink-faint); letter-spacing:0; }
+.stat .note { font-size:11.5px; color:var(--ink-faint); margin-top:3px; font-weight:500; }
+
+/* NEEDS ATTENTION */
+.attention { background:var(--surface); border:1.5px solid var(--amber); border-radius:var(--radius);
+  padding:15px 18px; box-shadow:var(--shadow); margin-bottom:26px; position:relative; overflow:hidden; }
+.attention::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--amber); }
+.attention h2 { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--amber);
+  display:flex; align-items:center; gap:7px; margin-bottom:11px; }
+.attn-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:9px; }
+.attn-item { display:flex; align-items:center; gap:10px; background:var(--surface-2);
+  border-radius:var(--radius-sm); padding:9px 12px; font-size:13px; }
+.attn-item .dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.attn-item .an { font-weight:700; }
+.attn-item .ar { color:var(--ink-soft); font-size:12px; }
+.attention.clear { border-color:var(--green); }
+.attention.clear::before { background:var(--green); }
+.attention.clear h2 { color:var(--green); }
+
+/* CATEGORY SECTION */
+.cat { margin-bottom: 30px; scroll-margin-top: 20px; }
+.cat-head { display:flex; align-items:center; gap:11px; margin-bottom:13px; padding-bottom:9px;
+  border-bottom: 2px solid var(--cat-c,var(--border)); }
+.cat-bar { width:5px; height:22px; border-radius:3px; background:var(--cat-c); }
+.cat-title { font-size:16px; font-weight:700; letter-spacing:-0.2px; }
+.cat-note { font-size:12px; color:var(--ink-faint); font-weight:500; }
+.cat-count { margin-left:auto; font-size:12px; font-weight:700; padding:3px 11px; border-radius:999px;
+  background:var(--cat-t); color:var(--cat-c); }
+
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:13px; }
+
+/* SERVICE CARD */
+.card { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius);
+  padding:16px 17px 15px; box-shadow:var(--shadow); transition:all .18s; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; }
+.card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--st-c); opacity:.9; }
+.card:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); }
+.card-top { display:flex; align-items:flex-start; gap:10px; margin-bottom:11px; padding-left:4px; }
+.card-name { font-size:15.5px; font-weight:700; letter-spacing:-0.2px; }
+.card-plan { font-size:12px; color:var(--ink-faint); font-weight:500; margin-top:1px; }
+.badge { margin-left:auto; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px;
+  padding:4px 9px; border-radius:999px; white-space:nowrap; background:var(--st-t); color:var(--st-c); }
+
+.rows { padding-left:4px; display:flex; flex-direction:column; gap:7px; margin-bottom:11px; }
+.row { display:flex; align-items:baseline; gap:8px; font-size:13px; }
+.row .k { font-size:11px; font-weight:600; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.4px;
+  width:74px; flex-shrink:0; }
+.row .v { color:var(--ink); font-weight:600; }
+.row .v.faint { color:var(--ink-faint); font-weight:500; }
+.verify-tag { font-size:10px; font-weight:700; color:var(--amber); background:var(--amber-t);
+  border-radius:5px; padding:1px 6px; margin-left:6px; cursor:help; white-space:nowrap; }
+
+.covers { padding-left:4px; margin-bottom:11px; }
+.covers .clabel { font-size:11px; font-weight:600; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+.chips { display:flex; flex-wrap:wrap; gap:5px; }
+.chip { font-size:11.5px; font-weight:500; color:var(--ink-soft); background:var(--surface-2);
+  border:1px solid var(--border); border-radius:6px; padding:3px 8px; }
+
+.notes { padding-left:4px; font-size:12px; color:var(--ink-soft); line-height:1.5;
+  border-top:1px dashed var(--border); padding-top:10px; margin-top:auto; }
+.notes .nlabel { font-weight:700; color:var(--ink-faint); }
+.card-foot { display:flex; align-items:center; gap:8px; margin-top:11px; padding-left:4px; }
+.keytag { font-size:10.5px; font-weight:600; font-family:'SF Mono',ui-monospace,monospace; padding:3px 8px; border-radius:6px; }
+.keytag.has { color:var(--green); background:var(--green-t); }
+.keytag.no  { color:var(--grey); background:var(--grey-t); }
+.card-link { margin-left:auto; font-size:11.5px; font-weight:600; color:var(--ink-faint); }
+.card:hover .card-link { color:var(--st-c); }
+
+.foot { margin-top:30px; padding-top:16px; border-top:1px solid var(--border); font-size:12px; color:var(--ink-faint); text-align:center; }
+.loading { text-align:center; padding:60px 20px; color:var(--ink-faint); font-size:14px; }
+
+@media (max-width:640px) {
+  .wrap { padding:20px 14px 70px; }
+  .grid { grid-template-columns:1fr; }
+  .masthead h1 { font-size:22px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <h1>Subscriptions &amp; Services</h1>
+      <div class="sub" id="sub">Loading registry…</div>
+    </div>
+    <a class="back" href="/">← Lobby</a>
+  </div>
+
+  <div id="content"><div class="loading">Loading services…</div></div>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+const STATUS = {
+  active:       { c:'var(--green)', t:'var(--green-t)', label:'Active' },
+  free:         { c:'var(--grey)',  t:'var(--grey-t)',  label:'Free' },
+  capped:       { c:'var(--amber)', t:'var(--amber-t)', label:'Capped' },
+  depleted:     { c:'var(--amber)', t:'var(--amber-t)', label:'Depleted' },
+  'zero-balance':{ c:'var(--red)',  t:'var(--red-t)',   label:'Zero balance' }
+};
+const ATTN = new Set(['capped','depleted','zero-balance']);
+
+const CAT_META = {
+  llm:        { name:'LLM — Agent Brains',      c:'#2f6fed', t:'#eaf1fe', note:'The language models that run the agents.' },
+  image:      { name:'Image Generation',        c:'#9333ea', t:'#f4e9fe', note:'Still image pipelines.' },
+  video:      { name:'Video & Animation',       c:'#e8742a', t:'#fdeede', note:'Video and motion generation.' },
+  research:   { name:'Research Data',           c:'#b8860b', t:'#f8f0d9', note:'Forensic research data APIs.' },
+  infra:      { name:'Compute & Infrastructure',c:'#0e9f6e', t:'#e7f7f0', note:'3D, build and backup infrastructure.' },
+  networking: { name:'Networking',              c:'#0d9488', t:'#e2f5f2', note:'Connectivity.' },
+  interface:  { name:'Interface',               c:'#d4506b', t:'#fbe9ee', note:'Messaging and interfaces.' }
+};
+const CAT_ORDER = ['llm','image','video','research','infra','networking','interface'];
+
+function daysUntil(d){ if(!d) return null; const t=new Date(d+'T00:00:00'); if(isNaN(t)) return null;
+  return Math.ceil((t - new Date(new Date().toDateString()))/86400000); }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function verifyHas(svc,field){ return (svc.verify||[]).some(v=>v.toLowerCase().startsWith(field.toLowerCase().split(' ')[0])); }
+function vtag(){ return ' <span class="verify-tag" title="Paul must confirm this value">⚠ verify</span>'; }
+
+function render(data){
+  document.getElementById('sub').textContent =
+    `${data.services.length} services · updated ${data.updated}`;
+
+  // SUMMARY
+  const fixed = data.services.filter(s=>s.cycle==='monthly' && typeof s.cost_usd==='number');
+  const monthly = data.monthly_total_usd;
+  const payg = data.services.filter(s=>['payg','credits'].includes(s.cycle)).length;
+  const attnList = data.services.filter(s=>ATTN.has(s.status));
+  const renewSoon = data.services.filter(s=>{ const n=daysUntil(s.renewal_date); return n!==null && n<=14; });
+
+  let html = `
+  <div class="summary">
+    <div class="stat" style="--stat-c:var(--blue)">
+      <div class="label">Fixed monthly spend</div>
+      <div class="value">$${monthly} <small>/mo</small></div>
+      <div class="note">${fixed.length} fixed subscription${fixed.length===1?'':'s'} · ⚠ verify prices</div>
+    </div>
+    <div class="stat" style="--stat-c:var(--green)">
+      <div class="label">Total services</div>
+      <div class="value">${data.services.length}</div>
+      <div class="note">${data.services.filter(s=>s.has_key).length} with API key in .env</div>
+    </div>
+    <div class="stat" style="--stat-c:var(--amber)">
+      <div class="label">Pay-as-you-go</div>
+      <div class="value">${payg}</div>
+      <div class="note">Credit / usage based — no fixed cost</div>
+    </div>
+    <div class="stat" style="--stat-c:${attnList.length?'var(--red)':'var(--green)'}">
+      <div class="label">Needs attention</div>
+      <div class="value">${attnList.length}</div>
+      <div class="note">${renewSoon.length} renewal${renewSoon.length===1?'':'s'} within 14 days</div>
+    </div>
+  </div>`;
+
+  // NEEDS ATTENTION STRIP
+  const attnAll = [...attnList, ...renewSoon.filter(s=>!ATTN.has(s.status))];
+  if (attnAll.length){
+    html += `<div class="attention"><h2>⚠ Needs attention</h2><div class="attn-grid">`;
+    attnList.forEach(s=>{ const st=STATUS[s.status];
+      html += `<div class="attn-item"><span class="dot" style="background:${st.c}"></span>
+        <span class="an">${esc(s.name)}</span><span class="ar">— ${st.label.toLowerCase()}</span></div>`; });
+    renewSoon.forEach(s=>{ const n=daysUntil(s.renewal_date);
+      html += `<div class="attn-item"><span class="dot" style="background:var(--amber)"></span>
+        <span class="an">${esc(s.name)}</span><span class="ar">— renews in ${n}d</span></div>`; });
+    html += `</div></div>`;
+  } else {
+    html += `<div class="attention clear"><h2>✓ All clear</h2>
+      <div class="attn-grid"><div class="attn-item"><span class="dot" style="background:var(--green)"></span>
+      <span class="ar">No depleted, capped, or zero-balance services. No renewals within 14 days.</span></div></div></div>`;
+  }
+
+  // CATEGORIES
+  const byCat = {};
+  data.services.forEach(s=>{ (byCat[s.category] ||= []).push(s); });
+  CAT_ORDER.forEach(cat=>{
+    const svcs = byCat[cat]; if(!svcs||!svcs.length) return;
+    const m = CAT_META[cat] || {name:cat,c:'#888',t:'#eee',note:''};
+    html += `<section class="cat" style="--cat-c:${m.c};--cat-t:${m.t}">
+      <div class="cat-head"><div class="cat-bar"></div>
+        <div class="cat-title">${m.name}</div><div class="cat-note">${m.note}</div>
+        <div class="cat-count">${svcs.length}</div></div>
+      <div class="grid">${svcs.map(card).join('')}</div></section>`;
+  });
+
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('foot').textContent =
+    `${data.services.length} services across ${CAT_ORDER.filter(c=>byCat[c]).length} categories · ${data.monthly_total_note}`;
+}
+
+function card(s){
+  const st = STATUS[s.status] || STATUS.active;
+  const cost = (typeof s.cost_usd==='number')
+    ? (s.cost_usd===0 ? 'Free' : `$${s.cost_usd}/mo`)
+    : (s.cycle==='payg' ? 'Pay-as-you-go' : s.cycle==='credits' ? 'Credits' : '—');
+  const costV = verifyHas(s,'cost') ? vtag() : '';
+  const cycle = ({monthly:'Monthly',payg:'Pay-as-you-go',free:'Free',credits:'Credits'})[s.cycle]||s.cycle;
+  const renewN = daysUntil(s.renewal_date);
+  const renew = s.renewal_date ? `${s.renewal_date}${renewN!==null?` (${renewN}d)`:''}` : '—';
+  const renewV = (!s.renewal_date && verifyHas(s,'renewal')) ? vtag() : '';
+  const bal = s.balance ? esc(s.balance) : '—';
+  const covers = (s.covers||[]).map(c=>`<span class="chip">${esc(c)}</span>`).join('');
+
+  return `<div class="card" style="--st-c:${st.c};--st-t:${st.t}">
+    <div class="card-top">
+      <div><div class="card-name">${esc(s.name)}</div><div class="card-plan">${esc(s.plan||'')}</div></div>
+      <span class="badge">${st.label}</span>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="k">Cost</span><span class="v">${cost}${costV}</span></div>
+      <div class="row"><span class="k">Cycle</span><span class="v faint">${cycle}</span></div>
+      <div class="row"><span class="k">Renewal</span><span class="v ${s.renewal_date?'':'faint'}">${renew}${renewV}</span></div>
+      <div class="row"><span class="k">Balance</span><span class="v ${s.balance?'':'faint'}">${bal}</span></div>
+    </div>
+    <div class="covers"><div class="clabel">Covers</div><div class="chips">${covers||'<span class="chip">—</span>'}</div></div>
+    ${s.notes?`<div class="notes"><span class="nlabel">Note:</span> ${esc(s.notes)}</div>`:''}
+    <div class="card-foot">
+      <span class="keytag ${s.has_key?'has':'no'}">${s.key_env? (s.has_key?'✓ '+s.key_env:'✗ '+s.key_env+' (missing)') : (s.has_key?'✓ key':'no API key')}</span>
+      ${s.url?`<a class="card-link" href="${esc(s.url)}" target="_blank" rel="noopener">Open ↗</a>`:''}
+    </div>
+  </div>`;
+}
+
+fetch('/api/subscriptions')
+  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(render)
+  .catch(err=>{
+    document.getElementById('content').innerHTML =
+      `<div class="loading">Could not load /api/subscriptions (${esc(err.message)}).<br>Is cath-bridge running on :8080?</div>`;
+  });
+</script>
+</body>
+</html>

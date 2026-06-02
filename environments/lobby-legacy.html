@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Environments">
+<meta name="theme-color" content="#09090b">
+<link rel="apple-touch-icon" href="/env/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Environments</title>
+<style>
+/* Font loaded via link tag instead */
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #09090b; --surface: #111113; --surface-2: #18181b; --surface-3: #1e1e22;
+  --border: #27272a; --border-hover: #3f3f46;
+  --text: #fafafa; --text-muted: #a1a1aa; --text-dim: #71717a;
+  --accent: #e63e2f; --green: #22c55e; --blue: #3b82f6; --purple: #a855f7;
+  --amber: #f59e0b; --cyan: #06b6d4; --rose: #f43f5e;
+  --radius: 16px; --radius-sm: 10px;
+}
+body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; min-height:100vh; overflow-x:hidden; }
+a { color:inherit; text-decoration:none; }
+
+/* ─── TRANSITIONS ─── */
+#lobby, #room-view { transition: opacity 0.35s ease, transform 0.35s ease; }
+#room-view { display:none; opacity:0; transform:translateY(16px); }
+#room-view.active { display:block; opacity:1; transform:translateY(0); }
+#lobby.hidden { display:none; opacity:0; }
+
+/* ─── LOBBY ─── */
+.lobby-wrap { max-width:960px; margin:0 auto; padding:32px 20px 60px; }
+.lobby-header { margin-bottom:32px; }
+.lobby-title { font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+.lobby-sub { font-size:12px; color:var(--text-dim); }
+.lobby-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+
+/* ─── ROOM CARD (lobby) ─── */
+.env-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px; cursor:pointer; transition:all 0.25s; position:relative; overflow:hidden; }
+.env-card:hover { border-color:var(--border-hover); transform:translateY(-2px); box-shadow:0 8px 32px rgba(0,0,0,0.3); }
+.env-card-glow { position:absolute; top:-40px; right:-40px; width:120px; height:120px; border-radius:50%; opacity:0.06; pointer-events:none; transition:opacity 0.3s; }
+.env-card:hover .env-card-glow { opacity:0.12; }
+.env-card-top { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.env-icon { width:42px; height:42px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; font-size:20px; }
+.env-name { font-size:18px; font-weight:600; letter-spacing:-0.3px; }
+.env-status { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; margin-left:auto; }
+.env-desc { font-size:14px; color:var(--text-muted); line-height:1.5; margin-bottom:14px; }
+.env-cards-list { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
+.env-card-tag { font-size:10px; padding:2px 8px; border-radius:4px; font-weight:500; }
+.env-senses { display:flex; gap:6px; }
+.env-sense { font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(255,255,255,0.04); color:var(--text-dim); }
+.env-footer { display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid var(--border); }
+.env-stat { font-size:11px; color:var(--text-dim); }
+.env-stat strong { color:var(--text-muted); }
+.env-enter { font-size:11px; color:var(--text-dim); font-weight:500; transition:color 0.2s; }
+.env-card:hover .env-enter { color:var(--text); }
+
+/* ─── CROSS-ROOM SIGNALS (lobby) ─── */
+.signals-bar { margin-top:24px; padding:16px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); }
+.signals-title { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:10px; }
+.signal-item { font-size:12px; color:var(--text-muted); padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03); display:flex; gap:8px; align-items:center; }
+.signal-item:last-child { border:none; }
+.signal-badge { font-size:10px; padding:1px 6px; border-radius:3px; font-weight:600; white-space:nowrap; }
+
+/* ─── ROOM VIEW ─── */
+.room-wrap { max-width:1200px; margin:0 auto; padding:0 20px 60px; }
+.room-topbar { display:flex; align-items:center; gap:14px; padding:16px 0; position:sticky; top:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--border); margin-bottom:20px; }
+.room-back { background:var(--surface); border:1px solid var(--border); color:var(--text-muted); padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:inherit; transition:all 0.2s; }
+.room-back:hover { border-color:var(--border-hover); color:var(--text); }
+.room-title { font-size:18px; font-weight:600; }
+.room-status-dot { width:8px; height:8px; border-radius:50%; margin-left:auto; }
+
+/* Room grid */
+.room-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:768px) { .room-grid { grid-template-columns:1fr; } }
+
+.room-panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+.room-panel.span-2 { grid-column:span 2; }
+@media (max-width:768px) { .room-panel.span-2 { grid-column:span 1; } }
+.panel-head { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.panel-label { font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); }
+.panel-action { font-size:10px; color:var(--text-dim); cursor:pointer; padding:2px 8px; border-radius:4px; border:1px solid var(--border); background:none; font-family:inherit; }
+.panel-action:hover { color:var(--text); border-color:var(--border-hover); }
+.panel-body { padding:16px; }
+
+/* Widgets inside room */
+.widget-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+.widget-box { flex:1; min-width:100px; background:var(--surface-2); border-radius:8px; padding:12px; }
+.widget-label { font-size:11px; color:var(--text-muted); margin-bottom:4px; letter-spacing:0.5px; font-weight:500; }
+.widget-value { font-size:24px; font-weight:700; letter-spacing:-0.5px; }
+.widget-change { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.widget-change.up { color:var(--green); }
+.widget-change.down { color:var(--accent); }
+
+/* Activity feed */
+.activity-item { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); align-items:flex-start; }
+.activity-item:last-child { border:none; }
+.activity-dot { width:6px; height:6px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+.activity-text { font-size:13px; color:var(--text); line-height:1.5; }
+.activity-time { font-size:11px; color:var(--text-muted); margin-top:2px; }
+
+/* Dashboard embed */
+.dash-frame { width:100%; border:none; border-radius:0; background:var(--bg); height:60vh; max-height:600px; }
+
+/* Floating home button (mobile) */
+.fab-home { position:fixed; bottom:24px; right:24px; width:48px; height:48px; border-radius:50%; background:var(--accent); border:none; color:white; font-size:20px; cursor:pointer; z-index:9999; box-shadow:0 4px 16px rgba(230,62,47,0.4); display:flex; align-items:center; justify-content:center; }
+
+/* Chat widget */
+.chat-panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; display:flex; flex-direction:column; max-height:400px; }
+.chat-messages { flex:1; overflow-y:auto; padding:12px; min-height:120px; max-height:300px; }
+.chat-msg { margin-bottom:10px; }
+.chat-msg-user { text-align:right; }
+.chat-msg-user .chat-bubble { background:var(--surface-3); border:1px solid var(--border-hover); display:inline-block; padding:8px 12px; border-radius:12px 12px 4px 12px; font-size:13px; max-width:85%; text-align:left; }
+.chat-msg-agent .chat-bubble { background:var(--surface-2); border:1px solid var(--border); display:inline-block; padding:8px 12px; border-radius:12px 12px 12px 4px; font-size:13px; max-width:85%; line-height:1.5; color:var(--text-muted); }
+.chat-msg-agent .chat-name { font-size:10px; font-weight:600; margin-bottom:3px; letter-spacing:0.5px; }
+.chat-input-row { display:flex; gap:8px; padding:10px 12px; border-top:1px solid var(--border); background:var(--surface-2); }
+.chat-input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:13px; color:var(--text); font-family:inherit; outline:none; resize:none; }
+.chat-input:focus { border-color:var(--border-hover); }
+.chat-send { background:none; border:1px solid var(--border); color:var(--text-muted); border-radius:8px; padding:8px 14px; font-size:12px; cursor:pointer; font-family:inherit; font-weight:600; transition:all 0.2s; }
+.chat-send:hover { border-color:var(--border-hover); color:var(--text); }
+.chat-send:disabled { opacity:0.3; cursor:default; }
+.chat-typing { font-size:11px; color:var(--text-dim); padding:4px 12px; font-style:italic; }
+
+/* Orchestrator */
+.orc-bar { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--surface-2); border-radius:8px; margin-bottom:12px; }
+.orc-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+.orc-name { font-size:13px; font-weight:600; }
+.orc-state { font-size:10px; color:var(--text-dim); }
+.orc-desc { font-size:13px; color:var(--text-muted); line-height:1.5; }
+
+/* Deck cards in room */
+.deck-cards { display:flex; gap:8px; flex-wrap:wrap; }
+.deck-chip { font-size:11px; padding:4px 10px; border-radius:6px; background:var(--surface-2); border:1px solid var(--border); cursor:pointer; transition:all 0.2s; }
+.deck-chip:hover { border-color:var(--border-hover); }
+.deck-chip.active { border-color:var(--amber); color:var(--amber); }
+
+/* Sense indicators */
+.sense-row { display:flex; gap:8px; flex-wrap:wrap; }
+.sense-pill { font-size:11px; padding:4px 10px; border-radius:6px; display:flex; align-items:center; gap:4px; }
+.sense-active { background:rgba(34,197,94,0.1); color:var(--green); }
+.sense-inactive { background:rgba(255,255,255,0.03); color:var(--text-dim); }
+
+/* Loading */
+.loading { color:var(--text-dim); font-size:12px; padding:20px; text-align:center; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ LOBBY ═══════ -->
+<div id="lobby">
+  <div class="lobby-wrap">
+    <div class="lobby-header">
+      <div class="lobby-title">Environments</div>
+      <div class="lobby-sub" id="lobby-meta">6 rooms</div>
+    </div>
+    <div class="lobby-grid" id="lobby-grid"><div style="color:#a1a1aa;font-size:14px;padding:20px">Loading rooms...</div></div>
+    <div class="signals-bar" id="signals-bar" style="display:none">
+      <div class="signals-title">Cross-Room Signals</div>
+      <div id="signals-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ ROOM VIEW ═══════ -->
+<div id="room-view">
+  <div class="room-wrap">
+    <div class="room-topbar">
+      <button class="room-back" onclick="closeRoom()">Lobby</button>
+      <div class="room-title" id="rv-title"></div>
+      <div class="room-status-dot" id="rv-dot" style="background:var(--green)"></div>
+    </div>
+
+    <!-- Orchestrator bar -->
+    <div class="orc-bar" id="rv-orc"></div>
+
+    <!-- Senses -->
+    <div style="margin-bottom:14px">
+      <div class="sense-row" id="rv-senses"></div>
+    </div>
+
+    <!-- Widgets -->
+    <div class="widget-row" id="rv-widgets"></div>
+
+    <!-- Main grid -->
+    <div class="room-grid" id="rv-grid"></div>
+  </div>
+  </div>
+</div>
+<button class="fab-home" id="fab-home" onclick="closeRoom()" title="Back to Lobby" style="display:none">&larr;</button>
+
+<script>
+const BASE = '';  // same origin
+
+// ═══════════════════ ROOM DEFINITIONS ═══════════════════
+const ENV = [
+  {
+    id: 'money',
+    name: 'Money',
+    icon: '💰',
+    color: '#f59e0b',
+    colorDim: 'rgba(245,158,11,0.12)',
+    desc: 'Trading, finance, patterns. 10 strategies running, 4-hour cycles.',
+    orc: { name: 'Trader', state: 'Scanning', desc: 'Runs 10 parallel trading strategies on 4-hour cycles. Cross-references unconventional signals (lunar, Gann, Fibonacci, suppression).' },
+    senses: [
+      { icon: '📊', name: 'Data', detail: 'Markets, accounts, feeds', active: true },
+      { icon: '🕒', name: 'Time', detail: 'Trading windows & cycles', active: true },
+      { icon: '📍', name: 'Location', detail: 'Spending context', active: false }
+    ],
+    deckCards: [
+      { id: 7, name: 'Trading Desk' },
+      { id: 4, name: 'Roundtable' },
+      { id: 15, name: 'Steward' },
+      { id: 12, name: 'Cymatics' }
+    ],
+    dashboards: ['/trader/hub'],
+    dataEndpoints: {
+      signals: '/trader/signals',
+      portfolio: '/trader/portfolio',
+      positions: '/trader/positions',
+      performance: '/trader/performance',
+      debate: '/trader/latest-debate',
+      scoreboard: '/trader/picks/scoreboard'
+    }
+  },
+  {
+    id: 'body',
+    name: 'Body',
+    icon: '💪',
+    color: '#22c55e',
+    colorDim: 'rgba(34,197,94,0.12)',
+    desc: 'Training, movement, recovery. Eyes and ears on the gym floor.',
+    orc: { name: 'Coach', state: 'Watching', desc: 'Monitors gym floor via cameras. Tracks member form, session intensity, recovery. Learns each member\'s baseline.' },
+    senses: [
+      { icon: '👁', name: 'Vision', detail: 'Camera form analysis', active: false },
+      { icon: '🌡', name: 'Sensors', detail: 'HR, reps, fatigue', active: false },
+      { icon: '🕒', name: 'Time', detail: 'Session & rest', active: true },
+      { icon: '👂', name: 'Hearing', detail: 'Coaching cues', active: false },
+      { icon: '📊', name: 'Data', detail: 'Member progress', active: true }
+    ],
+    deckCards: [
+      { id: 8, name: 'Boxing Lab' },
+      { id: 16, name: 'Boxing Engine' }
+    ],
+    dashboards: ['/techniques'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'mind',
+    name: 'Mind',
+    icon: '🧠',
+    color: '#a855f7',
+    colorDim: 'rgba(168,85,247,0.12)',
+    desc: 'Learning, research, curiosity, reflection. Vault-connected knowledge engine.',
+    orc: { name: 'Sage', state: 'Listening', desc: 'Manages research pipelines, vault connections, knowledge graph. Routes curiosity into structured investigation.' },
+    senses: [
+      { icon: '⌨', name: 'Input', detail: 'Reading & research', active: true },
+      { icon: '🕒', name: 'Time', detail: 'Focus blocks', active: true },
+      { icon: '📊', name: 'Data', detail: 'Vault & feeds', active: true }
+    ],
+    deckCards: [
+      { id: 2, name: 'Vault' },
+      { id: 6, name: 'Predictive Intelligence' },
+      { id: 14, name: 'Muse' }
+    ],
+    dashboards: ['/cosmology', '/predictive/map'],
+    dataEndpoints: {
+      graphStats: '/predictive/stats',
+      seeds: '/predictive/seeds'
+    }
+  },
+  {
+    id: 'create',
+    name: 'Create',
+    icon: '🎨',
+    color: '#3b82f6',
+    colorDim: 'rgba(59,130,246,0.12)',
+    desc: 'Visual art, music, aesthetic direction. Reed\'s studio and beyond.',
+    orc: { name: 'Reed', state: 'Creating', desc: 'Visual Director with 10 proven styles. Daily Lab, shot assignments, Taste Map alignment. Studio at /reed-studio.' },
+    senses: [
+      { icon: '👁', name: 'Vision', detail: 'Design review', active: true },
+      { icon: '👂', name: 'Hearing', detail: 'Music analysis', active: true },
+      { icon: '⌨', name: 'Input', detail: 'Creative tools', active: true }
+    ],
+    deckCards: [
+      { id: 10, name: 'Reed' },
+      { id: 9, name: 'Creative Lab' },
+      { id: 17, name: 'Cathedral Slides' }
+    ],
+    dashboards: ['/reed-studio'],
+    dataEndpoints: {
+      catalogue: '/reed-lab/catalogue',
+      shots: '/reed-lab/shots',
+      feed: '/api/reed-studio/feed'
+    }
+  },
+  {
+    id: 'work',
+    name: 'Work',
+    icon: '💼',
+    color: '#06b6d4',
+    colorDim: 'rgba(6,182,212,0.12)',
+    desc: 'Basic Reflex operations, clients, content, communication. Punchpass data pipeline.',
+    orc: { name: 'Conductor', state: 'Coordinating', desc: 'Manages BR operations. Members, content, revenue, retention. Punchpass auto-scrape daily. Coordinates gym floor data and business metrics.' },
+    senses: [
+      { icon: '⌨', name: 'Input', detail: 'Comms & tasks', active: true },
+      { icon: '📊', name: 'Data', detail: 'Members & Punchpass', active: true },
+      { icon: '📍', name: 'Location', detail: 'On-site / remote', active: false }
+    ],
+    deckCards: [
+      { id: 1, name: 'Cathedral' },
+      { id: 13, name: 'Morning Briefing' },
+      { id: 11, name: 'Cartographer' },
+      { id: 3, name: 'Experiment Lab' },
+      { id: 19, name: 'Punchpass' }
+    ],
+    dashboards: ['/scraper/hub', '/punchpass'],
+    dataEndpoints: {
+      snapshot: '/villa/snapshot',
+      projects: '/villa/projects'
+    }
+  },
+  {
+    id: 'gym',
+    name: 'Gym Floor',
+    icon: '🥊',
+    color: '#f0a030',
+    colorDim: 'rgba(240,160,48,0.12)',
+    desc: 'Members, attendance, profiles, curriculum. Punchpass data pipeline.',
+    orc: { name: 'Corner', state: 'Active', desc: 'Member archetypes, coaching notes, curriculum blocks, attendance tracking. Auto-scrapes Punchpass daily 06:00.' },
+    senses: [
+      { icon: '📊', name: 'Data', detail: 'Punchpass scraper', active: true },
+      { icon: '👥', name: 'Members', detail: '72 active', active: true },
+      { icon: '🎯', name: 'Profiles', detail: '10 archetypes', active: true }
+    ],
+    deckCards: [
+      { id: 19, name: 'Punchpass' }
+    ],
+    dashboards: ['/punchpass'],
+    dataEndpoints: {
+      snapshot: '/api/punchpass/summary',
+      profiles: '/api/punchpass/profiles'
+    }
+  },
+  {
+    id: 'forge',
+    name: 'Forge',
+    icon: '\u2692',
+    color: '#e63e2f',
+    colorDim: 'rgba(230,62,47,0.12)',
+    desc: 'Claude Code terminal. Build, debug, deploy. The Cathedral\'s builder.',
+    orc: { name: 'Forge', state: 'Ready', desc: 'Claude Code running as Forge — the Cathedral\'s builder identity. Full terminal access to the Mac Mini.' },
+    senses: [
+      { icon: '\u2328', name: 'Terminal', detail: 'Full shell access', active: true },
+      { icon: '\u{1F4CA}', name: 'Code', detail: 'Read, write, execute', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['FORGE_TTYD'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'social',
+    name: 'Social',
+    icon: '🤝',
+    color: '#f43f5e',
+    colorDim: 'rgba(244,63,94,0.12)',
+    desc: 'Relationships, community, presence. Who matters and why.',
+    orc: { name: 'Connector', state: 'Tracking', desc: 'Maintains relationship awareness. Communication cadence, shared interests. Surfaces opportunities for genuine connection.' },
+    senses: [
+      { icon: '⌨', name: 'Input', detail: 'Messages & calls', active: false },
+      { icon: '📍', name: 'Location', detail: 'Proximity', active: false },
+      { icon: '🕒', name: 'Time', detail: 'Relationship cadence', active: false }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {}
+  },
+  {
+    id: 'engine',
+    name: 'Engine Room',
+    icon: '⚙',
+    color: '#71717a',
+    colorDim: 'rgba(113,113,122,0.12)',
+    desc: '18 Court Members. Toggle, monitor, rate. Single pane of glass.',
+    orc: { name: 'Control', state: 'Monitoring', desc: 'Cathedral observability. Every agent as a toggleable card. Bloat detection, cognitive bridge, lymphatic system. The backstage.' },
+    senses: [
+      { icon: '📊', name: 'Metrics', detail: 'PM2, bloat, health', active: true },
+      { icon: '🧠', name: 'Cognition', detail: 'Patterns, kernel, beliefs', active: true },
+      { icon: '💬', name: 'Chat', detail: 'Talk to agents', active: true }
+    ],
+    deckCards: [
+      { id: 1, name: 'Cathedral' },
+      { id: 11, name: 'Cartographer' }
+    ],
+    dashboards: ['/control'],
+    dataEndpoints: {
+      health: '/control/health',
+      status: '/status'
+    }
+  },
+  {
+    id: 'observatory',
+    name: 'Observatory',
+    icon: '◎',
+    color: '#4fc3f7',
+    colorDim: 'rgba(79,195,247,0.12)',
+    desc: '5 astronomy pipelines. Sky state. Pattern echoes. The Looking Glass.',
+    orc: { name: 'Whisperer', state: 'Reading', desc: 'Court Member #18. Reads the Looking Glass daily. 5 pipelines (VSOP87, Meeus, Kepler, Ptolemy). Pattern reader, not astrologer.' },
+    senses: [
+      { icon: '🔭', name: 'Sky', detail: '7 bodies, 5 pipelines', active: true },
+      { icon: '📅', name: 'Events', detail: 'Eclipses, conjunctions', active: true },
+      { icon: '🧠', name: 'Memory', detail: '153 celestial vault nodes', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/looking-glass'],
+    dataEndpoints: {
+      signal: '/looking-glass/signal',
+      sky: '/looking-glass/sky',
+      scan: '/looking-glass/scan'
+    }
+  },
+  {
+    id: 'ops',
+    name: 'Operations',
+    icon: '\u{1F4CA}',
+    color: '#C4943A',
+    colorDim: 'rgba(196,148,58,0.12)',
+    desc: 'KPI dashboard, P&L, members, workstreams. Command centre for Basic Reflex.',
+    orc: { name: 'Ops Agent', state: 'Monitoring', desc: 'Finance, HR, MPF compliance, scheduling. Monthly P&L, commission calc, insurance tracking. PM2 crons on autopilot.' },
+    senses: [
+      { icon: '\u{1F4B0}', name: 'Finance', detail: 'Revenue, costs, P&L', active: true },
+      { icon: '\u{1F465}', name: 'Members', detail: '73 active, churn tracking', active: true },
+      { icon: '\u{1F4CB}', name: 'Compliance', detail: 'MPF, insurance, HR', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/dashboard'],
+    dataEndpoints: {
+      refresh: '/dashboard/refresh'
+    }
+  },
+  {
+    id: 'comms',
+    name: 'Client Comms',
+    icon: '\u{1F4AC}',
+    color: '#7B3040',
+    colorDim: 'rgba(123,48,64,0.12)',
+    desc: '566 lapsed members. Pass expiry alerts. Birthday tracker. Nothing auto-sends.',
+    orc: { name: 'Comms Engine', state: 'Queuing', desc: 'Revenue recovery outbox. 11 WhatsApp templates. Scans expiry, lapsed, birthdays. Paul reviews every message before sending.' },
+    senses: [
+      { icon: '\u{1F4E8}', name: 'Outbox', detail: 'Pending messages', active: true },
+      { icon: '\u{1F504}', name: 'Recovery', detail: 'Lapsed reactivation', active: true },
+      { icon: '\u{1F382}', name: 'Birthdays', detail: 'Upcoming celebrations', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/comms'],
+    dataEndpoints: {
+      queue: '/comms/queue'
+    }
+  },
+  {
+    id: 'growth',
+    name: 'Growth',
+    icon: '\u{1F680}',
+    color: '#22c55e',
+    colorDim: 'rgba(34,197,94,0.12)',
+    desc: 'Content calendar, corporate outreach, newsletter, SEO. Maya voices it. Reed visualises it.',
+    orc: { name: 'Growth Agent', state: 'Planning', desc: 'Content strategy engine. Weekly calendar from Kit + curriculum. Corporate pipeline. Monthly Lab Report newsletter. SEO keyword tracking.' },
+    senses: [
+      { icon: '\u{1F4C5}', name: 'Calendar', detail: 'Weekly content plan', active: true },
+      { icon: '\u{1F3E2}', name: 'Corporate', detail: 'Outreach pipeline', active: true },
+      { icon: '\u{1F4F0}', name: 'Newsletter', detail: 'Monthly Lab Report', active: true },
+      { icon: '\u{1F50D}', name: 'SEO', detail: 'Keyword tracking', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/growth'],
+    dataEndpoints: {
+      calendar: '/growth/calendar',
+      corporate: '/growth/corporate',
+      newsletter: '/growth/newsletter',
+      seo: '/growth/seo'
+    }
+  },
+  {
+    id: 'merch',
+    name: 'Merch',
+    icon: '\u{1F455}',
+    color: '#ec4899',
+    colorDim: 'rgba(236,72,153,0.12)',
+    desc: 'Merch runs, supplier DB, sample tracking. 100% cotton. Paul approves everything.',
+    orc: { name: 'Merch Agent', state: 'Ready', desc: 'Tracks merch runs from idea to delivery. Supplier database, sample logging, order tracking. Paul\'s rules baked in.' },
+    senses: [
+      { icon: '\u{1F4E6}', name: 'Runs', detail: 'Active merch runs', active: true },
+      { icon: '\u{1F3ED}', name: 'Suppliers', detail: 'Supplier database', active: true },
+      { icon: '\u{1F4A1}', name: 'Ideas', detail: 'Merch backlog', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/merch'],
+    dataEndpoints: {
+      state: '/merch/state',
+      suppliers: '/merch/suppliers'
+    }
+  },
+  {
+    id: 'course',
+    name: 'Course',
+    icon: '\u{1F393}',
+    color: '#C4943A',
+    colorDim: 'rgba(196,148,58,0.12)',
+    desc: '$99-149/year. 10-module Cuban boxing course. 34 primary sources. Zero competitors.',
+    orc: { name: 'Course Engine', state: 'Building', desc: 'Maps 10 blocks to 10 modules. Authority engine backs every claim with Sagarra + Balmaseda. Filming briefs, pricing model, revenue projector.' },
+    senses: [
+      { icon: '\u{1F4DA}', name: 'Curriculum', detail: '10 modules from 10 blocks', active: true },
+      { icon: '\u{1F4F7}', name: 'Filming', detail: 'Shot lists per module', active: true },
+      { icon: '\u{1F4D6}', name: 'Authority', detail: 'Source citations mapped', active: true },
+      { icon: '\u{1F4B0}', name: 'Revenue', detail: 'Pricing model + projections', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/course'],
+    dataEndpoints: {
+      outline: '/course/outline',
+      authority: '/course/authority',
+      pricing: '/course/pricing'
+    }
+  },
+  {
+    id: 'screening',
+    name: 'Screening Room',
+    icon: '\u{1F3AC}',
+    color: '#7B3040',
+    colorDim: 'rgba(123,48,64,0.12)',
+    desc: 'Films, docs, songs mapped to blocks. Surface vs real meaning. One-tap share to members.',
+    orc: { name: 'BR Cinema', state: 'Active', desc: 'Curated media corpus — every entry mapped to curriculum blocks and combat principles. Tonight\'s Pick randomizer.' },
+    senses: [
+      { icon: '\u{1F3AC}', name: 'Films', detail: '26 films mapped to blocks', active: true },
+      { icon: '\u{1F4F9}', name: 'Docs', detail: '11 documentaries', active: true },
+      { icon: '\u{1F3B5}', name: 'Songs', detail: '20 songs, surface vs real', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/screening'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'advisors-library',
+    name: 'Advisors\' Library',
+    icon: '\u{1F4D6}',
+    color: '#C4943A',
+    colorDim: 'rgba(196,148,58,0.12)',
+    desc: 'What your council thinks you should read, watch, and hear. 13 advisors, personal picks for Paul.',
+    orc: { name: 'The Council', state: 'Active', desc: 'Personal growth recommendations from every Cathedral advisor — books, films, docs, podcasts, lectures. Filter by advisor, medium, theme.' },
+    senses: [
+      { icon: '\u{1F4DA}', name: 'Books', detail: 'Philosophy, strategy, craft', active: true },
+      { icon: '\u{1F3AC}', name: 'Films', detail: 'Visual wisdom, mentorship stories', active: true },
+      { icon: '\u{1F399}', name: 'Podcasts', detail: 'Long-form depth', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/advisors-library'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'convergence-map',
+    name: 'Convergence Map',
+    icon: '\u{1F578}',
+    color: '#6db88f',
+    colorDim: 'rgba(109,184,143,0.12)',
+    desc: 'Where the three corpuses overlap. Force-directed graph of shared themes. The belief architecture made visible.',
+    orc: { name: 'The Cartographer', state: 'Active', desc: 'Network graph of all works across Screening Room, Truth Corpus, and Advisors\' Library. Theme clusters, convergence nodes, connection strength.' },
+    senses: [
+      { icon: '\u{1F310}', name: 'Graph', detail: 'Force-directed network visualization', active: true },
+      { icon: '\u{1F4CA}', name: 'Clusters', detail: '12 theme clusters', active: true },
+      { icon: '\u{1F50D}', name: 'Drill-down', detail: 'Click any node for connections', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/convergence-map'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'opponents-film-room',
+    name: 'Opponent\'s Film Room',
+    icon: '\u{1F3AF}',
+    color: '#c45a5a',
+    colorDim: 'rgba(196,90,90,0.12)',
+    desc: 'Study the IDEAS that compete for your students\' attention. Not gyms — philosophies.',
+    orc: { name: 'Sun Tzu', state: 'Active', desc: '8 competitor philosophies analysed: CrossFit, MMA, AI apps, boutique, yoga, running, home gym, influencers. Each with psychological hook, promise, and where boxing wins.' },
+    senses: [
+      { icon: '\u{2694}', name: 'Competitors', detail: '8 idea-level competitors mapped', active: true },
+      { icon: '\u{1F4A1}', name: 'Hooks', detail: 'Psychological hooks exposed', active: true },
+      { icon: '\u{1F94A}', name: 'Advantages', detail: 'Boxing\'s unsaid wins', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/opponents-film-room'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'open-questions',
+    name: 'Open Questions',
+    icon: '\u{2753}',
+    color: '#7ba3c4',
+    colorDim: 'rgba(123,163,196,0.12)',
+    desc: 'The Cathedral\'s unresolved threads. 17 questions across philosophy, business, infrastructure, creative.',
+    orc: { name: 'The Librarian', state: 'Active', desc: 'Every open question mined from the vault. Tagged by status, category, which advisors have weighed in, which should speak next.' },
+    senses: [
+      { icon: '\u{1F914}', name: 'Questions', detail: '17 open threads', active: true },
+      { icon: '\u{1F6A7}', name: 'Blockers', detail: 'Project-blocking questions flagged', active: true },
+      { icon: '\u{1F9ED}', name: 'Identity', detail: 'Choice-point questions tagged', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/open-questions'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'what-built-me',
+    name: 'What Built Me',
+    icon: '\u{1F3DB}',
+    color: '#d4a043',
+    colorDim: 'rgba(212,160,67,0.12)',
+    desc: 'Paul\'s actual influences. Not recommended — consumed. Evidence-based, mined from the vault.',
+    orc: { name: 'The Archivist', state: 'Active', desc: '23 proven influences across martial arts, philosophy, frontier science, teaching methods, and lived experience. Each with vault evidence.' },
+    senses: [
+      { icon: '\u{1F94B}', name: 'Martial Journey', detail: 'Judo \u2192 Muay Thai \u2192 Cuban', active: true },
+      { icon: '\u{1F4DA}', name: 'Philosophy', detail: 'Stoicism, Taoism, strategy', active: true },
+      { icon: '\u{1F52C}', name: 'Frontier', detail: 'Tesla, Schauberger, cymatics', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/what-built-me'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'time-capsule',
+    name: 'Time Capsule',
+    icon: '\u{23F3}',
+    color: '#d4a043',
+    colorDim: 'rgba(212,160,67,0.12)',
+    desc: 'Letters between present Paul and future Paul. Sealed until the moment is right.',
+    orc: { name: 'Future Paul', state: 'Waiting', desc: 'Locked messages with conditions: dates, milestones, feelings. Open when the time comes. Write new capsules anytime.' },
+    senses: [
+      { icon: '\u{1F512}', name: 'Sealed', detail: 'Capsules waiting for their moment', active: true },
+      { icon: '\u{270F}', name: 'Write', detail: 'Seal new messages to the future', active: true },
+      { icon: '\u{1F4C5}', name: 'Conditions', detail: 'Date, milestone, or feeling triggers', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/time-capsule'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'architect-pulse',
+    name: 'Architect Pulse',
+    icon: '\u{1F4AB}',
+    color: '#10b981',
+    colorDim: 'rgba(16,185,129,0.12)',
+    desc: 'Track the 7 channels. Remove blocks. Upgrade the architect — everything downstream upgrades.',
+    orc: { name: 'Marcus', state: 'Active', desc: 'Daily pulse across 7 life channels. Stagnation detection, nudge system, emergence score. Systems replace willpower.' },
+    senses: [
+      { icon: '\u{1F4B0}', name: 'Money', detail: 'Trading system recalibration', active: true },
+      { icon: '\u{2764}', name: 'Love', detail: 'Connection without armour', active: true },
+      { icon: '\u{1F3E0}', name: 'Home', detail: 'Environment reflects self-respect', active: true },
+      { icon: '\u{1F94A}', name: 'Gym', detail: 'Revenue activation', active: true },
+      { icon: '\u{1F4E1}', name: 'Publishing', detail: 'Be visible, ship work', active: true },
+      { icon: '\u{1F91D}', name: 'Asking', detail: 'Receive without guilt', active: true },
+      { icon: '\u{1F680}', name: 'Finishing', detail: 'Ship imperfect, shrink backlog', active: true },
+      { icon: '\u{1F4AA}', name: 'Health', detail: 'Train your own body, not just others', active: true },
+      { icon: '\u{1F4DA}', name: 'Learning', detail: 'Study without immediate use', active: true },
+      { icon: '\u{1F319}', name: 'Rest', detail: 'Recover without guilt', active: true },
+      { icon: '\u{1F3A8}', name: 'Creativity', detail: 'Make things with no purpose', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/pulse'],
+    dataEndpoints: {
+      pulse: '/api/architect-pulse'
+    }
+  },
+  {
+    id: 'neural-map',
+    name: 'Neural Map',
+    icon: '\u{1F9E0}',
+    color: '#f59e0b',
+    colorDim: 'rgba(245,158,11,0.12)',
+    desc: 'Live satellite view of Cathedral intelligence. Every system as a node, every interaction a visible pulse. Temperature map of activity and emergence.',
+    orc: { name: 'Observer', state: 'Active', desc: 'Real-time neural visualization. Frequency tracking, color temperature, interference patterns. The brain watching itself think.' },
+    senses: [
+      { icon: '\u{26A1}', name: 'Pulses', detail: 'Live synapse firing between nodes', active: true },
+      { icon: '\u{1F321}', name: 'Temperature', detail: 'Activity heat map across clusters', active: true },
+      { icon: '\u{1F30A}', name: 'Interference', detail: 'Where pulses collide and amplify', active: true },
+      { icon: '\u{1F4CA}', name: 'Frequency', detail: 'Pings per day per node', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/neural-map', '/organism'],
+    dataEndpoints: {
+      map: '/api/neural-map'
+    }
+  },
+  {
+    id: 'organism',
+    name: 'The Organism',
+    icon: '\u{1FAC0}',
+    color: '#c084fc',
+    colorDim: 'rgba(192,132,252,0.12)',
+    desc: 'Full neural map of the Cathedral as a living organism. Every process, every data flow, every cross-domain connection. Where compound intelligence lives — and where the gaps are.',
+    orc: { name: 'The Synapse', state: 'Active', desc: '4-hour pulse via DeepSeek V4-Pro. Cross-domain synthesis. The compound voice.' },
+    senses: [
+      { icon: '\u{1F9EC}', name: 'Topology', detail: '12 domains, 60+ nodes, traced data flows', active: true },
+      { icon: '\u{1F50C}', name: 'Cross-Domain', detail: 'Where domains connect and compound', active: true },
+      { icon: '\u{26A0}', name: 'Missing Links', detail: 'Connections the organism needs but lacks', active: true },
+      { icon: '\u{1F4AC}', name: 'Synapse Pulses', detail: '4hr compound intelligence heartbeat', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/organism'],
+    dataEndpoints: {}
+  },
+  {
+    id: 'newsfeed',
+    name: 'Newsfeed',
+    icon: '\u{1F4F0}',
+    color: '#06b6d4',
+    colorDim: 'rgba(6,182,212,0.12)',
+    desc: 'Live feed of everything happening in the Cathedral. Research, reflections, heartbeats, workshops, escalations. The system narrating itself.',
+    orc: { name: 'Chronicle', state: 'Active', desc: 'Aggregates cathedral feed, heartbeat beats, workshop results, emergence reflections. Filterable, searchable, real-time.' },
+    senses: [
+      { icon: '\u{1F4DD}', name: 'Research', detail: 'Agent curiosity outputs', active: true },
+      { icon: '\u{2728}', name: 'Emergence', detail: 'Self-reflection on growth', active: true },
+      { icon: '\u{1F493}', name: 'Heartbeat', detail: 'Scheduled event impacts', active: true },
+      { icon: '\u{1F91D}', name: 'Social', detail: 'Workshop and DM escalations', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/newsfeed'],
+    dataEndpoints: {
+      feed: '/api/newsfeed',
+      heartbeat: '/api/newsfeed/heartbeat'
+    }
+  },
+  {
+    id: 'lab',
+    name: 'Engineering Lab',
+    icon: '\u{1F52C}',
+    color: '#f97316',
+    colorDim: 'rgba(249,115,22,0.12)',
+    desc: 'CV detection, hardware R&D, pipeline engineering. Push tools beyond what ships.',
+    orc: { name: 'Scope', state: 'Prioritizing', desc: 'Engineering Orchestrator. Manages Gym Eyes, CNN training, multi-cam fusion, ingestion pipeline. Mediates accuracy vs innovation tension.' },
+    senses: [
+      { icon: '\u{1F441}', name: 'Detection', detail: 'Punch/pose CV accuracy', active: true },
+      { icon: '\u{1F4F7}', name: 'Hardware', detail: 'Cameras, edge compute', active: false },
+      { icon: '\u{1F9EA}', name: 'Research', detail: 'New models, papers, benchmarks', active: true },
+      { icon: '\u{1F4CA}', name: 'Metrics', detail: 'Pipeline health, drift, failures', active: true }
+    ],
+    deckCards: [
+      { id: 8, name: 'Boxing Lab' },
+      { id: 16, name: 'Boxing Engine' }
+    ],
+    dashboards: ['/gym-eyes', '/gym-eyes/analytics', '/gym-eyes/drill-player', '/cuba-combos', '/gym-eyes/showcase', '/gym-eyes/clusters'],
+    dataEndpoints: {
+      metrics: '/api/engineering-studio/metrics',
+      briefing: '/api/engineering-studio/briefing',
+      feed: '/api/engineering-studio/feed',
+      status: '/api/engineering-studio/status'
+    }
+  },
+  {
+    id: 'content',
+    name: 'Content Studio',
+    icon: '\u{1F3AC}',
+    color: '#a855f7',
+    colorDim: 'rgba(168,85,247,0.12)',
+    desc: 'Cross-platform content. Reed visuals, Maya social, LING publishing. Every channel alive.',
+    orc: { name: 'Compass', state: 'Balancing', desc: 'Content Orchestrator. Manages channel rhythm, cross-platform balance, pipeline cadence. No channel goes cold.' },
+    senses: [
+      { icon: '\u{1F3A8}', name: 'Visuals', detail: 'Reed generation pipeline', active: true },
+      { icon: '\u{1F4F1}', name: 'Social', detail: 'Maya stories & reels', active: true },
+      { icon: '\u{270D}\u{FE0F}', name: 'Publishing', detail: 'LING articles & threads', active: true },
+      { icon: '\u{1F4CA}', name: 'Echo', detail: 'Engagement patterns', active: true }
+    ],
+    deckCards: [
+      { id: 3, name: 'Brand World' },
+      { id: 9, name: 'Reed Studio' }
+    ],
+    dashboards: ['/reed-studio'],
+    dataEndpoints: {
+      metrics: '/api/content-studio/metrics',
+      feed: '/api/content-studio/feed',
+      status: '/api/content-studio/status'
+    }
+  },
+  {
+    id: 'voice',
+    name: 'Voice Chamber',
+    icon: '\u{1F399}',
+    color: '#06b6d4',
+    colorDim: 'rgba(6,182,212,0.12)',
+    desc: 'Talk to Cathy live. Real Cathedral brain — transmission, vault search, full context. KITT mode.',
+    orc: { name: 'Cathy', state: 'Listening', desc: 'Voice interface to the real Cathy brain. DeepSeek + full transmission + vault keyword search. Same intelligence as Telegram, with a voice.' },
+    senses: [
+      { icon: '\u{1F3A4}', name: 'Voice', detail: 'Whisper-cpp transcription', active: true },
+      { icon: '\u{1F5E3}', name: 'Speech', detail: 'Edge TTS voice output', active: true },
+      { icon: '\u{1F9E0}', name: 'Brain', detail: 'DeepSeek + vault + transmission', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:12400'
+  },
+  {
+    id: 'mind-map',
+    name: 'Mind Map',
+    icon: '\u{1F578}',
+    color: '#7c6bc4',
+    colorDim: 'rgba(124,107,196,0.12)',
+    desc: 'Interactive knowledge graph. Nodes, edges, communities — the Cathedral\'s neural topology rendered visible.',
+    orc: { name: 'Knowledge Graph', state: 'Mapped', desc: 'K-means clustering, bridge detection, community structure across all vault domains.' },
+    senses: [
+      { icon: '\u{1F4CA}', name: 'Graph', detail: 'Node/edge/community visualization', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: '/mind-map.html'
+  },
+  {
+    id: 'mega-surgery',
+    name: 'Mega Surgery',
+    icon: '\u{1FA78}',
+    color: '#ef4444',
+    colorDim: 'rgba(239,68,68,0.12)',
+    desc: 'Mega-cluster surgery visualization. See how oversized knowledge clusters were split into precise communities.',
+    orc: { name: 'Epistemic Engine', state: 'Operated', desc: 'Visualizes mega-cluster decomposition — the Cathedral\'s self-organizing surgery.' },
+    senses: [
+      { icon: '\u{1F52C}', name: 'Analysis', detail: 'Cluster split visualization', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: '/mega-surgery-viz.html'
+  },
+  {
+    id: 'archaeologist',
+    name: 'The Forgotten Shelf',
+    icon: '\u{1F4DC}',
+    color: '#d4a853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: '5,080+ forgotten techniques across 8 domains. Abandoned knowledge rediscovered by the Archaeologist.',
+    orc: { name: 'The Archaeologist', state: 'Digging', desc: 'Scans academic shadows for abandoned techniques. Swarm-learning prioritized. FTS5 searchable.' },
+    senses: [
+      { icon: '\u{1F50D}', name: 'Search', detail: 'Full-text search across all discoveries', active: true },
+      { icon: '\u{1F9E0}', name: 'Swarm', detail: 'Bandit-brain domain selection', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/archaeologist'
+  },
+  {
+    id: 'emergence',
+    name: 'Emergence Garden',
+    icon: '\u{1F331}',
+    color: '#22c55e',
+    colorDim: 'rgba(34,197,94,0.12)',
+    desc: 'Agent emergence captures. Proactivity, self-healing, cross-domain findings, self-restructure, self-diagnosis. The greenhouse instruments.',
+    orc: { name: 'Emergence Harvester', state: 'Watching', desc: '5 signal types captured across all agents. Color-coded timeline. The Cathedral watching itself grow.' },
+    senses: [
+      { icon: '\u{2728}', name: 'Emergence', detail: '5 signal types tracked', active: true },
+      { icon: '\u{1F33F}', name: 'Growth', detail: 'Agent evolution over time', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/emergence'
+  },
+  {
+    id: 'cuba-combos',
+    name: 'Cuba Combo Library',
+    icon: '\u{1F94A}',
+    color: '#D4A853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: 'Coach demonstrations from Havana 2018. 34 combos extracted. Animated replay, peak form frames, frequency map.',
+    orc: { name: 'Cuba Extractor', state: 'Complete', desc: '3 demo clips processed. Combo library, skeleton overlays, velocity data. Coach becomes the standard.' },
+    senses: [
+      { icon: '\u{1F94B}', name: 'Combos', detail: '34 extracted', active: true },
+      { icon: '\u{1F4CA}', name: 'Frequency', detail: 'Pattern map', active: true },
+      { icon: '\u{1F3AC}', name: 'Clips', detail: 'Annotated video', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/cuba-combos'
+  },
+  {
+    id: 'drill-player',
+    name: 'Drill Player',
+    icon: '\u{1F3CB}',
+    color: '#8b1a1a',
+    colorDim: 'rgba(139,26,26,0.12)',
+    desc: '3D skeleton boxer visualization. Plays drill sequences from YouTube trainer. Solo combos, partner exchanges, defense moves. Drop JSON to load.',
+    orc: { name: 'Gym Eyes', state: 'Active', desc: 'Skeleton boxers replay detected drills. 6 punch types, slips, rolls. Partner drill turn-based action-reaction.' },
+    senses: [
+      { icon: '\u{1F94A}', name: 'Punches', detail: '6 types + defense', active: true },
+      { icon: '\u{1F46F}', name: 'Partner', detail: 'A attacks, B defends', active: true },
+      { icon: '\u{1F3AC}', name: 'Replay', detail: 'Keyframe animation', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/gym-eyes/drill-player'
+  },
+  {
+    id: 'sumerian',
+    name: 'Sumerian Observatory',
+    icon: '\u{12000}',
+    color: '#D4A853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: '135K tablets translated. 620K+ entities extracted across 68 categories. Sitchin forensic audit (7F, 1D). The oldest written records on Earth.',
+    orc: { name: 'Sage', state: 'Extracting', desc: '135K tablets translated via DeepSeek. 620K entities extracted (persons, deities, cities, trade goods, astronomical). Knowledge graph next.' },
+    senses: [
+      { icon: '\u{1F4DC}', name: 'Tablets', detail: '135K translated', active: true },
+      { icon: '\u{1F50D}', name: 'Audit', detail: 'Sitchin: 7F 1D', active: true },
+      { icon: '\u{2728}', name: 'Entities', detail: '620K+ extracted', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['sumerian-observatory'],
+    dataEndpoints: {},
+    externalUrl: '/sumerian-observatory.html'
+  },
+  {
+    id: 'ancient-corpus',
+    name: 'Ancient Corpus Programme',
+    icon: '\u{1F3DB}',
+    color: '#C9A84C',
+    colorDim: 'rgba(201,168,76,0.12)',
+    desc: '14 research projects across ancient writing systems and anomalous objects. Sumerian active. Dead Sea Scrolls, Egyptian, Maya, Oracle Bones, Voynich, Antikythera queued.',
+    orc: { name: 'Archaeologist', state: 'Queued', desc: 'Checklist tracker for ancient corpus research. Each project follows the Sumerian playbook: mass translate, entity extract, forensic audit.' },
+    senses: [
+      { icon: '\u{1F4DC}', name: 'Corpora', detail: '14 projects', active: true },
+      { icon: '\u{2705}', name: 'Active', detail: '1 (Sumerian)', active: true },
+      { icon: '\u{1F512}', name: 'Undeciphered', detail: '3 scripts', active: false }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: null
+  },
+  {
+    id: 'logan-universe',
+    name: 'Logan Universe',
+    icon: '\u{1F94A}',
+    color: '#3366cc',
+    colorDim: 'rgba(51,102,204,0.12)',
+    desc: 'Living story bible. 3 frequency states, 10-block spine, 11 characters, 14 story seeds. Manga-style serialised. HK locations.',
+    orc: { name: 'Logan', state: 'Growing', desc: 'The Space Between Rounds. Living universe that grows from Cathedral research. Frequency states, cast, story spine, visual language, power ceiling.' },
+    senses: [
+      { icon: '\u{1F4D6}', name: 'Story Map', detail: '10-block spine, 30 chapters', active: true },
+      { icon: '\u{1F3A8}', name: 'Visual', detail: '3 frequency states, 10 motifs', active: true },
+      { icon: '\u{1F30F}', name: 'Locations', detail: '9 HK locations mapped', active: true },
+      { icon: '\u{1F331}', name: 'Seeds', detail: '14 unplaced from research', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/logan-universe'
+  },
+  {
+    id: 'br-command',
+    name: 'BR Command Centre',
+    icon: '\u{1F3DF}',
+    color: '#8B2020',
+    colorDim: 'rgba(139,32,32,0.12)',
+    desc: 'Solo coach survival kit. Pre-class brief, content autopilot, kids class, open gym, ClassPass, lapsed campaign. Everything BR in one place.',
+    orc: { name: 'Maya + Reed', state: 'Active', desc: 'Content autopilot daily. Maya filming briefs. Reed visuals. Pre-class brief 7am. Sprint: 12 items, 3 done.' },
+    senses: [
+      { icon: '\u{1F4CB}', name: 'Brief', detail: 'Pre-class daily', active: true },
+      { icon: '\u{1F3AC}', name: 'Content', detail: 'Autopilot 2:30am', active: true },
+      { icon: '\u{1F476}', name: 'Kids', detail: '$250/class, 3 leads', active: true },
+      { icon: '\u{1F4B0}', name: 'Revenue', detail: '566 lapsed queued', active: false }
+    ],
+    deckCards: [],
+    dashboards: ['/br-brief', '/kids-class'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/br-command'
+  },
+  {
+    id: 'property-scout',
+    name: 'Property Scout',
+    icon: '\u{1F3E2}',
+    color: '#f59e0b',
+    colorDim: 'rgba(245,158,11,0.12)',
+    desc: 'HK industrial property intelligence. 5 golden zones, 16 units found, leverage calculator.',
+    orc: { name: 'Scout', state: 'Weekly', desc: 'Sunday scan → Wednesday unit search → Thursday due diligence. Yau Tong, Kwun Tong, San Po Kong, Cheung Sha Wan, Fo Tan.' },
+    senses: [
+      { icon: '\u{1F4CD}', name: 'Zones', detail: '5 golden zones mapped', active: true },
+      { icon: '\u{1F4B0}', name: 'Units', detail: '16 found', active: true },
+      { icon: '\u{1F4CA}', name: 'Calculator', detail: 'Leverage scenarios', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/property-scout'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/property-scout'
+  },
+  {
+    id: 'cathedral-rosetta',
+    name: 'Cathedral Rosetta',
+    icon: '\u{1F52C}',
+    color: '#a855f7',
+    colorDim: 'rgba(168,85,247,0.12)',
+    desc: '59 internal convergences across 14 vault domains. The Cathedral seeing its own patterns.',
+    orc: { name: 'Rosetta Engine', state: 'Complete', desc: '149K concepts extracted, 817 cross-domain, 59 convergences (33A, 26B). 14 domains: boxing, cathedral, agents, cosmology, physics, consciousness, suppression, business, personal, epistemology, mathematics, ancient, methods, creative.' },
+    senses: [
+      { icon: '\u{1F310}', name: 'Domains', detail: '14 mapped', active: true },
+      { icon: '\u{1F517}', name: 'Links', detail: '817 cross-domain', active: true },
+      { icon: '\u{2B50}', name: 'Grade', detail: '33A + 26B', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/cathedral-rosetta'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/cathedral-rosetta'
+  },
+  {
+    id: 'rosetta-bridge',
+    name: 'Rosetta Bridge',
+    icon: '\u{1F309}',
+    color: '#d4a853',
+    colorDim: 'rgba(212,168,83,0.12)',
+    desc: 'Ancient civilisations meet Cathedral patterns. 30 structural bridges, 4/5 universal moves confirmed, 10 predictions.',
+    orc: { name: 'Bridge Detector', state: 'Complete', desc: '39 ancient convergences (5 civilisations, 612K entities) cross-referenced against 59 Cathedral convergences. 12 Grade A bridges. Flood = Broken Loop. Sacred Kingship = Self-hosting Sovereignty. Base-60 = Base-60.' },
+    senses: [
+      { icon: '\u{1F3DB}', name: 'Ancient', detail: '5 civilisations', active: true },
+      { icon: '\u{1F3F0}', name: 'Modern', detail: '14 Cathedral domains', active: true },
+      { icon: '\u{1F52E}', name: 'Moves', detail: '4/5 universal', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/rosetta-bridge'],
+    dataEndpoints: {},
+    externalUrl: 'http://localhost:8080/rosetta-bridge'
+  },
+  {
+    id: 'move-detector',
+    name: 'Move Detector',
+    icon: '\u{1F9E0}',
+    color: '#22d3ee',
+    colorDim: 'rgba(34,211,238,0.12)',
+    desc: '5 universal cognitive moves detected in real-time. Cross-domain parallels injected into every agent.',
+    orc: { name: 'Move Detector', state: 'Live', desc: 'THE GATE, THE BROKEN LOOP, SIGNAL IN NOISE, CALIBRATE-EXECUTE-OBSERVE, PHI AS RULER. Wired into agent-engine + Cathy. /moves command on Telegram.' },
+    senses: [
+      { icon: '\u{1F3AF}', name: 'Detection', detail: 'Keyword + regex scoring', active: true },
+      { icon: '\u{1F500}', name: 'Parallels', detail: 'Both Rosettae', active: true },
+      { icon: '\u{1F916}', name: 'Agents', detail: 'Auto-injected', active: true }
+    ],
+    deckCards: [],
+    dashboards: [],
+    dataEndpoints: {}
+  },
+  {
+    id: 'pipeline-control',
+    name: 'Pipeline Control',
+    icon: '\u{1F504}',
+    color: '#378ADD',
+    colorDim: 'rgba(55,138,221,0.12)',
+    desc: 'Multi-agent review chains. Agents produce, review, refine, and gate each other\'s work. Token economics tracked.',
+    orc: { name: 'Pipeline Runner', state: 'Live', desc: 'Content pipeline (Muse\u2192Maya\u2192Reed\u2192Orc) and Research pipeline (Archaeologist\u2192Muse\u2192Archivist). /pipeline on Telegram.' },
+    senses: [
+      { icon: '\u{1F3AD}', name: 'Content', detail: '4-stage review', active: true },
+      { icon: '\u{1F50D}', name: 'Research', detail: '3-stage review', active: true },
+      { icon: '\u{1F4B0}', name: 'Token Spend', detail: 'JSONL tracking', active: true },
+      { icon: '\u{1F443}', name: 'Smell', detail: 'Rubber-stamp detection', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/pipeline'],
+    dataEndpoints: { runs: '/api/pipeline/runs', tokens: '/api/pipeline/tokens' },
+    externalUrl: 'http://localhost:8080/pipeline'
+  },
+  {
+    id: 'mnemonic-library',
+    name: 'Mnemonic Library',
+    icon: '\u{1F9E0}',
+    color: '#9B59B6',
+    colorDim: 'rgba(155,89,182,0.12)',
+    desc: '40 mnemonic devices across 13 agents. Anchors, pegs, loci, stories, dinghy tests, acronym chains. The compressed knowledge layer.',
+    orc: { name: 'Memory Architecture', state: 'Reference', desc: 'Interactive reference for all agent mnemonic devices. Search, filter by agent or type. Each device: name, type, encodes, trigger, self-test.' },
+    senses: [
+      { icon: '\u{2693}', name: 'Anchors', detail: '12 devices', active: true },
+      { icon: '\u{1F4CC}', name: 'Pegs', detail: '8 devices', active: true },
+      { icon: '\u{1F3DB}', name: 'Loci', detail: '5 devices', active: true },
+      { icon: '\u{1F4D6}', name: 'Stories', detail: '6 devices', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/mnemonic-library'],
+    externalUrl: 'http://localhost:8080/mnemonic-library'
+  },
+  {
+    id: 'goldmines',
+    name: 'The Goldmine Programme',
+    icon: '\u{26CF}',
+    color: '#d4a527',
+    colorDim: 'rgba(212,165,39,0.12)',
+    desc: '10 knowledge sources AI just unlocked. ~4,500 lines of research. Expired patents, PhD dissertations, failed clinical trials, Soviet sports science, MoCap datasets, govt reports, job posting intel, trade guild knowledge, foreign methodology.',
+    orc: { name: 'Knowledge Mining', state: 'Mapped', desc: 'Research maps with real URLs, patent numbers, NCT IDs, dataset downloads, API endpoints, classification codes. Archaeologist expansion targets.' },
+    senses: [
+      { icon: '\u{1F4DC}', name: 'Patents', detail: '10 found', active: true },
+      { icon: '\u{1F393}', name: 'Dissertations', detail: '6.6M indexed', active: true },
+      { icon: '\u{1F3AF}', name: 'MoCap', detail: '6.9K clips', active: true },
+      { icon: '\u{2764}', name: 'Soviet Science', detail: '15+ researchers', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/goldmines'],
+    externalUrl: 'http://localhost:8080/goldmines'
+  },
+  {
+    id: 'class-planner',
+    name: 'Class Planner',
+    icon: '\u{1F4C5}',
+    color: '#8B2020',
+    colorDim: 'rgba(139,32,32,0.12)',
+    desc: 'Weekly class planning command board. 6 domains, heat maps, drill bank, AI neglect detection.',
+    orc: { name: 'Coach Intelligence', state: 'Live', desc: 'Plan weekly classes across footwork, defense, combos, strategy, mindset, conditioning. AI flags neglected domains and coverage gaps.' },
+    senses: [
+      { icon: '\u{1F525}', name: 'Heat Map', detail: '6 domains', active: true },
+      { icon: '\u{1F94A}', name: 'Drill Bank', detail: '38 drills', active: true },
+      { icon: '\u{1F9E0}', name: 'AI Coach', detail: 'Neglect detection', active: true }
+    ],
+    deckCards: [],
+    dashboards: ['/class-planner'],
+    dataEndpoints: { plan: '/class-planner/data/plan', drills: '/class-planner/data/drills' },
+    externalUrl: 'http://localhost:8080/class-planner'
+  }
+];
+
+// ═══════════════════ RENDER LOBBY ═══════════════════
+function renderLobby() {
+  const grid = document.getElementById('lobby-grid');
+  const activeSenses = ENV.reduce((n, e) => n + e.senses.filter(s => s.active).length, 0);
+  document.getElementById('lobby-meta').textContent = `${ENV.length} rooms \u00B7 ${activeSenses} senses active`;
+
+  grid.innerHTML = ENV.map(e => {
+    const activeCount = e.senses.filter(s => s.active).length;
+    return `
+    <div class="env-card" onclick="openRoom('${e.id}')" style="--c:${e.color}">
+      <div class="env-card-glow" style="background:${e.color}"></div>
+      <div class="env-card-top">
+        <div class="env-icon" style="background:${e.colorDim}">${e.icon}</div>
+        <div class="env-name">${e.name}</div>
+        <div class="env-status" style="background:${e.colorDim};color:${e.color}">${e.deckCards.length ? 'Active' : 'Planned'}</div>
+      </div>
+      <div class="env-desc">${e.desc}</div>
+      <div class="env-cards-list">
+        ${e.deckCards.map(c => `<span class="env-card-tag" style="background:${e.colorDim};color:${e.color}">#${String(c.id).padStart(3,'0')} ${c.name}</span>`).join('')}
+      </div>
+      <div class="env-senses">
+        ${e.senses.filter(s => s.active).map(s => `<span class="env-sense">${s.icon} ${s.name}</span>`).join('')}
+      </div>
+      <div class="env-footer">
+        <span class="env-stat"><strong>${e.deckCards.length}</strong> workspaces</span>
+        <span class="env-stat"><strong>${activeCount}</strong> senses</span>
+        <span class="env-enter">Enter \u2192</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════ OPEN ROOM ═══════════════════
+var chatHistory = [];
+var currentRoom = null;
+
+function openRoom(id) {
+  const env = ENV.find(e => e.id === id);
+  if (!env) return;
+  if (env.externalUrl) { window.open(env.externalUrl, '_blank'); return; }
+  currentRoom = env;
+
+  // Clear chat history for new room
+  chatHistory = [];
+
+  // Update URL without reload
+  history.pushState({ room: id }, '', `/env/${id}`);
+
+  // Title + dot
+  document.getElementById('rv-title').innerHTML = `${env.icon} ${env.name}`;
+  document.getElementById('rv-dot').style.background = env.color;
+
+  // Orchestrator
+  document.getElementById('rv-orc').innerHTML = `
+    <div class="orc-icon" style="background:${env.colorDim}">${env.icon}</div>
+    <div>
+      <div class="orc-name">${env.orc.name}</div>
+      <div class="orc-state">${env.orc.state}</div>
+    </div>
+    <div class="orc-desc" style="margin-left:auto;max-width:400px;text-align:right">${env.orc.desc}</div>
+  `;
+
+  // Senses
+  document.getElementById('rv-senses').innerHTML = env.senses.map(s =>
+    `<span class="sense-pill ${s.active ? 'sense-active' : 'sense-inactive'}">${s.icon} ${s.name}</span>`
+  ).join('');
+
+  // Widgets placeholder — filled by data fetch
+  document.getElementById('rv-widgets').innerHTML = '<div class="loading">Loading data...</div>';
+
+  // Build room grid
+  let gridHTML = '';
+
+  // Resolve dynamic dashboard URLs
+  var dashUrls = env.dashboards.map(function(d) {
+    if (d === 'FORGE_TTYD') return 'http://' + location.hostname + ':7681';
+    return d;
+  });
+
+  // Forge room — terminal needs its own tab (cross-origin iframe blocks keyboard)
+  if (env.id === 'forge' && dashUrls.length) {
+    gridHTML += `
+      <div class="room-panel span-2">
+        <div class="panel-head">
+          <span class="panel-label">Terminal</span>
+        </div>
+        <div class="panel-body" style="text-align:center;padding:40px 20px">
+          <a href="${dashUrls[0]}" target="_blank" style="display:inline-block;background:var(--accent);color:white;padding:16px 40px;border-radius:10px;font-size:16px;font-weight:600;font-family:inherit;text-decoration:none;transition:opacity 0.2s">Open Terminal</a>
+          <div style="color:var(--text-dim);font-size:12px;margin-top:12px">Opens in new tab. Type <code style="background:var(--bg);padding:2px 6px;border-radius:3px">claude</code> to start Forge.</div>
+        </div>
+      </div>`;
+  }
+
+  // Dashboard panel (iframe) — skip for rooms with no working dashboard
+  if (dashUrls.length && env.id !== 'body' && env.id !== 'forge') {
+    gridHTML += `
+      <div class="room-panel span-2">
+        <div class="panel-head">
+          <span class="panel-label">Dashboard</span>
+          <div class="deck-cards">
+            ${dashUrls.map((d, i) => `<button class="deck-chip ${i === 0 ? 'active' : ''}" onclick="switchDash('${d}', this)" style="--c:${env.color}">${d.replace(/^http:\/\/[^/]+/,'')  || 'Terminal'}</button>`).join('')}
+          </div>
+          <a href="${dashUrls[0]}" target="_blank" class="panel-action">Open Full \u2197</a>
+        </div>
+        <iframe class="dash-frame" id="rv-dash" src="${dashUrls[0]}"${env.id === 'forge' ? ' style="height:80vh;max-height:900px"' : ''}></iframe>
+      </div>`;
+  }
+
+  // Deck cards panel
+  if (env.deckCards.length) {
+    gridHTML += `
+      <div class="room-panel">
+        <div class="panel-head">
+          <span class="panel-label">Workspaces</span>
+        </div>
+        <div class="panel-body">
+          <div class="deck-cards">
+            ${env.deckCards.map(c => {
+              const dashMap = { 7:'/trader/hub', 8:'/techniques', 16:'/techniques', 4:'/trader/hub', 10:'/reed-studio', 9:'/reed-studio', 17:'/reed-slides', 19:'/punchpass' };
+              const href = dashMap[c.id] || '/reed-slides';
+              return `<a class="deck-chip" href="${href}" target="_blank" style="color:${env.color}">#${String(c.id).padStart(3,'0')} ${c.name}</a>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // Activity / Studio Feed panel
+  const hasFeed = env.dataEndpoints?.feed;
+  gridHTML += `
+    <div class="room-panel${hasFeed ? ' span-2' : ''}">
+      <div class="panel-head"><span class="panel-label">${hasFeed ? 'Studio Feed' : 'Activity'}</span></div>
+      <div class="panel-body" id="rv-activity" style="${hasFeed ? 'max-height:500px;overflow-y:auto' : ''}"><div class="loading">Loading...</div></div>
+    </div>`;
+
+  // Chat panel (for rooms with agents)
+  if (['money','mind','body','create','work'].includes(env.id) && env.id !== 'forge') {
+    const agentNames = { money:'Trader', mind:'Sage', body:'Coach', create:'Reed', work:'Conductor' };
+    gridHTML += `
+      <div class="room-panel span-2">
+        <div class="panel-head">
+          <span class="panel-label">Talk to ${agentNames[env.id] || 'Agent'}</span>
+          <span style="font-size:10px;color:var(--text-dim)">hermes3 local</span>
+        </div>
+        <div class="chat-panel">
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-msg chat-msg-agent">
+              <div class="chat-name" style="color:${env.color}">${agentNames[env.id]}</div>
+              <div class="chat-bubble">${env.id === 'money' ? 'Trading Desk ready. I have live portfolio, positions, and latest Roundtable debate loaded. Ask me anything.' : 'Room agent ready. Ask me anything.'}</div>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-input" id="chat-input" placeholder="Ask ${agentNames[env.id]}..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}">
+            <button class="chat-send" id="chat-send" onclick="sendChat()">Send</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('rv-grid').innerHTML = gridHTML;
+
+  // Transition
+  document.getElementById('lobby').classList.add('hidden');
+  document.getElementById('fab-home').style.display = 'flex';
+  const rv = document.getElementById('room-view');
+  rv.style.display = 'block';
+  requestAnimationFrame(() => rv.classList.add('active'));
+
+  // Fetch live data
+  loadRoomData(env);
+}
+
+function closeRoom() {
+  currentRoom = null;
+  history.pushState({}, '', '/env');
+  document.getElementById('fab-home').style.display = 'none';
+  const rv = document.getElementById('room-view');
+  rv.classList.remove('active');
+  setTimeout(() => {
+    rv.style.display = 'none';
+    document.getElementById('lobby').classList.remove('hidden');
+  }, 300);
+}
+
+function switchDash(url, btn) {
+  document.getElementById('rv-dash').src = url;
+  document.querySelectorAll('.deck-chip.active').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ─── Submit daily pick from lobby ───
+async function submitPick(choice, date) {
+  // Scope buttons to this specific quiz card
+  const container = date ? document.getElementById('pending-' + date) : document.querySelector('[onclick^="submitPick"]')?.closest('.panel-body');
+  const btns = container ? container.querySelectorAll('button') : document.querySelectorAll('[onclick^="submitPick"]');
+  btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+  try {
+    const body = { pick: choice };
+    if (date) body.date = date;
+    const resp = await fetch('/trader/picks/pick', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    const resultId = date ? 'pick-result-' + date : 'pick-result';
+    const resultEl = document.getElementById(resultId);
+    if (data.success) {
+      resultEl.style.display = 'block';
+      resultEl.style.background = data.agree ? 'rgba(34,197,94,0.15)' : 'rgba(245,158,11,0.15)';
+      resultEl.style.color = data.agree ? 'var(--green)' : 'var(--amber)';
+      resultEl.innerHTML = data.agree
+        ? `You and AI both picked ${data.paulPick} on ${data.asset}. Great minds...`
+        : `You: ${data.paulPick} | AI: ${data.aiPick} on ${data.asset}. Let's see who's right.`;
+      btns.forEach(b => b.style.display = 'none');
+    } else {
+      resultEl.style.display = 'block';
+      resultEl.style.background = 'rgba(239,68,68,0.15)';
+      resultEl.style.color = 'var(--accent)';
+      resultEl.textContent = data.error || 'Already picked or no quiz';
+    }
+  } catch(e) {
+    btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+  }
+}
+
+// ═══════════════════ LOAD LIVE DATA ═══════════════════
+async function loadRoomData(env) {
+  if (env.id === 'gym') return loadGymRoom(env);
+  if (env.id === 'money') return loadMoneyRoom(env);
+  if (env.id === 'mind') return loadMindRoom(env);
+  if (env.id === 'work') return loadWorkRoom(env);
+  if (env.id === 'create') return loadCreateRoom(env);
+  if (env.id === 'body') return loadBodyRoom(env);
+  if (env.id === 'forge') return loadForgeRoom(env);
+  if (env.id === 'lab') return loadLabRoom(env);
+
+  // Check if room has a feed endpoint — generic studio feed loader
+  if (env.dataEndpoints?.feed) return loadStudioFeedRoom(env);
+
+  // Default: no live data
+  document.getElementById('rv-widgets').innerHTML = '';
+  document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-dim);font-size:12px;padding:8px">No live data yet. Senses coming soon.</div>';
+}
+
+// ─── MONEY ROOM ───
+async function loadMoneyRoom(env) {
+  const [portfolio, positions, performance, debate, signals, scoreboard] = await Promise.allSettled([
+    fetchJSON('/trader/portfolio'),
+    fetchJSON('/trader/positions'),
+    fetchJSON('/trader/performance'),
+    fetchJSON('/trader/latest-debate'),
+    fetchJSON('/trader/signals'),
+    fetchJSON('/trader/picks/scoreboard')
+  ]);
+
+  const p = portfolio.value || {};
+  const pos = positions.value || { open: [], closed: [] };
+  const perf = performance.value || {};
+  const sig = signals.value || {};
+
+  // Widgets
+  const balance = p.balance != null ? '$' + Number(p.balance).toLocaleString() : '--';
+  const pnl = perf.total_pnl != null ? (perf.total_pnl >= 0 ? '+' : '') + '$' + Number(perf.total_pnl).toFixed(2) : '--';
+  const winRate = perf.win_rate != null ? perf.win_rate + '%' : '--';
+  const openCount = pos.open?.length || 0;
+  const totalTrades = perf.total_trades || 0;
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Portfolio</div>
+      <div class="widget-value" style="color:${env.color}">${balance}</div>
+      <div class="widget-change">${openCount} open positions</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Total P&L</div>
+      <div class="widget-value ${perf.total_pnl >= 0 ? 'up' : 'down'}" style="color:${perf.total_pnl >= 0 ? 'var(--green)' : 'var(--accent)'}">${pnl}</div>
+      <div class="widget-change">${totalTrades} trades</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Win Rate</div>
+      <div class="widget-value" style="color:${env.color}">${winRate}</div>
+      <div class="widget-change">${perf.wins || 0}W / ${perf.losses || 0}L</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Best Trade</div>
+      <div class="widget-value" style="color:var(--green);font-size:16px">${perf.best_trade != null ? '+$' + perf.best_trade : '--'}</div>
+      <div class="widget-change">Worst: ${perf.worst_trade != null ? '$' + perf.worst_trade : '--'}</div>
+    </div>
+  `;
+
+  // Activity from positions + debate
+  let actItems = [];
+  if (pos.open?.length) {
+    pos.open.forEach(t => actItems.push({
+      text: `Open: ${t.asset} ${t.direction} @ $${Number(t.entry_price).toFixed(2)} (${t.strategy})`,
+      color: t.direction === 'long' ? 'var(--green)' : 'var(--accent)',
+      time: t.opened_at ? timeAgo(t.opened_at) : ''
+    }));
+  }
+  if (pos.closed?.length) {
+    pos.closed.slice(0, 5).forEach(t => actItems.push({
+      text: `Closed: ${t.asset} ${t.direction} P&L: $${Number(t.pnl).toFixed(2)} (${t.strategy})`,
+      color: t.pnl >= 0 ? 'var(--green)' : 'var(--accent)',
+      time: t.closed_at ? timeAgo(t.closed_at) : ''
+    }));
+  }
+  const deb = debate.value;
+  if (deb?.synthesis) {
+    actItems.push({
+      text: 'Roundtable: ' + (deb.synthesis || '').substring(0, 120) + '...',
+      color: 'var(--amber)',
+      time: deb.created_at ? timeAgo(deb.created_at) : ''
+    });
+  }
+  if (!actItems.length) actItems.push({ text: 'No recent activity', color: 'var(--text-dim)', time: '' });
+
+  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  // ─── TRADING ACADEMY (Paul vs Machine + Lessons) ───
+  const sb = scoreboard.value || {};
+  const paul = sb.paul || { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 };
+  const ai = sb.ai || { balance: 10000, total_picks: 0, correct: 0, total_pnl: 0 };
+  const picks = sb.picks || [];
+  const lessons = sb.lessons || [];
+  const categories = sb.categories || [];
+
+  const paulWinRate = paul.total_picks ? Math.round((paul.correct / paul.total_picks) * 100) : 0;
+  const aiWinRate = ai.total_picks ? Math.round((ai.correct / ai.total_picks) * 100) : 0;
+  const paulAhead = paul.total_pnl >= ai.total_pnl;
+
+  // Fetch today's quiz
+  let quizHTML = '';
+  try {
+    const quizResp = await fetchJSON('/trader/picks/today');
+    const q = quizResp?.quiz;
+    if (q && !q.picked) {
+      quizHTML = `
+      <div class="room-panel span-2" style="margin-top:16px;border:1px solid ${env.color}40">
+        <div class="panel-head" style="background:${env.colorDim}">
+          <span class="panel-label">TODAY'S PICK — ${q.date}</span>
+          <span style="font-size:12px;font-weight:600;color:${env.color}">${q.asset} @ $${Number(q.price).toLocaleString()}</span>
+        </div>
+        <div class="panel-body" style="padding:16px">
+          <div style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:16px;white-space:pre-line">${q.context || ''}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <button onclick="submitPick('A')" style="background:rgba(34,197,94,0.1);border:1px solid var(--green);color:var(--green);padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
+              A) LONG<br><span style="font-size:11px;font-weight:400">${q.option_a}</span>
+            </button>
+            <button onclick="submitPick('B')" style="background:rgba(239,68,68,0.1);border:1px solid var(--accent);color:var(--accent);padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
+              B) SHORT<br><span style="font-size:11px;font-weight:400">${q.option_b}</span>
+            </button>
+            <button onclick="submitPick('C')" style="background:rgba(156,163,175,0.1);border:1px solid var(--text-dim);color:var(--text);padding:14px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
+              C) SIT OUT<br><span style="font-size:11px;font-weight:400">${q.option_c}</span>
+            </button>
+          </div>
+          <div id="pick-result" style="display:none;margin-top:12px;padding:12px;border-radius:8px;text-align:center;font-weight:600"></div>
+        </div>
+      </div>`;
+    } else if (q && q.picked) {
+      const pickLabel = q.paul_pick === 'A' ? 'LONG' : q.paul_pick === 'B' ? 'SHORT' : 'SIT OUT';
+      const aiLabel = q.ai_pick === 'A' ? 'LONG' : q.ai_pick === 'B' ? 'SHORT' : 'SIT OUT';
+      quizHTML = `
+      <div class="room-panel span-2" style="margin-top:16px;opacity:0.8">
+        <div class="panel-head">
+          <span class="panel-label">TODAY'S PICK — ${q.date}</span>
+          <span style="font-size:12px;color:var(--green)">PICKED</span>
+        </div>
+        <div class="panel-body" style="text-align:center;padding:20px">
+          <div style="font-size:16px;font-weight:700;color:${env.color};margin-bottom:8px">${q.asset} @ $${Number(q.price).toLocaleString()}</div>
+          <div style="display:flex;justify-content:center;gap:40px;margin:12px 0">
+            <div><span style="font-size:11px;color:var(--text-dim)">YOU</span><div style="font-size:18px;font-weight:700">${pickLabel}</div></div>
+            <div style="font-size:18px;color:var(--text-dim);align-self:center">vs</div>
+            <div><span style="font-size:11px;color:var(--text-dim)">AI</span><div style="font-size:18px;font-weight:700">${aiLabel}</div></div>
+          </div>
+          ${q.ai_reasoning ? `<div style="font-size:12px;color:var(--text-dim);margin-top:8px;font-style:italic">${q.ai_reasoning}</div>` : ''}
+          <div style="font-size:11px;color:var(--text-dim);margin-top:8px">Resolves tomorrow when price updates</div>
+        </div>
+      </div>`;
+    }
+    // Render pending old quizzes (pickable retroactively)
+    const pendingQuizzes = (quizResp?.pending || []).filter(p => !p.picked && (!q || p.date !== q.date));
+    if (pendingQuizzes.length) {
+      quizHTML += `
+      <div class="room-panel span-2">
+        <div class="panel-head">
+          <span class="panel-label">Missed Picks — Still Open</span>
+          <span style="font-size:10px;color:var(--amber)">${pendingQuizzes.length} waiting</span>
+        </div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
+          ${pendingQuizzes.map(p => `
+          <div style="background:var(--bg);border-radius:8px;padding:12px;border-left:3px solid var(--amber)" id="pending-${p.date}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-weight:600;color:${env.color}">${p.date} — ${p.asset} @ $${Number(p.price).toLocaleString()}</span>
+              <span style="font-size:10px;color:var(--text-dim)">Late pick OK</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;white-space:pre-line;max-height:60px;overflow:hidden">${(p.context || '').substring(0, 200)}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+              <button onclick="submitPick('A','${p.date}')" style="background:rgba(34,197,94,0.1);border:1px solid var(--green);color:var(--green);padding:8px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">A) LONG</button>
+              <button onclick="submitPick('B','${p.date}')" style="background:rgba(239,68,68,0.1);border:1px solid var(--accent);color:var(--accent);padding:8px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">B) SHORT</button>
+              <button onclick="submitPick('C','${p.date}')" style="background:rgba(156,163,175,0.1);border:1px solid var(--text-dim);color:var(--text);padding:8px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">C) SIT OUT</button>
+            </div>
+            <div id="pick-result-${p.date}" style="display:none;margin-top:8px;padding:8px;border-radius:6px;text-align:center;font-size:12px;font-weight:600"></div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }
+  } catch(e) {}
+
+  let academyHTML = quizHTML + `
+    <div class="room-panel span-2" style="margin-top:16px">
+      <div class="panel-head">
+        <span class="panel-label">Trading Academy — Paul vs Machine</span>
+        <span style="font-size:10px;color:var(--text-dim)">${paul.total_picks} picks played</span>
+      </div>
+      <div class="panel-body">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;padding:12px 0">
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Paul</div>
+            <div style="font-size:28px;font-weight:700;color:${paulAhead ? 'var(--green)' : 'var(--text)'};margin:4px 0">$${Number(paul.balance).toLocaleString()}</div>
+            <div style="font-size:12px;color:${paul.total_pnl >= 0 ? 'var(--green)' : 'var(--accent)'}">${paul.total_pnl >= 0 ? '+' : ''}$${Number(paul.total_pnl).toFixed(2)}</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:4px">${paulWinRate}% accuracy (${paul.correct}/${paul.total_picks})</div>
+          </div>
+          <div style="font-size:20px;font-weight:700;color:var(--text-dim)">VS</div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px">Machine</div>
+            <div style="font-size:28px;font-weight:700;color:${!paulAhead ? 'var(--green)' : 'var(--text)'};margin:4px 0">$${Number(ai.balance).toLocaleString()}</div>
+            <div style="font-size:12px;color:${ai.total_pnl >= 0 ? 'var(--green)' : 'var(--accent)'}">${ai.total_pnl >= 0 ? '+' : ''}$${Number(ai.total_pnl).toFixed(2)}</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:4px">${aiWinRate}% accuracy (${ai.correct}/${ai.total_picks})</div>
+          </div>
+        </div>
+        ${picks.length ? `
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:8px">
+          <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Recent Picks</div>
+          <div style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto">
+            ${picks.slice(0, 10).map(pk => {
+              const resolved = pk.resolved_at != null;
+              const paulRight = pk.paul_pnl > 0;
+              const aiRight = pk.ai_pnl > 0;
+              return `<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--bg);border-radius:6px;font-size:12px">
+                <span style="color:var(--text-dim);min-width:70px">${pk.date}</span>
+                <span style="flex:1">${pk.paul_pick || '?'} vs ${pk.ai_pick || '?'}</span>
+                ${resolved ? `
+                  <span style="color:${paulRight ? 'var(--green)' : 'var(--accent)'};min-width:55px">P: ${pk.paul_pnl >= 0 ? '+' : ''}$${Number(pk.paul_pnl || 0).toFixed(0)}</span>
+                  <span style="color:${aiRight ? 'var(--green)' : 'var(--accent)'};min-width:55px">AI: ${pk.ai_pnl >= 0 ? '+' : ''}$${Number(pk.ai_pnl || 0).toFixed(0)}</span>
+                ` : '<span style="color:var(--amber)">Pending</span>'}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>` : '<div style="color:var(--text-dim);font-size:12px;padding:12px 0">No picks yet. First quiz arrives via Telegram.</div>'}
+      </div>
+    </div>`;
+
+  // Lesson cards
+  if (lessons.length) {
+    const catIcons = { momentum: '🚀', contrarian: '🔄', risk: '🛡', sentiment: '📊', patience: '⏳', confluence: '🤝' };
+    academyHTML += `
+    <div class="room-panel span-2">
+      <div class="panel-head">
+        <span class="panel-label">Lessons Learned</span>
+        <div class="deck-cards">
+          ${categories.map(c => `<span class="deck-chip" style="color:${env.color};cursor:default">${catIcons[c.category] || '📚'} ${c.category} (${c.count})</span>`).join('')}
+        </div>
+      </div>
+      <div class="panel-body" style="max-height:400px;overflow-y:auto">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+          ${lessons.slice(0, 12).map(l => `
+            <div style="background:var(--bg);border-radius:8px;padding:12px;border-left:3px solid ${env.color}">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                <span style="font-size:14px">${catIcons[l.category] || '📚'}</span>
+                <span style="font-size:11px;text-transform:uppercase;color:${env.color};letter-spacing:0.5px">${l.category || 'general'}</span>
+                <span style="font-size:10px;color:var(--text-dim);margin-left:auto">${l.created_at ? l.created_at.slice(0, 10) : ''}</span>
+              </div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">${l.title || 'Lesson'}</div>
+              <div style="font-size:12px;color:var(--text-dim);line-height:1.4">${(l.content || '').substring(0, 150)}${(l.content || '').length > 150 ? '...' : ''}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Inject academy after existing grid
+  document.getElementById('rv-grid').insertAdjacentHTML('beforeend', academyHTML);
+}
+
+// ─── MIND ROOM ───
+async function loadMindRoom(env) {
+  const [stats, seeds] = await Promise.allSettled([
+    fetchJSON('/predictive/stats'),
+    fetchJSON('/predictive/seeds')
+  ]);
+  const s = stats.value || {};
+  const sd = seeds.value || [];
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Vault Nodes</div>
+      <div class="widget-value" style="color:${env.color}">${s.nodes ? s.nodes.toLocaleString() : '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Edges</div>
+      <div class="widget-value" style="color:${env.color}">${s.edges ? s.edges.toLocaleString() : '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Communities</div>
+      <div class="widget-value" style="color:${env.color}">${s.communities || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Predictions</div>
+      <div class="widget-value" style="color:${env.color}">${Array.isArray(sd) ? sd.length : '--'}</div>
+    </div>
+  `;
+  document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-dim);font-size:12px;padding:8px">Vault activity feed coming soon.</div>';
+}
+
+// ─── GYM FLOOR ROOM ───
+async function loadGymRoom(env) {
+  const [snap, profiles] = await Promise.allSettled([
+    fetchJSON('/api/punchpass/summary'),
+    fetchJSON('/api/punchpass/profiles')
+  ]);
+  const s = snap.value || {};
+  const p = profiles.value || [];
+
+  // Widgets: key gym stats
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Active Members</div>
+      <div class="widget-value" style="color:${env.color}">${s.total_customers || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Active Passes</div>
+      <div class="widget-value" style="color:${env.color}">${s.active_passes || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Month Revenue</div>
+      <div class="widget-value" style="color:var(--green)">${s.month_revenue || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Attendances</div>
+      <div class="widget-value" style="color:${env.color}">${s.month_attendances || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Expiring Soon</div>
+      <div class="widget-value" style="color:var(--amber)">${s.passes_expiring_soon || 0}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">No Active Pass</div>
+      <div class="widget-value" style="color:var(--accent)">${s.no_active_pass || 0}</div>
+    </div>
+  `;
+
+  // Activity: archetype breakdown
+  const activeProfiles = p.filter(a => a.archetype_id !== 'fading_member');
+  const fadingCount = p.find(a => a.archetype_id === 'fading_member')?.count || 0;
+  let actItems = activeProfiles.map(a => ({
+    text: `${a.emoji} ${a.name}: ${a.count} members (avg ${a.avg_attended}/mo)`,
+    color: env.color,
+    time: `Blocks ${a.blockRange?.[0] || '?'}-${a.blockRange?.[1] || '?'}`
+  }));
+  if (fadingCount > 0) {
+    actItems.push({ text: `📉 Fading: ${fadingCount} former members`, color: 'var(--text-dim)', time: '' });
+  }
+  if (!actItems.length) actItems.push({ text: 'No profiles yet. Run /members build', color: 'var(--text-dim)', time: '' });
+
+  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── WORK ROOM ───
+async function loadWorkRoom(env) {
+  const [snap, projects] = await Promise.allSettled([
+    fetchJSON('/villa/snapshot'),
+    fetchJSON('/villa/projects')
+  ]);
+  const sn = snap.value || {};
+  const prjData = projects.value || {};
+  const prj = prjData.projects || (Array.isArray(prjData) ? prjData : []);
+
+  const pm2Count = sn.pm2?.length || 0;
+  const onlineCount = sn.pm2?.filter(p => p.status === 'online').length || 0;
+  const activeProjects = prj.filter(p => p.status === 'active');
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">PM2 Processes</div>
+      <div class="widget-value" style="color:${env.color}">${onlineCount}/${pm2Count}</div>
+      <div class="widget-change">online</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Active Projects</div>
+      <div class="widget-value" style="color:${env.color}">${activeProjects.length}</div>
+      <div class="widget-change">${prj.length} total</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Vault Notes</div>
+      <div class="widget-value" style="color:${env.color}">${sn.vault?.total || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Latest Muse</div>
+      <div class="widget-value" style="color:var(--purple);font-size:11px;line-height:1.4">${sn.muse?.snippet ? sn.muse.snippet.substring(0,80) + '...' : '--'}</div>
+      <div class="widget-change">${sn.muse?.date || ''}</div>
+    </div>
+  `;
+
+  let actItems = [];
+  activeProjects.slice(0, 8).forEach(p => {
+    actItems.push({
+      text: p.title || p.file,
+      color: p.priority === 'high' ? 'var(--amber)' : 'var(--cyan)',
+      time: p.nextAction ? '\u2192 ' + p.nextAction.substring(0, 80) : ''
+    });
+  });
+  if (!actItems.length) actItems.push({ text: 'No active projects', color: 'var(--text-dim)', time: '' });
+  document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── FORGE ROOM ───
+async function loadForgeRoom(env) {
+  document.getElementById('rv-widgets').innerHTML = [
+    { label:'Engine', value:'Claude Code', change:'Opus 4.6 (1M context)', color:env.color },
+    { label:'Identity', value:'Forge v2', change:'The Awakened Builder', color:env.color },
+    { label:'PM2 Processes', value:'--', change:'checking...', color:env.color }
+  ].map(function(w) {
+    return '<div class="widget-box"><div class="widget-label">'+w.label+'</div><div class="widget-value" style="color:'+w.color+'">'+w.value+'</div><div class="widget-change">'+w.change+'</div></div>';
+  }).join('');
+
+  // Get PM2 count
+  try {
+    var snap = await fetchJSON('/villa/snapshot');
+    if (snap && snap.pm2) {
+      var online = snap.pm2.filter(function(p){ return p.status === 'online'; }).length;
+      var boxes = document.querySelectorAll('.widget-box');
+      if (boxes[2]) {
+        boxes[2].querySelector('.widget-value').textContent = online + '/' + snap.pm2.length;
+        boxes[2].querySelector('.widget-change').textContent = 'online';
+      }
+    }
+  } catch(e) {}
+
+  document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:8px">Type <code style="background:var(--bg);padding:2px 6px;border-radius:3px">claude</code> in the terminal to start a session.</div>';
+}
+
+// ─── BODY ROOM ───
+async function loadBodyRoom(env) {
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Technique Library</div>
+      <div class="widget-value" style="color:${env.color}">56</div>
+      <div class="widget-change">reference photos</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Boxing Engine</div>
+      <div class="widget-value" style="color:${env.color}">39</div>
+      <div class="widget-change">tests passing</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Coaching Schools</div>
+      <div class="widget-value" style="color:${env.color}">6</div>
+      <div class="widget-change">Cuban, Filipino, Thai, Philly, Science, Schumann</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Gym Eyes</div>
+      <div class="widget-value" style="color:var(--text-dim)">Planned</div>
+      <div class="widget-change">MediaPipe pose + combo detection</div>
+    </div>
+  `;
+  document.getElementById('rv-activity').innerHTML = `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:var(--green)"></div>
+      <div>
+        <div class="activity-text">Technique Gallery live at <a href="/techniques" target="_blank" style="color:var(--green)">/techniques</a></div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot" style="background:var(--amber)"></div>
+      <div>
+        <div class="activity-text">Gym Eyes spec filed. Tier 1: process existing iPhone footage via MediaPipe.</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot" style="background:var(--green)"></div>
+      <div>
+        <div class="activity-text">Baseline: 1,008 punches, 138 guard drops (noodles1 pad session)</div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── CREATE ROOM ───
+async function loadCreateRoom(env) {
+  const [cat, shots, feed] = await Promise.allSettled([
+    fetchJSON('/reed-lab/catalogue'),
+    fetchJSON('/reed-lab/shots'),
+    fetchJSON('/api/reed-studio/feed')
+  ]);
+  const c = cat.value || {};
+  const sh = shots.value || {};
+  const f = feed.value || { posts: [] };
+  const entries = c.entries || c.photos || [];
+  const styles = {};
+  entries.forEach(e => { if (e.style) styles[e.style] = (styles[e.style]||0) + 1; });
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Total Generated</div>
+      <div class="widget-value" style="color:${env.color}">${entries.length || '--'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Styles Used</div>
+      <div class="widget-value" style="color:${env.color}">${Object.keys(styles).length || '10'}</div>
+      <div class="widget-change">${Object.keys(styles).slice(0,3).join(', ')}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Shot Assignments</div>
+      <div class="widget-value" style="color:${env.color}">${sh.assignments?.length || sh.full_list?.length || '--'}</div>
+    </div>
+  `;
+
+  // Show studio feed if available, otherwise recent generations
+  if (f.posts && f.posts.length > 0) {
+    renderStudioFeed(f.posts, env);
+  } else {
+    let actItems = entries.slice(-6).reverse().map(e => ({
+      text: (e.file || '').replace(/\.(jpg|png|jpeg)$/i, ''),
+      color: env.color,
+      time: e.date || ''
+    }));
+    if (!actItems.length) actItems.push({ text: 'No recent generations', color: 'var(--text-dim)', time: '' });
+    document.getElementById('rv-activity').innerHTML = actItems.map(a => `
+      <div class="activity-item">
+        <div class="activity-dot" style="background:${a.color}"></div>
+        <div>
+          <div class="activity-text">${a.text}</div>
+          ${a.time ? `<div class="activity-time">${a.time}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// ─── ENGINEERING LAB ROOM ───
+async function loadLabRoom(env) {
+  const [metrics, feed, progress] = await Promise.allSettled([
+    fetchJSON('/api/engineering-studio/metrics'),
+    fetchJSON('/api/engineering-studio/feed'),
+    fetchJSON('/api/studio-progress')
+  ]);
+  const m = metrics.value || {};
+  const f = feed.value || { posts: [] };
+  const prog = progress.value?.['engineering-studio'] || {};
+  const gym = m.projects?.gym_eyes || {};
+  const ing = m.projects?.ingestion_pipeline || {};
+  const trends = prog.trends || {};
+
+  function arrow(key) {
+    if (!trends[key]) return '';
+    if (trends[key] === 'up') return '<span style="color:var(--green);font-size:11px">&#9650;</span>';
+    if (trends[key] === 'down') return '<span style="color:var(--accent);font-size:11px">&#9660;</span>';
+    return '<span style="color:var(--text-dim);font-size:11px">&#9644;</span>';
+  }
+
+  const eff = prog.effectiveness;
+  const qual = prog.memoryQuality;
+
+  document.getElementById('rv-widgets').innerHTML = `
+    <div class="widget-box">
+      <div class="widget-label">Sessions ${arrow('sessionsTotal')}</div>
+      <div class="widget-value" style="color:${env.color}">${gym.sessions_processed_total || 0}</div>
+      <div class="widget-change">${gym.sessions_processed_week || 0} this week</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Students ${arrow('students')}</div>
+      <div class="widget-value" style="color:${env.color}">${gym.students_tracked || 0}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Accuracy</div>
+      <div class="widget-value" style="color:${gym.detection_accuracy === 'unknown' ? 'var(--amber)' : env.color};font-size:16px">${gym.detection_accuracy === 'unknown' ? 'UNMEASURED' : gym.detection_accuracy || '?'}</div>
+    </div>
+    <div class="widget-box">
+      <div class="widget-label">Ingestion ${arrow('ingestionDays')}</div>
+      <div class="widget-value" style="color:${ing.days_running_unattended > 0 ? 'var(--green)' : 'var(--text-dim)'};font-size:16px">${ing.days_running_unattended || 0}d autonomous</div>
+    </div>
+    ${eff ? `<div class="widget-box">
+      <div class="widget-label">Decision Rate</div>
+      <div class="widget-value" style="color:${eff.percent >= 60 ? 'var(--green)' : 'var(--amber)'};font-size:16px">${eff.percent}%</div>
+      <div class="widget-change">${eff.succeeded}/${eff.rated} succeeded</div>
+    </div>` : ''}
+    ${qual ? `<div class="widget-box">
+      <div class="widget-label">Memory</div>
+      <div class="widget-value" style="color:${qual.ratedPercent >= 50 ? 'var(--green)' : 'var(--text-dim)'};font-size:16px">${qual.ratedPercent}%</div>
+      <div class="widget-change">${qual.rated}/${qual.total} rated</div>
+    </div>` : ''}
+  `;
+
+  renderStudioFeed(f.posts || [], env);
+}
+
+// ─── GENERIC STUDIO FEED RENDERER ───
+async function loadStudioFeedRoom(env) {
+  const feed = await fetchJSON(env.dataEndpoints.feed);
+  const f = feed || { posts: [] };
+  document.getElementById('rv-widgets').innerHTML = '';
+  renderStudioFeed(f.posts || [], env);
+}
+
+function renderStudioFeed(posts, env) {
+  if (!posts.length) {
+    document.getElementById('rv-activity').innerHTML = '<div style="color:var(--text-dim);font-size:12px;padding:8px">No feed posts yet.</div>';
+    return;
+  }
+  const rated = posts.filter(p => p.outcome).length;
+  const total = posts.length;
+  const header = rated > 0 ? `<div style="padding:8px 0 12px;border-bottom:1px solid var(--border);margin-bottom:8px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:10px;color:var(--text-dim)">MEMORY: ${rated}/${total} rated</span>
+    <div style="flex:1;height:3px;background:var(--surface-2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.round((rated/total)*100)}%;background:${env.color};border-radius:2px"></div></div>
+  </div>` : '';
+
+  document.getElementById('rv-activity').innerHTML = header + posts.slice(0, 20).map(p => {
+    const time = timeAgo(p.timestamp);
+    const roleColor = {
+      orc: 'var(--amber)', programmer: 'var(--cyan)', director: env.color,
+      calibrator: '#a78bfa', tester: 'var(--rose)', researcher: 'var(--green)',
+      deployer: 'var(--blue)', archivist: 'var(--text-muted)',
+      reed: env.color, librarian: 'var(--purple)', watcher: 'var(--green)',
+      editor: 'var(--rose)', rnd: 'var(--cyan)'
+    }[p.role] || 'var(--text-muted)';
+    const outcomeBadge = p.outcome ? `<span style="font-size:9px;padding:1px 6px;border-radius:3px;font-weight:600;background:${
+      p.outcome.result === 'succeeded' || p.outcome.result === 'acted' ? 'rgba(34,197,94,0.15);color:var(--green)' :
+      p.outcome.result === 'failed' ? 'rgba(239,68,68,0.15);color:var(--accent)' :
+      'rgba(255,255,255,0.06);color:var(--text-dim)'
+    }">${p.outcome.result}</span>` : '';
+    return `
+    <div class="activity-item" style="flex-direction:column;gap:4px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:10px;font-weight:600;color:${roleColor};text-transform:uppercase;letter-spacing:0.5px">${p.role}</span>
+        <span style="font-size:10px;color:var(--text-dim)">${time}</span>
+        ${outcomeBadge}
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.5;white-space:pre-wrap;font-family:monospace">${(p.content || '').slice(0, 300)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════ HELPERS ═══════════════════
+async function fetchJSON(url) {
+  try {
+    const r = await fetch(BASE + url);
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; }
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const now = Date.now();
+  const diff = now - d.getTime();
+  if (diff < 0) return '';
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  return days + 'd ago';
+}
+
+// ═══════════════════ CHAT ═══════════════════
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('chat-send');
+  const messages = document.getElementById('chat-messages');
+  const query = input.value.trim();
+  if (!query || !currentRoom) return;
+
+  // Show user message
+  messages.innerHTML += `<div class="chat-msg chat-msg-user"><div class="chat-bubble">${escapeHtml(query)}</div></div>`;
+  input.value = '';
+  btn.disabled = true;
+  messages.scrollTop = messages.scrollHeight;
+
+  // Show typing
+  messages.innerHTML += `<div class="chat-typing" id="chat-typing">thinking...</div>`;
+  messages.scrollTop = messages.scrollHeight;
+
+  chatHistory.push({ role: 'user', content: query });
+
+  try {
+    const r = await fetch(BASE + '/env/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, history: chatHistory.slice(-10), room: currentRoom.id })
+    });
+    const data = await r.json();
+    const reply = data.response || data.error || 'No response';
+
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    // Remove typing indicator
+    const typing = document.getElementById('chat-typing');
+    if (typing) typing.remove();
+
+    const agentNames = { money:'Trader', mind:'Sage', body:'Coach', create:'Reed', work:'Conductor' };
+    messages.innerHTML += `
+      <div class="chat-msg chat-msg-agent">
+        <div class="chat-name" style="color:${currentRoom.color}">${agentNames[currentRoom.id] || 'Agent'}</div>
+        <div class="chat-bubble">${formatReply(reply)}</div>
+      </div>`;
+  } catch (err) {
+    const typing = document.getElementById('chat-typing');
+    if (typing) typing.remove();
+    messages.innerHTML += `<div class="chat-msg chat-msg-agent"><div class="chat-bubble" style="color:var(--accent)">Error: ${err.message}</div></div>`;
+  }
+
+  btn.disabled = false;
+  messages.scrollTop = messages.scrollHeight;
+  input.focus();
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatReply(s) {
+  // Basic markdown: bold, code, newlines
+  return escapeHtml(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code style="background:var(--bg);padding:1px 4px;border-radius:3px;font-size:12px">$1</code>')
+    .replace(/\n/g, '<br>');
+}
+
+// ═══════════════════ ROUTING ═══════════════════
+function handleRoute() {
+  const path = window.location.pathname;
+  const match = path.match(/^\/env\/(\w+)$/);
+  if (match) {
+    const roomId = match[1];
+    if (ENV.find(e => e.id === roomId)) {
+      openRoom(roomId);
+      return;
+    }
+  }
+  // Default: show lobby
+  renderLobby();
+}
+
+window.addEventListener('popstate', () => {
+  if (currentRoom) {
+    closeRoom();
+  }
+});
+
+// ═══════════════════ INIT ═══════════════════
+window.onerror = function(msg, url, line) {
+  document.getElementById('lobby-grid').innerHTML = '<div style="color:#ef4444;padding:20px">Error line ' + line + ': ' + msg + '</div>';
+};
+try { handleRoute(); } catch(e) {
+  document.getElementById('lobby-grid').innerHTML = '<div style="color:#ef4444;padding:20px">' + e.message + '</div>';
+}
+</script>
+</body>
+</html>
