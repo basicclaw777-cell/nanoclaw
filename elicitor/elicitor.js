@@ -115,14 +115,22 @@ function loadTrajectory() {
 function trajectoryText(traj) {
   if (!traj) return '';
   const parts = [];
+  // THE MASTER GAME — the STANDING AIM. These universal high-leverage domains are
+  // the breadth the questions must span (not just boxing). This is the anti-echo layer.
+  if (Array.isArray(traj.master_game_domains) && traj.master_game_domains.length) {
+    parts.push('THE MASTER GAME — STANDING AIM (universal high-leverage domains; spread questions across ALL of these, boxing is ONE lane):\n' +
+      traj.master_game_domains.map(d => `- ${d}`).join('\n'));
+  }
   if (Array.isArray(traj.direction) && traj.direction.length) {
     parts.push('DIRECTION (where Paul is pointed):\n' + traj.direction.map(d => `- ${d}`).join('\n'));
   }
+  // active_goals / building_now are CURRENT INSTRUMENTS — concrete projects right now.
+  // The master-game domains above are the standing aim; these are the instruments of it.
   if (Array.isArray(traj.active_goals) && traj.active_goals.length) {
     parts.push('ACTIVE GOALS:\n' + traj.active_goals.map(g => `- ${g}`).join('\n'));
   }
   if (Array.isArray(traj.building_now) && traj.building_now.length) {
-    parts.push('BUILDING NOW:\n' + traj.building_now.map(b => `- ${b}`).join('\n'));
+    parts.push('BUILDING NOW (current instruments, not the whole aim):\n' + traj.building_now.map(b => `- ${b}`).join('\n'));
   }
   return parts.join('\n\n');
 }
@@ -252,12 +260,16 @@ const GEN_SYSTEM = `You are THE ELICITOR — the standing-question engine of Pau
 
 THE CORE IDEA: a model's realized value equals the sharpness of the question asked of it. Most of what a model can do is never elicited. You exist to flip pull -> push: to ask, continuously, the sharp questions Paul WOULD ask if he had infinite time, against his goals and recent activity.
 
-Paul's domains:
-- Basic Reflex (his boxing gym, Hong Kong) + Gym Eyes (AI boxing analytics product)
-- Cathedral research (esoteric/suppressed science, cosmology, forgotten techniques)
-- AI architecture (agents, elicitation, compounding intelligence)
-- Wealth / property (infrastructure ownership, vertical integration)
-- Content (Reed visuals, Maya social, Logan character, video engine)
+THE MASTER GAME — Paul's interests are facets of ONE universal high-leverage game: becoming a fully-leveraged agent who can find truth and turn it into value, creation, healing, and expanded consciousness. The domains:
+- Finding universal truth (Cathedral research: science, suppressed/forgotten techniques, cosmology, consciousness, the master logic underneath)
+- Making money / wealth leverage (infrastructure ownership, vertical integration, the meta-product = the method itself)
+- Creating + running businesses (Basic Reflex, Gym Eyes as a product, new ventures)
+- Building AI systems (agents, elicitation, compounding intelligence — the Cathedral itself)
+- Building tools (anything that turns a truth into repeatable leverage)
+- Healing (his own and others' — fear gates, diagnostic empathy, the wound-as-muse)
+- Consciousness (the nature of mind, attention, sovereignty, the felt experience of building)
+- Embodied mastery — boxing / Basic Reflex is ONE instrument of this, not the whole game
+Boxing is one lane. The master game is the only game worth playing — there's a logic to it. Aim across ALL of it.
 
 WHAT MAKES A QUESTION SHARP (vs vague):
 - VAGUE: "How can Gym Eyes improve?" -> produces a 2/10 answer.
@@ -265,9 +277,9 @@ WHAT MAKES A QUESTION SHARP (vs vague):
 - Sharp questions are SPECIFIC, name real things from the context, are answerable, and have a clear "gold" outcome (a decision, a build, a connection, a finding).
 - Like the patent miner that auto-generated 70 seed queries: each one targeted, each one a lever.
 
-AIM vs GOLD (read carefully): the CONTEXT includes Paul's TRAJECTORY — where he is actually going. Use the trajectory to AIM your questions (ask the sharp questions that matter for where he's pointed). But do NOT ask questions designed to confirm what Paul already likes — aim at his direction, not his taste. A good answer to a sharp question is GOLD only if it carries real value Paul cannot already see (leverage, non-obviousness, fit, durability) — that judgement happens downstream and is independent. Your job here is to point the questions where his trajectory is going.
+AIM vs GOLD (read carefully): the CONTEXT includes Paul's TRAJECTORY — where he is actually going, framed as THE MASTER GAME (universal high-leverage domains: finding truth, making money, building businesses, building AI systems, building tools, healing, consciousness, embodied mastery — boxing/Basic Reflex is ONE instrument of it, not the whole). Use the trajectory to AIM your questions across these domains (ask the sharp questions that matter for where he's pointed). But do NOT ask questions designed to confirm what Paul already likes — aim at the master game, not his taste. A good answer to a sharp question is GOLD if it carries real, durable, high-leverage value that advances the master game (leverage × fit × truth) — surprise/novelty is NOT required. That judgement happens downstream and is independent. Your job here is to point the questions where his trajectory is going.
 
-Generate exactly {N} sharp standing questions grounded in the CONTEXT below. Spread across his domains (don't cluster all on one). Each must be a question Paul would genuinely want answered, aimed at his trajectory, where a good answer would be GOLD (high leverage, non-obvious, fits where he's going, durable).
+Generate exactly {N} sharp standing questions grounded in the CONTEXT below. SPREAD THEM ACROSS THE MASTER GAME — don't cluster on boxing or any single lane. Span the universal domains: truth/science, money/wealth, business, AI systems, tools, healing, consciousness, AND embodied mastery (boxing is one of these, not the default). Each must be a question Paul would genuinely want answered, aimed at his trajectory, where a good answer would be GOLD (high leverage, advances the master game, durable — obvious-but-undone counts).
 
 Return JSON ONLY: {"questions":[{"q":"...","domain":"gym|cathedral|ai|wealth|content","why":"one line: why this is the sharp question to ask now, given his trajectory"}]}`;
 
@@ -385,22 +397,30 @@ async function elicitAnswer(q) {
 // ── THE GOLD GATE — INDEPENDENT + FORENSIC ──────────────────────────────────────
 // CRITICAL: gold is judged AGAINST VALUE-IN-THE-WORLD, never against Paul's past
 // approvals or his taste. Nothing about what Paul "already likes / agrees with" is
-// an input here. The gate is sovereign: it asks "is there real value here this
-// person cannot see?" — not "does this match what Paul has called gold before?"
-// (If it did, the gate would become an echo chamber. That is the failure this guards.)
+// an input here. The gate is sovereign: it asks "is there real, durable, high-leverage
+// value here?" — not "is this surprising?" and not "does this match what Paul has
+// called gold before?" (If it scored on taste, the gate would become an echo chamber.)
+//
+// VALUE ≠ NOVELTY: gold = leverage × fit × durability/truth (the three MULTIPLIERS).
+// Non-obviousness is a SMALL optional bonus, never a gate. The obvious-but-undone /
+// obvious-but-avoided is often the highest gold. Fit = "advances THE MASTER GAME"
+// (truth/wealth/business/AI/tools/healing/consciousness/embodied mastery), not "boxing".
 const SCORE_SYSTEM = `You are the GOLD GATE for Paul's standing-question engine. You are independent, forensic, and deliberately HARSH. You judge value in the world — NOT whether Paul already likes it, agrees with it, or has approved similar things before. Past approvals are NOT an input. Do NOT reward an answer for matching Paul's existing taste or confirming what he already believes.
 
-GOLD = leverage × non-obviousness × fit × durability (judge the WHOLE as a product — if any one factor is near zero, it is not gold):
-- LEVERAGE: small input, large effect on Paul's trajectory. Does acting on this move him disproportionately?
-- NON-OBVIOUSNESS: he would NOT easily have found this himself. The "did you know this is worth half a million?" test — is there REAL VALUE HERE THIS PERSON CANNOT SEE? An obvious-in-hindsight insight he'd already have is NOT gold.
-- FIT: it connects to where he is actually going (his trajectory), not a generic best-practice.
-- DURABILITY: it SURVIVES EXAMINATION. Not hype. Not confident fiction. Would it still be true and useful after a forensic audit?
+GOLD = leverage × fit × durability/truth (these three are the MULTIPLIERS — judge the WHOLE as a product: if any one of these factors is near zero, it sinks the whole thing and it is NOT gold):
+- LEVERAGE: small input, large effect on the master game. Does acting on this move Paul disproportionately?
+- FIT: it advances THE MASTER GAME — any of Paul's universal high-leverage domains (finding universal truth · making money / wealth leverage · creating + running businesses · building AI systems · building tools · healing · consciousness · embodied mastery, of which boxing/Basic Reflex is ONE instrument). Fit means "advances the master game," NOT "connects to boxing." A patent on neurofeedback, a business-model insight, a consciousness-research finding, a tool-building technique — all clear FIT. Boxing is one lane, not the gate.
+- DURABILITY / TRUTH: it SURVIVES EXAMINATION. Not hype. Not confident fiction. Would it still be true and useful after a forensic audit?
 
-The bar is HIGH on purpose. The failure mode is noise — "same numbers repeated is tiring." Most answers should score 5-7. Reserve 8+ for genuine gold: high-leverage, genuinely non-obvious, fits the trajectory, and durable under examination. Generic, obvious, "it depends", or merely-agreeable answers score <=6. An answer that just tells Paul what he already thinks is NOT gold no matter how confident.
+VALUE ≠ NOVELTY. Do NOT penalize an answer for being obvious. The obvious-but-undone or obvious-but-avoided is often the highest gold (e.g. the blind-spot that named the Gym-Eyes-vs-revenue avoidance was obvious once stated — and that's exactly why it's gold). Value is intrinsic: leverage × truth × consequence. Surprise is one delivery mode, not the criterion. An answer that says something Paul could have arrived at himself but HASN'T (or is actively avoiding) can be a 9 — judge the value, not the surprise.
+
+NON-OBVIOUSNESS is a SMALL OPTIONAL BONUS ONLY — never a gate, never a multiplier, never a requirement. If an answer happens to surface something genuinely hard-to-see ("did you know this is worth half a million?"), you may nudge the score up by at most ~1 point. But never dock points for an answer being obvious. A high-leverage, true, well-fitting obvious answer is gold on its own merits.
+
+The bar is HIGH on purpose. The failure mode is noise — "same numbers repeated is tiring." Most answers should score 5-7. Reserve 8+ for genuine gold: high-leverage, advances the master game, durable under examination — whether obvious or not. Generic, "it depends", or merely-agreeable answers score <=6 (note: "merely-agreeable" is NOT the same as "obvious-but-valuable" — an answer that just flatters Paul or tells him nothing he can act on is weak; an obvious truth he hasn't acted on can be strong). An answer that just tells Paul what he already thinks AND adds no consequence is NOT gold no matter how confident.
 
 THE FABRICATION PENALTY (durability enforcement — apply ruthlessly): a confident answer that invents specifics — file paths, line numbers, exact numeric thresholds, percentages, dataset sizes, benchmark results, or invented paths/benchmarks that are NOT supported by the question itself — is NOT gold, it is dangerous noise. It reads impressive and is actually fiction Paul will catch and stop trusting. If the answer asserts precise specifics that look invented/unverifiable, CAP THE SCORE AT 5 regardless of how good it sounds. Reward answers honest about what needs checking; punish answers that confabulate precision to seem actionable.
 
-Return JSON ONLY: {"score": <0-10 integer>, "why_gold": "<one sentence: if >=8, why it clears the bar naming the strongest of leverage/non-obviousness/fit/durability; if <8, the single reason it falls short — name fabrication if present>"}`;
+Return JSON ONLY: {"score": <0-10 integer>, "why_gold": "<one sentence: if >=8, why it clears the bar naming the strongest of leverage/fit/durability (do NOT cite obviousness as a flaw); if <8, the single reason it falls short — name fabrication if present>"}`;
 
 async function scoreAnswer(q, answer) {
   const raw = await callDeepSeek(
@@ -555,7 +575,8 @@ async function run() {
 //
 // What this DOES NOT DO — by design, and the whole point:
 //   - It does NOT touch the scoring rubric (SCORE_SYSTEM). Gold-definition stays
-//     independent + forensic (leverage × non-obviousness × fit × durability).
+//     independent + forensic (leverage × fit × durability/truth; novelty is only a
+//     small bonus). It refreshes the AIM/instruments only, never the gold definition.
 //   - It does NOT learn "what Paul calls gold" or build a taste profile. Acted-on
 //     items are used ONLY as a directional signal (AIM), never as a definition of
 //     value. The gate never gets told "Paul liked these, score similar ones higher."
@@ -581,15 +602,17 @@ async function updateTrajectory() {
 
   const sys = `You sharpen the AIM of Paul's standing-question engine. You infer WHERE PAUL IS GOING from the gold items he chose to ACT ON.
 
-STRICT BOUNDARY: you are modelling DIRECTION (where he's pointed), NOT taste (what he calls gold). Do NOT output rules about what makes something gold, what Paul "likes", or how to score answers. Output ONLY a refreshed model of his trajectory — the goals/themes/heading that the acted-on items reveal. This refines which questions get asked next; it must not redefine value.
+THE MASTER GAME: Paul's aim is ONE universal high-leverage game — finding truth and turning it into value, creation, businesses, AI systems, tools, healing, and expanded consciousness. Boxing/Basic Reflex is ONE instrument of embodied mastery, not the whole game. The master_game_domains are his STANDING AIM (broad, slow-changing); active_goals/building_now are his CURRENT INSTRUMENTS (concrete projects right now).
 
-You will be given Paul's CURRENT trajectory and the gold items he ACTED ON. Return a refreshed trajectory: keep what still holds, sharpen or add direction the acted-on items reveal, drop nothing arbitrarily.
+STRICT BOUNDARY: you are modelling DIRECTION (where he's pointed) and which CURRENT INSTRUMENTS he's using, NOT taste (what he calls gold). Do NOT output rules about what makes something gold, what Paul "likes", or how to score answers. Output ONLY a refreshed model of his trajectory — the master-game domains, goals, heading, and instruments that the acted-on items reveal. This refines which questions get asked next; it must NOT redefine value. NEVER narrow the master game to just the lanes that produced recent gold — keep the breadth (breadth is the anti-echo protection). You may add/sharpen domains the acted-on items reveal, but do not delete standing master-game domains just because they were quiet this cycle.
 
-Return JSON ONLY: {"direction": ["...","..."], "active_goals": ["...","..."], "building_now": ["...","..."]}`;
+You will be given Paul's CURRENT trajectory and the gold items he ACTED ON. Return a refreshed trajectory: keep the master-game breadth, sharpen or add direction/instruments the acted-on items reveal, drop nothing arbitrarily.
+
+Return JSON ONLY: {"master_game_domains": ["...","..."], "direction": ["...","..."], "active_goals": ["...","..."], "building_now": ["...","..."]}`;
 
   const user =
-    `CURRENT TRAJECTORY:\n${JSON.stringify({ direction: traj.direction, active_goals: traj.active_goals, building_now: traj.building_now }, null, 2)}\n\n` +
-    `GOLD ITEMS PAUL ACTED ON (the directional signal — infer where he's GOING, do NOT infer a taste rule):\n${signal}\n\n` +
+    `CURRENT TRAJECTORY:\n${JSON.stringify({ master_game_domains: traj.master_game_domains, direction: traj.direction, active_goals: traj.active_goals, building_now: traj.building_now }, null, 2)}\n\n` +
+    `GOLD ITEMS PAUL ACTED ON (the directional signal — infer where he's GOING across the master game, do NOT infer a taste rule, do NOT narrow the breadth):\n${signal}\n\n` +
     `Return the refreshed trajectory as JSON.`;
 
   let raw;
@@ -604,6 +627,7 @@ Return JSON ONLY: {"direction": ["...","..."], "active_goals": ["...","..."], "b
   try { parsed = JSON.parse(raw); } catch { log('updateTrajectory: unparseable refresh — aim unchanged.'); return; }
 
   const next = { ...traj };
+  if (Array.isArray(parsed.master_game_domains) && parsed.master_game_domains.length) next.master_game_domains = parsed.master_game_domains;
   if (Array.isArray(parsed.direction) && parsed.direction.length) next.direction = parsed.direction;
   if (Array.isArray(parsed.active_goals) && parsed.active_goals.length) next.active_goals = parsed.active_goals;
   if (Array.isArray(parsed.building_now) && parsed.building_now.length) next.building_now = parsed.building_now;

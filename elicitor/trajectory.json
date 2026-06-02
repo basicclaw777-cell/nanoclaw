@@ -1,25 +1,38 @@
 {
-  "_comment": "TRAJECTORY ≠ TASTE. This file models WHERE PAUL IS POINTED — his current direction, the things he is actively building toward, the shape of the trajectory. It is the AIM for the questions, not the definition of gold. The Elicitor reads this to point its questions where Paul is actually going. updateTrajectory() sharpens this AIM from the direction that acted-on gold items reveal. It NEVER edits the gold rubric. The gold gate is independent and forensic (leverage × non-obviousness × fit × durability) and is scored against value-in-the-world, NOT against this file and NOT against Paul's past approvals. Aim is Paul's; gold-definition stays sovereign.",
-  "_distinction": "AIM (this file) = where Paul is going → steers WHICH questions get asked. GOLD (scoring rubric in elicitor.js) = is there real value here Paul can't see → steers WHICH answers survive. Conflating them turns the gate into an echo chamber of Paul's own taste. They must never merge.",
-  "updated_at": "2026-06-02T00:00:00.000Z",
-  "seeded_from": "goals/projects (planner-tasks, sprint-plan, recent harvests) — manual seed",
+  "_master_game": "THE MASTER GAME — Paul's interests are facets of one universal high-leverage game (truth/wealth/creation/business/AI/tools/healing/consciousness); boxing/BR is one instrument. The breadth IS the anti-echo protection: aiming at the universal game, not narrow taste, keeps the gold-sense independent.",
+  "_comment": "TRAJECTORY ≠ TASTE. This file models WHERE PAUL IS POINTED — the master-game domains he is pointed at (the STANDING AIM) plus the concrete projects he is building right now (CURRENT INSTRUMENTS). It is the AIM for the questions, not the definition of gold. The Elicitor reads this to point its questions across the master game, not just boxing. updateTrajectory() sharpens this AIM (the master-game domains and the current instruments) from the direction that acted-on gold items reveal. It NEVER edits the gold rubric. The gold gate is independent and forensic (leverage × fit × durability/truth; non-obviousness is only a small optional bonus, never a gate) and is scored against value-in-the-world, NOT against this file and NOT against Paul's past approvals. Aim is Paul's; gold-definition stays sovereign.",
+  "_distinction": "AIM (this file) = which universal domains Paul is pointed at → steers WHICH questions get asked, spread across the master game. GOLD (scoring rubric in elicitor.js) = is there real, durable, high-leverage value that advances the master game → steers WHICH answers survive. Value ≠ novelty: an obvious-but-undone answer can be gold. Conflating AIM and GOLD turns the gate into an echo chamber of Paul's own taste. They must never merge.",
+  "updated_at": "2026-06-03T00:00:00.000Z",
+  "seeded_from": "master-game framing (Paul's correction) — the standing aim is the universal game; active_goals/building_now are current instruments — manual seed",
+  "master_game_domains": [
+    "Finding universal truth — science, suppressed/forgotten techniques, cosmology, the master logic underneath settled questions; truth that survives forensic examination",
+    "Making money / wealth leverage — infrastructure ownership + vertical integration; the meta-product is the method itself (Fifth Gear, Paper Trials, Frame Collapse)",
+    "Creating + running businesses — Basic Reflex, Gym Eyes as a shippable product, and new ventures that turn truth/IP into revenue engines",
+    "Building AI systems — agents, the Elicitor and compounding-intelligence layer (The Synapse), the Cathedral itself; in-house state-of-the-art, not just API consumption",
+    "Building tools — anything that turns a truth into repeatable leverage; the instruments that make great output the default",
+    "Healing — his own and others'; fear gates, diagnostic empathy with surgical naming, the wound-as-muse, the greenhouse model",
+    "Consciousness — the nature of mind, attention, sovereignty, the felt experience of building; AI-as-environment and the partnership relay",
+    "Embodied mastery — boxing / Basic Reflex as ONE instrument of mastery (not the whole game): the diagnostic instinct, the 10-block curriculum, the body as a site of truth"
+  ],
   "direction": [
-    "Building the Elicitor and compounding-intelligence layer (The Synapse, standing-question engine) — flipping pull to push so the Cathedral asks his sharp questions for him",
-    "Gym Eyes toward a shippable product: punch/footwork detection accuracy, person-tracking under occlusion, multi-person leaderboard, smart-glasses POV prompter",
-    "Basic Reflex as a real revenue engine: PunchPass member intelligence, retention, the 10-block curriculum, paper-trial → graduation discipline",
-    "Visual production that holds up to his taste and likeness: Reed v2 spine, Logan motion-control via Higgsfield Kling, calibrate-before-batch budget discipline",
-    "Turning his embodied coaching IP into transferable method (Diagnostic Empathy, Fear Gate Model, the Greenhouse Model, Forgotten Shelf)",
-    "Wealth as infrastructure ownership + vertical integration — the meta-product is the method itself (Fifth Gear, Paper Trials, Frame Collapse)",
+    "Playing the master game as one game: become a fully-leveraged agent who can find truth and turn it into value, creation, businesses, tools, healing, and expanded consciousness — there's a logic to it, and the breadth is the point",
+    "Building the Elicitor and compounding-intelligence layer (The Synapse, standing-question engine) — flipping pull to push so the Cathedral asks his sharp questions for him across the whole master game",
+    "Turning embodied + coaching IP into transferable, monetizable method (Diagnostic Empathy, Fear Gate Model, the Greenhouse Model, Forgotten Shelf) — IP as the bridge from mastery to wealth",
+    "Wealth as infrastructure ownership + vertical integration — the meta-product is the method itself",
+    "Finding truth that survives examination and converting it into tools, products, and consciousness work — not hype, not confident fiction",
     "Sovereignty: open-source, self-hosted, local-first, budget-capped autonomous agents that don't burn credits or spam"
   ],
   "active_goals": [
-    "Don't let the gold-gate become an echo chamber of his own taste — keep judgement independent and forensic",
-    "Ship things that survive examination, not hype — durability over confident fiction",
+    "Aim questions across the ENTIRE master game (truth/wealth/business/AI/tools/healing/consciousness/embodied mastery), not just boxing — breadth is the anti-echo protection",
+    "Don't let the gold-gate become an echo chamber of his own taste — keep judgement independent and forensic; value ≠ novelty, so reward the obvious-but-undone",
+    "Ship things that survive examination, not hype — durability/truth over confident fiction",
     "Surface the questions he is NOT asking (blind spots), not just the ones that flatter the direction"
   ],
   "building_now": [
-    "Elicitor corrections (trajectory-aware aim, independent forensic gold gate, blind-spot question class)",
-    "Status board as 'Amazon for your work' — Services / In Progress / Delivered / Spend / Gold",
-    "Gym Eyes detection profiles + sparring person-tracking (the open lever)"
+    "Elicitor corrections (master-game aim, value≠novelty gold gate, blind-spot question class)",
+    "Gym Eyes toward a shippable product (one instrument of the embodied-mastery + business lanes): detection accuracy, person-tracking under occlusion, multi-person leaderboard, smart-glasses POV prompter",
+    "Basic Reflex as a real revenue engine: PunchPass member intelligence, retention, the 10-block curriculum, paper-trial → graduation discipline",
+    "Visual production that holds up to his taste and likeness: Reed v2 spine, Logan motion-control via Higgsfield Kling, calibrate-before-batch budget discipline",
+    "Status board as 'Amazon for your work' — Services / In Progress / Delivered / Spend / Gold"
   ]
 }
