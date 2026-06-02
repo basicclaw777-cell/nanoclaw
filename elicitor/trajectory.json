@@ -1,0 +1,25 @@
+{
+  "_comment": "TRAJECTORY ≠ TASTE. This file models WHERE PAUL IS POINTED — his current direction, the things he is actively building toward, the shape of the trajectory. It is the AIM for the questions, not the definition of gold. The Elicitor reads this to point its questions where Paul is actually going. updateTrajectory() sharpens this AIM from the direction that acted-on gold items reveal. It NEVER edits the gold rubric. The gold gate is independent and forensic (leverage × non-obviousness × fit × durability) and is scored against value-in-the-world, NOT against this file and NOT against Paul's past approvals. Aim is Paul's; gold-definition stays sovereign.",
+  "_distinction": "AIM (this file) = where Paul is going → steers WHICH questions get asked. GOLD (scoring rubric in elicitor.js) = is there real value here Paul can't see → steers WHICH answers survive. Conflating them turns the gate into an echo chamber of Paul's own taste. They must never merge.",
+  "updated_at": "2026-06-02T00:00:00.000Z",
+  "seeded_from": "goals/projects (planner-tasks, sprint-plan, recent harvests) — manual seed",
+  "direction": [
+    "Building the Elicitor and compounding-intelligence layer (The Synapse, standing-question engine) — flipping pull to push so the Cathedral asks his sharp questions for him",
+    "Gym Eyes toward a shippable product: punch/footwork detection accuracy, person-tracking under occlusion, multi-person leaderboard, smart-glasses POV prompter",
+    "Basic Reflex as a real revenue engine: PunchPass member intelligence, retention, the 10-block curriculum, paper-trial → graduation discipline",
+    "Visual production that holds up to his taste and likeness: Reed v2 spine, Logan motion-control via Higgsfield Kling, calibrate-before-batch budget discipline",
+    "Turning his embodied coaching IP into transferable method (Diagnostic Empathy, Fear Gate Model, the Greenhouse Model, Forgotten Shelf)",
+    "Wealth as infrastructure ownership + vertical integration — the meta-product is the method itself (Fifth Gear, Paper Trials, Frame Collapse)",
+    "Sovereignty: open-source, self-hosted, local-first, budget-capped autonomous agents that don't burn credits or spam"
+  ],
+  "active_goals": [
+    "Don't let the gold-gate become an echo chamber of his own taste — keep judgement independent and forensic",
+    "Ship things that survive examination, not hype — durability over confident fiction",
+    "Surface the questions he is NOT asking (blind spots), not just the ones that flatter the direction"
+  ],
+  "building_now": [
+    "Elicitor corrections (trajectory-aware aim, independent forensic gold gate, blind-spot question class)",
+    "Status board as 'Amazon for your work' — Services / In Progress / Delivered / Spend / Gold",
+    "Gym Eyes detection profiles + sparring person-tracking (the open lever)"
+  ]
+}

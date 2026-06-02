@@ -529,9 +529,11 @@ function renderGold(){
 function goldCard(g){
   const dm = GOLD_DOMAIN[g.domain]||GOLD_DOMAIN.general;
   const actedNote = g.acted_on ? `acted ${ago(g.acted_on)}` : '';
-  return `<div class="card" style="--st-c:${dm.c}">
+  const blind = g.class==='blind-spot';
+  const blindFlag = blind ? `<span class="badge" style="--st-t:#fdecea;color:#c0392b;margin-right:6px" title="The question you're not asking — may sting">🔦 Blind spot</span>` : '';
+  return `<div class="card" style="--st-c:${blind?'#c0392b':dm.c}">
     <div class="card-top"><div><div class="card-name">${esc(g.question)}</div>
-      <div class="card-plan">${dm.l} · ${ago(g.ts)}${g.route&&g.route!=='vault+deepseek'?' · via '+esc(g.route):''}</div></div>
+      <div class="card-plan">${blindFlag}${dm.l} · ${ago(g.ts)}${g.route&&g.route!=='vault+deepseek'?' · via '+esc(g.route):''}</div></div>
       <span class="badge" style="--st-t:#f8f0d9;color:#b8860b">${g.score}/10</span></div>
     <div class="detail" style="white-space:pre-wrap;line-height:1.5">${esc(g.answer)}</div>
     ${g.why_gold?`<div class="detail" style="color:var(--ink-faint);border-left:3px solid ${dm.c};padding-left:8px"><b>Why gold:</b> ${esc(g.why_gold)}</div>`:''}

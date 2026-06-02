@@ -52,6 +52,11 @@ const HERE = __dirname;
 const GOLD_FEED = path.join(HERE, 'gold-feed.json');
 const QUESTIONS_LOG = path.join(HERE, 'questions-log.jsonl');
 const RUN_STATE = path.join(HERE, 'run-state.json');
+// TRAJECTORY ≠ TASTE. trajectory.json models WHERE PAUL IS POINTED (his current
+// direction / goals / what he's building). It AIMS the questions. It is NOT a
+// list of "what Paul calls gold" and it NEVER feeds the scoring rubric. The aim
+// is Paul's; the gold-definition stays independent + forensic. See updateTrajectory().
+const TRAJECTORY = path.join(HERE, 'trajectory.json');
 
 const VAULT = path.join(HOME, 'cathedral-vault');
 const HARVEST_DIR = path.join(VAULT, '00_Staging/cathedral');
@@ -64,6 +69,7 @@ const IN_PROGRESS = path.join(NANOCLAW, 'in-progress-index.json');
 const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
 const GOLD_BAR = 8;              // score >= 8 (out of 10) reaches the gold feed
 const DEFAULT_N = 8;             // questions per run (default)
+const BLIND_SPOT_N = 2;          // blind-spot questions per run (the ones that may sting)
 const DAILY_CALL_CEILING = 60;   // hard daily DeepSeek call ceiling
 // per-run call cap is derived: 1 (generate) + N (elicit) + N (score) + slack
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
@@ -79,8 +85,9 @@ const N = Math.max(1, Math.min(20, parseInt(argVal('--cap', String(DEFAULT_N)), 
 const DRY = args.includes('--dry');
 const NO_TELEGRAM = args.includes('--no-telegram') || DRY;
 
-// per-run DeepSeek call ceiling: generation + (elicit + score) per question + slack
-const PER_RUN_CALL_CAP = 1 + N * 2 + 2;
+// per-run DeepSeek call ceiling: 2 generation calls (normal + blind-spot) +
+// (elicit + score) per question for both normal AND blind-spot questions + slack
+const PER_RUN_CALL_CAP = 2 + (N + BLIND_SPOT_N) * 2 + 2;
 
 // ── runtime call counter ──────────────────────────────────────────────────────
 let callsThisRun = 0;
@@ -99,8 +106,41 @@ function writeJSON(p, obj) {
 // ── 1. GATHER CONTEXT ──────────────────────────────────────────────────────────
 // Read Paul's current focus from what already exists. Summarize "what Paul is
 // working on / cares about right now" — grounding for sharp question generation.
+// Load the AIM (trajectory) — where Paul is pointed. This STEERS which questions
+// get asked. It does NOT define gold. (TRAJECTORY ≠ TASTE — see header on TRAJECTORY.)
+function loadTrajectory() {
+  return readJSON(TRAJECTORY, null);
+}
+
+function trajectoryText(traj) {
+  if (!traj) return '';
+  const parts = [];
+  if (Array.isArray(traj.direction) && traj.direction.length) {
+    parts.push('DIRECTION (where Paul is pointed):\n' + traj.direction.map(d => `- ${d}`).join('\n'));
+  }
+  if (Array.isArray(traj.active_goals) && traj.active_goals.length) {
+    parts.push('ACTIVE GOALS:\n' + traj.active_goals.map(g => `- ${g}`).join('\n'));
+  }
+  if (Array.isArray(traj.building_now) && traj.building_now.length) {
+    parts.push('BUILDING NOW:\n' + traj.building_now.map(b => `- ${b}`).join('\n'));
+  }
+  return parts.join('\n\n');
+}
+
 function gatherContext() {
-  const ctx = { sources: [], blocks: [] };
+  const ctx = { sources: [], blocks: [], trajectory: null };
+
+  // TRAJECTORY first — this AIMS the question generation. It is the model of where
+  // Paul is going. (It does NOT influence scoring — gold stays independent.)
+  const traj = loadTrajectory();
+  if (traj) {
+    ctx.trajectory = traj;
+    const tt = trajectoryText(traj);
+    if (tt) {
+      ctx.sources.push('trajectory.json (AIM)');
+      ctx.blocks.push("PAUL'S TRAJECTORY — AIM THE QUESTIONS HERE (where he is actually going):\n" + tt);
+    }
+  }
 
   // planner tasks (top priorities, dedup descriptions)
   const planner = readJSON(PLANNER_TASKS, []);
@@ -225,9 +265,11 @@ WHAT MAKES A QUESTION SHARP (vs vague):
 - Sharp questions are SPECIFIC, name real things from the context, are answerable, and have a clear "gold" outcome (a decision, a build, a connection, a finding).
 - Like the patent miner that auto-generated 70 seed queries: each one targeted, each one a lever.
 
-Generate exactly {N} sharp standing questions grounded in the CONTEXT below. Spread across his domains (don't cluster all on one). Each must be a question Paul would genuinely want answered, where a good answer would be GOLD (high value, novel, actionable).
+AIM vs GOLD (read carefully): the CONTEXT includes Paul's TRAJECTORY — where he is actually going. Use the trajectory to AIM your questions (ask the sharp questions that matter for where he's pointed). But do NOT ask questions designed to confirm what Paul already likes — aim at his direction, not his taste. A good answer to a sharp question is GOLD only if it carries real value Paul cannot already see (leverage, non-obviousness, fit, durability) — that judgement happens downstream and is independent. Your job here is to point the questions where his trajectory is going.
 
-Return JSON ONLY: {"questions":[{"q":"...","domain":"gym|cathedral|ai|wealth|content","why":"one line: why this is the sharp question to ask now"}]}`;
+Generate exactly {N} sharp standing questions grounded in the CONTEXT below. Spread across his domains (don't cluster all on one). Each must be a question Paul would genuinely want answered, aimed at his trajectory, where a good answer would be GOLD (high leverage, non-obvious, fits where he's going, durable).
+
+Return JSON ONLY: {"questions":[{"q":"...","domain":"gym|cathedral|ai|wealth|content","why":"one line: why this is the sharp question to ask now, given his trajectory"}]}`;
 
 async function generateQuestions(ctx) {
   const raw = await callDeepSeek(
@@ -239,6 +281,40 @@ async function generateQuestions(ctx) {
   try { parsed = JSON.parse(raw); } catch { parsed = { questions: [] }; }
   const qs = Array.isArray(parsed.questions) ? parsed.questions : [];
   return qs.slice(0, N).filter(x => x && x.q);
+}
+
+// ── 2b. GENERATE BLIND-SPOT QUESTIONS ──────────────────────────────────────────
+// The whole point: by definition, Paul's taste-map would NEVER surface these. They
+// are the questions he is NOT asking — because he doesn't want the answer. These may
+// sting; that is correct. They are scored by the SAME independent gold bar.
+const BLINDSPOT_SYSTEM = `You are THE ELICITOR's blind-spot probe for Paul's Cathedral (a sovereign AI research system).
+
+Most of the engine asks the sharp questions Paul WOULD ask. You ask the ones he is NOT asking — on purpose, because he doesn't want the answer.
+
+Your job: from the CONTEXT (his trajectory, current work, recent corrections, open intentions), find what Paul is AVOIDING / NOT SEEING / SMOOTHING OVER. The question he is conspicuously not asking. The assumption he treats as settled that isn't. The thing that, if true, would force an uncomfortable change of course.
+
+These are blind spots BY DEFINITION — they would never surface from his own taste, his own framing, or a question generator aimed at his goals. That is exactly why they are valuable. Do not flatter. Do not soften. Name the avoided thing as a sharp, answerable question grounded in the actual context (not generic life advice).
+
+Examples of the SHAPE (not the content): "Is [thing Paul keeps building] actually solving the problem, or is it a sophisticated way of avoiding [harder problem]?" · "What load-bearing assumption behind [current direction] has Paul never tested because testing it risks the whole thing?" · "Where is Paul mistaking motion for progress?"
+
+Ground every blind-spot question in something concrete from the CONTEXT. A blind spot that names a real, specific thing in his system stings and is gold. A vague one is noise.
+
+Generate exactly {K} blind-spot questions. Return JSON ONLY: {"questions":[{"q":"...","domain":"gym|cathedral|ai|wealth|content","why":"one line: why this is the question Paul is avoiding"}]}`;
+
+async function generateBlindSpotQuestions(ctx) {
+  if (BLIND_SPOT_N < 1) return [];
+  const raw = await callDeepSeek(
+    BLINDSPOT_SYSTEM.replace('{K}', String(BLIND_SPOT_N)),
+    `CONTEXT — what Paul is working on / pointed at / re-steering right now:\n\n${ctx.text}\n\nGenerate ${BLIND_SPOT_N} blind-spot questions (what he's avoiding) as JSON.`,
+    { temperature: 0.7, maxTokens: 1200, json: true }
+  );
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { parsed = { questions: [] }; }
+  const qs = Array.isArray(parsed.questions) ? parsed.questions : [];
+  // tag each as a blind-spot so it carries through scoring, gold-feed and Telegram
+  return qs.slice(0, BLIND_SPOT_N)
+    .filter(x => x && x.q)
+    .map(x => ({ ...x, qclass: 'blind-spot' }));
 }
 
 // ── ROUTING HOOKS (left for later, per brief) ──────────────────────────────────
@@ -306,18 +382,25 @@ async function elicitAnswer(q) {
 }
 
 // ── 4. SCORE FOR GOLD ───────────────────────────────────────────────────────────
-const SCORE_SYSTEM = `You are the GOLD GATE for Paul's standing-question engine. You are deliberately HARSH.
+// ── THE GOLD GATE — INDEPENDENT + FORENSIC ──────────────────────────────────────
+// CRITICAL: gold is judged AGAINST VALUE-IN-THE-WORLD, never against Paul's past
+// approvals or his taste. Nothing about what Paul "already likes / agrees with" is
+// an input here. The gate is sovereign: it asks "is there real value here this
+// person cannot see?" — not "does this match what Paul has called gold before?"
+// (If it did, the gate would become an echo chamber. That is the failure this guards.)
+const SCORE_SYSTEM = `You are the GOLD GATE for Paul's standing-question engine. You are independent, forensic, and deliberately HARSH. You judge value in the world — NOT whether Paul already likes it, agrees with it, or has approved similar things before. Past approvals are NOT an input. Do NOT reward an answer for matching Paul's existing taste or confirming what he already believes.
 
-Score an answer 0-10 on the product of three axes (judge the WHOLE, not an average):
-- VALUE: would Paul act on this / is it worth his scarce attention?
-- NOVELTY: is this a non-obvious insight, or generic advice he'd already know?
-- ACTIONABILITY: is there a concrete move, or is it just framing?
+GOLD = leverage × non-obviousness × fit × durability (judge the WHOLE as a product — if any one factor is near zero, it is not gold):
+- LEVERAGE: small input, large effect on Paul's trajectory. Does acting on this move him disproportionately?
+- NON-OBVIOUSNESS: he would NOT easily have found this himself. The "did you know this is worth half a million?" test — is there REAL VALUE HERE THIS PERSON CANNOT SEE? An obvious-in-hindsight insight he'd already have is NOT gold.
+- FIT: it connects to where he is actually going (his trajectory), not a generic best-practice.
+- DURABILITY: it SURVIVES EXAMINATION. Not hype. Not confident fiction. Would it still be true and useful after a forensic audit?
 
-The bar is HIGH on purpose. The failure mode is noise — "same numbers repeated is tiring." Most answers should score 5-7. Reserve 8+ for genuine gold: specific, non-obvious, immediately actionable, worth interrupting Paul for. Generic, vague, or "it depends" answers score <=6. A confident but obvious answer is NOT gold.
+The bar is HIGH on purpose. The failure mode is noise — "same numbers repeated is tiring." Most answers should score 5-7. Reserve 8+ for genuine gold: high-leverage, genuinely non-obvious, fits the trajectory, and durable under examination. Generic, obvious, "it depends", or merely-agreeable answers score <=6. An answer that just tells Paul what he already thinks is NOT gold no matter how confident.
 
-THE FABRICATION PENALTY (apply ruthlessly): a confident answer that invents specifics — file paths, line numbers, exact numeric thresholds, percentages, dataset sizes, or benchmark results that are NOT supported by the question itself — is NOT gold, it is dangerous noise. It reads impressive and is actually fiction Paul will catch and stop trusting. If the answer asserts precise specifics that look invented/unverifiable, CAP THE SCORE AT 5 regardless of how good it sounds. Reward answers that are honest about what needs checking; punish answers that confabulate precision to seem actionable.
+THE FABRICATION PENALTY (durability enforcement — apply ruthlessly): a confident answer that invents specifics — file paths, line numbers, exact numeric thresholds, percentages, dataset sizes, benchmark results, or invented paths/benchmarks that are NOT supported by the question itself — is NOT gold, it is dangerous noise. It reads impressive and is actually fiction Paul will catch and stop trusting. If the answer asserts precise specifics that look invented/unverifiable, CAP THE SCORE AT 5 regardless of how good it sounds. Reward answers honest about what needs checking; punish answers that confabulate precision to seem actionable.
 
-Return JSON ONLY: {"score": <0-10 integer>, "why_gold": "<one sentence: if >=8, why it clears the bar; if <8, the single reason it falls short — name fabrication if present>"}`;
+Return JSON ONLY: {"score": <0-10 integer>, "why_gold": "<one sentence: if >=8, why it clears the bar naming the strongest of leverage/non-obviousness/fit/durability; if <8, the single reason it falls short — name fabrication if present>"}`;
 
 async function scoreAnswer(q, answer) {
   const raw = await callDeepSeek(
@@ -355,24 +438,35 @@ async function run() {
   log(`context gathered from: ${ctx.sources.join(', ') || '(none)'} — ${ctx.text.length} chars`);
   if (!ctx.text.trim()) { log('no context found — aborting (would generate ungrounded noise).'); return; }
 
-  // 2. generate
+  // 2. generate — normal sharp questions (aimed by trajectory) + blind-spot questions
   const questions = await generateQuestions(ctx);
   log(`generated ${questions.length} sharp questions`);
   if (!questions.length) { log('no questions generated — aborting.'); return; }
+
+  // 2b. blind-spot questions — what Paul is NOT asking (scored by the SAME gold bar)
+  let blindSpots = [];
+  try {
+    blindSpots = await generateBlindSpotQuestions(ctx);
+    log(`generated ${blindSpots.length} blind-spot question(s)`);
+  } catch (e) {
+    log(`blind-spot generation failed (continuing without): ${e.message}`);
+  }
+  const allQuestions = [...questions, ...blindSpots];
 
   // existing gold (for dedup)
   const feed = readJSON(GOLD_FEED, []);
   const existingHashes = new Set(feed.map(g => g.id));
 
-  // 3+4. elicit + score each
+  // 3+4. elicit + score each (blind-spot answers scored by the IDENTICAL gold bar)
   const scored = [];
-  for (const q of questions) {
+  for (const q of allQuestions) {
     q.route = classifyRoute(q); // routing hook (attached, not dispatched)
+    const isBlind = q.qclass === 'blind-spot';
     try {
       const { answer, grounding } = await elicitAnswer(q);
       const { score, why_gold } = await scoreAnswer(q, answer);
       scored.push({ q, answer, grounding, score, why_gold });
-      log(`  [${score}/10] (${q.route}) ${q.q.slice(0, 70)}…`);
+      log(`  [${score}/10]${isBlind ? ' 🔦BLIND' : ''} (${q.route}) ${q.q.slice(0, 64)}…`);
     } catch (e) {
       log(`  elicit/score failed for a question: ${e.message}`);
       if (/call cap/.test(e.message)) break; // budget guard
@@ -383,6 +477,7 @@ async function run() {
   if (!DRY) {
     const logStream = scored.map(s => JSON.stringify({
       ts: nowISO(), id: questionHash(s.q.q), domain: s.q.domain, route: s.q.route,
+      class: s.q.qclass || 'normal',
       question: s.q.q, score: s.score, why_gold: s.why_gold, gold: s.score >= GOLD_BAR,
     })).join('\n');
     if (logStream) fs.appendFileSync(QUESTIONS_LOG, logStream + '\n');
@@ -403,6 +498,8 @@ async function run() {
       why_gold: s.why_gold,
       domain: s.q.domain || 'general',
       route: s.q.route,
+      // tag the class so the board / Telegram can flag blind spots distinctly
+      class: s.q.qclass === 'blind-spot' ? 'blind-spot' : 'normal',
       ts: nowISO(),
       acted_on: null,
     });
@@ -425,6 +522,14 @@ async function run() {
   state.last_run = nowISO();
   if (!DRY) writeJSON(RUN_STATE, state);
 
+  // SHARPEN THE AIM (not the gold-definition): infer where acted-on gold reveals
+  // Paul is going, and refresh trajectory.json's direction. This NEVER touches the
+  // scoring rubric — it only steers future question generation.
+  if (!DRY) {
+    try { await updateTrajectory(); }
+    catch (e) { log(`updateTrajectory skipped: ${e.message}`); }
+  }
+
   // Telegram digest of ONLY the new gold + spend awareness (SI-31)
   await sendDigest(newGold, scored, state);
 
@@ -432,11 +537,81 @@ async function run() {
   if (DRY) {
     console.log('\n──── DRY PREVIEW: would-be gold ────');
     newGold.forEach(g => {
-      console.log(`\n[${g.score}/10] (${g.domain}) ${g.question}\n→ ${g.answer}\nWHY GOLD: ${g.why_gold}`);
+      const tag = g.class === 'blind-spot' ? ' 🔦BLIND-SPOT' : '';
+      console.log(`\n[${g.score}/10]${tag} (${g.domain}) ${g.question}\n→ ${g.answer}\nWHY GOLD: ${g.why_gold}`);
     });
   }
 
   return { newGold, scored, calls: callsThisRun };
+}
+
+// ── SHARPEN THE AIM (updateTrajectory) ──────────────────────────────────────────
+// THIS IS THE TRAJECTORY≠TASTE BOUNDARY, ENFORCED IN CODE.
+//
+// What this DOES: read the gold-feed, look at which gold items Paul actually
+// ACTED ON (acted_on flag set), and infer the DIRECTION those acted-on items
+// reveal — i.e. where Paul is going. Refresh trajectory.json's `direction` so the
+// next run AIMS its questions more precisely at his real heading.
+//
+// What this DOES NOT DO — by design, and the whole point:
+//   - It does NOT touch the scoring rubric (SCORE_SYSTEM). Gold-definition stays
+//     independent + forensic (leverage × non-obviousness × fit × durability).
+//   - It does NOT learn "what Paul calls gold" or build a taste profile. Acted-on
+//     items are used ONLY as a directional signal (AIM), never as a definition of
+//     value. The gate never gets told "Paul liked these, score similar ones higher."
+// AIM is Paul's (where he's pointed). GOLD-definition is the gate's (sovereign).
+// They must never merge — merging them makes the gate an echo chamber of his taste.
+async function updateTrajectory() {
+  const traj = loadTrajectory();
+  if (!traj) { log('updateTrajectory: no trajectory.json — skipping.'); return; }
+
+  const feed = readJSON(GOLD_FEED, []);
+  const actedOn = (Array.isArray(feed) ? feed : []).filter(g => g.acted_on);
+  if (!actedOn.length) {
+    log('updateTrajectory: no acted-on gold yet — aim unchanged (need acted_on signal to sharpen direction).');
+    return;
+  }
+
+  // Build a compact signal of what Paul has acted on (Q + why_gold + domain only —
+  // we extract DIRECTION from these, not a taste rule).
+  const signal = actedOn.slice(0, 12).map((g, i) =>
+    `${i + 1}. [${g.domain || 'general'}${g.class === 'blind-spot' ? ' · blind-spot' : ''}] ${g.question}` +
+    (g.why_gold ? `\n   (value: ${g.why_gold})` : '')
+  ).join('\n');
+
+  const sys = `You sharpen the AIM of Paul's standing-question engine. You infer WHERE PAUL IS GOING from the gold items he chose to ACT ON.
+
+STRICT BOUNDARY: you are modelling DIRECTION (where he's pointed), NOT taste (what he calls gold). Do NOT output rules about what makes something gold, what Paul "likes", or how to score answers. Output ONLY a refreshed model of his trajectory — the goals/themes/heading that the acted-on items reveal. This refines which questions get asked next; it must not redefine value.
+
+You will be given Paul's CURRENT trajectory and the gold items he ACTED ON. Return a refreshed trajectory: keep what still holds, sharpen or add direction the acted-on items reveal, drop nothing arbitrarily.
+
+Return JSON ONLY: {"direction": ["...","..."], "active_goals": ["...","..."], "building_now": ["...","..."]}`;
+
+  const user =
+    `CURRENT TRAJECTORY:\n${JSON.stringify({ direction: traj.direction, active_goals: traj.active_goals, building_now: traj.building_now }, null, 2)}\n\n` +
+    `GOLD ITEMS PAUL ACTED ON (the directional signal — infer where he's GOING, do NOT infer a taste rule):\n${signal}\n\n` +
+    `Return the refreshed trajectory as JSON.`;
+
+  let raw;
+  try {
+    raw = await callDeepSeek(sys, user, { temperature: 0.3, maxTokens: 900, json: true });
+  } catch (e) {
+    log(`updateTrajectory: DeepSeek call skipped (${e.message}) — aim unchanged.`);
+    return;
+  }
+
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { log('updateTrajectory: unparseable refresh — aim unchanged.'); return; }
+
+  const next = { ...traj };
+  if (Array.isArray(parsed.direction) && parsed.direction.length) next.direction = parsed.direction;
+  if (Array.isArray(parsed.active_goals) && parsed.active_goals.length) next.active_goals = parsed.active_goals;
+  if (Array.isArray(parsed.building_now) && parsed.building_now.length) next.building_now = parsed.building_now;
+  next.updated_at = nowISO();
+  next.seeded_from = `sharpened from ${actedOn.length} acted-on gold item(s) — AIM only, gold-definition untouched`;
+
+  writeJSON(TRAJECTORY, next);
+  log(`updateTrajectory: aim sharpened from ${actedOn.length} acted-on gold item(s) (gold rubric untouched).`);
 }
 
 // ── Telegram ────────────────────────────────────────────────────────────────────
@@ -463,15 +638,34 @@ async function sendDigest(newGold, scored, state) {
     return;
   }
 
+  // Separate normal gold from blind-spot gold — the blind spots get flagged
+  // distinctly ("🔦 Blind spot:") because by definition they may sting.
+  const normalGold = newGold.filter(g => g.class !== 'blind-spot');
+  const blindGold = newGold.filter(g => g.class === 'blind-spot');
+
   let msg = `🪙 *What I'd have asked this week — and what came back*\n_(${newGold.length} cleared the gold bar of ${scored.length} asked)_\n`;
-  newGold.forEach((g, i) => {
+  normalGold.forEach((g, i) => {
     msg += `\n*${i + 1}. [${g.score}/10 · ${g.domain}]* ${g.question}\n`;
     msg += `${g.answer.slice(0, 600)}\n`;
     msg += `_Why gold: ${g.why_gold}_\n`;
   });
+  if (blindGold.length) {
+    msg += `\n— — —\n*🔦 Blind spots* _(the questions you're not asking — these may sting; that's the point)_\n`;
+    blindGold.forEach((g, i) => {
+      msg += `\n*🔦 Blind spot ${i + 1}. [${g.score}/10 · ${g.domain}]* ${g.question}\n`;
+      msg += `${g.answer.slice(0, 600)}\n`;
+      msg += `_Why gold: ${g.why_gold}_\n`;
+    });
+  }
   msg += `\nFull cards + "acted on" toggle → localhost:8080/board#gold\n${spendLine}`;
   await sendTelegram(msg);
 }
 
 // ── entry ────────────────────────────────────────────────────────────────────
-run().catch(e => { console.error('[elicitor] fatal:', e.message); process.exit(1); });
+// Only auto-run when invoked directly (so the module can be required for testing
+// individual functions like updateTrajectory without triggering a full cycle).
+if (require.main === module) {
+  run().catch(e => { console.error('[elicitor] fatal:', e.message); process.exit(1); });
+}
+
+module.exports = { run, gatherContext, loadTrajectory, updateTrajectory, generateBlindSpotQuestions };
