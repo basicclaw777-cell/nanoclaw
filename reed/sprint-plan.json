@@ -12,25 +12,25 @@
     "gate": "Send both to Paul's Telegram. PROCEED only if he confirms likeness + quality. If off-model: adjust recipe (different still / settings / soul-id 2a825762 long-dreadlocks) and re-test BEFORE any scaling. Calibration credits come out of the Logan track."
   },
   "track_A_logan": {
-    "credits": 90,
-    "focus": "animated Logan assets (motion-control clips), character input = the 31 existing clean stills, motion ref = boxing corpus",
+    "credits": 96,
+    "focus": "animated Logan assets (motion-control clips), character input = the 31 existing clean stills, motion ref = boxing corpus. Includes the 12cr Phase-0 calibration.",
     "items": [
       { "item": "frequency-state stills (Lapis/BlackLight/Fluorescent) — only stills not already in the 31-image library", "gens": 3, "credits": 6 },
       { "item": "signature idle loop", "gens": 2, "credits": 12 },
-      { "item": "boxing actions: jab/cross/hook/slip/guard-recovery/combo (motion ref = corpus)", "gens": 12, "credits": 72 }
+      { "item": "boxing actions: jab/cross/hook/slip/guard-recovery/combo (motion ref = corpus)", "gens": 11, "credits": 66 }
     ],
-    "note": "Phase-0 calibration (12cr) is drawn against this track -> ~78cr of new Track-A gens after calibration."
+    "note": "84cr of new Track-A gens + 12cr Phase-0 calibration = 96cr Logan total."
   },
   "track_B_maya": {
-    "credits": 90,
+    "credits": 96,
     "focus": "BR content stills driven by Maya's content plan (maya-content-plan.json -> maya-plan.js -> image-requests.json). Lower Paul-likeness risk than Logan; still batch-reviewed + gated + captioned.",
     "items": [
-      { "item": "BR Instagram stills across Maya's 5 pillars (member celebration / technique / internal game / Maya-Asks / motivation), Nano Banana Pro", "gens": 45, "credits": 90 }
+      { "item": "BR Instagram stills across Maya's 5 pillars (member celebration / technique / internal game / Maya-Asks / motivation), Nano Banana Pro", "gens": 48, "credits": 96 }
     ],
-    "note": "~45 image gens -> ~30 keepers after regen. Each runs the Flow-1 gate -> Maya caption -> publish-ready. Maya REQUESTS these via maya-plan.js (she's the director)."
+    "note": "~48 image gens -> ~32 keepers after regen. Each runs the Flow-1 gate -> Maya caption -> publish-ready. Maya REQUESTS these via maya-plan.js (she's the director)."
   },
   "reserve": { "credits": 8, "note": "final contingency across both tracks" },
-  "totals": { "calibration": 12, "track_A_logan_net": 78, "track_B_maya": 90, "logan_total_incl_calibration": 90, "reserve": 8, "sum": 200 },
+  "totals": { "calibration": 12, "track_A_logan_net": 84, "track_B_maya": 96, "logan_total_incl_calibration": 96, "reserve": 8, "sum": 200, "_check": "96 logan + 96 maya + 8 reserve = 200" },
   "expected_keepers": "~10 Logan animated clips + 3 freq-state stills (Track A) + ~30 BR content images (Track B), all captioned + publish-ready, for $12.",
   "status": "READY. Higgsfield topped up. AWAITING: (1) Paul confirms Maya's 5 pillars + cadence in maya-content-plan.json, (2) Paul says go on Phase-0 calibration. Then: auth Higgsfield MCP -> calibrate -> on approval, scale both tracks batch-reviewed.",
   "pre_run_checklist": [
