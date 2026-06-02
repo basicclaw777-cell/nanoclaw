@@ -1334,6 +1334,13 @@ app.get('/gym-eyes/dashboard/:name', (req, res) => {
 });
 
 // Cuba Combo Library dashboard + assets
+app.get('/gym-eyes/vision-landscape', (req, res) => {
+  const p = path.join(HOME, 'basic-reflex', 'gym-eyes', 'vision-landscape.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
 const CUBA_LIB = path.join(HOME, 'basic-reflex', 'gym-eyes', 'cuba-library');
 app.get('/cuba-combos', (req, res) => {
   res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
@@ -4339,6 +4346,34 @@ app.get('/logan-universe/image', (req, res) => {
   const filePath = path.join(dir, file);
   if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
   res.sendFile(filePath);
+});
+
+// ── Video Engine ──────────────────────────────────────────────────────────────
+
+app.get('/video-engine', (req, res) => {
+  res.sendFile(path.join(__dirname, 'video-engine-dashboard.html'));
+});
+
+app.get('/api/video-engine', (req, res) => {
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'video-engine.json'), 'utf8'));
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/video-engine/template', (req, res) => {
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'video-engine.json'), 'utf8'));
+    const { key, template } = req.body;
+    if (!key || !template) return res.status(400).json({ error: 'key and template required' });
+    data.templates[key] = template;
+    fs.writeFileSync(path.join(__dirname, 'video-engine.json'), JSON.stringify(data, null, 2));
+    res.json({ ok: true, templates: Object.keys(data.templates) });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // ── Archaeologist Explorer ────────────────────────────────────────────────────

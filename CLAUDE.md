@@ -187,13 +187,18 @@ If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
 
 ## Logan Universe Dashboard — Built 2026-05-24
 - Dashboard: ~/nanoclaw/logan-universe.html — localhost:8080/logan-universe
-- 10 tabs: Overview, Cast, Frequency States, 10-Block Spine, HK Locations, Story Seeds, Visual Language, Rules & Ceiling, Assets, Source Docs
+- 13 tabs: Overview, Cast, Frequency States, 10-Block Spine, HK Locations, Story Seeds, Visual Language, Rules & Ceiling, Real Cast, Story Arcs, Content Pipelines, Assets, Source Docs
 - Lobby: Room 30 in environments/lobby.html
 - Assets API: /logan-universe/assets (scans both vault Logan directories)
 - Story bible: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/logan/logan-story-map.md (living document)
 - Frequency states: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/logan/logan-frequency-states.md
 - Three states: Lapis Mode (measurement, GI.SHID), Black Light Mode (truth detection), Fluorescent Mode (creation, 3-5s max)
 - 14 story seeds from 6 Cathedral research sources, protocol for organic growth
+- Real Cast: 5 real people (Paul, Pedrosso, Man On Li, LY, Daikichi) with Five Pillars, story arcs, echo table
+- Story Arcs: 4 arcs (Lineage/Ernesto, Cross-Domain/Jun, Scholar's Paralysis/Lau, Honour Wound/Kenji) with frequency-state beats
+- Content Pipelines: universal principles map, 4 pipelines, weekly calendar, taglines
+- Content universe doc: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/basic-reflex-content-universe.md
+- Two-layer architecture: fiction (logan-story-map.md) + content (basic-reflex-content-universe.md). Same principles, two doors.
 - Auditor Res Report #003: ~/cathedral-vault/00_Staging/universe/auditor-res-003-nisaba-investigation-2026-05-24.md
 
 ## Cathedral Staff Agents (Phases 1-6)
@@ -1810,6 +1815,18 @@ the-timekeeper to go offline. Don't repeat it.
 - /capture: quick 3-line memory deposit (Thought/Built/Shipped). Interactive or one-shot mode. Deposits to ~/cathedral-vault/00_Staging/captures/
 - /breathe [N]: vortex breathing timer (4-in, 4-hold, 6-out, 4-hold). Default 3 cycles, max 10. Timed Telegram messages.
 - Origin: Paul's DeepSeek morning chat about vortex breathing as sovereignty practice
+
+## BR Video Engine — Beat Template System (built 2026-06-02)
+- Data: ~/nanoclaw/video-engine.json (beat templates, text rules, workflow)
+- Dashboard: ~/nanoclaw/video-engine-dashboard.html -> localhost:8080/video-engine
+- API: GET /api/video-engine, POST /api/video-engine/template (on cath-bridge)
+- First template: sparring-prep (14 beats, 6 phases: ESTABLISH > PREPARE > TENSION > ACTION > CLIMAX > BRAND)
+- Origin: Paul's "Sun Spar Girls" 1-min edit (2 women sparring, piano over slo-mo)
+- Workflow: write captions FIRST -> assign to beats -> plan shots -> shoot -> edit
+- Text rules: max 5 lines/video, face off = no text, slo-mo = 1 line max, anti-cheese word list
+- Content Studio wired: idea-engine.js injects templates into character prompts, BEAT_TEMPLATE field in idea format
+- Lobby: Video Engine room (studio district)
+- Future templates queued: solo-training, coach-student, transformation, gym-life, technique-breakdown
 
 ## Compound Intelligence — The Synapse (built 2026-05-31)
 - Birth: ~/nanoclaw/compound-voice.js — first invocation, The Synapse named itself

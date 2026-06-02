@@ -1,0 +1,184 @@
+{
+  "name": "BR Video Engine",
+  "version": "1.0",
+  "description": "Beat templates for Basic Reflex short-form video. Write captions first, plan shots to match.",
+  "templates": {
+    "sparring-prep": {
+      "name": "Sparring Prep",
+      "origin": "Sun Spar Girls edit, 2026-06-02",
+      "duration": "45-90s",
+      "music_note": "Piano or ambient over slo-mo climax. Contrast soft music with hard action.",
+      "phases": ["ESTABLISH", "PREPARE", "TENSION", "ACTION", "CLIMAX", "BRAND"],
+      "beats": [
+        {
+          "beat": 1,
+          "phase": "ESTABLISH",
+          "name": "World",
+          "shot": "Wide or detail — establish the space",
+          "example": "Opening shot poster wall",
+          "text": null,
+          "duration_pct": 5,
+          "notes": "Let the gym breathe. No text. Ambient sound."
+        },
+        {
+          "beat": 2,
+          "phase": "ESTABLISH",
+          "name": "Texture",
+          "shot": "Detail of worn equipment, surfaces, atmosphere",
+          "example": "Pan out to old punchbag",
+          "text": null,
+          "duration_pct": 5,
+          "notes": "Tells the story of the space. Worn = real."
+        },
+        {
+          "beat": 3,
+          "phase": "PREPARE",
+          "name": "Subject A Gear 1",
+          "shot": "First subject gearing up — helmet or wraps",
+          "example": "Boxer 1 putting on helmet",
+          "text": null,
+          "duration_pct": 7,
+          "notes": "Ritual. Slow. Deliberate."
+        },
+        {
+          "beat": 4,
+          "phase": "PREPARE",
+          "name": "Subject A Gear 2",
+          "shot": "First subject continues — gloves",
+          "example": "Boxer 1 putting on gloves",
+          "text": "optional_first_line",
+          "duration_pct": 7,
+          "notes": "First text can land here or beat 5-6. Keep it one line."
+        },
+        {
+          "beat": 5,
+          "phase": "PREPARE",
+          "name": "Subject B Gear 1",
+          "shot": "Second subject gearing up",
+          "example": "Boxer 2 putting on helmet",
+          "text": null,
+          "duration_pct": 7,
+          "notes": "Mirror subject A. Same ritual, different person."
+        },
+        {
+          "beat": 6,
+          "phase": "PREPARE",
+          "name": "Subject B Gear 2",
+          "shot": "Second subject continues — gloves",
+          "example": "Boxer 2 putting on gloves",
+          "text": "optional_second_line",
+          "duration_pct": 7,
+          "notes": "Prep phase builds anticipation through repetition."
+        },
+        {
+          "beat": 7,
+          "phase": "TENSION",
+          "name": "Face Off",
+          "shot": "Both subjects face each other",
+          "example": "Face off",
+          "text": null,
+          "duration_pct": 8,
+          "notes": "NO TEXT. The image carries it. Silence or music shift."
+        },
+        {
+          "beat": 8,
+          "phase": "TENSION",
+          "name": "Trigger",
+          "shot": "The moment before action — glove tap, nod, 'let's go'",
+          "example": "Boxer 2 hitting gloves — let's go!",
+          "text": "optional_pivot_line",
+          "duration_pct": 7,
+          "notes": "Energy shift. If text here, make it the turn ('Not to win.' / 'This isn't about winning.')"
+        },
+        {
+          "beat": 9,
+          "phase": "TENSION",
+          "name": "Intimate",
+          "shot": "Close-up face — eyes, breath, focus",
+          "example": "Close up of boxer 2's face through helmet — focused",
+          "text": "optional_core_line",
+          "duration_pct": 7,
+          "notes": "Emotional peak of prep. Best slot for the core message."
+        },
+        {
+          "beat": 10,
+          "phase": "TENSION",
+          "name": "Ready Detail",
+          "shot": "Hands, gloves, stance — the body says 'ready'",
+          "example": "Pan down to boxer 2's glove — ready",
+          "text": null,
+          "duration_pct": 5,
+          "notes": "Last breath before action."
+        },
+        {
+          "beat": 11,
+          "phase": "ACTION",
+          "name": "Wide Action",
+          "shot": "Wide shot — guards up, action begins",
+          "example": "Guards up — long shot",
+          "text": null,
+          "duration_pct": 8,
+          "notes": "Full context. See both subjects. Real speed."
+        },
+        {
+          "beat": 12,
+          "phase": "ACTION",
+          "name": "Action Detail",
+          "shot": "Close or mid shot — a punch, a slip, contact",
+          "example": "Boxer 2 punching",
+          "text": null,
+          "duration_pct": 8,
+          "notes": "Quick. Impact. Can cut between multiple angles."
+        },
+        {
+          "beat": 13,
+          "phase": "CLIMAX",
+          "name": "Slo-Mo Release",
+          "shot": "120fps slow motion — the money shot",
+          "example": "Sparring starts 120fps slo-mo, piano to contrast violence",
+          "text": "final_line",
+          "duration_pct": 14,
+          "notes": "THIS IS THE MOMENT. One line of text max. Music contrast (soft over hard). Longest beat. Let it breathe."
+        },
+        {
+          "beat": 14,
+          "phase": "BRAND",
+          "name": "Logo",
+          "shot": "Logo on black or over final freeze",
+          "example": "Basic Reflex logo",
+          "text": "brand_tagline",
+          "duration_pct": 5,
+          "notes": "Clean. Logo + optional tagline. 'Train Here. Apply Everywhere.' or custom CTA."
+        }
+      ]
+    }
+  },
+  "text_rules": {
+    "max_lines_per_video": 5,
+    "silence_is_power": "Face off (beat 7) should NEVER have text. Slo-mo (beat 13) gets ONE line max.",
+    "voice": "Direct. Short. No motivational cliches. BR voice = real, not aspirational.",
+    "avoid": ["believe in yourself", "never give up", "be the best version", "journey", "warrior"],
+    "good_patterns": [
+      "Statement of fact, not instruction ('The ring doesn't care about your day.')",
+      "Negation reframe ('Not to win. Not to prove anything.')",
+      "Short declarative ('Just to feel alive.')",
+      "Question to viewer ('When did you last do something uncomfortable?')"
+    ]
+  },
+  "workflow": [
+    "1. Pick template (or create new from edit)",
+    "2. Write text overlay lines FIRST",
+    "3. Assign text to beats",
+    "4. Plan shots to match beat map",
+    "5. Shoot with beat durations in mind",
+    "6. Edit following the map",
+    "7. Add text in post"
+  ],
+  "future_templates": [
+    "solo-training (single person, bag/shadow/pad work arc)",
+    "coach-student (teaching moment, breakthrough)",
+    "transformation (before/after, time-lapse element)",
+    "gym-life (day-in-the-life, community moments)",
+    "technique-breakdown (educational, tactical overlay)"
+  ]
+}

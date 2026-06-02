@@ -53,6 +53,8 @@ a:hover { text-decoration:underline; }
 .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
 @media (max-width:768px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+@media (max-width:900px) { .grid-3[style*="repeat(5"] { grid-template-columns:1fr 1fr !important; } }
+@media (max-width:500px) { .grid-3[style*="repeat(5"] { grid-template-columns:1fr !important; } }
 
 /* Frequency state cards */
 .freq-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; position:relative; overflow:hidden; }
@@ -150,7 +152,7 @@ a:hover { text-decoration:underline; }
 <div class="header">
   <a class="header-back" href="/env/lobby">Lobby</a>
   <h1><span>Logan</span> Universe</h1>
-  <div class="header-sub">Living Story Bible &middot; Updated 2026-05-24</div>
+  <div class="header-sub">Living Story Bible &middot; Updated 2026-06-02</div>
 </div>
 
 <div class="nav" id="nav">
@@ -162,6 +164,9 @@ a:hover { text-decoration:underline; }
   <div class="nav-tab" data-view="seeds">Story Seeds</div>
   <div class="nav-tab" data-view="visual">Visual Language</div>
   <div class="nav-tab" data-view="rules">Rules &amp; Ceiling</div>
+  <div class="nav-tab" data-view="realcast">Real Cast</div>
+  <div class="nav-tab" data-view="arcs">Story Arcs</div>
+  <div class="nav-tab" data-view="pipelines">Content Pipelines</div>
   <div class="nav-tab" data-view="assets">Assets</div>
   <div class="nav-tab" data-view="docs">Source Docs</div>
 </div>
@@ -231,13 +236,28 @@ a:hover { text-decoration:underline; }
 <div class="view" id="v-cast">
   <div class="section-title">Main Cast</div>
   <table class="cast-table">
-    <tr><th>Character</th><th>Age</th><th>Role</th><th>Stuck Pattern</th><th>What Logan Triggers</th></tr>
-    <tr><td class="cast-name">Logan</td><td>21</td><td>Mentor/protagonist</td><td>Carries lineage weight</td><td>&mdash;</td></tr>
-    <tr><td class="cast-name">Mei Lin</td><td>19</td><td>Grounded practitioner</td><td>Doesn't trust own instincts</td><td>Self-trust</td></tr>
-    <tr><td class="cast-name">Kael</td><td>17</td><td>The seeker</td><td>Overcommits, rushes, wants power</td><td>Patience</td></tr>
-    <tr><td class="cast-name">Coach Ernesto</td><td>60s</td><td>Veteran (phone/flashback)</td><td>&mdash;</td><td>Lineage, tradition</td></tr>
-    <tr><td class="cast-name">Reed</td><td>22</td><td>The enthusiast</td><td>Energy without direction</td><td>Discipline</td></tr>
-    <tr><td class="cast-name">Emily Park</td><td>20s</td><td>Korean-Australian fitness</td><td>Different movement discipline</td><td>Cross-domain perspective</td></tr>
+    <tr><th>Character</th><th>Age</th><th>Role</th><th>Stuck Pattern</th><th>What Logan Triggers</th><th>Inspired By</th></tr>
+    <tr><td class="cast-name">Logan</td><td>21</td><td>Mentor/protagonist</td><td>Carries lineage weight</td><td>&mdash;</td><td style="color:var(--text-dim)">Paul</td></tr>
+    <tr><td class="cast-name">Mei Lin</td><td>19</td><td>Grounded practitioner</td><td>Doesn't trust own instincts</td><td>Self-trust</td><td></td></tr>
+    <tr><td class="cast-name">Kael</td><td>17</td><td>The seeker</td><td>Overcommits, rushes, wants power</td><td>Patience</td><td></td></tr>
+    <tr><td class="cast-name" style="color:var(--gold)">Coach Ernesto</td><td>60s</td><td>The master technician</td><td>Carries a system far from home</td><td>Lineage, precision, simplicity</td><td style="color:var(--gold)">Pedrosso</td></tr>
+    <tr><td class="cast-name">Reed</td><td>22</td><td>The enthusiast</td><td>Energy without direction</td><td>Discipline</td><td></td></tr>
+    <tr><td class="cast-name">Emily Park</td><td>20s</td><td>Korean-Australian fitness</td><td>Different movement discipline</td><td>Cross-domain perspective</td><td></td></tr>
+    <tr><td class="cast-name" style="color:var(--lapis-glow)">Jun</td><td>30s</td><td>Cross-domain warrior</td><td>Champion in his own art, needs principles</td><td>"I don't know your sport. I know performance."</td><td style="color:var(--lapis-glow)">Man On Li</td></tr>
+    <tr><td class="cast-name" style="color:var(--uv-glow)">Professor Lau</td><td>40s</td><td>The analyst who can't commit</td><td>Studies every fighter, can't throw</td><td>"You've studied everyone except yourself."</td><td style="color:var(--uv-glow)">LY</td></tr>
+    <tr><td class="cast-name" style="color:var(--red)">Kenji</td><td>20s</td><td>The honour-bound fighter</td><td>Shame spiral after every loss</td><td>Self-love before self-improvement</td><td style="color:var(--red)">Daikichi</td></tr>
+  </table>
+
+  <div class="section-title">Character Engine</div>
+  <table class="cast-table">
+    <tr><th>Character</th><th>Core Insecurity</th><th>Default Coping</th><th>Want</th><th>Need</th><th>Freq. Trigger</th></tr>
+    <tr><td class="cast-name">Logan</td><td>Am I worthy of the lineage?</td><td>Over-teaches</td><td>Honour Ernesto</td><td>Find own voice</td><td style="color:var(--fluor)">All three</td></tr>
+    <tr><td class="cast-name" style="color:var(--gold)">Ernesto</td><td>The system may die with him</td><td>Perfectionism, silence</td><td>Preserve Cuban boxing</td><td>Trust it lives in Logan</td><td style="color:var(--lapis-glow)">Lapis</td></tr>
+    <tr><td class="cast-name" style="color:var(--lapis-glow)">Jun</td><td>"I'm only good at one thing"</td><td>Retreats to what he knows</td><td>Win the championship</td><td>Trust that principles transfer</td><td style="color:var(--lapis-glow)">Lapis</td></tr>
+    <tr><td class="cast-name" style="color:var(--uv-glow)">Prof. Lau</td><td>"I'm not a real fighter"</td><td>Intellectualizes everything</td><td>Understand boxing completely</td><td>Stop understanding, start doing</td><td style="color:var(--uv-glow)">Black Light</td></tr>
+    <tr><td class="cast-name" style="color:var(--red)">Kenji</td><td>"I'm not enough"</td><td>Shame, withdrawal, over-training</td><td>Never lose</td><td>Survive losing without self-destruction</td><td style="color:var(--uv-glow)">Black Light</td></tr>
+    <tr><td class="cast-name">Mei Lin</td><td>What if my instincts are wrong?</td><td>Defers, waits</td><td>Technical perfection</td><td>Trust what she feels</td><td style="color:var(--lapis-glow)">Lapis flicker</td></tr>
+    <tr><td class="cast-name">Kael</td><td>Need to prove I'm strong</td><td>Overcommits, rushes</td><td>Power, respect</td><td>Patience, foundation</td><td style="color:var(--text-dim)">None (too early)</td></tr>
   </table>
 
   <div class="section-title">Client Characters (Archetypes)</div>
@@ -469,6 +489,212 @@ a:hover { text-decoration:underline; }
   </div>
 </div>
 
+<!-- ═══ REAL CAST ═══ -->
+<div class="view" id="v-realcast">
+  <div class="section-title">The Real People &mdash; Basic Reflex Content Universe</div>
+  <div class="card" style="border-left:3px solid var(--gold);margin-bottom:20px;">
+    <div class="card-body">Same principles power both layers. Real people inspire fictional characters. The content universe provides <strong>proof</strong>. The manga provides <strong>story</strong>. Two doors, one truth: <em>Boxing doesn't build character. It reveals it.</em></div>
+  </div>
+
+  <div class="section-title">Five Pillars</div>
+  <div class="grid-3" style="grid-template-columns:repeat(5,1fr);">
+    <div class="freq-card lapis"><div class="glow"></div><div class="freq-name">Movement</div><div class="freq-sub">Coach Paul</div><div class="freq-body">Adaptability &amp; positioning. Footwork drills, reflex work, movement breakdowns.</div></div>
+    <div class="freq-card" style="border-left:3px solid var(--gold);"><div class="freq-name">Technique</div><div class="freq-sub">Pedrosso (legacy)</div><div class="freq-body">Efficient combat mastery. Cuban boxing history, precision drills, pad work.</div></div>
+    <div class="freq-card uv"><div class="glow"></div><div class="freq-name">Mindset</div><div class="freq-sub">Man On Li</div><div class="freq-body">Mental cultivation. Champion thinking, self-belief, transformation journeys.</div></div>
+    <div class="freq-card" style="border-left:3px solid #3b82f6;"><div class="freq-name">Analysis</div><div class="freq-sub">LY</div><div class="freq-body">Understanding combat deeply. Fight breakdowns, tactical studies, boxing IQ.</div></div>
+    <div class="freq-card fluor"><div class="glow"></div><div class="freq-name">Pressure</div><div class="freq-sub">The Gym</div><div class="freq-body">Principles under stress. Competition prep, sparring, recovery stories.</div></div>
+  </div>
+
+  <div class="section-title">Coach Paul &mdash; The Architect</div>
+  <div class="card">
+    <div class="card-title" style="color:var(--lapis-glow);">The Connector</div>
+    <div class="card-meta">MOVEMENT pillar &middot; Coaching clips, principle explanations, wisdom drops</div>
+    <div class="card-body">
+      Doesn't know every sport &mdash; knows every principle. Teaches footwork, reflexes, timing, self-belief. Cuban boxing lineage via Pedrosso. Built a gym in Hong Kong that produces transformations.<br><br>
+      <strong>Key line:</strong> <em>"I don't know your sport. I know performance."</em><br>
+      <strong>Visual:</strong> Mitt work, dynamic movement, coaching interactions, urban gym atmosphere, tactical overlays.
+    </div>
+  </div>
+
+  <div class="section-title">Pedrosso &mdash; The Master Technician</div>
+  <div class="card">
+    <div class="card-title" style="color:var(--gold);">The Foundation</div>
+    <div class="card-meta">TECHNIQUE pillar &middot; Origin story, "The Cuban Way" series, historical footage</div>
+    <div class="card-body">
+      Cuban boxing coach. Ex-national champion. The source of the lineage. Where Paul learned. Not a character &mdash; the foundation.<br><br>
+      <strong>Key themes:</strong> Mastery through simplicity. Fundamentals over flash. Precision over power. Ring IQ. Calmness under pressure.<br>
+      <strong>Visual:</strong> Cuban boxing gym, worn ring canvas, sweat and realism, compact stance, minimal wasted movement.
+    </div>
+  </div>
+
+  <div class="section-title">Man On Li &mdash; The Champion Mind</div>
+  <div class="card">
+    <div class="card-title" style="color:var(--uv-glow);">The Proof</div>
+    <div class="card-meta">MINDSET pillar &middot; "The World Champion Story" series, champion mentality drops</div>
+    <div class="card-body">
+      Stick fighter. Came to Paul for boxing training for a match. Paul trained him in movement, footwork, reflexes, self-belief. Man On Li asked Paul to train him for the World Championships. In a sport Paul doesn't even practice. <strong>He won. World champion.</strong><br><br>
+      <strong>Key line:</strong> <em>"Paul... your bullshit works. I'm world champion."</em><br>
+      <strong>Visual:</strong> Fluid movement, boxing drills applied elsewhere, calm composure, focused eyes.
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--surface-2);border-radius:var(--radius-sm);font-size:12px;color:var(--text-dim);">
+      <strong>Story arc:</strong> Skilled but limited &rarr; Resistance ("you don't know my sport") &rarr; Training &rarr; Self-doubt &rarr; Discipline holds &rarr; Competition pressure &rarr; Victory &rarr; "Your bullshit works" &rarr; Transformation complete
+    </div>
+  </div>
+
+  <div class="section-title">LY &mdash; The Analyst</div>
+  <div class="card">
+    <div class="card-title" style="color:#3b82f6;">The Dual Identity</div>
+    <div class="card-meta">ANALYSIS pillar &middot; "LY's Film Room", "See It vs Do It" series</div>
+    <div class="card-body">
+      Deputy headmaster. Academic. Chinese. Studies fighters on YouTube obsessively &mdash; breaks down their moves with surgical precision. Trained with Paul for a fight. The man who understands everything and had to learn to <strong>do</strong>.<br><br>
+      <strong>Key themes:</strong> Pattern recognition. The gap between understanding and executing. Curiosity as training tool.<br>
+      <strong>Visual:</strong> Freeze frames, tactical overlays, fight footage with annotations, slow-motion breakdowns.
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--surface-2);border-radius:var(--radius-sm);font-size:12px;color:var(--text-dim);">
+      <strong>Story arc:</strong> Overthinker arrives &rarr; Can quote every fighter's stats &rarr; Pads go up: freeze &rarr; Studies MORE (wrong response) &rarr; "No more videos for 30 days" &rarr; Has to FEEL instead of KNOW &rarr; First committed punch &rarr; Analysis + experience = complete fighter
+    </div>
+  </div>
+
+  <div class="section-title">Daikichi &mdash; The Honour-Bound Fighter</div>
+  <div class="card">
+    <div class="card-title" style="color:var(--red);">The Gate</div>
+    <div class="card-meta">PRESSURE pillar &middot; "After The Loss", "Honour and Self-Love" series</div>
+    <div class="card-body">
+      Japanese. Amateur and pro fighter. Coached by Paul for several fights. Fierce competitor. Coaches from the heart and experience. But carries a wound: Japanese honour culture creates shame spirals after losses.<br><br>
+      <strong>Key lesson:</strong> Self-love before self-improvement. Honour doesn't require perfection.<br>
+      <strong>Visual:</strong> Japanese aesthetic, discipline, training intensity, post-loss stillness. Fierce and fragile.
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--surface-2);border-radius:var(--radius-sm);font-size:12px;color:var(--text-dim);">
+      <strong>Story arc:</strong> Fierce fighter, coaches naturally &rarr; Loses a fight &rarr; Shame spiral, disappears &rarr; Over-trains (punishment) &rarr; Paul assigns him to coach a beginner &rarr; Sees own fear in student's eyes &rarr; "Honour doesn't require perfection. It requires showing up." &rarr; Loses again, comes back next day &rarr; Changed relationship with losing
+    </div>
+  </div>
+
+  <div class="section-title">Real &rarr; Fiction Echo Table</div>
+  <table class="cast-table">
+    <tr><th>Real Person</th><th>Fictional Echo</th><th>What Transfers</th></tr>
+    <tr><td class="cast-name" style="color:var(--gold)">Pedrosso</td><td>Coach Ernesto</td><td>Lineage, Cuban precision, "mastery through simplicity"</td></tr>
+    <tr><td class="cast-name" style="color:var(--uv-glow)">Man On Li</td><td>Jun</td><td>Cross-domain proof, principles > technique</td></tr>
+    <tr><td class="cast-name" style="color:#3b82f6">LY</td><td>Professor Lau</td><td>Analysis vs action, the scholar-fighter gap</td></tr>
+    <tr><td class="cast-name" style="color:var(--red)">Daikichi</td><td>Kenji</td><td>Honour wound, shame after loss, teaching heals the teacher</td></tr>
+    <tr><td class="cast-name" style="color:var(--lapis-glow)">Coach Paul</td><td>Logan</td><td>The architect, the connector, the measuring rod</td></tr>
+  </table>
+</div>
+
+<!-- ═══ STORY ARCS ═══ -->
+<div class="view" id="v-arcs">
+  <div class="section-title">Arc A &mdash; The Lineage (Coach Ernesto)</div>
+  <div class="card" style="border-left:3px solid var(--gold);">
+    <div class="card-meta">Inspired by Pedrosso &middot; TECHNIQUE pillar &middot; Blocks 1-3</div>
+    <div class="card-body"><em>"You will learn. But first, you will unlearn."</em></div>
+  </div>
+  <div class="spine-block"><div class="spine-num lapis">1</div><div class="spine-content"><div class="spine-phase">Lapis Flicker</div><div class="spine-title">Logan arrives at Ernesto's gym</div><div class="spine-scenes"><li>Logan sees structure in Ernesto's movement &mdash; GI.SHID flickers</li><li>Ernesto ignores Logan's talent. "Stand here. Don't move."</li><li>Two days of nothing. Stillness drill. Logan's ego screams.</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num lapis">2</div><div class="spine-content"><div class="spine-phase">Lapis Sustained</div><div class="spine-title">The measuring rod calibrates</div><div class="spine-scenes"><li>Ernesto teaches one combination. Logan sees the geometry: weight transfer, angles, economy</li><li>"In Cuba, we don't throw 100 punches. We throw 1 punch, 100 times correctly."</li><li>Logan's Lapis locks on &mdash; he sees WHY the technique works, not just HOW</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num uv">3</div><div class="spine-content"><div class="spine-phase">Black Light Test</div><div class="spine-title">The cost of seeing</div><div class="spine-scenes"><li>Logan sees Ernesto's hidden pain &mdash; the system may die with him, far from Cuba</li><li>Black Light activates involuntarily. Logan can't turn it off.</li><li>Ernesto: "You see too much. Good. Now carry it."</li></div></div></div>
+
+  <div class="section-title" style="margin-top:24px;">Arc B &mdash; Cross-Domain Proof (Jun)</div>
+  <div class="card" style="border-left:3px solid var(--lapis-glow);">
+    <div class="card-meta">Inspired by Man On Li &middot; MINDSET pillar &middot; Blocks 4-6</div>
+    <div class="card-body"><em>"I don't know your sport. I know performance."</em></div>
+  </div>
+  <div class="spine-block"><div class="spine-num lapis">4</div><div class="spine-content"><div class="spine-phase">Lapis Measurement</div><div class="spine-title">Jun arrives &mdash; champion in his own art</div><div class="spine-scenes"><li>Jun is a stick fighter preparing for a match. Asks Logan for boxing footwork.</li><li>Logan's Lapis reads Jun's movement: "Your timing is elite. Your balance is wrong."</li><li>Jun resists: "You don't know my sport."</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num lapis">5</div><div class="spine-content"><div class="spine-phase">Lapis Deep</div><div class="spine-title">Principles transfer</div><div class="spine-scenes"><li>Logan teaches footwork, reflexes, timing &mdash; NOT stick fighting technique</li><li>Jun starts winning sparring sessions he used to lose. The principles work.</li><li>Jun: "Train me for the World Championships."</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num fluor">6</div><div class="spine-content"><div class="spine-phase">Fluorescent Flash</div><div class="spine-title">"Your bullshit works"</div><div class="spine-scenes"><li>Competition pressure. Jun doubts. Logan's self-belief training kicks in.</li><li>Jun wins. World champion in a sport Logan doesn't practice.</li><li>Brief Fluorescent flash: Logan creates something new &mdash; a method that transcends sport</li></div></div></div>
+
+  <div class="section-title" style="margin-top:24px;">Arc C &mdash; The Scholar's Paralysis (Professor Lau)</div>
+  <div class="card" style="border-left:3px solid var(--uv-glow);">
+    <div class="card-meta">Inspired by LY &middot; ANALYSIS pillar &middot; Blocks 5-7</div>
+    <div class="card-body"><em>"You've studied everyone except yourself."</em></div>
+  </div>
+  <div class="spine-block"><div class="spine-num uv">5</div><div class="spine-content"><div class="spine-phase">Black Light Read</div><div class="spine-title">Professor Lau watches from the corner</div><div class="spine-scenes"><li>Lau has watched 10,000 hours of fight footage. Can quote every stat.</li><li>Logan's Black Light reads Lau's truth: terrified of being hit. All analysis, no action.</li><li>Lau: "I'm here to study, not fight." Logan: "Then why did you put gloves on?"</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num lapis">6</div><div class="spine-content"><div class="spine-phase">Lapis Prescription</div><div class="spine-title">"No more videos for 30 days"</div><div class="spine-scenes"><li>Logan bans Lau from studying any fighter for 30 days. Knowledge detox.</li><li>Lau forced to FEEL instead of KNOW. First committed punch &mdash; ugly but real.</li><li>The gap between understanding and executing begins to close.</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num uv">7</div><div class="spine-content"><div class="spine-phase">Black Light Synthesis</div><div class="spine-title">Analysis + experience = complete fighter</div><div class="spine-scenes"><li>Lau's analysis finally informs his movement instead of replacing it</li><li>He sees patterns in real time &mdash; not from film study but from his own body</li><li>"I was studying the map. You made me walk the territory."</li></div></div></div>
+
+  <div class="section-title" style="margin-top:24px;">Arc D &mdash; The Honour Wound (Kenji)</div>
+  <div class="card" style="border-left:3px solid var(--red);">
+    <div class="card-meta">Inspired by Daikichi &middot; PRESSURE pillar &middot; Blocks 7-9</div>
+    <div class="card-body"><em>"Honour doesn't require perfection. It requires showing up."</em></div>
+  </div>
+  <div class="spine-block"><div class="spine-num uv">7</div><div class="spine-content"><div class="spine-phase">Black Light Exposure</div><div class="spine-title">Kenji loses &mdash; shame spiral begins</div><div class="spine-scenes"><li>Kenji fights and loses. Not a bad performance &mdash; just lost.</li><li>Japanese honour culture activates: shame, withdrawal, disappears for days</li><li>Returns over-training &mdash; punishment disguised as improvement</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num lapis">8</div><div class="spine-content"><div class="spine-phase">Lapis Diagnosis</div><div class="spine-title">Logan doesn't comfort &mdash; assigns</div><div class="spine-scenes"><li>Logan doesn't give a speech. Assigns Kenji to coach a beginner.</li><li>Kenji sees his own fear in the student's eyes. Recognition.</li><li>"You're teaching him it's okay to be hit. When did you forget that?"</li></div></div><div class="spine-connector"></div></div>
+  <div class="spine-block"><div class="spine-num fluor">9</div><div class="spine-content"><div class="spine-phase">Near-Fluorescent</div><div class="spine-title">The honour reframe</div><div class="spine-scenes"><li>Kenji fights again. Loses again. Comes back the next day.</li><li>Changed relationship with losing: honour is in the showing up, not the winning</li><li>Logan sees something in Kenji's return &mdash; a Fluorescent flicker in Kenji himself</li></div></div></div>
+</div>
+
+<!-- ═══ CONTENT PIPELINES ═══ -->
+<div class="view" id="v-pipelines">
+  <div class="section-title">Universal Principles Map</div>
+  <div class="card" style="border-left:3px solid var(--lapis-glow);margin-bottom:20px;">
+    <div class="card-body">Every combat principle maps to life. This is the content engine.</div>
+  </div>
+  <table class="cast-table">
+    <tr><th>Combat Principle</th><th>Life Application</th><th>Content Hook</th></tr>
+    <tr><td class="cast-name">Balance</td><td>Emotional stability</td><td><em>"If you can't stand still, you can't move well"</em></td></tr>
+    <tr><td class="cast-name">Footwork</td><td>Adaptability</td><td><em>"Your feet decide before your hands"</em></td></tr>
+    <tr><td class="cast-name">Timing</td><td>Patience</td><td><em>"Speed without timing is just movement"</em></td></tr>
+    <tr><td class="cast-name">Defense</td><td>Boundaries</td><td><em>"Guard up isn't fear &mdash; it's respect"</em></td></tr>
+    <tr><td class="cast-name">Distance</td><td>Relationship awareness</td><td><em>"Too close = no perspective. Too far = no connection"</em></td></tr>
+    <tr><td class="cast-name">Relaxation</td><td>Emotional regulation</td><td><em>"Tension is the enemy of power"</em></td></tr>
+    <tr><td class="cast-name">Recovery</td><td>Resilience</td><td><em>"Everyone gets hit. Champions reset."</em></td></tr>
+    <tr><td class="cast-name">Angles</td><td>Creative problem-solving</td><td><em>"The straight line is the first thing they expect"</em></td></tr>
+    <tr><td class="cast-name">Rhythm</td><td>Life flow</td><td><em>"Find the beat, then break it"</em></td></tr>
+    <tr><td class="cast-name">Discipline</td><td>Long-term growth</td><td><em>"Discipline isn't punishment. It's freedom."</em></td></tr>
+  </table>
+
+  <div class="section-title">Content Pipelines</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--lapis-glow);">Training Content</div>
+      <div class="card-meta">Weekly &middot; MOVEMENT + TECHNIQUE &middot; Reels, TikTok</div>
+      <div class="card-body">Drill of the week, footwork fundamentals, pad work highlights, reflex training clips, Cuban technique breakdowns. Source: Coach Paul's gym sessions.</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:#3b82f6;">Analysis Content</div>
+      <div class="card-meta">Weekly &middot; ANALYSIS &middot; YouTube, Carousels</div>
+      <div class="card-body">Fight breakdowns (recent + classic), tactical pattern recognition, "What most people miss" series, boxing IQ development. Source: LY + Coach Paul.</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--uv-glow);">Mindset Content</div>
+      <div class="card-meta">2x/month &middot; MINDSET &middot; Reels, Quote Cards</div>
+      <div class="card-body">Transformation stories, principle drops, champion mentality lessons, fear gate moments. Source: Man On Li's journey, coaching philosophy.</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--gold);">Documentary / Story</div>
+      <div class="card-meta">Monthly &middot; ALL PILLARS &middot; YouTube, Long Instagram</div>
+      <div class="card-body">"The Space Between Rounds" series. Character profiles, competition prep, "After The Loss" &mdash; real talk about losing. Source: real gym moments.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Weekly Content Calendar</div>
+  <table class="cast-table">
+    <tr><th>Day</th><th>Content</th><th>Pillar</th><th>Platform</th></tr>
+    <tr><td class="cast-name">Monday</td><td>Drill of the week</td><td style="color:var(--lapis-glow)">MOVEMENT</td><td>IG Reel, TikTok</td></tr>
+    <tr><td class="cast-name">Tuesday</td><td>Tactical breakdown</td><td style="color:#3b82f6">ANALYSIS</td><td>IG Carousel, YouTube</td></tr>
+    <tr><td class="cast-name">Wednesday</td><td>Training clip</td><td style="color:var(--gold)">TECHNIQUE</td><td>IG Reel</td></tr>
+    <tr><td class="cast-name">Thursday</td><td>Principle drop</td><td style="color:var(--uv-glow)">MINDSET</td><td>Quote card + caption</td></tr>
+    <tr><td class="cast-name">Friday</td><td>Gym moment</td><td style="color:var(--red)">PRESSURE</td><td>Story/Reel</td></tr>
+    <tr><td class="cast-name">Saturday</td><td>Rest / community</td><td style="color:var(--text-dim)">&mdash;</td><td>Story</td></tr>
+    <tr><td class="cast-name">Sunday</td><td>Long-form / documentary</td><td>All</td><td>YouTube, long IG</td></tr>
+  </table>
+
+  <div class="section-title">Taglines</div>
+  <div class="grid-3">
+    <div class="card" style="text-align:center;"><div class="card-title" style="color:var(--lapis-glow);font-size:16px;">Train Here. Apply Everywhere.</div><div class="card-meta">PRIMARY</div></div>
+    <div class="card" style="text-align:center;"><div class="card-body">Combat. Mindset. Life.</div></div>
+    <div class="card" style="text-align:center;"><div class="card-body">Pressure Reveals Character.</div></div>
+    <div class="card" style="text-align:center;"><div class="card-body">Movement Is Intelligence.</div></div>
+    <div class="card" style="text-align:center;"><div class="card-body">Discipline Is Freedom.</div></div>
+    <div class="card" style="text-align:center;"><div class="card-body">The Gym Is The Laboratory.</div></div>
+  </div>
+
+  <div class="section-title">The Overarching Message</div>
+  <div class="card" style="border-left:3px solid var(--fluor);">
+    <div class="card-body" style="text-align:center;font-size:14px;line-height:1.8;">
+      The fight is never truly against other people.<br>
+      It is against: <strong>fear</strong> &middot; <strong>ego</strong> &middot; <strong>imbalance</strong> &middot; <strong>hesitation</strong> &middot; <strong>chaos</strong> &middot; <strong>lack of self-awareness</strong><br><br>
+      Combat becomes the training ground for life.
+    </div>
+  </div>
+</div>
+
 <!-- ═══ ASSETS ═══ -->
 <div class="view" id="v-assets">
   <div class="section-title">Character Sheets &amp; Art</div>
@@ -484,6 +710,7 @@ a:hover { text-decoration:underline; }
   <div class="doc-link"><div class="doc-icon">&#127912;</div><div><div class="doc-name">Frequency States</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/logan-frequency-states.md</div></div></div>
   <div class="doc-link"><div class="doc-icon">&#128100;</div><div><div class="doc-name">Character Spec</div><div class="doc-path">09_Artifacts/logan/logan-character-spec.md</div></div></div>
   <div class="doc-link"><div class="doc-icon">&#127758;</div><div><div class="doc-name">Brand Universe</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/logan-brand-universe.md</div></div></div>
+  <div class="doc-link"><div class="doc-icon">&#127941;</div><div><div class="doc-name">Content Universe (Real People)</div><div class="doc-path">09_Artifacts/branding/basic-reflex/basic-reflex-content-universe.md</div></div></div>
   <div class="doc-link"><div class="doc-icon">&#128220;</div><div><div class="doc-name">Universe Vision</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/LOGAN_UNIVERSE_VISION.md</div></div></div>
   <div class="doc-link"><div class="doc-icon">&#127916;</div><div><div class="doc-name">Generation Playbook</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/LOGAN_GENERATION_PLAYBOOK.md</div></div></div>
   <div class="doc-link"><div class="doc-icon">&#128274;</div><div><div class="doc-name">IP System</div><div class="doc-path">09_Artifacts/branding/basic-reflex/logan/LOGAN_IP_SYSTEM.md</div></div></div>
