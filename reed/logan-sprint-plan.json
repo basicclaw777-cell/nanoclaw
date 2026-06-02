@@ -1,0 +1,25 @@
+{
+  "_comment": "Logan animated-asset sprint — the EXECUTABLE 200-credit allocation. Locked before any generation (Paul's rule: allocate fully first). reed-generate.js / the Higgsfield-MCP sprint run against this; stop at the reserve line. 200 cr = $12 (~$0.06/cr). Still=2cr, Kling clip (incl motion-control)=6cr.",
+  "budget": { "total_credits": 200, "usd": 12, "still_cr": 2, "kling_clip_cr": 6, "reserve_credits": 44, "method": "Higgsfield MCP, batch-reviewed (3-4 -> Telegram -> keep/regen), stop at reserve" },
+  "inputs": {
+    "logan_stills_existing": "~/reed-dump/logan-stills/ (10 clean: 5 head angles + 5 full-body turnarounds) — $0 reuse, the motion-control character inputs",
+    "motion_refs": "~/boxing-corpus/ + Cuba library for boxing actions; capture-wishlist tells Paul the gaps to shoot",
+    "soul_id_logan": "2a825762-9d13-4d93-9324-32fe5d5db803 (long dreadlocks mandatory)"
+  },
+  "allocation": [
+    { "bucket": "stills", "item": "frequency-state stills (Lapis/BlackLight/Fluorescent)", "gens": 3, "credits": 6, "priority": "P1" },
+    { "bucket": "stills", "item": "HK-location Logan still", "gens": 1, "credits": 2, "priority": "P2" },
+    { "bucket": "stills", "item": "variant/spare stills", "gens": 2, "credits": 4, "priority": "buffer" },
+    { "bucket": "clips", "item": "signature idle loop", "gens": 2, "credits": 12, "priority": "P1" },
+    { "bucket": "clips", "item": "boxing actions: jab/cross/hook/slip/guard-recovery/combo (motion ref = corpus)", "gens": 14, "credits": 84, "priority": "P1" },
+    { "bucket": "clips", "item": "frequency-state clips (Fluorescent <=5s)", "gens": 5, "credits": 30, "priority": "P1" },
+    { "bucket": "clips", "item": "HK-location walk", "gens": 2, "credits": 12, "priority": "P2" },
+    { "bucket": "clips", "item": "presence clip", "gens": 1, "credits": 6, "priority": "P2" },
+    { "bucket": "clips", "item": "story-seed moment (most visual of the 14)", "gens": 2, "credits": 12, "priority": "P2" },
+    { "bucket": "reserve", "item": "regen buffer for P1 misses (3-5x wastage insurance)", "gens": 7, "credits": 44, "priority": "reserve" }
+  ],
+  "totals": { "stills_credits": 12, "p1_clip_credits": 114, "p2_clip_credits": 30, "reserve_credits": 44, "sum": 200 },
+  "expected_keepers": "~15 stills (10 existing + 5 new) + ~10 P1 clips + ~3 P2 clips = the Logan asset pack for $12 (~$0.36/animated clip)",
+  "pipeline": "each generated asset flows through Flow 1: -> ready/ -> /reedready gate -> Maya caption -> publish-ready. Logan sprint dogfoods the pipeline.",
+  "status": "LOCKED — awaiting Paul topup confirm + Higgsfield MCP auth. Then: lock new stills, batch-generate clips, gate+caption, publish-ready."
+}
