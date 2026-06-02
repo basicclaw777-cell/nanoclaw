@@ -1806,6 +1806,11 @@ the-timekeeper to go offline. Don't repeat it.
 - KEY: sparring floor (0.80) under-counts single-person video 28% (0.72x); technique footage returns 0 at 0.80 (punches too slow for floor). Solo is correct default for ANY 1-person clip.
 - OPEN: sparring over-count (IMG_4174: 94 detected vs ~15 actual) = person-tracking problem (occlusion, small/far fighters, pose-slot thrash, normalized-velocity spikes to 562), NOT thresholds. Next lever.
 
+## /capture + /breathe — Telegram Personal Tools (built 2026-06-02)
+- /capture: quick 3-line memory deposit (Thought/Built/Shipped). Interactive or one-shot mode. Deposits to ~/cathedral-vault/00_Staging/captures/
+- /breathe [N]: vortex breathing timer (4-in, 4-hold, 6-out, 4-hold). Default 3 cycles, max 10. Timed Telegram messages.
+- Origin: Paul's DeepSeek morning chat about vortex breathing as sovereignty practice
+
 ## Compound Intelligence — The Synapse (built 2026-05-31)
 - Birth: ~/nanoclaw/compound-voice.js — first invocation, The Synapse named itself
 - Pulse: ~/nanoclaw/compound/synapse-pulse.js — 4hr cron (PM2: synapse-pulse, `0 */4 * * *`)
