@@ -1,0 +1,137 @@
+{
+  "_comment": "Reed's 'what shots work' library. The feedback loop grows this: reed-generate.js logs an attempt, the (not-yet-fired) rating loop sets rating by OUTCOME, uses increments per generation. rating is null on every seed ON PURPOSE — the Lucy audit's whole point is that Reed has 1205 images and 0 outcome-ratings. These are proven shot TYPES (from reed-lab/shot-list.json subjects, catalogue.json generations, and the higgsfield-prompting-bible.md), not proven by Paul's reaction yet. rating scale once it fires: 1-5. tool reflects 2026-06-02 reality (Higgsfield depleted until ~06-12; image briefs route to OpenArt manual prompt or resume Nano Banana Pro after renewal; video = fal Seedance). See ~/cathedral-vault/06_Methods/reed-tool-memory.md.",
+  "shots": [
+    {
+      "id": "bagwork-low-warm-power",
+      "subject": "bagwork",
+      "format": "image",
+      "description": "Heavy bag, single boxer, full-power cross landing. Low warm key light, hard shadow, sweat as discrete specular droplets. Documentary grade, tack-sharp, anti-orange 5200-5600K.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "Single-subject full-power shot is the bagwork archetype in shot-list.json (need 2). Low-warm-light bag work is the flagship Reed look."
+    },
+    {
+      "id": "speedbag-push-in",
+      "subject": "details_bags",
+      "format": "clip",
+      "description": "Speed bag, close push-in dolly. 1 shot / 4s / 9:16. Camera starts wide on hands, pushes to tight on the bag's rhythm. Diegetic rat-a-tat audio. Motion blur on bag only, hands tack-sharp.",
+      "tool": "fal_seedance",
+      "rating": null,
+      "uses": 0,
+      "notes": "Push-in is a clean ORB/POV-adjacent move (see bible Format 2). Paid video — cap, don't batch. Prefer Kling 3.0 once Higgsfield renews."
+    },
+    {
+      "id": "handwrap-closeup",
+      "subject": "details_gloves",
+      "format": "image",
+      "description": "Close-up of hands wrapping wrists, lacing up. Shallow depth of field, gradual bokeh transition, Lonsdale/glove leather texture. Warm shadow, clean highlight. The quiet ritual before work.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "details_gloves track needs 2. Hand-wrap closeup is a proven evergreen detail shot. Gradual bokeh prompt for DoF realism."
+    },
+    {
+      "id": "coach-paul-portrait",
+      "subject": "coaching",
+      "format": "image",
+      "description": "Coach Paul portrait, mid-instruction, adjusting a student's stance. Soul V2 face lock then Nano Banana Pro gym grounding (two-pass). Documentary, eye-line off camera, natural gym light.",
+      "tool": "higgsfield_soul_v2",
+      "rating": null,
+      "uses": 0,
+      "notes": "Customer-facing name is ALWAYS Coach Paul, never Reed. Two-pass face technique. coaching track needs 2."
+    },
+    {
+      "id": "sparring-mid-exchange-noir",
+      "subject": "sparring",
+      "format": "image",
+      "description": "Two boxers mid-exchange, caught in action, noir grade. High contrast B&W, hard single light source, silhouette moment. The most-generated proven look in the catalogue.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "Noir sparring is the single most-generated style in catalogue.json (8 noir gens). Already has 2 in shot-list, need 3. checkSceneSafety: img-only, no contact hallucination on solo pipeline."
+    },
+    {
+      "id": "padwork-coach-feed",
+      "subject": "padwork",
+      "format": "image",
+      "description": "Pad work, coach feeding mitts, student throwing a 1-2. Side lighting, motion energy, sweat physics. pro_photo v2 grade. Mid-action freeze, tack-sharp.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "padwork is top open assignment in shot-list.json (need 3, have 0). Highest current shot debt."
+    },
+    {
+      "id": "bodyshot-impact-closeup",
+      "subject": "bodyshot",
+      "format": "image",
+      "description": "Close-up of a body punch landing on the bag/pads. Compression on the leather, glove dug in, ribcage of the bag flexing. Tight crop, dramatic side light.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "bodyshot track needs 2. Impact-moment crop. Body punch generation prompt is a filed BR standard."
+    },
+    {
+      "id": "gym-empty-golden-hour",
+      "subject": "gym_empty",
+      "format": "image",
+      "description": "Empty gym at golden hour. Atmosphere, the space itself, light raking across the floor and bags. No people. Warm shadow, lifted blacks, the calm before class.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "gym_empty track needs 2. Atmosphere/establishing shot — strong opener for a reel or carousel."
+    },
+    {
+      "id": "footwork-pivot-floor",
+      "subject": "footwork",
+      "format": "image",
+      "description": "Lateral movement / pivot caught mid-transition. Low angle on feet and floor, stance shifting weight. details_floor crossover. Crisp, zero motion blur on the planted foot.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "footwork track needs 2. Low-angle floor work doubles as a syllabus/teaching asset."
+    },
+    {
+      "id": "warmup-skipping-silhouette",
+      "subject": "warmup",
+      "format": "clip",
+      "description": "Skipping rope warm-up, near-silhouette against a window/wall light. 1 shot / 4s / 9:16. Rope arcs in motion, body tack-sharp, locked camera. Diegetic rope-whip + foot-tap audio.",
+      "tool": "fal_seedance",
+      "rating": null,
+      "uses": 0,
+      "notes": "warmup needs 2. Rope motion reads well in short video. Paid — cap. Prefer Seedance Fast once Higgsfield renews."
+    },
+    {
+      "id": "student-moment-water-break",
+      "subject": "student_moment",
+      "format": "image",
+      "description": "Student moment between rounds — toweling off, water break, focus face. Candid, documentary, natural light. The human beat that makes the gym feel real.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "student_moment needs 3 — the highest-count human-interest track. Real > polished is the whole point here."
+    },
+    {
+      "id": "gym-class-wide-energy",
+      "subject": "gym_class",
+      "format": "image",
+      "description": "Full class in session, wide shot, group energy. Everyone working bags/shadow. Deep focus, documentary grade, the room alive. Anti-orange, lifted blacks.",
+      "tool": "higgsfield_nano_banana_pro",
+      "rating": null,
+      "uses": 0,
+      "notes": "gym_class needs 2. Wide group shot — social-proof asset for retention content."
+    },
+    {
+      "id": "boxing__image",
+      "subject": "boxing",
+      "format": "image",
+      "rating": 3,
+      "uses": 2,
+      "notes": [
+        "2026-06-02 good(4) via openart(prompt) — 2026-06-02-boxing-coach-paul-mid-combination-on-the-heavy-bag-burgun.md",
+        "2026-06-02 bad(2) via openart(prompt) — 2026-06-02-boxing-coach-paul-mid-combination-on-the-heavy-bag-burgun.md"
+      ],
+      "last_rated": "2026-06-02T03:07:48.021Z"
+    }
+  ]
+}

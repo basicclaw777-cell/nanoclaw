@@ -1,0 +1,71 @@
+{
+  "_comment": "Reed's grounded tool registry — the SINGLE source of truth for what Reed can actually call, what it costs, and when to use it. Updated by reed-research + reed-higgsfield-tester. status: live | depleted_until | manual | check | capped. Reed's spine (reed-generate.js) reads this to pick the cheapest tool that clears the bar. Last grounded: 2026-06-02 (Higgsfield Starter renews ~2026-06-12).",
+  "renewal": { "higgsfield_starter": "2026-06-12", "note": "Until renewal, Higgsfield is depleted. Images = OpenArt (manual, Reed writes the prompt). Video = fal Seedance (paid, capped). After renewal, Higgsfield is the workhorse for both." },
+  "budget": { "daily_usd_cap": 5.0, "per_run_usd_cap": 2.0, "note": "Hard caps. fal Seedance ~$1.20/4s. Telegram spend notice after each paid run (SI-31/32). Never regenerate an identical brief — cache by brief hash." },
+  "tools": {
+    "higgsfield_nano_banana_pro": {
+      "kind": "image", "via": "higgsfield CLI", "status": "depleted_until:2026-06-12",
+      "cost": "included in $15/mo Starter (~1200 imgs/mo)", "cost_per_unit_usd": 0,
+      "strengths": ["best image quality", "preservation pipeline", "graphic-novel grade"],
+      "gotchas": ["no --custom_reference_id / no soul-id support — use Soul V2 for faces"],
+      "use_when": "primary IMAGE workhorse once renewed (sunk subscription cost)",
+      "ref": "~/cathedral-vault/06_Methods/higgsfield-prompting-bible.md"
+    },
+    "higgsfield_soul_v2": {
+      "kind": "image", "via": "higgsfield CLI (text2image_soul_v2)", "status": "depleted_until:2026-06-12",
+      "cost": "included in Starter (~20k)", "cost_per_unit_usd": 0,
+      "strengths": ["identity-faithful faces (Logan/Ling/Maya soul IDs)"],
+      "gotchas": ["text-only, no --image input — gym always from text description", "specify 'long dreadlocks' for Logan/Cloud Whisperer"],
+      "soul_ids": { "logan": "2a825762-9d13-4d93-9324-32fe5d5db803", "ling": "fbc29317-be0c-4807-9cd0-326001a53d1e", "maya": "ea241374-0a51-4b28-90d4-b98fc9d7bc3d" },
+      "use_when": "any image needing a known face once renewed",
+      "ref": "two-pass: Soul V2 (face) -> Nano Banana Pro (gym grounding)"
+    },
+    "higgsfield_kling3": {
+      "kind": "video", "via": "higgsfield CLI", "status": "depleted_until:2026-06-12",
+      "cost": "included in Starter (~533 videos)", "cost_per_unit_usd": 0,
+      "strengths": ["premium motion", "8s clips"], "gotchas": [],
+      "use_when": "premium VIDEO once renewed (free under subscription — prefer over paid fal)"
+    },
+    "higgsfield_seedance_fast": {
+      "kind": "video", "via": "higgsfield CLI", "status": "depleted_until:2026-06-12",
+      "cost": "included in Starter (Fast tier)", "cost_per_unit_usd": 0,
+      "strengths": ["fast video", "diegetic audio design"], "gotchas": ["Fast tier, not Full"],
+      "use_when": "bulk/daily video once renewed (free under subscription)"
+    },
+    "fal_seedance": {
+      "kind": "video", "via": "fal.ai API (FAL_KEY)", "status": "live",
+      "cost": "~$1.20 / 4s clip, pay-per-use", "cost_per_unit_usd": 1.2,
+      "strengths": ["Seedance 2.0 Full quality", "works NOW"],
+      "gotchas": ["PAID per call — cap to daily budget", "don't batch"],
+      "use_when": "VIDEO needed in the next 10 days (Higgsfield depleted). CAP strictly."
+    },
+    "openart_nano_banana": {
+      "kind": "image", "via": "MANUAL (web app, no API)", "status": "manual",
+      "cost": "$7/mo Paul's plan", "cost_per_unit_usd": 0,
+      "strengths": ["Paul's current interim image path"],
+      "gotchas": ["NO programmatic access — Reed CANNOT auto-generate here"],
+      "use_when": "images in the next 10 days: Reed writes a taste-gated, paste-ready prompt to ready/prompts/ for Paul to run in OpenArt"
+    },
+    "gpt_image_2": {
+      "kind": "image", "via": "laozhang proxy (LAOZHANG_API_KEY)", "status": "check",
+      "cost": "per-call via proxy", "cost_per_unit_usd": null,
+      "strengths": ["won the pro-photo comparison vs nano_banana_2 (2026-05-14)"],
+      "gotchas": ["verify key/credits before relying on it"],
+      "use_when": "fallback image path if key is live — verify first"
+    },
+    "gemini_nano_banana": {
+      "kind": "image", "via": "Gemini API (GEMINI_API_KEY)", "status": "capped",
+      "cost": "$0.13/img", "cost_per_unit_usd": 0.13,
+      "gotchas": ["spending cap blocks it — raise at ai.studio/spend"],
+      "use_when": "only if Paul lifts the Gemini spend cap"
+    }
+  },
+  "selection_doctrine": [
+    "1. Consult the Taste Map first (checkRejection) — never generate a rejected style.",
+    "2. Pick the CHEAPEST tool that clears the quality bar for the format.",
+    "3. Subscription (Higgsfield, when live) beats pay-per-use (fal) — the cost is already sunk.",
+    "4. Next 10 days: image brief -> write paste-ready OpenArt prompt (no spend); video brief -> fal Seedance (capped).",
+    "5. Never regenerate an identical brief — check the cache.",
+    "6. After any PAID run, post spend to Telegram and decrement the daily budget."
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "reed",
+  "private": true,
+  "type": "commonjs",
+  "description": "Reed v2 generation spine + feedback loop — CJS (require/module.exports). Local package.json overrides nanoclaw's type:module so reed-generate.js and reed-rate.js run as the CommonJS files they are written as."
+}

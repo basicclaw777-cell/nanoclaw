@@ -1075,6 +1075,51 @@ bot.onText(/^\/liveness(?:@\w+)?\s*$/, async (msg) => {
   }
 });
 
+// /reedmake — Reed v2 generation spine. Taste-gated, cheapest-tool, budget-capped.
+// Image (Higgsfield depleted) -> paste-ready OpenArt prompt. Video -> fal Seedance.
+// Add "video" for a clip; add "go" to actually spend on a paid clip.
+bot.onText(/^\/reedmake(?:@\w+)?\s+(.+)$/is, async (msg, match) => {
+  const chatId = msg.chat.id;
+  let brief = (match[1] || '').trim();
+  const flags = [];
+  if (/\bvideo\b/i.test(brief)) { flags.push('--video'); brief = brief.replace(/\bvideo\b/i, '').trim(); }
+  if (/\bgo\b/i.test(brief)) { flags.push('--go'); brief = brief.replace(/\bgo\b/i, '').trim(); }
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'reed', 'reed-generate.js'), brief, ...flags],
+      { timeout: 180000 }, (err, stdout) => {
+        if (err && !stdout) return safeSend(chatId, `⚠️ reedmake: ${err.message}`);
+        safeSend(chatId, `🎬 *Reed*\n${(stdout || '').slice(0, 1500)}`, { parse_mode: 'Markdown' });
+      });
+  } catch (e) { safeSend(chatId, `⚠️ reedmake failed: ${e.message}`); }
+});
+
+// /reedrate <id|filename> <good|bad|1-5> — rate a generated item; bandit + shots learn.
+bot.onText(/^\/reedrate(?:@\w+)?\s+(\S+)\s+(\S+)\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'reed', 'reed-rate.js'), match[1], match[2]],
+      { timeout: 30000 }, (err, stdout) => {
+        safeSend(chatId, err && !stdout ? `⚠️ reedrate: ${err.message}` : `⭐ ${(stdout || 'rated').slice(0, 800)}`);
+      });
+  } catch (e) { safeSend(chatId, `⚠️ reedrate failed: ${e.message}`); }
+});
+
+// /reeddump — the daily offload queue (ready-to-post images/clips/prompts).
+bot.onText(/^\/reed(?:dump|queue)(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { execFile } = require('child_process');
+    execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'reed', 'dump-manifest.js')],
+      { timeout: 30000 }, () => {
+        let md = '';
+        try { md = fs.readFileSync(path.join(process.env.HOME, 'reed-dump', 'ready', 'MANIFEST.md'), 'utf8'); } catch {}
+        safeSend(chatId, md ? `📤 *Reed offload queue*\n\`\`\`\n${md.slice(0, 3000)}\n\`\`\`` : '📭 Offload queue empty.', { parse_mode: 'Markdown' });
+      });
+  } catch (e) { safeSend(chatId, `⚠️ reeddump failed: ${e.message}`); }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;
@@ -6846,6 +6891,78 @@ bot.onText(/\/pipeline(?:\s+(\S+))?\s*([\s\S]*)/, async (msg, match) => {
   } catch (err) {
     await safeSend(chatId, `Pipeline error: ${err.message}`);
   }
+});
+
+// ── /capture — Quick 3-line memory deposit ──────────────────────────────────
+const captureState = {};
+bot.onText(/^\/capture(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  captureState[chatId] = { step: 'thought', lines: {} };
+  await safeSend(chatId, '🧠 *CAPTURE*\n\nLine 1/3 — What I *thought*:', { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/capture(?:@\w+)?\s+(.+)$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  // One-shot: split by newlines into thought/built/shipped
+  const lines = match[1].split('\n').map(l => l.trim()).filter(Boolean);
+  const thought = lines[0] || '';
+  const built = lines[1] || '';
+  const shipped = lines[2] || '';
+  const today = new Date().toISOString().split('T')[0];
+  const time = new Date().toTimeString().slice(0, 5);
+  const content = `---\ndate: ${today}\ntime: "${time}"\ntype: capture\n---\n\n# Capture — ${today} ${time}\n\n**Thought:** ${thought}\n**Built:** ${built}\n**Shipped:** ${shipped}\n`;
+  writeToVault(chatId, `00_Staging/captures/capture-${today}-${time.replace(':', '')}.md`, content);
+});
+
+// Multi-step capture flow handler
+bot.on('message', async (msg) => {
+  const chatId = msg.chat.id;
+  if (!captureState[chatId] || !msg.text || msg.text.startsWith('/')) return;
+  const state = captureState[chatId];
+  const text = msg.text.trim();
+
+  if (state.step === 'thought') {
+    state.lines.thought = text;
+    state.step = 'built';
+    await safeSend(chatId, 'Line 2/3 — What I *built*:', { parse_mode: 'Markdown' });
+  } else if (state.step === 'built') {
+    state.lines.built = text;
+    state.step = 'shipped';
+    await safeSend(chatId, 'Line 3/3 — What I *shipped*:', { parse_mode: 'Markdown' });
+  } else if (state.step === 'shipped') {
+    state.lines.shipped = text;
+    const today = new Date().toISOString().split('T')[0];
+    const time = new Date().toTimeString().slice(0, 5);
+    const content = `---\ndate: ${today}\ntime: "${time}"\ntype: capture\n---\n\n# Capture — ${today} ${time}\n\n**Thought:** ${state.lines.thought}\n**Built:** ${state.lines.built}\n**Shipped:** ${state.lines.shipped}\n`;
+    writeToVault(chatId, `00_Staging/captures/capture-${today}-${time.replace(':', '')}.md`, content);
+    delete captureState[chatId];
+  }
+});
+
+// ── /breathe — Vortex breathing timer (4-4-6-4) ─────────────────────────────
+bot.onText(/^\/breathe(?:@\w+)?(?:\s+(\d+))?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const cycles = Math.min(parseInt(match?.[1]) || 3, 10);
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  await safeSend(chatId, `🌀 *Vortex Breathing* — ${cycles} cycles\n4 in · 4 hold · 6 out · 4 hold\n\nStarting in 3...`, { parse_mode: 'Markdown' });
+  await sleep(3000);
+
+  for (let i = 1; i <= cycles; i++) {
+    await safeSend(chatId, `— Cycle ${i}/${cycles} —\n\n🫁 *BREATHE IN...*`, { parse_mode: 'Markdown' });
+    await sleep(4000);
+    await safeSend(chatId, '⏸ *HOLD...*', { parse_mode: 'Markdown' });
+    await sleep(4000);
+    await safeSend(chatId, '💨 *BREATHE OUT...*', { parse_mode: 'Markdown' });
+    await sleep(6000);
+    await safeSend(chatId, '⏸ *HOLD...*', { parse_mode: 'Markdown' });
+    await sleep(4000);
+  }
+
+  await safeSend(chatId, `✅ *${cycles} cycles complete.*\n\nSovereignty restored.`, { parse_mode: 'Markdown' });
 });
 
 // ── Inline keyboard callback handler (Densifier, Decay Detector) ────────────
