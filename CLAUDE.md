@@ -557,6 +557,13 @@ Apply retroactively to existing tools — audit for untriggered builds quarterly
 - Campaign targets: 40 members within 6 months (immediate), 484 at 12+ months (different strategy)
 - TRIGGER: UNASSIGNED — needs campaign send pipeline
 
+### BR Curriculum CRM — Tap-Screen MVP (built 2026-06-03)
+- Location: ~/basic-reflex/crm/ — tap-screen.html (live coach gate-tap UI), curriculum-crm-design.md (6-table model), punchpass-integration-findings.md
+- Purpose: live coach logging of gated 10-block + kids progression. Tap Attended / Gate-passed; stall flag >14d idle. localStorage MVP + JSON export (paper-trial before SQLite/server).
+- Strategy: own the differentiated curriculum layer (BR IP); PunchPass keeps booking+payments; PostHog = anonymous web funnel. Tracking starts at 10-block enrollment. Kids included (growth bet).
+- ⚠ RECONCILE next session: overlaps existing ~/Cathedral/br-crm/ (565 members) + ~/nanoclaw/block-config.json (10-block source of truth) + punchpass-scraper.cjs (CDP pipe). Tap-screen must read block-config.json + seed from members.json; merge, don't fork.
+- PostHog: brief at vault 08_Project_Orchestrator/products/research-brief-posthog-br-analytics.md; kit at ~/basic-reflex/posthog/ (Cloud free tier + JS snippet decided; not installed).
+
 ### The Timekeeper — Court Member #15 (2026-04-13 evening)
 - Script: ~/Cathedral/the-timekeeper.js (PM2 cron */15 min, no-autorestart)
 - Schedule file: ~/Cathedral/cathedral-schedule.json (shared state with Orchestrator)
