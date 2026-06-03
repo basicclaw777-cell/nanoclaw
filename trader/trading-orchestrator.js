@@ -159,7 +159,8 @@ function checkOpenPositions(prices, portfolio, config) {
     const currentPrice = priceData.price;
     const isLong = pos.direction === 'long';
 
-    // Stale position check: configurable days (default 3), close if within 1.5% of entry
+    // Time-based exit: close losing/flat positions after stale_days (default 3)
+    // Gold miner finding: 2.5-6 day hold period loses money. Cut faster.
     const staleDays = config.risk_rules.stale_days || 3;
     const openedAt = new Date(pos.opened_at);
     const daysOpen = (Date.now() - openedAt.getTime()) / 86400000;
@@ -168,7 +169,8 @@ function checkOpenPositions(prices, portfolio, config) {
       ? (currentPrice - pos.entry_price) / pos.entry_price
       : (pos.entry_price - currentPrice) / pos.entry_price;
 
-    if (daysOpen >= staleDays && Math.abs(moveFromEntry) < 0.015) {
+    // Close if: stale AND (flat or losing). Winners keep running.
+    if (daysOpen >= staleDays && moveFromEntry < 0.02) {
       // Stale — close at current price to free the slot
       const result = closeTrade(pos.id, currentPrice);
       if (result) {
@@ -257,13 +259,20 @@ function filterActionableSignals(signals, config) {
   const minConfluence = config.risk_rules.min_confluence || 2;
   const weights = config.strategy_weights || {};
 
+  // Direction lock filter: some strategies only allowed in one direction (from gold miner analysis)
+  const dirLocks = config.direction_locks || {};
+
   // Only trade specific asset signals (not MARKET-wide)
-  const assetSignals = signals.filter(s =>
-    s.asset !== 'MARKET' &&
-    config.watchlist.includes(s.asset) &&
-    s.strength >= 0.45 &&
-    s.direction !== 'neutral'
-  );
+  const assetSignals = signals.filter(s => {
+    if (s.asset === 'MARKET' || !config.watchlist.includes(s.asset) || s.strength < 0.45 || s.direction === 'neutral') return false;
+
+    // Enforce direction locks
+    const lock = dirLocks[s.type] || dirLocks[s.source];
+    if (lock === 'short_only' && s.direction === 'long') return false;
+    if (lock === 'long_only' && s.direction === 'short') return false;
+
+    return true;
+  });
 
   // Also consider MARKET signals as context
   const marketSignals = signals.filter(s => s.asset === 'MARKET');
@@ -363,34 +372,16 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
     confluenceInfo,
   ].join('. ');
 
-  // Run bull-bear debate
-  console.log('  Running bull-bear debate...');
-  let debateResult;
-  try {
-    debateResult = await debate({
-      asset: signal.asset,
-      direction,
-      entryPrice,
-      signals: [signal],
-      context,
-    });
-  } catch (e) {
-    console.error(`  Debate failed: ${e.message}`);
-    logDecision(signal.asset, 'ERROR', `Debate failed: ${e.message}`, [signal], '', '', '', 'error');
-    return null;
-  }
-
-  console.log(`  Bull: ${debateResult.bullCase.substring(0, 80)}...`);
-  console.log(`  Bear: ${debateResult.bearCase.substring(0, 80)}...`);
-  console.log(`  Decision: ${debateResult.decision} — ${debateResult.reasoning}`);
-
-  if (debateResult.decision === 'FLIP') {
-    direction = direction === 'long' ? 'short' : 'long';
-    console.log(`  FLIPPED to ${direction} — ${debateResult.reasoning}`);
-  } else if (debateResult.decision !== 'BUY') {
-    console.log(`  Skipped (${debateResult.decision})`);
-    return null;
-  }
+  // Phase 0: NO DEBATE — let all signals trade, P&L is the judge
+  // Debate belongs in Phase 1+ when real money is at risk.
+  // Paper trading = maximum data collection. Every skip = lost data point.
+  const debateResult = {
+    decision: 'BUY',
+    reasoning: context,
+    bullCase: `Auto-BUY (Phase 0 paper trading). ${confluenceInfo}`,
+    bearCase: 'Debate bypassed — collecting empirical data.',
+  };
+  console.log(`  Phase 0 auto-BUY — ${confluenceInfo}`);
 
   // Calculate position sizing
   const isLong = direction === 'long';
@@ -505,11 +496,24 @@ async function run() {
     return;
   }
 
-  // Step 2: Check open positions
+  // Step 2: Check open positions (always runs — exits need to fire even in low vol)
   checkOpenPositions(signalData.prices, portfolio, config);
+
+  // Volatility gate: skip NEW trades if BTC 24h change < 1% (dead market = noise trades)
+  // Gold miner finding: scheduled cron runs into dead markets lose $276
+  const btcData = signalData.prices?.BTC;
+  const btcChange = Math.abs(btcData?.change_24h || 0);
+  if (btcChange < 1.0) {
+    console.log(`[VOLATILITY GATE] BTC 24h change ${btcChange.toFixed(2)}% < 1% threshold — skipping new trades (positions still monitored)`);
+  }
 
   // Step 3: Filter actionable signals
   const { actionable, marketBias } = filterActionableSignals(signalData.signals, config);
+
+  // Apply volatility gate: empty actionable if market too quiet
+  if (btcChange < 1.0) {
+    actionable.length = 0;
+  }
 
   // Step 4: Process each actionable signal (sequential — debate is slow)
   let tradesOpened = 0;

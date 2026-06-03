@@ -1,0 +1,183 @@
+{
+  "started": "2026-06-03T17:37:21.807Z",
+  "total_invested": 40000,
+  "allocations": [
+    {
+      "name": "S&P 500",
+      "symbol": "SPY",
+      "category": "equity",
+      "color": "#2563EB",
+      "invested": 5000,
+      "why": "US large cap benchmark. Historical 10% annual. The thing to beat.",
+      "entry_price": 755.098,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 6.621657056435059,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 755.098,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    },
+    {
+      "name": "Bitcoin",
+      "symbol": "BTC-USD",
+      "category": "crypto",
+      "color": "#F7931A",
+      "invested": 5000,
+      "why": "Digital gold. Halving cycle. Asymmetric upside. Uncorrelated to stocks.",
+      "entry_price": 65985.87,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 0.07577379823892601,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 65985.87,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    },
+    {
+      "name": "Gold",
+      "symbol": "GLD",
+      "category": "commodity",
+      "color": "#FFD700",
+      "invested": 5000,
+      "why": "Safe haven. Inflation hedge. 5000-year store of value. Inverse to equities in crisis.",
+      "entry_price": 407.41,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 12.27264917405071,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 407.41,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    },
+    {
+      "name": "Emerging Markets",
+      "symbol": "VWO",
+      "category": "equity",
+      "color": "#10B981",
+      "invested": 5000,
+      "why": "China, India, Brazil, Taiwan. Developing economies. Different growth cycle to US.",
+      "entry_price": 60.32,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 82.89124668435014,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 60.32,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    },
+    {
+      "name": "US Real Estate",
+      "symbol": "VNQ",
+      "category": "property",
+      "color": "#DC2626",
+      "invested": 5000,
+      "why": "Property without buying property. REITs = rental income + appreciation. Rate-sensitive.",
+      "entry_price": 94.91,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 52.68148772521336,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 94.91,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    },
+    {
+      "name": "Asia ex-Japan",
+      "symbol": "AAXJ",
+      "category": "equity",
+      "color": "#7C3AED",
+      "invested": 5000,
+      "why": "Regional exposure. HK, Korea, India, Singapore, Thailand. Where Paul lives.",
+      "entry_price": 121.61,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 41.115039881588686,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 121.61,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    },
+    {
+      "name": "US Bonds 20yr",
+      "symbol": "TLT",
+      "category": "bonds",
+      "color": "#059669",
+      "invested": 5000,
+      "why": "Fixed income. Rate cut play. Portfolio hedge. Moves opposite to stocks in panic.",
+      "entry_price": 85.24,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 58.65790708587518,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 85.24,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    },
+    {
+      "name": "Commodities",
+      "symbol": "DBC",
+      "category": "commodity",
+      "color": "#D97706",
+      "invested": 5000,
+      "why": "Oil, metals, agriculture basket. Inflation proxy. Real-world stuff.",
+      "entry_price": 30.335,
+      "entry_date": "2026-06-03",
+      "currency": "USD",
+      "units": 164.82610845557937,
+      "snapshots": [
+        {
+          "date": "2026-06-03",
+          "week": 0,
+          "price": 30.335,
+          "value": 5000,
+          "pnl": 0,
+          "pnl_pct": 0
+        }
+      ]
+    }
+  ],
+  "snapshot_count": 1
+}

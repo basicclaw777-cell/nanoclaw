@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Allocation Tracker</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,sans-serif;background:#0F172A;color:#E2E8F0;min-height:100vh}
+.header{background:linear-gradient(135deg,#1E293B,#0F172A);padding:32px;border-bottom:1px solid #334155}
+.header h1{font-size:28px;font-weight:700;margin-bottom:8px}
+.header .subtitle{color:#94A3B8;font-size:15px}
+.header .totals{display:flex;gap:32px;margin-top:20px;flex-wrap:wrap}
+.total-card{background:#1E293B;border:1px solid #334155;border-radius:12px;padding:16px 24px}
+.total-card .label{font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:1px}
+.total-card .value{font-size:28px;font-weight:700;margin-top:4px}
+.total-card .value.green{color:#34D399}.total-card .value.red{color:#F87171}.total-card .value.neutral{color:#E2E8F0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:24px}
+.card{background:#1E293B;border:1px solid #334155;border-radius:12px;padding:20px;transition:border-color .2s}
+.card:hover{border-color:#475569}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.card-name{font-size:17px;font-weight:600}
+.card-category{font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.card-pnl{text-align:right}.card-pnl .pct{font-size:24px;font-weight:700}.card-pnl .dollar{font-size:13px;color:#94A3B8}
+.card-why{font-size:12px;color:#64748B;margin-bottom:12px;font-style:italic}
+.card-bar{height:8px;border-radius:4px;background:#334155;margin-bottom:8px;overflow:hidden}
+.card-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.card-details{display:flex;justify-content:space-between;font-size:12px;color:#94A3B8}
+.chart-section{padding:24px}.chart-section h2{font-size:20px;font-weight:600;margin-bottom:16px}
+.ranking{background:#1E293B;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.rank-row{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid #1a2332}
+.rank-row:last-child{border-bottom:none}
+.rank-pos{width:40px;font-size:20px;font-weight:700;color:#475569}
+.rank-pos.gold{color:#FFD700}.rank-pos.silver{color:#C0C0C0}.rank-pos.bronze{color:#CD7F32}
+.rank-name{flex:1}.rank-name .main{font-size:15px;font-weight:500}.rank-name .sub{font-size:11px;color:#64748B}
+.rank-bar-container{width:200px;margin:0 20px}
+.rank-bar{height:24px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-weight:600;min-width:2px}
+.rank-pnl{width:100px;text-align:right;font-size:15px;font-weight:600}
+.week-table{width:100%;border-collapse:collapse;margin-top:16px}
+.week-table th{text-align:left;padding:10px 12px;font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #334155}
+.week-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid #1a2332}
+.week-table tr:hover{background:#1a2332}
+.green{color:#34D399}.red{color:#F87171}
+.footer{padding:24px;text-align:center;color:#475569;font-size:12px}
+@media(max-width:768px){.header .totals{flex-direction:column;gap:12px}.grid{grid-template-columns:1fr;padding:12px}.rank-bar-container{display:none}}
+</style></head><body>
+<div class="header">
+<h1>Where Should My Money Go?</h1>
+<div class="subtitle">$40,000 across 8 asset classes — Week 0 — Started 2026-06-03</div>
+<div class="totals">
+<div class="total-card"><div class="label">Total Invested</div><div class="value neutral">$40,000</div></div>
+<div class="total-card"><div class="label">Current Value</div><div class="value neutral">$40000</div></div>
+<div class="total-card"><div class="label">Total P&L</div><div class="value green">+$0</div></div>
+<div class="total-card"><div class="label">Return</div><div class="value green">+0.0%</div></div>
+</div></div>
+<div class="chart-section"><h2>Performance Ranking</h2><div class="ranking"><div class="rank-row"><div class="rank-pos gold">1</div><div class="rank-name"><div class="main">S&P 500</div><div class="sub">equity &middot; SPY</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div><div class="rank-row"><div class="rank-pos silver">2</div><div class="rank-name"><div class="main">Bitcoin</div><div class="sub">crypto &middot; BTC-USD</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div><div class="rank-row"><div class="rank-pos bronze">3</div><div class="rank-name"><div class="main">Gold</div><div class="sub">commodity &middot; GLD</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div><div class="rank-row"><div class="rank-pos ">4</div><div class="rank-name"><div class="main">Emerging Markets</div><div class="sub">equity &middot; VWO</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div><div class="rank-row"><div class="rank-pos ">5</div><div class="rank-name"><div class="main">US Real Estate</div><div class="sub">property &middot; VNQ</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div><div class="rank-row"><div class="rank-pos ">6</div><div class="rank-name"><div class="main">Asia ex-Japan</div><div class="sub">equity &middot; AAXJ</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div><div class="rank-row"><div class="rank-pos ">7</div><div class="rank-name"><div class="main">US Bonds 20yr</div><div class="sub">bonds &middot; TLT</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div><div class="rank-row"><div class="rank-pos ">8</div><div class="rank-name"><div class="main">Commodities</div><div class="sub">commodity &middot; DBC</div></div><div class="rank-bar-container"><div class="rank-bar" style="width:2%;background:#065F46;color:#34D399;">+0.0%</div></div><div class="rank-pnl green">+$0</div></div></div></div>
+<div class="grid"><div class="card"><div class="card-header"><div><div class="card-name" style="color:#2563EB">S&P 500</div><div class="card-category">equity &middot; SPY</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">US large cap benchmark. Historical 10% annual. The thing to beat.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $755.10</span><span>Now: $755.10</span><span>Value: $5000</span></div></div><div class="card"><div class="card-header"><div><div class="card-name" style="color:#F7931A">Bitcoin</div><div class="card-category">crypto &middot; BTC-USD</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">Digital gold. Halving cycle. Asymmetric upside. Uncorrelated to stocks.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $65985.87</span><span>Now: $65985.87</span><span>Value: $5000</span></div></div><div class="card"><div class="card-header"><div><div class="card-name" style="color:#FFD700">Gold</div><div class="card-category">commodity &middot; GLD</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">Safe haven. Inflation hedge. 5000-year store of value. Inverse to equities in crisis.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $407.41</span><span>Now: $407.41</span><span>Value: $5000</span></div></div><div class="card"><div class="card-header"><div><div class="card-name" style="color:#10B981">Emerging Markets</div><div class="card-category">equity &middot; VWO</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">China, India, Brazil, Taiwan. Developing economies. Different growth cycle to US.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $60.32</span><span>Now: $60.32</span><span>Value: $5000</span></div></div><div class="card"><div class="card-header"><div><div class="card-name" style="color:#DC2626">US Real Estate</div><div class="card-category">property &middot; VNQ</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">Property without buying property. REITs = rental income + appreciation. Rate-sensitive.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $94.91</span><span>Now: $94.91</span><span>Value: $5000</span></div></div><div class="card"><div class="card-header"><div><div class="card-name" style="color:#7C3AED">Asia ex-Japan</div><div class="card-category">equity &middot; AAXJ</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">Regional exposure. HK, Korea, India, Singapore, Thailand. Where Paul lives.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $121.61</span><span>Now: $121.61</span><span>Value: $5000</span></div></div><div class="card"><div class="card-header"><div><div class="card-name" style="color:#059669">US Bonds 20yr</div><div class="card-category">bonds &middot; TLT</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">Fixed income. Rate cut play. Portfolio hedge. Moves opposite to stocks in panic.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $85.24</span><span>Now: $85.24</span><span>Value: $5000</span></div></div><div class="card"><div class="card-header"><div><div class="card-name" style="color:#D97706">Commodities</div><div class="card-category">commodity &middot; DBC</div></div><div class="card-pnl"><div class="pct green">+0.0%</div><div class="dollar">+$0</div></div></div><div class="card-why">Oil, metals, agriculture basket. Inflation proxy. Real-world stuff.</div><div class="card-bar"><div class="card-bar-fill" style="width:0%;background:#34D399;"></div></div><div class="card-details"><span>Entry: $30.34</span><span>Now: $30.34</span><span>Value: $5000</span></div></div></div>
+
+<div class="footer">Cathedral Allocation Tracker &middot; Paper positions &middot; Updated 2026-06-03 &middot; Week 0</div>
+</body></html>

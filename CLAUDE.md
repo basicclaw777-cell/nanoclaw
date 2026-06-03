@@ -1415,6 +1415,41 @@ the-timekeeper to go offline. Don't repeat it.
 - relative_strength reinstated after wrongful elimination (was top earner at $152.25)
 - Protection logic: if worst weekly performer is also top overall, skip to next worst
 
+## Trading Experiment Expansion (2026-06-04)
+
+### Phase 0 Debate Bypass
+- trading-orchestrator.js: bull-bear debate replaced with auto-BUY for all signals
+- Paper trading = maximum data collection. Every skip = lost data point.
+- Debate belongs in Phase 1+ when real money is at risk.
+
+### Simpsons Trader — Cultural Prediction Experiment
+- Script: ~/nanoclaw/trader/simpsons-trader.js (ESM)
+- PM2: simpsons-trader (#144), cron 0 0,12 * * * (8am/8pm HKT)
+- $5K paper balance, tests cultural/media prediction signals only
+
+### Cyclical Trader — Calendar/Geometric Experiment
+- Script: ~/nanoclaw/trader/cyclical-trader.js (ESM)
+- PM2: cyclical-trader (#145), cron 0 0,12 * * *
+- $5K paper, 4 strategies: historical_cycles, lunar_cycles, gann_geometry, fibonacci_time
+- Wider parameters: 7% SL, 15% TP, 14-day hold, $500 cap
+- Own DB tables (cyclical_trades, cyclical_signals_log)
+
+### Allocation Tracker — "Where Should My Money Go?"
+- Script: ~/nanoclaw/trader/allocation-tracker.js (ESM)
+- PM2: allocation-weekly (#146), cron Sunday 10am HKT
+- $40K across 8 uncorrelated asset classes (Forge-picked):
+  SPY, BTC-USD, GLD, VWO, VNQ, AAXJ, TLT, DBC
+- Dashboard: localhost:8080/allocations
+- API: /allocations, /api/allocations on cath-bridge
+
+### Trading Mentor — Weekly Investment Teacher
+- Script: ~/nanoclaw/trader/trading-mentor.js (ESM)
+- PM2: trading-mentor (#147) Sunday 10:30am HKT, trading-mentor-check (#148) Wed 6pm HKT
+- Watches all 4 experiments. DeepSeek digest using WHY.md tone.
+- 12 investment concepts cycled weekly, tied to Paul's actual data
+- Mid-week health check: silent unless something wrong
+- Alerts: drawdown >5%/>10%, sharp weekly drops, correlation collapse, stale data
+
 ## Cathedral Planner — DeepSeek Upgrade (fixed 2026-05-21)
 - cathedral-planner.py: DeepSeek primary, Claude fallback (was Claude-only with wrong model ID)
 - Auto-arbitrates all pending agent goals on every run
@@ -1954,6 +1989,31 @@ the-timekeeper to go offline. Don't repeat it.
   proposes risky) → Organism (every mind elicits → gold-of-gold → one governed hand). The
   Cathedral interrogates itself. Vault: the-elicitation-threshold.md, the-master-game.md,
   idea-the-self-eliciting-organism.
+
+## Emergence Board — Kanban lifecycle for emergent agent behavior (built 2026-06-03)
+- ~/nanoclaw/emergence-board.js — full Kanban: DETECTED → WATCHING → CONFIRMED → INTEGRATED | DISMISSED
+- Ingests from emergence-captures.json + surprises.json. CLI: ingest, stats, stale, advance, note.
+- Data: ~/nanoclaw/emergence-board.json (200 incidents from first ingest)
+- Staleness: WATCHING incidents >3 days without update flagged stale
+- API: GET /api/emergence (counts + incidents), POST /api/emergence/advance (status + note)
+- Board tab: 🌱 Emergence in board.html — grouped by status, interactive advance/dismiss buttons
+- Telegram: /emergence [ingest|stats|stale]
+- PM2: emergence-ingest (daily cron)
+- Solves: emergence reports said "watch for X" but threads lost in Telegram scroll. Now read-write.
+
+## Lucy Heartbeat — bi-weekly diagnostic pulse (built 2026-06-03)
+- ~/nanoclaw/lucy-heartbeat.js — DeepSeek-powered system diagnostic, 1st + 15th of month
+- Gathers: recent harvests, emergence board, monitor state, previous heartbeats, cathedral state
+- Delta reporting: each pulse builds on previous — tracks deepening, new emergence, fading, contradictions
+- Model rotation: DeepSeek primary x3 pulses, fresh model every 4th pulse for contrast/audit
+- State: ~/nanoclaw/lucy-heartbeat-state.json (pulse number, history)
+- Output: ~/Cathedral/agents/lucy-heartbeats/heartbeat-NNN-YYYY-MM-DD.md + vault deposit
+- API: GET /api/lucy-heartbeat (state + latest content)
+- Telegram: /lucy [pulse|status]
+- PM2: lucy-heartbeat (bi-weekly cron, 1st + 15th)
+- Pulse #1 findings: Self-Eliciting Organism first run, cross-agent unsolicited interventions,
+  vault 78% fading, Matchmaker introduction pattern (investigation direction)
+- Origin: Paul's insight — single trip forgotten, rhythmic intervals allow processing + compounding
 
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
