@@ -2,6 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import 'dotenv/config';
+import { grokImage, grokVideo, logCall } from '../grok-trial.js';
+import { falImg2Img, falUpload } from '../fal-client.js';
+import { pickNightlySet, getStylesForPick, initFolders as initCurator } from './source-curator.js';
+import { createRequire } from 'module';
+const genGuard = createRequire(import.meta.url)('../lib/generation-guard.cjs'); // GLOBAL kill-switch
 
 const INBOX = path.join(process.env.HOME, 'nanoclaw', 'reed-inbox');
 const CALIBRATION = path.join(process.env.HOME, 'Downloads', 'upgraded standard');
@@ -129,9 +134,14 @@ const EXPERIMENTAL = [
   { name: 'Polaroid Memory', aspect: '1:1', prompt: 'Vintage Polaroid photograph. White border frame. Slightly overexposed, warm color shift, soft focus at edges. Nostalgic faded colors. Natural candid moment in the gym. The feel of a photo found in a shoebox. Square format.' },
 ];
 
-// Nightly: proven styles + 1 experimental + 1 video + 1 generative scene
-const NIGHTLY_STYLES = ['pro_photo', 'noir', 'dramatic'];
-const WEEKLY_BONUS = ['ippo', 'neon', 'manga', 'poster']; // Sunday gets all
+// ── LEAN REED: cost-aware generation (fal.ai pay-per-use) ────────────────────
+// Weeknight: 2 photos × 2 styles = 4 img2img ($0.10)
+// Sunday:    3 photos × 3 styles = 9 img2img ($0.225) + 1 video ($0.40)
+// Experiment: 1 per night ($0.025)
+// Generative: PAUSED (Soul ID requires Higgsfield — cancelled)
+// Weekly budget target: ~$1.40 (~$6/month)
+const NIGHTLY_STYLES = ['pro_photo', 'dramatic'];
+const WEEKLY_BONUS = ['noir']; // Sunday adds noir only
 
 // ── CATHY STANDARD: Reed knows Paul ─────────────────────────────────────────
 // Reed is making visuals for Paul Logan. Boxing gym owner, Hong Kong.
@@ -217,7 +227,62 @@ function upscaleIfNeeded(imgPath) {
   return imgPath;
 }
 
-function generate(imgPath, recipe) {
+// Engine selection: fal (default, img2img), grok (text-only generation), higgsfield (legacy)
+const REED_ENGINE = process.env.REED_ENGINE || 'fal';
+const USE_GROK = REED_ENGINE === 'grok';
+const USE_FAL = REED_ENGINE === 'fal';
+
+async function generateGrokImage(prompt) {
+  try {
+    const result = await grokImage(prompt);
+    return result?.url || null;
+  } catch (e) {
+    console.error(`[reed-lab] Grok image failed: ${e.message}`);
+    return null;
+  }
+}
+
+async function generateGrokVideo(prompt) {
+  try {
+    const result = await grokVideo(prompt);
+    return result?.url || null;
+  } catch (e) {
+    console.error(`[reed-lab] Grok video failed: ${e.message}`);
+    return null;
+  }
+}
+
+async function generateFalImg2Img(imgPath, prompt) {
+  try {
+    console.log(`[reed-lab]   Uploading to fal.ai...`);
+    const imageUrl = await falUpload(imgPath);
+    console.log(`[reed-lab]   Running FLUX dev img2img ($0.025)...`);
+    const result = await falImg2Img(imageUrl, prompt, { model: 'dev', strength: 0.15 });
+    return result?.url || null;
+  } catch (e) {
+    console.error(`[reed-lab] fal.ai img2img failed: ${e.message}`);
+    return null;
+  }
+}
+
+async function generate(imgPath, recipe) {
+  // GLOBAL kill-switch — autonomous nightly lab; block and return null when paused.
+  try { genGuard.assertGenAllowed(); }
+  catch (e) { console.error(`[reed-lab] 🚫 ${e.message} — skipping generation`); return null; }
+  // fal.ai path: img2img retouch (default — best for existing photos)
+  if (USE_FAL && recipe.type !== 'video') {
+    return await generateFalImg2Img(imgPath, recipe.prompt);
+  }
+  // Grok path: text-to-image (no img2img), so prompt must describe scene
+  if (USE_GROK && recipe.type !== 'video') {
+    console.log(`[reed-lab]   Using Grok Imagine ($0.02)`);
+    return await generateGrokImage(recipe.prompt);
+  }
+  if ((USE_GROK || USE_FAL) && recipe.type === 'video') {
+    console.log(`[reed-lab]   Using Grok Video ($0.40)`);
+    return await generateGrokVideo(recipe.prompt);
+  }
+
   const model = recipe.model || 'nano_banana_2';
   const isVideo = recipe.type === 'video';
   let cmd;
@@ -231,7 +296,6 @@ function generate(imgPath, recipe) {
   try {
     const result = execSync(cmd, { encoding: 'utf-8', timeout: 600000 }).trim();
     if (result.startsWith('http')) return result;
-    // Check for job ID (failed status)
     if (result.includes('failed')) { console.error(`[reed-lab] Generation failed: ${result}`); return null; }
     console.error(`[reed-lab] Unexpected result: ${result.slice(0, 100)}`);
     return null;
@@ -241,7 +305,16 @@ function generate(imgPath, recipe) {
   }
 }
 
-function generateFromPrompt(scene) {
+async function generateFromPrompt(scene) {
+  // GLOBAL kill-switch — autonomous nightly lab; block and return null when paused.
+  try { genGuard.assertGenAllowed(); }
+  catch (e) { console.error(`[reed-lab] 🚫 ${e.message} — skipping scene`); return null; }
+  // For text-to-image scenes without Soul ID: Grok ($0.02) or fal FLUX ($0.025)
+  if ((USE_GROK || USE_FAL) && !scene.useSoul) {
+    console.log(`[reed-lab]   Using Grok Imagine for scene ($0.02)`);
+    return await generateGrokImage(scene.prompt);
+  }
+
   const model = scene.model || 'nano_banana_2';
   let cmd;
 
@@ -277,18 +350,27 @@ function downloadAndSave(url, sourceName, styleName) {
 }
 
 async function sendToTelegram(photoPath, caption) {
-  const FormData = (await import('form-data')).default;
-  const form = new FormData();
-  form.append('chat_id', CHAT_ID);
-  form.append('photo', fs.createReadStream(photoPath));
-  form.append('caption', caption);
-  const resp = await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
-    method: 'POST',
-    body: form
-  });
-  const data = await resp.json();
-  if (!data.ok) console.error(`[reed-lab] Telegram send failed: ${JSON.stringify(data)}`);
-  return data.ok;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const FormData = (await import('form-data')).default;
+      const form = new FormData();
+      form.append('chat_id', CHAT_ID);
+      form.append('photo', fs.createReadStream(photoPath));
+      form.append('caption', caption);
+      const resp = await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+        method: 'POST',
+        body: form
+      });
+      const data = await resp.json();
+      if (!data.ok) console.error(`[reed-lab] Telegram send failed: ${JSON.stringify(data)}`);
+      return data.ok;
+    } catch (err) {
+      console.error(`[reed-lab] Telegram send error (attempt ${attempt + 1}/3): ${err.message}`);
+      if (attempt < 2) await new Promise(r => setTimeout(r, 5000));
+    }
+  }
+  console.error('[reed-lab] Telegram send failed after 3 attempts, skipping');
+  return false;
 }
 
 async function sendText(text) {
@@ -301,6 +383,11 @@ async function sendText(text) {
 
 async function run() {
   console.log('[reed-lab] Daily Lab starting...');
+  // GLOBAL kill-switch — bail early on the autonomous nightly run when paused.
+  if (genGuard.isPaused()) {
+    console.log('[reed-lab] 🚫 Generation paused (global kill-switch) — skipping nightly run.');
+    return;
+  }
   const catalogue = loadCatalogue();
   const isSunday = new Date().getDay() === 0;
 
@@ -317,24 +404,41 @@ async function run() {
   const baseStyles = isSunday ? [...NIGHTLY_STYLES, ...WEEKLY_BONUS] : NIGHTLY_STYLES;
   const styles = weightStyles(baseStyles, catalogue);
 
-  // Get photos to process
+  // Get photos — curator picks first, then inbox, then calibration fallback
   let photos = getNewPhotos();
+  let curatorPicks = [];
+
+  if (photos.length === 0) {
+    // Use curator for organized selection
+    try {
+      initCurator();
+      curatorPicks = pickNightlySet({ maxPhotos: isSunday ? 4 : 2, includeExperiment: true });
+      photos = curatorPicks.map(p => p.path);
+      if (photos.length > 0) {
+        console.log(`[reed-lab] Curator picked ${photos.length} photos from ${[...new Set(curatorPicks.map(p => p.category))].join(', ')}`);
+      }
+    } catch (e) {
+      console.error(`[reed-lab] Curator error: ${e.message}`);
+    }
+  }
+
   if (photos.length === 0) {
     const calibration = getRandomCalibration(catalogue);
     if (calibration) {
       photos = [calibration];
-      console.log(`[reed-lab] No inbox photos. Using calibration: ${path.basename(calibration)}`);
+      console.log(`[reed-lab] Fallback to calibration: ${path.basename(calibration)}`);
     } else {
       console.log('[reed-lab] No photos to process. Skipping.');
-      await sendText('🎬 Reed Lab: No new photos in inbox. Drop photos in ~/nanoclaw/reed-inbox/');
+      await sendText('🎬 Reed Lab: No photos available. Populate reed-sources/ folders.');
       return;
     }
   }
 
-  // Limit to 2 photos per night (cost control)
-  photos = photos.slice(0, 2);
+  // Lean Reed: 2 photos weeknight, 3 Sunday (cost control)
+  photos = photos.slice(0, isSunday ? 3 : 2);
 
-  await sendText(`🎬 Reed Daily Lab\n${photos.length} photo(s) × ${styles.length} styles = ${photos.length * styles.length} generations\n${isSunday ? '🌟 Sunday bonus: all styles!' : 'Nightly set: pro, noir, dramatic'}`);
+  const estCost = (photos.length * styles.length * 0.025) + (isSunday ? 0.40 : 0) + 0.025;
+  await sendText(`🎬 Reed Daily Lab (Lean Mode)\n${photos.length} photo(s) × ${styles.length} styles + 1 experiment${isSunday ? ' + 1 video' : ''}\nEst. cost: ~$${estCost.toFixed(2)}\n${isSunday ? '🌟 Sunday: pro + dramatic + noir + video' : 'Nightly: pro + dramatic'}`);
 
   const results = [];
 
@@ -343,10 +447,15 @@ async function run() {
     const processedPath = upscaleIfNeeded(photo);
     console.log(`[reed-lab] Processing: ${sourceName}`);
 
-    for (const styleKey of styles) {
+    // Use curator-recommended styles if available, otherwise default rotation
+    const curatorPick = curatorPicks.find(p => p.path === photo);
+    const photoStyles = curatorPick ? getStylesForPick(curatorPick).filter(s => RECIPES[s]) : styles;
+    const activeStyles = photoStyles.length > 0 ? photoStyles : styles;
+
+    for (const styleKey of activeStyles) {
       const recipe = RECIPES[styleKey];
       console.log(`[reed-lab]   Style: ${recipe.name}`);
-      const url = generate(processedPath, recipe);
+      const url = await generate(processedPath, recipe);
       if (!url) continue;
 
       const savedPath = downloadAndSave(url, sourceName, styleKey);
@@ -391,19 +500,18 @@ async function run() {
     }
   }
 
-  // ── PHASE 2: One video from best photo ──────────────────────────────────
-  if (photos.length > 0) {
+  // ── PHASE 2: Video — Sunday only (Grok $0.40/clip, too pricey nightly) ──
+  if (isSunday && photos.length > 0) {
     const bestPhoto = upscaleIfNeeded(photos[0]);
     const videoRecipe = RECIPES.video_cinematic;
-    console.log(`[reed-lab] Generating video from: ${path.basename(bestPhoto)}`);
-    const videoUrl = generate(bestPhoto, videoRecipe);
+    console.log(`[reed-lab] Sunday video from: ${path.basename(bestPhoto)}`);
+    const videoUrl = await generate(bestPhoto, videoRecipe);
     if (videoUrl) {
       const dateStr = new Date().toISOString().slice(0, 10);
       const outDir = path.join(OUTPUT_DIR, dateStr);
       if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
       const videoPath = path.join(outDir, `${dateStr}_video_cinematic.mp4`);
       execSync(`curl -sL "${videoUrl}" -o "${videoPath}"`, { timeout: 120000 });
-      // Send video to Telegram
       const FormData = (await import('form-data')).default;
       const form = new FormData();
       form.append('chat_id', CHAT_ID);
@@ -414,6 +522,8 @@ async function run() {
       catalogue.stats.total_generated++;
       catalogue.stats.by_style.video_cinematic = (catalogue.stats.by_style.video_cinematic || 0) + 1;
     }
+  } else if (!isSunday) {
+    console.log('[reed-lab] Video: Sunday only (cost control). Skipping.');
   }
 
   // ── PHASE 3: One experimental recipe (rotates daily) ───────────────────
@@ -421,9 +531,9 @@ async function run() {
     const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
     const expIdx = dayOfYear % EXPERIMENTAL.length;
     const experiment = EXPERIMENTAL[expIdx];
-    const expRecipe = { name: experiment.name, model: 'nano_banana_2', aspect: experiment.aspect, prompt: experiment.prompt };
+    const expRecipe = { name: experiment.name, model: 'flux_dev', aspect: experiment.aspect, prompt: experiment.prompt };
     console.log(`[reed-lab] Experiment #${expIdx}: ${experiment.name}`);
-    const expUrl = generate(upscaleIfNeeded(photos[0]), expRecipe);
+    const expUrl = await generate(upscaleIfNeeded(photos[0]), expRecipe);
     if (expUrl) {
       const savedPath = downloadAndSave(expUrl, path.basename(photos[0], path.extname(photos[0])), `exp_${experiment.name.toLowerCase().replace(/\W/g, '_')}`);
       await sendToTelegram(savedPath, `🧪 Reed Experiment: ${experiment.name}`);
@@ -432,21 +542,11 @@ async function run() {
     }
   }
 
-  // ── PHASE 4: One generative scene (rotates daily) ──────────────────────
-  {
-    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    const sceneIdx = dayOfYear % GENERATIVE_SCENES.length;
-    const scene = GENERATIVE_SCENES[sceneIdx];
-    console.log(`[reed-lab] Generative scene: ${scene.name}`);
-    const sceneUrl = generateFromPrompt(scene);
-    if (sceneUrl) {
-      const savedPath = downloadAndSave(sceneUrl, scene.name.toLowerCase().replace(/\W/g, '_'), 'generated');
-      await sendToTelegram(savedPath, `🎬 Reed Lab: ${scene.name} (generated)`);
-      results.push({ source: 'generative', style: scene.name, output: savedPath, url: sceneUrl, date: new Date().toISOString() });
-      catalogue.stats.total_generated++;
-      catalogue.stats.by_style[`gen_${scene.name}`] = (catalogue.stats.by_style[`gen_${scene.name}`] || 0) + 1;
-    }
-  }
+  // ── PHASE 4: Generative scenes — PAUSED ──────────────────────────────────
+  // Soul V2 (text2image_soul_v2) requires Higgsfield Ultra (cancelled 2026-05-27).
+  // Grok text-to-image can't match Soul ID face lock — outputs are generic gyms.
+  // Re-enable when: (a) find face-lock API alternative, or (b) Grok proves quality via paper trial.
+  console.log('[reed-lab] Generative scenes: PAUSED (Soul ID unavailable).');
 
   catalogue.generations.push(...results);
   saveCatalogue(catalogue);
@@ -491,6 +591,7 @@ async function sendShotList() {
   // Count what we have from catalogue filenames
   for (const subject of SUBJECTS) {
     subject.have = catalogue.photos.filter(p => {
+      if (!p.source) return false;
       const name = path.basename(p.source).toLowerCase();
       return name.includes(subject.tag) ||
         (subject.tag === 'sparring' && name.includes('spar')) ||

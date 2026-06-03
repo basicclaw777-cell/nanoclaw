@@ -14,8 +14,25 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
+const genGuard = createRequire(import.meta.url)('./lib/generation-guard.cjs'); // GLOBAL kill-switch
 
 const MANIFEST_PATH = path.join(process.env.HOME, 'nanoclaw', 'cathedral-manifest.json');
+
+// Generator-type PM2 processes that spend on paid image/video generation.
+// While the global kill-switch is ON, reconcile() must NOT auto-restart these —
+// that is exactly how a "paused" Reed generator got reconciled back online and
+// drained Higgsfield (48 -> 0.58 credits) on 2026-06-03.
+const GENERATOR_PROCS = new Set([
+  'reed-studio-engine',
+  'reed-director',
+  'reed-shots',
+  'reed-lab',
+  'hf-tester',
+  'reed-gemini',
+  'content-autopilot',
+  'content-ideas',
+]);
 
 // ─── THE MANIFEST ──────────────────────────────────────────────
 // intended: "online" (long-running), "cron" (run-and-exit), "stopped" (intentionally off), "dead" (should be deleted)
@@ -221,10 +238,24 @@ function audit() {
 
 function reconcile() {
   const pm2 = getPM2State();
+  const genPaused = genGuard.isPaused();
+  if (genPaused) {
+    console.log('  ⚠️  Global generation kill-switch is ON — generator processes will NOT be auto-started.');
+  }
 
   for (const [name, spec] of Object.entries(MANIFEST)) {
     const actual = pm2[name];
     if (!actual) continue;
+
+    // GLOBAL kill-switch: never reconcile a generator back online while paused.
+    if (genPaused && GENERATOR_PROCS.has(name)) {
+      if (actual.status === 'online') {
+        console.log(`  🚫 ${name} is a generator and the kill-switch is ON — leaving as-is (not enforcing online).`);
+      } else {
+        console.log(`  🚫 SKIP START ${name} (generator, kill-switch ON)`);
+      }
+      continue;
+    }
 
     if (spec.intended === 'dead') {
       console.log(`  DELETE ${name} (${spec.reason})`);

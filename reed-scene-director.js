@@ -2,12 +2,16 @@
 // Reed Scene Director — BR-locked image scene builder
 // Two-stage: DeepSeek prompt writing (using Banana Pro Director grammar) + Higgsfield generation
 // Usage: node reed-scene-director.js --character logan --scene "training on heavy bag" [--image ref.jpg] [--model nano_banana_2|gpt_image_2]
+// Reference: ~/cathedral-vault/06_Methods/higgsfield-prompting-bible.md (Seedance formats, camera vocabulary, Marketing Studio modes)
+// Feature Map: ~/nanoclaw/higgsfield-map.json (grades, proven pipelines, test queue)
 
 import { execSync, execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import { createRequire } from 'module';
+const genGuard = createRequire(import.meta.url)('./lib/generation-guard.cjs'); // GLOBAL kill-switch
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -242,6 +246,7 @@ function sendTelegramPhoto(filePath, caption) {
 }
 
 async function generateScene(characterName, sceneDescription, options = {}) {
+  genGuard.assertGenAllowed({ manual: options.manual === true }); // GLOBAL kill-switch
   const char = getCharacter(characterName);
 
   // Default model: text2image_soul_v2 for characters with soul IDs (face accuracy)
@@ -364,6 +369,7 @@ async function generateScene(characterName, sceneDescription, options = {}) {
 }
 
 async function generateVideo(characterName, sceneDescription, options = {}) {
+  genGuard.assertGenAllowed({ manual: options.manual === true }); // GLOBAL kill-switch
   const duration = options.duration || 5;
   const char = getCharacter(characterName);
 
@@ -435,6 +441,7 @@ async function generateVideo(characterName, sceneDescription, options = {}) {
 
 // Also export for pure environment (no character) scenes
 async function generateEnvironment(sceneDescription, options = {}) {
+  genGuard.assertGenAllowed({ manual: options.manual === true }); // GLOBAL kill-switch
   const model = options.model || 'nano_banana_2';
   const gym = registry.gym;
 
@@ -554,14 +561,19 @@ if (rawArgs.length > 0) {
     process.exit(1);
   }
 
-  if (mode === 'env') {
-    await generateEnvironment(scene, { model: model || 'nano_banana_2', image });
-  } else if (mode === 'video') {
-    if (!character) { console.log('--character required for video'); process.exit(1); }
-    await generateVideo(character, scene, { image, duration });
-  } else {
-    if (!character) { console.log('--character required for scene'); process.exit(1); }
-    await generateScene(character, scene, { model, image });
+  try {
+    if (mode === 'env') {
+      await generateEnvironment(scene, { model: model || 'nano_banana_2', image, manual: true }); // CLI = human-triggered
+    } else if (mode === 'video') {
+      if (!character) { console.log('--character required for video'); process.exit(1); }
+      await generateVideo(character, scene, { image, duration, manual: true });
+    } else {
+      if (!character) { console.log('--character required for scene'); process.exit(1); }
+      await generateScene(character, scene, { model, image, manual: true });
+    }
+  } catch (e) {
+    console.log(`🚫 ${e.message}`);
+    process.exit(1);
   }
 
   process.exit(0);

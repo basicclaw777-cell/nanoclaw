@@ -1220,6 +1220,26 @@ bot.onText(/^\/organism(?:@\w+)?\s*$/i, async (msg) => {
   } catch (e) { await safeSend(chatId, `⚠️ organism failed: ${e.message}`); }
 });
 
+// /pausegen /resumegen /genstatus — the GLOBAL generation kill-switch.
+// Stops ALL autonomous paid image/video gen; cron/pm2/manifest cannot override it.
+// Paul's explicit /reedmake --go (manual) still works while paused.
+function _genGuard() { const { createRequire } = require('module'); const r = createRequire(__filename); return r(path.join(process.env.HOME, 'nanoclaw', 'lib', 'generation-guard.cjs')); }
+bot.onText(/^\/pausegen(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try { _genGuard().pause('manual via Telegram'); await safeSend(chatId, '🛑 *Generation PAUSED* — all autonomous image/video gen blocked. /reedmake --go (manual) still works. /resumegen to lift.', { parse_mode: 'Markdown' }); }
+  catch (e) { await safeSend(chatId, `⚠️ pausegen: ${e.message}`); }
+});
+bot.onText(/^\/resumegen(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try { _genGuard().resume(); await safeSend(chatId, '▶️ *Generation RESUMED* — autonomous gen allowed again. Watch /board → Spend.', { parse_mode: 'Markdown' }); }
+  catch (e) { await safeSend(chatId, `⚠️ resumegen: ${e.message}`); }
+});
+bot.onText(/^\/genstatus(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try { const s = _genGuard().status(); await safeSend(chatId, `🔌 *Generation:* ${s.paused ? '🛑 PAUSED' : '▶️ active'}${s.reason ? `\nreason: ${s.reason}` : ''}${s.since ? `\nsince: ${s.since}` : ''}`, { parse_mode: 'Markdown' }); }
+  catch (e) { await safeSend(chatId, `⚠️ genstatus: ${e.message}`); }
+});
+
 // /ledger — Falsifiable claims tracker
 bot.onText(/^\/ledger(?:@\w+)?\s*(.*)$/, async (msg, match) => {
   const chatId = msg.chat.id;

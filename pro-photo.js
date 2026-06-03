@@ -8,6 +8,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import { grokImage, logCall } from './grok-trial.js';
+import { falImg2Img, falUpload } from './fal-client.js';
+import { createRequire } from 'module';
+const genGuard = createRequire(import.meta.url)('./lib/generation-guard.cjs'); // GLOBAL kill-switch
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,29 +26,31 @@ const CHAT_ID = process.env.PAUL_CHAT_ID || '1912121485';
 const POLL_INTERVAL = 5000;
 
 // Default engine: GPT Image 2 (won comparison test 2026-05-14)
+// grok = Grok Imagine ($0.02/image) — on paper trial
 const DEFAULT_ENGINE = 'gpt_image_2';
+const XAI_KEY = process.env.XAI_API_KEY;
 
 // Base prompt — used as fallback when enhancement fails
-const BASE_PROMPT = `Apply a high-end commercial retouch to the attached image. Maintain 100% exact preservation of subject identity, poses, clothing, and all background elements. Strictly 16:9 cinematic aspect ratio. Camera Profile: Sony A7R V with 70mm lens; zero background blur; deep, crisp focus throughout. Lighting: Add a soft, directional key light from camera-left; diminish harsh overhead ceiling lights. Aesthetic: Premium sports documentary color grade with neutral-to-warm tones and natural skin tones. Enhance micro-contrast on leather textures and skin without smoothing. No hallucinations; do not add or remove objects. Final output must look like a professional Lightroom/Capture One grade of the original raw file.`;
+const BASE_PROMPT = `Color grade only. Contrast +10. Shadows +10. Temperature 5400K. Saturation +5. Vignette -10. Sharpening +60. Clarity +30. Do not change any content in the image.`;
 
 // Enhancement system prompt — turns DeepSeek into a photography director
-const ENHANCE_SYSTEM = `You are a professional colorist and lighting director. You create image GRADING prompts for an AI image-to-image model.
+const ENHANCE_SYSTEM = `You write SHORT color grading instructions for an AI image editor. The AI receives the original photo — it can see everything. Your job is ONLY to describe color/light adjustments using numeric values.
 
-CRITICAL: This is a RETOUCH, not a recreation. The model receives the original photo. Your prompt must ONLY describe how to grade, light, and texture the existing image. Do NOT describe what is in the photo. Do NOT describe subjects, poses, actions, or scene content. The model can already see the image.
+Output ONLY the grading instructions. No explanation.
 
-Output ONLY the prompt text. No explanation, no preamble.
+RULES:
+- NEVER describe what is in the image
+- NEVER mention subjects, objects, logos, posters, or scene content
+- ONLY use Lightroom-style adjustments: exposure, contrast, highlights, shadows, whites, blacks, temperature, tint, vibrance, saturation, clarity, sharpening, vignette, grain
+- Keep it under 60 words
+- Always include: Sharpening +60, Clarity +30 (minimum)
+- Always end with: "Do not change any content in the image."
 
-YOUR PROMPT MUST START WITH:
-"Apply a high-end commercial retouch to the attached image. Maintain 100% exact preservation of all subjects, poses, clothing, objects, text, and background elements. Do not add, remove, or alter any content. Do not hallucinate new elements. Strictly 16:9 cinematic aspect ratio. Maximum sharpness and resolution — crisp focus throughout, zero motion blur, no softening. Output must be tack-sharp at full resolution."
+CONTEXT: Boxing gym photos. Neutral-warm (5200-5600K). Documentary feel. Natural skin tones — never orange.
 
-THEN ADD (100-150 words):
-1. Camera simulation: specific lens (50-85mm), f-stop, sensor, depth of field behaviour
-2. Lighting adjustment: how to reshape existing light — key direction, fill reduction, rim light enhancement, practical light treatment. Do NOT invent new light sources that aren't plausible in a gym.
-3. Color science: specific grade direction — lift/gamma/gain, color temperature shift, skin tone treatment, shadow hue
-4. Texture: micro-contrast on leather/metal/skin without smoothing, grain structure
-5. Tonal range: black point, highlight rolloff, midtone density
+EXAMPLE OUTPUT:
+"Exposure +0.3. Contrast +15. Highlights -20. Shadows +25. Temperature 5400K. Vibrance +10. Clarity +20. Sharpen +40. Subtle vignette -15. Fine grain amount 10. Do not change any content in the image."`;
 
-CONTEXT: Boxing gym photos. Warm but NEUTRAL — not orange. Documentary feel, ESPN/Magnum. Skin tones must be natural, never pushed warm/amber/orange. If adjusting color temperature, stay at 5200-5600K (daylight neutral). Shadows can be warm but highlights and midtones stay clean and neutral.`;
 
 // Ensure directories exist
 if (!fs.existsSync(INBOX)) fs.mkdirSync(INBOX, { recursive: true });
@@ -106,7 +112,109 @@ function sendTelegramPhoto(filePath, caption) {
   }
 }
 
-async function processImage(imagePath, engine, enhance) {
+async function processImageGrok(imagePath, enhance) {
+  const basename = path.basename(imagePath, path.extname(imagePath));
+  const outFile = path.join(OUTBOX, `${basename}-grok-pro.png`);
+
+  console.log(`\n🎬 Processing (Grok Imagine): ${path.basename(imagePath)}`);
+
+  // Stage 1: Prompt enhancement
+  let prompt;
+  if (enhance) {
+    console.log('  🧠 Stage 1: DeepSeek prompt enhancement...');
+    prompt = await enhancePrompt(imagePath);
+  } else {
+    prompt = BASE_PROMPT;
+  }
+
+  // Stage 2: Grok image generation (text-to-image — no img2img support)
+  // Grok Imagine is text-only, so we describe the desired output
+  console.log('  ⏳ Stage 2: Generating via Grok Imagine...');
+
+  try {
+    const result = await grokImage(prompt);
+    if (!result.url) throw new Error('No URL in response');
+
+    console.log(`  ⬇️  Downloading result ($${result.costUsd})...`);
+    execSync(`curl -sL "${result.url}" -o "${outFile}"`, { timeout: 60000 });
+
+    const stats = fs.statSync(outFile);
+    const sizeMB = (stats.size / 1024 / 1024).toFixed(1);
+    console.log(`  ✅ Saved: ${outFile} (${sizeMB}MB) in ${(result.duration / 1000).toFixed(1)}s`);
+
+    const tag = enhance ? 'Enhanced' : 'Standard';
+    sendTelegramPhoto(outFile, `Pro Photo (Grok ${tag}): ${basename} — $${result.costUsd}`);
+
+    return outFile;
+  } catch (e) {
+    console.log(`  ❌ Grok failed: ${e.message}`);
+    return null;
+  }
+}
+
+async function processImageFal(imagePath, enhance, model = 'dev', _manual = false) {
+  const basename = path.basename(imagePath, path.extname(imagePath));
+  const outFile = path.join(OUTBOX, `${basename}-fal-${model}.png`);
+
+  console.log(`\n🎬 Processing (fal.ai FLUX ${model}): ${path.basename(imagePath)}`);
+
+  // Stage 1: Prompt enhancement
+  let prompt;
+  if (enhance) {
+    console.log('  🧠 Stage 1: DeepSeek prompt enhancement...');
+    prompt = await enhancePrompt(imagePath);
+  } else {
+    prompt = BASE_PROMPT;
+  }
+
+  // Stage 2: Upload image + fal img2img
+  console.log(`  ⏳ Stage 2: Uploading to fal.ai...`);
+
+  try {
+    const imageUrl = await falUpload(imagePath);
+    console.log(`  📤 Uploaded. Running FLUX ${model} img2img...`);
+
+    const result = await falImg2Img(imageUrl, prompt, { model, strength: 0.10 });
+    if (!result.url) throw new Error('No URL in response');
+
+    console.log(`  ⬇️  Downloading result ($${result.cost})...`);
+    execSync(`curl -sL "${result.url}" -o "${outFile}"`, { timeout: 60000 });
+
+    const stats = fs.statSync(outFile);
+    const sizeMB = (stats.size / 1024 / 1024).toFixed(1);
+    console.log(`  ✅ Saved: ${outFile} (${sizeMB}MB)`);
+
+    const tag = enhance ? 'Enhanced' : 'Standard';
+    sendTelegramPhoto(outFile, `Pro Photo (FLUX ${model} ${tag}): ${basename} — $${result.cost}`);
+
+    return outFile;
+  } catch (e) {
+    console.log(`  ❌ fal.ai failed: ${e.message}`);
+    return null;
+  }
+}
+
+async function processImage(imagePath, engine, enhance, manual = false) {
+  // GLOBAL kill-switch — covers ALL engines (grok/fal/higgsfield). Autonomous
+  // (watch-mode) calls blocked when paused; CLI passes manual:true.
+  try {
+    genGuard.assertGenAllowed({ manual });
+  } catch (e) {
+    console.log(`  🚫 ${e.message} — skipping ${path.basename(imagePath)}`);
+    return null;
+  }
+  // Route to Grok if selected (text-to-image only)
+  if (engine === 'grok') {
+    return processImageGrok(imagePath, enhance);
+  }
+  // Route to fal.ai FLUX (img2img retouch — the good stuff)
+  if (engine === 'fal' || engine === 'fal-dev') {
+    return processImageFal(imagePath, enhance, 'dev', manual);
+  }
+  if (engine === 'fal-schnell') {
+    return processImageFal(imagePath, enhance, 'schnell', manual);
+  }
+
   engine = engine || DEFAULT_ENGINE;
   const engineLabel = engine === 'gpt_image_2' ? 'GPT Image 2' : 'Nano Banana 2';
   const suffix = engine === 'gpt_image_2' ? '-gpt-pro' : '-pro';
@@ -166,7 +274,8 @@ const args = [];
 for (let i = 0; i < rawArgs.length; i++) {
   if (rawArgs[i] === '--engine' && rawArgs[i + 1]) {
     const val = rawArgs[++i].toLowerCase();
-    cliEngine = val === 'gpt' ? 'gpt_image_2' : 'nano_banana_2';
+    const engineMap = { gpt: 'gpt_image_2', grok: 'grok', fal: 'fal', 'fal-dev': 'fal-dev', 'fal-schnell': 'fal-schnell', nano: 'nano_banana_2' };
+    cliEngine = engineMap[val] || 'fal';
   } else if (rawArgs[i] === '--no-enhance') {
     enhance = false;
   } else {
@@ -182,7 +291,7 @@ if (args.length > 0 && args[0] !== '--watch') {
   const results = [];
   for (const arg of args) {
     if (fs.existsSync(arg)) {
-      const result = await processImage(arg, cliEngine, enhance);
+      const result = await processImage(arg, cliEngine, enhance, true); // CLI = human-triggered
       if (result) results.push(result);
     } else {
       console.log(`⚠️  File not found: ${arg}`);

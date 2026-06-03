@@ -11,6 +11,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { chooseAction, recordOutcome, getState } from './bandit-brain.js';
 import { out, rd, scan } from './linda-vault.js';
+import { createRequire } from 'module';
+const genGuard = createRequire(import.meta.url)('./lib/generation-guard.cjs'); // GLOBAL kill-switch
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -552,6 +554,7 @@ async function runTest(modelJst, modelName, type, prompt, extraMeta = {}) {
   const startTime = Date.now();
 
   try {
+    genGuard.assertGenAllowed(); // GLOBAL kill-switch — autonomous tester, blocked when paused
     const args = ['generate', 'create', modelJst, '--prompt', prompt];
     if (type === 'video') {
       const calImg = getCalibrationImage();
@@ -596,7 +599,8 @@ async function runTest(modelJst, modelName, type, prompt, extraMeta = {}) {
     const errMsg = err.stderr ? err.stderr.toString().slice(0, 500) : (err.message || 'Unknown').slice(0, 500);
     result.error = errMsg;
 
-    if (/timeout/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Timed out.'; }
+    if (/GENERATION PAUSED/i.test(errMsg)) { result.grade = 'untested'; result.notes = 'Global kill-switch ON — generation paused.'; }
+    else if (/timeout/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Timed out.'; }
     else if (/not found|invalid|unknown param/i.test(errMsg)) { result.grade = 'D'; result.notes = 'Model/param not available.'; recordError(modelJst, errMsg, null); }
     else if (/nsfw|safety|content.policy/i.test(errMsg)) { result.grade = 'C'; result.notes = 'Safety filter.'; }
     else if (/credit|quota|limit/i.test(errMsg)) { result.grade = 'untested'; result.notes = 'Credits exhausted.'; }
@@ -981,6 +985,9 @@ async function main() {
 async function continuousLoop() {
   let totalGenerated = 0;
   let loopCount = 0;
+  let consecutiveExhausted = 0;
+  const EXHAUSTION_THRESHOLD = 2; // 2 consecutive loops with zero new generations = stop
+  const EXHAUSTION_SLEEP_MS = 6 * 60 * 60 * 1000; // 6 hours
 
   reedLog('[hftest] Reed Continuous Mode — generating until stopped');
   await sendTelegram('*Reed Mastery Loop — Continuous Mode Started*');
@@ -991,17 +998,36 @@ async function continuousLoop() {
       await main();
     } catch (err) {
       reedLog(`[hftest] Loop ${loopCount} error: ${err.message}`);
-      // Don't exit on error, wait and retry
     }
 
-    // Tally what we've made
+    // Tally what we've made — only count SUCCESSFUL generations (not credit failures)
     const log = loadLog();
     const newTotal = log.length;
     const delta = newTotal - totalGenerated;
     totalGenerated = newTotal;
 
-    if (delta > 0) {
-      reedLog(`[hftest] Loop ${loopCount}: +${delta} generations (total: ${totalGenerated})`);
+    // Check if recent entries are all credit failures
+    const recentEntries = log.slice(-Math.max(delta, 3));
+    const recentCreditErrors = recentEntries.filter(e =>
+      e.notes?.includes('Credits exhausted') || e.notes?.includes('credit') || e.error?.includes?.('Credits')
+    ).length;
+    const recentSuccesses = recentEntries.filter(e => e.success && !e.notes?.includes('Credits')).length;
+
+    if (recentSuccesses > 0) {
+      consecutiveExhausted = 0;
+      reedLog(`[hftest] Loop ${loopCount}: +${delta} generations, ${recentSuccesses} successful (total: ${totalGenerated})`);
+    } else {
+      consecutiveExhausted++;
+      reedLog(`[hftest] Loop ${loopCount}: zero successful generations (${consecutiveExhausted}/${EXHAUSTION_THRESHOLD})`);
+    }
+
+    // Circuit breaker: credits exhausted detection
+    if (consecutiveExhausted >= EXHAUSTION_THRESHOLD) {
+      await sendTelegram('*Reed — Credits Exhausted. Sleeping 6 hours.*\nWill retry at ' + new Date(Date.now() + EXHAUSTION_SLEEP_MS).toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit' }));
+      reedLog(`[hftest] Credits exhausted — sleeping 6 hours`);
+      await new Promise(r => setTimeout(r, EXHAUSTION_SLEEP_MS));
+      consecutiveExhausted = 0;
+      continue;
     }
 
     // Send hourly summary (every ~60 loops at 60s interval)

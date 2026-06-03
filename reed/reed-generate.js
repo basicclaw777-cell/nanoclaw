@@ -33,6 +33,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const genGuard = require('../lib/generation-guard.cjs'); // GLOBAL kill-switch
 const HOME = process.env.HOME;
 const REED = path.join(HOME, 'nanoclaw', 'reed');
 const DUMP = path.join(HOME, 'reed-dump', 'ready');
@@ -203,6 +204,15 @@ async function main() {
       return;
     }
     // LIVE paid generation
+    // GLOBAL kill-switch: --go is human-triggered (manual:true), so Paul's explicit
+    // /reedmake --go still spends. Any non-go autonomous path never reaches here.
+    try {
+      genGuard.assertGenAllowed({ manual: go });
+    } catch (e) {
+      console.log(`🚫 ${e.message}`);
+      await tg(`🚫 Reed: ${e.message} — use /resumegen to allow autonomous generation.`);
+      return;
+    }
     console.log(`Generating ${kind} via ${tool.id} (~$${cost})…`);
     try {
       const r = await falSeedance(tasted);
@@ -219,6 +229,15 @@ async function main() {
   }
 
   // Free subscription path (Higgsfield live, after renewal) — stub the CLI call until then.
+  // GLOBAL kill-switch: Higgsfield credits ARE money (this path is what drained 48->0.58).
+  // --go = human-triggered (manual:true); autonomous callers (no --go) are blocked when paused.
+  try {
+    genGuard.assertGenAllowed({ manual: go });
+  } catch (e) {
+    console.log(`🚫 ${e.message}`);
+    await tg(`🚫 Reed: ${e.message} — use /resumegen to allow autonomous generation.`);
+    return;
+  }
   console.log(`Higgsfield path for ${tool.id} — wires to higgsfield CLI after renewal (${TOOLS.renewal.higgsfield_starter}).`);
   await tg(`🟡 Reed: ${tool.id} is the chosen tool but Higgsfield renews ~${TOOLS.renewal.higgsfield_starter}. Held until then.`);
 }
