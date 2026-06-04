@@ -2049,6 +2049,15 @@ the-timekeeper to go offline. Don't repeat it.
 - Logan mapping: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/logan/logan-principled-practice-map.md
 - Lobby rooms: The Cathedral Map (maps district), Logan x Principled Practice (maps district)
 
+## 10-Block Course Guide — Student-Facing PP Tool (built 2026-06-04)
+- HTML: ~/basic-reflex/course-guide.html -> localhost:8080/course-guide
+- 7 PP stages as destinations, 10 blocks as waypoints
+- 4 layers per block: Technique (from block-config.json), Capacity, Mindset (3 mindsets + 3 pots + 24 principles), EQ (5 EQ principles)
+- Psych bar (Discipline > Composure > Confidence), Feeling Ladder (6 steps), Fear Gates per transition
+- Sources: 10_BLOCK_CURRICULUM.md, foundations-3-mindsets-3-pots-24-principles.md, fear-gates-in-boxing.md, emotional-intelligence-principles.md
+- Trojan Horse at product level: students see a boxing course, methodology is invisible infrastructure
+- Lobby: "10-Block Course Guide" room in maps district
+
 ## Emergence Loop-Closing — Ship-Gate + Re-Audit (built 2026-06-04)
 - production-engine.js `classifyDeliverable()` (front gate): an LLM returning text is NOT a deliverable. Refusals/errors/"need X from Paul" blocks no longer mark shipped=true → no longer falsely close emergence loops (WATCHING→CONFIRMED). Returns real|too-short|error|blocked-on-paul|refusal. blocked-on-paul routes to Telegram (real ask back to Paul); refusal/error annotate the incident [REFUSED]/[ERRORED] and keep it WATCHING.
 - Composes with yesterday's integration-gate (emergence-integration-gate.js, wired into lucy-heartbeat.js:251): front gate = refusal never reaches CONFIRMED; back gate = CONFIRMED→INTEGRATED needs persistence + non-recurrence across K=2 pulses (fail-safe HOLD).

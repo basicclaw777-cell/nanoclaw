@@ -135,6 +135,9 @@ app.get('/map', (req, res) => {
 app.get('/logan-pp-map', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'logan-pp-map.html'));
 });
+app.get('/course-guide', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'basic-reflex', 'course-guide.html'));
+});
 app.get('/api/delivered', (req, res) => {
   boardRegen(res, 'delivered-index.js', 'delivered-index.json', 'delivered');
 });
@@ -1577,6 +1580,13 @@ app.get('/gym-eyes/dashboard/:name', (req, res) => {
 // Cuba Combo Library dashboard + assets
 app.get('/gym-eyes/vision-landscape', (req, res) => {
   const p = path.join(HOME, 'basic-reflex', 'gym-eyes', 'vision-landscape.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+app.get('/brand-dna', (req, res) => {
+  const p = path.join(HOME, 'basic-reflex', 'visuals', 'brand-dna.html');
   if (!fs.existsSync(p)) return res.status(404).send('Not found');
   res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
   res.sendFile(p);
