@@ -129,6 +129,12 @@ function boardRegen(res, script, jsonFile, label) {
 app.get('/board', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'board.html'));
 });
+app.get('/map', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'cathedral-map.html'));
+});
+app.get('/logan-pp-map', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'logan-pp-map.html'));
+});
 app.get('/api/delivered', (req, res) => {
   boardRegen(res, 'delivered-index.js', 'delivered-index.json', 'delivered');
 });
@@ -252,6 +258,69 @@ app.post('/api/gold/acted', express.json(), (req, res) => {
     fsx.writeFileSync(GOLD_FEED, JSON.stringify(items, null, 2) + '\n');
     res.json({ ok: true, id, acted_on: it.acted_on });
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Emergence Board — Kanban tracker for emergence incidents.
+const EMERGENCE_BOARD_FILE = path.join(NANOCLAW, 'emergence-board.json');
+app.get('/api/emergence', (req, res) => {
+  const fsx = require('fs');
+  let board = { incidents: [], version: 1 };
+  try { if (fsx.existsSync(EMERGENCE_BOARD_FILE)) board = JSON.parse(fsx.readFileSync(EMERGENCE_BOARD_FILE, 'utf8')); } catch {}
+  const incidents = board.incidents || [];
+  const byStatus = { DETECTED: 0, WATCHING: 0, CONFIRMED: 0, INTEGRATED: 0, DISMISSED: 0 };
+  for (const i of incidents) byStatus[i.status] = (byStatus[i.status] || 0) + 1;
+  const staleDays = 3;
+  const cutoff = Date.now() - staleDays * 86400000;
+  const staleCount = incidents.filter(i =>
+    i.status === 'WATCHING' && (!i.lastCheckedAt || new Date(i.lastCheckedAt).getTime() < cutoff)
+  ).length;
+  // Analytics
+  const agentFrom = {}, agentTo = {}, signalTypes = {}, reEmerged = [];
+  for (const i of incidents) {
+    if (i.agent) agentFrom[i.agent] = (agentFrom[i.agent]||0)+1;
+    if (i.target) agentTo[i.target] = (agentTo[i.target]||0)+1;
+    if (i.signal) signalTypes[i.signal] = (signalTypes[i.signal]||0)+1;
+    if ((i.reEmergedCount||0) > 0) reEmerged.push({ id:i.id, agent:i.agent, target:i.target, signal:i.signal, count:i.reEmergedCount, summary:(i.summary||'').slice(0,120) });
+  }
+  const topInitiators = Object.entries(agentFrom).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,v])=>({agent:k,count:v}));
+  const topTargets = Object.entries(agentTo).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,v])=>({agent:k,count:v}));
+  const confirmed = incidents.filter(i=>i.status==='CONFIRMED');
+  const demoted = incidents.filter(i=>(i.reEmergedCount||0)>0);
+  res.json({ generated_at: new Date().toISOString(), counts: { ...byStatus, total: incidents.length, stale: staleCount }, analytics: { topInitiators, topTargets, signalTypes, reEmerged: reEmerged.sort((a,b)=>b.count-a.count).slice(0,15), confirmed: confirmed.length, demoted: demoted.length }, incidents });
+});
+app.post('/api/emergence/advance', express.json(), (req, res) => {
+  const fsx = require('fs');
+  const { id, status, note } = req.body || {};
+  if (!id || !status) return res.status(400).json({ error: 'id and status required' });
+  let board = { incidents: [], version: 1 };
+  try { if (fsx.existsSync(EMERGENCE_BOARD_FILE)) board = JSON.parse(fsx.readFileSync(EMERGENCE_BOARD_FILE, 'utf8')); } catch {}
+  const inc = board.incidents.find(i => i.id === id);
+  if (!inc) return res.status(404).json({ error: 'incident not found' });
+  const valid = { DETECTED: ['WATCHING', 'DISMISSED'], WATCHING: ['CONFIRMED', 'DISMISSED'], CONFIRMED: ['INTEGRATED', 'DISMISSED'] };
+  if (!valid[inc.status]?.includes(status)) return res.status(400).json({ error: `cannot transition ${inc.status} → ${status}` });
+  inc.status = status;
+  inc.lastCheckedAt = new Date().toISOString();
+  if (status === 'INTEGRATED' || status === 'DISMISSED') inc.resolvedAt = new Date().toISOString();
+  if (note) inc.followUps.push({ ts: new Date().toISOString(), note });
+  fsx.writeFileSync(EMERGENCE_BOARD_FILE, JSON.stringify(board, null, 2));
+  res.json({ ok: true, incident: inc });
+});
+
+// Lucy Heartbeat — pulse state + history
+const HEARTBEAT_STATE = path.join(NANOCLAW, 'lucy-heartbeat-state.json');
+const HEARTBEAT_DIR = path.join(HOME, 'Cathedral', 'agents', 'lucy-heartbeats');
+app.get('/api/lucy-heartbeat', (req, res) => {
+  const fsx = require('fs');
+  let state = { pulseNumber: 0, lastPulse: null, history: [] };
+  try { if (fsx.existsSync(HEARTBEAT_STATE)) state = JSON.parse(fsx.readFileSync(HEARTBEAT_STATE, 'utf8')); } catch {}
+  let latestContent = null;
+  try {
+    if (fsx.existsSync(HEARTBEAT_DIR)) {
+      const files = fsx.readdirSync(HEARTBEAT_DIR).filter(f => f.endsWith('.md')).sort();
+      if (files.length) latestContent = fsx.readFileSync(path.join(HEARTBEAT_DIR, files[files.length - 1]), 'utf8');
+    }
+  } catch {}
+  res.json({ generated_at: new Date().toISOString(), state, latestContent });
 });
 
 // Static file server for Reed deliverables (images / videos / caption .md).
@@ -1808,6 +1877,108 @@ app.get('/gym-eyes/drill-player', (req, res) => {
   res.sendFile(drillPath);
 });
 
+// Virtual Tutor — coach overlay system
+app.get('/gym-eyes/virtual-tutor', (req, res) => {
+  const tutorPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'virtual-tutor.html');
+  if (!fs.existsSync(tutorPath)) return res.status(404).send('Virtual tutor not found');
+  res.sendFile(tutorPath);
+});
+
+// Virtual Tutor API — list available comparisons
+app.get('/gym-eyes/tutor/comparisons', (req, res) => {
+  const outDir = path.join(HOME, 'basic-reflex', 'gym-eyes', 'tutor_output');
+  if (!fs.existsSync(outDir)) return res.json([]);
+  const files = fs.readdirSync(outDir).filter(f => f.endsWith('.json')).sort().reverse();
+  res.json(files.map(f => ({
+    file: f,
+    url: `/gym-eyes/tutor/file/${f}`,
+  })));
+});
+
+// Serve tutor comparison JSON files
+app.get('/gym-eyes/tutor/file/:name', (req, res) => {
+  const name = req.params.name;
+  if (!name || name.includes('..')) return res.status(400).send('bad');
+  const filePath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'tutor_output', name);
+  if (!fs.existsSync(filePath)) return res.status(404).send('not found');
+  res.sendFile(filePath);
+});
+
+// ── Homework — student upload + instant coaching ──────────────────────────
+const multer = require('multer');
+const { execFile } = require('child_process');
+const hwUploadDir = path.join(HOME, 'basic-reflex', 'gym-eyes', 'homework_uploads');
+if (!fs.existsSync(hwUploadDir)) fs.mkdirSync(hwUploadDir, { recursive: true });
+
+const hwUpload = multer({
+  dest: hwUploadDir,
+  limits: { fileSize: 200 * 1024 * 1024 }, // 200MB max
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('video/')) cb(null, true);
+    else cb(new Error('Only video files accepted'));
+  }
+});
+
+app.get('/gym-eyes/homework', (req, res) => {
+  const hwPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'homework.html');
+  if (!fs.existsSync(hwPath)) return res.status(404).send('Homework page not found');
+  res.sendFile(hwPath);
+});
+
+app.get('/gym-eyes/homework/combos', (req, res) => {
+  try {
+    const libPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'cuba-library', 'combo-library.json');
+    const lib = JSON.parse(fs.readFileSync(libPath, 'utf8'));
+    const combos = lib.combos.map(c => ({
+      id: `combo-${String(c.id).padStart(3, '0')}`,
+      name: c.name,
+      shorthand: c.shorthand,
+      punch_count: c.punch_count,
+    }));
+    res.json(combos);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/gym-eyes/homework/submit', hwUpload.single('video'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No video uploaded' });
+  const combo = req.body.combo;
+  if (!combo || !/^combo-\d{3}$/.test(combo)) {
+    fs.unlinkSync(req.file.path);
+    return res.status(400).json({ error: 'Invalid combo ID' });
+  }
+
+  // Rename upload to have proper extension
+  const ext = path.extname(req.file.originalname) || '.mp4';
+  const videoPath = req.file.path + ext;
+  fs.renameSync(req.file.path, videoPath);
+
+  const processor = path.join(HOME, 'basic-reflex', 'gym-eyes', 'homework_processor.py');
+
+  execFile('python3', [processor, '--video', videoPath, '--combo', combo], {
+    timeout: 120000, // 2 min max
+    maxBuffer: 10 * 1024 * 1024,
+  }, (err, stdout, stderr) => {
+    // Clean up uploaded file after processing
+    try { fs.unlinkSync(videoPath); } catch (_) {}
+
+    if (err) {
+      console.error('[homework] Processing error:', stderr || err.message);
+      return res.status(500).json({ error: 'Processing failed: ' + (stderr || err.message).slice(0, 200) });
+    }
+
+    try {
+      const result = JSON.parse(stdout);
+      if (result.error) return res.status(400).json(result);
+      res.json(result);
+    } catch (e) {
+      console.error('[homework] Parse error:', stdout.slice(0, 500));
+      res.status(500).json({ error: 'Failed to parse results' });
+    }
+  });
+});
+
 // Dataset explorer
 app.get('/datasets', (req, res) => {
   const explorerPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'dataset_explorer.html');
@@ -2562,6 +2733,16 @@ app.get('/ephemeris', (req, res) => {
   const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'ephemeris-dashboard.html');
   try { res.send(fs.readFileSync(dashPath, 'utf8')); }
   catch (err) { res.status(500).send(`Ephemeris dashboard not found: ${err.message}`); }
+});
+
+app.get('/allocations', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'trader', 'allocation-dashboard.html'));
+});
+
+app.get('/api/allocations', (req, res) => {
+  const fp = path.join(NANOCLAW, 'trader', 'allocation-portfolio.json');
+  if (!require('fs').existsSync(fp)) return res.status(404).json({ error: 'No portfolio' });
+  res.json(JSON.parse(require('fs').readFileSync(fp, 'utf8')));
 });
 
 app.get('/trader/hub', (req, res) => {

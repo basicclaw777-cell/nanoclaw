@@ -2037,6 +2037,18 @@ the-timekeeper to go offline. Don't repeat it.
   vault 78% fading, Matchmaker introduction pattern (investigation direction)
 - Origin: Paul's insight — single trip forgotten, rhythmic intervals allow processing + compounding
 
+## Principled Practice — 7-Stage Methodology (named 2026-06-04)
+- Meta-framework: ~/cathedral-vault/06_Methods/the-7-stage-cycle.md
+- Cycle: ORIGIN > SEEING > FINDING > BUILDING > TESTING > HEALING > INTEGRATING > (restart)
+- 19 methods organized into 7 stages. Stage 7 feeds back to Stage 1.
+- 3 new methods added: The Pulse (Stage 5), The Trojan Horse (Stage 6), The Held Tension (Stage 7)
+- Name: "Principled Practice" — principles discovered through doing, practice that only works because it's principled
+- External framing: "How to build AI systems that compound" (door) → general-purpose methodology (payload)
+- Cathedral Map: ~/nanoclaw/cathedral-map.html → localhost:8080/map (64 nodes, 75 connections, 5 zones)
+- Logan x PP Map: ~/nanoclaw/logan-pp-map.html → localhost:8080/logan-pp-map
+- Logan mapping: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/logan/logan-principled-practice-map.md
+- Lobby rooms: The Cathedral Map (maps district), Logan x Principled Practice (maps district)
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each

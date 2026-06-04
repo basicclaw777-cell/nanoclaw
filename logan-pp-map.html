@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logan x Principled Practice — Mind Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAFAF8; font-family: 'Inter', system-ui, -apple-system, sans-serif; overflow: hidden; cursor: grab; }
+  body.dragging { cursor: grabbing; }
+
+  #canvas { width: 100vw; height: 100vh; }
+
+  .node {
+    position: absolute;
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .node:hover { transform: scale(1.06); box-shadow: 0 4px 16px rgba(0,0,0,0.14); z-index: 100; }
+
+  /* Center hub */
+  .hub { background: #1a1a2e; color: #f0e6d3; font-size: 16px; padding: 16px 22px; border-radius: 20px; border: 3px solid #d4a853; box-shadow: 0 4px 20px rgba(212,168,83,0.3); }
+
+  /* 7 stage colors */
+  .stage-origin    { background: #dc2626; color: #fff; }
+  .stage-seeing    { background: #1e3a5f; color: #e8d5b7; border: 2px solid #d4a853; }
+  .stage-finding   { background: #065f46; color: #d1fae5; }
+  .stage-building  { background: #d97706; color: #fff; }
+  .stage-testing   { background: #7c3aed; color: #ede9fe; }
+  .stage-healing   { background: #be185d; color: #fce7f3; }
+  .stage-integrating { background: #0f766e; color: #ccfbf1; }
+
+  /* Sub-node types */
+  .freq     { border-radius: 50%; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 11px; line-height: 1.3; }
+  .freq-lapis  { background: radial-gradient(circle, #1e3a5f, #0c1929); color: #d4a853; border: 2px solid #d4a853; }
+  .freq-black  { background: radial-gradient(circle, #2d1b4e, #0a0612); color: #c084fc; border: 2px solid #7c3aed; }
+  .freq-fluor  { background: radial-gradient(circle, #fef3c7, #fbbf24); color: #1a1a2e; border: 2px solid #d97706; }
+
+  .arc       { background: #fff; border: 2px solid #ccc; color: #333; font-size: 12px; border-radius: 10px; }
+  .arc:hover { border-color: #888; }
+
+  .block     { background: #f5f0e8; border: 1.5px solid #d4a853; color: #5c4a2e; font-size: 11px; border-radius: 8px; padding: 6px 10px; }
+
+  .ep        { background: #eef2ff; border: 1.5px solid #818cf8; color: #3730a3; font-size: 11px; border-radius: 8px; padding: 6px 10px; }
+
+  .trojan    { background: #fef3c7; border: 2px dashed #d97706; color: #92400e; font-size: 12px; border-radius: 12px; }
+
+  .youth     { background: #ecfdf5; border: 2px solid #10b981; color: #064e3b; font-size: 12px; border-radius: 12px; }
+
+  /* SVG lines */
+  svg { position: absolute; top: 0; left: 0; pointer-events: none; }
+  .conn { fill: none; stroke-width: 1.8; opacity: 0.4; }
+  .conn-stage   { stroke: #d4a853; stroke-dasharray: 6 4; }
+  .conn-freq    { stroke: #7c3aed; }
+  .conn-arc     { stroke: #888; stroke-dasharray: 3 3; }
+  .conn-block   { stroke: #d4a853; opacity: 0.3; }
+  .conn-trojan  { stroke: #d97706; stroke-dasharray: 8 4; stroke-width: 2.2; opacity: 0.5; }
+  .conn-cycle   { stroke: #dc2626; stroke-width: 2.5; opacity: 0.6; marker-end: url(#arrowRed); }
+  .conn-ep      { stroke: #818cf8; opacity: 0.25; }
+
+  /* Title bar */
+  #titlebar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    background: rgba(250,250,248,0.92); backdrop-filter: blur(8px);
+    padding: 12px 24px; display: flex; align-items: center; gap: 16px;
+    border-bottom: 1px solid #e5e0d8;
+  }
+  #titlebar h1 { font-size: 18px; color: #1a1a2e; font-weight: 700; }
+  #titlebar .sub { font-size: 13px; color: #888; font-weight: 400; }
+  #titlebar .legend { margin-left: auto; display: flex; gap: 12px; font-size: 11px; color: #666; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; vertical-align: middle; }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed; z-index: 300; display: none;
+    background: #1a1a2e; color: #f0e6d3; padding: 10px 14px;
+    border-radius: 10px; font-size: 12px; max-width: 280px;
+    line-height: 1.5; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="titlebar">
+  <h1>Logan x Principled Practice</h1>
+  <span class="sub">The Trojan Horse Map</span>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:#dc2626"></span>Origin</span>
+    <span><span class="legend-dot" style="background:#1e3a5f"></span>Seeing</span>
+    <span><span class="legend-dot" style="background:#065f46"></span>Finding</span>
+    <span><span class="legend-dot" style="background:#d97706"></span>Building</span>
+    <span><span class="legend-dot" style="background:#7c3aed"></span>Testing</span>
+    <span><span class="legend-dot" style="background:#be185d"></span>Healing</span>
+    <span><span class="legend-dot" style="background:#0f766e"></span>Integrating</span>
+  </div>
+</div>
+
+<div id="tooltip"></div>
+
+<div id="canvas">
+  <svg id="lines" viewBox="0 0 2400 1800">
+    <defs>
+      <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#dc2626" opacity="0.6"/>
+      </marker>
+      <marker id="arrowGold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#d4a853" opacity="0.5"/>
+      </marker>
+    </defs>
+  </svg>
+</div>
+
+<script>
+const nodes = [
+  // Center hub
+  { id:'hub', label:'PRINCIPLED\nPRACTICE', cls:'hub', x:1100, y:750, tip:'7 stages, 19 methods, one cycle.\nLogan delivers it all without naming it.' },
+
+  // 7 stages — ring around hub
+  { id:'s1', label:'1. ORIGIN',       cls:'stage-origin',      x:1100, y:340, tip:'The fuel. "I refuse to be what I despise."\nLogan: Cuban lineage weight.' },
+  { id:'s2', label:'2. SEEING',       cls:'stage-seeing',      x:1500, y:460, tip:'Three instruments: Perfection Detector, Diagnostic Empathy, Cognitive Signature.\nLogan: Lapis + Black Light modes.' },
+  { id:'s3', label:'3. FINDING',      cls:'stage-finding',     x:1600, y:750, tip:'Forgotten Shelf + Elicitation Threshold.\nLogan: Cross-domain proof (Jun).' },
+  { id:'s4', label:'4. BUILDING',     cls:'stage-building',    x:1500, y:1040, tip:'4-to-8, AI as Environment, DIP.\nLogan: Fluorescent Mode, 10-block system.' },
+  { id:'s5', label:'5. TESTING',      cls:'stage-testing',     x:1100, y:1160, tip:'Paper Trial, Partnership Relay, The Pulse.\nLogan: Sparring, Ring General.' },
+  { id:'s6', label:'6. HEALING',      cls:'stage-healing',     x:700, y:1040, tip:'Fear Gate, Wound as Muse, Trojan Horse.\nLogan: Kenji arc, coaching scenes.' },
+  { id:'s7', label:'7. INTEGRATING',  cls:'stage-integrating', x:600, y:750, tip:'Seed Loop, Cup of Tea, Master Game, Held Tension.\nLogan: "The aura was always there."' },
+
+  // Frequency states
+  { id:'f-lapis', label:'LAPIS\nMODE',       cls:'freq freq-lapis', x:1420, y:300, tip:'The Measuring Eye. Deep blue aura, gold flecks.\nPattern recognition. Diagnostic clarity.\n= PP Stage 2: SEEING' },
+  { id:'f-black', label:'BLACK\nLIGHT',      cls:'freq freq-black', x:540, y:460, tip:'The Auditor. UV purple, fakes go dark.\nTruth detection. Perfection Detector.\n= PP Stages 2+6: SEEING + HEALING' },
+  { id:'f-fluor', label:'FLUOR-\nESCENT',    cls:'freq freq-fluor', x:1420, y:1180, tip:'The Architect. Particle swarm, geometry.\nCreation from pattern. 3-5 sec max.\n= PP Stages 4+7: BUILDING + INTEGRATING' },
+
+  // Character arcs
+  { id:'a-ern', label:'Arc A: Ernesto\n(Lineage)',         cls:'arc', x:880, y:260, tip:'The Hypocrisy Cost as story.\n"Are you teaching, or performing?"\nFuel from refusal to let the system die.' },
+  { id:'a-jun', label:'Arc B: Jun\n(Cross-Domain)',        cls:'arc', x:1750, y:640, tip:'The Forgotten Shelf as story.\n"I don\'t know your sport. I know performance."\nPrinciples transfer across domains.' },
+  { id:'a-lau', label:'Arc C: Prof Lau\n(Scholar\'s Paralysis)', cls:'arc', x:1750, y:920, tip:'The anti-pattern of Principled Practice.\nPrinciples without practice = philosophy.\n"You\'ve studied everyone except yourself."' },
+  { id:'a-ken', label:'Arc D: Kenji\n(Honour Wound)',      cls:'arc', x:480, y:920, tip:'Fear Gate + Wound as Muse as story.\nShame spiral after every loss.\n"Teaching is how you remember what you already know."' },
+
+  // 10-block curriculum mapping
+  { id:'b01',  label:'Blocks 0-1: Origin',      cls:'block', x:870, y:440, tip:'Finding the fuel. Why you\'re here.\nNo frequency states yet.' },
+  { id:'b23',  label:'Blocks 2-3: Seeing',      cls:'block', x:1350, y:540, tip:'First measurement — the jab as diagnostic.\nLapis flicker at Block 2.' },
+  { id:'b45',  label:'Blocks 4-5: Finding',     cls:'block', x:1560, y:850, tip:'Finding angles, inside range.\nLapis sustained. Mining the hidden.' },
+  { id:'b6',   label:'Block 6: Building',       cls:'block', x:1430, y:950, tip:'Full vocabulary = complete toolkit.\nLapis + Black Light flicker.' },
+  { id:'b78',  label:'Blocks 7-8: Test+Heal',   cls:'block', x:900, y:1120, tip:'Combinations under pressure.\nBlack Light sustained. Seeing your own lies.' },
+  { id:'b9',   label:'Block 9: Integrating',    cls:'block', x:670, y:870, tip:'Ring General — building in real-time.\nFluorescent flicker.' },
+  { id:'b10',  label:'Block 10: Cycle Restarts', cls:'block', x:700, y:640, tip:'"The aura was always there."\nFluorescent mode. New contradictions emerge.' },
+
+  // Episode principles
+  { id:'ep1',  label:'Ep 1: Discipline',    cls:'ep', x:950, y:180, tip:'ORIGIN — fuel from refusing inconsistency' },
+  { id:'ep2',  label:'Ep 2: Focus',         cls:'ep', x:1280, y:200, tip:'SEEING — attention is a skill, not effort' },
+  { id:'ep3',  label:'Ep 3: Resilience',    cls:'ep', x:1040, y:1260, tip:'TESTING — first real loss = first real data' },
+  { id:'ep5',  label:'Ep 5: Adaptability',  cls:'ep', x:1700, y:510, tip:'FINDING — can\'t solve new style = mine new approaches' },
+  { id:'ep6',  label:'Ep 6: Strategy',      cls:'ep', x:1690, y:1080, tip:'BUILDING — building the plan, not just having one' },
+  { id:'ep7',  label:'Ep 7: Patience',      cls:'ep', x:460, y:640, tip:'INTEGRATING — The Held Tension: don\'t resolve prematurely' },
+  { id:'ep4',  label:'Ep 4: Confidence',    cls:'ep', x:550, y:1140, tip:'HEALING — overcorrection from wound, ego as fear response' },
+  { id:'ep8',  label:'Ep 8: Control',       cls:'ep', x:700, y:1190, tip:'HEALING — anger leaks = wound unprocessed' },
+  { id:'ep9',  label:'Ep 9: Respect',       cls:'ep', x:1590, y:350, tip:'SEEING — "Awareness, not politeness" = seeing clearly' },
+  { id:'ep10', label:'Ep 10: Purpose',      cls:'ep', x:430, y:770, tip:'INTEGRATING — the choice, not the fight. Cycle restarts.' },
+
+  // Trojan Horse architecture
+  { id:'door',    label:'THE DOOR\nManga + Superpowers',  cls:'trojan', x:200, y:300, tip:'What they came for. A 21-year-old boxer\nwith superpowers in Hong Kong.\nGenuinely good on its own terms.' },
+  { id:'room',    label:'THE ROOM\nThe Gym Floor',        cls:'trojan', x:200, y:450, tip:'Where the real work happens.\nStruggle is normal. Failure expected.\nSweat masks tears.' },
+  { id:'payload', label:'THE PAYLOAD\n7-Stage Methodology', cls:'trojan', x:200, y:600, tip:'A complete methodology for building\nintelligence that compounds.\nDelivered through fight scenes.' },
+  { id:'recog',   label:'THE RECOGNITION\n"Skills, Not Powers"', cls:'trojan', x:200, y:750, tip:'The moment readers realize:\nstates aren\'t superpowers — they\'re skills.\n"The aura was always there."' },
+
+  // Youth crisis mapping
+  { id:'y-attn',  label:'Attention Crisis\n→ Lapis teaches seeing',   cls:'youth', x:100, y:960, tip:'"You can learn to see structure."\nNot a lecture about focus.\nA visual demonstration.' },
+  { id:'y-id',    label:'Identity Crisis\n→ Black Light teaches truth', cls:'youth', x:300, y:1060, tip:'"Fake things go dark, real things glow."\nNot a lecture about authenticity.\nA power that shows you.' },
+  { id:'y-purp',  label:'Purpose Crisis\n→ Curriculum IS discovery',   cls:'youth', x:100, y:1160, tip:'Not "find your passion."\nA structured path where the work\nIS the discovery.' },
+];
+
+const conns = [
+  // Hub to stages
+  { from:'hub', to:'s1', cls:'conn-stage' },
+  { from:'hub', to:'s2', cls:'conn-stage' },
+  { from:'hub', to:'s3', cls:'conn-stage' },
+  { from:'hub', to:'s4', cls:'conn-stage' },
+  { from:'hub', to:'s5', cls:'conn-stage' },
+  { from:'hub', to:'s6', cls:'conn-stage' },
+  { from:'hub', to:'s7', cls:'conn-stage' },
+
+  // Cycle flow
+  { from:'s1', to:'s2', cls:'conn-cycle' },
+  { from:'s2', to:'s3', cls:'conn-cycle' },
+  { from:'s3', to:'s4', cls:'conn-cycle' },
+  { from:'s4', to:'s5', cls:'conn-cycle' },
+  { from:'s5', to:'s6', cls:'conn-cycle' },
+  { from:'s6', to:'s7', cls:'conn-cycle' },
+  { from:'s7', to:'s1', cls:'conn-cycle' },
+
+  // Frequency → stages
+  { from:'f-lapis', to:'s2', cls:'conn-freq' },
+  { from:'f-black', to:'s2', cls:'conn-freq' },
+  { from:'f-black', to:'s6', cls:'conn-freq' },
+  { from:'f-fluor', to:'s4', cls:'conn-freq' },
+  { from:'f-fluor', to:'s7', cls:'conn-freq' },
+
+  // Arcs → stages
+  { from:'a-ern', to:'s1', cls:'conn-arc' },
+  { from:'a-jun', to:'s3', cls:'conn-arc' },
+  { from:'a-lau', to:'s4', cls:'conn-arc' },
+  { from:'a-ken', to:'s6', cls:'conn-arc' },
+
+  // Blocks → stages
+  { from:'b01', to:'s1', cls:'conn-block' },
+  { from:'b23', to:'s2', cls:'conn-block' },
+  { from:'b45', to:'s3', cls:'conn-block' },
+  { from:'b6',  to:'s4', cls:'conn-block' },
+  { from:'b78', to:'s5', cls:'conn-block' },
+  { from:'b78', to:'s6', cls:'conn-block' },
+  { from:'b9',  to:'s7', cls:'conn-block' },
+  { from:'b10', to:'s7', cls:'conn-block' },
+
+  // Episodes → stages
+  { from:'ep1',  to:'s1', cls:'conn-ep' },
+  { from:'ep2',  to:'s2', cls:'conn-ep' },
+  { from:'ep9',  to:'s2', cls:'conn-ep' },
+  { from:'ep5',  to:'s3', cls:'conn-ep' },
+  { from:'ep6',  to:'s4', cls:'conn-ep' },
+  { from:'ep3',  to:'s5', cls:'conn-ep' },
+  { from:'ep4',  to:'s6', cls:'conn-ep' },
+  { from:'ep8',  to:'s6', cls:'conn-ep' },
+  { from:'ep7',  to:'s7', cls:'conn-ep' },
+  { from:'ep10', to:'s7', cls:'conn-ep' },
+
+  // Trojan Horse chain
+  { from:'door',    to:'room',    cls:'conn-trojan' },
+  { from:'room',    to:'payload', cls:'conn-trojan' },
+  { from:'payload', to:'recog',   cls:'conn-trojan' },
+  { from:'payload', to:'hub',     cls:'conn-trojan' },
+
+  // Youth → frequencies
+  { from:'y-attn', to:'f-lapis', cls:'conn-freq' },
+  { from:'y-id',   to:'f-black', cls:'conn-freq' },
+  { from:'y-purp', to:'hub',     cls:'conn-stage' },
+];
+
+// ── Render ──
+const canvas = document.getElementById('canvas');
+const svg = document.getElementById('lines');
+const tooltip = document.getElementById('tooltip');
+let scale = 0.52, panX = -30, panY = -10, dragging = false, lastX, lastY;
+
+function nodeMap() {
+  const m = {};
+  nodes.forEach(n => { m[n.id] = n; });
+  return m;
+}
+const nm = nodeMap();
+
+function center(n) {
+  const el = document.getElementById('n-' + n.id);
+  if (!el) return { x: n.x + 50, y: n.y + 20 };
+  return { x: n.x + el.offsetWidth / 2, y: n.y + el.offsetHeight / 2 };
+}
+
+function renderNodes() {
+  nodes.forEach(n => {
+    const el = document.createElement('div');
+    el.id = 'n-' + n.id;
+    el.className = 'node ' + n.cls;
+    el.innerHTML = n.label.replace(/\n/g, '<br>');
+    el.style.left = n.x + 'px';
+    el.style.top = n.y + 'px';
+    if (n.tip) {
+      el.addEventListener('mouseenter', e => {
+        tooltip.style.display = 'block';
+        tooltip.innerHTML = n.tip.replace(/\n/g, '<br>');
+        tooltip.style.left = (e.clientX + 14) + 'px';
+        tooltip.style.top = (e.clientY + 14) + 'px';
+      });
+      el.addEventListener('mousemove', e => {
+        tooltip.style.left = (e.clientX + 14) + 'px';
+        tooltip.style.top = (e.clientY + 14) + 'px';
+      });
+      el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    }
+    canvas.appendChild(el);
+  });
+}
+
+function renderConns() {
+  requestAnimationFrame(() => {
+    let paths = '';
+    conns.forEach(c => {
+      const a = center(nm[c.from]);
+      const b = center(nm[c.to]);
+      const mx = (a.x + b.x) / 2;
+      const my = (a.y + b.y) / 2;
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const cx = mx - dy * 0.15;
+      const cy = my + dx * 0.15;
+      paths += `<path class="conn ${c.cls}" d="M${a.x},${a.y} Q${cx},${cy} ${b.x},${b.y}"/>`;
+    });
+    svg.innerHTML = svg.innerHTML.split('</defs>')[0] + '</defs>' + paths;
+  });
+}
+
+function applyTransform() {
+  canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+  canvas.style.transformOrigin = '0 0';
+}
+
+renderNodes();
+renderConns();
+applyTransform();
+
+// Pan
+canvas.addEventListener('mousedown', e => {
+  if (e.target.classList.contains('node') || e.target.parentElement?.classList.contains('node')) return;
+  dragging = true; lastX = e.clientX; lastY = e.clientY;
+  document.body.classList.add('dragging');
+});
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  panX += e.clientX - lastX;
+  panY += e.clientY - lastY;
+  lastX = e.clientX; lastY = e.clientY;
+  applyTransform();
+});
+window.addEventListener('mouseup', () => { dragging = false; document.body.classList.remove('dragging'); });
+
+// Zoom
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const d = e.deltaY > 0 ? 0.92 : 1.08;
+  const ns = Math.max(0.2, Math.min(2, scale * d));
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  panX = e.clientX - (e.clientX - panX) * (ns / scale);
+  panY = e.clientY - (e.clientY - panY) * (ns / scale);
+  scale = ns;
+  applyTransform();
+}, { passive: false });
+
+// Touch pan
+let touchStart = null;
+canvas.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) { touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }
+});
+canvas.addEventListener('touchmove', e => {
+  if (!touchStart || e.touches.length !== 1) return;
+  e.preventDefault();
+  panX += e.touches[0].clientX - touchStart.x;
+  panY += e.touches[0].clientY - touchStart.y;
+  touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  applyTransform();
+}, { passive: false });
+canvas.addEventListener('touchend', () => { touchStart = null; });
+</script>
+</body>
+</html>

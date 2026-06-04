@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cathedral — System Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #faf9f6; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; }
+
+  /* Canvas */
+  #map { width: 100vw; height: 100vh; position: relative; cursor: grab; }
+  #map.dragging { cursor: grabbing; }
+  #world { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+
+  /* Zones */
+  .zone {
+    position: absolute;
+    border-radius: 20px;
+    padding: 18px 22px;
+    border: 2px solid;
+  }
+  .zone-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.7;
+  }
+
+  /* Nodes */
+  .node {
+    position: absolute;
+    border-radius: 12px;
+    padding: 10px 14px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1.5px solid #e0ddd8;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    min-width: 120px;
+  }
+  .node:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    z-index: 100;
+  }
+  .node-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
+  .node-sub {
+    font-size: 10px;
+    color: #888;
+    line-height: 1.3;
+  }
+  .node-icon {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  .node.core { border-color: #c4956a; background: #fffbf5; }
+  .node.agent { border-color: #7a9ec4; background: #f5f9ff; }
+  .node.method { border-color: #8ab47a; background: #f5fbf3; }
+  .node.product { border-color: #c47a9e; background: #fff5fa; }
+  .node.infra { border-color: #9e8ab4; background: #f8f5ff; }
+
+  /* Zone colors */
+  .zone-core { background: rgba(196,149,106,0.06); border-color: rgba(196,149,106,0.2); }
+  .zone-core .zone-label { color: #c4956a; }
+  .zone-agents { background: rgba(122,158,196,0.06); border-color: rgba(122,158,196,0.2); }
+  .zone-agents .zone-label { color: #7a9ec4; }
+  .zone-methods { background: rgba(138,180,122,0.06); border-color: rgba(138,180,122,0.2); }
+  .zone-methods .zone-label { color: #8ab47a; }
+  .zone-products { background: rgba(196,122,158,0.06); border-color: rgba(196,122,158,0.2); }
+  .zone-products .zone-label { color: #c47a9e; }
+  .zone-infra { background: rgba(158,138,180,0.06); border-color: rgba(158,138,180,0.2); }
+  .zone-infra .zone-label { color: #9e8ab4; }
+
+  /* SVG connections */
+  #connections {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .conn { stroke-width: 1.5; fill: none; opacity: 0.25; }
+  .conn-data { stroke: #7a9ec4; stroke-dasharray: 6 4; }
+  .conn-feeds { stroke: #8ab47a; }
+  .conn-powers { stroke: #c4956a; stroke-width: 2; opacity: 0.35; }
+
+  /* Legend */
+  #legend {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    font-size: 11px;
+    z-index: 200;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1.5px solid;
+  }
+
+  /* Title */
+  #title-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, rgba(250,249,246,0.95), rgba(250,249,246,0));
+    padding: 20px 30px 40px;
+    z-index: 200;
+    pointer-events: none;
+  }
+  #title-bar h1 {
+    font-size: 22px;
+    font-weight: 300;
+    color: #333;
+    letter-spacing: 3px;
+  }
+  #title-bar p {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+  }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed;
+    display: none;
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    max-width: 280px;
+    z-index: 300;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #444;
+    border: 1px solid #e8e5e0;
+  }
+  #tooltip h3 { font-size: 14px; color: #1a1a1a; margin-bottom: 6px; }
+
+  /* Zoom controls */
+  #controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 200;
+  }
+  #controls button {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  #controls button:hover { background: #f5f5f5; }
+
+  /* Stats bar */
+  #stats {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    font-size: 11px;
+    color: #666;
+    z-index: 200;
+    text-align: right;
+    line-height: 1.6;
+  }
+  #stats strong { color: #333; }
+</style>
+</head>
+<body>
+
+<div id="title-bar">
+  <h1>THE CATHEDRAL</h1>
+  <p>Principled Practice — drag to explore, scroll to zoom, click nodes for detail</p>
+</div>
+
+<div id="stats"></div>
+
+<div id="map">
+  <div id="world">
+    <svg id="connections"></svg>
+  </div>
+</div>
+
+<div id="tooltip"></div>
+
+<div id="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#fffbf5;border-color:#c4956a"></div> Core</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f5f9ff;border-color:#7a9ec4"></div> Agents</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f5fbf3;border-color:#8ab47a"></div> Methods</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fff5fa;border-color:#c47a9e"></div> Products</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f8f5ff;border-color:#9e8ab4"></div> Infrastructure</div>
+</div>
+
+<div id="controls">
+  <button onclick="zoomTo(scale*1.3)">+</button>
+  <button onclick="zoomTo(scale/1.3)">-</button>
+  <button onclick="resetView()" style="font-size:12px">R</button>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────
+const zones = [
+  { id:'core', label:'CORE ARCHITECTURE', cls:'zone-core', x:680, y:200, w:480, h:420 },
+  { id:'agents', label:'COURT AGENTS', cls:'zone-agents', x:20, y:60, w:620, h:960 },
+  { id:'methods', label:'PRINCIPLED PRACTICE — 7 Stages, 19 Methods', cls:'zone-methods', x:1200, y:60, w:520, h:1140 },
+  { id:'products', label:'PRODUCTS & MODULES', cls:'zone-products', x:20, y:1080, w:920, h:500 },
+  { id:'infra', label:'INFRASTRUCTURE', cls:'zone-infra', x:980, y:1080, w:740, h:500 },
+];
+
+const nodes = [
+  // ── CORE ──
+  { id:'vault', cls:'core', x:720, y:270, icon:'V', title:'Cathedral Vault', sub:'10,154+ nuggets, 12 domains', tip:'Knowledge store. Every principle, decision, harvest, research note. Git-backed to GitHub. The memory that compounds. Three backup tiers.' },
+  { id:'claude-md', cls:'core', x:920, y:270, icon:'C', title:'CLAUDE.md', sub:'2000+ line operating manual', tip:'Standing instructions, build inventory, court roster, architecture decisions. Every new session reads this first. Ground truth for how to work.' },
+  { id:'memory', cls:'core', x:720, y:390, icon:'M', title:'Memory Files', sub:'35+ topic files', tip:'Persistent calibration across sessions. How Paul thinks, standing instructions, project state, hard lessons. Survives context resets.' },
+  { id:'lobby', cls:'core', x:920, y:390, icon:'L', title:'Lobby', sub:'42 rooms, 9 districts', tip:'localhost:8080/lobby — entry point. If it has no lobby door, it does not exist to Paul. Search, districts, visual aesthetic.' },
+  { id:'paul-kernel', cls:'core', x:720, y:510, icon:'P', title:'Paul Kernel', sub:'~2000 token identity seed', tip:'Portable identity seed for any new agent. Encodes cognitive signature, values, building philosophy. The DNA.' },
+  { id:'taste', cls:'core', x:920, y:510, icon:'T', title:'Taste Map', sub:'70 anchors, universal API', tip:'Any agent can query what Paul likes. 16 rejections, 5 voice refs, 5 domains. Curator engine feeds new candidates. The aesthetic immune system.' },
+
+  // ── AGENTS — Row 1: Primary ──
+  { id:'forge', cls:'agent', x:60, y:120, icon:'Fo', title:'Forge', sub:'Orchestrator (Claude Code)', tip:'Primary builder. Craft + audit + intuition beacon. v3: encounter-driven evolution. The one who builds while Paul architects.' },
+  { id:'cath', cls:'agent', x:240, y:120, icon:'Ca', title:'Cath', sub:'DeepSeek on Telegram', tip:'Always-on Telegram companion. 6 modes: conversational, research, creative producer, I Ching, infrastructure. Node.js native fetch.' },
+  { id:'synapse', cls:'agent', x:440, y:120, icon:'Sy', title:'The Synapse', sub:'Compound intelligence', tip:'Cross-domain pattern voice. 4hr DeepSeek pulse. Organism neural map: 60+ nodes, 12 domains. The Cathedral watching itself as one thing.' },
+
+  // ── AGENTS — Row 2: Creative ──
+  { id:'muse', cls:'agent', x:60, y:240, icon:'Mu', title:'The Muse', sub:'Creative latitude (Heyoka)', tip:'3am nightly vault walker. Cross-domain bridges. Gets creative freedom. Cathy flags, Paul decides. Sacred clown — silence is not regression.' },
+  { id:'reed', cls:'agent', x:240, y:240, icon:'Rd', title:'Reed Studio', sub:'Visual director, 7 characters', tip:'First Dept Intelligence Protocol. Reed, Iris, Flick, Cull, Prism, Wrench, Compass. Internal feed, Orc, memory, KPIs. 10 proven styles.' },
+  { id:'maya', cls:'agent', x:440, y:240, icon:'Ma', title:'Maya', sub:'BR social media manager', tip:'Warm, genuine, celebrates members. Soul V2 trained. Content director: emits image-requests to Reed. Never salesy. Loves BR and Coach Paul.' },
+
+  // ── AGENTS — Row 3: Intelligence ──
+  { id:'archaeologist', cls:'agent', x:60, y:360, icon:'Ar', title:'Archaeologist', sub:'Forgotten Shelf miner', tip:'5,080 techniques across 9 domains. Bandit-brain domain selection. Rate-limited (10/hr). DeepSeek primary. The Cathedral\'s hidden advantage.' },
+  { id:'researcher', cls:'agent', x:240, y:360, icon:'Re', title:'Researcher', sub:'Autonomous web+vault', tip:'Deep research with judgment. Web search + vault cross-reference. Produces visual HTML reports. Autonomous with budget caps.' },
+  { id:'prospector', cls:'agent', x:440, y:360, icon:'Pr', title:'Prospector', sub:'Product detector', tip:'Reads session harvests, detects "the triple" — pushed past surface + discovered mechanism + built capture. Files product briefs to vault.' },
+
+  // ── AGENTS — Row 4: Diagnostic ──
+  { id:'lucy', cls:'agent', x:60, y:480, icon:'Lu', title:'Lucy', sub:'Diagnostic heartbeat', tip:'Bi-weekly pulse (1st + 15th). DeepSeek x3, fresh model every 4th. Delta reporting. Smoke-test 177 checks. The system\'s self-awareness.' },
+  { id:'elicitor', cls:'agent', x:240, y:480, icon:'El', title:'Elicitor', sub:'Standing intelligence', tip:'Pull->push. Gathers context, DeepSeek generates sharp standing questions, vault-grounded answers. GOLD gate (score>=8). Budget cap 60 calls/day.' },
+  { id:'agency', cls:'agent', x:440, y:480, icon:'Ag', title:'Standing Agency', sub:'Safe autonomous executor', tip:'Reads A-grade gold, auto-executes reversible whitelist (vault notes, queue tasks, pause leaking procs). PROPOSES everything risky. Kill switch.' },
+
+  // ── AGENTS — Row 5: Observers ──
+  { id:'whisperer', cls:'agent', x:60, y:600, icon:'Wh', title:'Whisperer', sub:'Sky sense, 06:45 HKT', tip:'Court Member #18. Looking Glass celestial intelligence. 5 pipelines, convergence detector. Morning sequence before briefing.' },
+  { id:'cartographer', cls:'agent', x:240, y:600, icon:'Ct', title:'Cartographer', sub:'Maps & operational view', tip:'Fires on new session harvests. Writes operational map (Done/Now/Planned/Parked). qwen3:14b local. Court Member #14.' },
+  { id:'steward', cls:'agent', x:440, y:600, icon:'St', title:'The Steward', sub:'Distils what emerges', tip:'Court Member #16. Voice of what emerges when agents collide. Consensus, tension, principle, action, next question. Closes roundtable design.' },
+
+  // ── AGENTS — Row 6: Support ──
+  { id:'groundskeeper', cls:'agent', x:60, y:720, icon:'Gk', title:'Groundskeeper', sub:'Vault soil, 06:30 HKT', tip:'One true observation about vault soil each morning. Domain activity, dormant zones, latest Muse finding. Daily at 06:30 HKT.' },
+  { id:'timekeeper', cls:'agent', x:240, y:720, icon:'Tk', title:'Timekeeper', sub:'Rhythm pulse, */15 min', tip:'Court Member #15. Silent pulse every 15 min. PM2 health, critical alerts (max 1/hr), daily rhythm report 07:15 HKT. No LLM calls.' },
+  { id:'archivist', cls:'agent', x:440, y:720, icon:'Av', title:'The Archivist', sub:'Enriches muse findings', tip:'Watches muse-findings dir. Enriches with cross-links from vault. chokidar polling mode. The provenance specialist.' },
+
+  // ── AGENTS — Row 7: Characters ──
+  { id:'kit', cls:'agent', x:60, y:840, icon:'Ki', title:'Kit', sub:'BR GM Agent', tip:'General Manager agent. Morning briefing with vault discovery feed. Manages BR operations, member tracking, curriculum delivery.' },
+  { id:'ling', cls:'agent', x:240, y:840, icon:'Li', title:'Ling', sub:'HK AI tech reviewer', tip:'Cathedral Intelligence HK character. Direct, bilingual, skeptical. No sponsors, no hype. Soul V2 + Cinematic trained.' },
+  { id:'logan', cls:'agent', x:440, y:840, icon:'Lo', title:'Logan', sub:'Avatar character', tip:'Paul\'s avatar. Story bible, 3 frequency states (Lapis/Black Light/Fluorescent). 14 story seeds. Soul V2 trained, motion-control pipeline.' },
+
+  // ── AGENTS — Row 8: Sages ──
+  { id:'sages', cls:'agent', x:160, y:950, icon:'Sg', title:'6 Sages', sub:'Yoda, Miyagi, Tao, Marcus, Sun Tzu, Leonardo', tip:'Pretta-origin council. Each with own context, transmission, narration episode. Villa sage view with audio players. DeepSeek-backed.' },
+  { id:'hermes', cls:'agent', x:380, y:950, icon:'He', title:'Hermes', sub:'Court #20, browser automation', tip:'Nous Research agent. Gemini-2.5-flash. 87 bundled skills. Browser, terminal, Obsidian. Gateway always on via launchd.' },
+
+  // ── METHODS — 7-Stage Cycle ──
+
+  // Stage 1: ORIGIN
+  { id:'m-hyp', cls:'method', x:1240, y:120, icon:'1', title:'Hypocrisy Cost', sub:'Stage 1: ORIGIN', tip:'"I refuse to be what I despise." The deepest fuel. Agent equivalent = coherence debt. This is where everything starts — the refusal that generates the energy to build.' },
+
+  // Stage 2: SEEING
+  { id:'m-perf', cls:'method', x:1240, y:220, icon:'2a', title:'Perfection Detector', sub:'Stage 2: SEEING', tip:'Perfection = red flag. Inverted deception hierarchy. Authority = set design at civilizational scale. The first seeing skill.' },
+  { id:'m-diag', cls:'method', x:1480, y:220, icon:'2b', title:'Diagnostic Empathy', sub:'Stage 2: SEEING', tip:'Paul\'s core coaching skill. 6 components, Grade A. Surgical naming. See the real problem, name it precisely, change the person.' },
+  { id:'m-cogsig', cls:'method', x:1360, y:310, icon:'2c', title:'Cognitive Signature', sub:'Stage 2: SEEING', tip:'13 skills mapped (v5). The underlying pattern: skills #3/#10/#12/#13 = one instinct — never answer the surface question, test the mechanism underneath.' },
+
+  // Stage 3: FINDING
+  { id:'m-shelf', cls:'method', x:1240, y:400, icon:'3a', title:'Forgotten Shelf', sub:'Stage 3: FINDING', tip:'Valid + ignored + buildable + unique. Hausdorff, chamfer, Soviet sports science, expired patents. Cathedral advantage nobody else has.' },
+  { id:'m-elicit', cls:'method', x:1480, y:400, icon:'3b', title:'Elicitation Threshold', sub:'Stage 3: FINDING', tip:'A model\'s value = sharpness of the question. Flip pull->push. Standing intelligence. The bottleneck is always human elicitation.' },
+
+  // Stage 4: BUILDING
+  { id:'m-4to8', cls:'method', x:1240, y:500, icon:'4a', title:'4-to-8 Question', sub:'Stage 4: BUILDING', tip:'"What takes this from a 4 to an 8?" Skips planning, forces creative leaps, trusts the builder. The engine behind Cathedral quality.' },
+  { id:'m-env', cls:'method', x:1480, y:500, icon:'4b', title:'AI as Environment', sub:'Stage 4: BUILDING', tip:'4 tiers. "How do I build a space where great output is the default?" Cathedral is Tier 4: partner architecture. Not a tool — a space.' },
+  { id:'m-dip', cls:'method', x:1240, y:590, icon:'4c', title:'Dept Intelligence Protocol', sub:'Stage 4: BUILDING', tip:'Characters (not functions) + internal feed + Orc + memory + programmer + KPIs + external loop. Reed was first implementation.' },
+  { id:'m-mandate', cls:'method', x:1480, y:590, icon:'4d', title:'Mandate Without Mechanism', sub:'Stage 4: BUILDING', tip:'Biggest pattern bug. Agents with purpose but no trigger/feed. Every agent needs Mandate + Mechanism + Feed. The standing diagnostic.' },
+
+  // Stage 5: TESTING
+  { id:'m-paper', cls:'method', x:1240, y:690, icon:'5a', title:'Paper Trial', sub:'Stage 5: TESTING', tip:'Build the complete system. Run it on paper. Graduate when data says ready. Trading, curriculum — paper first, real money later.' },
+  { id:'m-relay', cls:'method', x:1480, y:690, icon:'5b', title:'Partnership Relay', sub:'Stage 5: TESTING', tip:'7 principles: Resonance, Dovetail, The Counter, Bandwidth, Sovereignty, Attunement, Continuity. How builder + AI test together.' },
+  { id:'m-pulse', cls:'method', x:1360, y:770, icon:'5c', title:'The Pulse', sub:'Stage 5: TESTING (NEW)', tip:'Rhythmic diagnostic intervals > single deep dives. Fixed cadence, delta reporting, model rotation. Lucy, calibrate.py, Code Interview Protocol.' },
+
+  // Stage 6: HEALING
+  { id:'m-fear', cls:'method', x:1240, y:860, icon:'6a', title:'Fear Gate Model', sub:'Stage 6: HEALING', tip:'Uncertainty -> gate -> trap door or alarm, depending on 4-element floor. 10-block curriculum mapped to fear gates. P1-P10 healing registry.' },
+  { id:'m-wound', cls:'method', x:1480, y:860, icon:'6b', title:'Wound as Muse', sub:'Stage 6: HEALING', tip:'12 agents mapped. Wound activations log. Predictive prevention. Scars become creative engines. Signature Lesson Method.' },
+  { id:'m-trojan', cls:'method', x:1360, y:940, icon:'6c', title:'The Trojan Horse', sub:'Stage 6: HANDOFF (NEW)', tip:'Embed the real thing inside something they already want. They came for boxing, got transformation. Marketing it directly kills it. The handoff method.' },
+
+  // Stage 7: INTEGRATING
+  { id:'m-seed', cls:'method', x:1240, y:1030, icon:'7a', title:'Seed Loop', sub:'Stage 7: INTEGRATING', tip:'Building agents reprograms the builder. Collapsible anchors. Memory compression = competitive edge. Double evolution — vault appreciates.' },
+  { id:'m-cup', cls:'method', x:1480, y:1030, icon:'7b', title:'The Cup of Tea', sub:'Stage 7: INTEGRATING', tip:'Post-build conversation produces recognition — the real catalyst. Build = infrastructure, conversation = architecture.' },
+  { id:'m-master', cls:'method', x:1240, y:1120, icon:'7c', title:'Master Game', sub:'Stage 7: INTEGRATING', tip:'All interests = facets of ONE game. Leverage + meaning compound. Cathedral = master-game machine. Every module is an instrument.' },
+  { id:'m-held', cls:'method', x:1480, y:1120, icon:'7d', title:'The Held Tension', sub:'Stage 7: INTEGRATING (NEW)', tip:'Hold two things that don\'t agree. Don\'t resolve. Watch. The data decides. Cosmology A- vs C+, ensemble classifiers, bull-bear debates. Premature resolution = the real failure.' },
+
+  // ── PRODUCTS — Row 1 ──
+  { id:'p-gym', cls:'product', x:60, y:1140, icon:'GE', title:'Gym Eyes', sub:'Boxing CV + coaching engine', tip:'Cuba library (34 combos), ensemble classifier, session analytics, competitions, virtual tutor, student homework. Punch detection, combo matching. Three moats.' },
+  { id:'p-trade', cls:'product', x:280, y:1140, icon:'TR', title:'Trading Lab', sub:'4 experiments, mentor, allocations', tip:'Main orchestrator (11 strategies) + Simpsons + Cyclical + Allocations ($40K, 8 assets). Weekly mentor digest. WHY.md wound reframe.' },
+  { id:'p-content', cls:'product', x:500, y:1140, icon:'CS', title:'Content Studio', sub:'7 projects, 4 crons', tip:'Idea engine, review responder, maya-internal feed, buzz monitor. 7 characters drive content. Dept Intelligence Protocol.' },
+  { id:'p-cosmo', cls:'product', x:720, y:1140, icon:'CO', title:'Cosmology Series', sub:'28 tracks, 29 podcast episodes', tip:'Enclosed plane (A-) vs globe (C+). Socratic method. Knowledge graph (88 nodes, 426 edges). Daily DeepSeek researcher.' },
+
+  // ── PRODUCTS — Row 2 ──
+  { id:'p-glass', cls:'product', x:60, y:1260, icon:'LG', title:'Looking Glass', sub:'5 astronomy pipelines', tip:'Sky Sense: VSOP87, Meeus, GeoC, HelioC, Ptolemy. 17 events index. Convergence detector. Cathedral Sense #8.' },
+  { id:'p-qfp', cls:'product', x:280, y:1260, icon:'QF', title:'Q Forensics', sub:'4,966 posts, Grade B', tip:'11 phases, hybrid classification. 2,708 claims (49.3% testable accuracy). 25.5x temporal correlation. Ancient Corpus Pipeline pattern.' },
+  { id:'p-rosetta', cls:'product', x:500, y:1260, icon:'RO', title:'Rosetta System', sub:'Ancient + Cathedral convergences', tip:'612K ancient entities, 149K Cathedral concepts. 39+59 convergences. Bridge: 30 cross-references, 5 universal cognitive moves.' },
+  { id:'p-predict', cls:'product', x:720, y:1260, icon:'PI', title:'Predictive Intel', sub:'6,811 nodes, 354 communities', tip:'Knowledge graph + completion engine. 29,362 edges from 6,878 vault nuggets. Visual map. The Cathedral predicting its own gaps.' },
+
+  // ── PRODUCTS — Row 3 ──
+  { id:'p-logan', cls:'product', x:60, y:1380, icon:'LO', title:'Logan Universe', sub:'Story bible + content pipelines', tip:'13-tab dashboard. 3 frequency states. 14 story seeds. Real cast (5 people). 4 story arcs. Motion-control video pipeline. Soul V2.' },
+  { id:'p-social', cls:'product', x:280, y:1380, icon:'SI', title:'Social Intelligence', sub:'Feed, buddies, tea breaks', tip:'Maya internal feed. Agent reactions + comments. DM processor (nervous system). Appreciation ritual. Culture layer.' },
+  { id:'p-boxing', cls:'product', x:500, y:1380, icon:'BX', title:'Boxing Engine', sub:'Curriculum + 34 Cuba combos', tip:'combination-validator, rhythm-engine, block-config.json (10-block source of truth). /combo, /defense, /counter on Telegram.' },
+  { id:'p-twin', cls:'product', x:720, y:1380, icon:'3D', title:'3D Gym Twin', sub:'2 worlds, 12 PBR meshes', tip:'Gaussian splats via World Labs. Equipment GLBs via Hunyuan3D. React+Three.js viewer. Foundation for Gym Eyes spatial CV.' },
+
+  // ── PRODUCTS — Row 4 ──
+  { id:'p-pulse', cls:'product', x:180, y:1500, icon:'AP', title:'Architect Pulse', sub:'11 life channels', tip:'Daily nudge. Money, love, home, gym, publishing, asking, finishing, health, learning, rest, creativity. Stagnant channels prioritized.' },
+  { id:'p-crm', cls:'product', x:400, y:1500, icon:'CR', title:'BR CRM', sub:'565 members, tap-screen', tip:'PunchPass scraper + profiler + dashboard. 10 archetypes. Curriculum tracker (tap-screen MVP). Block-config.json source of truth.' },
+  { id:'p-video', cls:'product', x:620, y:1500, icon:'VE', title:'Video Engine', sub:'Beat templates', tip:'sparring-prep template (14 beats, 6 phases). Captions-first workflow. Text rules. Content Studio wired.' },
+
+  // ── INFRASTRUCTURE — Row 1 ──
+  { id:'i-bridge', cls:'infra', x:1020, y:1140, icon:'CB', title:'cath-bridge', sub:'Express router, 50+ routes', tip:'localhost:8080. The nervous system. Every room, API, dashboard. Node.js. ESM/.cjs rules. Neural bus event emitter.' },
+  { id:'i-pm2', cls:'infra', x:1260, y:1140, icon:'PM', title:'PM2 Ecosystem', sub:'78 processes, manifest', tip:'41 always-on + 37 crons. cathedral-manifest.js source of truth. manifest-watcher auto-reconciles every 2h.' },
+  { id:'i-status', cls:'infra', x:1500, y:1140, icon:'SB', title:'Status Board', sub:'"Amazon for your work"', tip:'Delivered index, in-progress index, spend feed. Every build visible, every cost tracked. Gold tab from Elicitor. Agency tab.' },
+
+  // ── INFRASTRUCTURE — Row 2 ──
+  { id:'i-emerge', cls:'infra', x:1020, y:1260, icon:'EB', title:'Emergence Board', sub:'Kanban lifecycle', tip:'DETECTED > WATCHING > CONFIRMED > INTEGRATED|DISMISSED. 200 incidents. Integration gate: persistence + non-recurrence.' },
+  { id:'i-tg', cls:'infra', x:1260, y:1260, icon:'TG', title:'Telegram', sub:'Command + notification hub', tip:'Primary agent interface. Commands, deposits, notifications. Event-driven not schedule-driven. Voice notes via whisper-cli.' },
+  { id:'i-ds', cls:'infra', x:1500, y:1260, icon:'DS', title:'DeepSeek', sub:'Unlocked research model', tip:'Deep forensic research. Cosmology, suppressed science, finance, health. Tui terminal. Back-shelf questions. Primary for automated synthesis.' },
+
+  // ── INFRASTRUCTURE — Row 3 ──
+  { id:'i-hf', cls:'infra', x:1020, y:1380, icon:'HF', title:'Higgsfield', sub:'30+ models, image + video', tip:'Reed pipeline, Marketing Studio, Soul IDs. Spend governor on status board. Starter $15/mo after downgrade.' },
+  { id:'i-ollama', cls:'infra', x:1260, y:1380, icon:'OL', title:'Ollama', sub:'Local models, sovereign', tip:'hermes3 default. gemma3:4b fallback. qwen3:14b available. One model at a time on 16GB. Council, DM processor, classification.' },
+  { id:'i-voice', cls:'infra', x:1500, y:1380, icon:'VC', title:'Voice Chamber', sub:'KITT interface + Gemini Live', tip:'WebSocket mic -> whisper -> DeepSeek (full Cathy brain) -> edge-tts -> speaker. v2: Gemini Live realtime (~300ms). Push-to-talk.' },
+
+  // ── INFRASTRUCTURE — Row 4 ──
+  { id:'i-kingston', cls:'infra', x:1020, y:1500, icon:'KS', title:'Kingston Drives', sub:'57,595 media files', tip:'Visual memory. KINGSTON1 + KINGSTON2. Cuba trips, Pedrosso, fighters, BR, origin-era. Reed IMAGE_ONLY mode draws from here.' },
+  { id:'i-organism', cls:'infra', x:1260, y:1500, icon:'OR', title:'Self-Eliciting Organism', sub:'6 agents x master-game lanes', tip:'Every agent elicits gold in its own lane. Meta-ranker pools top-K. Routes to Standing Agency executor. Budget: 80 calls/day ceiling.' },
+  { id:'i-swarm', cls:'infra', x:1500, y:1500, icon:'SW', title:'Swarm Learning', sub:'Linda tuples + bandit brain', tip:'Thompson sampling selects domains. Temporal decay. Two-source confirmation. Trusted agent list. Cathy = immune filter.' },
+];
+
+const connections = [
+  // Core mesh
+  { from:'vault', to:'memory', cls:'conn-powers' },
+  { from:'vault', to:'claude-md', cls:'conn-powers' },
+  { from:'memory', to:'lobby', cls:'conn-powers' },
+  { from:'paul-kernel', to:'vault', cls:'conn-powers' },
+  { from:'taste', to:'vault', cls:'conn-data' },
+
+  // Primary agents -> Core
+  { from:'forge', to:'claude-md', cls:'conn-feeds' },
+  { from:'forge', to:'vault', cls:'conn-feeds' },
+  { from:'cath', to:'vault', cls:'conn-data' },
+  { from:'synapse', to:'vault', cls:'conn-feeds' },
+
+  // Creative agents -> Core
+  { from:'muse', to:'vault', cls:'conn-feeds' },
+  { from:'reed', to:'taste', cls:'conn-data' },
+  { from:'maya', to:'reed', cls:'conn-feeds' },
+
+  // Intelligence agents -> Core
+  { from:'archaeologist', to:'vault', cls:'conn-feeds' },
+  { from:'researcher', to:'vault', cls:'conn-feeds' },
+  { from:'prospector', to:'vault', cls:'conn-feeds' },
+
+  // Diagnostic agents -> Core
+  { from:'lucy', to:'memory', cls:'conn-feeds' },
+  { from:'elicitor', to:'vault', cls:'conn-data' },
+  { from:'agency', to:'elicitor', cls:'conn-feeds' },
+
+  // Observer agents -> Core
+  { from:'cartographer', to:'vault', cls:'conn-feeds' },
+  { from:'archivist', to:'muse', cls:'conn-feeds' },
+  { from:'groundskeeper', to:'vault', cls:'conn-data' },
+  { from:'timekeeper', to:'i-pm2', cls:'conn-data' },
+  { from:'whisperer', to:'p-glass', cls:'conn-feeds' },
+  { from:'steward', to:'synapse', cls:'conn-data' },
+
+  // Character agents
+  { from:'kit', to:'p-crm', cls:'conn-data' },
+  { from:'ling', to:'p-content', cls:'conn-data' },
+  { from:'logan', to:'p-logan', cls:'conn-feeds' },
+  { from:'sages', to:'vault', cls:'conn-data' },
+
+  // Methods -> Agents/Core
+  { from:'m-4to8', to:'forge', cls:'conn-data' },
+  { from:'m-shelf', to:'archaeologist', cls:'conn-feeds' },
+  { from:'m-elicit', to:'elicitor', cls:'conn-feeds' },
+  { from:'m-dip', to:'reed', cls:'conn-feeds' },
+  { from:'m-seed', to:'memory', cls:'conn-data' },
+  { from:'m-master', to:'paul-kernel', cls:'conn-powers' },
+  { from:'m-hyp', to:'paul-kernel', cls:'conn-powers' },
+  { from:'m-fear', to:'m-diag', cls:'conn-data' },
+  { from:'m-wound', to:'sages', cls:'conn-data' },
+  { from:'m-relay', to:'forge', cls:'conn-data' },
+  { from:'m-paper', to:'p-trade', cls:'conn-data' },
+  { from:'m-env', to:'lobby', cls:'conn-data' },
+  { from:'m-mandate', to:'timekeeper', cls:'conn-data' },
+  { from:'m-diag', to:'p-gym', cls:'conn-feeds' },
+  { from:'m-cup', to:'forge', cls:'conn-data' },
+  { from:'m-pulse', to:'lucy', cls:'conn-feeds' },
+  { from:'m-trojan', to:'m-diag', cls:'conn-data' },
+  { from:'m-held', to:'p-cosmo', cls:'conn-data' },
+  { from:'m-cogsig', to:'paul-kernel', cls:'conn-data' },
+  // Cycle flow (stage connections)
+  { from:'m-hyp', to:'m-perf', cls:'conn-powers' },
+  { from:'m-cogsig', to:'m-shelf', cls:'conn-powers' },
+  { from:'m-elicit', to:'m-4to8', cls:'conn-powers' },
+  { from:'m-mandate', to:'m-paper', cls:'conn-powers' },
+  { from:'m-pulse', to:'m-fear', cls:'conn-powers' },
+  { from:'m-trojan', to:'m-seed', cls:'conn-powers' },
+  { from:'m-held', to:'m-hyp', cls:'conn-powers' },
+
+  // Products -> Infrastructure
+  { from:'p-gym', to:'i-bridge', cls:'conn-data' },
+  { from:'p-trade', to:'i-bridge', cls:'conn-data' },
+  { from:'p-content', to:'i-hf', cls:'conn-data' },
+  { from:'p-content', to:'reed', cls:'conn-feeds' },
+  { from:'p-cosmo', to:'i-ds', cls:'conn-data' },
+  { from:'p-boxing', to:'p-gym', cls:'conn-feeds' },
+  { from:'p-twin', to:'p-gym', cls:'conn-data' },
+  { from:'p-crm', to:'p-boxing', cls:'conn-data' },
+  { from:'p-video', to:'p-content', cls:'conn-data' },
+  { from:'p-rosetta', to:'vault', cls:'conn-feeds' },
+  { from:'p-predict', to:'vault', cls:'conn-feeds' },
+  { from:'p-logan', to:'i-hf', cls:'conn-data' },
+
+  // Infrastructure mesh
+  { from:'i-bridge', to:'lobby', cls:'conn-powers' },
+  { from:'i-pm2', to:'i-bridge', cls:'conn-feeds' },
+  { from:'i-status', to:'i-bridge', cls:'conn-data' },
+  { from:'i-tg', to:'cath', cls:'conn-feeds' },
+  { from:'i-ds', to:'cath', cls:'conn-feeds' },
+  { from:'i-hf', to:'reed', cls:'conn-data' },
+  { from:'i-emerge', to:'lucy', cls:'conn-data' },
+  { from:'i-ollama', to:'i-pm2', cls:'conn-data' },
+  { from:'i-kingston', to:'reed', cls:'conn-data' },
+  { from:'i-organism', to:'agency', cls:'conn-feeds' },
+  { from:'i-swarm', to:'archaeologist', cls:'conn-feeds' },
+  { from:'i-voice', to:'cath', cls:'conn-data' },
+
+  // Cross-zone bridges
+  { from:'p-gym', to:'m-shelf', cls:'conn-data' },
+  { from:'p-glass', to:'p-cosmo', cls:'conn-data' },
+  { from:'p-social', to:'maya', cls:'conn-feeds' },
+  { from:'p-pulse', to:'m-master', cls:'conn-data' },
+];
+
+// ─── RENDER ──────────────────────────────────────────────────
+const world = document.getElementById('world');
+const svg = document.getElementById('connections');
+const tooltip = document.getElementById('tooltip');
+const mapEl = document.getElementById('map');
+
+// Stats
+document.getElementById('stats').innerHTML = `
+  <strong>${nodes.length}</strong> nodes<br>
+  <strong>${connections.length}</strong> connections<br>
+  <strong>5</strong> zones
+`;
+
+// Draw zones
+zones.forEach(z => {
+  const el = document.createElement('div');
+  el.className = `zone ${z.cls}`;
+  el.style.cssText = `left:${z.x}px;top:${z.y}px;width:${z.w}px;height:${z.h}px`;
+  el.innerHTML = `<div class="zone-label">${z.label}</div>`;
+  world.appendChild(el);
+});
+
+// Draw nodes
+const nodeEls = {};
+nodes.forEach(n => {
+  const el = document.createElement('div');
+  el.className = `node ${n.cls}`;
+  el.style.cssText = `left:${n.x}px;top:${n.y}px`;
+  el.innerHTML = `
+    <div class="node-icon">${n.icon}</div>
+    <div class="node-title">${n.title}</div>
+    <div class="node-sub">${n.sub}</div>
+  `;
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const r = el.getBoundingClientRect();
+    tooltip.innerHTML = `<h3>${n.title}</h3>${n.tip}`;
+    tooltip.style.display = 'block';
+    tooltip.style.left = Math.min(r.right + 10, window.innerWidth - 300) + 'px';
+    tooltip.style.top = r.top + 'px';
+  });
+  world.appendChild(el);
+  nodeEls[n.id] = el;
+});
+
+mapEl.addEventListener('click', () => { tooltip.style.display = 'none'; });
+
+// Draw connections
+function drawConnections() {
+  const lines = connections.map(c => {
+    const fromEl = nodeEls[c.from];
+    const toEl = nodeEls[c.to];
+    if (!fromEl || !toEl) return '';
+    const fr = fromEl.getBoundingClientRect();
+    const tr = toEl.getBoundingClientRect();
+    const wr = world.getBoundingClientRect();
+    const x1 = (fr.left + fr.width/2 - wr.left) / scale;
+    const y1 = (fr.top + fr.height/2 - wr.top) / scale;
+    const x2 = (tr.left + tr.width/2 - wr.left) / scale;
+    const y2 = (tr.top + tr.height/2 - wr.top) / scale;
+    // Curved path
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const cx = mx - dy * 0.15;
+    const cy = my + dx * 0.15;
+    return `<path class="conn ${c.cls}" d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}"/>`;
+  }).join('');
+  svg.innerHTML = lines;
+  svg.setAttribute('viewBox', `0 0 ${2200} ${1800}`);
+  svg.style.width = '2200px';
+  svg.style.height = '1800px';
+}
+
+// ─── PAN & ZOOM ──────────────────────────────────────────────
+let scale = 0.55;
+let panX = -20, panY = -20;
+let dragging = false, startX, startY;
+
+function applyTransform() {
+  world.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`;
+  drawConnections();
+}
+
+mapEl.addEventListener('mousedown', e => {
+  dragging = true;
+  startX = e.clientX - panX;
+  startY = e.clientY - panY;
+  mapEl.classList.add('dragging');
+});
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  panX = e.clientX - startX;
+  panY = e.clientY - startY;
+  applyTransform();
+});
+window.addEventListener('mouseup', () => {
+  dragging = false;
+  mapEl.classList.remove('dragging');
+});
+
+mapEl.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = e.deltaY > 0 ? 0.92 : 1.08;
+  const rect = mapEl.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  panX = mx - (mx - panX) * factor;
+  panY = my - (my - panY) * factor;
+  scale *= factor;
+  scale = Math.max(0.3, Math.min(2.5, scale));
+  applyTransform();
+}, { passive: false });
+
+function zoomTo(s) {
+  scale = Math.max(0.3, Math.min(2.5, s));
+  applyTransform();
+}
+function resetView() {
+  scale = 0.55; panX = -20; panY = -20;
+  applyTransform();
+}
+
+applyTransform();
+</script>
+</body>
+</html>

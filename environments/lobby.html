@@ -228,6 +228,7 @@ const ROOMS = [
   { d:'gymeyes', icon:'🔬', name:'Engineering Lab',    orc:'Scope',         desc:'CV detection, hardware R&D, pipeline engineering. Gym Eyes, CNN training, multi-cam. Drill Player + Cuba Combos live here.', route:'/gym-eyes', merge:'Drill Player and Cuba Combo Library run as workspaces inside this lab.' },
   { d:'gymeyes', icon:'🥊', name:'Cuba Combo Library', orc:'Cuba Extractor', desc:'34 combos extracted from Havana 2018 coach demos. Animated replay, peak frames, frequency map.', route:'http://localhost:8080/cuba-combos', ext:true },
   { d:'gymeyes', icon:'🏋', name:'Drill Player',       orc:'Gym Eyes',      desc:'3D skeleton boxer visualization. Plays detected drill sequences. 6 punch types, slips/rolls, partner drills.', route:'http://localhost:8080/gym-eyes/drill-player', ext:true },
+  { d:'gymeyes', icon:'📝', name:'Student Homework',   orc:'Virtual Tutor', desc:'Students upload combo video, get instant automated coaching. Score + per-joint breakdown + coaching tips. Zero coach workload.', route:'http://localhost:8080/gym-eyes/homework', ext:true },
 
   // ── Visual & Content Studio ──
   { d:'studio', icon:'🎬', name:'Content Studio', orc:'Compass', desc:'Cross-platform content: Reed visuals, Maya social, LING publishing.', route:'/reed-studio' },
@@ -243,6 +244,8 @@ const ROOMS = [
   { d:'agents', icon:'📰', name:'Newsfeed',         orc:'Chronicle',           desc:'Live feed of everything in the Cathedral: research, reflections, heartbeats, escalations.', route:'/newsfeed' },
 
   // ── Knowledge Graphs & Maps ──
+  { d:'maps', icon:'🗺', name:'The Cathedral Map', orc:'Cartographer', desc:'The whole system in one view. 5 zones, 30+ nodes, connections. Drag to explore, click for detail. The capstone object.', route:'/map' },
+  { d:'maps', icon:'🐴', name:'Logan x Principled Practice', orc:'Logan', desc:'How Logan delivers the 7-stage cycle to youth. Frequency states, character arcs, 10-block curriculum, Trojan Horse architecture — all mapped.', route:'/logan-pp-map' },
   { d:'maps', icon:'🕸', name:'Mind Map',         orc:'Knowledge Graph', desc:'Interactive knowledge graph. Nodes, edges, communities. K-means clustering, bridge detection.', route:'/mind-map.html' },
   { d:'maps', icon:'🩺', name:'Mega Surgery',     orc:'Epistemic Engine', desc:'Mega-cluster surgery visualization. How oversized knowledge clusters split into communities.', route:'/mega-surgery-viz.html' },
   { d:'maps', icon:'🔬', name:'Cathedral Rosetta', orc:'Rosetta Engine', desc:'59 internal convergences across 14 vault domains. The Cathedral seeing its own patterns.', route:'http://localhost:8080/cathedral-rosetta', ext:true },
