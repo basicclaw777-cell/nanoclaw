@@ -2049,6 +2049,33 @@ the-timekeeper to go offline. Don't repeat it.
 - Logan mapping: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/logan/logan-principled-practice-map.md
 - Lobby rooms: The Cathedral Map (maps district), Logan x Principled Practice (maps district)
 
+## Emergence Loop-Closing — Ship-Gate + Re-Audit (built 2026-06-04)
+- production-engine.js `classifyDeliverable()` (front gate): an LLM returning text is NOT a deliverable. Refusals/errors/"need X from Paul" blocks no longer mark shipped=true → no longer falsely close emergence loops (WATCHING→CONFIRMED). Returns real|too-short|error|blocked-on-paul|refusal. blocked-on-paul routes to Telegram (real ask back to Paul); refusal/error annotate the incident [REFUSED]/[ERRORED] and keep it WATCHING.
+- Composes with yesterday's integration-gate (emergence-integration-gate.js, wired into lucy-heartbeat.js:251): front gate = refusal never reaches CONFIRMED; back gate = CONFIRMED→INTEGRATED needs persistence + non-recurrence across K=2 pulses (fail-safe HOLD).
+- emergence-reaudit.js — one-shot retroactive ship-gate on already-CONFIRMED incidents (pulls 500-char persisted output from agent memory by emergenceId; falls back to truncated note for refusal markers only; batch-reconciliation closes need Gate-1 persistence or revert). Re-audit result: 15 CONFIRMED → 4 real, 11 reverted to WATCHING (4 refusals + 7 unverifiable hand-stamped batch closes). `node emergence-reaudit.js [--apply]`.
+- LESSON (recurring): shipped=true meant "LLM replied," not "work done" — same class as "verify the ledger not the exit code." Phantom-dependency stall found: Yoda invented a "raw 100-rating list" (no such file; Reed real ratings = red/ratings.jsonl, 2 entries, 1-5 scale), Reed-Director blocked real work on the imaginary artifact. Dismissed em-1780470221250-3dpq. Guard idea: when an agent blocks on "need X from Paul," check X names a real artifact before pinging Paul.
+
+## The Mouth + Mercury — wider front door + nugget herald (built 2026-06-04)
+- THE MOUTH — ~/nanoclaw/thought-intake.js (ESM). Raw thought in → (1) PRESERVED to vault 00_Staging/captures/ with frontmatter, (2) ROUTED: DeepSeek classifies {type, agent, action, lens} → planner-tasks.json {category:'paul-thought'} so the (now-gated) production engine matures it, (3) TRACED to thought-intake-log.jsonl with an id (raw→what-it-became). Fail-open: classify failure → preserve as note, never lose a thought. Telegram: `/t <raw thought>`. Solves: /capture was a drawer (stored, nothing digested it); this is a mouth (routes into the metabolism).
+- MERCURY, THE HERALD — ~/nanoclaw/mercury-herald.js (ESM). Sibling of the Elicitor: Elicitor surfaces QUESTIONS Paul would ask; Mercury surfaces ANSWERS he didn't — truths the system discovered ON ITS OWN that Paul didn't input. GATHER recent outputs (feed posts, CONFIRMED emergence, Lucy heartbeats, Synapse pulses, since lastRun) → GATE (DeepSeek, "self-generated truth, novel, worth interrupting for", GOLD>=8, push-gold-only) → VOICE (Telegram in Mercury's voice + mercury-feed.json). Telegram: `/herald` (alias `/mercury`), `/herald dry`, `/herald status`. Governance (SI-31): MAX_CANDIDATES=25/run, 60 calls/day, kill switch (touch ~/nanoclaw/MERCURY_PAUSED or MERCURY_PAUSED=1), dedup by content hash, MANUAL-FIRST (no cron auto-started — widen on trust, per agency/organism pattern).
+- New persona (Forge's call, rename-able): Mercury = messenger/herald of the existing pantheon (Marcus/Leonardo/Yoda). Distinct from Cathy (posture=doubt/drift) and Elicitor (posture=questions); Mercury's posture=recognition of self-discovered truth. Origin: Paul — "the system told me something true I didn't put in… is there a voice to inhabit that role?"
+- CALIBRATION caught in dry run (before any cron): gate scored agent appreciation-round mutual-praise as 9/10 gold. Tightened GATE_SYSTEM — peer praise / social-proof aggregation = SENTIMENT not discovered truth, scored low. Re-test: only the real discovery (Reservoir Computing, abandoned 112d, 7 inbound links) survived. Watch this gate on first live runs.
+- NOT YET: Mercury PM2 cron (manual-first by design — run /herald a few times, confirm gold quality, then add weekly cron). Voice-note path for The Mouth (no msg.voice→intake yet; existing /capture voice path lands in voice-notes/, not routed).
+
+## Vault Dig — Edge Taxonomy Capabilities (built 2026-06-04)
+- vault-dig.js expanded from 4 to 7 capabilities (no new PM2, no new DB)
+- [5] Hole-Value Scoring: Swanson ABC structural holes. foundational x maturity x persistence x similarity. Zero LLM.
+- [6] Anomaly Gradient: 4-factor rubric (independence x persistence x theory-edge x resolution-power). LLM-capped at 8/run.
+- [7] Phase-Coherence Matrix: celestial (Looking Glass EVENTS_DB) x trading (trades + cyclical_trades) x vault domains. Honest thin-data reporting.
+- Vault nugget: ~/cathedral-vault/02_Refined_Gold/cathedral/the-edge-taxonomy-five-veins.md (Grade A)
+- Telegram: /vault-dig runs all 7. Max 18 LLM calls/run.
+
+## Bias Mapper — Wired 2026-06-04
+- bias-mapper.js tested + wired into telegram-bot.js
+- 57 biases, 16 gaps, 12 agent susceptibilities, DeepSeek gap predictions
+- Telegram: /bias-map
+- Output: ~/nanoclaw/bias-mapper-output/
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
