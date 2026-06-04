@@ -52,6 +52,8 @@ import { registerGraphCommands } from './knowledge-graph.js';
 import { registerCausalCommands } from './causal-net.js';
 import { registerActiveCommands } from './active-learning.js';
 import { registerArchaeologistCommands } from './archaeologist-commands.js';
+import { registerVaultDigCommands } from './vault-dig.js';
+import { registerBiasMapperCommands } from './bias-mapper.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -204,6 +206,8 @@ registerGraphCommands(bot);
 registerCausalCommands(bot);
 registerActiveCommands(bot);
 registerArchaeologistCommands(bot);
+registerVaultDigCommands(bot);
+registerBiasMapperCommands(bot);
 
 // ── Telegram health state (written to cath-state.json) ──────────────────────
 const telegramHealth = {
@@ -1218,6 +1222,95 @@ bot.onText(/^\/organism(?:@\w+)?\s*$/i, async (msg) => {
         safeSend(chatId, err && !stdout ? `⚠️ organism: ${err.message}` : `🧬 ${(stdout || 'done').slice(0, 900)}\n\n_Board → Organism tab · /agency for what's proposed_`);
       });
   } catch (e) { await safeSend(chatId, `⚠️ organism failed: ${e.message}`); }
+});
+
+// /emergence — Emergence Board: ingest, stats, stale alerts
+bot.onText(/^\/emergence(?:@\w+)?\s*(ingest|stats|stale)?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const sub = (match[1] || 'stats').toLowerCase();
+  try {
+    const { execFileSync } = require('child_process');
+    const out = execFileSync('node', [path.join(process.env.HOME, 'nanoclaw', 'emergence-board.js'), sub],
+      { timeout: 30000, encoding: 'utf8' });
+    await safeSend(chatId, `🌱 *Emergence Board — ${sub}*\n\`\`\`\n${(out || 'done').slice(0, 1200)}\n\`\`\`\n_Board → Emergence tab_`, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ emergence: ${e.message}`); }
+});
+
+// /reignite — Emergence Reigniter: turn dead cross-agent asks into live tasks
+bot.onText(/^\/reignite(?:@\w+)?\s*(dry)?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const dry = match[1] === 'dry';
+  await safeSend(chatId, `🔥 Reigniting dead emergence asks${dry ? ' (DRY RUN)' : ''}…`);
+  try {
+    const { execFile } = require('child_process');
+    const args = [path.join(process.env.HOME, 'nanoclaw', 'emergence-reigniter.js')];
+    if (dry) args.push('--dry-run');
+    execFile('node', args, { timeout: 180000, encoding: 'utf8' }, async (err, stdout) => {
+      if (err && !stdout) { await safeSend(chatId, `⚠️ reignite: ${err.message}`); return; }
+      // Reigniter sends its own Telegram summary — echo CLI output too
+      if (stdout) await safeSend(chatId, `\`\`\`\n${stdout.slice(-1500)}\n\`\`\``, { parse_mode: 'Markdown' });
+    });
+  } catch (e) { await safeSend(chatId, `⚠️ reignite: ${e.message}`); }
+});
+
+// /t — THE MOUTH: throw a raw thought into the metabolism. It gets preserved to
+// the vault, classified, and routed to the right agent so it matures on its own.
+bot.onText(/^\/t(?:@\w+)?\s+([\s\S]+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const text = (match[1] || '').trim();
+  if (!text) return safeSend(chatId, 'Usage: /t <your raw thought>');
+  await safeSend(chatId, '🌱 Swallowing the thought…');
+  try {
+    const { routeThought } = await import(path.join(process.env.HOME, 'nanoclaw', 'thought-intake.js'));
+    const r = await routeThought(text);
+    const routed = r.agent && r.queued
+      ? `→ *${r.agent}* will work it: _${r.action}_`
+      : `→ incubating (no agent) — it'll surface via the vault`;
+    await safeSend(chatId, `🌱 *Routed* (${r.type}, lens: ${r.lens || '—'})\n${routed}\n\n_Preserved + tracked as \`${r.id}\`. Matures on its own._`, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ intake: ${e.message}`); }
+});
+
+// /herald (alias /mercury) — MERCURY: surface truths the Cathedral discovered on
+// its own (things Paul didn't input), gold-gated. /herald dry = preview only.
+bot.onText(/^\/(?:herald|mercury)(?:@\w+)?\s*(dry|status)?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const sub = (match[1] || 'run').toLowerCase();
+  try {
+    if (sub === 'status') {
+      const { execFile } = require('child_process');
+      return execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'mercury-herald.js'), 'status'],
+        { timeout: 30000 }, (err, stdout) => safeSend(chatId, `📯 *Mercury*\n\`\`\`\n${(stdout || err?.message || '').slice(0, 1500)}\n\`\`\``, { parse_mode: 'Markdown' }));
+    }
+    await safeSend(chatId, `📯 Mercury scanning for self-discovered truths${sub === 'dry' ? ' (dry)' : ''}…`);
+    const { run } = await import(path.join(process.env.HOME, 'nanoclaw', 'mercury-herald.js'));
+    const r = await run({ dry: sub === 'dry' });
+    if (r.paused) return safeSend(chatId, '📯 Mercury is PAUSED (kill switch).');
+    await safeSend(chatId, `📯 Mercury: ${r.candidates} scanned → *${typeof r.gold === 'number' ? r.gold : (r.gold?.length || 0)}* gold.${sub === 'dry' ? ' (dry — nothing sent)' : ' Proclaimed above if any.'}`, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ herald: ${e.message}`); }
+});
+
+// /lucy — Lucy Heartbeat: run pulse or show status
+bot.onText(/^\/lucy(?:@\w+)?\s*(pulse|status)?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const sub = (match[1] || 'status').toLowerCase();
+  if (sub === 'pulse') {
+    await safeSend(chatId, '🫀 Running Lucy Heartbeat pulse…');
+    try {
+      const { execFile } = require('child_process');
+      execFile('node', [path.join(process.env.HOME, 'nanoclaw', 'lucy-heartbeat.js'), 'pulse'],
+        { timeout: 120000 }, (err, stdout) => {
+          if (err && !stdout) safeSend(chatId, `⚠️ lucy pulse: ${err.message}`);
+          // Pulse sends its own Telegram message — no need to echo here
+        });
+    } catch (e) { await safeSend(chatId, `⚠️ lucy: ${e.message}`); }
+  } else {
+    try {
+      const { execFileSync } = require('child_process');
+      const out = execFileSync('node', [path.join(process.env.HOME, 'nanoclaw', 'lucy-heartbeat.js'), 'status'],
+        { timeout: 10000, encoding: 'utf8' });
+      await safeSend(chatId, `🫀 *Lucy Heartbeat*\n\`\`\`\n${(out || 'no pulses yet').slice(0, 800)}\n\`\`\`\n_/lucy pulse — run now_`, { parse_mode: 'Markdown' });
+    } catch (e) { await safeSend(chatId, `⚠️ lucy: ${e.message}`); }
+  }
 });
 
 // /pausegen /resumegen /genstatus — the GLOBAL generation kill-switch.
