@@ -1803,6 +1803,8 @@ the-timekeeper to go offline. Don't repeat it.
 - PM2: skills-scout (daily cron, no-autorestart), scout-bridge (weekly cron, no-autorestart)
 - QUEUED: Scout Rating Room (interactive lobby room for Paul to rate hot/warm/cold)
 - Cathedral Infographic: localhost:8080/cathedral-infographic (3-column: Does/Want/Blown, live data)
+- LUCY GATE + ELICITATION (2026-06-04): keyword scorer saturated — every AI repo scored 24/25, the wall got ignored. Fix in skills-scout.js: cheap heuristic now a coarse pre-filter; DeepSeek (deepseek-chat, budget LUCY_MAX_CALLS=20/run, SI-31) re-scores survivors against real Cathedral state (CATHEDRAL_OWNS + STANDING_QUESTIONS) with an exact-capability redundancy test → verdict GOLD/WATCH/SKIP + lucy_* frontmatter. Only GOLD surfaces to the digest (elicitation push-gold-only); WATCH filed quietly; SKIP dropped. Calibration that mattered: "redundant" = a named owned component does THIS precise function — an adjacent tool does NOT disqualify. Proof on the 14 that old-scout rubber-stamped at 24/25: 6 GOLD · 3 WATCH · 5 SKIP (was 14 GOLD-equiv). `module.exports` + `require.main===module` guard added so it's testable without a live run. NOTE: gate rates the PITCH, not verified behavior — headroom scored GOLD 22 but hands-on its default compress() is a near-no-op (see headroom-crush below). Filter, not proof.
+- headroom-crush.py (2026-06-04, BUILT, wire-in NOT justified yet): ~/Cathedral/headroom-crush.py wraps headroom SmartCrusher (Rust, offline, no LLM, no external calls — safe under SI-25 + sovereignty). Interpreter = ~/cathedral-venv/bin/python3 (headroom-ai installed there). VERIFIED: compresses FLAT uniform-schema arrays (synthetic log array proof), no-ops SAFELY on nested JSON (real pm2 jlist = no-gain-passthrough, bytes identical). Fail-open on any error (echoes input). HONEST STATUS: default headroom.compress() = cache-alignment only (0 token savings). Real savings are shape-dependent (flat repetitive records only) and NOT yet measured on a real fleet context. Do NOT wire into agent-engine on unproven savings — first measure on one flat-uniform context (log dump / uniform record array); wire that one spot only if it saves there.
 
 ## Agent Pipeline System — Multi-Agent Review Chains (built 2026-05-27)
 - Runner: ~/Cathedral/agents/pipeline-runner.js (CJS)
@@ -1852,6 +1854,26 @@ the-timekeeper to go offline. Don't repeat it.
 - gym-eyes-v2.js runDetector(path, profile='solo') — single-person homework loop defaults to solo. Fight Lab (two-fighter) stays sparring.
 - KEY: sparring floor (0.80) under-counts single-person video 28% (0.72x); technique footage returns 0 at 0.80 (punches too slow for floor). Solo is correct default for ANY 1-person clip.
 - OPEN: sparring over-count (IMG_4174: 94 detected vs ~15 actual) = person-tracking problem (occlusion, small/far fighters, pose-slot thrash, normalized-velocity spikes to 562), NOT thresholds. Next lever.
+
+## Gym Eyes — Virtual Tutor + Student Homework (built 2026-06-04)
+- Patent-inspired coach overlay: skeleton_extractor.py (MediaPipe per-frame landmarks, cache),
+  virtual_tutor.py (DTW alignment, per-joint deviation scoring A/B/C/D, coaching hints).
+  Based on expired patents TW200811767/TWI286717 (2006) + WO2010085704.
+- 34 coach combo skeletons pre-extracted and cached at skeleton_cache/coach/.
+- Z-depth: MediaPipe Z added to comparison output (student_z/coach_z per frame).
+  Calibrated against drill-player.html guard pose: 0.8x scale.
+- Student Homework (student-facing, automated, zero coach workload):
+  - homework.html — upload page: combo dropdown, video upload, progress bar, results (score ring,
+    per-joint bars, coaching tips, "Try Again"). Clean/bright Basic Reflex branded.
+  - homework_processor.py — runs virtual_tutor.py, returns summary-only JSON (no heavy aligned_frames).
+  - cath-bridge routes: GET /gym-eyes/homework (page), /homework/combos (API), POST /homework/submit
+    (multer upload, 200MB limit, 2min timeout, auto-delete after processing).
+  - Instant feedback model: student uploads → score in ~2min → try again. No Paul in the loop.
+    MediaPipe is local — zero API cost per submission.
+- Hub: 2 new tool cards (Student Homework, Virtual Tutor). Lobby: Student Homework room in Gym Eyes district.
+- virtual-tutor.html: 3D skeleton viz with floor cross, deviation lines, coaching panel. Nice-to-have —
+  engine is the product, visualization is the wrapper.
+- UNVALIDATED: not yet tested on a real student video. Engine exists and waits. Don't extend until validated.
 
 ## /capture + /breathe — Telegram Personal Tools (built 2026-06-02)
 - /capture: quick 3-line memory deposit (Thought/Built/Shipped). Interactive or one-shot mode. Deposits to ~/cathedral-vault/00_Staging/captures/
