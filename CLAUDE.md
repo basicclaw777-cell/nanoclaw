@@ -2098,6 +2098,31 @@ the-timekeeper to go offline. Don't repeat it.
 - Telegram: /bias-map
 - Output: ~/nanoclaw/bias-mapper-output/
 
+## Ancient Corpus Pipeline — Forensic Research (built 2026-06-05 session 2)
+- One question ("have we looked into the emerald tablets?") → 12 vault deposits, ~200KB+ Grade A research, 5 named methods, 1 principle, 1 curriculum doc
+- **Research deposits (all Grade A unless noted):**
+  - Emerald Tablets forensic research (~15KB) — 3-pass DeepSeek, source separation (Tabula Smaragdina / Corpus Hermeticum / Doreal), "as above so below" truncation discovered
+  - Corpus Hermeticum forensic extraction (63KB, 909 lines) — all 17 treatises, 10 load-bearing principles, 7 contradictions, 24 practices, silence doctrine
+  - Nag Hammadi Hermetic forensic extraction (43KB, 656 lines) — 8-stage ritual initiation, vowel chant (earliest Western mantra), divinization in the body
+  - Gilgamesh forensic extraction (71KB, 687 lines) — 12 tablets, convergence 8 STRONG / 4 PARTIAL (highest pre-Hermetic), bread clock, anti-flood narrative
+  - Gilgamesh tomb / Looking Glass / Iraq Museum layer separation (Grade B+) — VERIFIED/CLAIMED/SPECULATION, tomb never excavated, synthesis retroactive (2017+)
+- **Methods named and filed:**
+  - The Convergence Detector (06_Methods/) — corpus ingestion → CONFIRMED / EXTENDED / CONTRADICTED
+  - Ancient Corpus Pipeline (06_Methods/) — 10 candidate corpuses ranked, Tier 1: Stoics, Tao Te Ching, Yoga Sutras, Buddhist Abhidharma
+  - The Teacher Voice (06_Methods/) — missing layer between knowledge and learning, multi-format output
+  - The Live Thread (06_Methods/) — real learning = pulling then following live threads
+  - The Three Tests (06_Methods/) — universal diagnostic: Chant (signal), Bread (truth), Walls (direction)
+- **The Antidote** (02_Refined_Gold/cathedral/) — 5 corruption layers, controlling force from primary sources, 3 counter-mechanisms
+- **10-Blocks Live Thread** (06_Basic_Reflex_Syllabus/) — full Live Thread path through all 10 blocks, Block 6 = love-point
+- DeepSeek autonomous vault writing worked on 3/5 passes (wrote directly to filesystem). Path issue: used ~/Cathedral/vault/ instead of ~/cathedral-vault/ — files needed mv. Monitor future DeepSeek vault writes.
+
+### Standing Instructions Added (session 2026-06-05 s2)
+- **SI-33** — Every corpus ingestion produces a convergence map as primary output (CONFIRMED / EXTENDED / CONTRADICTED)
+- **SI-34** — Audit every teaching product: "is the thread live or are we pushing?" (Live Thread method)
+- **SI-35** — Every build auditable against The Three Tests (Chant/Bread/Walls)
+- **SI-36** — Students experience QUESTIONS, not block labels. Labels are internal only.
+- **SI-37** — Source separation for Hermetic tradition: Tabula Smaragdina (8th-9th c. Arabic) vs Corpus Hermeticum (2nd-3rd c. Greek) vs Doreal (1930s, REFUTED). Never conflate.
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
