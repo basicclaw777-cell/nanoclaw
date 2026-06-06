@@ -1816,6 +1816,12 @@ the-timekeeper to go offline. Don't repeat it.
 - LEFT for Paul's call: illustrator.js:56 (CSOB burgundy), Maya wardrobe "burgundy hoodie" (reed-characters.json).
 - Lesson: fix the generator, not just the doc — purging the registry doesn't stop illustrator.js injecting burgundy.
 
+## BR Onboarding + The Three Engines + 10-Block Gates (2026-06-07)
+- 10-block GATES WIRED: block-config.json now has `gate` (pass-condition) + `engine` per block (insert-only, consumers untouched, JSON validated, _updated→2026-06-07). Engine map: 1 Body+Mind · 2-4 Body · 5 Emotion (the 4→5 wall) · 6 Mind+Body · 7 Emotion+Body · 8 Emotion · 9 Mind · 10 All three. Dashboard/10-blocks read block.gate + block.engine. Gates = Paul's drafts to validate (file authority: Paul changes it, code obeys).
+- The Three Engines (BR IP, from Paul's captured thought): Body (machine) / Mind (OS) / Emotion (energy), one currency = ENERGY (organize·cultivate·protect). Emotion triad = Composure·Courage·Reset. Mind engine = IntegrityOS vs OmissionOS; emotion engine = the Fear Gate. Vault: 02_Refined_Gold/cathedral/the-three-engines.md + 06_Basic_Reflex_Syllabus/principles-the-three-engines.md.
+- Onboarding dashboard: Gemini build prompt (mobile, one-page, 3-engine method zone, one hero CTA, quieter nav). Diagrams (Excalidraw, never image-models): ~/basic-reflex/visuals/three-engines.excalidraw + three-engines-states.excalidraw.
+- Reed audit 2026-06-07: NOT generating. Higgsfield balance 0.58cr (drained, all 64cr spent 06-02), Gemini lab dead since 06-03. Autonomous loops paused (not in PM2). HELD by Paul — restart = deliberate top-up + un-pause, not automatic.
+
 ## Agent Pipeline System — Multi-Agent Review Chains (built 2026-05-27)
 - Runner: ~/Cathedral/agents/pipeline-runner.js (CJS)
 - Token logger: ~/Cathedral/agents/token-logger.js (JSONL at token-spend-log.jsonl)
