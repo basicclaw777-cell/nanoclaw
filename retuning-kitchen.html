@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Retuning Kitchen</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafaf7; color: #1a1a1a; }
+
+.header {
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c2e 100%);
+  color: white; padding: 32px 24px; text-align: center;
+}
+.header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.header p { opacity: 0.85; font-size: 14px; max-width: 600px; margin: 0 auto; }
+
+.back-btn {
+  position: absolute; top: 16px; left: 16px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+  color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer;
+  font-size: 13px; text-decoration: none;
+}
+.back-btn:hover { background: rgba(255,255,255,0.25); }
+
+.tabs {
+  display: flex; gap: 0; border-bottom: 2px solid #e5e5e0;
+  background: white; overflow-x: auto; position: sticky; top: 0; z-index: 10;
+}
+.tab {
+  padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: 600;
+  color: #666; border-bottom: 3px solid transparent; white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab:hover { color: #2d5016; }
+.tab.active { color: #2d5016; border-bottom-color: #4a7c2e; }
+
+.content { max-width: 900px; margin: 0 auto; padding: 24px; }
+.section { display: none; }
+.section.active { display: block; }
+
+.card {
+  background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  border: 1px solid #e5e5e0; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.card h3 { font-size: 16px; margin-bottom: 8px; color: #2d5016; }
+.card p { font-size: 14px; line-height: 1.6; color: #444; }
+
+.freq-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 600; margin: 2px;
+}
+.freq-vagus { background: #e8f5e9; color: #2e7d32; }
+.freq-gut { background: #fff3e0; color: #e65100; }
+.freq-fascia { background: #e3f2fd; color: #1565c0; }
+.freq-brain { background: #f3e5f5; color: #7b1fa2; }
+.freq-bone { background: #efebe9; color: #4e342e; }
+.freq-heart { background: #fce4ec; color: #c62828; }
+.freq-detune { background: #ffebee; color: #b71c1c; }
+
+.recipe {
+  background: #f9f9f5; border-left: 4px solid #4a7c2e;
+  padding: 16px; margin: 12px 0; border-radius: 0 8px 8px 0;
+}
+.recipe h4 { font-size: 14px; margin-bottom: 6px; }
+.recipe ul { padding-left: 20px; font-size: 13px; line-height: 1.8; }
+
+.ancient-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 10px; font-weight: 700; background: #fff8e1; color: #f57f17;
+  margin-left: 6px;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+th { text-align: left; padding: 8px 12px; background: #f5f5f0; border-bottom: 2px solid #ddd; font-weight: 600; }
+td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+tr:hover td { background: #fafaf5; }
+
+.search-box {
+  width: 100%; padding: 10px 16px; border: 1px solid #ddd; border-radius: 8px;
+  font-size: 14px; margin-bottom: 16px; background: white;
+}
+
+.filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-btn {
+  padding: 6px 14px; border-radius: 16px; border: 1px solid #ddd;
+  background: white; cursor: pointer; font-size: 12px; font-weight: 500;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: #4a7c2e; color: #2d5016; }
+.filter-btn.active { background: #2d5016; color: white; border-color: #2d5016; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+.mushroom-card {
+  background: white; border-radius: 10px; padding: 16px;
+  border: 1px solid #e5e5e0; cursor: pointer; transition: all 0.2s;
+}
+.mushroom-card:hover { border-color: #4a7c2e; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.mushroom-card h4 { font-size: 15px; margin-bottom: 4px; }
+.mushroom-card .latin { font-size: 12px; color: #888; font-style: italic; margin-bottom: 8px; }
+.mushroom-card .desc { font-size: 13px; color: #555; line-height: 1.5; }
+
+.expand { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee; font-size: 13px; }
+.mushroom-card.open .expand { display: block; }
+</style>
+</head>
+<body>
+
+<div class="header" style="position:relative;">
+  <a href="/environments/lobby" class="back-btn">Back to Lobby</a>
+  <h1>The Retuning Kitchen</h1>
+  <p>Feed the antenna. Close the loops. Retune the local cavity. Ancient + modern, grounded in frequency science.</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">Overview</div>
+  <div class="tab" onclick="showTab('foods')">Retuning Foods</div>
+  <div class="tab" onclick="showTab('mushrooms')">Mushrooms</div>
+  <div class="tab" onclick="showTab('herbs')">Herbs + Spices</div>
+  <div class="tab" onclick="showTab('ancient')">Ancient Pharmacopoeia</div>
+  <div class="tab" onclick="showTab('jammers')">Frequency Jammers</div>
+  <div class="tab" onclick="showTab('recipes')">Easy Recipes</div>
+  <div class="tab" onclick="showTab('protocol')">Daily Protocol</div>
+</div>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+<div class="section active" id="overview">
+  <div class="card">
+    <h3>The Premise</h3>
+    <p>The body is a resonant cavity. It generates frequency through piezoelectric tissue (fascia, bone), neural conduction, chemical oscillation (gut), and electromagnetic fields (heart, brain). Each system requires specific nutrients to function. The modern diet — specifically the food pyramid — depletes exactly those nutrients.</p>
+    <p style="margin-top:12px;">This is not a diet plan. It's a frequency maintenance manual.</p>
+  </div>
+
+  <div class="card">
+    <h3>The Body's Frequency Systems</h3>
+    <table>
+      <tr><th>System</th><th>Frequency</th><th>Key Nutrients</th><th>Detuned By</th></tr>
+      <tr><td>Brain</td><td>7.83 Hz (Schumann)</td><td>DHA, magnesium, B vitamins</td><td>Seed oils, sugar, blue light</td></tr>
+      <tr><td>Heart</td><td>1.0-1.5 Hz</td><td>CoQ10, magnesium, potassium</td><td>Chronic stress, stimulants</td></tr>
+      <tr><td>Vagus nerve</td><td>Carrier signal</td><td>Zinc, B12, choline</td><td>Phytates (grains), inflammation</td></tr>
+      <tr><td>Breath</td><td>0.1 Hz optimal</td><td>Iron (hemoglobin), magnesium</td><td>Shallow breathing, sedentary</td></tr>
+      <tr><td>Fascia</td><td>Piezoelectric</td><td>Collagen, vitamin C, glycine</td><td>Muscle-meat-only diet, sedentary</td></tr>
+      <tr><td>Gut</td><td>Serotonin (90%)</td><td>Probiotics, fiber, zinc</td><td>Processed food, antibiotics</td></tr>
+      <tr><td>Bones</td><td>Piezoelectric matrix</td><td>K2, D3, calcium, magnesium</td><td>Low-fat diet removes K2 sources</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>The Extraction Pattern in Food</h3>
+    <table>
+      <tr><th>Ancestral (Closed Loop)</th><th>Industrial (Open Loop)</th></tr>
+      <tr><td>Eat fat + protein = satisfied 4-6 hours</td><td>Eat grains + sugar = crash in 2 hours, buy more</td></tr>
+      <tr><td>Organ meats = complete nutrition</td><td>Muscle meat only + supplement subscription</td></tr>
+      <tr><td>Fermented foods = gut ecosystem</td><td>Pasteurized everything + probiotic market</td></tr>
+      <tr><td>Local seasonal food</td><td>Global supply chain dependency</td></tr>
+      <tr><td>Animal fat (stable)</td><td>Seed oils (oxidize, inflame, crave more)</td></tr>
+    </table>
+    <p style="margin-top:12px; font-size:13px; color:#888;">The hungry ghost (preta): enormous stomach, tiny throat. Eats endlessly, never satisfied. The food pyramid manufactures this biochemically.</p>
+  </div>
+</div>
+
+<!-- RETUNING FOODS -->
+<div class="section" id="foods">
+  <input class="search-box" type="text" placeholder="Search foods..." oninput="filterFoods(this.value)">
+  <div class="filter-row">
+    <div class="filter-btn active" onclick="filterBySystem(this, 'all')">All</div>
+    <div class="filter-btn" onclick="filterBySystem(this, 'vagus')">Vagus</div>
+    <div class="filter-btn" onclick="filterBySystem(this, 'gut')">Gut</div>
+    <div class="filter-btn" onclick="filterBySystem(this, 'fascia')">Fascia</div>
+    <div class="filter-btn" onclick="filterBySystem(this, 'brain')">Brain</div>
+    <div class="filter-btn" onclick="filterBySystem(this, 'bone')">Bone</div>
+    <div class="filter-btn" onclick="filterBySystem(this, 'heart')">Heart</div>
+  </div>
+  <div id="foods-list"></div>
+</div>
+
+<!-- MUSHROOMS -->
+<div class="section" id="mushrooms">
+  <div class="card">
+    <h3>Medicinal Mushrooms — The Forgotten Frequency Medicine</h3>
+    <p>Fungi are the oldest pharmacological agents on Earth. They predate plants by ~700 million years. Many contain beta-glucans (immune modulation), adaptogens (stress response), and neuroactive compounds (brain frequency). The Sumerian tablets reference fungal preparations. Traditional Chinese Medicine documents 200+ species.</p>
+  </div>
+  <div class="grid" id="mushroom-grid"></div>
+</div>
+
+<!-- HERBS -->
+<div class="section" id="herbs">
+  <div class="card">
+    <h3>Herbs + Spices as Frequency Medicine</h3>
+    <p>Shared across Sumerian (761 plants), Voynich (~96 stems), Ayurveda, TCM, and medieval European herbals. The preparation methods are 89% identical across 4,000 years: crush, mix, drink, bind, anoint, fumigate, wash, boil.</p>
+  </div>
+  <div class="grid" id="herbs-grid"></div>
+</div>
+
+<!-- ANCIENT PHARMACOPOEIA -->
+<div class="section" id="ancient">
+  <div class="card">
+    <h3>Ancient Corpus — Extracted Pharmacological Knowledge</h3>
+    <p>From the Cathedral's ancient corpus pipeline: Sumerian medical tablets (271 tablets, 761 plants), Voynich manuscript (~96 plant stems), Corpus Hermeticum, Nag Hammadi, Gilgamesh. Key finding: 44% of Sumerian medical tablets combine plants + acoustic chanting — medicine was pharmacological AND acoustic, one discipline.</p>
+  </div>
+
+  <div class="card">
+    <h3>Sumerian Top Plants (by frequency in medical tablets)</h3>
+    <table>
+      <tr><th>Plant</th><th>Tablets</th><th>Modern Equivalent</th><th>Known Properties</th></tr>
+      <tr><td>Cedar</td><td>17</td><td>Cedrus (essential oil)</td><td>Antimicrobial, anti-inflammatory, respiratory</td></tr>
+      <tr><td>White Plant</td><td>13</td><td>Unidentified (possibly marshmallow root)</td><td>Unknown — research target</td></tr>
+      <tr><td>Tamarisk</td><td>12</td><td>Tamarix (salt cedar)</td><td>Astringent, anti-diarrheal, wound healing</td></tr>
+      <tr><td>Reed</td><td>10</td><td>Phragmites / Arundo</td><td>Traditional fever remedy, diuretic</td></tr>
+      <tr><td>Aktam</td><td>8</td><td>Unidentified</td><td>Unknown — research target</td></tr>
+      <tr><td>Juniper</td><td>8</td><td>Juniperus communis</td><td>Antimicrobial, digestive, kidney support</td></tr>
+      <tr><td>Date palm</td><td>7</td><td>Phoenix dactylifera</td><td>Mineral-dense (potassium, magnesium), energy</td></tr>
+      <tr><td>Poplar</td><td>5</td><td>Populus (contains salicin)</td><td>Precursor to aspirin — anti-inflammatory</td></tr>
+      <tr><td>Cypress</td><td>4</td><td>Cupressus sempervirens</td><td>Circulatory, respiratory, antimicrobial</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Voynich Preparation Methods (decoded suffix system)</h3>
+    <table>
+      <tr><th>Method</th><th>Voynich</th><th>Sumerian</th><th>Modern</th></tr>
+      <tr><td>Crush</td><td>Yes</td><td>33 tablets</td><td>Mortar + pestle, blender</td></tr>
+      <tr><td>Mix</td><td>Yes</td><td>15 tablets</td><td>Combine with carrier (honey, oil, water)</td></tr>
+      <tr><td>Drink</td><td>Yes</td><td>15 tablets</td><td>Tea, decoction, tincture</td></tr>
+      <tr><td>Bind</td><td>Yes</td><td>11 tablets</td><td>Poultice, compress</td></tr>
+      <tr><td>Anoint</td><td>Yes</td><td>8 tablets</td><td>Topical oil application</td></tr>
+      <tr><td>Fumigate</td><td>Yes</td><td>6 tablets</td><td>Smoke, incense, steam</td></tr>
+      <tr><td>Wash</td><td>Yes</td><td>5 tablets</td><td>Bath, rinse</td></tr>
+      <tr><td>Boil</td><td>Yes</td><td>4 tablets</td><td>Decoction (simmer 20+ min)</td></tr>
+    </table>
+    <p style="margin-top:12px; font-size:13px; color:#888;">89% overlap across 4,000 years. The preparation methods are universal.</p>
+  </div>
+
+  <div class="card">
+    <h3>The Integrated System</h3>
+    <p>Ancient medicine was not "primitive." It was integrated:</p>
+    <ul style="padding-left:20px; font-size:14px; line-height:1.8;">
+      <li><strong>Architecture</strong> (temple at 60-120 Hz) + <strong>Pharmacology</strong> (plants) + <strong>Acoustics</strong> (chanting/vowel sequences) = one discipline</li>
+      <li>44% of Sumerian medical tablets combine physical treatment with incantation</li>
+      <li>The Nag Hammadi vowel chant (A O EE O EEE...) is the earliest documented Western mantra — used in the same temples</li>
+      <li>Ghost sickness / demon seizure = consciousness-altered states treated medically, not spiritually</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Gilgamesh — The Plant of Rejuvenation</h3>
+    <p>"Its thorn will prick like a rose, but it will restore a man's youth." Found at the bottom of the Apsu (primordial sweet-water ocean). Stolen by the serpent, who sheds its skin — renewal is already spoken for. The plant is unidentified. Research target.</p>
+    <p style="margin-top:8px; font-size:13px; color:#888;">The Bread Clock from the same text: seven loaves in stages of decay = physical evidence defeating self-deception. The first epistemological tool in literature.</p>
+  </div>
+</div>
+
+<!-- FREQUENCY JAMMERS -->
+<div class="section" id="jammers">
+  <div class="card" style="border-left: 4px solid #c62828;">
+    <h3 style="color:#c62828;">Frequency Jammers — What to Eliminate</h3>
+    <p>Each one degrades a specific frequency-generating system. Not "unhealthy food" — targeted detuning agents.</p>
+  </div>
+  <div id="jammers-list"></div>
+</div>
+
+<!-- EASY RECIPES -->
+<div class="section" id="recipes">
+  <div class="card">
+    <h3>Principles</h3>
+    <p>Easy to make. Cheap. Available in Hong Kong. Feed the antenna, don't jam it. Each recipe tags which frequency system it supports.</p>
+  </div>
+  <div id="recipes-list"></div>
+</div>
+
+<!-- DAILY PROTOCOL -->
+<div class="section" id="protocol">
+  <div class="card">
+    <h3>The Retuning Day</h3>
+    <p>Frequency maintenance is not a diet — it's a daily protocol combining food, movement, and breathing. Each element retunes a specific system.</p>
+  </div>
+
+  <div class="card">
+    <h3>Morning (Wake — Before Food)</h3>
+    <table>
+      <tr><th>Action</th><th>System</th><th>Time</th></tr>
+      <tr><td>3 cycles vortex breathing (4-in, 4-hold, 6-out, 4-hold)</td><td><span class="freq-tag freq-vagus">Vagus</span> <span class="freq-tag freq-brain">Brain</span> <span class="freq-tag freq-heart">Heart</span></td><td>2 min</td></tr>
+      <tr><td>Glass of water with pinch of sea salt + squeeze of lemon</td><td><span class="freq-tag freq-gut">Gut</span></td><td>30 sec</td></tr>
+      <tr><td>Cold water face splash or cold shower finish (30s)</td><td><span class="freq-tag freq-vagus">Vagus</span></td><td>30 sec</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>First Meal (Break-fast)</h3>
+    <table>
+      <tr><th>Option</th><th>Systems Fed</th></tr>
+      <tr><td>3 eggs scrambled in butter + sauerkraut</td><td><span class="freq-tag freq-brain">Brain</span> <span class="freq-tag freq-gut">Gut</span></td></tr>
+      <tr><td>Bone broth + leftover meat + greens</td><td><span class="freq-tag freq-fascia">Fascia</span> <span class="freq-tag freq-bone">Bone</span> <span class="freq-tag freq-gut">Gut</span></td></tr>
+      <tr><td>Sardines on sourdough + avocado</td><td><span class="freq-tag freq-brain">Brain</span> <span class="freq-tag freq-heart">Heart</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Midday</h3>
+    <table>
+      <tr><th>Action</th><th>System</th></tr>
+      <tr><td>Movement (boxing, walk, any full-body)</td><td><span class="freq-tag freq-fascia">Fascia</span> <span class="freq-tag freq-heart">Heart</span></td></tr>
+      <tr><td>Main meal: protein + fat + vegetables (no seed oils)</td><td>All systems</td></tr>
+      <tr><td>Mushroom tea or lion's mane coffee</td><td><span class="freq-tag freq-brain">Brain</span> <span class="freq-tag freq-vagus">Vagus</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Evening</h3>
+    <table>
+      <tr><th>Action</th><th>System</th></tr>
+      <tr><td>Blue light filter / dim lights after sunset</td><td><span class="freq-tag freq-brain">Brain</span></td></tr>
+      <tr><td>Light meal if needed (soup, eggs, fermented)</td><td><span class="freq-tag freq-gut">Gut</span></td></tr>
+      <tr><td>432 Hz or Schumann tones (cavity-tones)</td><td><span class="freq-tag freq-brain">Brain</span> <span class="freq-tag freq-heart">Heart</span></td></tr>
+      <tr><td>3 cycles vortex breathing before sleep</td><td><span class="freq-tag freq-vagus">Vagus</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Weekly</h3>
+    <table>
+      <tr><th>Action</th><th>System</th></tr>
+      <tr><td>Organ meat meal (liver pate, heart, kidney)</td><td><span class="freq-tag freq-bone">Bone</span> <span class="freq-tag freq-brain">Brain</span></td></tr>
+      <tr><td>Batch bone broth (slow cooker 24h)</td><td><span class="freq-tag freq-fascia">Fascia</span> <span class="freq-tag freq-gut">Gut</span></td></tr>
+      <tr><td>Shellfish meal (oysters, mussels, prawns)</td><td><span class="freq-tag freq-vagus">Vagus</span> <span class="freq-tag freq-brain">Brain</span></td></tr>
+      <tr><td>Fermentation check (sauerkraut jar, kefir)</td><td><span class="freq-tag freq-gut">Gut</span></td></tr>
+    </table>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// Data
+const FOODS = [
+  { name: 'Liver (chicken/beef)', systems: ['brain','bone','heart'], tags: ['freq-brain','freq-bone','freq-heart'], desc: 'Most nutrient-dense food. Retinol (A), B12, folate, iron, copper, CoQ10. Weekly.', ancient: false, easy: 'Pan-fry with butter+onion, 3 min each side. Or blend into meatballs.' },
+  { name: 'Bone Broth', systems: ['fascia','gut','bone'], tags: ['freq-fascia','freq-gut','freq-bone'], desc: 'Collagen, glycine, minerals. Repairs piezoelectric fascia matrix. Heals gut lining.', ancient: true, easy: 'Bones + water + splash vinegar. Slow cooker 24h. Salt at end.' },
+  { name: 'Eggs (whole, pastured)', systems: ['brain','heart'], tags: ['freq-brain','freq-heart'], desc: 'Choline (brain), complete protein, fat-soluble vitamins. Cheapest Grade A nutrition.', ancient: false, easy: 'Scramble in butter. 3 min.' },
+  { name: 'Sardines', systems: ['brain','heart','bone'], tags: ['freq-brain','freq-heart','freq-bone'], desc: 'DHA (neural membranes), calcium (bones eaten whole), omega-3. Low mercury.', ancient: false, easy: 'Tin + lemon + sourdough toast. 2 min.' },
+  { name: 'Oysters', systems: ['vagus','brain'], tags: ['freq-vagus','freq-brain'], desc: 'Highest zinc food (vagus nerve). B12, copper, selenium. 6 oysters = daily zinc.', ancient: true, easy: 'Raw with lemon. Or tinned smoked oysters on crackers.' },
+  { name: 'Sauerkraut (raw/unpasteurized)', systems: ['gut'], tags: ['freq-gut'], desc: 'Lactobacillus probiotics, vitamin C, fiber. Serotonin factory support.', ancient: true, easy: 'Cabbage + salt + jar. Wait 7 days. 2 tbsp per meal.' },
+  { name: 'Kefir', systems: ['gut','bone'], tags: ['freq-gut','freq-bone'], desc: '30+ probiotic strains (vs yogurt 2-3). Calcium, B12, K2. Fermented = pre-digested.', ancient: true, easy: 'Buy kefir grains once, add milk daily. Self-perpetuating.' },
+  { name: 'Butter (grass-fed)', systems: ['brain','bone'], tags: ['freq-brain','freq-bone'], desc: 'Vitamin K2 (bone mineralization), butyrate (gut fuel), CLA. Replaces seed oils.', ancient: false, easy: 'Cook everything in butter instead of seed oil.' },
+  { name: 'Sweet Potato', systems: ['gut','brain'], tags: ['freq-gut','freq-brain'], desc: 'Beta-carotene (vitamin A precursor), slow carb, potassium, fiber. Seasonal.', ancient: false, easy: 'Bake whole 45 min at 200C. Split, add butter.' },
+  { name: 'Dark Leafy Greens', systems: ['vagus','heart','bone'], tags: ['freq-vagus','freq-heart','freq-bone'], desc: 'Magnesium (300+ reactions), folate, calcium, K1. Foundation mineral.', ancient: false, easy: 'Wilt spinach/bok choy in pan with garlic. 2 min.' },
+  { name: 'Salmon (wild)', systems: ['brain','heart'], tags: ['freq-brain','freq-heart'], desc: 'DHA, astaxanthin (antioxidant), vitamin D. Neural membrane integrity.', ancient: false, easy: 'Pan-sear skin-down 4 min, flip 2 min. Salt + lemon.' },
+  { name: 'Turmeric', systems: ['gut','brain'], tags: ['freq-gut','freq-brain'], desc: 'Curcumin: anti-inflammatory, crosses blood-brain barrier. Always with black pepper (piperine 2000% absorption).', ancient: true, easy: 'Golden milk: turmeric + black pepper + coconut milk + honey. Warm.' },
+  { name: 'Ginger', systems: ['vagus','gut'], tags: ['freq-vagus','freq-gut'], desc: 'Vagus nerve stimulant, anti-nausea, digestive enzyme activation. Documented in Sumerian texts.', ancient: true, easy: 'Grate fresh into hot water. Or slice thin in stir-fry.' },
+  { name: 'Dates', systems: ['heart','brain'], tags: ['freq-heart','freq-brain'], desc: 'Potassium, magnesium, natural sugar with fiber (no crash). Date palm = top 7 Sumerian plant.', ancient: true, easy: 'Eat 2-3 as snack. Or stuff with almond butter.' },
+  { name: 'Seaweed / Kelp', systems: ['vagus','brain'], tags: ['freq-vagus','freq-brain'], desc: 'Iodine (thyroid oscillator). Replaced by bromide in bread since 1960s. Critical.', ancient: false, easy: 'Nori sheets as snack. Or miso soup with wakame.' },
+  { name: 'Garlic', systems: ['gut','heart'], tags: ['freq-gut','freq-heart'], desc: 'Allicin: antimicrobial, prebiotic, cardiovascular. Let sit 10 min after crushing (activates allicin).', ancient: true, easy: 'Crush, wait 10 min, then cook. In everything.' },
+  { name: 'Raw Honey', systems: ['gut','brain'], tags: ['freq-gut','freq-brain'], desc: 'Prebiotic (feeds good bacteria), antimicrobial, enzymes. NOT heated/pasteurized.', ancient: true, easy: 'Spoonful daily. Or in tea below 40C to preserve enzymes.' },
+  { name: 'Avocado', systems: ['brain','heart'], tags: ['freq-brain','freq-heart'], desc: 'Monounsaturated fat, potassium (more than banana), folate, fiber.', ancient: false, easy: 'Half with salt + olive oil + lemon. 30 sec.' },
+  { name: 'Berries (seasonal)', systems: ['brain'], tags: ['freq-brain'], desc: 'Anthocyanins cross blood-brain barrier. Blueberries, blackberries, elderberries. Antioxidant.', ancient: false, easy: 'Handful daily. Frozen = same nutrition, cheaper.' },
+  { name: 'Coconut Oil', systems: ['brain','gut'], tags: ['freq-brain','freq-gut'], desc: 'MCTs (medium chain triglycerides): brain fuel, antimicrobial (lauric acid). Stable at high heat.', ancient: false, easy: 'Cook with instead of seed oil. 1 tbsp in coffee.' },
+];
+
+const MUSHROOMS = [
+  { name: "Lion's Mane", latin: 'Hericium erinaceus', systems: ['brain','vagus'], tags: ['freq-brain','freq-vagus'],
+    desc: 'NGF (nerve growth factor) stimulation. Repairs neural pathways. The brain-frequency mushroom.',
+    detail: 'Contains hericenones and erinacines that cross blood-brain barrier and stimulate NGF production. Clinical studies show improvement in mild cognitive impairment. Traditional use in Chinese medicine for stomach and brain.',
+    use: 'Powder in coffee/tea (1-2g daily). Or sauteed fresh in butter. Available dried in HK at Wing On or herbal shops.',
+    freq: 'Brain oscillation support. Neural repair = better signal transmission = cleaner frequency generation.' },
+  { name: 'Reishi', latin: 'Ganoderma lucidum (Ling Zhi)', systems: ['vagus','heart','gut'], tags: ['freq-vagus','freq-heart','freq-gut'],
+    desc: 'The "mushroom of immortality." Adaptogen. Vagus nerve + HRV + sleep quality.',
+    detail: 'Triterpenes (ganoderic acids): anti-inflammatory, liver support. Beta-glucans: immune modulation. 2000+ year documented use in TCM. Calming effect on nervous system.',
+    use: 'Tea (slice dried, simmer 30 min). Or powder in hot water before bed. Bitter — add honey.',
+    freq: 'Vagus tone improvement. HRV coherence. Parasympathetic activation = cavity coupling.' },
+  { name: 'Chaga', latin: 'Inonotus obliquus', systems: ['gut','brain'], tags: ['freq-gut','freq-brain'],
+    desc: 'Highest ORAC score (antioxidant) of any food. Gut support, immune modulation.',
+    detail: 'Grows on birch trees. Contains betulinic acid (from birch bark), melanin, SOD (superoxide dismutase). Traditional Siberian/Scandinavian use. Anti-inflammatory.',
+    use: 'Chunks simmered in water 20 min (reuse chunks 3-4 times). Or powder in coffee.',
+    freq: 'Gut ecosystem support. Melanin content theorized to interact with electromagnetic fields.' },
+  { name: 'Cordyceps', latin: 'Cordyceps militaris', systems: ['heart','fascia'], tags: ['freq-heart','freq-fascia'],
+    desc: 'Oxygen utilization + ATP production. The athlete mushroom. Heart + endurance.',
+    detail: 'Increases cellular ATP production. Improves oxygen utilization (VO2 max studies). Traditional Tibetan/Chinese medicine for kidney and lung. Cordycepin = adenosine analog.',
+    use: 'Powder in pre-workout smoothie (1-2g). Or capsules. Fresh is rare — cultivated militaris works.',
+    freq: 'Heart rhythm support. ATP = cellular energy = stronger piezoelectric signal from fascia during movement.' },
+  { name: 'Turkey Tail', latin: 'Trametes versicolor (Yun Zhi)', systems: ['gut'], tags: ['freq-gut'],
+    desc: 'PSK/PSP polysaccharides. Strongest evidence for gut microbiome modulation.',
+    detail: 'FDA-approved as adjunct cancer therapy in Japan (PSK/Krestin). Prebiotic effect on beneficial bacteria. Most researched medicinal mushroom. Available everywhere in HK.',
+    use: 'Tea (dried slices, simmer 20 min). Or powder. Very common in HK herbal shops as Yun Zhi.',
+    freq: 'Gut microbiome = serotonin factory. 90% of serotonin made in gut. Feed the factory.' },
+  { name: 'Maitake', latin: 'Grifola frondosa', systems: ['gut','heart'], tags: ['freq-gut','freq-heart'],
+    desc: 'Blood sugar regulation. D-fraction immune compound. The metabolic mushroom.',
+    detail: 'MD-fraction and D-fraction polysaccharides. Blood sugar regulation (insulin sensitivity). Adaptogenic. Japanese name = "dancing mushroom." Good culinary mushroom.',
+    use: 'Saute fresh with garlic + soy sauce. Or dried powder in soup.',
+    freq: 'Metabolic oscillator stability. Insulin regulation = steady energy = no crash-crave open loop.' },
+  { name: 'Shiitake', latin: 'Lentinula edodes', systems: ['bone','gut'], tags: ['freq-bone','freq-gut'],
+    desc: 'Only plant source of vitamin D (sun-dried). Lentinan immune compound. Available everywhere.',
+    detail: 'Sun-dried shiitake = vitamin D2 (expose dried shiitake to sunlight 30 min, D content jumps 100x). Lentinan: beta-glucan, immune modulation. Eritadenine: cholesterol metabolism.',
+    use: 'Cook fresh in anything. Or dry, sun-expose, then use in soup. Cheapest medicinal mushroom.',
+    freq: 'Vitamin D for bone mineralization (piezoelectric matrix). Immune modulation for gut ecosystem.' },
+  { name: 'Tremella', latin: 'Tremella fuciformis (Snow Fungus)', systems: ['fascia','gut'], tags: ['freq-fascia','freq-gut'],
+    desc: 'Hyaluronic acid precursor. Fascia hydration. The connective tissue mushroom.',
+    detail: 'Stimulates hyaluronic acid production. Traditional Chinese beauty + longevity ingredient. Polysaccharides similar to hyaluronic acid structure. Gut-healing mucilage.',
+    use: 'Sweet soup: soak dried tremella, simmer with dates + goji + rock sugar. Classic HK dessert.',
+    freq: 'Fascia hydration = better piezoelectric signal transmission. Connective tissue is the antenna.' },
+];
+
+const HERBS = [
+  { name: 'Turmeric + Black Pepper', systems: ['gut','brain'], tags: ['freq-gut','freq-brain'], desc: 'Curcumin: anti-inflammatory, neuroprotective. Piperine increases absorption 2000%. Sumerian documented.', use: 'Golden milk: warm coconut milk + 1 tsp turmeric + pinch black pepper + honey.' },
+  { name: 'Ginger', systems: ['vagus','gut'], tags: ['freq-vagus','freq-gut'], desc: 'Vagus nerve stimulant, digestive enzyme activator. Sumerian medical plant.', use: 'Fresh grated in hot water. Or sliced in stir-fry.' },
+  { name: 'Rosemary', systems: ['brain'], tags: ['freq-brain'], desc: 'Carnosic acid: neuroprotective, memory enhancement. Aroma alone improves memory (clinical studies).', use: 'Fresh sprig in cooking. Or essential oil diffuser while working.' },
+  { name: 'Ashwagandha', systems: ['vagus','heart'], tags: ['freq-vagus','freq-heart'], desc: 'Adaptogen. Cortisol reduction (clinical studies: -30%). HRV improvement. Thyroid support.', use: 'Powder in warm milk before bed (1/2 tsp). Or capsules.' },
+  { name: 'Holy Basil (Tulsi)', systems: ['brain','heart'], tags: ['freq-brain','freq-heart'], desc: 'Adaptogen. Reduces cortisol, improves HRV coherence. Sacred in Ayurveda — "The Incomparable One."', use: 'Tea: fresh or dried leaves, steep 5 min. Daily.' },
+  { name: 'Oregano', systems: ['gut'], tags: ['freq-gut'], desc: 'Carvacrol: strongest natural antimicrobial. Disrupts pathogenic biofilms. Oil of oregano = concentrated.', use: 'Fresh in cooking. Oil of oregano: 2 drops under tongue for acute gut issues (strong).' },
+  { name: 'Cinnamon (Ceylon)', systems: ['heart','gut'], tags: ['freq-heart','freq-gut'], desc: 'Blood sugar regulation, anti-inflammatory. CEYLON only (Cassia contains coumarin = liver toxic).', use: '1/2 tsp in coffee, oatmeal, or golden milk. Check label: Ceylon, not Cassia.' },
+  { name: 'Juniper Berries', systems: ['gut','vagus'], tags: ['freq-gut','freq-vagus'], desc: 'Antimicrobial, digestive, kidney support. Top 6 Sumerian medical plant. Voynich manuscript plant.', use: 'Crush 3-4 berries, steep in hot water 10 min. Or in cooking (pairs with meat).' },
+  { name: 'Thyme', systems: ['gut'], tags: ['freq-gut'], desc: 'Thymol: antimicrobial, expectorant. Traditional respiratory remedy across all Mediterranean traditions.', use: 'Fresh in cooking. Tea for respiratory issues: steep 10 min.' },
+  { name: 'Black Seed (Nigella sativa)', systems: ['gut','brain','heart'], tags: ['freq-gut','freq-brain','freq-heart'], desc: '"The remedy for everything except death" (Islamic medicine). Thymoquinone: anti-inflammatory, immune modulator, neuroprotective.', use: '1 tsp oil daily. Or seeds ground on food. Peppery, strong.' },
+  { name: 'Frankincense (Boswellia)', systems: ['brain','gut'], tags: ['freq-brain','freq-gut'], desc: 'Boswellic acids: anti-inflammatory (stronger than NSAIDs in some studies). Ancient temple incense — fumigation method from Sumerian tablets.', use: 'Resin: burn on charcoal (traditional fumigation). Supplement: Boswellia serrata capsules.' },
+  { name: 'Mugwort (Artemisia)', systems: ['brain'], tags: ['freq-brain'], desc: 'Traditional dream herb across cultures. Thujone: mild psychoactive. Used in moxibustion (TCM).', use: 'Tea before bed for vivid dreams. Or dried herb as pillow sachet. Available in HK herbal shops.' },
+];
+
+const JAMMERS = [
+  { name: 'Seed Oils (Soy, Canola, Corn, Sunflower)', system: 'All systems', tag: 'freq-detune', mechanism: 'Oxidize cell membranes (linoleic acid peroxidation). Disrupt omega 3:6 ratio (should be 1:1-3, modern diet is 1:20+). Cell membranes carry every signal in the body — oxidized membranes = degraded signal.', history: 'Introduced 1910s (Procter & Gamble Crisco). Promoted as "heart healthy" to replace animal fats. Single worst dietary change of 20th century.', replace: 'Butter, ghee, tallow, lard, olive oil, coconut oil, avocado oil.' },
+  { name: 'Refined Sugar', system: 'Gut, Brain, Heart', tag: 'freq-detune', mechanism: 'Insulin spike -> crash -> crave = open loop. Feeds pathogenic gut bacteria (candida). Glycation damages proteins. Crosses blood-brain barrier, disrupts dopamine.', history: '1967: Sugar Research Foundation paid Harvard to blame fat instead. Yudkin (who identified sugar) career destroyed.', replace: 'Raw honey, dates, whole fruit. The fiber in whole fruit prevents the spike.' },
+  { name: 'Processed Grains (wheat flour, white rice)', system: 'Vagus, Gut', tag: 'freq-detune', mechanism: 'Gluten/gliadin increases intestinal permeability ("leaky gut"). Phytic acid binds zinc + magnesium (vagus nerve nutrients). High glycemic = insulin chaos. Nutrient-poor calories.', history: 'Base of food pyramid (6-11 servings). Cheap, shelf-stable, profitable. Grain subsidies make it artificially cheap.', replace: 'Root vegetables (sweet potato, squash), sourdough (fermentation reduces phytates), rice (white, soaked — less phytic acid than brown).' },
+  { name: 'Pasteurized Dairy', system: 'Gut', tag: 'freq-detune', mechanism: 'Pasteurization destroys lactase (enzyme needed to digest lactose), beneficial bacteria, and vitamin content. "Lactose intolerance" is largely pasteurization intolerance — raw dairy contains its own digestive enzymes.', history: 'Mandatory pasteurization laws from 1920s+. Raw dairy sales restricted or banned in many jurisdictions.', replace: 'Raw dairy (where legal), kefir, hard aged cheese (fermentation pre-digests), ghee (pure butterfat, no lactose).' },
+  { name: 'Artificial Sweeteners', system: 'Gut, Brain', tag: 'freq-detune', mechanism: 'Disrupt gut microbiome (documented for sucralose, aspartame). Confuse insulin response (sweet taste without calories = metabolic confusion). Some evidence of neurotoxicity.', history: 'Marketed as "healthier" sugar replacement. Creates dependency on sweet taste without providing energy — the ultimate open loop.', replace: 'Raw honey, stevia leaf (whole, not processed extract), or nothing. Retrain palate away from constant sweetness.' },
+  { name: 'Tap Water (unfiltered)', system: 'Gut, Brain', tag: 'freq-detune', mechanism: 'Chlorine kills gut bacteria (same mechanism as pool water). Fluoride: thyroid disruption, pineal calcification (contested but documented). Heavy metals vary by location.', history: 'Fluoridation began 1945. Chlorination is necessary for sanitation but destroys microbiome on ingestion.', replace: 'Carbon filter (removes chlorine), reverse osmosis (removes fluoride + heavy metals), add minerals back (pinch of sea salt).' },
+];
+
+const RECIPES = [
+  { name: 'Golden Milk', time: '5 min', systems: ['gut','brain'], tags: ['freq-gut','freq-brain'],
+    ingredients: ['1 cup coconut milk (or any milk)', '1 tsp turmeric', 'Pinch black pepper', '1/2 tsp cinnamon (Ceylon)', '1 tsp raw honey', 'Optional: 1/2 tsp ashwagandha'],
+    method: 'Warm milk gently (don\'t boil). Whisk in turmeric, pepper, cinnamon. Remove from heat, stir in honey + ashwagandha. Drink before bed.',
+    why: 'Curcumin (anti-inflammatory) + piperine (2000% absorption) + ashwagandha (cortisol reduction) = evening vagus reset.' },
+  { name: 'Bone Broth (batch)', time: '5 min prep + 24h slow cook', systems: ['fascia','gut','bone'], tags: ['freq-fascia','freq-gut','freq-bone'],
+    ingredients: ['1-2 kg bones (chicken carcass, beef marrow, pork)', '2 tbsp apple cider vinegar', 'Water to cover', 'Salt, peppercorns at end'],
+    method: 'Bones + vinegar + water in slow cooker. Low for 24 hours. Strain. Salt to taste. Store in jars (fridge 5 days, freezer 3 months). Drink warm as is, or use as cooking liquid.',
+    why: 'Collagen -> glycine (fascia repair). Minerals extracted by vinegar: calcium, magnesium, phosphorus. Gut-healing gelatin.' },
+  { name: 'Sardine Toast', time: '3 min', systems: ['brain','heart','bone'], tags: ['freq-brain','freq-heart','freq-bone'],
+    ingredients: ['1 tin sardines in olive oil', '1 slice sourdough bread', '1/2 lemon', 'Salt, chili flakes'],
+    method: 'Toast bread. Open tin. Squeeze lemon over sardines. Put on toast. Salt + chili. Eat bones and all.',
+    why: 'DHA (neural membranes) + calcium (eat the bones) + omega-3 (heart) + minimal processing. 3-minute Grade A nutrition. Cheapest brain food.' },
+  { name: 'Mushroom Brain Coffee', time: '3 min', systems: ['brain','vagus'], tags: ['freq-brain','freq-vagus'],
+    ingredients: ['1 cup coffee', '1 tsp lion\'s mane powder', '1 tsp coconut oil or butter', 'Optional: 1/2 tsp reishi (evening version: skip coffee, use hot water)'],
+    method: 'Brew coffee. Blend or whisk in mushroom powder + fat (fat helps absorption). Optional: blend for frothy texture.',
+    why: 'Lion\'s mane NGF + caffeine = focused brain. Fat = sustained energy, no crash. Reishi version for evening = vagus tone before sleep.' },
+  { name: 'Liver Pate (Paul-friendly)', time: '15 min', systems: ['brain','bone','heart'], tags: ['freq-brain','freq-bone','freq-heart'],
+    ingredients: ['250g chicken livers', '2 tbsp butter', '1 small onion, diced', '2 cloves garlic', 'Salt, thyme, splash of brandy/wine (optional)'],
+    method: 'Saute onion in butter 3 min. Add garlic 1 min. Add livers, cook 5 min (pink inside OK). Add thyme, salt, optional splash. Blend smooth. Chill. Eat on sourdough or with crackers.',
+    why: 'Liver = most nutrient-dense food. Retinol A, B12, folate, iron, copper, CoQ10. Pate makes it palatable. One batch lasts a week.' },
+  { name: 'Quick Sauerkraut', time: '10 min + 7 days ferment', systems: ['gut'], tags: ['freq-gut'],
+    ingredients: ['1 medium cabbage', '1 tbsp sea salt', 'Optional: caraway seeds, juniper berries, garlic'],
+    method: 'Shred cabbage. Massage salt in until liquid releases (5 min). Pack tightly in jar, press down until liquid covers cabbage. Weight down. Lid loosely. Room temp 7 days. Taste daily after day 5. Refrigerate when tangy enough.',
+    why: 'Lactobacillus fermentation = probiotics. Vitamin C. Fiber for gut bacteria. Self-perpetuating — make once, always have. 2 tbsp per meal.' },
+  { name: 'HK Sweet Soup (Tremella + Dates)', time: '10 min prep + 1h simmer', systems: ['fascia','gut'], tags: ['freq-fascia','freq-gut'],
+    ingredients: ['1 dried tremella mushroom (snow fungus)', '6-8 red dates (jujubes)', '1 tbsp goji berries', 'Rock sugar to taste', 'Optional: lotus seeds, dried longan'],
+    method: 'Soak tremella 30 min, tear into pieces. Simmer all ingredients in water 1 hour. Add rock sugar at end. Serve warm or cold.',
+    why: 'Tremella = hyaluronic acid precursor (fascia hydration). Red dates = iron + B vitamins. Classic HK dessert that is actually frequency medicine. Available in any HK dried goods shop.' },
+  { name: 'Anti-Inflammatory Ginger Shot', time: '5 min', systems: ['vagus','gut'], tags: ['freq-vagus','freq-gut'],
+    ingredients: ['1 thumb-size piece fresh ginger', '1/2 lemon', '1 tsp raw honey', 'Pinch cayenne'],
+    method: 'Grate ginger, squeeze through cloth or fine strainer into small glass. Add lemon juice, honey, cayenne. Shoot it.',
+    why: 'Ginger = vagus nerve stimulant + digestive enzyme activator. Lemon = vitamin C. Cayenne = capsaicin (circulation). Morning kickstart.' },
+];
+
+// Render functions
+function renderFoods() {
+  const el = document.getElementById('foods-list');
+  el.innerHTML = FOODS.map(f => `
+    <div class="card food-card" data-systems="${f.systems.join(',')}" data-name="${f.name.toLowerCase()}">
+      <h3>${f.name} ${f.ancient ? '<span class="ancient-tag">ANCIENT</span>' : ''}</h3>
+      <div style="margin:6px 0">${f.tags.map(t => `<span class="freq-tag ${t}">${t.replace('freq-','')}</span>`).join(' ')}</div>
+      <p>${f.desc}</p>
+      <div class="recipe"><h4>Easy prep:</h4><p>${f.easy}</p></div>
+    </div>
+  `).join('');
+}
+
+function renderMushrooms() {
+  const el = document.getElementById('mushroom-grid');
+  el.innerHTML = MUSHROOMS.map(m => `
+    <div class="mushroom-card" onclick="this.classList.toggle('open')">
+      <h4>${m.name}</h4>
+      <div class="latin">${m.latin}</div>
+      <div style="margin:4px 0">${m.tags.map(t => `<span class="freq-tag ${t}">${t.replace('freq-','')}</span>`).join(' ')}</div>
+      <div class="desc">${m.desc}</div>
+      <div class="expand">
+        <p><strong>Detail:</strong> ${m.detail}</p>
+        <p style="margin-top:8px"><strong>How to use:</strong> ${m.use}</p>
+        <p style="margin-top:8px"><strong>Frequency role:</strong> ${m.freq}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderHerbs() {
+  const el = document.getElementById('herbs-grid');
+  el.innerHTML = HERBS.map(h => `
+    <div class="mushroom-card" onclick="this.classList.toggle('open')">
+      <h4>${h.name}</h4>
+      <div style="margin:4px 0">${h.tags.map(t => `<span class="freq-tag ${t}">${t.replace('freq-','')}</span>`).join(' ')}</div>
+      <div class="desc">${h.desc}</div>
+      <div class="expand">
+        <p><strong>How to use:</strong> ${h.use}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderJammers() {
+  const el = document.getElementById('jammers-list');
+  el.innerHTML = JAMMERS.map(j => `
+    <div class="card" style="border-left:4px solid #c62828">
+      <h3 style="color:#c62828">${j.name}</h3>
+      <p><strong>System affected:</strong> ${j.system}</p>
+      <p style="margin-top:8px"><strong>Mechanism:</strong> ${j.mechanism}</p>
+      <p style="margin-top:8px"><strong>History:</strong> ${j.history}</p>
+      <p style="margin-top:8px; color:#2d5016"><strong>Replace with:</strong> ${j.replace}</p>
+    </div>
+  `).join('');
+}
+
+function renderRecipes() {
+  const el = document.getElementById('recipes-list');
+  el.innerHTML = RECIPES.map(r => `
+    <div class="card">
+      <h3>${r.name} <span style="font-size:12px;color:#888;font-weight:400">(${r.time})</span></h3>
+      <div style="margin:6px 0">${r.tags.map(t => `<span class="freq-tag ${t}">${t.replace('freq-','')}</span>`).join(' ')}</div>
+      <div class="recipe">
+        <h4>Ingredients:</h4>
+        <ul>${r.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+        <h4 style="margin-top:10px">Method:</h4>
+        <p>${r.method}</p>
+      </div>
+      <p style="margin-top:8px; font-size:13px; color:#2d5016"><strong>Why:</strong> ${r.why}</p>
+    </div>
+  `).join('');
+}
+
+// Filters
+function filterFoods(query) {
+  document.querySelectorAll('.food-card').forEach(c => {
+    c.style.display = c.dataset.name.includes(query.toLowerCase()) ? '' : 'none';
+  });
+}
+
+function filterBySystem(btn, system) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.food-card').forEach(c => {
+    if (system === 'all') { c.style.display = ''; return; }
+    c.style.display = c.dataset.systems.includes(system) ? '' : 'none';
+  });
+}
+
+// Tabs
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Init
+renderFoods();
+renderMushrooms();
+renderHerbs();
+renderJammers();
+renderRecipes();
+</script>
+</body>
+</html>

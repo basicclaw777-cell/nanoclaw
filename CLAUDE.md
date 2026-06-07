@@ -1816,6 +1816,30 @@ the-timekeeper to go offline. Don't repeat it.
 - LEFT for Paul's call: illustrator.js:56 (CSOB burgundy), Maya wardrobe "burgundy hoodie" (reed-characters.json).
 - Lesson: fix the generator, not just the doc — purging the registry doesn't stop illustrator.js injecting burgundy.
 
+## The Resonant Enclosure — Research Series (2026-06-06/07)
+
+### Relay Thread Sessions
+Two consecutive relay thread sessions produced 8+ vault deposits, ~400KB Grade A/B+ research.
+
+### Vault Deposits (02_Refined_Gold/cathedral/)
+- the-resonant-enclosure.md — original principle (2026-06-06)
+- the-resonant-enclosure-full-relay.md (Grade A) — Oracle question, Pretta connection, body repair manual, nutrition detuning, three scales
+- the-nutrition-detuning.md (Grade B+) — food pyramid as extraction architecture
+- the-pretta-as-research-instrument.md (Grade A) — wound as research instrument, footsoldier-to-HQ
+- the-resonant-architecture.md (Grade B+) — pyramids as resonant amplifiers, 10 global sites, sacred geometry = standing wave engineering, gym-as-pyramid, falsifiable HRV test
+- the-mercury-circuit.md (Grade B) — mercury as premium conductor, cinnabar = real red mercury, alchemy = coded engineering manual, Philosopher's Stone = amalgam spec
+
+### Dashboard
+- The Retuning Kitchen: retuning-kitchen.html → localhost:8080/retuning-kitchen
+- 8 tabs: Overview, Retuning Foods (20), Mushrooms (8), Herbs (12), Frequency Jammers (6), Recipes (8), Daily Protocol, Ancient Pharmacopoeia
+- Lobby: maps district, "The Retuning Kitchen"
+
+### Open Research Threads
+- HK rooftop pyramid structures — survey needed
+- Deep structures beneath Giza — resonant function in cavity model
+- Teotihuacan mercury chamber acoustic measurement
+- HRV measurement protocol for BR gym (falsifiable test for gym-as-pyramid)
+
 ## BR Onboarding + The Three Engines + 10-Block Gates (2026-06-07)
 - 10-block GATES WIRED: block-config.json now has `gate` (pass-condition) + `engine` per block (insert-only, consumers untouched, JSON validated, _updated→2026-06-07). Engine map: 1 Body+Mind · 2-4 Body · 5 Emotion (the 4→5 wall) · 6 Mind+Body · 7 Emotion+Body · 8 Emotion · 9 Mind · 10 All three. Dashboard/10-blocks read block.gate + block.engine. Gates = Paul's drafts to validate (file authority: Paul changes it, code obeys).
 - The Three Engines (BR IP, from Paul's captured thought): Body (machine) / Mind (OS) / Emotion (energy), one currency = ENERGY (organize·cultivate·protect). Emotion triad = Composure·Courage·Reset. Mind engine = IntegrityOS vs OmissionOS; emotion engine = the Fear Gate. Vault: 02_Refined_Gold/cathedral/the-three-engines.md + 06_Basic_Reflex_Syllabus/principles-the-three-engines.md.

@@ -53,7 +53,7 @@ function neuralRouteToNodes(url) {
     '/comms': ['bridge', 'comms'], '/merch': ['bridge', 'merch'],
     '/course': ['bridge', 'course'], '/publisher': ['bridge', 'publisher'],
     '/trader': ['bridge', 'trading'], '/looking-glass': ['bridge', 'looking-glass'], '/geomag': ['bridge', 'geomag'],
-    '/cosmology': ['bridge', 'cosmology'], '/scraper': ['bridge', 'scraper'],
+    '/cosmology': ['bridge', 'cosmology'], '/retuning-kitchen': ['bridge', 'research'], '/scraper': ['bridge', 'scraper'],
     '/gym-eyes': ['bridge', 'gym-eyes'], '/techniques': ['bridge', 'techniques'],
     '/screening': ['bridge', 'screening'], '/cathedral-city': ['bridge', 'city'],
     '/constellation': ['bridge', 'constellation'], '/pulse': ['bridge', 'pulse'],
@@ -132,11 +132,17 @@ app.get('/board', (req, res) => {
 app.get('/map', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'cathedral-map.html'));
 });
+app.get('/enclosure', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'enclosure-map.html'));
+});
 app.get('/logan-pp-map', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'logan-pp-map.html'));
 });
 app.get('/course-guide', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'basic-reflex', 'course-guide.html'));
+});
+app.get('/retuning-kitchen', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'retuning-kitchen.html'));
 });
 app.get('/api/delivered', (req, res) => {
   boardRegen(res, 'delivered-index.js', 'delivered-index.json', 'delivered');
@@ -4407,6 +4413,11 @@ app.get('/organism', (req, res) => {
 // ── Cathedral Infographic ────────────────────────────────────────────────────
 app.get('/cathedral-infographic', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'cathedral-infographic.html'));
+});
+
+// ── Harmonic Dome ────────────────────────────────────────────────────────────
+app.get('/harmonic-dome', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'harmonic-dome.html'));
 });
 
 // ── Scout Room ───────────────────────────────────────────────────────────────
