@@ -1121,6 +1121,7 @@ He will decide when he's done.
 - Vault deposits: ~/cathedral-vault/00_Staging/scraper-intel/{domain}/
 - First run: 107 PubMed papers deposited
 - Cron schedules defined in config.json but NOT yet wired to PM2 — manual /intel run for now
+- 2026-06-08: market/revenue tabs found empty = targets never triggered (built 05-04, only sentiment+science had run). Fixed by manual run; competitor_gyms/reviews/cross_sport/corporate_leads/grants now have data. STILL no durable trigger (Paul: leave manual). When wiring: use launchd LaunchAgent, NOT PM2 cron (SI-25 PM2-Python DNS would re-break external scrapers). Known: corporate_leads Indeed 403 anti-bot → 0 job leads (grants half works). Mandate-Without-Mechanism recurrence: dashboard was fine, the feed was just never turned on.
 - Scrapling note: use urllib for clean JSON APIs (PubMed, Reddit). Scrapling Fetcher for anti-bot sites only.
 - Basic Reflex home page: Intelligence Hub link added
 
