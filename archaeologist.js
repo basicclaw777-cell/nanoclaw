@@ -223,7 +223,15 @@ const DOMAIN_KEYWORDS = {
   'audio_acoustics': ['audio', 'acoustics', 'sound', 'speech', 'music', 'frequency', 'resonance'],
   'finance_trading': ['trading', 'finance', 'market', 'investment', 'portfolio', 'risk', 'quant', 'analysis'],
   'coaching_psychology': ['coaching', 'psychology', 'diagnostic', 'counselling', 'therapy', 'behavior', 'cognitive'],
-  'researcher_suppression': ['scientist death', 'researcher disappearance', 'suppressed research', 'classified technology', 'anti-gravity', 'exotic propulsion', 'directed energy weapon', 'DEW', 'whistleblower', 'patent seizure', 'secrecy order', 'invention secrecy act', 'black budget', 'SAP', 'USAP']
+  'researcher_suppression': ['scientist death', 'researcher disappearance', 'suppressed research', 'classified technology', 'anti-gravity', 'exotic propulsion', 'directed energy weapon', 'DEW', 'whistleblower', 'patent seizure', 'secrecy order', 'invention secrecy act', 'black budget', 'SAP', 'USAP'],
+  'negative_results': ['null result', 'failed experiment', 'negative finding', 'disproven', 'replication failure', 'file drawer', 'non-significant', 'drug repurposing', 'off-label', 'abandoned trial', 'phase II failure', 'retracted'],
+  'cognitive_error': ['cognitive bias', 'heuristic', 'decision error', 'bounded rationality', 'framing effect', 'anchoring', 'base rate neglect', 'availability heuristic', 'confirmation bias', 'prospect theory'],
+  // Universal-Key seams (2026-06-08): archives AI now unlocks — where the next Conrad Haas sits unread
+  'forgotten_manuscripts': ['manuscript', 'archive', 'handwritten treatise', 'codex', 'notebook', 'marginalia', 'unread document', 'arsenal master', 'Conrad Haas', 'HTR', 'palaeography'],
+  'undeciphered_scripts': ['undeciphered', 'Linear A', 'Indus script', 'Rongorongo', 'proto-Elamite', 'Cypro-Minoan', 'lost language', 'decipherment', 'unread writing system'],
+  'lost_libraries': ['Herculaneum', 'carbonized scroll', 'Vesuvius', 'lost library', 'destroyed archive', 'burned manuscript', 'virtual unrolling', 'recovered text'],
+  'pre_digital_science': ['pre-digital journal', 'paper-only', 'un-digitized', 'pre-1990 research', 'forgotten journal', 'OCR archive', 'lost paper'],
+  'oral_knowledge': ['oral history', 'untranscribed', 'audio archive', 'indigenous knowledge', 'master recording', 'field recording', 'apprentice knowledge', 'practitioner tape']
 };
 
 // ── Swarm Loop ────────────────────────────────────────────────────────────────
@@ -256,7 +264,14 @@ async function researchDomain(domain, triggerContext = '') {
     audio_acoustics: 'Audio and Acoustics',
     finance_trading: 'Finance and Trading',
     coaching_psychology: 'Coaching and Psychology',
-    researcher_suppression: 'Researcher Suppression and Classified Technology Seizure'
+    researcher_suppression: 'Researcher Suppression and Classified Technology Seizure',
+    negative_results: 'Negative Results, Failed Experiments, and Null Findings (Swanson-style undiscovered public knowledge)',
+    cognitive_error: 'Cognitive Biases, Decision Errors, and Systematic Human Error Patterns',
+    forgotten_manuscripts: 'Forgotten Manuscripts and Unread Archive Knowledge (the Conrad Haas vein — handwritten treatises AI handwriting-recognition can now read at scale)',
+    undeciphered_scripts: 'Undeciphered Scripts and Lost Languages (AI-assisted decipherment)',
+    lost_libraries: 'Lost and Damaged Libraries (Herculaneum/Vesuvius carbonized scrolls, virtually unrolled and AI-read)',
+    pre_digital_science: 'Pre-Digital Paper Science (pre-1990 journals never digitised, now OCR-accessible)',
+    oral_knowledge: 'Oral, Indigenous, and Untranscribed Audio Knowledge (mass AI transcription)'
   };
 
   const domainName = domainNames[domain] || domain;
