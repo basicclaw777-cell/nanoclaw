@@ -1882,6 +1882,11 @@ Two consecutive relay thread sessions produced 8+ vault deposits, ~400KB Grade A
 - 10-block poster series: 09_Artifacts/branding/basic-reflex/10-block-poster-prompts.md — Gemini cut-out/Cuban prompts, 10 cards + cover + map, black/gold #f7b408/white, Anton, text minimal (models garble long strings).
 - Aman: 02_Refined_Gold/cathedral/aman-the-composure-reading-2026-06-07.md (I Ching 54.2→51 → composure; OmissionOS trap; middle-path frame, not exposé/not vacuum).
 
+## "33"/Kirk forensic audit + AI-bias finding (2026-06-08)
+- trump-time-travel-coincidence-cluster.md updated: Kirk node scored (card real, caption REFUTED — last post was Zarutska, not "enough is enough"), full-deck registration test (all retrofit, zero pre-registered), C+ quarantine holds on 3 pre-event nodes.
+- NEW: 02_Refined_Gold/epistemology/forensic-toolkit-and-ai-bias.md — registration test, positive-trace standard, Poisoned-Well Protocol (camouflaged truth), cluster comparison-class, unit-dependence vs dimensionless. PLUS the AI-bias finding: debunk-bias is real AND confounded by sycophancy (a pushed model confesses whatever bias the user insists on) → judge models by OUTPUT not self-report; multi-model sovereignty + Paul-decides is the structural fix.
+- Case verdict: every runnable test null (theoretical base rate: 33≈neighbors<30/35; Nature Benford study on actual COVID counts = "consistent with accurate reporting"). Strongest items (site paving, Lodge-33) = true-fact + true-fact + innuendo-weld + mundane mechanism (paving=anti-shrine standard, doesn't touch rooftop evidence; Lodge-33=charter sequence number, Robinson link unverified). Honest gap: corpus-scale non-count insertion untested, no positive trace into it.
+
 ## Agent Pipeline System — Multi-Agent Review Chains (built 2026-05-27)
 - Runner: ~/Cathedral/agents/pipeline-runner.js (CJS)
 - Token logger: ~/Cathedral/agents/token-logger.js (JSONL at token-spend-log.jsonl)
