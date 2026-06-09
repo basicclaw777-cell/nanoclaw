@@ -2276,6 +2276,28 @@ ChatGPT external review identified Cathedral at inflection point: Phase 1 (colle
 - Images: cathedral-outputs.png, cathedral-visualised.png (brain anatomy metaphor)
 - Transcript + analysis: Grade A deposit
 
+## Cathedral Memoir — Narrative Voice (built 2026-06-09)
+- Engine: ~/nanoclaw/cathedral-memoir.js (ESM) — gathers all 5 memory types + emergence + harvests + synapse pulses + Lucy heartbeats
+- Dashboard: ~/nanoclaw/cathedral-memoir.html → localhost:8080/memoir
+- Synthesis: DeepSeek primary (deepseek-chat), Ollama gemma3:4b fallback
+- 9-chapter structure with sketchnote captions, 2000-3500 word target
+- State: ~/nanoclaw/memoir/memoir-state.json
+- Vault deposit: 00_Staging/cathedral/cathedral-memoir-{date}.md
+- Routes: /memoir, /api/memoir/latest, /api/memoir/generate on cath-bridge
+- Telegram: /memoir (generate), /memoir latest
+- Lobby: Cathedral Memoir room in maps district
+- First gen: 14,976 chars, all 8 sources, honest self-assessment (dormant intents, empty outcome ledger)
+- Note: DeepSeek key must be in PM2 environment for cath-bridge to serve /api/memoir/generate
+
+## ChatGPT External Review — Systems of Organized Cognition (2026-06-09)
+- Vault: 02_Refined_Gold/cathedral/chatgpt-cathedral-review-systems-of-organized-cognition.md (Grade A)
+- Benchmark: systems of organized cognition, not AI projects
+- Strongest analogy: small intelligence fusion center (structural isomorphism)
+- Concept: "institutional compression ratio" — RAND + Bell Labs + university in one operator
+- Grades: Knowledge Architecture A, Institutional Design A, Compounding A+, Outcome Tracking C+
+- Key underestimate: once beliefs get IDs + lineage + confidence = doctrine management, not notes
+- Closing diagnostic: "whether it can learn from its own history without becoming trapped by it"
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each

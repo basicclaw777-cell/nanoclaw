@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral Memoir</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0a0f; color:#e8e6df; font-family:'Crimson Pro',Georgia,serif; min-height:100vh; }
+  .header { background:linear-gradient(135deg,#0f0f1a 0%,#1a1528 100%); border-bottom:1px solid #f7b40833; padding:2rem; text-align:center; }
+  .header h1 { font-family:'Share Tech Mono',monospace; font-size:1.8rem; color:#f7b408; letter-spacing:0.15em; margin-bottom:0.5rem; }
+  .header .subtitle { font-style:italic; color:#888; font-size:1.1rem; }
+  .meta-bar { display:flex; justify-content:center; gap:2rem; padding:1rem; background:#0d0d15; border-bottom:1px solid #ffffff0a; font-family:'Share Tech Mono',monospace; font-size:0.75rem; color:#666; flex-wrap:wrap; }
+  .meta-bar .pill { background:#ffffff08; padding:0.3rem 0.8rem; border-radius:12px; border:1px solid #ffffff0a; }
+  .meta-bar .pill.active { border-color:#1D9E7533; color:#1D9E75; }
+  .meta-bar .pill.inactive { border-color:#ef444433; color:#ef4444; }
+  .controls { text-align:center; padding:1.5rem; }
+  .controls button { font-family:'Share Tech Mono',monospace; background:#f7b40815; color:#f7b408; border:1px solid #f7b40833; padding:0.6rem 1.5rem; border-radius:6px; cursor:pointer; font-size:0.9rem; transition:all 0.2s; }
+  .controls button:hover { background:#f7b40825; border-color:#f7b408; }
+  .controls button:disabled { opacity:0.4; cursor:not-allowed; }
+  .controls .status { font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:#666; margin-top:0.5rem; }
+  .memoir-body { max-width:800px; margin:0 auto; padding:2rem; }
+  .memoir-body .empty { text-align:center; padding:4rem 2rem; color:#555; font-style:italic; font-size:1.2rem; }
+  .memoir-body h2 { font-family:'Share Tech Mono',monospace; color:#f7b408; font-size:1.2rem; margin:2.5rem 0 1rem; padding-bottom:0.5rem; border-bottom:1px solid #f7b40822; }
+  .memoir-body p { line-height:1.8; margin-bottom:1rem; font-size:1.05rem; }
+  .memoir-body strong { color:#1D9E75; }
+  .memoir-body em { color:#a99bdf; }
+  .memoir-body blockquote { border-left:3px solid #534AB7; padding:0.5rem 1rem; margin:1rem 0; background:#534AB710; font-style:italic; color:#c4bcef; }
+  .memoir-body ul, .memoir-body ol { padding-left:1.5rem; margin-bottom:1rem; }
+  .memoir-body li { line-height:1.7; margin-bottom:0.3rem; }
+  .memoir-body code { font-family:'Share Tech Mono',monospace; background:#ffffff0a; padding:0.1em 0.4em; border-radius:3px; font-size:0.9em; color:#06b6d4; }
+  .sketchnote { background:#f7b40808; border:1px dashed #f7b40833; border-radius:8px; padding:1rem 1.5rem; margin:1.5rem 0; text-align:center; font-family:'Share Tech Mono',monospace; font-size:0.85rem; color:#f7b408cc; }
+  .sketchnote::before { content:'~ '; }
+  .sketchnote::after { content:' ~'; }
+  .source-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0.8rem; margin:2rem 0; }
+  .source-card { background:#ffffff05; border:1px solid #ffffff0a; border-radius:8px; padding:1rem; text-align:center; }
+  .source-card .label { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:#888; text-transform:uppercase; letter-spacing:0.1em; }
+  .source-card .value { font-size:1.4rem; color:#f7b408; margin-top:0.3rem; font-family:'Share Tech Mono',monospace; }
+  .back-btn { position:fixed; top:1rem; left:1rem; font-family:'Share Tech Mono',monospace; background:#ffffff08; color:#888; border:1px solid #ffffff15; padding:0.4rem 0.8rem; border-radius:4px; cursor:pointer; font-size:0.75rem; text-decoration:none; z-index:10; }
+  .back-btn:hover { color:#f7b408; border-color:#f7b40833; }
+  .loading { text-align:center; padding:3rem; }
+  .loading .spinner { display:inline-block; width:24px; height:24px; border:2px solid #f7b40833; border-top-color:#f7b408; border-radius:50%; animation:spin 1s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<a href="/lobby" class="back-btn">< lobby</a>
+
+<div class="header">
+  <h1>CATHEDRAL MEMOIR</h1>
+  <div class="subtitle">The Cathedral telling its own story</div>
+</div>
+
+<div class="meta-bar" id="metaBar"></div>
+
+<div class="controls">
+  <button onclick="generateMemoir()" id="genBtn">Generate New Memoir</button>
+  <div class="status" id="genStatus"></div>
+</div>
+
+<div class="memoir-body" id="memoirBody">
+  <div class="loading" id="loadingState"><div class="spinner"></div><br>Loading memoir...</div>
+</div>
+
+<script>
+async function loadMemoir() {
+  try {
+    const resp = await fetch('/api/memoir/latest');
+    const data = await resp.json();
+    if (!data.ok || !data.memoir) {
+      document.getElementById('memoirBody').innerHTML = '<div class="empty">No memoir generated yet.<br>Click "Generate New Memoir" to create the first chapter.</div>';
+      document.getElementById('metaBar').innerHTML = '';
+      return;
+    }
+    renderMemoir(data.memoir);
+    renderMeta(data.state);
+  } catch (e) {
+    document.getElementById('memoirBody').innerHTML = '<div class="empty">Could not load memoir. API may be offline.</div>';
+  }
+}
+
+function renderMeta(state) {
+  if (!state) return;
+  const bar = document.getElementById('metaBar');
+  const sources = state.dataSources || {};
+  const pills = [
+    { label: 'Claims', active: sources.claims },
+    { label: 'Attention', active: sources.attention },
+    { label: 'Intents', active: sources.intents },
+    { label: 'Outcomes', active: sources.outcomes },
+    { label: 'Emergence', active: sources.emergence },
+    { label: `${sources.pass3Harvests || 0} Harvests`, active: (sources.pass3Harvests || 0) > 0 },
+    { label: `${sources.synapsePulses || 0} Pulses`, active: (sources.synapsePulses || 0) > 0 },
+    { label: `${sources.lucyHeartbeats || 0} Lucy`, active: (sources.lucyHeartbeats || 0) > 0 },
+  ];
+  bar.innerHTML = `<span class="pill">${state.lastGenerated}</span>` +
+    pills.map(p => `<span class="pill ${p.active ? 'active' : 'inactive'}">${p.label}</span>`).join('');
+}
+
+function renderMemoir(memoir) {
+  // Parse markdown-ish content into HTML
+  let html = memoir.content || '';
+  // Remove frontmatter
+  html = html.replace(/^---[\s\S]*?---\n*/, '');
+  // Convert markdown headers
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Inline code
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Blockquotes
+  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+  // Sketchnote captions (lines starting with ~)
+  html = html.replace(/^~\s*(.+?)\s*~?\s*$/gm, '<div class="sketchnote">$1</div>');
+  // Paragraphs (double newline)
+  html = html.split(/\n\n+/).map(block => {
+    if (block.startsWith('<h') || block.startsWith('<blockquote') || block.startsWith('<div') || block.startsWith('<ul') || block.startsWith('<ol')) return block;
+    if (block.trim().startsWith('- ')) {
+      const items = block.trim().split('\n').map(l => `<li>${l.replace(/^-\s*/, '')}</li>`).join('');
+      return `<ul>${items}</ul>`;
+    }
+    if (/^\d+\.\s/.test(block.trim())) {
+      const items = block.trim().split('\n').map(l => `<li>${l.replace(/^\d+\.\s*/, '')}</li>`).join('');
+      return `<ol>${items}</ol>`;
+    }
+    return `<p>${block.replace(/\n/g, ' ')}</p>`;
+  }).join('\n');
+
+  document.getElementById('memoirBody').innerHTML = html;
+}
+
+async function generateMemoir() {
+  const btn = document.getElementById('genBtn');
+  const status = document.getElementById('genStatus');
+  btn.disabled = true;
+  status.textContent = 'Gathering memory types + synthesizing narrative...';
+  document.getElementById('memoirBody').innerHTML = '<div class="loading"><div class="spinner"></div><br>Generating memoir... this takes 30-60 seconds.</div>';
+
+  try {
+    const resp = await fetch('/api/memoir/generate', { method: 'POST' });
+    const data = await resp.json();
+    if (data.ok) {
+      status.textContent = 'Memoir generated.';
+      loadMemoir();
+    } else {
+      status.textContent = 'Error: ' + (data.error || 'unknown');
+    }
+  } catch (e) {
+    status.textContent = 'Error: ' + e.message;
+  }
+  btn.disabled = false;
+}
+
+loadMemoir();
+</script>
+</body>
+</html>

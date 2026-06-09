@@ -126,6 +126,9 @@ function boardRegen(res, script, jsonFile, label) {
   return res.status(503).json({ error: `${label} index not available` });
 }
 
+app.get(['/cop', '/common-operating-picture'], (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'cop.html'));
+});
 app.get('/board', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'board.html'));
 });
@@ -1591,6 +1594,231 @@ app.get('/gym-eyes/vision-landscape', (req, res) => {
   res.sendFile(p);
 });
 
+// ── BR Website mockup ───────────────────────────────────────────────────────
+app.use('/br-website', express.static(path.join(HOME, 'basic-reflex', 'website')));
+
+// ── Study Lab ───────────────────────────────────────────────────────────────
+const STUDY_OUTPUT = path.join(NANOCLAW, 'study-lab-output');
+const PODCAST_DIR = path.join(HOME, 'Cathedral', 'podcasts');
+
+app.get('/study-lab', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(path.join(NANOCLAW, 'study-lab-dashboard.html'));
+});
+
+app.get('/study-lab/file/:name', (req, res) => {
+  const p = path.join(STUDY_OUTPUT, req.params.name);
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+app.get('/study-lab/audio/:name', (req, res) => {
+  const p = path.join(PODCAST_DIR, req.params.name);
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.sendFile(p);
+});
+
+app.get('/api/study-lab', (req, res) => {
+  const podcasts = fs.existsSync(PODCAST_DIR)
+    ? fs.readdirSync(PODCAST_DIR).filter(f => f.endsWith('.mp3')).sort().reverse().map(f => {
+        const mdPath = path.join(PODCAST_DIR, f.replace('.mp3', '.md'));
+        let meta = {};
+        if (fs.existsSync(mdPath)) {
+          const content = fs.readFileSync(mdPath, 'utf8');
+          const fm = content.match(/^---\n([\s\S]*?)\n---/);
+          if (fm) fm[1].split('\n').forEach(line => {
+            const [k, ...v] = line.split(':');
+            if (k && v.length) meta[k.trim()] = v.join(':').trim();
+          });
+        }
+        return { file: f, ...meta };
+      })
+    : [];
+  const slides = fs.existsSync(STUDY_OUTPUT)
+    ? fs.readdirSync(STUDY_OUTPUT).filter(f => f.startsWith('slides-')).sort().reverse()
+    : [];
+  const mindmaps = fs.existsSync(STUDY_OUTPUT)
+    ? fs.readdirSync(STUDY_OUTPUT).filter(f => f.startsWith('mindmap-')).sort().reverse()
+    : [];
+  const quizzes = fs.existsSync(STUDY_OUTPUT)
+    ? fs.readdirSync(STUDY_OUTPUT).filter(f => f.startsWith('quiz-')).sort().reverse()
+    : [];
+  res.json({ podcasts, slides, mindmaps, quizzes });
+});
+
+app.post('/api/study-lab/generate', async (req, res) => {
+  const { topic, type, speakers } = req.body || {};
+  if (!topic) return res.status(400).json({ error: 'Topic required' });
+  try {
+    const results = {};
+    if (type === 'slides' || type === 'all') {
+      const { execSync: ex } = require('child_process');
+      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} slides "${topic.replace(/"/g, '\\"')}"`,
+        { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      results.slides = true;
+    }
+    if (type === 'mindmap' || type === 'all') {
+      const { execSync: ex } = require('child_process');
+      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} mindmap "${topic.replace(/"/g, '\\"')}"`,
+        { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      results.mindmap = true;
+    }
+    if (type === 'quiz' || type === 'all') {
+      const { execSync: ex } = require('child_process');
+      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} quiz "${topic.replace(/"/g, '\\"')}"`,
+        { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      results.quiz = true;
+    }
+    if (type === 'podcast' || type === 'all') {
+      const { execSync: ex } = require('child_process');
+      const spk = speakers ? `--speakers=${speakers}` : '';
+      ex(`node ${path.join(NANOCLAW, 'cathedral-podcast.js')} "${topic.replace(/"/g, '\\"')}" ${spk}`,
+        { cwd: NANOCLAW, timeout: 600000, stdio: 'pipe' });
+      results.podcast = true;
+    }
+    res.json({ ok: true, message: `Generated: ${Object.keys(results).join(', ')}`, results });
+  } catch (e) {
+    res.status(500).json({ error: e.message || 'Generation failed' });
+  }
+});
+
+// ── Fundamentals Syllabus ────────────────────────────────────────────────────
+const SYLLABUS_CONFIG = path.join(NANOCLAW, 'syllabus-config.json');
+
+app.get('/syllabus', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(path.join(NANOCLAW, 'syllabus-dashboard.html'));
+});
+
+app.get('/api/syllabus', (req, res) => {
+  try {
+    const config = JSON.parse(fs.readFileSync(SYLLABUS_CONFIG, 'utf8'));
+    const topics = config.topics || [];
+    const completed = topics.filter(t => t.status === 'completed').length;
+    const inProgress = topics.filter(t => t.status === 'in_progress').length;
+    const enriched = topics.map(t => ({
+      ...t,
+      available: t.status === 'not_started' && (t.prerequisites || []).every(pid =>
+        topics.find(p => p.id === pid)?.status === 'completed'
+      )
+    }));
+    res.json({ topics: enriched, progress: { completed, inProgress, total: topics.length, percent: Math.round((completed / topics.length) * 100) } });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/syllabus/complete', (req, res) => {
+  try {
+    const { topicId } = req.body || {};
+    if (!topicId) return res.status(400).json({ error: 'topicId required' });
+    const config = JSON.parse(fs.readFileSync(SYLLABUS_CONFIG, 'utf8'));
+    const topic = config.topics.find(t => t.id === topicId);
+    if (!topic) return res.status(404).json({ ok: false, error: `Topic "${topicId}" not found` });
+    topic.status = 'completed';
+    topic.completedAt = new Date().toISOString();
+    config._updated = new Date().toISOString().split('T')[0];
+    fs.writeFileSync(SYLLABUS_CONFIG, JSON.stringify(config, null, 2) + '\n');
+    const unlocked = config.topics.filter(t => {
+      if (t.status !== 'not_started') return false;
+      return (t.prerequisites || []).every(pid => config.topics.find(p => p.id === pid)?.status === 'completed');
+    });
+    res.json({ ok: true, completed: topic.title, newlyUnlocked: unlocked.map(t => ({ id: t.id, title: t.title })) });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/syllabus/start', (req, res) => {
+  try {
+    const { topicId } = req.body || {};
+    if (!topicId) return res.status(400).json({ error: 'topicId required' });
+    const config = JSON.parse(fs.readFileSync(SYLLABUS_CONFIG, 'utf8'));
+    const topic = config.topics.find(t => t.id === topicId);
+    if (!topic) return res.status(404).json({ ok: false, error: `Topic "${topicId}" not found` });
+    topic.status = 'in_progress';
+    topic.startedAt = new Date().toISOString();
+    config._updated = new Date().toISOString().split('T')[0];
+    fs.writeFileSync(SYLLABUS_CONFIG, JSON.stringify(config, null, 2) + '\n');
+    res.json({ ok: true, started: topic.title });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/syllabus/generate', async (req, res) => {
+  try {
+    const { topicId } = req.body || {};
+    if (!topicId) return res.status(400).json({ error: 'topicId required' });
+    const config = JSON.parse(fs.readFileSync(SYLLABUS_CONFIG, 'utf8'));
+    const topic = config.topics.find(t => t.id === topicId);
+    if (!topic) return res.status(404).json({ ok: false, error: `Topic "${topicId}" not found` });
+    const searchQuery = [topic.title, ...(topic.vaultKeywords || []).slice(0, 3)].join(' ');
+    const { execSync: ex } = require('child_process');
+    const results = {};
+    try {
+      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} slides "${searchQuery.replace(/"/g, '\\"')}"`, { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      results.slides = { path: path.join(STUDY_OUTPUT, `slides-${topicId}.html`) };
+    } catch (e2) { results.slidesError = e2.message; }
+    try {
+      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} mindmap "${searchQuery.replace(/"/g, '\\"')}"`, { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      results.mindmap = { path: path.join(STUDY_OUTPUT, `mindmap-${topicId}.html`) };
+    } catch (e2) { results.mindmapError = e2.message; }
+    try {
+      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} quiz "${searchQuery.replace(/"/g, '\\"')}"`, { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      results.quiz = { path: path.join(STUDY_OUTPUT, `quiz-${topicId}.html`) };
+    } catch (e2) { results.quizError = e2.message; }
+    res.json({ ok: true, topic: topic.title, topicId, results });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/syllabus/next', (req, res) => {
+  try {
+    const config = JSON.parse(fs.readFileSync(SYLLABUS_CONFIG, 'utf8'));
+    const topics = config.topics || [];
+    const current = topics.find(t => t.status === 'in_progress');
+    if (current) return res.json({ topic: current, reason: 'Currently in progress' });
+    const available = topics.filter(t => {
+      if (t.status !== 'not_started') return false;
+      return (t.prerequisites || []).every(pid => topics.find(p => p.id === pid)?.status === 'completed');
+    }).sort((a, b) => a.difficulty - b.difficulty);
+    if (available.length === 0) {
+      const remaining = topics.filter(t => t.status !== 'completed');
+      return res.json({ topic: null, reason: remaining.length === 0 ? 'All 20 fundamentals completed!' : 'No topics available' });
+    }
+    res.json({ topic: available[0], reason: `Lowest difficulty available (${available.length} unlocked)` });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/syllabus/suggest', (req, res) => {
+  try {
+    const thread = (req.query.thread || '').toLowerCase();
+    if (!thread) return res.json({ topic: null, reason: 'No thread provided' });
+    const config = JSON.parse(fs.readFileSync(SYLLABUS_CONFIG, 'utf8'));
+    const topics = config.topics || [];
+    const scored = topics.filter(t => t.status !== 'completed').map(t => {
+      let score = 0;
+      for (const kw of (t.vaultKeywords || [])) { if (thread.includes(kw.toLowerCase())) score += 3; }
+      for (const d of (t.domains || [])) { if (thread.includes(d.replace(/_/g, ' '))) score += 2; }
+      if (thread.includes(t.title.toLowerCase())) score += 5;
+      if (thread.includes(t.id.replace(/-/g, ' '))) score += 4;
+      const available = (t.prerequisites || []).every(pid => topics.find(p => p.id === pid)?.status === 'completed');
+      if (available && t.status === 'not_started') score += 1;
+      return { topic: t, score, available };
+    }).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
+    if (scored.length === 0) return res.json({ topic: null, reason: `No match for "${req.query.thread}"` });
+    const best = scored[0];
+    res.json({ topic: best.topic, reason: `Matches "${req.query.thread}" (score: ${best.score})`, available: best.available });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/brand-dna', (req, res) => {
   const p = path.join(HOME, 'basic-reflex', 'visuals', 'brand-dna.html');
   if (!fs.existsSync(p)) return res.status(404).send('Not found');
@@ -2759,6 +2987,117 @@ app.get('/api/allocations', (req, res) => {
   const fp = path.join(NANOCLAW, 'trader', 'allocation-portfolio.json');
   if (!require('fs').existsSync(fp)) return res.status(404).json({ error: 'No portfolio' });
   res.json(JSON.parse(require('fs').readFileSync(fp, 'utf8')));
+});
+
+// --- Polymarket Scanner ---
+app.get('/polymarket', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'polymarket', 'dashboard.html'));
+});
+
+app.get('/api/polymarket/markets', (req, res) => {
+  const fp = path.join(NANOCLAW, 'polymarket', 'markets.json');
+  if (!fs.existsSync(fp)) return res.status(404).json({ error: 'No scan data yet. Run scanner first.' });
+  res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+});
+
+app.post('/api/polymarket/scan', async (req, res) => {
+  try {
+    const { execFileSync } = require('child_process');
+    execFileSync('node', [path.join(NANOCLAW, 'polymarket', 'scanner.js')], { timeout: 30000 });
+    const fp = path.join(NANOCLAW, 'polymarket', 'markets.json');
+    res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/polymarket/kelly', (req, res) => {
+  try {
+    const { execFileSync } = require('child_process');
+    const out = execFileSync('node', ['-e', `
+      import('${path.join(NANOCLAW, 'polymarket', 'kelly.js').replace(/\\/g, '/')}')
+        .then(m => { const r = m.sizeAll(); process.stdout.write(JSON.stringify(r)); })
+    `], { timeout: 10000 }).toString();
+    res.json(JSON.parse(out));
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/polymarket/ledger', (req, res) => {
+  const fp = path.join(NANOCLAW, 'polymarket', 'ledger.json');
+  if (!fs.existsSync(fp)) {
+    res.json({ mode: 'paper', bankroll: 1000, positions: [], stats: { totalTrades: 0, wins: 0, losses: 0, totalPnl: 0 } });
+    return;
+  }
+  const ledger = JSON.parse(fs.readFileSync(fp, 'utf8'));
+  const open = (ledger.positions || []).filter(p => p.status === 'open');
+  const exposure = open.reduce((s, p) => s + p.cost, 0);
+  res.json({ ...ledger, openPositions: open.length, exposure: Math.round(exposure * 100) / 100 });
+});
+
+app.post('/api/polymarket/trade', express.json(), (req, res) => {
+  try {
+    const { marketId, question, side, shares, sharePrice, edge, confidence, reasoning } = req.body;
+    const { execFileSync } = require('child_process');
+    const args = [marketId, question, side, String(shares), String(sharePrice), String(edge)].map(a => a || '');
+    execFileSync('node', [path.join(NANOCLAW, 'polymarket', 'ledger.js'), 'open', ...args], { timeout: 5000 });
+    const fp = path.join(NANOCLAW, 'polymarket', 'ledger.json');
+    res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/polymarket/report', (req, res) => {
+  try {
+    const { execFileSync } = require('child_process');
+    const out = execFileSync('node', [path.join(NANOCLAW, 'polymarket', 'monitor.js'), 'report'], { timeout: 10000 }).toString();
+    res.type('text').send(out);
+  } catch (err) { res.status(500).send(err.message); }
+});
+
+app.post('/api/polymarket/execute', (req, res) => {
+  try {
+    const { execFileSync } = require('child_process');
+    const dry = req.query.dry === 'true' ? ' --dry' : '';
+    const out = execFileSync('node', [path.join(NANOCLAW, 'polymarket', 'executor.js'), ...(dry ? ['--dry'] : [])], { timeout: 30000 }).toString();
+    const fp = path.join(NANOCLAW, 'polymarket', 'ledger.json');
+    const ledger = fs.existsSync(fp) ? JSON.parse(fs.readFileSync(fp, 'utf8')) : {};
+    res.json({ output: out, ledger });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/polymarket/monitor', (req, res) => {
+  try {
+    const { execFileSync } = require('child_process');
+    const out = execFileSync('node', [path.join(NANOCLAW, 'polymarket', 'monitor.js'), 'check'], { timeout: 30000 }).toString();
+    res.json({ output: out });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/polymarket/estimates', (req, res) => {
+  const fp = path.join(NANOCLAW, 'polymarket', 'estimates.json');
+  if (!fs.existsSync(fp)) return res.json({});
+  res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+});
+
+app.get('/api/polymarket/research/:slug', (req, res) => {
+  const dir = path.join(NANOCLAW, 'polymarket', 'research');
+  if (!fs.existsSync(dir)) return res.status(404).json({ error: 'No research yet' });
+  const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
+  const match = files.find(f => f.includes(req.params.slug));
+  if (!match) return res.status(404).json({ error: 'Research not found' });
+  res.json(JSON.parse(fs.readFileSync(path.join(dir, match), 'utf8')));
+});
+
+app.post('/api/polymarket/research', async (req, res) => {
+  try {
+    const count = req.body?.count || 5;
+    const { execFileSync } = require('child_process');
+    execFileSync('node', [path.join(NANOCLAW, 'polymarket', 'researcher.js'), String(count)], { timeout: 180000 });
+    const fp = path.join(NANOCLAW, 'polymarket', 'estimates.json');
+    if (fs.existsSync(fp)) res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+    else res.json({});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/trader/hub', (req, res) => {
@@ -4936,6 +5275,392 @@ app.get('/mnemonic-library', (req, res) => {
 
 app.get('/goldmines', (req, res) => {
   res.sendFile(path.join(process.env.HOME, 'basic-reflex', 'visuals', 'goldmine-dashboard.html'));
+});
+
+// ── Cathedral Ferrari Diagram ────────────────────────────────────────────────
+app.get('/cathedral-ferrari', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(path.join(NANOCLAW, 'study-lab-output', 'cathedral-ferrari.html'));
+});
+
+// ── Vault Health ──────────────────────────────────────────────────────────────
+app.get('/vault-health', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(path.join(NANOCLAW, 'study-lab-output', 'domain-heat-map.html'));
+});
+
+app.get('/api/vault-health', (req, res) => {
+  const statsPath = path.join(NANOCLAW, 'study-lab-output', 'vault-health-stats.json');
+  if (!fs.existsSync(statsPath)) {
+    return res.status(404).json({ error: 'No vault health data yet. Run: node vault-health-injector.js' });
+  }
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'application/json' });
+  res.sendFile(statsPath);
+});
+
+// ── Publication Hub ───────────────────────────────────────────────────────────
+
+app.get('/publisher', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'publication-dashboard.html'));
+});
+
+app.get('/api/publication/book', (req, res) => {
+  const dir = path.join(NANOCLAW, 'publication-output', 'book');
+  try {
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md')).sort();
+    const chapters = files.map(f => {
+      const content = fs.readFileSync(path.join(dir, f), 'utf8');
+      const numMatch = f.match(/chapter-(\d+)/);
+      const titleMatch = content.match(/title:\s*"(.+)"/);
+      const words = content.split(/\s+/).length;
+      return { file: f, chapter: numMatch ? parseInt(numMatch[1]) : 0, title: titleMatch ? titleMatch[1] : f, words };
+    });
+    res.json({ chapters });
+  } catch { res.json({ chapters: [] }); }
+});
+
+app.get('/api/publication/newsletters', (req, res) => {
+  const dir = path.join(NANOCLAW, 'publication-output', 'newsletter');
+  try {
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md')).sort().reverse();
+    const newsletters = files.map(f => {
+      const content = fs.readFileSync(path.join(dir, f), 'utf8');
+      const titleMatch = content.match(/title:\s*"(.+)"/);
+      const dateMatch = f.match(/newsletter-(\d{4}-\d{2}-\d{2})/);
+      const bodyStart = content.indexOf('---', content.indexOf('---') + 3);
+      const body = bodyStart > 0 ? content.slice(bodyStart + 3).trim() : content;
+      return { file: f, date: dateMatch ? dateMatch[1] : '', title: titleMatch ? titleMatch[1] : f, preview: body.slice(0, 300) };
+    });
+    res.json({ newsletters });
+  } catch { res.json({ newsletters: [] }); }
+});
+
+app.get('/api/publication/podcasts', (req, res) => {
+  const dir = path.join(NANOCLAW, 'publication-output', 'podcast');
+  try {
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md')).sort().reverse();
+    const curations = files.map(f => {
+      const content = fs.readFileSync(path.join(dir, f), 'utf8');
+      const dateMatch = f.match(/curated-(\d{4}-\d{2}-\d{2})/);
+      const curatedMatch = content.match(/episodes_curated:\s*(\d+)/);
+      const episodes = [];
+      const epBlocks = content.split(/^### /m).slice(1);
+      for (const block of epBlocks) {
+        const nameMatch = block.match(/^(.+?)\s*[—–-]\s*Score:\s*(\d+)/);
+        const reasonMatch = block.match(/\*\*Reason:\*\*\s*(.+)/);
+        const descMatch = block.match(/\*\*Public description:\*\*\s*(.+)/);
+        const audioMatch = block.match(/\*\*Audio:\*\*\s*(.+)/);
+        if (nameMatch) {
+          episodes.push({
+            file: nameMatch[1].trim(), score: parseInt(nameMatch[2]),
+            reason: reasonMatch ? reasonMatch[1] : '', description: descMatch ? descMatch[1] : '',
+            audioPath: audioMatch ? audioMatch[1].trim() : null,
+          });
+        }
+      }
+      return { file: f, date: dateMatch ? dateMatch[1] : '', curated: curatedMatch ? parseInt(curatedMatch[1]) : episodes.length, episodes };
+    });
+    res.json({ curations });
+  } catch { res.json({ curations: [] }); }
+});
+
+app.post('/api/publication/book/generate', async (req, res) => {
+  const chapter = req.body?.chapter;
+  if (!chapter || chapter < 1 || chapter > 15) return res.status(400).json({ ok: false, error: 'Invalid chapter (1-15)' });
+  try {
+    const { assembleChapter } = await import('./publication-engine.js');
+    const result = await assembleChapter(chapter);
+    res.json(result);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/publication/newsletter/generate', async (req, res) => {
+  try {
+    const { draftNewsletter } = await import('./publication-engine.js');
+    const result = await draftNewsletter();
+    res.json(result);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/publication/podcast/curate', async (req, res) => {
+  try {
+    const { curatePodcast } = await import('./publication-engine.js');
+    const result = await curatePodcast();
+    res.json(result);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/publication-output/:type/:file', (req, res) => {
+  const { type, file } = req.params;
+  if (!['book', 'newsletter', 'podcast'].includes(type)) return res.status(404).send('Not found');
+  const filePath = path.join(NANOCLAW, 'publication-output', type, file);
+  if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+  res.set('Content-Type', 'text/markdown; charset=utf-8');
+  res.sendFile(filePath);
+});
+
+// ── Cathedral Output Map ─────────────────────────────────────────────────────
+app.get(['/cathedral-outputs', '/outputs'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'cathedral-outputs.html'));
+});
+
+// ── Claim Ledger — epistemic provenance tracking ────────────────────────────
+
+app.get('/api/claim-ledger/stats', async (req, res) => {
+  try {
+    const { getStats } = await import('./claim-ledger.js');
+    res.json(getStats());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/claim-ledger/blocked', async (req, res) => {
+  try {
+    const { getBlockedEvents } = await import('./claim-ledger.js');
+    res.json(getBlockedEvents(20));
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/claim-ledger/register', async (req, res) => {
+  try {
+    const { registerClaim } = await import('./claim-ledger.js');
+    const { content, sourceType, confidence, grade, originAgent, originSession, vaultPath, ancestors } = req.body;
+    if (!content || !sourceType) return res.status(400).json({ ok: false, error: 'content and sourceType required' });
+    const claim = registerClaim(content, sourceType, { confidence, grade, originAgent, originSession, vaultPath, ancestors });
+    res.json({ ok: true, claim });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/claim-ledger/lineage/:id', async (req, res) => {
+  try {
+    const { getAncestors } = await import('./claim-ledger.js');
+    res.json(getAncestors(req.params.id));
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/claim-ledger/check-lineage', async (req, res) => {
+  try {
+    const { sharesLineage } = await import('./claim-ledger.js');
+    const { claimA, claimB } = req.body;
+    if (!claimA || !claimB) return res.status(400).json({ ok: false, error: 'claimA and claimB required' });
+    res.json(sharesLineage(claimA, claimB));
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Intent Registry — Strategic intent layer ─────────────────────────────────
+
+app.get('/api/intents/health', async (req, res) => {
+  try {
+    const { getIntentHealth } = await import('./intent-registry.js');
+    res.json(getIntentHealth());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/intents', async (req, res) => {
+  try {
+    const { getIntents, getIntentHealth } = await import('./intent-registry.js');
+    const status = req.query.status || 'ACTIVE';
+    const intents = getIntents(status);
+    const health = getIntentHealth();
+    const healthMap = Object.fromEntries(health.map(h => [h.id, h]));
+    const enriched = intents.map(i => ({ ...i, health: healthMap[i.id] || null }));
+    res.json(enriched);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/intents/:id', async (req, res) => {
+  try {
+    const { getIntent } = await import('./intent-registry.js');
+    const intent = getIntent(req.params.id);
+    if (!intent) return res.status(404).json({ ok: false, error: 'not found' });
+    res.json(intent);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/intents', async (req, res) => {
+  try {
+    const { createIntent } = await import('./intent-registry.js');
+    const { title, description, priority } = req.body;
+    if (!title) return res.status(400).json({ ok: false, error: 'title required' });
+    const intent = createIntent(title, description, priority);
+    res.json({ ok: true, intent });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.put('/api/intents/:id', async (req, res) => {
+  try {
+    const { updateIntent } = await import('./intent-registry.js');
+    const intent = updateIntent(req.params.id, req.body);
+    if (!intent) return res.status(404).json({ ok: false, error: 'not found' });
+    res.json({ ok: true, intent });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/intents/:id/signal', async (req, res) => {
+  try {
+    const { registerSignal } = await import('./intent-registry.js');
+    const { signal_type, signal_id, signal_summary, alignment } = req.body;
+    if (!signal_type || !signal_summary) return res.status(400).json({ ok: false, error: 'signal_type and signal_summary required' });
+    const signal = registerSignal(req.params.id, signal_type, signal_id, signal_summary, alignment);
+    res.json({ ok: true, signal });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Priority Engine — Global Budget Allocator ────────────────────────────────
+
+app.get('/api/priority/stats', async (req, res) => {
+  try {
+    const { getStats } = await import('./priority-engine.js');
+    res.json(getStats());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/priority/digest', async (req, res) => {
+  try {
+    const { getDigest } = await import('./priority-engine.js');
+    const hours = parseInt(req.query.hours) || 24;
+    res.json(getDigest(hours));
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/priority/classify', async (req, res) => {
+  try {
+    const { classify, trackEvent } = await import('./priority-engine.js');
+    const event = req.body;
+    if (!event || !event.type) return res.status(400).json({ ok: false, error: 'event.type required' });
+    const result = classify(event);
+    trackEvent(event, result);
+    res.json(result);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Attention Ledger — Outcome-Based Priority Feedback ───────────────────────
+
+app.get('/api/attention/stats', async (req, res) => {
+  try {
+    const { getStats } = await import('./attention-ledger.js');
+    res.json(getStats());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/attention/unreviewed', async (req, res) => {
+  try {
+    const { getUnreviewed } = await import('./attention-ledger.js');
+    const limit = parseInt(req.query.limit) || 20;
+    res.json(getUnreviewed(limit));
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/attention/review', async (req, res) => {
+  try {
+    const { reviewEvent } = await import('./attention-ledger.js');
+    const { id, outcome, notes } = req.body;
+    if (!id || !outcome) return res.status(400).json({ ok: false, error: 'id and outcome required' });
+    const result = reviewEvent(id, outcome, notes || null, req.body.reviewSource || 'paul');
+    res.json(result);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/attention/learnings', async (req, res) => {
+  try {
+    const { getLearnings } = await import('./attention-ledger.js');
+    res.json(getLearnings());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Outcome Ledger — real-world result tracking ─────────────────────────────
+
+app.get('/api/outcomes', async (req, res) => {
+  try {
+    const { getOutcomes } = await import('./outcome-ledger.js');
+    const opts = {};
+    if (req.query.domain) opts.domain = req.query.domain;
+    if (req.query.result) opts.result = req.query.result;
+    if (req.query.since) opts.since = req.query.since;
+    if (req.query.limit) opts.limit = parseInt(req.query.limit) || 50;
+    res.json(getOutcomes(opts));
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/outcomes/stats', async (req, res) => {
+  try {
+    const { getStats } = await import('./outcome-ledger.js');
+    res.json(getStats());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/outcomes/agent-accuracy', async (req, res) => {
+  try {
+    const { getAgentAccuracy } = await import('./outcome-ledger.js');
+    res.json(getAgentAccuracy());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/outcomes/intent-roi', async (req, res) => {
+  try {
+    const { getIntentROI } = await import('./outcome-ledger.js');
+    res.json(getIntentROI());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/outcomes/learning-loop', async (req, res) => {
+  try {
+    const { getLearningLoop } = await import('./outcome-ledger.js');
+    res.json(getLearningLoop());
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/outcomes/:id', async (req, res) => {
+  try {
+    const { getOutcome } = await import('./outcome-ledger.js');
+    const outcome = getOutcome(req.params.id);
+    if (!outcome) return res.status(404).json({ ok: false, error: 'Not found' });
+    res.json(outcome);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/outcomes', async (req, res) => {
+  try {
+    const { recordOutcome } = await import('./outcome-ledger.js');
+    const { title, description, domain, result, magnitude, links } = req.body;
+    if (!title || !result) return res.status(400).json({ ok: false, error: 'title and result required' });
+    const outcome = recordOutcome(title, description, domain, result, magnitude, links);
+    if (outcome.error) return res.status(400).json({ ok: false, error: outcome.error });
+    res.json(outcome);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/outcomes/:id/link', async (req, res) => {
+  try {
+    const { linkOutcome } = await import('./outcome-ledger.js');
+    const { linkedType, linkedId, relationship } = req.body;
+    if (!linkedType || !linkedId) return res.status(400).json({ ok: false, error: 'linkedType and linkedId required' });
+    const result = linkOutcome(req.params.id, linkedType, linkedId, relationship);
+    if (result.error) return res.status(400).json({ ok: false, error: result.error });
+    res.json(result);
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Cathedral Memoir ──────────────────────────────────────────────────────────
+
+app.get(['/memoir', '/cathedral-memoir'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'cathedral-memoir.html'));
+});
+
+app.get('/api/memoir/latest', async (req, res) => {
+  try {
+    const { getLatestMemoir } = await import('./cathedral-memoir.js');
+    const memoir = getLatestMemoir();
+    if (!memoir) return res.json({ ok: false, memoir: null });
+    res.json({ ok: true, memoir, state: memoir.state });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/memoir/generate', async (req, res) => {
+  try {
+    const { generateMemoir } = await import('./cathedral-memoir.js');
+    const result = await generateMemoir();
+    res.json({ ok: true, file: result.state.memoirFile, sources: result.state.dataSources });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

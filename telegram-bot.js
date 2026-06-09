@@ -926,6 +926,27 @@ bot.onText(/\/metabolism/, async (msg) => {
   }
 });
 
+// /vault-health — run vault health injector, send summary stats
+bot.onText(/\/vault-health/, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    await safeSend(chatId, 'Vault Health Injector — scanning...', { parse_mode: 'Markdown' });
+    const result = execSync('node /Users/basicclaw777/nanoclaw/vault-health-injector.js', {
+      encoding: 'utf8',
+      timeout: 120000,
+      env: { ...process.env, HOME: process.env.HOME },
+    });
+    // Extract summary from stdout
+    const lines = result.split('\n');
+    const summaryIdx = lines.findIndex(l => l.includes('--- SUMMARY ---'));
+    const summary = summaryIdx >= 0 ? lines.slice(summaryIdx).join('\n') : result.slice(-1500);
+    await safeSend(chatId, `Vault Health Scan Complete\n\n${summary.slice(0, 3800)}`);
+  } catch (err) {
+    console.error('vault-health error:', err);
+    await safeSend(chatId, `Vault health scan failed: ${err.message}`);
+  }
+});
+
 // /trajectory [topic] — belief evolution on a topic
 // /trajectory drift    — reads proprioception block from cath-state.json
 bot.onText(/\/trajectory (.+)/, async (msg, match) => {
@@ -1311,6 +1332,148 @@ bot.onText(/^\/lucy(?:@\w+)?\s*(pulse|status)?\s*$/i, async (msg, match) => {
       await safeSend(chatId, `🫀 *Lucy Heartbeat*\n\`\`\`\n${(out || 'no pulses yet').slice(0, 800)}\n\`\`\`\n_/lucy pulse — run now_`, { parse_mode: 'Markdown' });
     } catch (e) { await safeSend(chatId, `⚠️ lucy: ${e.message}`); }
   }
+});
+
+// /outcome — Record a real-world outcome (Paul is the sensor)
+// Format: /outcome RESULT DOMAIN title and description here
+// Example: /outcome SUCCESS boxing Schools pilot: 27 students, 84% retention
+// Also: /outcome stats, /outcome loop
+bot.onText(/^\/outcome(?:@\w+)?\s+([\s\S]+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const raw = (match[1] || '').trim();
+  try {
+    // Sub-commands
+    if (raw === 'stats') {
+      const { getStats } = await import(path.join(process.env.HOME, 'nanoclaw', 'outcome-ledger.js'));
+      const s = getStats();
+      const resultLine = Object.entries(s.byResult).map(([k,v]) => `${k}: ${v}`).join(', ') || 'none';
+      const domainLine = Object.entries(s.byDomain).map(([k,v]) => `${k}: ${v}`).join(', ') || 'none';
+      await safeSend(chatId, `📋 *Outcome Ledger*\nTotal: ${s.total} (${s.thisMonth} this month)\nResults: ${resultLine}\nDomains: ${domainLine}\nAvg magnitude: ${s.avgMagnitude}`, { parse_mode: 'Markdown' });
+      return;
+    }
+    if (raw === 'loop') {
+      const { getLearningLoop } = await import(path.join(process.env.HOME, 'nanoclaw', 'outcome-ledger.js'));
+      const l = getLearningLoop();
+      let txt = `🔄 *Learning Loop*\n`;
+      txt += `Outcomes: ${l.summary.totalOutcomes} (${l.summary.successRate}% success, avg mag ${l.summary.avgMagnitude})\n`;
+      if (l.topIntent) txt += `Top intent: ${l.topIntent.title} (${l.topIntent.successes} wins, mag ${l.topIntent.totalMagnitude})\n`;
+      if (l.topAgent) txt += `Top agent: ${l.topAgent.agent} (${l.topAgent.accuracy}% accuracy, ${l.topAgent.predictions} predictions)\n`;
+      if (l.noisiest) txt += `Noisiest source: ${l.noisiest.source} (${l.noisiest.noiseRate}% noise)\n`;
+      await safeSend(chatId, txt, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    // Record an outcome: /outcome RESULT DOMAIN rest is title
+    const VALID_RESULTS = ['SUCCESS', 'PARTIAL', 'NEUTRAL', 'FAILURE', 'UNEXPECTED'];
+    const parts = raw.split(/\s+/);
+    const resultWord = (parts[0] || '').toUpperCase();
+
+    if (!VALID_RESULTS.includes(resultWord)) {
+      await safeSend(chatId, `Usage: /outcome [RESULT] [DOMAIN] [TITLE]\nResults: ${VALID_RESULTS.join(', ')}\n\nOr: /outcome stats, /outcome loop`);
+      return;
+    }
+
+    const domain = parts[1] || null;
+    const titleText = parts.slice(2).join(' ');
+    if (!titleText) {
+      await safeSend(chatId, 'Need a title. Example:\n/outcome SUCCESS boxing Schools pilot: 27 students');
+      return;
+    }
+
+    // Split title from description on colon or first sentence
+    let title = titleText;
+    let description = null;
+    const colonIdx = titleText.indexOf(':');
+    if (colonIdx > 0 && colonIdx < 60) {
+      title = titleText.slice(0, colonIdx).trim();
+      description = titleText.slice(colonIdx + 1).trim() || null;
+    }
+
+    const { recordOutcome } = await import(path.join(process.env.HOME, 'nanoclaw', 'outcome-ledger.js'));
+
+    // Auto-link intents
+    let links = [];
+    try {
+      const { mapToIntents } = await import(path.join(process.env.HOME, 'nanoclaw', 'intent-registry.js'));
+      const intentMatches = mapToIntents(titleText + ' ' + (description || '') + ' ' + (domain || ''));
+      links = intentMatches.slice(0, 3).map(m => ({
+        type: 'intent',
+        id: m.id,
+        relationship: resultWord === 'SUCCESS' || resultWord === 'PARTIAL' ? 'ADVANCED' : resultWord === 'FAILURE' ? 'THREATENED' : 'RELATED'
+      }));
+    } catch (e) { /* intent mapping optional */ }
+
+    const outcome = recordOutcome(title, description, domain, resultWord, 5, links);
+    if (outcome.error) {
+      await safeSend(chatId, `⚠️ ${outcome.error}`);
+      return;
+    }
+
+    const linkedStr = links.length > 0
+      ? `\nAuto-linked: ${links.map(l => l.id).join(', ')}`
+      : '';
+    await safeSend(chatId, `📋 Recorded *${outcome.id}*: ${title} (${resultWord}, ${domain})${linkedStr}`, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ outcome: ${e.message}`); }
+});
+
+// /memoir — Cathedral Memoir: narrative voice of all memory types
+bot.onText(/^\/memoir(?:@\w+)?\s*(generate|latest)?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const sub = (match[1] || '').toLowerCase();
+  try {
+    if (sub === 'generate' || sub === '') {
+      await safeSend(chatId, '📖 Generating Cathedral Memoir... (30-60 seconds)');
+      const { generateMemoir } = await import(path.join(process.env.HOME, 'nanoclaw', 'cathedral-memoir.js'));
+      const result = await generateMemoir();
+      const sources = result.state.dataSources;
+      const sourceList = Object.entries(sources).filter(([,v]) => v && v !== 0).map(([k]) => k).join(', ');
+      const narrative = result.narrative || '';
+      // Send in chunks if long
+      const chunks = narrative.match(/[\s\S]{1,3800}/g) || ['No content generated.'];
+      for (const chunk of chunks) {
+        await safeSend(chatId, chunk);
+      }
+      await safeSend(chatId, `📊 Sources: ${sourceList}\n📁 Saved: ${result.state.memoirFile}`);
+    } else if (sub === 'latest') {
+      const { getLatestMemoir } = await import(path.join(process.env.HOME, 'nanoclaw', 'cathedral-memoir.js'));
+      const m = getLatestMemoir();
+      if (!m) { await safeSend(chatId, 'No memoir yet. /memoir generate'); return; }
+      const content = m.content.replace(/^---[\s\S]*?---\n*/, '').slice(0, 3800);
+      await safeSend(chatId, `📖 *Latest Memoir* (${m.file})\n\n${content}`, { parse_mode: 'Markdown' });
+    }
+  } catch (e) { await safeSend(chatId, `⚠️ memoir: ${e.message}`); }
+});
+
+// /priority — Global Priority Engine stats + digest
+bot.onText(/^\/priority(?:@\w+)?\s*(digest)?\s*$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const sub = (match[1] || '').toLowerCase();
+  try {
+    const { getStats, getDigest } = await import(path.join(process.env.HOME, 'nanoclaw', 'priority-engine.js'));
+    if (sub === 'digest') {
+      const d = getDigest();
+      if (!d.totalBackground) {
+        await safeSend(chatId, '📊 *Priority Digest* — no background events in last 24h.', { parse_mode: 'Markdown' });
+      } else {
+        const lines = d.groups.map(g => `  ${g.type}: ${g.count}x (${g.sources.join(', ')})`);
+        await safeSend(chatId, `📊 *Priority Digest (${d.period})*\n${d.totalBackground} background events:\n\`\`\`\n${lines.join('\n')}\n\`\`\``, { parse_mode: 'Markdown' });
+      }
+    } else {
+      const s = getStats();
+      const d24 = s.last24h;
+      const t = d24.byTier;
+      const top = d24.topTypes.map(x => `  ${x.type}: ${x.count}`).join('\n') || '  (none)';
+      await safeSend(chatId,
+        `📊 *Priority Engine — 24h*\n` +
+        `🔴 CRITICAL: ${t.CRITICAL}  🟡 IMPORTANT: ${t.IMPORTANT}\n` +
+        `🟢 ROUTINE: ${t.ROUTINE}  ⚪ BACKGROUND: ${t.BACKGROUND}\n` +
+        `Total: ${d24.total}\n\n` +
+        `*Top types:*\n\`\`\`\n${top}\n\`\`\`\n` +
+        `_/priority digest — background summary_`,
+        { parse_mode: 'Markdown' }
+      );
+    }
+  } catch (e) { await safeSend(chatId, `⚠️ priority: ${e.message}`); }
 });
 
 // /pausegen /resumegen /genstatus — the GLOBAL generation kill-switch.
@@ -3069,66 +3232,172 @@ bot.on('photo', async (msg) => {
 });
 
 // --- Voice Note Handler ---
-bot.on('voice', async (msg) => {
-  const chatId = msg.chat.id;
-  const fileId = msg.voice.file_id;
+// ── Voice-First Relay System — shared transcription pipeline ────────────────
+// Reusable whisper transcription: download → ffmpeg WAV → whisper-cli → text
+// Used by: bot.on('voice'), bot.on('audio'), /vj voice journal
+async function transcribeVoiceFile(fileId, { timeoutMs = 60000 } = {}) {
   const now = new Date();
-  const dateStr = now.toISOString().replace('T', ' ').slice(0, 16);
   const fileStamp = now.toISOString().replace(/[-:T]/g, '').slice(0, 15);
   const oggPath = `/tmp/voice-${fileStamp}.ogg`;
   const wavPath = `/tmp/voice-${fileStamp}.wav`;
-  const vaultDir = `${process.env.HOME}/cathedral-vault/00_Staging/voice-notes`;
-  const vaultPath = `${vaultDir}/${fileStamp}.md`;
+
+  // 1. Download from Telegram
+  const fileLink = await bot.getFileLink(fileId);
+  const axios = (await import('axios')).default;
+  const response = await axios({ url: fileLink, responseType: 'arraybuffer' });
+  fs.writeFileSync(oggPath, response.data);
+
+  // 2. Convert to WAV via ffmpeg
+  await new Promise((resolve, reject) => {
+    const ffmpeg = spawn('/opt/homebrew/bin/ffmpeg', ['-y', '-i', oggPath, '-af', 'adelay=500|500,apad=pad_dur=1', '-ar', '16000', '-ac', '1', wavPath]);
+    const timer = setTimeout(() => { ffmpeg.kill(); reject(new Error('ffmpeg timeout')); }, 30000);
+    ffmpeg.on('close', code => { clearTimeout(timer); code === 0 ? resolve() : reject(new Error(`ffmpeg exit ${code}`)); });
+    ffmpeg.on('error', err => { clearTimeout(timer); reject(err); });
+  });
+
+  // 3. Transcribe via whisper-cpp
+  const transcript = await new Promise((resolve, reject) => {
+    const whisper = spawn('/opt/homebrew/bin/whisper-cli', [
+      '-m', `${process.env.HOME}/Cathedral/models/ggml-medium.bin`,
+      '-f', wavPath,
+      '--no-timestamps',
+      '-otxt',
+      '-of', wavPath
+    ]);
+    const timer = setTimeout(() => { whisper.kill(); reject(new Error('whisper timeout')); }, timeoutMs);
+    whisper.on('close', () => {
+      clearTimeout(timer);
+      const txtPath = wavPath + '.txt';
+      if (fs.existsSync(txtPath)) {
+        resolve(fs.readFileSync(txtPath, 'utf8').trim());
+        try { fs.unlinkSync(txtPath); } catch {}
+      } else {
+        reject(new Error('Whisper produced no output'));
+      }
+    });
+    whisper.on('error', err => { clearTimeout(timer); reject(err); });
+  });
+
+  // 4. Cleanup temp files
+  try { fs.unlinkSync(oggPath); } catch {}
+  try { fs.unlinkSync(wavPath); } catch {}
+
+  return { transcript, fileStamp, now };
+}
+
+// Route transcript through thought-intake (/t equivalent)
+async function routeVoiceToThoughtIntake(chatId, transcript) {
+  const { routeThought } = await import(path.join(process.env.HOME, 'nanoclaw', 'thought-intake.js'));
+  const r = await routeThought(transcript);
+  const routed = r.agent && r.queued
+    ? `-> *${r.agent}* will work it: _${r.action}_`
+    : `-> incubating (no agent) — it'll surface via the vault`;
+  return { result: r, summary: `*Routed* (${r.type}, lens: ${r.lens || '—'})\n${routed}\n_Tracked as \`${r.id}\`_` };
+}
+
+// Deposit to voice journal (~/cathedral-vault/00_Staging/voice-journal/)
+async function depositVoiceJournal(transcript, now) {
+  const vaultDir = `${process.env.HOME}/cathedral-vault/00_Staging/voice-journal`;
+  fs.mkdirSync(vaultDir, { recursive: true });
+  const dateStr = now.toISOString().slice(0, 10);
+  const timeStr = now.toISOString().replace('T', ' ').slice(0, 16);
+  const vaultPath = `${vaultDir}/voice-journal-${dateStr}.md`;
+  const wordCount = transcript.split(/\s+/).filter(Boolean).length;
+
+  // Append if same-day file exists, otherwise create new
+  if (fs.existsSync(vaultPath)) {
+    const append = `\n\n---\n\n## ${timeStr}\n\n${transcript}\n`;
+    fs.appendFileSync(vaultPath, append);
+  } else {
+    const frontmatter = [
+      '---',
+      `title: Voice Journal — ${dateStr}`,
+      `date: ${dateStr}`,
+      'type: voice-journal',
+      'source: telegram',
+      'tags: [voice-journal, inbox]',
+      '---',
+      '',
+      `# Voice Journal — ${dateStr}`,
+      '',
+      `## ${timeStr}`,
+      '',
+      transcript,
+      ''
+    ].join('\n');
+    fs.writeFileSync(vaultPath, frontmatter);
+  }
+
+  return { wordCount, vaultPath };
+}
+
+// State for /vj (voice journal) — next voice note from this chat routes to journal
+const pendingVoiceJournal = {};
+
+// /vj or /voicejournal — sets voice journal mode for next voice note
+bot.onText(/^\/(?:vj|voicejournal)(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  pendingVoiceJournal[chatId] = { ts: Date.now() };
+  await safeSend(chatId, '🎙️ Voice journal mode ON. Send your voice note now.\n_Auto-expires in 5 minutes._', { parse_mode: 'Markdown' });
+});
+
+bot.on('voice', async (msg) => {
+  const chatId = msg.chat.id;
+  const fileId = msg.voice.file_id;
+  const caption = (msg.caption || '').trim().toLowerCase();
+
+  // Detect routing mode from caption or pending state
+  const isRelay = caption.startsWith('/relay');
+  const isThought = caption.startsWith('/t ') || caption === '/t';
+  const isVoiceJournal = pendingVoiceJournal[chatId] && (Date.now() - pendingVoiceJournal[chatId].ts < 300000);
 
   try {
-    // 1. Download OGG from Telegram
-    const fileLink = await bot.getFileLink(fileId);
-    const axios = (await import('axios')).default;
-    const response = await axios({ url: fileLink, responseType: 'arraybuffer' });
-    fs.writeFileSync(oggPath, response.data);
+    await safeSend(chatId, '🎙️ Transcribing...');
+    const { transcript, fileStamp, now } = await transcribeVoiceFile(fileId);
+    const dateStr = now.toISOString().replace('T', ' ').slice(0, 16);
+    const wordCount = transcript.split(/\s+/).filter(Boolean).length;
 
-    // 2. Convert OGG to WAV via ffmpeg
-    await new Promise((resolve, reject) => {
-      const ffmpeg = spawn('ffmpeg', ['-y', '-i', oggPath, '-af', 'adelay=500|500,apad=pad_dur=1', '-ar', '16000', '-ac', '1', wavPath]);
-      ffmpeg.on('close', code => code === 0 ? resolve() : reject(new Error(`ffmpeg exit ${code}`)));
-      ffmpeg.on('error', reject);
-    });
+    // Always show Paul the transcription for verification
+    const preview = transcript.length > 500 ? transcript.slice(0, 500) + '...' : transcript;
+    await safeSend(chatId, `🎙️ *Transcribed* (${wordCount} words):\n\n_${preview}_`, { parse_mode: 'Markdown' });
 
-    // 3. Transcribe via whisper-cpp
-    const transcript = await new Promise((resolve, reject) => {
-      const whisper = spawn('/opt/homebrew/bin/whisper-cli', [
-        '-m', `${process.env.HOME}/Cathedral/models/ggml-medium.bin`,
-        '-f', wavPath,
-        '--no-timestamps',
-        '-otxt',
-        '-of', wavPath
-      ]);
-      whisper.on('close', () => {
-        const txtPath = wavPath + '.txt';
-        if (fs.existsSync(txtPath)) {
-          resolve(fs.readFileSync(txtPath, 'utf8').trim());
-          fs.unlinkSync(txtPath);
-        } else {
-          reject(new Error('Whisper produced no output'));
-        }
-      });
-      whisper.on('error', reject);
-    });
-
-    // 4. Write to vault
+    // Write to vault (voice-notes) regardless of routing mode
+    const vaultDir = `${process.env.HOME}/cathedral-vault/00_Staging/voice-notes`;
     fs.mkdirSync(vaultDir, { recursive: true });
+    const vaultPath = `${vaultDir}/${fileStamp}.md`;
     const frontmatter = `---\ntitle: Voice Note — ${dateStr}\ntype: voice-note\nsource: telegram\ncreated: ${now.toISOString().slice(0, 10)}\ntags: [voice-note, inbox]\n---\n\n# Voice Note — ${dateStr}\n\n${transcript}\n`;
     fs.writeFileSync(vaultPath, frontmatter);
 
-    // 5. Confirm receipt and route through Cathy
-    const firstLine = transcript.split('\n')[0].slice(0, 100);
-    await safeSend(chatId, `🎙️ Heard. Filed to vault.\n"${firstLine}..."`);
+    // ── Route: /relay — transcribe and feed into thought-intake as relay thread
+    if (isRelay) {
+      await safeSend(chatId, '🌱 Routing through The Mouth (relay)...');
+      const { summary } = await routeVoiceToThoughtIntake(chatId, transcript);
+      await safeSend(chatId, `🎙️ Voice relay captured.\n${summary}`, { parse_mode: 'Markdown' });
+      return;
+    }
 
-    // Cleanup
-    try { fs.unlinkSync(oggPath); } catch {}
-    try { fs.unlinkSync(wavPath); } catch {}
+    // ── Route: /t — transcribe and route through thought-intake
+    if (isThought) {
+      await safeSend(chatId, '🌱 Routing through The Mouth...');
+      const { summary } = await routeVoiceToThoughtIntake(chatId, transcript);
+      await safeSend(chatId, `🎙️ Voice thought captured.\n${summary}`, { parse_mode: 'Markdown' });
+      return;
+    }
 
-    // 6. Route transcript through Cathy — same path as text messages
+    // ── Route: /vj — voice journal mode
+    if (isVoiceJournal) {
+      delete pendingVoiceJournal[chatId];
+      const { wordCount: wc, vaultPath: vjPath } = await depositVoiceJournal(transcript, now);
+      // Also route through thought-intake for classification
+      await safeSend(chatId, '🌱 Classifying...');
+      const { result } = await routeVoiceToThoughtIntake(chatId, transcript);
+      const agent = result.agent || 'incubation';
+      const lens = result.lens || 'unsorted';
+      await safeSend(chatId, `🎙️ Voice journal captured. ${wc} words.\nRouted to: *${agent}* (lens: ${lens})\nFiled: \`${path.basename(vjPath)}\``, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    // ── Default: route through Cathy (existing behavior)
     addToConversation('cath', chatId, 'user', transcript);
     const history = getConversationHistory('cath', chatId);
     await safeSend(chatId, '⏳ Cathedral...');
@@ -3139,6 +3408,78 @@ bot.on('voice', async (msg) => {
   } catch (err) {
     console.error('Voice handler error:', err);
     await safeSend(chatId, `⚠️ Voice note received but transcription failed: ${err.message}`);
+  }
+});
+
+// ── Long audio handler — files >1 min (Telegram sends as 'audio' not 'voice') ──
+bot.on('audio', async (msg) => {
+  const chatId = msg.chat.id;
+  if (!msg.audio || !msg.audio.file_id) return;
+  const fileId = msg.audio.file_id;
+  const caption = (msg.caption || '').trim().toLowerCase();
+  const duration = msg.audio.duration || 0;
+
+  const isRelay = caption.startsWith('/relay');
+  const isThought = caption.startsWith('/t ') || caption === '/t';
+  const isVoiceJournal = pendingVoiceJournal[chatId] && (Date.now() - pendingVoiceJournal[chatId].ts < 300000);
+
+  try {
+    await safeSend(chatId, `🎙️ Long audio received (${Math.round(duration / 60)}m${duration % 60}s). Transcribing — this may take a moment...`);
+    // Longer timeout for bigger files: 120s
+    const { transcript, fileStamp, now } = await transcribeVoiceFile(fileId, { timeoutMs: 120000 });
+    const dateStr = now.toISOString().replace('T', ' ').slice(0, 16);
+    const wordCount = transcript.split(/\s+/).filter(Boolean).length;
+
+    // Show transcription for verification
+    const preview = transcript.length > 500 ? transcript.slice(0, 500) + '...' : transcript;
+    await safeSend(chatId, `🎙️ *Transcribed* (${wordCount} words, ${Math.round(duration / 60)}m audio):\n\n_${preview}_`, { parse_mode: 'Markdown' });
+
+    // Write to vault
+    const vaultDir = `${process.env.HOME}/cathedral-vault/00_Staging/voice-notes`;
+    fs.mkdirSync(vaultDir, { recursive: true });
+    const vaultPath = `${vaultDir}/${fileStamp}.md`;
+    const frontmatter = `---\ntitle: Voice Note — ${dateStr}\ntype: voice-note\nsource: telegram-audio\ncreated: ${now.toISOString().slice(0, 10)}\nduration: ${duration}s\ntags: [voice-note, long-audio, inbox]\n---\n\n# Voice Note — ${dateStr}\n\n${transcript}\n`;
+    fs.writeFileSync(vaultPath, frontmatter);
+
+    // ── Route: /relay
+    if (isRelay) {
+      await safeSend(chatId, '🌱 Routing through The Mouth (relay)...');
+      const { summary } = await routeVoiceToThoughtIntake(chatId, transcript);
+      await safeSend(chatId, `🎙️ Voice relay captured.\n${summary}`, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    // ── Route: /t
+    if (isThought) {
+      await safeSend(chatId, '🌱 Routing through The Mouth...');
+      const { summary } = await routeVoiceToThoughtIntake(chatId, transcript);
+      await safeSend(chatId, `🎙️ Voice thought captured.\n${summary}`, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    // ── Route: /vj (voice journal)
+    if (isVoiceJournal) {
+      delete pendingVoiceJournal[chatId];
+      const { wordCount: wc, vaultPath: vjPath } = await depositVoiceJournal(transcript, now);
+      await safeSend(chatId, '🌱 Classifying...');
+      const { result } = await routeVoiceToThoughtIntake(chatId, transcript);
+      const agent = result.agent || 'incubation';
+      const lens = result.lens || 'unsorted';
+      await safeSend(chatId, `🎙️ Voice journal captured. ${wc} words.\nRouted to: *${agent}* (lens: ${lens})\nFiled: \`${path.basename(vjPath)}\``, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    // ── Default: route through Cathy
+    addToConversation('cath', chatId, 'user', transcript);
+    const history = getConversationHistory('cath', chatId);
+    await safeSend(chatId, '⏳ Cathedral...');
+    const reply = await callCath(transcript, history);
+    addToConversation('cath', chatId, 'assistant', reply || '');
+    await safeSend(chatId, reply || '⚠️ No response from Cath.');
+
+  } catch (err) {
+    console.error('Audio handler error:', err);
+    await safeSend(chatId, `⚠️ Audio received but transcription failed: ${err.message}`);
   }
 });
 
@@ -7369,5 +7710,578 @@ bot.on('callback_query', async (query) => {
   } catch (err) {
     console.error('Callback error:', err.message);
     await bot.answerCallbackQuery(query.id, { text: `Error: ${err.message.slice(0, 150)}` });
+  }
+});
+
+// === POLYMARKET COMMANDS ===
+
+bot.onText(/^\/polymarket(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const [ledgerRes, estRes] = await Promise.all([
+      fetch('http://localhost:8080/api/polymarket/ledger').catch(() => null),
+      fetch('http://localhost:8080/api/polymarket/estimates').catch(() => null)
+    ]);
+    const ledger = ledgerRes ? await ledgerRes.json() : {};
+    const estimates = estRes ? await estRes.json() : {};
+    const estEntries = Object.values(estimates);
+
+    let txt = '<b>Polymarket Scanner</b>\n\n';
+    txt += `<b>Ledger</b> (${(ledger.mode || 'paper').toUpperCase()})\n`;
+    txt += `  Bankroll: $${ledger.bankroll || 0}\n`;
+    txt += `  Exposure: $${ledger.exposure || 0}\n`;
+    txt += `  PnL: ${(ledger.stats?.totalPnl || 0) >= 0 ? '+' : ''}$${ledger.stats?.totalPnl || 0}\n`;
+    txt += `  Trades: ${ledger.stats?.totalTrades || 0} | W${ledger.stats?.wins || 0} L${ledger.stats?.losses || 0}\n\n`;
+
+    const open = (ledger.positions || []).filter(p => p.status === 'open');
+    if (open.length) {
+      txt += `<b>Open Positions (${open.length})</b>\n`;
+      for (const p of open) {
+        const days = Math.floor((Date.now() - new Date(p.openedAt)) / 86400000);
+        txt += `  ${p.side} ${p.shares}sh @ $${p.sharePrice}\n`;
+        txt += `  <i>${p.question.slice(0, 60)}</i>\n`;
+        txt += `  Cost: $${p.cost} | Edge: ${(p.edge * 100).toFixed(0)}% | ${days}d\n\n`;
+      }
+    }
+
+    if (estEntries.length) {
+      const tradeable = estEntries.filter(e => e.edge?.tradeable);
+      txt += `<b>Estimates:</b> ${estEntries.length} total, ${tradeable.length} tradeable\n`;
+    }
+
+    txt += `\nDashboard: localhost:8080/polymarket`;
+    safeSend(chatId, txt, { parse_mode: 'HTML' });
+  } catch (err) {
+    safeSend(chatId, `Polymarket error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/pmreport(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const res = await fetch('http://localhost:8080/api/polymarket/report');
+    const report = await res.text();
+    safeSend(chatId, `<pre>${report}</pre>`, { parse_mode: 'HTML' });
+  } catch (err) {
+    safeSend(chatId, `Report error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/pmscan(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  safeSend(chatId, 'Scanning markets...');
+  try {
+    const res = await fetch('http://localhost:8080/api/polymarket/scan', { method: 'POST' });
+    const data = await res.json();
+    safeSend(chatId, `Scan complete: ${data.candidates} candidates from ${data.totalEvents} events.\nTop candidate: ${data.markets?.candidates?.[0]?.question || 'none'}`);
+  } catch (err) {
+    safeSend(chatId, `Scan error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/pmresearch(?:@\w+)?\s*(\d+)?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const count = match[1] ? parseInt(match[1]) : 5;
+  safeSend(chatId, `Researching top ${count} markets via DeepSeek...`);
+  try {
+    const res = await fetch('http://localhost:8080/api/polymarket/research', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ count })
+    });
+    const estimates = await res.json();
+    const entries = Object.values(estimates);
+    const tradeable = entries.filter(e => e.edge?.tradeable);
+    let txt = `<b>Research Complete</b>\n${entries.length} estimates, ${tradeable.length} tradeable\n\n`;
+    for (const e of tradeable) {
+      txt += `<b>${e.edge.side}</b> ${e.question.slice(0, 55)}\n`;
+      txt += `  Edge: ${e.edge.edgePct} | Our: ${e.edge.ourEstimate} vs Mkt: ${e.edge.marketPrice}\n\n`;
+    }
+    if (!tradeable.length) txt += 'No tradeable edges found.';
+    safeSend(chatId, txt, { parse_mode: 'HTML' });
+  } catch (err) {
+    safeSend(chatId, `Research error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/pmexec(?:@\w+)?(?:\s+(--dry))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const dry = match[1] === '--dry' ? '?dry=true' : '';
+  safeSend(chatId, dry ? 'Dry run...' : 'Executing paper trades...');
+  try {
+    const res = await fetch(`http://localhost:8080/api/polymarket/execute${dry}`, { method: 'POST' });
+    const data = await res.json();
+    let txt = `<pre>${data.output.slice(0, 3500)}</pre>`;
+    if (data.ledger?.bankroll) txt += `\nBankroll: $${data.ledger.bankroll}`;
+    safeSend(chatId, txt, { parse_mode: 'HTML' });
+  } catch (err) {
+    safeSend(chatId, `Exec error: ${err.message}`);
+  }
+});
+
+// ── Fundamentals Syllabus — /syllabus ───────────────────────────────────────
+bot.onText(/^\/syllabus(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const arg = match?.[1]?.trim();
+
+  try {
+    if (!arg) {
+      // Show progress + next + current
+      const res = await fetch('http://localhost:8080/api/syllabus');
+      const data = await res.json();
+      const p = data.progress || {};
+      const topics = data.topics || [];
+      const inProg = topics.filter(t => t.status === 'in_progress');
+      const available = topics.filter(t => t.available && t.status === 'not_started');
+
+      let txt = `<b>Fundamentals Syllabus</b>\n`;
+      txt += `Progress: ${p.completed}/${p.total} (${p.percent}%)\n\n`;
+
+      if (inProg.length) {
+        txt += `<b>In Progress:</b>\n`;
+        for (const t of inProg) txt += `  ${t.title} (${t.id})\n`;
+        txt += '\n';
+      }
+
+      if (available.length) {
+        txt += `<b>Available (${available.length}):</b>\n`;
+        for (const t of available.slice(0, 5)) txt += `  ${t.title} (${t.id})\n`;
+        if (available.length > 5) txt += `  ...and ${available.length - 5} more\n`;
+        txt += '\n';
+      }
+
+      txt += `Dashboard: http://localhost:8080/syllabus`;
+      safeSend(chatId, txt, { parse_mode: 'HTML' });
+      return;
+    }
+
+    if (arg === 'next') {
+      const res = await fetch('http://localhost:8080/api/syllabus/next');
+      const data = await res.json();
+      if (data.topic) {
+        let txt = `<b>Next Suggested:</b> ${data.topic.title}\n`;
+        txt += `ID: ${data.topic.id}\n`;
+        txt += `Difficulty: ${data.topic.difficulty}\n`;
+        txt += `${data.reason}\n\n`;
+        txt += `${data.topic.description}\n\n`;
+        txt += `Start: /syllabus start ${data.topic.id}`;
+        safeSend(chatId, txt, { parse_mode: 'HTML' });
+      } else {
+        safeSend(chatId, data.reason || 'No topics available.');
+      }
+      return;
+    }
+
+    const startMatch = arg.match(/^start\s+(.+)$/i);
+    if (startMatch) {
+      const topicId = startMatch[1].trim();
+      // Mark in progress
+      const startRes = await fetch('http://localhost:8080/api/syllabus/start', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topicId })
+      });
+      const startData = await startRes.json();
+      if (!startData.ok) return safeSend(chatId, `Error: ${startData.error}`);
+
+      safeSend(chatId, `Started: <b>${startData.started}</b>\nGenerating study pack (slides + mind map + quiz)...`, { parse_mode: 'HTML' });
+
+      // Generate pack
+      const genRes = await fetch('http://localhost:8080/api/syllabus/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topicId })
+      });
+      const genData = await genRes.json();
+      if (genData.ok) {
+        let txt = `Study pack for "${genData.topic}" ready!\n\n`;
+        txt += `Dashboard: http://localhost:8080/syllabus\n`;
+        txt += `Study Lab: http://localhost:8080/study-lab`;
+        safeSend(chatId, txt);
+      } else {
+        safeSend(chatId, `Pack generation error: ${genData.error}`);
+      }
+      return;
+    }
+
+    const doneMatch = arg.match(/^done\s+(.+)$/i);
+    if (doneMatch) {
+      const topicId = doneMatch[1].trim();
+      const res = await fetch('http://localhost:8080/api/syllabus/complete', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topicId })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        let txt = `Completed: <b>${data.completed}</b>\n`;
+        if (data.newlyUnlocked?.length) {
+          txt += `\nNewly unlocked:\n`;
+          for (const t of data.newlyUnlocked) txt += `  ${t.title} (${t.id})\n`;
+        }
+        safeSend(chatId, txt, { parse_mode: 'HTML' });
+      } else {
+        safeSend(chatId, `Error: ${data.error}`);
+      }
+      return;
+    }
+
+    // Unknown subcommand — show help
+    safeSend(chatId, 'Syllabus commands:\n/syllabus — progress + status\n/syllabus next — suggest next topic\n/syllabus start <id> — start topic + generate pack\n/syllabus done <id> — mark completed\n\nDashboard: http://localhost:8080/syllabus');
+  } catch (err) {
+    safeSend(chatId, `Syllabus error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/pmmonitor(?:@\w+)?$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const res = await fetch('http://localhost:8080/api/polymarket/monitor', { method: 'POST' });
+    const data = await res.json();
+    safeSend(chatId, `<pre>${data.output.slice(0, 3500)}</pre>`, { parse_mode: 'HTML' });
+  } catch (err) {
+    safeSend(chatId, `Monitor error: ${err.message}`);
+  }
+});
+
+// ── Study Lab — Podcast / Slides / Mind Map ─────────────────────────────────
+
+bot.onText(/^\/podcast(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const topic = match?.[1]?.trim();
+  if (!topic) return safeSend(chatId, 'Usage: /podcast <topic>\nGenerates a multi-voice discussion from vault research.');
+  safeSend(chatId, `Generating podcast: "${topic}"\nThis takes 3-6 minutes...`);
+  try {
+    const { execSync } = require('child_process');
+    execSync(`node ${path.join(__dirname, 'cathedral-podcast.js')} "${topic.replace(/"/g, '\\"')}"`,
+      { cwd: __dirname, timeout: 600000, stdio: 'pipe' });
+    // Find latest podcast
+    const podDir = path.join(process.env.HOME, 'Cathedral', 'podcasts');
+    const files = fs.readdirSync(podDir).filter(f => f.endsWith('.ogg')).sort().reverse();
+    if (files.length > 0) {
+      const oggPath = path.join(podDir, files[0]);
+      const mdPath = oggPath.replace('.ogg', '.md');
+      await bot.sendVoice(chatId, oggPath, { caption: `Cathedral Podcast: ${topic}` });
+      if (fs.existsSync(mdPath)) {
+        const transcript = fs.readFileSync(mdPath, 'utf8').slice(0, 3500);
+        safeSend(chatId, `<pre>${transcript}</pre>`, { parse_mode: 'HTML' });
+      }
+    }
+  } catch (err) {
+    safeSend(chatId, `Podcast error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/slides(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const topic = match?.[1]?.trim();
+  if (!topic) return safeSend(chatId, 'Usage: /slides <topic>\nGenerates a study slide deck from vault research.');
+  safeSend(chatId, `Generating slides: "${topic}"...`);
+  try {
+    const { execSync } = require('child_process');
+    execSync(`node ${path.join(__dirname, 'study-lab.js')} slides "${topic.replace(/"/g, '\\"')}"`,
+      { cwd: __dirname, timeout: 120000, stdio: 'pipe' });
+    const slug = topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50);
+    safeSend(chatId, `Slides ready: http://localhost:8080/study-lab/file/slides-${slug}.html\n\nOr open Study Lab: http://localhost:8080/study-lab`);
+  } catch (err) {
+    safeSend(chatId, `Slides error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/mindmap(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const topic = match?.[1]?.trim();
+  if (!topic) return safeSend(chatId, 'Usage: /mindmap <topic>\nGenerates an interactive concept map from vault research.');
+  safeSend(chatId, `Generating mind map: "${topic}"...`);
+  try {
+    const { execSync } = require('child_process');
+    execSync(`node ${path.join(__dirname, 'study-lab.js')} mindmap "${topic.replace(/"/g, '\\"')}"`,
+      { cwd: __dirname, timeout: 120000, stdio: 'pipe' });
+    const slug = topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50);
+    safeSend(chatId, `Mind map ready: http://localhost:8080/study-lab/file/mindmap-${slug}.html\n\nOr open Study Lab: http://localhost:8080/study-lab`);
+  } catch (err) {
+    safeSend(chatId, `Mind map error: ${err.message}`);
+  }
+});
+
+bot.onText(/^\/study(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const topic = match?.[1]?.trim();
+  if (!topic) return safeSend(chatId, 'Study Lab commands:\n/podcast <topic> — multi-voice discussion\n/slides <topic> — study slide deck\n/mindmap <topic> — interactive concept map\n/study <topic> — all three\n\nDashboard: http://localhost:8080/study-lab');
+  safeSend(chatId, `Full study pack: "${topic}"\nGenerating slides + mind map + podcast (5-8 min)...`);
+  try {
+    const { execSync } = require('child_process');
+    // Slides + mindmap in parallel-ish (fast)
+    execSync(`node ${path.join(__dirname, 'study-lab.js')} slides "${topic.replace(/"/g, '\\"')}"`,
+      { cwd: __dirname, timeout: 120000, stdio: 'pipe' });
+    execSync(`node ${path.join(__dirname, 'study-lab.js')} mindmap "${topic.replace(/"/g, '\\"')}"`,
+      { cwd: __dirname, timeout: 120000, stdio: 'pipe' });
+    const slug = topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50);
+    safeSend(chatId, `Slides + Mind Map ready!\n\nSlides: http://localhost:8080/study-lab/file/slides-${slug}.html\nMind Map: http://localhost:8080/study-lab/file/mindmap-${slug}.html\n\nNow generating podcast (3-5 min)...`);
+    // Podcast (slow)
+    execSync(`node ${path.join(__dirname, 'cathedral-podcast.js')} "${topic.replace(/"/g, '\\"')}"`,
+      { cwd: __dirname, timeout: 600000, stdio: 'pipe' });
+    const podDir = path.join(process.env.HOME, 'Cathedral', 'podcasts');
+    const files = fs.readdirSync(podDir).filter(f => f.endsWith('.ogg')).sort().reverse();
+    if (files.length > 0) {
+      await bot.sendVoice(chatId, path.join(podDir, files[0]), { caption: `Cathedral Podcast: ${topic}` });
+    }
+    safeSend(chatId, `Full study pack complete! Dashboard: http://localhost:8080/study-lab`);
+  } catch (err) {
+    safeSend(chatId, `Study error: ${err.message}`);
+  }
+});
+
+// ── Quiz — /quiz [topic] ──────────────────────────────────────────────────
+bot.onText(/^\/quiz(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const topic = match?.[1]?.trim();
+  if (!topic) return safeSend(chatId, 'Usage: /quiz <topic>\nGenerates an interactive quiz from vault research.');
+  safeSend(chatId, `Generating quiz: "${topic}"...`);
+  try {
+    const slug = topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50);
+    execSync(`node ${path.join(__dirname, 'study-lab.js')} quiz "${topic.replace(/"/g, '\\"')}"`,
+      { cwd: __dirname, timeout: 120000, stdio: 'pipe' });
+    safeSend(chatId, `Quiz ready: http://localhost:8080/study-lab/file/quiz-${slug}.html\n\nOr open Study Lab: http://localhost:8080/study-lab`);
+  } catch (err) {
+    safeSend(chatId, `Quiz error: ${err.message}`);
+  }
+});
+
+// ── Digest podcast — /digest-podcast ──────────────────────────────────────
+bot.onText(/^\/digest[-_]?podcast(?:@\w+)?(?:\s+(.+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const hoursArg = match?.[1]?.trim();
+  const hours = hoursArg ? parseInt(hoursArg) : 48;
+  safeSend(chatId, `Generating system digest podcast (last ${hours}h)...\nCathy + Forge reviewing Cathedral activity. 3-8 min.`);
+  try {
+    execSync(
+      `node ${path.join(__dirname, 'cathedral-podcast.js')} --digest --hours=${hours}`,
+      { cwd: __dirname, timeout: 600000, stdio: 'pipe' }
+    );
+    const podDir = path.join(process.env.HOME, 'Cathedral', 'podcasts');
+    const files = fs.readdirSync(podDir).filter(f => f.includes('digest') && f.endsWith('.ogg')).sort().reverse();
+    if (files.length > 0) {
+      await bot.sendVoice(chatId, path.join(podDir, files[0]), { caption: `Cathedral System Digest (last ${hours}h)` });
+      const mdFiles = fs.readdirSync(podDir).filter(f => f.includes('digest') && f.endsWith('.md')).sort().reverse();
+      if (mdFiles.length > 0) {
+        const transcript = fs.readFileSync(path.join(podDir, mdFiles[0]), 'utf8');
+        const summary = transcript.split('\n').slice(0, 20).join('\n');
+        safeSend(chatId, `Transcript:\n\n${summary}\n\n...full transcript saved to vault.`);
+      }
+    } else {
+      safeSend(chatId, 'Digest generated but no audio found.');
+    }
+  } catch (err) {
+    const errMsg = err.stderr?.toString?.() || err.message;
+    if (errMsg.includes('No recent activity')) {
+      safeSend(chatId, `No activity in last ${hours}h. Nothing to digest.`);
+    } else {
+      safeSend(chatId, `Digest error: ${errMsg.slice(0, 300)}`);
+    }
+  }
+});
+
+// ── Agent podcast — /agentcast ──────────────────────────────────────────────
+bot.onText(/^\/agentcast(?:@\w+)?(?:\s+(\w+))?(?:\s+(solo|duo))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const agentId = match?.[1]?.trim()?.toLowerCase();
+  const format = match?.[2]?.trim()?.toLowerCase() || 'solo';
+
+  const KNOWN_AGENTS = ['muse', 'archaeologist', 'lucy', 'synapse', 'whisperer', 'prospector', 'orc', 'cathy_solo'];
+  if (!agentId) {
+    safeSend(chatId, `Agent podcasts — each agent thinks, explores, develops ideas from their own data.\n\nUsage: /agentcast <agent> [solo|duo]\n\nAgents: ${KNOWN_AGENTS.join(', ')}\n\nsolo = monologue, duo = conversation with Cathy`);
+    return;
+  }
+  if (!KNOWN_AGENTS.includes(agentId)) {
+    safeSend(chatId, `Unknown agent: ${agentId}\nAvailable: ${KNOWN_AGENTS.join(', ')}`);
+    return;
+  }
+
+  safeSend(chatId, `Generating ${format} podcast for ${agentId}...\nGathering data, writing script, rendering audio. 3-10 min.`);
+  try {
+    execSync(
+      `node ${path.join(__dirname, 'cathedral-podcast.js')} --agent ${agentId} --format=${format}`,
+      { cwd: __dirname, timeout: 600000, stdio: 'pipe' }
+    );
+    const podDir = path.join(process.env.HOME, 'Cathedral', 'podcasts');
+    const files = fs.readdirSync(podDir).filter(f => f.includes(agentId) && f.endsWith('.ogg')).sort().reverse();
+    if (files.length > 0) {
+      await bot.sendVoice(chatId, path.join(podDir, files[0]), { caption: `${agentId} — ${format} podcast` });
+      const mdFiles = fs.readdirSync(podDir).filter(f => f.includes(agentId) && f.endsWith('.md')).sort().reverse();
+      if (mdFiles.length > 0) {
+        const transcript = fs.readFileSync(path.join(podDir, mdFiles[0]), 'utf8');
+        const summary = transcript.split('\n').slice(0, 25).join('\n');
+        safeSend(chatId, `Transcript:\n\n${summary}\n\n...full transcript saved.`);
+      }
+    } else {
+      safeSend(chatId, 'Podcast generated but no audio found.');
+    }
+  } catch (err) {
+    const errMsg = err.stderr?.toString?.() || err.message;
+    safeSend(chatId, `Agent podcast error: ${errMsg.slice(0, 400)}`);
+  }
+});
+
+// ── Publication commands ──────────────────────────────────────────────────────
+
+bot.onText(/^\/publish(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const args = match?.[1]?.trim();
+
+  // /publish (no args) — status overview
+  if (!args) {
+    try {
+      const bookDir = path.join(__dirname, 'publication-output', 'book');
+      const newsDir = path.join(__dirname, 'publication-output', 'newsletter');
+      const podDir = path.join(__dirname, 'publication-output', 'podcast');
+      const bookCount = fs.existsSync(bookDir) ? fs.readdirSync(bookDir).filter(f => f.endsWith('.md')).length : 0;
+      const newsCount = fs.existsSync(newsDir) ? fs.readdirSync(newsDir).filter(f => f.endsWith('.md')).length : 0;
+      const podCount = fs.existsSync(podDir) ? fs.readdirSync(podDir).filter(f => f.endsWith('.md')).length : 0;
+      safeSend(chatId,
+        `Publication Hub\n\n` +
+        `Book: ${bookCount}/15 chapters drafted\n` +
+        `Newsletters: ${newsCount} written\n` +
+        `Podcasts: ${podCount} curations\n\n` +
+        `Commands:\n/publish book <N> — generate chapter N\n/publish newsletter — draft newsletter\n/publish podcast — curate recent podcasts\n\n` +
+        `Dashboard: http://localhost:8080/publisher`
+      );
+    } catch (e) { safeSend(chatId, `Publication status error: ${e.message}`); }
+    return;
+  }
+
+  // /publish book <N>
+  const bookMatch = args.match(/^book\s+(\d+)$/i);
+  if (bookMatch) {
+    const chapterNum = parseInt(bookMatch[1]);
+    if (chapterNum < 1 || chapterNum > 15) return safeSend(chatId, 'Chapter must be 1-15.');
+    safeSend(chatId, `Assembling Chapter ${chapterNum}... (searching vault + DeepSeek, ~60s)`);
+    try {
+      const { assembleChapter } = await import('./publication-engine.js');
+      const result = await assembleChapter(chapterNum);
+      if (result.ok) {
+        safeSend(chatId,
+          `Chapter ${result.chapter}: ${result.title}\n` +
+          `Part: ${result.part}\n` +
+          `Words: ${result.words} | Vault nuggets used: ${result.nuggets}\n\n` +
+          `${result.summary}\n\n` +
+          `Full draft: http://localhost:8080/publisher`
+        );
+      } else {
+        safeSend(chatId, `Book error: ${result.error}`);
+      }
+    } catch (e) { safeSend(chatId, `Book error: ${e.message}`); }
+    return;
+  }
+
+  // /publish newsletter
+  if (args.match(/^newsletter$/i)) {
+    safeSend(chatId, 'Drafting newsletter... (pulling Mercury feed + vault, ~30s)');
+    try {
+      const { draftNewsletter } = await import('./publication-engine.js');
+      const result = await draftNewsletter();
+      if (result.ok) {
+        safeSend(chatId,
+          `Newsletter drafted: "${result.title}"\n` +
+          `Words: ${result.words} | Sources: ${result.sources.mercury} Mercury, ${result.sources.vault} vault\n\n` +
+          `Preview:\n${result.preview}\n\n` +
+          `Full draft: http://localhost:8080/publisher`
+        );
+      } else {
+        safeSend(chatId, `Newsletter error: ${result.error}`);
+      }
+    } catch (e) { safeSend(chatId, `Newsletter error: ${e.message}`); }
+    return;
+  }
+
+  // /publish podcast
+  if (args.match(/^podcast$/i)) {
+    safeSend(chatId, 'Curating recent podcasts... (~30s)');
+    try {
+      const { curatePodcast } = await import('./publication-engine.js');
+      const result = await curatePodcast();
+      if (result.ok) {
+        let msg = `Podcast curation: ${result.curated}/${result.scanned} scored 7+\n`;
+        if (result.top) {
+          msg += `\nTop pick: ${result.top.file} (${result.top.score}/10)\n${result.top.reason}`;
+        }
+        msg += `\n\nFull curation: http://localhost:8080/publisher`;
+        safeSend(chatId, msg);
+      } else {
+        safeSend(chatId, `Podcast error: ${result.error}`);
+      }
+    } catch (e) { safeSend(chatId, `Podcast error: ${e.message}`); }
+    return;
+  }
+
+  safeSend(chatId, 'Usage: /publish | /publish book <N> | /publish newsletter | /publish podcast');
+});
+
+// ── /ledger — Claim Ledger + Provenance Tracking ────────────────────────────
+
+bot.onText(/^\/ledger(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const args = (match[1] || '').trim();
+
+  try {
+    const ledger = await import('./claim-ledger.js');
+
+    // /ledger blocked — show recent self-corroboration blocks
+    if (args.match(/^blocked$/i)) {
+      const events = ledger.getBlockedEvents(10);
+      if (events.length === 0) {
+        safeSend(chatId, 'No self-corroboration blocks recorded.');
+        return;
+      }
+      let text = '*Self-Corroboration Blocks*\n\n';
+      for (const ev of events) {
+        const snippet = ev.claim_content.slice(0, 60);
+        text += `\u2022 "${snippet}..."\n`;
+        text += `  ${ev.old_confidence} \u2192 ${ev.new_confidence} (BLOCKED)\n`;
+        text += `  Reason: ${ev.reason || 'self-corroboration'}\n`;
+        text += `  ${ev.created_at}\n\n`;
+      }
+      safeSend(chatId, text);
+      return;
+    }
+
+    // /ledger register <text> — quick register PRIMARY claim
+    const registerMatch = args.match(/^register\s+(.+)$/is);
+    if (registerMatch) {
+      const claim = ledger.registerClaim(registerMatch[1], 'PRIMARY', { originAgent: 'telegram' });
+      safeSend(chatId, `Claim registered:\nID: \`${claim.id}\`\nType: PRIMARY\nConfidence: ${claim.confidence}`);
+      return;
+    }
+
+    // /ledger (no args) — stats
+    const stats = ledger.getStats();
+    let text = '*Claim Ledger*\n\n';
+    text += `Total claims: ${stats.total}\n\n`;
+    text += '*By type:*\n';
+    for (const [type, count] of Object.entries(stats.byType)) {
+      text += `  ${type}: ${count}\n`;
+    }
+    text += '\n*By grade:*\n';
+    for (const [grade, count] of Object.entries(stats.byGrade)) {
+      text += `  ${grade}: ${count}\n`;
+    }
+    text += '\n*Promotion:*\n';
+    for (const [status, count] of Object.entries(stats.promoted)) {
+      text += `  ${status}: ${count}\n`;
+    }
+    text += `\nSelf-corroboration blocks: ${stats.blockedEvents}`;
+    safeSend(chatId, text);
+  } catch (e) {
+    safeSend(chatId, `Ledger error: ${e.message}`);
   }
 });
