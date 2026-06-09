@@ -63,6 +63,10 @@
   <div><span class="dot" style="background:#ef4444"></span> Relay 4: Master Game</div>
   <div><span class="dot" style="background:#a855f7"></span> Relay 5: 10-Block Gates</div>
   <div><span class="dot" style="background:#f97316"></span> Relay 6: Agent Autonomy</div>
+  <div><span class="dot" style="background:#14b8a6"></span> Relay 7: Ancient Corpus Gaps</div>
+  <div><span class="dot" style="background:#ec4899"></span> Relay 8: Cathedral for Others</div>
+  <div><span class="dot" style="background:#f43f5e"></span> Relay 9: Coaching IP Form</div>
+  <div><span class="dot" style="background:#8b5cf6"></span> Relay 10: Cosmology Grade</div>
   <div style="margin-top:0.4rem; color:#f7b40866">--- cross-relay connections</div>
 </div>
 
@@ -134,6 +138,47 @@ const RELAYS = [
       { id: 'd6f', title: 'Minimum Viable Agent Principle', desc: 'Least privilege at agent level, not user level. No broader permissions than function requires.' },
     ]
   },
+  {
+    id: 'r7', title: 'Ancient Corpus Extraction Gaps', color: '#14b8a6', rounds: 4, status: 'converged',
+    discoveries: [
+      { id: 'd7a', title: 'Contradiction Tracker (Fork Detector)', desc: 'Follows a single claim across time and space to identify where traditions bifurcate — forks, not flat contradictions.' },
+      { id: 'd7b', title: 'Perceptual Shift Detector', desc: 'Measures whether a claim alters how subsequent inputs are framed — attention-change as evidence of application.' },
+      { id: 'd7c', title: 'Drift Detector', desc: 'Rate-of-change of a concept across time. Where meaning accelerates or stabilizes within and across traditions.' },
+      { id: 'd7d', title: 'Significance Scorer', desc: 'Evaluates patterns on breadth, depth, stability, and generativity — weights importance beyond mere detection.' },
+      { id: 'd7e', title: 'Absence Detector', desc: 'Maps expected content against actual for genre/era/tradition. Missing content is data.' },
+      { id: 'd7f', title: 'Reception Flow Extractor', desc: 'Tracks how claims transform through interpretive traditions — commentary tradition alongside primary source.' },
+    ]
+  },
+  {
+    id: 'r8', title: 'Cathedral for Someone Else', color: '#ec4899', rounds: 4, status: 'converged',
+    discoveries: [
+      { id: 'd8a', title: 'Kernel/Shell/Userland Model', desc: 'Three-layer architecture: kernel (universal primitives), shell (configurable params), userland (personal content).' },
+      { id: 'd8b', title: 'Epistemic Hygiene Floor', desc: 'Minimum prerequisite: tolerance for deferred gratification in pattern recognition. Can be lowered but not eliminated.' },
+      { id: 'd8c', title: 'Bootstrapping Protocol', desc: 'Chapter 0: spend 2 weeks capturing everything, cluster into 3-5 groups, assign one agent per group.' },
+      { id: 'd8d', title: 'Minimum Viable Cathedral', desc: '3 agents, 100 nuggets, claim ledger, relay partner. 6-8 weeks to critical mass.' },
+      { id: 'd8e', title: 'Vault Promotion Criterion', desc: 'A raw note becomes a graded nugget only after surviving at least one relay and receiving a claim grade.' },
+    ]
+  },
+  {
+    id: 'r9', title: 'Coaching IP Product Form', color: '#f43f5e', rounds: 10, status: 'max-rounds',
+    discoveries: [
+      { id: 'd9a', title: 'Reveal Escalation Model', desc: 'Two-phase pipeline: Phase 1 pure Trojan Horse (boxing program), Phase 2 explicit IP certification gated by Phase 1 completion.' },
+      { id: 'd9b', title: 'Signature-Locked Scaling', desc: 'Method is observable (fighters who don\'t panic) but illegible without trained perception. Defensible by design.' },
+      { id: 'd9c', title: 'Transparency Paradox', desc: 'Naming the method kills it. Showing the results sells it. The product IS the boxing program.' },
+      { id: 'd9d', title: 'Pause-Point Recognition (PPR)', desc: 'The visible behavioral signature — the pause before action — that proves the method worked. Video comparison = marketing.' },
+      { id: 'd9e', title: 'PPR Flywheel', desc: 'PPR evidence attracts Phase 1 → Phase 1 produces PPR → PPR becomes evidence for next cycle.' },
+    ]
+  },
+  {
+    id: 'r10', title: 'Cosmology Evidence Grade', color: '#8b5cf6', rounds: 6, status: 'converged',
+    discoveries: [
+      { id: 'd10a', title: 'Ontological Overfitting', desc: 'Worldview assumptions encoded into sensor network and audit layers. Confirmation structurally inevitable.' },
+      { id: 'd10b', title: 'Structural Immunity', desc: 'No mechanism by which core hypothesis can be falsified by the system\'s own outputs.' },
+      { id: 'd10c', title: 'Operational Falsifiability', desc: 'Core assumptions must be explicitly put at risk through pre-registered tests with abandonment thresholds.' },
+      { id: 'd10d', title: 'Architectural Circularity', desc: 'Bias embedded in system design, invisible to its own audits. Run the audit backward with the alternative model.' },
+      { id: 'd10e', title: 'Methodology as Publishable Asset', desc: 'The 17-layer audit structure is the breakthrough — publish the method, not the conclusion.' },
+    ]
+  },
 ];
 
 // Cross-relay connections (the gold)
@@ -164,12 +209,37 @@ const CROSS_LINKS = [
   { from: 'd6c', to: 'd2b', reason: 'Anomaly surface area = attentional debt for agents — detection latency is cognitive load' },
   { from: 'd6d', to: 'd5d', reason: 'Graduated autonomy reduction mirrors mini-gate architecture — stepwise trust' },
   { from: 'd6f', to: 'd3c', reason: 'Minimum viable agent IS access control applied to agents, not users' },
+  // Relay 7 cross-links
+  { from: 'd7a', to: 'd5e', reason: 'Fork detection mirrors developmental wall diagnostics — both reveal hidden divergence points' },
+  { from: 'd7b', to: 'd2c', reason: 'Perceptual shift = attention target inversion applied to ancient texts' },
+  { from: 'd7c', to: 'd4d', reason: 'Drift detection is pattern refinery applied to concepts over time' },
+  { from: 'd7d', to: 'd1a', reason: 'Significance scoring parallels causal model — weighting patterns, not just detecting them' },
+  { from: 'd7e', to: 'd3d', reason: 'Absence detection closes the library-toolkit gap — what\'s missing is data' },
+  { from: 'd7f', to: 'd4b', reason: 'Reception flow tracks how compounding substrate transforms through interpreters' },
+  // Relay 8 cross-links
+  { from: 'd8a', to: 'd6b', reason: 'Kernel/shell/userland enforces self-reference prohibition — layers can\'t modify their own kernel' },
+  { from: 'd8b', to: 'd5b', reason: 'Epistemic hygiene floor mirrors selection vs development — some people can\'t Cathedral' },
+  { from: 'd8c', to: 'd2a', reason: 'Bootstrapping protocol requires shared attention — 2 weeks of capture IS attention training' },
+  { from: 'd8d', to: 'd3d', reason: 'Minimum viable Cathedral = toolkit not library — 3 agents operationalized > 100 passive notes' },
+  { from: 'd8e', to: 'd7d', reason: 'Vault promotion criterion IS significance scoring applied to personal knowledge' },
+  // Relay 9 cross-links
+  { from: 'd9a', to: 'd5c', reason: 'Reveal escalation mirrors gradual exposure — Phase 1 builds trust for Phase 2 disclosure' },
+  { from: 'd9b', to: 'd3c', reason: 'Signature-locked scaling IS access control — illegibility without training is the moat' },
+  { from: 'd9c', to: 'd1a', reason: 'Transparency paradox: naming the causal model kills the Trojan Horse delivery' },
+  { from: 'd9d', to: 'd2a', reason: 'PPR is shared attention made visible — the pause IS the signal both parties see' },
+  { from: 'd9e', to: 'd4b', reason: 'PPR flywheel is compounding substrate — evidence produces students produces evidence' },
+  // Relay 10 cross-links
+  { from: 'd10a', to: 'd7a', reason: 'Ontological overfitting = failing to run the contradiction tracker on your own assumptions' },
+  { from: 'd10b', to: 'd6b', reason: 'Structural immunity parallels self-reference prohibition — system can\'t falsify itself' },
+  { from: 'd10c', to: 'd5e', reason: 'Operational falsifiability mirrors deficit model — put assumptions at risk to reveal what\'s missing' },
+  { from: 'd10d', to: 'd7e', reason: 'Architectural circularity IS absence detection failure — can\'t see what your own design hides' },
+  { from: 'd10e', to: 'd1d', reason: 'Methodology as publishable asset = discovery engine thesis applied to epistemology itself' },
 ];
 
 // Layout
 const W = window.innerWidth, H = window.innerHeight;
 const CX = W/2, CY = H/2;
-const RELAY_RADIUS = Math.min(W, H) * 0.32;
+const RELAY_RADIUS = Math.min(W, H) * 0.35;
 
 const nodes = [];
 const links = [];
@@ -183,7 +253,7 @@ RELAYS.forEach((r, ri) => {
 
   const dCount = r.discoveries.length;
   r.discoveries.forEach((d, di) => {
-    const dAngle = angle + ((di - (dCount-1)/2) * 0.18);
+    const dAngle = angle + ((di - (dCount-1)/2) * 0.12);
     const dRadius = RELAY_RADIUS * 0.55;
     const dx = CX + Math.cos(dAngle) * (RELAY_RADIUS + dRadius * 0.4 + di * 15);
     const dy = CY + Math.sin(dAngle) * (RELAY_RADIUS + dRadius * 0.4 + di * 15);
@@ -304,7 +374,7 @@ function hideTooltip() { tooltip.style.display = 'none'; }
 // Stats
 const totalDisc = RELAYS.reduce((s, r) => s + r.discoveries.length, 0);
 const totalRounds = RELAYS.reduce((s, r) => s + r.rounds, 0);
-document.getElementById('stats').textContent = `${RELAYS.filter(r=>r.status==='converged').length} relays converged | ${totalRounds} rounds | ${totalDisc} discoveries | ${crossLinks.length} cross-connections`;
+document.getElementById('stats').textContent = `${RELAYS.length} relays (${RELAYS.filter(r=>r.status==='converged').length} converged) | ${totalRounds} rounds | ${totalDisc} discoveries | ${crossLinks.length} cross-connections`;
 </script>
 </body>
 </html>
