@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-05-30",
+  "lastUpdated": "2026-06-09",
   "source": "Paul direct input — first real seed data",
   "domains": {
     "music": {
@@ -987,7 +987,9 @@
         "patience_reward",
         "principle_embodiment",
         "self_regulating",
-        "rhythm_agility"
+        "rhythm_agility",
+        "individualization",
+        "diagnostic_revealing"
       ],
       "confirmed_qualities": [
         "teaches a principle in unexpected and unignorable way",
@@ -1003,7 +1005,12 @@
         "rhythm and agility through play — skipping, tag, races, keep-ups",
         "drills that force combination throwing — not just singles",
         "hitting moving targets — pads moving, angles changing",
-        "changing angles — footwork + punch selection under spatial pressure"
+        "changing angles — footwork + punch selection under spatial pressure",
+        "individual weakness focus — each student a different task, fosters independence/autonomy",
+        "pressure that makes them laugh — safe failure, you feel the brain working or not",
+        "footwork as the cement between the bricks — fluidity that's easy to skip but essential",
+        "reveals which phase/stage the student fails — the drill diagnoses the gap",
+        "directional control — measured, smooth, reactive movement in all four directions"
       ],
       "rejections": [
         "mindless repetition without awareness",
@@ -1012,7 +1019,8 @@
         "cannot be broken down or built up progressively",
         "drills with no underlying principle — just exercise",
         "pure conditioning with no skill transfer",
-        "drills that only work with constant coach direction"
+        "drills that only work with constant coach direction",
+        "winging the session — no structure, no plan (Paul's named anti-pattern, wants to fix)"
       ],
       "anchors": [
         {
@@ -1044,7 +1052,11 @@
             "chunkability",
             "loopability"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "phased_attacks",
+            "loops"
+          ]
         },
         {
           "item": "push hands",
@@ -1055,7 +1067,11 @@
             "principle_embodiment",
             "patience_reward"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "partner_work",
+            "odd_number"
+          ]
         },
         {
           "item": "looping partner attack-defend drills",
@@ -1066,7 +1082,11 @@
             "loopability",
             "rhythm_and_flow"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "loops",
+            "partner_work"
+          ]
         },
         {
           "item": "10 consecutive wall catches — drop resets to zero",
@@ -1098,7 +1118,11 @@
             "chunkability",
             "loopability"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "loops",
+            "phased_attacks"
+          ]
         },
         {
           "item": "restriction drills: left only, footwork only, body only",
@@ -1118,7 +1142,11 @@
             "rhythm_agility",
             "loopability"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "circuits_1_3min",
+            "rhythms"
+          ]
         },
         {
           "item": "tag games",
@@ -1128,7 +1156,11 @@
             "rhythm_agility",
             "principle_embodiment"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "circuits_1_3min",
+            "odd_number"
+          ]
         },
         {
           "item": "keep-ups",
@@ -1138,7 +1170,11 @@
             "rhythm_agility",
             "self_regulating"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "circuits_1_3min",
+            "rhythms"
+          ]
         },
         {
           "item": "races with movement constraints",
@@ -1148,7 +1184,11 @@
             "rhythm_agility",
             "consciousness_forcing"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "circuits_1_3min",
+            "odd_number"
+          ]
         },
         {
           "item": "combination throwing drills — must string punches together",
@@ -1159,7 +1199,11 @@
             "loopability",
             "principle_teaching"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "phased_attacks",
+            "loops"
+          ]
         },
         {
           "item": "moving target pads — coach moves, student adjusts",
@@ -1169,7 +1213,11 @@
             "consciousness_forcing",
             "principle_embodiment"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "entries_exits",
+            "loops"
+          ]
         },
         {
           "item": "angle-changing drills — footwork + punch selection under spatial pressure",
@@ -1180,7 +1228,230 @@
             "principle_teaching",
             "rhythm_agility"
           ],
-          "added": "2026-05-30"
+          "added": "2026-05-30",
+          "categories": [
+            "entries_exits",
+            "setups"
+          ]
+        },
+        {
+          "item": "individual weakness round-robin — go round class, each a different focus (mobility / bag / technique)",
+          "status": "YES",
+          "reason": "Breaks the class up, individual + specific, fosters independence and self-diagnosis",
+          "dimensions": [
+            "individualization",
+            "consciousness_forcing",
+            "diagnostic_revealing"
+          ],
+          "blocks": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "added": "2026-06-09"
+        },
+        {
+          "item": "multi-phase tennis-ball footwork — no-step jab catch, then half-step jab catch on the beat, directional calls",
+          "status": "YES",
+          "reason": "Brain under pressure — must fit both punches before the ball arrives; they laugh, feel the brain work",
+          "dimensions": [
+            "consciousness_forcing",
+            "chunkability",
+            "rhythm_agility",
+            "diagnostic_revealing"
+          ],
+          "blocks": [
+            2,
+            3
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "phased_attacks",
+            "rhythms"
+          ]
+        },
+        {
+          "item": "directional anchor steps — 4 directions + full steps, weighted / elastic / bodyweight, fast-react then smooth",
+          "status": "YES",
+          "reason": "Good form, measured directional control, reactive then fluid",
+          "dimensions": [
+            "patience_reward",
+            "principle_embodiment",
+            "rhythm_agility"
+          ],
+          "blocks": [
+            2,
+            3
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "rhythms",
+            "entries_exits"
+          ]
+        },
+        {
+          "item": "flow footwork — coach drifts forward/back/side, student keeps range + angle, pivots both ways, ducks the lead hook",
+          "status": "YES",
+          "reason": "The cement between the bricks — ring generalship + fluidity, easy to skip, hugely useful. Current favourite.",
+          "dimensions": [
+            "partner_flow",
+            "principle_embodiment",
+            "loopability",
+            "diagnostic_revealing"
+          ],
+          "blocks": [
+            2,
+            5,
+            6,
+            9
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "entries_exits",
+            "partner_work"
+          ]
+        },
+        {
+          "item": "double-end + step sequences — step L/R, 1-2-3-4, slip-slip, step out",
+          "status": "YES",
+          "reason": "Cardio + loop + flow; you see exactly which stage they drop (hook, step) — diagnostic for bag work",
+          "dimensions": [
+            "chunkability",
+            "loopability",
+            "diagnostic_revealing",
+            "rhythm_agility"
+          ],
+          "blocks": [
+            3,
+            4,
+            5
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "phased_attacks",
+            "loops"
+          ]
+        },
+        {
+          "item": "pad flow — jab, double-jab, cross, 1-2, cross-hook, hook-uppercut, broken with footwork + defence",
+          "status": "YES",
+          "reason": "Bread-and-butter combination foundation; every punch, looped, moving every direction",
+          "dimensions": [
+            "chunkability",
+            "loopability",
+            "principle_teaching"
+          ],
+          "blocks": [
+            3,
+            4,
+            5
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "loops",
+            "phased_attacks"
+          ]
+        },
+        {
+          "item": "plyo line-hops — over a line forward/back, single-leg, weighted / unweighted",
+          "status": "YES",
+          "reason": "Rhythm + agility + conditioning with skill transfer",
+          "dimensions": [
+            "rhythm_agility",
+            "loopability"
+          ],
+          "blocks": [
+            2,
+            7
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "circuits_1_3min",
+            "rhythms"
+          ]
+        },
+        {
+          "item": "slip-and-tag — one wears gloves, one slips and tags the shoulder",
+          "status": "YES",
+          "reason": "Timing + footwork without the danger; reading without fear",
+          "dimensions": [
+            "partner_flow",
+            "loopability",
+            "consciousness_forcing"
+          ],
+          "blocks": [
+            5,
+            6
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "partner_work",
+            "loops"
+          ]
+        },
+        {
+          "item": "number-call attack/defend read — attacker picks single / double / L-R, defender reads; whistles for reaction speed",
+          "status": "YES",
+          "reason": "Harder to read = defender works reading + fluidity; weight on back foot, fast reactions",
+          "dimensions": [
+            "partner_flow",
+            "consciousness_forcing",
+            "diagnostic_revealing",
+            "rhythm_agility"
+          ],
+          "blocks": [
+            5,
+            6,
+            7
+          ],
+          "added": "2026-06-09",
+          "categories": [
+            "partner_work",
+            "setups"
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "key": "entries_exits",
+          "label": "Entries & exits",
+          "note": "Getting in and out — angles and strategies for closing and escaping"
+        },
+        {
+          "key": "rhythms",
+          "label": "Rhythms",
+          "note": "Timing, beat, measured/reactive movement"
+        },
+        {
+          "key": "phased_attacks",
+          "label": "Phased attacks",
+          "note": "Multi-beat sequenced attacks — phase 1, phase 2, assemble"
+        },
+        {
+          "key": "setups",
+          "label": "Set-ups",
+          "note": "Feints, baits, creating the opening before the shot"
+        },
+        {
+          "key": "loops",
+          "label": "Loops",
+          "note": "Continuous, looping drills — get into the zone"
+        },
+        {
+          "key": "circuits_1_3min",
+          "label": "1–3 min circuits",
+          "note": "Timed stations — flagged conditioning OR skill-development focus"
+        },
+        {
+          "key": "partner_work",
+          "label": "Partner work",
+          "note": "Two (or more) active partners"
+        },
+        {
+          "key": "odd_number",
+          "label": "Odd-number drills",
+          "note": "Drills that still work with an uneven class count — 3-ways, rotations, coach-fills"
         }
       ]
     }
