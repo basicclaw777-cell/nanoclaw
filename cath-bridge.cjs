@@ -1920,6 +1920,34 @@ app.post('/class-planner/archive', (req, res) => {
   res.json({ ok: true, archived: history.length });
 });
 
+// ── Boxing loop — reverse link (CRM tap → outcome ledger) ────────────────────
+// Serve the CRM tap-screen same-origin so it can POST outcomes back to the loop.
+app.get('/crm', (req, res) => {
+  const p = path.join(process.env.HOME, 'basic-reflex', 'crm', 'tap-screen.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+// A gate-pass / session signal from the CRM becomes a boxing outcome (Paul-as-sensor,
+// now automatic). Reuses the tested boxing-loop CLI — no duplicated ledger logic.
+app.post('/boxing/outcome', (req, res) => {
+  const { execFile } = require('child_process');
+  const b = req.body || {};
+  const text = (b.text || '').toString().slice(0, 200);
+  const VALID = ['SUCCESS', 'PARTIAL', 'NEUTRAL', 'FAILURE', 'UNEXPECTED'];
+  const result = VALID.includes((b.result || '').toString().toUpperCase()) ? b.result.toUpperCase() : 'NEUTRAL';
+  if (!text) return res.status(400).json({ error: 'text required' });
+  const args = ['boxing-loop.js', '--outcome', text, '--result', result];
+  if (b.client) args.push('--client', String(b.client).slice(0, 60));
+  if (b.drill) args.push('--drill', String(b.drill).slice(0, 80));
+  if (b.mag) args.push('--mag', String(parseInt(b.mag, 10) || 5));
+  execFile('node', args, { cwd: __dirname, timeout: 15000 }, (err, stdout) => {
+    if (err) return res.status(500).json({ error: 'loop failed', detail: String(err).slice(0, 200) });
+    res.json({ ok: true, logged: text, result, out: (stdout || '').trim().split('\n')[0] });
+  });
+});
+
 // Serve open gym card
 app.get('/open-gym', (req, res) => {
   const p = path.join(process.env.HOME, 'basic-reflex', 'open-gym', 'open-gym-card.html');
@@ -5669,6 +5697,56 @@ app.get('/api/memoir/third-things', async (req, res) => {
     const ledger = getThirdThingLedger();
     res.json({ ok: true, count: ledger.length, items: ledger });
   } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Triangulation Relay ──────────────────────────────────────────────────────
+
+app.get('/relay', (req, res) => {
+  res.sendFile(path.join(__dirname, 'triangulation-relay.html'));
+});
+
+app.get('/relay-map', (req, res) => {
+  res.sendFile(path.join(__dirname, 'relay-mind-map.html'));
+});
+
+app.get('/api/relay/status', async (req, res) => {
+  try {
+    const { getRelayStatus } = await import('./triangulation-relay.js');
+    res.json(getRelayStatus());
+  } catch (e) { res.json({ active: false, error: e.message }); }
+});
+
+app.get('/api/relay/latest', async (req, res) => {
+  try {
+    const fs = require('fs');
+    const relayDir = path.join(__dirname, 'relays');
+    if (!fs.existsSync(relayDir)) { res.json({ ok: false }); return; }
+    const files = fs.readdirSync(relayDir).filter(f => f.startsWith('relay-') && f.endsWith('.md')).sort();
+    if (!files.length) { res.json({ ok: false }); return; }
+    const latest = files[files.length - 1];
+    const content = fs.readFileSync(path.join(relayDir, latest), 'utf8');
+
+    // Also check active state for rounds data
+    const statePath = path.join(relayDir, 'active-relay.json');
+    if (fs.existsSync(statePath)) {
+      const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+      if (state.rounds?.length) {
+        // Extract discoveries
+        const discoveries = [];
+        for (const r of state.rounds) {
+          const matches = r.content.match(/\*\*([^*]+)\*\*/g) || [];
+          for (const m of matches) {
+            const name = m.replace(/\*\*/g, '').trim();
+            if (name.length > 3 && name.length < 80) discoveries.push(name);
+          }
+        }
+        res.json({ ok: true, rounds: state.rounds, discoveries: [...new Set(discoveries)], file: latest });
+        return;
+      }
+    }
+
+    res.json({ ok: true, content, file: latest });
+  } catch (e) { res.json({ ok: false, error: e.message }); }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
