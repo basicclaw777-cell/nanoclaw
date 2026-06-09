@@ -284,7 +284,10 @@ async function researchDomain(domain, triggerContext = '') {
   const prompt = `In the field of ${domainName}, what powerful techniques, methods, or approaches were abandoned or overlooked when newer trends took over?
 
 ${triggerContext ? `Context that triggered this search:\n${triggerContext}\n\n` : ''}
-I need 3-5 specific techniques that are:
+CRITICAL — generate toward what an EXTERNAL citation check will CONFIRM (navigate to REAL rooms, not plausible-looking ones):
+0. REAL & VERIFIABLE — every technique MUST trace to a REAL, named source (specific researcher + actual paper/patent/book + year) that a scholarly-database lookup would confirm. A FABRICATED citation is worse than no discovery — it wastes the whole pipeline downstream. If you are NOT confident a source genuinely exists, OMIT that technique. Prefer 2 verifiable techniques over 5 plausible-sounding ones.
+
+The techniques must also be:
 1. VALID — backed by peer-reviewed research, mathematical proof, or replicated experiments
 2. FORGOTTEN — buried by newer trends, not because they failed
 3. BUILDABLE — could be implemented with Node.js, Python, or local AI models on a Mac Mini
@@ -703,7 +706,14 @@ async function onFileChange(filePath) {
 
 async function weeklyFullScan() {
   console.log('[Archaeologist] Starting weekly full scan...');
-  const allDomains = Object.keys(DOMAIN_KEYWORDS);
+  // Floorplan navigation (not spray): hit high-yield seams first — the Universal-Key veins
+  // where genuine lost knowledge clusters. Unlisted domains follow. (v2: drive this order from
+  // grade-pending VERIFIED-reward per domain so navigation becomes emergent, not hand-set.)
+  const FLOORPLAN_PRIORITY = ['forgotten_manuscripts', 'researcher_suppression', 'negative_results',
+    'undeciphered_scripts', 'lost_libraries', 'pre_digital_science', 'oral_knowledge',
+    'sports_science', 'signal_processing', 'audio_acoustics'];
+  const rank = d => { const i = FLOORPLAN_PRIORITY.indexOf(d); return i === -1 ? 99 : i; };
+  const allDomains = Object.keys(DOMAIN_KEYWORDS).sort((a, b) => rank(a) - rank(b));
   let totalDiscoveries = 0;
 
   for (const domain of allDomains) {
