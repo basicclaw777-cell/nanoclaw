@@ -2298,6 +2298,20 @@ ChatGPT external review identified Cathedral at inflection point: Phase 1 (colle
 - Key underestimate: once beliefs get IDs + lineage + confidence = doctrine management, not notes
 - Closing diagnostic: "whether it can learn from its own history without becoming trapped by it"
 
+## Triangulation Relay System — Built 2026-06-09
+- Engine: ~/nanoclaw/triangulation-relay.js — two LLMs in sustained dialogue, convergence detection via [CONVERGING] signals
+- Discovery extractor: DeepSeek LLM-based (temp 0.3, 24K text cap), fallback regex for `**The [Capitalized]**`
+- Queue UI: ~/nanoclaw/triangulation-relay.html — 10 pre-defined topics
+- Output: ~/nanoclaw/relays/ (markdown files with YAML frontmatter)
+- Auto-deposits to vault 02_Refined_Gold/cathedral/
+- Mind Map: ~/nanoclaw/relay-mind-map.html → localhost:8080/relay-map
+  - 6 relays, 34 discoveries, 24 cross-relay connections
+  - Force-directed layout, pan+zoom, hover tooltips
+- Lobby: Relay Mind Map room in maps district
+- First run: 6 relays, all converged (30 rounds total, 34 discoveries)
+- Relay queue topics 7-10 remaining: Ancient Corpus gaps, Cathedral for someone else, Coaching IP product form, Cosmology evidence grade
+- Caveat: dual-DeepSeek relays hallucinate operational specifics — frameworks sound, details fabricated
+
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each

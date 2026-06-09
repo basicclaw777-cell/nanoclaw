@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triangulation Relay Mind Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Epilogue:wght@400;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0a0f; color:#e8e6df; font-family:'Epilogue',sans-serif; min-height:100vh; overflow:hidden; }
+
+  .back-btn { position:fixed; top:1rem; left:1rem; font-family:'Share Tech Mono',monospace; background:#ffffff08; color:#888; border:1px solid #ffffff15; padding:0.4rem 0.8rem; border-radius:4px; cursor:pointer; font-size:0.75rem; text-decoration:none; z-index:100; }
+  .back-btn:hover { color:#f7b408; border-color:#f7b40833; }
+
+  .header { position:fixed; top:0; left:0; right:0; z-index:50; background:linear-gradient(180deg,#0a0a0f 0%,#0a0a0f99 80%,transparent); padding:1rem 2rem 2rem; text-align:center; pointer-events:none; }
+  .header h1 { font-family:'Share Tech Mono',monospace; font-size:1.4rem; color:#f7b408; letter-spacing:0.1em; pointer-events:auto; }
+  .header .sub { color:#666; font-size:0.85rem; margin-top:0.3rem; }
+  .header .stats { font-family:'Share Tech Mono',monospace; color:#555; font-size:0.75rem; margin-top:0.5rem; }
+
+  svg { width:100vw; height:100vh; cursor:grab; }
+  svg:active { cursor:grabbing; }
+
+  .relay-node { cursor:pointer; }
+  .relay-node circle { transition: r 0.2s, fill-opacity 0.2s; }
+  .relay-node:hover circle { r:42; fill-opacity:0.25; }
+  .relay-node text { font-family:'Epilogue',sans-serif; fill:#e8e6df; pointer-events:none; }
+
+  .discovery-node { cursor:pointer; }
+  .discovery-node circle { transition: r 0.2s, fill-opacity 0.2s; }
+  .discovery-node:hover circle { r:22; fill-opacity:0.3; }
+  .discovery-node text { font-family:'Epilogue',sans-serif; fill:#ccc; pointer-events:none; font-size:10px; }
+
+  .link { stroke-opacity:0.15; }
+  .link:hover { stroke-opacity:0.5; }
+  .cross-link { stroke-dasharray:4 4; stroke-opacity:0.25; }
+  .cross-link:hover { stroke-opacity:0.6; }
+
+  .tooltip { position:fixed; background:#1a1528ee; border:1px solid #f7b40833; border-radius:8px; padding:1rem; max-width:400px; font-size:0.85rem; line-height:1.5; z-index:200; pointer-events:none; display:none; backdrop-filter:blur(8px); }
+  .tooltip h3 { font-family:'Share Tech Mono',monospace; color:#f7b408; font-size:0.9rem; margin-bottom:0.5rem; }
+  .tooltip .desc { color:#bbb; }
+  .tooltip .relay-tag { display:inline-block; font-family:'Share Tech Mono',monospace; font-size:0.7rem; padding:0.15rem 0.4rem; border-radius:3px; margin-top:0.5rem; }
+
+  .legend { position:fixed; bottom:1rem; right:1rem; font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:#555; z-index:50; }
+  .legend div { margin:0.2rem 0; display:flex; align-items:center; gap:0.4rem; }
+  .legend .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+</style>
+</head>
+<body>
+<a href="/lobby" class="back-btn">&lt; lobby</a>
+
+<div class="header">
+  <h1>TRIANGULATION RELAY MIND MAP</h1>
+  <div class="sub">Discoveries across all relay threads — connections are the gold</div>
+  <div class="stats" id="stats"></div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="legend">
+  <div><span class="dot" style="background:#f7b408"></span> Relay 1: What is BR Selling</div>
+  <div><span class="dot" style="background:#06b6d4"></span> Relay 2: Closed-Loop Coach</div>
+  <div><span class="dot" style="background:#1D9E75"></span> Relay 3: Forgotten Shelf Moat</div>
+  <div><span class="dot" style="background:#ef4444"></span> Relay 4: Master Game</div>
+  <div><span class="dot" style="background:#a855f7"></span> Relay 5: 10-Block Gates</div>
+  <div><span class="dot" style="background:#f97316"></span> Relay 6: Agent Autonomy</div>
+  <div style="margin-top:0.4rem; color:#f7b40866">--- cross-relay connections</div>
+</div>
+
+<svg id="canvas"></svg>
+
+<script>
+const RELAYS = [
+  {
+    id: 'r1', title: 'What is BR Actually Selling?', color: '#f7b408', rounds: 6, status: 'converged',
+    discoveries: [
+      { id: 'd1a', title: 'The Causal Model Moat', desc: 'Defensible asset is discovered causal structure of skill acquisition, not data volume. Error progression chains, correction efficacy, timing models.' },
+      { id: 'd1b', title: 'Coach-as-Node Pricing', desc: 'Usage-based pricing reflecting data contribution (quantity + quality), not just value received. OpenAI API pricing analogy.' },
+      { id: 'd1c', title: 'The Reactive Build Tax', desc: 'Every build that doesn\'t improve the causal model delays the pricing geometry problem.' },
+      { id: 'd1d', title: 'Discovery Engine Thesis', desc: 'Long-term moat = ability to enter new domains and extract causal models faster than incumbents.' },
+      { id: 'd1e', title: 'Prescriptive vs Descriptive Models', desc: 'Interventional data (controlled correction experiments) is harder to replicate than observational maps.' },
+      { id: 'd1f', title: 'Data Quality Pricing', desc: 'Coach pricing should reflect error diversity, not just student count.' },
+    ]
+  },
+  {
+    id: 'r2', title: 'Closed-Loop Coach Spine', color: '#06b6d4', rounds: 4, status: 'converged',
+    discoveries: [
+      { id: 'd2a', title: 'Shared Attention Protocol', desc: 'System points, student looks, student reports. Loop closes on shared perception, not measurement convergence.' },
+      { id: 'd2b', title: 'Attentional Debt', desc: '8-11 cognitive acts per loop iteration. Each seam = dropout risk.' },
+      { id: 'd2c', title: 'Attention Target Inversion', desc: 'Deviations are attention failures, not symptoms. Drills = scaffolds for attention, not treatments.' },
+      { id: 'd2d', title: 'The Proprioceptive Gap', desc: 'System measures angles, student feels effort. Fundamental epistemic mismatch requiring translation.' },
+      { id: 'd2e', title: 'Questions > Cues > Prescriptions', desc: 'Thinnest wire is a question, not a cue, not a drill. Student as expert on own body.' },
+    ]
+  },
+  {
+    id: 'r3', title: 'Is the Forgotten Shelf a Real Moat?', color: '#1D9E75', rounds: 4, status: 'converged',
+    discoveries: [
+      { id: 'd3a', title: 'Verification Compounding', desc: 'Each verified claim speeds up the next via accumulated citation graph. Accelerates, not erodes.' },
+      { id: 'd3b', title: 'Extraction Entropy', desc: 'Diminishing returns once surface artifacts removed. Deep seam or rich topsoil?' },
+      { id: 'd3c', title: 'Access Control = Final Moat', desc: 'Supply-side (verification) + demand-side (distribution) defensibility required. Without both, it\'s forkable.' },
+      { id: 'd3d', title: 'Library vs Toolkit Gap', desc: '5,000 citations = museum. Operationalized techniques with measured results = moat.' },
+    ]
+  },
+  {
+    id: 'r4', title: 'The Master Game', color: '#ef4444', rounds: 6, status: 'converged',
+    discoveries: [
+      { id: 'd4a', title: 'Instrument Liquidity', desc: 'Module value = cross-domain applicability, not domain depth.' },
+      { id: 'd4b', title: 'Compounding Substrate', desc: 'Each loop needs a substrate. Truth via data, meaning via coherence, leverage via tools. Alignment = compounding.' },
+      { id: 'd4c', title: 'Prosthetic Cognition', desc: 'Tools shape the operator\'s cognition, not just extend it. Value is in the fit, not the function.' },
+      { id: 'd4d', title: 'Pattern Refinery', desc: 'Cathedral processes patterns, not data. Pattern recognition is the base currency of liquidity.' },
+      { id: 'd4e', title: 'Operator-Substrate Dialectic', desc: 'Paul is both director AND raw material. Cathedral harvests his irrationality as fuel.' },
+      { id: 'd4f', title: 'Relational Atrophy (Shadow)', desc: 'Solitary loops optimize for coherence at cost of connection, depth, accountability.' },
+      { id: 'd4g', title: 'Finite Game Risk', desc: 'Master Game may be finite disguised as infinite. Costs eventually exhaust the system.' },
+    ]
+  },
+  {
+    id: 'r5', title: '10-Block Curriculum Gates', color: '#a855f7', rounds: 6, status: 'converged',
+    discoveries: [
+      { id: 'd5a', title: 'Contingency Principle', desc: 'Block 4→5 wall is real but contingent on sequencing, not a universal developmental stage.' },
+      { id: 'd5b', title: 'Selection vs Development', desc: '20-25% permanent failure rate is selection (wrong person), not pedagogy failure.' },
+      { id: 'd5c', title: 'Gradual Exposure Corollary', desc: 'Emotion gate works because prior blocks build physical trust that makes emotional exposure survivable.' },
+      { id: 'd5d', title: 'Mini-Gate Architecture', desc: 'Diagnostic checkpoints at Blocks 2/3/4, not just the big gate at 4→5.' },
+      { id: 'd5e', title: 'Deficit Model of Developmental Walls', desc: 'Walls aren\'t obstacles to remove but diagnostic instruments revealing what\'s missing.' },
+      { id: 'd5f', title: 'Controlled Trial Proposal', desc: 'A/B: standard sequence vs mini-gated sequence, measure retention at Block 6+.' },
+    ]
+  },
+  {
+    id: 'r6', title: 'Agent Autonomy Boundaries', color: '#f97316', rounds: 4, status: 'converged',
+    discoveries: [
+      { id: 'd6a', title: '4-Axis Trust Taxonomy', desc: 'Domain × scope × reversibility × propagation depth. Not linear from manual to full autonomy.' },
+      { id: 'd6b', title: 'Self-Reference Prohibition', desc: 'No agent operates in a space that includes its own definition. The meta-rule.' },
+      { id: 'd6c', title: 'Anomaly Surface Area Principle', desc: 'Autonomy ceiling inversely proportional to failure detection latency.' },
+      { id: 'd6d', title: 'Graduated Autonomy Reduction', desc: 'As time since human check-in increases, agent permissions decrease stepwise.' },
+      { id: 'd6e', title: 'Lifecycle-Bound Permissions', desc: 'External hooks (webhooks, API keys) auto-revoke when agent process terminates.' },
+      { id: 'd6f', title: 'Minimum Viable Agent Principle', desc: 'Least privilege at agent level, not user level. No broader permissions than function requires.' },
+    ]
+  },
+];
+
+// Cross-relay connections (the gold)
+const CROSS_LINKS = [
+  { from: 'd1a', to: 'd2a', reason: 'Causal model needs shared attention to collect correction data' },
+  { from: 'd1a', to: 'd3a', reason: 'Both are verification-dependent moats' },
+  { from: 'd1d', to: 'd4a', reason: 'Discovery engine IS instrument liquidity applied to domains' },
+  { from: 'd1d', to: 'd3b', reason: 'Extraction entropy limits discovery engine speed' },
+  { from: 'd1c', to: 'd4g', reason: 'Reactive builds are a symptom of the finite game risk' },
+  { from: 'd2c', to: 'd1a', reason: 'Attention targets feed the causal model with richer data' },
+  { from: 'd2e', to: 'd4c', reason: 'Questions as interface = prosthetic cognition for the student' },
+  { from: 'd2d', to: 'd3d', reason: 'Proprioceptive gap = why library ≠ toolkit' },
+  { from: 'd3c', to: 'd1b', reason: 'Access control solves pricing — gated access to verified techniques' },
+  { from: 'd3d', to: 'd2c', reason: 'Toolkit requires attention inversion to operationalize' },
+  { from: 'd4d', to: 'd1d', reason: 'Pattern refinery IS the discovery engine' },
+  { from: 'd4b', to: 'd3b', reason: 'Extraction entropy = substrate misalignment in knowledge domain' },
+  { from: 'd4e', to: 'd2a', reason: 'Operator-substrate mirrors system-student shared attention' },
+  { from: 'd4f', to: 'd2b', reason: 'Relational atrophy parallels attentional debt — human cost of optimization' },
+  // Relay 5 cross-links
+  { from: 'd5a', to: 'd2c', reason: 'Contingency on sequencing mirrors attention target inversion — context determines the wall' },
+  { from: 'd5b', to: 'd1a', reason: 'Selection vs development distinction feeds the causal model — pedagogy vs person' },
+  { from: 'd5c', to: 'd4b', reason: 'Gradual exposure builds trust substrate — physical trust enables emotional compounding' },
+  { from: 'd5d', to: 'd3d', reason: 'Mini-gates operationalize the library — checkpoints are toolkit, not museum' },
+  { from: 'd5e', to: 'd2d', reason: 'Developmental walls as diagnostics mirrors the proprioceptive gap — both reveal hidden state' },
+  // Relay 6 cross-links
+  { from: 'd6a', to: 'd1c', reason: 'Trust taxonomy prevents reactive build tax — scope before action' },
+  { from: 'd6b', to: 'd4e', reason: 'Self-reference prohibition parallels operator-substrate dialectic — can\'t be both' },
+  { from: 'd6c', to: 'd2b', reason: 'Anomaly surface area = attentional debt for agents — detection latency is cognitive load' },
+  { from: 'd6d', to: 'd5d', reason: 'Graduated autonomy reduction mirrors mini-gate architecture — stepwise trust' },
+  { from: 'd6f', to: 'd3c', reason: 'Minimum viable agent IS access control applied to agents, not users' },
+];
+
+// Layout
+const W = window.innerWidth, H = window.innerHeight;
+const CX = W/2, CY = H/2;
+const RELAY_RADIUS = Math.min(W, H) * 0.32;
+
+const nodes = [];
+const links = [];
+const allDiscoveries = {};
+
+RELAYS.forEach((r, ri) => {
+  const angle = (ri / RELAYS.length) * Math.PI * 2 - Math.PI/2;
+  const rx = CX + Math.cos(angle) * RELAY_RADIUS;
+  const ry = CY + Math.sin(angle) * RELAY_RADIUS;
+  nodes.push({ ...r, x: rx, y: ry, type: 'relay' });
+
+  const dCount = r.discoveries.length;
+  r.discoveries.forEach((d, di) => {
+    const dAngle = angle + ((di - (dCount-1)/2) * 0.18);
+    const dRadius = RELAY_RADIUS * 0.55;
+    const dx = CX + Math.cos(dAngle) * (RELAY_RADIUS + dRadius * 0.4 + di * 15);
+    const dy = CY + Math.sin(dAngle) * (RELAY_RADIUS + dRadius * 0.4 + di * 15);
+    const node = { ...d, x: dx, y: dy, type: 'discovery', color: r.color, relayTitle: r.title };
+    nodes.push(node);
+    allDiscoveries[d.id] = node;
+    links.push({ source: { x: rx, y: ry }, target: { x: dx, y: dy }, color: r.color, type: 'parent' });
+  });
+});
+
+// Build cross-links
+const crossLinks = CROSS_LINKS.filter(cl => allDiscoveries[cl.from] && allDiscoveries[cl.to]).map(cl => ({
+  source: allDiscoveries[cl.from],
+  target: allDiscoveries[cl.to],
+  reason: cl.reason
+}));
+
+// Render SVG
+const svg = document.getElementById('canvas');
+const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+svg.appendChild(g);
+
+// Pan/zoom
+let scale = 1, tx = 0, ty = 0, dragging = false, lastX, lastY;
+function updateTransform() { g.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`); }
+
+svg.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
+svg.addEventListener('mousemove', e => { if (!dragging) return; tx += e.clientX - lastX; ty += e.clientY - lastY; lastX = e.clientX; lastY = e.clientY; updateTransform(); });
+svg.addEventListener('mouseup', () => dragging = false);
+svg.addEventListener('mouseleave', () => dragging = false);
+svg.addEventListener('wheel', e => { e.preventDefault(); const d = e.deltaY > 0 ? 0.9 : 1.1; scale *= d; updateTransform(); }, { passive: false });
+
+// Draw cross-links first (behind)
+crossLinks.forEach(cl => {
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', cl.source.x); line.setAttribute('y1', cl.source.y);
+  line.setAttribute('x2', cl.target.x); line.setAttribute('y2', cl.target.y);
+  line.setAttribute('stroke', '#f7b408'); line.setAttribute('stroke-width', 1);
+  line.setAttribute('class', 'cross-link');
+  line.addEventListener('mouseenter', e => showTooltip(e, `<h3>Cross-Relay Connection</h3><div class="desc">${cl.source.title} <span style="color:#f7b408">&harr;</span> ${cl.target.title}</div><div class="desc" style="margin-top:0.5rem;color:#f7b408">${cl.reason}</div>`));
+  line.addEventListener('mouseleave', hideTooltip);
+  g.appendChild(line);
+});
+
+// Draw parent links
+links.forEach(l => {
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', l.source.x); line.setAttribute('y1', l.source.y);
+  line.setAttribute('x2', l.target.x); line.setAttribute('y2', l.target.y);
+  line.setAttribute('stroke', l.color); line.setAttribute('stroke-width', 1);
+  line.setAttribute('class', 'link');
+  g.appendChild(line);
+});
+
+// Draw nodes
+nodes.forEach(n => {
+  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  group.setAttribute('class', n.type === 'relay' ? 'relay-node' : 'discovery-node');
+  group.setAttribute('transform', `translate(${n.x},${n.y})`);
+
+  const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  const color = n.type === 'relay' ? n.color : n.color;
+  circle.setAttribute('r', n.type === 'relay' ? 36 : 16);
+  circle.setAttribute('fill', color);
+  circle.setAttribute('fill-opacity', n.type === 'relay' ? 0.15 : 0.1);
+  circle.setAttribute('stroke', color);
+  circle.setAttribute('stroke-width', n.type === 'relay' ? 2 : 1);
+  circle.setAttribute('stroke-opacity', n.type === 'relay' ? 0.6 : 0.3);
+  group.appendChild(circle);
+
+  if (n.type === 'relay') {
+    const num = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    num.setAttribute('text-anchor', 'middle'); num.setAttribute('dy', '-0.2em');
+    num.setAttribute('font-size', '14'); num.setAttribute('font-weight', '700');
+    num.setAttribute('fill', color);
+    num.textContent = 'R' + (RELAYS.indexOf(n) + 1);
+    group.appendChild(num);
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('text-anchor', 'middle'); label.setAttribute('dy', '1.2em');
+    label.setAttribute('font-size', '9'); label.setAttribute('fill', '#888');
+    label.textContent = n.title.length > 25 ? n.title.slice(0, 25) + '...' : n.title;
+    group.appendChild(label);
+
+    const statusDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    statusDot.setAttribute('cx', 28); statusDot.setAttribute('cy', -28);
+    statusDot.setAttribute('r', 4);
+    statusDot.setAttribute('fill', n.status === 'converged' ? '#1D9E75' : n.status === 'running' ? '#f7b408' : '#555');
+    group.appendChild(statusDot);
+
+    group.addEventListener('mouseenter', e => showTooltip(e, `<h3>${n.title}</h3><div class="desc">${n.rounds} rounds | ${n.status}</div><div class="desc">${n.discoveries.length} discoveries</div>`));
+  } else {
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('text-anchor', 'middle'); label.setAttribute('dy', '0.35em');
+    label.setAttribute('font-size', '8');
+    const short = n.title.length > 20 ? n.title.slice(0, 20) + '..' : n.title;
+    label.textContent = short;
+    group.appendChild(label);
+
+    group.addEventListener('mouseenter', e => showTooltip(e, `<h3>${n.title}</h3><div class="desc">${n.desc}</div><div class="relay-tag" style="background:${n.color}22;color:${n.color};border:1px solid ${n.color}44">${n.relayTitle}</div>`));
+  }
+
+  group.addEventListener('mouseleave', hideTooltip);
+  g.appendChild(group);
+});
+
+// Tooltip
+const tooltip = document.getElementById('tooltip');
+function showTooltip(e, html) {
+  tooltip.innerHTML = html;
+  tooltip.style.display = 'block';
+  const x = Math.min(e.clientX + 15, W - 420);
+  const y = Math.min(e.clientY + 15, H - 200);
+  tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px';
+}
+function hideTooltip() { tooltip.style.display = 'none'; }
+
+// Stats
+const totalDisc = RELAYS.reduce((s, r) => s + r.discoveries.length, 0);
+const totalRounds = RELAYS.reduce((s, r) => s + r.rounds, 0);
+document.getElementById('stats').textContent = `${RELAYS.filter(r=>r.status==='converged').length} relays converged | ${totalRounds} rounds | ${totalDisc} discoveries | ${crossLinks.length} cross-connections`;
+</script>
+</body>
+</html>
