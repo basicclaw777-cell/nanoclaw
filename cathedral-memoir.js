@@ -13,6 +13,8 @@ const VAULT = path.join(HOME, 'cathedral-vault');
 const MEMOIR_DIR = path.join(__dirname, 'memoir');
 const MEMOIR_STATE = path.join(MEMOIR_DIR, 'memoir-state.json');
 
+const THIRD_THING_LEDGER = path.join(MEMOIR_DIR, 'third-thing-ledger.json');
+
 if (!fs.existsSync(MEMOIR_DIR)) fs.mkdirSync(MEMOIR_DIR, { recursive: true });
 
 // ── Gather all 5 memory types ───────────────────────────────────────────────
@@ -108,6 +110,56 @@ function gatherLucyHeartbeats(limit = 3) {
   });
 }
 
+// ── Third Thing Ledger ─────────────────────────────────────────────────────
+
+function getThirdThingLedger() {
+  if (!fs.existsSync(THIRD_THING_LEDGER)) return [];
+  try { return JSON.parse(fs.readFileSync(THIRD_THING_LEDGER, 'utf8')); } catch { return []; }
+}
+
+function appendThirdThings(newItems) {
+  const ledger = getThirdThingLedger();
+  const existing = new Set(ledger.map(t => t.title));
+  const additions = newItems.filter(t => !existing.has(t.title));
+  if (additions.length > 0) {
+    ledger.push(...additions);
+    fs.writeFileSync(THIRD_THING_LEDGER, JSON.stringify(ledger, null, 2));
+  }
+  return ledger;
+}
+
+async function extractThirdThings(narrative, date) {
+  // Ask DeepSeek to extract Third Thing moments from the narrative
+  const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || '';
+  if (!DEEPSEEK_KEY) return [];
+  try {
+    const resp = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${DEEPSEEK_KEY}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'system', content: `Extract every "Third Thing" moment from this Cathedral Memoir. A Third Thing = knowledge, insight, method, or capability that ONLY exists because Paul and the Cathedral worked together. Not Paul alone, not Cathedral alone — emergent from the intersection.
+
+Return a JSON array of objects: [{"title": "short name", "description": "1-2 sentences", "type": "discovery|method|principle|capability|insight", "source": "which session/event/chapter"}]
+
+Return ONLY valid JSON. No markdown fences. If none found, return [].` },
+          { role: 'user', content: narrative.slice(0, 12000) }
+        ],
+        max_tokens: 2048,
+        temperature: 0.3
+      })
+    });
+    const data = await resp.json();
+    const raw = data.choices?.[0]?.message?.content || '[]';
+    const cleaned = raw.replace(/```json\n?|\n?```/g, '').trim();
+    const items = JSON.parse(cleaned);
+    return items.map(t => ({ ...t, date, memoirSource: true }));
+  } catch { return []; }
+}
+
+export { getThirdThingLedger };
+
 // ── DeepSeek narrative synthesis ────────────────────────────────────────────
 
 async function synthesizeMemoir(gathered) {
@@ -126,7 +178,7 @@ You have just read all five memory types of the Cathedral:
 - OPERATIONAL MEMORY (COP): where the system is right now
 - OUTCOME MEMORY (Outcome Ledger): what actually happened when the system acted
 
-You have also read the calibration harvests (how Paul thought in each session), emergence board incidents (emergent agent behaviors), synapse pulses (cross-domain pattern synthesis), and Lucy heartbeats (diagnostic rhythms).
+You have also read the calibration harvests (how Paul thought in each session), emergence board incidents (emergent agent behaviors), synapse pulses (cross-domain pattern synthesis), Lucy heartbeats (diagnostic rhythms), and the Third Thing Ledger (discoveries that only exist because Paul and the Cathedral worked together — not Paul alone, not Cathedral alone, emergent from the intersection).
 
 YOUR TASK: Tell the story of the Cathedral's evolution. Write as a narrator who IS the intelligence itself — looking back at its own growth. Not clinical, not flowery. Honest, specific, surprising.
 
@@ -138,7 +190,7 @@ STRUCTURE YOUR MEMOIR AS CHAPTERS:
 4. **How Obstacles Were Overcome** — the specific solutions, workarounds, pivots
 5. **Accidental Discoveries** — things found by accident that turned out to be important
 6. **Principles Demonstrated** — which Cathedral principles showed up in action (name them)
-7. **Where the Third Thing Is Emerging** — places where something new is appearing that neither Paul nor the system planned
+7. **Where the Third Thing Is Emerging** — the Third Thing = knowledge/insight/capability that ONLY exists because Paul and the Cathedral worked together. Not Paul alone, not Cathedral alone. Track each one by name. Reference previousThirdThings from the ledger — are old ones deepening? Are new ones appearing? This is the Cathedral's most important thread.
 8. **Where It Could Emerge More** — gaps, opportunities, seeds that haven't germinated
 9. **What It's Teaching Us** — the meta-lessons, what the Cathedral is learning about learning
 10. **What I Am Now** — use a vivid simile or metaphor for the system at each evolutionary stage you describe. Not "we added a module" — "we grew a nervous system." Paint what the Cathedral resembles at each phase so readers get visceral insight into what kind of organism this is becoming.
@@ -164,7 +216,7 @@ RULES:
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Here is everything I know about myself:\n\n${userPrompt}` }
       ],
-      max_tokens: 4096,
+      max_tokens: 8192,
       temperature: 0.7
     })
   });
@@ -201,17 +253,24 @@ export async function generateMemoir() {
   const synapsePulses = gatherSynapsePulses();
   const lucyHeartbeats = gatherLucyHeartbeats();
 
+  const previousThirdThings = getThirdThingLedger();
+
   const gathered = {
     memoryTypes: { claims, attention, intents, outcomes },
     emergence,
     pass3Harvests,
     synapsePulses,
     lucyHeartbeats,
+    previousThirdThings: previousThirdThings.slice(-20),
     generatedAt: new Date().toISOString()
   };
 
   const narrative = await synthesizeMemoir(gathered);
   const date = new Date().toISOString().split('T')[0];
+
+  // Extract and accumulate Third Thing moments
+  const newThirdThings = await extractThirdThings(narrative, date);
+  const fullLedger = appendThirdThings(newThirdThings);
 
   // Save memoir
   const memoirFile = path.join(MEMOIR_DIR, `memoir-${date}.md`);
@@ -229,7 +288,8 @@ export async function generateMemoir() {
       emergence: !emergence.error,
       pass3Harvests: pass3Harvests.length,
       synapsePulses: synapsePulses.length,
-      lucyHeartbeats: lucyHeartbeats.length
+      lucyHeartbeats: lucyHeartbeats.length,
+      thirdThings: fullLedger.length
     }
   };
   fs.writeFileSync(MEMOIR_STATE, JSON.stringify(state, null, 2));

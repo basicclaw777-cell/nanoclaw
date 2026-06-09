@@ -1444,6 +1444,21 @@ bot.onText(/^\/memoir(?:@\w+)?\s*(generate|latest)?\s*$/i, async (msg, match) =>
   } catch (e) { await safeSend(chatId, `⚠️ memoir: ${e.message}`); }
 });
 
+// /thirdthing — The Third Thing Ledger: emergent Paul+Cathedral discoveries
+bot.onText(/^\/thirdthing(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const { getThirdThingLedger } = await import(path.join(process.env.HOME, 'nanoclaw', 'cathedral-memoir.js'));
+    const ledger = getThirdThingLedger();
+    if (!ledger.length) {
+      await safeSend(chatId, '🔮 No Third Things recorded yet. Generate a /memoir first.');
+      return;
+    }
+    const lines = ledger.slice(-10).map((t, i) => `${i + 1}. *${t.title}* (${t.type}, ${t.date})\n   ${t.description}`);
+    await safeSend(chatId, `🔮 *Third Thing Ledger* (${ledger.length} total)\n\n${lines.join('\n\n')}`, { parse_mode: 'Markdown' });
+  } catch (e) { await safeSend(chatId, `⚠️ thirdthing: ${e.message}`); }
+});
+
 // /priority — Global Priority Engine stats + digest
 bot.onText(/^\/priority(?:@\w+)?\s*(digest)?\s*$/i, async (msg, match) => {
   const chatId = msg.chat.id;

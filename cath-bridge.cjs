@@ -5663,6 +5663,14 @@ app.post('/api/memoir/generate', async (req, res) => {
   } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
 });
 
+app.get('/api/memoir/third-things', async (req, res) => {
+  try {
+    const { getThirdThingLedger } = await import('./cathedral-memoir.js');
+    const ledger = getThirdThingLedger();
+    res.json({ ok: true, count: ledger.length, items: ledger });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
 // ── Start ─────────────────────────────────────────────────────────────────────
 
 app.listen(PORT, '0.0.0.0', () => {

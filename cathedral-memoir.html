@@ -93,6 +93,7 @@ function renderMeta(state) {
     { label: `${sources.pass3Harvests || 0} Harvests`, active: (sources.pass3Harvests || 0) > 0 },
     { label: `${sources.synapsePulses || 0} Pulses`, active: (sources.synapsePulses || 0) > 0 },
     { label: `${sources.lucyHeartbeats || 0} Lucy`, active: (sources.lucyHeartbeats || 0) > 0 },
+    { label: `${sources.thirdThings || 0} Third Things`, active: (sources.thirdThings || 0) > 0 },
   ];
   bar.innerHTML = `<span class="pill">${state.lastGenerated}</span>` +
     pills.map(p => `<span class="pill ${p.active ? 'active' : 'inactive'}">${p.label}</span>`).join('');
