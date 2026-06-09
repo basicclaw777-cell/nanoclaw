@@ -54,37 +54,49 @@ function initOut() {
   return db;
 }
 
-// Pick strong, cross-domain candidate finds: best-scored / recent, one pool, then cross-domain pairs.
+// Pool v2: ONE strongest find per DISTINCT domain → maximum cross-field diversity
+// (v1 grabbed top-40 by score, which clustered on whatever was freshly run).
 function selectPool() {
   const db = new Database(ARCH_DB, { readonly: true });
   const rows = db.prepare(`
     SELECT technique, domain, valid_reason, cathedral_application, ensemble_score
     FROM discoveries
     WHERE technique IS NOT NULL AND domain IS NOT NULL
-    ORDER BY (ensemble_score IS NULL), ensemble_score DESC, timestamp DESC
-    LIMIT 40`).all();
+    ORDER BY (ensemble_score IS NULL), ensemble_score DESC, timestamp DESC`).all();
   db.close();
-  // dedupe to ~1-2 per domain for cross-domain variety
-  const perDomain = {};
-  const pool = [];
-  for (const r of rows) {
-    perDomain[r.domain] = (perDomain[r.domain] || 0) + 1;
-    if (perDomain[r.domain] <= 2) pool.push(r);
-  }
-  return pool;
+  const byDomain = {};
+  for (const r of rows) (byDomain[r.domain] ||= []).push(r);
+  return Object.values(byDomain).map(arr => arr[0]);   // one best per domain (~all domains)
 }
 
+// Pairs v2: diversity-first — greedily cap each domain to ≤2 uses so the run spans MANY
+// fields instead of clustering 3-4 (the v1 failure: everything was "read old text").
 function crossPairs(pool, cap) {
   const pairs = [];
   for (let i = 0; i < pool.length; i++)
     for (let j = i + 1; j < pool.length; j++)
-      if (pool[i].domain !== pool[j].domain) pairs.push([pool[i], pool[j]]);
-  // deterministic shuffle (no Math.random — index-based) then cap
-  pairs.sort((a, b) => ((a[0].ensemble_score || 0) + (a[1].ensemble_score || 0)) < ((b[0].ensemble_score || 0) + (b[1].ensemble_score || 0)) ? 1 : -1);
-  return pairs.slice(0, cap);
+      pairs.push([pool[i], pool[j]]);   // one-per-domain pool → all pairs already cross-domain
+  // deterministic mix (no Math.random): hash on domain names
+  pairs.sort((a, b) => ((a[0].domain + a[1].domain).length % 11) - ((b[0].domain + b[1].domain).length % 11));
+  const used = {}, picked = [];
+  for (const p of pairs) {
+    if (picked.length >= cap) break;
+    const [da, db_] = [p[0].domain, p[1].domain];
+    if ((used[da] || 0) < 2 && (used[db_] || 0) < 2) {
+      picked.push(p); used[da] = (used[da] || 0) + 1; used[db_] = (used[db_] || 0) + 1;
+    }
+  }
+  for (const p of pairs) { if (picked.length >= cap) break; if (!picked.includes(p)) picked.push(p); }
+  return picked;
 }
 
-const SYSTEM = `You are the Cathedral's Fusion Gate. You judge whether two FORGOTTEN techniques from DIFFERENT fields combine into a genuinely NEW, BUILDABLE capability — not a vague analogy. Be STRICT: most pairs do NOT fuse; reserve score >=7 only for a real, specific, buildable combination. The source techniques are unverified leads — judge the fusion's potential, not their truth.
+const SYSTEM = `You are the Cathedral's Fusion Gate. Judge whether two FORGOTTEN techniques from DIFFERENT fields combine into a genuinely NEW, BUILDABLE capability — a specific tool or method, not a vague analogy.
+SCORING — default LOW, spread the scores, MOST pairs do NOT fuse:
+ 0-3 = no real fusion: basically the same field, generic, or only a loose analogy. THE MAJORITY land here.
+ 4-6 = plausible but speculative; needs a leap.
+ 7-8 = genuine, specific, buildable combination.
+ 9-10 = rare: a capability nobody has, clearly buildable now.
+Be strict. "Use A's method on B's data" when both are the same kind of problem (e.g. two ways to read old manuscripts) is NOT a fusion → score <=3. Real fusion crosses genuinely different problem-domains. Sources are unverified leads — judge the fusion's potential, not their truth.
 Return ONLY JSON: {"fusion_name":"...","score":<0-10 int>,"what_it_enables":"<one line>","buildable":"<one line: how>","why":"<one line>"}`;
 
 function parse(txt) { const m = txt.match(/\{[\s\S]*\}/); try { return m ? JSON.parse(m[0]) : null; } catch { return null; } }
