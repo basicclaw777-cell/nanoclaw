@@ -1888,6 +1888,14 @@ Two consecutive relay thread sessions produced 8+ vault deposits, ~400KB Grade A
 - NEW: 02_Refined_Gold/epistemology/forensic-toolkit-and-ai-bias.md — registration test, positive-trace standard, Poisoned-Well Protocol (camouflaged truth), cluster comparison-class, unit-dependence vs dimensionless. PLUS the AI-bias finding: debunk-bias is real AND confounded by sycophancy (a pushed model confesses whatever bias the user insists on) → judge models by OUTPUT not self-report; multi-model sovereignty + Paul-decides is the structural fix.
 - Case verdict: every runnable test null (theoretical base rate: 33≈neighbors<30/35; Nature Benford study on actual COVID counts = "consistent with accurate reporting"). Strongest items (site paving, Lodge-33) = true-fact + true-fact + innuendo-weld + mundane mechanism (paving=anti-shrine standard, doesn't touch rooftop evidence; Lodge-33=charter sequence number, Robinson link unverified). Honest gap: corpus-scale non-count insertion untested, no positive trace into it.
 
+## Forgotten-Shelf mining → grading → fusion pipeline (2026-06-09)
+- Archaeologist: +5 universal-key domains (forgotten_manuscripts/undeciphered_scripts/lost_libraries/pre_digital_science/oral_knowledge). NAVIGATE not spray — prompt demands real externally-verifiable provenance ("fabricated citation worse than no discovery; omit if unsure"); weekly scan hits high-yield seams first (v2: drive order from grading reward → emergent). Ran full scan now → 67 finds.
+- grade-pending.js (Stage B) — single-model value grade + external-provenance override (2+ unverified cites → can't VERIFY), replaces the RAM-choked 3-model ensemble. Stage A = `archaeologist.js --backfill --verify` (Semantic Scholar citation check — the independent step the LLM can't fake). CLI: `node grade-pending.js --max N`. Verdicts VERIFIED/WATCH/REJECTED.
+- fusion-gate.js — cross-domain synthesis over finds ("the edge is the refinery, not the mine"). v2: pool 1/domain + strict rubric (2-3/14 pass, no saturation). Output: vortex_data/fusion-gate.db + 00_Staging/fusion-gate/. CLI: `node fusion-gate.js --max N`.
+- Both manual CLI, budget-capped (SI-31), kill-switch (*.PAUSED), separate output DB. MEASURED: old prompt 0/20 verified (75% reject = confabulation); new prompt 3/9 verified (REAL — Lord's Singer of Tales / Hymes / Abrahams spot-checked), reject-rate delta = noise at n=9 (not claimed). The 6000 PENDING were theater; held to a real bar, gold rate is low.
+- Vault: 02_Refined_Gold/conrad-haas-sibiu-manuscript.md (A-, Forgotten Shelf patron saint), 06_Methods/the-universal-key-map.md (Goldmine v2), emergent-capacity-and-the-unblocker-relay.md, 02_Refined_Gold/cathedral/the-immune-system-year-2026.md.
+- Intel Hub empty-tabs fix (2026-06-08): scrapers never triggered (Mandate-Without-Mechanism); ran manually, tabs populated, left manual; launchd-not-PM2 when wired (SI-25 DNS).
+
 ## Agent Pipeline System — Multi-Agent Review Chains (built 2026-05-27)
 - Runner: ~/Cathedral/agents/pipeline-runner.js (CJS)
 - Token logger: ~/Cathedral/agents/token-logger.js (JSONL at token-spend-log.jsonl)
@@ -2207,6 +2215,66 @@ Two consecutive relay thread sessions produced 8+ vault deposits, ~400KB Grade A
 - **The Cathedral Synthesis** (02_Refined_Gold/) — Paul's compression: 3 simultaneous processes from one activity — Building (walls), Rewiring (mirrors), The Third Thing (emergence). Precondition: honesty.
 - **Hypocrisy Cost v2** — Capacity Paradox: must acknowledge capacity for what you refuse, or the refusal is theater.
 - **The Court and Toolkit Classification** (02_Refined_Gold/) — not everything called an agent is a court member. 13 court members, ~20 toolkit skills, ~14 dormant (future-ready, not dead). Test: "would Paul notice if it lost its name?"
+
+## Executive Control Layer — Phase 3 (built 2026-06-09)
+
+### Architecture
+ChatGPT external review identified Cathedral at inflection point: Phase 1 (collect/store/retrieve) → Phase 2 (judge/prioritize/govern) → Phase 3 (modeling the state of the system itself). Five memory types forming a closed learning loop.
+
+### Cathedral Output Map (localhost:8080/cathedral-outputs)
+- HTML: ~/nanoclaw/cathedral-outputs.html
+- 3 layers: Direct (9 outputs), Executive (5 outputs), Compound (5 outputs)
+- Modal drill-downs for claim stats, priority digest, admiralty guide
+- Route: /cathedral-outputs and /outputs
+- Lobby: maps district
+
+### Attention Ledger (~/nanoclaw/attention-ledger.js)
+- SQLite `attention_events` in metrics.db, ATT-NNNNNN IDs
+- Outcome tracking: HIGH_VALUE / USEFUL / NEUTRAL / NOISE / HARMFUL
+- getLearnings() — pure SQL: flags over/under-escalated sources
+- Auto-wired into agent-event-bus.js
+- Bridge: attention-cli-bridge.js + ~/Cathedral/agents/attention-bridge.cjs
+- API: /api/attention/stats, /unreviewed, /review, /learnings
+
+### Intent Registry (~/nanoclaw/intent-registry.js)
+- SQLite `intents` + `intent_signals` in metrics.db, INTENT-NNN IDs
+- 7 seed intents: teaching leverage, sovereignty, Logan, Gym Eyes PMF, vault intelligence, BR revenue, transferable methodology
+- mapToIntents() — keyword matching, no LLM
+- getIntentHealth() — velocity, advancing/threatening, dormancy
+- Auto-wired into agent-engine.js (max 3 intents per agent output)
+- Bridge: intent-cli-bridge.js + ~/Cathedral/agents/intent-bridge.cjs
+- API: /api/intents, /api/intents/health, /api/intents/:id, POST /api/intents, PUT /api/intents/:id, POST /api/intents/:id/signal
+
+### Common Operating Picture (localhost:8080/cop)
+- HTML: ~/nanoclaw/cop.html — ONE screen, 5 questions
+- Belief (green), Attention (purple), Intent (gold), Emergence (cyan), Health (dynamic)
+- Auto-refresh 30s, graceful API failure handling
+- Route: /cop and /common-operating-picture
+- Lobby: maps district
+
+### Outcome Ledger (~/nanoclaw/outcome-ledger.js)
+- SQLite `outcomes` + `outcome_links` in metrics.db, OUT-NNNNNN IDs
+- Results: SUCCESS / PARTIAL / NEUTRAL / FAILURE / UNEXPECTED
+- Links to claims, attention events, intents, emergence incidents
+- Learning loop analytics (pure SQL): getAgentAccuracy(), getIntentROI(), getSourceReliability(), getLearningLoop()
+- Telegram: /outcome RESULT DOMAIN title, /outcome stats, /outcome loop
+- Auto-links intents via mapToIntents()
+- API: /api/outcomes, /stats, /:id, /agent-accuracy, /intent-roi, /learning-loop
+- Paul is the sensor — /outcome is the return path
+
+### Five Memory Types (closed learning loop)
+| Memory | Module | Tracks |
+|--------|--------|--------|
+| Knowledge | Claim Ledger | What we believe |
+| Attention | Attention Ledger | What we prioritized (+ whether it was smart) |
+| Strategic | Intent Registry | What we're trying to do |
+| Operational | COP | Where we are now |
+| Outcome | Outcome Ledger | What actually happened |
+
+### ChatGPT Analysis Filed
+- Vault: ~/cathedral-vault/02_Refined_Gold/cathedral/chatgpt-cathedral-analysis/
+- Images: cathedral-outputs.png, cathedral-visualised.png (brain anatomy metaphor)
+- Transcript + analysis: Grade A deposit
 
 ## TODO — MEMORY.md compression pass
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
