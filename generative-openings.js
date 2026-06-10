@@ -1,19 +1,24 @@
 #!/usr/bin/env node
-// generative-openings.js — standing hunt for UNTAPPED Noyron-able domains.
+// generative-openings.js — standing hunt for UNTAPPED Noyron-able domains, across the
+// engine families, with SUBSTRATE tagging so the points are map-ready from the first one.
 //
-// The thesis (Noyron / Leap71): AI that searches a space too big for humans, scored by a
-// CHEAP external verifier, in a NEGLECTED domain → "alien" outputs. Two families so far:
+// Thesis: AI searches a space too big for humans, scored by a CHEAP verifier, in a
+// NEGLECTED domain → "alien" outputs. AI's leverage ≈ how cheap+true the verifier is.
 //
-//   --mode design   (forward): generate an artifact, a cheap sim scores it.
-//                    Gate: a concrete laptop/workstation simulator must exist.
-//   --mode sensing  (inverse): decode a cheap ambient signal into a hidden truth
-//                    ("treat the noise as a sensor"). Gate: cheap sensor + a ground-truth
-//                    verifier YOU control + CONSTRUCTIVE non-surveillance target.
+// Families (--mode):
+//   design    forward synthesis — make an artifact, a cheap SIM scores it.
+//   sensing   inverse — decode a cheap ambient signal → hidden truth (constructive only).
+//   strategy  invent a METHOD/policy/algorithm — a cheap sim/benchmark scores it.
+//   optimize  pack/route/schedule — a cheap INSTANT objective scores it.
+//
+// Every candidate is ALSO tagged on the SUBSTRATE axes (the hidden dimensions that predict
+// leverage) so the accumulating points form a map. The substrate is "real" only when it
+// predicts held-out leverage — not yet, we're collecting points.
 //
 // Forensic: a fabricated verifier/coupling is worse than no candidate — omit if unsure.
 // WIP. DeepSeek, fail-safe without key. Budget-capped per run (SI-31).
 //
-// CLI:  node generative-openings.js --mode sensing --n 7 [--seed "vibration"] [--report]
+// CLI:  node generative-openings.js --mode strategy --n 7 [--seed "..."] [--report]
 
 import fs from 'fs';
 import path from 'path';
@@ -28,41 +33,44 @@ const KEY = process.env.DEEPSEEK_API_KEY
 
 const args = process.argv.slice(2);
 const flag = (f) => { const i = args.indexOf(f); return i >= 0 ? (args[i + 1] ?? true) : null; };
-const N = Math.min(parseInt(flag('--n'), 10) || 6, 12); // budget cap
+const N = Math.min(parseInt(flag('--n'), 10) || 6, 12);
 const MODE = (flag('--mode') || 'design').toString();
 
-const DESIGN_SYSTEM = `You hunt UNTAPPED generative-design domains — where an AI generating from first principles, scored by a CHEAP external verifier, could produce solutions no human would design (the Noyron/Leap71 pattern).
+// Shared SUBSTRATE schema — the axes the map will resolve. Appended to every return spec.
+const SUBSTRATE = `"substrate":{"verifier_cheapness":<0-10, 10=instant/free truth-check>,"verifier_fidelity":<0-10, 10=the cheap check perfectly matches reality (the sim-to-real gap)>,"search_structure":"continuous|geometric|combinatorial|symbolic|sequential","generation_tractability":<0-10, can AI parameterise+propose candidates>,"fabrication_cost":<0-10, 10=cheap/none to build+test the winner; pure-software=10>,"data_availability":<0-10>,"neglect_density":<0-10, 10=wide open>}`;
+const SUBSTRATE_NOTE = `Also score each candidate honestly on the SUBSTRATE axes — these become a map of where AI leverage lives, so do not inflate them.`;
 
-A domain qualifies ONLY if ALL THREE hold:
-1. CHEAP VERIFIER — name a REAL simulator/formal check that runs on a laptop or cheap workstation in under a day (OpenFOAM, NEC2/openEMS, Elmer/CalculiX FEA, k-Wave, KLayout/gdstk, OR-Tools, a compiler, RDKit). Wet lab / wind tunnel / clinical / fab / slow-human → NOT valid, drop it.
-2. BIG SEARCH SPACE — combinatorial/geometric, beyond human hand-enumeration.
-3. NEGLECTED — niche/unglamorous; the big labs have NOT saturated it.
+const SYS = {
+  design: `You hunt UNTAPPED generative-design domains — an AI generating from first principles, scored by a CHEAP simulator, producing designs no human would draw (Noyron/Leap71).
+Qualify ONLY if ALL hold: (1) CHEAP VERIFIER — name a REAL simulator running on a laptop/cheap workstation in <1 day (OpenFOAM, k-Wave, Elmer/CalculiX, openEMS, KLayout, RDKit); wet lab / wind tunnel / clinical / fab → drop. (2) BIG SEARCH SPACE. (3) NEGLECTED — big labs haven't saturated it.
+Be STRICT — a hand-wavy verifier is worse than none; omit it. Avoid protein folding, code-gen, aerospace CFD, drug discovery. ${SUBSTRATE_NOTE}
+Return ONLY a JSON array, each: {"domain":"","verifier":"<named tool + how it scores>","verifier_cost":"laptop|workstation|expensive","search_space":"","neglect_reason":"","alien_example":"","score":<0-10>,${SUBSTRATE}}`,
 
-Be STRICT and HONEST. A fabricated or hand-wavy verifier is worse than no candidate — omit if you cannot name a concrete cheap one. Avoid saturated targets (protein folding, code-gen, aerospace CFD, drug discovery).
+  sensing: `You hunt UNTAPPED inverse-sensing openings — a CHEAP ambient signal decoded into a hidden truth ("treat the noise as a sensor").
+Qualify ONLY if ALL hold: (1) CHEAP SENSOR everyone has (phone mic/cam, $30 SDR, WiFi card, contact mic, accelerometer, photodiode). (2) REAL PHYSICAL COUPLING — name how the hidden cause modulates the signal. (3) GROUND-TRUTH VERIFIER YOU CONTROL — independently capture the true answer cheaply and check the decode (name it). (4) CONSTRUCTIVE, NON-SURVEILLANCE TARGET — machines/structures/nature/materials/environment/self-with-consent ONLY; NEVER covert monitoring or ID of people. (5) NEGLECTED.
+Be STRICT — fabricated coupling/verifier is worse than none; omit. Reject anything whose main use is spying on people. ${SUBSTRATE_NOTE}
+Return ONLY a JSON array, each: {"domain":"","signal":"","sensor":"","coupling":"<physics>","verifier":"<ground truth + how checked>","target_class":"machine|structure|nature|material|self|environment","constructive_use":"","neglect_reason":"","alien_example":"","score":<0-10>,${SUBSTRATE}}`,
 
-Return ONLY a JSON array, each: {"domain":"","verifier":"<named tool + how it scores>","verifier_cost":"laptop|workstation|expensive","search_space":"<one line>","neglect_reason":"","alien_example":"","score":<0-10 int>,"why_now":""}`;
+  strategy: `You hunt UNTAPPED strategy/algorithm-discovery openings — AI invents a METHOD, policy, heuristic, or algorithm, and a CHEAP simulation or benchmark scores how well it performs (AlphaZero-shaped, in neglected niches).
+Qualify ONLY if ALL hold: (1) CHEAP SIM/BENCHMARK — name a concrete simulator/benchmark/executable model that scores a proposed strategy in seconds-minutes on a laptop (SUMO traffic, ns-3, MuJoCo/PyBullet, a market replay, a discrete-event sim). (2) BIG STRATEGY SPACE — many possible policies/heuristics, beyond hand-search. (3) A BETTER METHOD MATTERS. (4) NEGLECTED — NOT chess/Go/standard RL benchmarks.
+Be STRICT — name a REAL cheap scorer or omit. ${SUBSTRATE_NOTE}
+Return ONLY a JSON array, each: {"domain":"","strategy_space":"","simulator":"<named + how it scores a strategy>","value_if_found":"","neglect_reason":"","alien_example":"","score":<0-10>,${SUBSTRATE}}`,
 
-const SENSING_SYSTEM = `You hunt UNTAPPED inverse-sensing openings — where a CHEAP ambient signal is decoded back into a hidden truth ("treat the noise as a sensor": vibration->audio, RF->vitals, sound->fault).
-
-A candidate qualifies ONLY if ALL hold:
-1. CHEAP SENSOR — junk hardware most people have: phone mic/camera, $30 SDR (RTL-SDR), WiFi card, contact/piezo mic, accelerometer, webcam, photodiode.
-2. REAL PHYSICAL COUPLING — name HOW the hidden cause modulates the signal. It must be genuine physics, not wishful.
-3. GROUND-TRUTH VERIFIER YOU CONTROL — you can cheaply capture the TRUE answer independently and check the decode against it (e.g. record real audio AND the vibration video; chest-strap HR vs RF; a known fault vs the sound). Name it.
-4. CONSTRUCTIVE, NON-SURVEILLANCE TARGET — aim ONLY at machines, structures, nature, materials, the environment, or one's OWN body with consent. DO NOT propose covert monitoring or identification of people. Diagnostics / health / conservation / repair / science / accessibility only.
-5. NEGLECTED — a specific rig nobody bothered to build.
-
-Be STRICT and HONEST. A fabricated coupling or verifier is worse than no candidate — omit if unsure. Reject anything whose main use is spying on people.
-
-Return ONLY a JSON array, each: {"domain":"","signal":"","sensor":"","coupling":"<the physics>","verifier":"<ground truth + how checked>","target_class":"machine|structure|nature|material|self|environment","constructive_use":"","neglect_reason":"","alien_example":"","score":<0-10 int>}`;
+  optimize: `You hunt UNTAPPED combinatorial-optimization openings — pack/route/schedule/assign/layout problems with a CHEAP, INSTANT objective function, in neglected real-world niches.
+Qualify ONLY if ALL hold: (1) CHEAP INSTANT OBJECTIVE — a clear computable score for any candidate solution (named: OR-Tools/CP-SAT model, packing-density calc, wirelength metric). (2) HUGE COMBINATORIAL SPACE. (3) REAL NEGLECTED NICHE — a specific applied problem, NOT generic TSP/VRP/bin-packing demos.
+Be STRICT — name the concrete objective or omit. ${SUBSTRATE_NOTE}
+Return ONLY a JSON array, each: {"domain":"","objective":"<named + what it scores>","space":"","value_if_solved":"","neglect_reason":"","alien_example":"","score":<0-10>,${SUBSTRATE}}`,
+};
 
 function userPrompt() {
   const seed = flag('--seed');
-  let p;
-  if (MODE === 'sensing') {
-    p = `Generate ${N} untapped inverse-sensing openings that pass all five conditions. Span signals: RF/WiFi, vibration, acoustic, optical/light, EM, power, thermal. CONSTRUCTIVE targets only — machines, structures, nature, materials, environment, self-with-consent. NO surveillance of people.`;
-  } else {
-    p = `Generate ${N} untapped generative-design domains passing all three conditions. Span physical (acoustic, EM, structural, thermal, fluidic, optical) and formal (combinatorial, layout, scheduling) spaces.`;
-  }
+  const spans = {
+    design: 'Span physical (acoustic, EM, structural, thermal, fluidic, optical) and formal spaces.',
+    sensing: 'Span signals: RF/WiFi, vibration, acoustic, optical/light, EM, power, thermal. CONSTRUCTIVE targets only — NO surveillance of people.',
+    strategy: 'Span control, routing, networking, markets/auctions, resource policies, evolutionary heuristics.',
+    optimize: 'Span layout, packing, scheduling, assignment, routing in specific applied niches.',
+  };
+  let p = `Generate ${N} untapped ${MODE} openings passing all conditions. ${spans[MODE] || ''}`;
   if (typeof seed === 'string') p += `\nFocus near: ${seed}.`;
   return p;
 }
@@ -71,7 +79,7 @@ async function callDeepSeek(system, prompt) {
   const res = await fetch('https://api.deepseek.com/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${KEY}` },
-    body: JSON.stringify({ model: 'deepseek-chat', temperature: 0.7, max_tokens: 3600,
+    body: JSON.stringify({ model: 'deepseek-chat', temperature: 0.7, max_tokens: 4000,
       messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }),
   });
   const j = await res.json();
@@ -79,44 +87,44 @@ async function callDeepSeek(system, prompt) {
   return j.choices?.[0]?.message?.content || '';
 }
 
+const SUB_KEYS = ['verifier_cheapness', 'verifier_fidelity', 'search_structure', 'generation_tractability', 'fabrication_cost', 'data_availability', 'neglect_density'];
 const ALLOWED_TARGETS = ['machine', 'structure', 'nature', 'material', 'self', 'environment'];
 
 function gate(c) {
   if (typeof c.score !== 'number' || c.score < 5) return 'low score';
-  if (MODE === 'sensing') {
+  if (!c.substrate || !SUB_KEYS.every(k => c.substrate[k] !== undefined)) return 'no substrate tags';
+  if (MODE === 'design') {
+    if (!c.verifier || c.verifier.length < 8) return 'no concrete verifier';
+    if (!['laptop', 'workstation'].includes((c.verifier_cost || '').toLowerCase())) return 'verifier not cheap (' + c.verifier_cost + ')';
+  } else if (MODE === 'sensing') {
     if (!c.sensor || !c.verifier || c.verifier.length < 8) return 'no concrete sensor/verifier';
-    const t = (c.target_class || '').toLowerCase();
-    if (!ALLOWED_TARGETS.includes(t)) return 'target not constructive/non-surveillance (' + c.target_class + ')';
-    return null;
+    if (!ALLOWED_TARGETS.includes((c.target_class || '').toLowerCase())) return 'target not constructive (' + c.target_class + ')';
+  } else if (MODE === 'strategy') {
+    if (!c.simulator || c.simulator.length < 8) return 'no concrete simulator';
+  } else if (MODE === 'optimize') {
+    if (!c.objective || c.objective.length < 8) return 'no concrete objective';
   }
-  if (!c.verifier || c.verifier.length < 8) return 'no concrete verifier';
-  if (!['laptop', 'workstation'].includes((c.verifier_cost || '').toLowerCase())) return 'verifier not cheap (' + c.verifier_cost + ')';
   return null;
 }
 
+function subLine(s) {
+  return `   substrate: vCheap${s.verifier_cheapness} vFid${s.verifier_fidelity} ${s.search_structure} gen${s.generation_tractability} fab${s.fabrication_cost} data${s.data_availability} neglect${s.neglect_density}`;
+}
 function printCand(c) {
-  if (MODE === 'sensing') {
-    console.log(`✅ ${c.domain}  [${c.score}/10 · ${c.target_class}]`);
-    console.log(`   signal→truth: ${c.signal}  (sensor: ${c.sensor})`);
-    console.log(`   physics: ${c.coupling}`);
-    console.log(`   verifier: ${c.verifier}`);
-    console.log(`   use: ${c.constructive_use}`);
-    console.log(`   alien e.g.: ${c.alien_example}\n`);
-  } else {
-    console.log(`✅ ${c.domain}  [${c.score}/10 · verifier: ${c.verifier_cost}]`);
-    console.log(`   verifier: ${c.verifier}`);
-    console.log(`   space: ${c.search_space}`);
-    console.log(`   alien e.g.: ${c.alien_example}\n`);
-  }
+  const head = { design: c.verifier, sensing: `${c.signal} (sensor ${c.sensor})`, strategy: c.simulator, optimize: c.objective }[MODE];
+  console.log(`✅ ${c.domain}  [${c.score}/10]`);
+  console.log(`   verifier: ${head}`);
+  console.log(`   alien e.g.: ${c.alien_example}`);
+  console.log(subLine(c.substrate) + '\n');
 }
 
 function load() { try { return JSON.parse(fs.readFileSync(STORE, 'utf8')); } catch { return { openings: [], lastScan: null }; } }
 
 async function main() {
   if (!KEY) { console.log('[generative-openings] no DEEPSEEK_API_KEY — fail-safe, nothing run.'); return; }
+  if (!SYS[MODE]) { console.log(`unknown mode "${MODE}". use: design | sensing | strategy | optimize`); return; }
   console.log(`[generative-openings] mode=${MODE} · hunting ${N}...\n`);
-  let raw; try { raw = await callDeepSeek(MODE === 'sensing' ? SENSING_SYSTEM : DESIGN_SYSTEM, userPrompt()); }
-  catch (e) { console.log('DeepSeek error:', e.message); return; }
+  let raw; try { raw = await callDeepSeek(SYS[MODE], userPrompt()); } catch (e) { console.log('DeepSeek error:', e.message); return; }
   const m = raw.match(/\[[\s\S]*\]/);
   let cands; try { cands = JSON.parse(m ? m[0] : raw); } catch { console.log('parse fail. raw:\n', raw.slice(0, 400)); return; }
 
@@ -128,7 +136,7 @@ async function main() {
     accepted.push(c); have.add(c.domain.toLowerCase()); }
 
   for (const c of accepted) printCand(c);
-  for (const r of rejected) console.log(`❌ ${r.c.domain} — ${r.why}`);
+  for (const r of rejected) console.log(`❌ ${r.c.domain || '(unnamed)'} — ${r.why}`);
 
   store.openings.push(...accepted.map(c => ({ ...c, family: MODE, added: '2026-06-10' })));
   store.lastScan = '2026-06-10';
@@ -137,15 +145,11 @@ async function main() {
 
   if (flag('--report')) {
     const fam = store.openings.filter(o => o.family === MODE || (MODE === 'design' && !o.family));
-    const head = MODE === 'sensing'
-      ? ['| Domain | Score | Target | Sensor | Verifier (ground truth) | Constructive use |', '|---|---|---|---|---|---|',
-         ...fam.map(o => `| ${o.domain} | ${o.score} | ${o.target_class} | ${o.sensor} | ${o.verifier} | ${o.constructive_use} |`)]
-      : ['| Domain | Score | Verifier (cheap) | Why neglected | Alien example |', '|---|---|---|---|---|',
-         ...fam.map(o => `| ${o.domain} | ${o.score} | ${o.verifier} | ${o.neglect_reason} | ${o.alien_example} |`)];
-    const lines = ['---', `title: "Generative-Design Openings — ${MODE} hunt"`, 'date: 2026-06-10', 'type: research', '---', '',
-      `# Untapped Noyron-able domains — ${MODE} family`, '',
-      'Registration test before any build: **can we run the verifier in one afternoon?**', '', ...head];
-    const p = path.join(REPORT_DIR, `generative-openings-${MODE}-2026-06-10.md`);
+    const lines = ['---', `title: "Engine Openings — ${MODE} family"`, 'date: 2026-06-10', 'type: research', '---', '',
+      `# Untapped openings — ${MODE} family`, '', 'Registration test before any build: **can we run the verifier in one afternoon?** Substrate cols feed the leverage map.', '',
+      '| Domain | Score | vCheap | vFid | Structure | Neglect | Alien example |', '|---|---|---|---|---|---|---|',
+      ...fam.map(o => { const s = o.substrate || {}; return `| ${o.domain} | ${o.score} | ${s.verifier_cheapness ?? '-'} | ${s.verifier_fidelity ?? '-'} | ${s.search_structure ?? '-'} | ${s.neglect_density ?? '-'} | ${o.alien_example || ''} |`; })];
+    const p = path.join(REPORT_DIR, `engine-openings-${MODE}-2026-06-10.md`);
     try { fs.writeFileSync(p, lines.join('\n')); console.log('   report:', p); } catch (e) { console.log('   (report skip:', e.message + ')'); }
   }
 }
