@@ -2316,3 +2316,18 @@ ChatGPT external review identified Cathedral at inflection point: Phase 1 (colle
 - ~/.claude/projects/-Users-basicclaw777/memory/MEMORY.md is over its 24.4KB index budget.
   Root cause: bloated multi-line index entries. Fix: move detail into topic files, keep each
   index line <200 chars. Separate cleanup task — flagged 2026-06-01.
+
+## Session Update — 2026-06-10 (Boxing Intelligence, floor-to-floor)
+New builds:
+- ~/basic-reflex/clients/ — 6 PT profiles (Aman handover) + README + programs-rough.md. Constraints tagged (confirm) where transcription-uncertain.
+- crm/tap-screen.html — real gates read from block-config.json, block names+engines, coach constraint note per member, auto-seeds the 6 as the 10-block test cohort.
+- taste-map.json boxing_drills — 25 anchors, +individualization/diagnostic_revealing dims (11 total), +8-category functional taxonomy, negative map ("winging it").
+- ~/nanoclaw/boxing-loop.js — boxing domain on the Executive Control Layer (reuses intent/attention/outcome ledgers, no new DB). CLI --seed/--outcome/--status. domain='boxing'.
+- ~/nanoclaw/drill-suggester.js — generative twin of taste-curator: DeepSeek generates new drills on Paul's taste (hold fingerprint, change goal), rejection gate, queues to taste-candidates.json (pending). Fail-safe without key.
+- ~/basic-reflex/class-planner/drill-bank-sync.cjs — maps generated drills (category→domain) into the planner bank; class-planner.html shows them with [AI] badge.
+- cath-bridge.cjs: GET /crm (serve tap-screen same-origin) + POST /boxing/outcome (execFiles boxing-loop --outcome). Reverse link: gate-pass tap → SUCCESS outcome. localhost:8080/crm.
+- grade-pending.js — GLM second grader (dual-grade consensus, only VERIFY on agreement; fail-safe DeepSeek-only). Needs GLM_API_KEY in .env. [UNCOMMITTED — out of scope]
+Vault: 06_Basic_Reflex_Syllabus/drill-taste-map.md, boxing-intelligence-architecture.md; ~/basic-reflex/visuals/drill-taste-map.excalidraw
+Standing instructions: WIP builds = stable spine + liquid content (don't freeze the schema) · verify AI-generated dates/names against ground truth before client-facing · generated drills are proposals tagged [AI] (human + outcome loop = the real gate, never auto-promote)
+Architecture: boxing intelligence = first real-world domain instance of the Executive Control Layer (the 5-memory closed loop), proving ground for Phase-4.
+Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cathedral-vault push to basicclaw777-cell forks).
