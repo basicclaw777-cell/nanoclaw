@@ -35,6 +35,10 @@ const args = process.argv.slice(2);
 const flag = (f) => { const i = args.indexOf(f); return i >= 0 ? (args[i + 1] ?? true) : null; };
 const N = Math.min(parseInt(flag('--n'), 10) || 6, 12);
 const MODE = (flag('--mode') || 'design').toString();
+const ENGINE = (flag('--engine') || 'deepseek').toString();  // deepseek | fable
+const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY
+  || (() => { try { return fs.readFileSync(path.join(__dirname, '.env'), 'utf8').match(/ANTHROPIC_API_KEY=(.+)/)?.[1]?.trim(); } catch { return null; } })();
+const FABLE_MODEL = process.env.FABLE_MODEL || 'claude-fable-5';
 
 // Shared SUBSTRATE schema — the axes the map will resolve. Appended to every return spec.
 const SUBSTRATE = `"substrate":{"verifier_cheapness":<0-10, 10=instant/free truth-check>,"verifier_fidelity":<0-10, 10=the cheap check perfectly matches reality (the sim-to-real gap)>,"search_structure":"continuous|geometric|combinatorial|symbolic|sequential","generation_tractability":<0-10, can AI parameterise+propose candidates>,"fabrication_cost":<0-10, 10=cheap/none to build+test the winner; pure-software=10>,"data_availability":<0-10>,"neglect_density":<0-10, 10=wide open>}`;
@@ -87,6 +91,23 @@ async function callDeepSeek(system, prompt) {
   return j.choices?.[0]?.message?.content || '';
 }
 
+async function callFable(system, prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+    body: JSON.stringify({ model: FABLE_MODEL, max_tokens: 4000, temperature: 0.7,
+      system, messages: [{ role: 'user', content: prompt }] }),
+  });
+  const j = await res.json();
+  if (j.error) throw new Error(j.error.message || JSON.stringify(j.error));
+  return (j.content || []).map(b => b.text || '').join('') || '';
+}
+
+async function callGen(system, prompt) {
+  if (ENGINE === 'fable') { if (!ANTHROPIC_KEY) throw new Error('no ANTHROPIC_API_KEY'); return callFable(system, prompt); }
+  if (!KEY) throw new Error('no DEEPSEEK_API_KEY'); return callDeepSeek(system, prompt);
+}
+
 const SUB_KEYS = ['verifier_cheapness', 'verifier_fidelity', 'search_structure', 'generation_tractability', 'fabrication_cost', 'data_availability', 'neglect_density'];
 const ALLOWED_TARGETS = ['machine', 'structure', 'nature', 'material', 'self', 'environment'];
 
@@ -121,10 +142,11 @@ function printCand(c) {
 function load() { try { return JSON.parse(fs.readFileSync(STORE, 'utf8')); } catch { return { openings: [], lastScan: null }; } }
 
 async function main() {
-  if (!KEY) { console.log('[generative-openings] no DEEPSEEK_API_KEY — fail-safe, nothing run.'); return; }
+  if (ENGINE === 'deepseek' && !KEY) { console.log('[generative-openings] no DEEPSEEK_API_KEY — fail-safe, nothing run.'); return; }
+  if (ENGINE === 'fable' && !ANTHROPIC_KEY) { console.log('[generative-openings] no ANTHROPIC_API_KEY — fail-safe, nothing run.'); return; }
   if (!SYS[MODE]) { console.log(`unknown mode "${MODE}". use: design | sensing | strategy | optimize`); return; }
-  console.log(`[generative-openings] mode=${MODE} · hunting ${N}...\n`);
-  let raw; try { raw = await callDeepSeek(SYS[MODE], userPrompt()); } catch (e) { console.log('DeepSeek error:', e.message); return; }
+  console.log(`[generative-openings] mode=${MODE} · engine=${ENGINE} · hunting ${N}...\n`);
+  let raw; try { raw = await callGen(SYS[MODE], userPrompt()); } catch (e) { console.log(`${ENGINE} error:`, e.message); return; }
   const m = raw.match(/\[[\s\S]*\]/);
   let cands; try { cands = JSON.parse(m ? m[0] : raw); } catch { console.log('parse fail. raw:\n', raw.slice(0, 400)); return; }
 
@@ -138,7 +160,7 @@ async function main() {
   for (const c of accepted) printCand(c);
   for (const r of rejected) console.log(`❌ ${r.c.domain || '(unnamed)'} — ${r.why}`);
 
-  store.openings.push(...accepted.map(c => ({ ...c, family: MODE, added: '2026-06-10' })));
+  store.openings.push(...accepted.map(c => ({ ...c, family: MODE, engine: ENGINE, added: '2026-06-10' })));
   store.lastScan = '2026-06-10';
   fs.writeFileSync(STORE, JSON.stringify(store, null, 2));
   console.log(`\n→ ${accepted.length} new ${MODE} openings stored (${store.openings.length} total). ${rejected.length} gated out.`);
