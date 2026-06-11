@@ -1,0 +1,150 @@
+{
+  "generated": "2026-06-11",
+  "method": "filename-concept (cheap proxy)",
+  "territory": [
+    [
+      "boxing",
+      203
+    ],
+    [
+      "leonardo",
+      51
+    ],
+    [
+      "telegram",
+      45
+    ],
+    [
+      "system",
+      34
+    ],
+    [
+      "agent",
+      27
+    ],
+    [
+      "architecture",
+      27
+    ],
+    [
+      "philosophy",
+      27
+    ],
+    [
+      "framework",
+      25
+    ],
+    [
+      "relay",
+      24
+    ],
+    [
+      "principle",
+      24
+    ],
+    [
+      "protocol",
+      21
+    ],
+    [
+      "ekman",
+      20
+    ],
+    [
+      "coach",
+      19
+    ],
+    [
+      "extraction",
+      19
+    ],
+    [
+      "master",
+      19
+    ],
+    [
+      "resonance",
+      19
+    ],
+    [
+      "paul",
+      18
+    ],
+    [
+      "business",
+      18
+    ]
+  ],
+  "voids": [
+    {
+      "a": "boxing",
+      "b": "leonardo",
+      "co": 0,
+      "strength": 254,
+      "target": "bridge \"boxing\" × \"leonardo\""
+    },
+    {
+      "a": "boxing",
+      "b": "telegram",
+      "co": 1,
+      "strength": 248,
+      "target": "bridge \"boxing\" × \"telegram\""
+    },
+    {
+      "a": "boxing",
+      "b": "philosophy",
+      "co": 0,
+      "strength": 230,
+      "target": "bridge \"boxing\" × \"philosophy\""
+    },
+    {
+      "a": "boxing",
+      "b": "protocol",
+      "co": 0,
+      "strength": 224,
+      "target": "bridge \"boxing\" × \"protocol\""
+    },
+    {
+      "a": "boxing",
+      "b": "ekman",
+      "co": 0,
+      "strength": 223,
+      "target": "bridge \"boxing\" × \"ekman\""
+    },
+    {
+      "a": "boxing",
+      "b": "resonance",
+      "co": 1,
+      "strength": 222,
+      "target": "bridge \"boxing\" × \"resonance\""
+    },
+    {
+      "a": "boxing",
+      "b": "business",
+      "co": 0,
+      "strength": 221,
+      "target": "bridge \"boxing\" × \"business\""
+    },
+    {
+      "a": "leonardo",
+      "b": "system",
+      "co": 0,
+      "strength": 85,
+      "target": "bridge \"leonardo\" × \"system\""
+    },
+    {
+      "a": "telegram",
+      "b": "system",
+      "co": 0,
+      "strength": 79,
+      "target": "bridge \"telegram\" × \"system\""
+    },
+    {
+      "a": "leonardo",
+      "b": "agent",
+      "co": 0,
+      "strength": 78,
+      "target": "bridge \"leonardo\" × \"agent\""
+    }
+  ]
+}

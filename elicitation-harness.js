@@ -113,7 +113,15 @@ async function predict() {
   const db = load();
   const n = parseInt(flag('--n'), 10) || 5;
   const have = db.patterns.map(p => p.name);
-  const prompt = `His catalogued moves:\n${have.map(h => '- ' + h).join('\n')}\n\nPropose ${n} NEW distinct elicitation moves in his style, not already listed.`;
+  // void-steering: aim new moves at the unexplored regions of his answer-shape (shape-map.js)
+  let voidClause = '';
+  if (flag('--void')) {
+    try {
+      const vs = JSON.parse(fs.readFileSync(path.join(__dirname, 'voids.json'), 'utf8')).voids || [];
+      if (vs.length) voidClause = `\n\nSTEER toward these VOIDS in his explored territory — concepts he has gone deep on SEPARATELY but never bridged. Propose moves that would let him reach them:\n${vs.slice(0, 6).map(v => `- ${v.a} × ${v.b}`).join('\n')}\nA good move here is a question-form that forces a bridge between two of his own deep-but-disconnected regions.`;
+    } catch { console.log('(no voids.json — run shape-map.js first)'); }
+  }
+  const prompt = `His catalogued moves:\n${have.map(h => '- ' + h).join('\n')}\n\nPropose ${n} NEW distinct elicitation moves in his style, not already listed.${voidClause}`;
   let raw; try { raw = await callGen(PREDICT_SYS, prompt); } catch (e) { console.log(`${ENGINE} error:`, e.message); return; }
   const m = raw.match(/\[[\s\S]*\]/); let cands; try { cands = JSON.parse(m ? m[0] : raw); } catch { console.log('parse fail:\n', raw.slice(0, 300)); return; }
   const haveLower = new Set(have.map(h => h.toLowerCase()));
