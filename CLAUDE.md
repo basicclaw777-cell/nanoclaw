@@ -2331,3 +2331,66 @@ Vault: 06_Basic_Reflex_Syllabus/drill-taste-map.md, boxing-intelligence-architec
 Standing instructions: WIP builds = stable spine + liquid content (don't freeze the schema) · verify AI-generated dates/names against ground truth before client-facing · generated drills are proposals tagged [AI] (human + outcome loop = the real gate, never auto-promote)
 Architecture: boxing intelligence = first real-world domain instance of the Executive Control Layer (the 5-memory closed loop), proving ground for Phase-4.
 Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cathedral-vault push to basicclaw777-cell forks).
+
+## Session Update — 2026-06-11 (Fable 5 Lucy Fixes)
+
+### Lucy Protocol — Fable 5 Diagnostic Run
+- 10 Lucy reports generated at ~/Cathedral/agents/lucy-fable5-reports/
+- Cross-agent synthesis: 3 failure classes identified — Fabrication Selection Pressure, Split-Brain Memory, Phantom Dependencies
+
+### Structural Finding: The Cathedral Lies To Itself
+- Ship-gate + re-queue = fabrication selector (LLM returning text ≠ work done; re-queue punishes honesty)
+- Split-brain memory: crystallized/*.json (Thompson Sampling) never cleaned by 05-31 surgery
+- Generated tasks cite specific numbers/artifacts that don't exist (phantom dependencies at generation layer)
+
+### Fixes Applied (24 items from Fable 5 findings)
+
+**production-engine.js (6 edits):**
+- Evidence resolver: 7 data source patterns + LEDGER_AGENTS injection (tasks get data attached)
+- Evidence gate: pre-dispatch check removes tasks with only unresolvable data references
+- Re-queue cap: max 2 retries then escalate as capability-gap (kills infinite fabrication loop)
+- Mechanism gate: MECHANISM_GATE_AGENTS (muse/universe/archaeologist/trading/boxing/br) — numerical claims need mechanism + falsification
+- Extended keyword-overlap matcher: consumes ALL pending planner tasks (not just emergence-reignite/paul-thought)
+- Task prompt: "Use ONLY the evidence attached above. If no evidence, say so honestly — do not fabricate"
+
+**cathedral-planner.py (2 fixes):**
+- Bug 1: regex truncated task descriptions at in-word hyphens (now requires spaces around separator)
+- Bug 2: queue clobber replaced entire file — now read-merge-write preserves trigger-generated tasks
+
+**agent-engine.js (4 fixes):**
+- Uptake stopwords expanded ~100→~300, min word length 4→5, hit threshold 2→3
+- ORDER BY RANDOM → keyword-matched discovery injection using agent relevance terms
+- Working memory: stores longest paragraph instead of first sentence
+- Code awareness: slice(0, 40) → slice(0, 120) so agents see actual functions
+
+**cathy-drift-audit.js (2 fixes):**
+- Champion branch: full machinery matching drift branch (DM, bus emit, bandit reward)
+- Grader parse failure: retry once then skip (was defaulting to C/GENUINE on parse failure)
+
+**persist-interaction.js (1 fix):**
+- lastIndexOf bug: captured last original entry index BEFORE pushing new entry (was scrambling memory)
+
+**dual-memory.js (1 fix):**
+- Keyword extractor: strip dashes (was storing markdown table borders), min 5+ chars
+
+**memory-consolidator.js (1 fix):**
+- Journal dedup: exact + substring dedup across all journal files
+
+**orc-sequencer.js (1 fix):**
+- Dependency edges: tasks with `needs: [taskId]` topologically sorted
+
+**registry.json (2 updates):**
+- archaeologist stateFiles: [] → ["~/nanoclaw/vortex_data/archaeologist.db"]
+- boxing stateFiles: [] → ["state/boxing-ledger.json"]
+
+**crystallized/prospector.json (1 fix):**
+- Replaced "I have stopped being a prospector" identity crisis with registry role description
+
+**New files:**
+- ~/Cathedral/agents/state/br-ledger.json — append-only BR performance ledger
+- ~/Cathedral/agents/state/boxing-ledger.json — append-only boxing metrics ledger
+
+### Smoke Test — Daily Health Check
+- PM2: cathedral-smoke-test, cron 25 5 * * * (05:25 HKT daily)
+- Script: ~/Cathedral/smoke-test.js — 177-check health scan
+- Distinguishes cron one-shots (stopped between runs = normal) from autorestart crash loops
