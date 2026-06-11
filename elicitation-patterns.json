@@ -1,0 +1,127 @@
+{
+  "patterns": [
+    {
+      "name": "The 4-to-8",
+      "move": "ask \"what takes this from a 4 to an 8?\"",
+      "fires_when": "output is decent but not great",
+      "yields": "creative leaps; skips planning, trusts the builder",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Mechanism-underneath",
+      "move": "ask \"what does X actually DO / how does it work underneath?\"",
+      "fires_when": "any new tool, material, or concept",
+      "yields": "transferable models, not facts",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Floorplan-not-spray",
+      "move": "ask \"where does this structurally tend to be?\" — navigate by priors",
+      "fires_when": "before a search",
+      "yields": "targeted finds instead of blind spray",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "The non-obvious thread",
+      "move": "ask \"what's the deeper connection here?\"",
+      "fires_when": "several threads present at once",
+      "yields": "the gold others miss",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "What-would-have-to-be-true",
+      "move": "ask \"for all of this to connect, what must hold?\"",
+      "fires_when": "a pile of findings",
+      "yields": "the hidden assumption; the synthesis",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Bigger-picture-unprompted",
+      "move": "ask \"what larger move is this an instance of?\"",
+      "fires_when": "mid-build",
+      "yields": "the meta-frame; platform vs tool",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Cross-domain bridge",
+      "move": "ask \"map X from another field onto this\"",
+      "fires_when": "stuck, or genuinely curious",
+      "yields": "novel combinations (jet engine → coaching)",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Held tension",
+      "move": "ask \"can we run both and let data decide?\"",
+      "fires_when": "a binary choice",
+      "yields": "avoids premature resolution",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Prove-it",
+      "move": "ask \"what's the falsifiable test with a known key?\"",
+      "fires_when": "a real-vs-performative doubt",
+      "yields": "a blind, scored experiment",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Registration test",
+      "move": "ask \"did I predict this BEFORE, or am I retrofitting?\"",
+      "fires_when": "a conviction or a read on someone",
+      "yields": "separates signal from story",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    },
+    {
+      "name": "Where's-the-verifier",
+      "move": "ask \"what's the cheap, faithful truth-check here?\"",
+      "fires_when": "any AI-leverage or build question",
+      "yields": "the leverage diagnostic",
+      "yield_score": 9,
+      "uses": 1,
+      "source": "seed",
+      "added": "2026-06-11",
+      "notes": [
+        "today: where's-the-verifier birthed the whole leverage map"
+      ]
+    },
+    {
+      "name": "Steal-the-blueprint",
+      "move": "ask \"what's the reusable pattern under this product, rebuilt sovereign?\"",
+      "fires_when": "an external tool or product",
+      "yields": "the architecture, not the dependency",
+      "yield_score": 7,
+      "uses": 0,
+      "source": "seed",
+      "added": "2026-06-11"
+    }
+  ]
+}
