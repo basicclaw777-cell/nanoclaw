@@ -26,6 +26,7 @@ import { watchRun, watchClose, synthesizeInsights, getWatcherStats } from './met
 import { runRoundtable } from './strategy-roundtable.js';
 import { logDomainRun, detectCrossDomainConvergence } from '../experiment-engine/meta-watcher.js';
 import { isEliminated, runElimination } from './strategy-elimination.js';
+import { openPlacebos } from './placebo-arm.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG_PATH = path.join(__dirname, 'config.json');
@@ -647,6 +648,9 @@ async function run() {
       await notify(summary);
     }
   }
+
+  // Placebo arm — coinflip strategies through the same judge (tests elimination, not strategies).
+  try { await openPlacebos(); } catch (e) { console.log('[placebo] skip:', e.message); }
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n[TRADER] Done in ${elapsed}s — ${tradesOpened} trades opened\n`);

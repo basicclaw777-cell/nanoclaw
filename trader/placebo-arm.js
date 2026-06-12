@@ -43,7 +43,7 @@ async function fetchPrices() {
   return out;
 }
 
-async function openPlacebos() {
+export async function openPlacebos() {
   const prices = await fetchPrices();
   const assets = Object.keys(prices);
   if (!assets.length) { console.log('[placebo] no prices — skipping'); return; }
@@ -94,5 +94,8 @@ async function checkResults() {
   else console.log('  (no closed coinflip trades yet — run the opener for a week first)');
 }
 
-const mode = process.argv.includes('--check') ? checkResults : openPlacebos;
-mode().catch(e => console.log('error:', e.message));
+// CLI dispatch only when run directly — guarded so the orchestrator can import openPlacebos.
+if (process.argv[1]?.endsWith('placebo-arm.js')) {
+  const mode = process.argv.includes('--check') ? checkResults : openPlacebos;
+  mode().catch(e => console.log('error:', e.message));
+}
