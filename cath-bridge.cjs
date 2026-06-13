@@ -144,6 +144,12 @@ app.get('/logan-pp-map', (req, res) => {
 app.get('/course-guide', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'basic-reflex', 'course-guide.html'));
 });
+
+// Learning Hub — Cuba methodology digestion samples
+app.get('/learning-hub/:file', (req, res) => {
+  const f = req.params.file.replace(/[^a-z0-9\-]/gi, '');
+  res.sendFile(path.join(HOME, 'basic-reflex', 'learning-hub', f + '.html'));
+});
 app.get('/retuning-kitchen', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'retuning-kitchen.html'));
 });
@@ -1607,14 +1613,14 @@ app.get('/study-lab', (req, res) => {
 });
 
 app.get('/study-lab/file/:name', (req, res) => {
-  const p = path.join(STUDY_OUTPUT, req.params.name);
+  const p = path.join(STUDY_OUTPUT, path.basename(req.params.name));
   if (!fs.existsSync(p)) return res.status(404).send('Not found');
   res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
   res.sendFile(p);
 });
 
 app.get('/study-lab/audio/:name', (req, res) => {
-  const p = path.join(PODCAST_DIR, req.params.name);
+  const p = path.join(PODCAST_DIR, path.basename(req.params.name));
   if (!fs.existsSync(p)) return res.status(404).send('Not found');
   res.sendFile(p);
 });
@@ -1651,30 +1657,25 @@ app.post('/api/study-lab/generate', async (req, res) => {
   const { topic, type, speakers } = req.body || {};
   if (!topic) return res.status(400).json({ error: 'Topic required' });
   try {
+    const { execFileSync } = require('child_process');
+    const studyLab = path.join(NANOCLAW, 'study-lab.js');
     const results = {};
     if (type === 'slides' || type === 'all') {
-      const { execSync: ex } = require('child_process');
-      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} slides "${topic.replace(/"/g, '\\"')}"`,
-        { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      execFileSync('node', [studyLab, 'slides', topic], { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
       results.slides = true;
     }
     if (type === 'mindmap' || type === 'all') {
-      const { execSync: ex } = require('child_process');
-      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} mindmap "${topic.replace(/"/g, '\\"')}"`,
-        { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      execFileSync('node', [studyLab, 'mindmap', topic], { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
       results.mindmap = true;
     }
     if (type === 'quiz' || type === 'all') {
-      const { execSync: ex } = require('child_process');
-      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} quiz "${topic.replace(/"/g, '\\"')}"`,
-        { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      execFileSync('node', [studyLab, 'quiz', topic], { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
       results.quiz = true;
     }
     if (type === 'podcast' || type === 'all') {
-      const { execSync: ex } = require('child_process');
-      const spk = speakers ? `--speakers=${speakers}` : '';
-      ex(`node ${path.join(NANOCLAW, 'cathedral-podcast.js')} "${topic.replace(/"/g, '\\"')}" ${spk}`,
-        { cwd: NANOCLAW, timeout: 600000, stdio: 'pipe' });
+      const podArgs = [path.join(NANOCLAW, 'cathedral-podcast.js'), topic];
+      if (speakers) podArgs.push(`--speakers=${speakers}`);
+      execFileSync('node', podArgs, { cwd: NANOCLAW, timeout: 600000, stdio: 'pipe' });
       results.podcast = true;
     }
     res.json({ ok: true, message: `Generated: ${Object.keys(results).join(', ')}`, results });
@@ -1755,18 +1756,19 @@ app.post('/api/syllabus/generate', async (req, res) => {
     const topic = config.topics.find(t => t.id === topicId);
     if (!topic) return res.status(404).json({ ok: false, error: `Topic "${topicId}" not found` });
     const searchQuery = [topic.title, ...(topic.vaultKeywords || []).slice(0, 3)].join(' ');
-    const { execSync: ex } = require('child_process');
+    const { execFileSync } = require('child_process');
+    const studyLab = path.join(NANOCLAW, 'study-lab.js');
     const results = {};
     try {
-      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} slides "${searchQuery.replace(/"/g, '\\"')}"`, { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      execFileSync('node', [studyLab, 'slides', searchQuery], { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
       results.slides = { path: path.join(STUDY_OUTPUT, `slides-${topicId}.html`) };
     } catch (e2) { results.slidesError = e2.message; }
     try {
-      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} mindmap "${searchQuery.replace(/"/g, '\\"')}"`, { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      execFileSync('node', [studyLab, 'mindmap', searchQuery], { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
       results.mindmap = { path: path.join(STUDY_OUTPUT, `mindmap-${topicId}.html`) };
     } catch (e2) { results.mindmapError = e2.message; }
     try {
-      ex(`node ${path.join(NANOCLAW, 'study-lab.js')} quiz "${searchQuery.replace(/"/g, '\\"')}"`, { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
+      execFileSync('node', [studyLab, 'quiz', searchQuery], { cwd: NANOCLAW, timeout: 120000, stdio: 'pipe' });
       results.quiz = { path: path.join(STUDY_OUTPUT, `quiz-${topicId}.html`) };
     } catch (e2) { results.quizError = e2.message; }
     res.json({ ok: true, topic: topic.title, topicId, results });
@@ -1832,17 +1834,17 @@ app.get('/cuba-combos', (req, res) => {
   res.sendFile(path.join(CUBA_LIB, 'cuba-dashboard.html'));
 });
 app.get('/cuba-combos/:file', (req, res) => {
-  const filePath = path.join(CUBA_LIB, req.params.file);
+  const filePath = path.join(CUBA_LIB, path.basename(req.params.file));
   if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
   res.sendFile(filePath);
 });
 app.get('/cuba-combos/clips/:file', (req, res) => {
-  const filePath = path.join(CUBA_LIB, 'clips', req.params.file);
+  const filePath = path.join(CUBA_LIB, 'clips', path.basename(req.params.file));
   if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
   res.sendFile(filePath);
 });
 app.get('/cuba-combos/frames/:file', (req, res) => {
-  const filePath = path.join(CUBA_LIB, 'frames', req.params.file);
+  const filePath = path.join(CUBA_LIB, 'frames', path.basename(req.params.file));
   if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
   res.sendFile(filePath);
 });
@@ -3781,7 +3783,7 @@ app.get('/reed-treatments', (req, res) => {
 });
 // Serve treatment images (relative paths from reed-instagram-treatments.html)
 app.get('/Downloads/:folder/:file', (req, res) => {
-  const filePath = path.join(HOME, 'Downloads', req.params.folder, req.params.file);
+  const filePath = path.join(HOME, 'Downloads', path.basename(req.params.folder), path.basename(req.params.file));
   if (!fs.existsSync(filePath)) return res.status(404).send('not found');
   res.sendFile(filePath);
 });
