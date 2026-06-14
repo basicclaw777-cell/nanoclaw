@@ -94,6 +94,11 @@ const GEOMETRY_FORMS = [
   'merkaba',
   'sacred geometry',
   'implosion',
+  'strange attractor',
+  'lorenz attractor',
+  'chaotic attractor',
+  'phase space',
+  'bifurcation',
 ];
 
 // ── Suppression playbook stages ───────────────────────────────────────────────
