@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Lorenz Attractor — Calibration Standard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#f6f7fa; --surface:#ffffff; --border:#e4e7ec; --ink:#1a1d24; --ink-soft:#475067;
+  --ink-faint:#8a93a6; --violet:#7c3aed; --amber:#d98b0b; --gold:#b8860b;
+  --trace-a:#7c3aed; --trace-b:#d98b0b; --canvas-bg:#ffffff; --grid:rgba(124,58,237,0.05);
+}
+body.dark {
+  --bg:#09090f; --surface:#13131c; --border:#262633; --ink:#e8e9f0; --ink-soft:#9aa0b4;
+  --ink-faint:#5b6076; --canvas-bg:#0b0b12; --grid:rgba(124,58,237,0.10);
+  --trace-a:#a07cff; --trace-b:#f5b342;
+}
+body {
+  background:var(--bg); color:var(--ink); font-family:'Inter',-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased; line-height:1.5; min-height:100vh;
+  transition:background .25s ease, color .25s ease;
+}
+.wrap { max-width:1180px; margin:0 auto; padding:26px 20px 60px; }
+.mast { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+.mast h1 { font-size:23px; font-weight:800; letter-spacing:-0.5px; }
+.mast .sub { font-size:13px; color:var(--ink-faint); margin-top:3px; font-weight:500; }
+.kicker { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:5px; }
+.theme-btn { font-family:'JetBrains Mono',monospace; font-size:12px; background:var(--surface);
+  border:1px solid var(--border); color:var(--ink-soft); padding:8px 13px; border-radius:6px;
+  cursor:pointer; transition:border-color .15s, color .15s; }
+.theme-btn:hover { border-color:var(--violet); color:var(--violet); }
+
+.grid-main { display:grid; grid-template-columns:1fr 340px; gap:18px; align-items:start; }
+@media(max-width:880px){ .grid-main{ grid-template-columns:1fr; } }
+
+.stage { background:var(--canvas-bg); border:1px solid var(--border); border-radius:12px;
+  overflow:hidden; position:relative; transition:background .25s ease; }
+canvas { display:block; width:100%; height:auto; }
+.readout { position:absolute; left:12px; bottom:11px; font-family:'JetBrains Mono',monospace;
+  font-size:11px; color:var(--ink-faint); line-height:1.7; pointer-events:none; }
+.readout b { color:var(--ink-soft); font-weight:500; }
+
+.panel { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 18px 20px; }
+.panel + .panel { margin-top:16px; }
+.panel h2 { font-size:12px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+  color:var(--ink-soft); margin-bottom:13px; }
+.eq { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--ink); line-height:2.05;
+  background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:11px 13px; }
+.eq .v { color:var(--violet); font-weight:500; }
+
+.ctrl { margin-top:14px; }
+.ctrl label { display:flex; justify-content:space-between; font-size:12px; color:var(--ink-soft);
+  font-weight:500; margin-bottom:5px; }
+.ctrl label span { font-family:'JetBrains Mono',monospace; color:var(--violet); }
+input[type=range]{ width:100%; accent-color:var(--violet); height:4px; }
+.btn-row { display:flex; gap:8px; margin-top:16px; }
+.btn { flex:1; font-family:'JetBrains Mono',monospace; font-size:12px; padding:9px; border-radius:6px;
+  border:1px solid var(--border); background:var(--bg); color:var(--ink-soft); cursor:pointer;
+  transition:border-color .15s, color .15s; }
+.btn:hover { border-color:var(--violet); color:var(--violet); }
+.btn.on { background:var(--violet); color:#fff; border-color:var(--violet); }
+
+.note { font-size:13px; color:var(--ink-soft); line-height:1.62; }
+.note p { margin-bottom:10px; }
+.note p:last-child { margin-bottom:0; }
+.note b { color:var(--ink); font-weight:600; }
+.grade { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+  color:#0e9f6e; background:rgba(14,159,110,0.10); border:1px solid rgba(14,159,110,0.25);
+  padding:1px 7px; border-radius:5px; }
+.foot { margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-faint); }
+.foot a { color:var(--violet); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mast">
+    <div>
+      <div class="kicker">Cathedral · Calibration Standard</div>
+      <h1>The Lorenz Attractor</h1>
+      <div class="sub">Three equations. Deterministic rule, unpredictable path, ordered shape. The Grade-A benchmark for geometry-as-law claims.</div>
+    </div>
+    <button class="theme-btn" id="theme">◐ DARK</button>
+  </div>
+
+  <div class="grid-main">
+    <div class="stage">
+      <canvas id="c" width="1600" height="1200"></canvas>
+      <div class="readout" id="readout"></div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2>The System</h2>
+        <div class="eq">
+          dx/dt = <span class="v">σ</span>(y − x)<br>
+          dy/dt = x(<span class="v">ρ</span> − z) − y<br>
+          dz/dt = xy − <span class="v">β</span>z
+        </div>
+        <div class="ctrl">
+          <label>σ &nbsp;sigma <span id="lsig">10.0</span></label>
+          <input type="range" id="sig" min="0" max="20" step="0.1" value="10">
+        </div>
+        <div class="ctrl">
+          <label>ρ &nbsp;rho <span id="lrho">28.0</span></label>
+          <input type="range" id="rho" min="0" max="60" step="0.1" value="28">
+        </div>
+        <div class="ctrl">
+          <label>β &nbsp;beta <span id="lbet">2.67</span></label>
+          <input type="range" id="bet" min="0" max="8" step="0.01" value="2.667">
+        </div>
+        <div class="btn-row">
+          <button class="btn on" id="spin">⟳ SPIN</button>
+          <button class="btn" id="reset">RESET</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Why It's Here <span class="grade">GRADE A</span></h2>
+        <div class="note">
+          <p>Lorenz (1963) reduced atmospheric convection to these three lines. The path <b>never repeats, never crosses itself, never escapes</b> — yet a microscopic nudge to the start sends it elsewhere entirely. That sensitivity is the <b>butterfly effect</b>.</p>
+          <p>The shape is the order chaos is trapped inside. A simple deterministic rule producing complex, reproducible geometry — the rare confirmed YES to the Cathedral's core question.</p>
+          <p>Use it as the <b>control</b>: any vortex-math or sacred-geometry claim must hold structurally stripped of narrative, the way these equations do. Most won't.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">vault: 02_Refined_Gold/epistemology/lorenz-attractor-calibration-standard.md · detector: gold-extractor.js GEOMETRY_FORMS · render: canvas (SI-38), no image model</div>
+</div>
+
+<script>
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+// Lorenz parameters (live-editable)
+let SIG = 10, RHO = 28, BET = 8/3;
+const dt = 0.005;
+
+// Integrate the full attractor once, redraw under rotation each frame.
+let pts = [];
+function integrate() {
+  pts = [];
+  let x = 0.1, y = 0, z = 0;          // fixed seed → reproducible (the point)
+  const N = 14000;
+  for (let i = 0; i < N; i++) {
+    // RK4 step
+    const f = (x,y,z) => [SIG*(y-x), x*(RHO-z)-y, x*y-BET*z];
+    const k1 = f(x,y,z);
+    const k2 = f(x+0.5*dt*k1[0], y+0.5*dt*k1[1], z+0.5*dt*k1[2]);
+    const k3 = f(x+0.5*dt*k2[0], y+0.5*dt*k2[1], z+0.5*dt*k2[2]);
+    const k4 = f(x+dt*k3[0], y+dt*k3[1], z+dt*k3[2]);
+    x += dt/6*(k1[0]+2*k2[0]+2*k3[0]+k4[0]);
+    y += dt/6*(k1[1]+2*k2[1]+2*k3[1]+k4[1]);
+    z += dt/6*(k1[2]+2*k2[2]+2*k3[2]+k4[2]);
+    if (i > 40) pts.push([x, y, z]);  // drop transient settling
+  }
+}
+integrate();
+
+let theta = 0, spinning = true, head = 0;
+const SCALE = 19, CZ = 25;
+
+function css(v){ return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  const cosT = Math.cos(theta), sinT = Math.sin(theta);
+  const ta = css('--trace-a'), tb = css('--trace-b');
+
+  ctx.lineWidth = 1.6;
+  ctx.lineJoin = 'round';
+  // draw progressively up to `head` so it traces in
+  const upTo = Math.min(head, pts.length);
+  let prev = null;
+  for (let i = 0; i < upTo; i++) {
+    const [x,y,z] = pts[i];
+    // rotate about vertical (z) axis, project
+    const rx = x*cosT - y*sinT;
+    const ry = x*sinT + y*cosT;
+    const px = W/2 + rx*SCALE;
+    const py = H/2 + (z - CZ)*SCALE * -1;   // z up
+    if (prev) {
+      // colour by lobe: x<0 vs x>0 (the two wings)
+      const t = i/pts.length;
+      ctx.strokeStyle = x < 0 ? ta : tb;
+      ctx.globalAlpha = 0.25 + 0.75*Math.min(1, t*1.4);
+      ctx.beginPath();
+      ctx.moveTo(prev[0], prev[1]);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+    }
+    prev = [px, py];
+  }
+  ctx.globalAlpha = 1;
+  // moving head marker
+  if (prev && upTo < pts.length) {
+    ctx.fillStyle = css('--violet');
+    ctx.beginPath(); ctx.arc(prev[0], prev[1], 4, 0, 7); ctx.fill();
+  }
+
+  document.getElementById('readout').innerHTML =
+    `<b>points</b> ${upTo.toLocaleString()} / ${pts.length.toLocaleString()}<br>` +
+    `<b>σ ρ β</b> ${SIG.toFixed(1)} ${RHO.toFixed(1)} ${BET.toFixed(2)}<br>` +
+    `<b>θ</b> ${(theta*180/Math.PI%360).toFixed(0)}°`;
+}
+
+function loop() {
+  if (head < pts.length) head += 90;
+  if (spinning) theta += 0.0032;
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+
+// ── Controls ──
+function bind(id, lbl, fmt, set) {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    set(parseFloat(el.value));
+    document.getElementById(lbl).textContent = fmt(parseFloat(el.value));
+    integrate(); head = 0;
+  });
+}
+bind('sig','lsig', v=>v.toFixed(1), v=>SIG=v);
+bind('rho','lrho', v=>v.toFixed(1), v=>RHO=v);
+bind('bet','lbet', v=>v.toFixed(2), v=>BET=v);
+
+document.getElementById('spin').addEventListener('click', e => {
+  spinning = !spinning; e.target.classList.toggle('on', spinning);
+});
+document.getElementById('reset').addEventListener('click', () => {
+  SIG=10; RHO=28; BET=8/3; theta=0; head=0;
+  sig.value=10; rho.value=28; bet.value=2.667;
+  lsig.textContent='10.0'; lrho.textContent='28.0'; lbet.textContent='2.67';
+  integrate();
+});
+document.getElementById('theme').addEventListener('click', e => {
+  document.body.classList.toggle('dark');
+  e.target.textContent = document.body.classList.contains('dark') ? '◑ LIGHT' : '◐ DARK';
+});
+</script>
+</body>
+</html>

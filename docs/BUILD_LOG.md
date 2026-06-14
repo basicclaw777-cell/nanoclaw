@@ -1,6 +1,16 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-14 — Lorenz Attractor: detector tags + calibration note + visual door
+
+Edward Lorenz's strange attractor adopted as the Cathedral's **Grade-A calibration standard** — the proven "simple deterministic rule → complex ordered geometry" case that every geometry-as-law claim gets tested against (the control, not a discovery; mainstream physics, NOT a suppression find).
+
+- **A · Detector** — `gold-extractor.js` GEOMETRY_FORMS +5: `strange attractor`, `lorenz attractor`, `chaotic attractor`, `phase space`, `bifurcation`. Flags vortex/water/frequency nuggets showing attractor structure. (commit da0e21c)
+- **D · Vault note** — `02_Refined_Gold/epistemology/lorenz-attractor-calibration-standard.md`, Grade A, links the-convergence-detector + nisaba-measurement-convergence. (vault commit 9708c02)
+- **B · Visual door** — `lorenz-attractor.html`, served `/lorenz-attractor.html` via cath-bridge.cjs. Live RK4-integrated render, vertical-axis spin, σ/ρ/β sliders, two-lobe colour split, light/dark toggle (default bright per SI-38). Canvas only, no image model. Lobby card added to Research district (🦋, orc Forge). Route verified live (200).
+
+Boundaries marked everywhere: Lorenz rigorous; the fractal→consciousness tower built on top = Grade D/F contamination, never conflated.
+
 # The Cathedral Project — Obliteratus Build
 
 ## Project Overview

@@ -5051,6 +5051,10 @@ app.get('/mega-surgery-viz.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'mega-surgery-viz.html'));
 });
 
+app.get('/lorenz-attractor.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'lorenz-attractor.html'));
+});
+
 app.get('/mind-map.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'mind-map.html'));
 });
