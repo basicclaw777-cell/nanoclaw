@@ -5067,6 +5067,11 @@ app.get(['/pandamericano/camp', '/pandamericano-camp.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'pandamericano-camp.html'));
 });
 
+app.get('/pandamericano/audio/:file', (req, res) => {
+  const safe = path.basename(req.params.file).replace(/[^a-z0-9._-]/gi, ''); // path-traversal guard
+  res.sendFile(path.join(VAULT, '09_Artifacts', 'audio', 'pandamericano', safe));
+});
+
 app.get('/mind-map.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'mind-map.html'));
 });

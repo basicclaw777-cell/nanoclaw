@@ -54,6 +54,15 @@ fs.mkdirSync(path.dirname(MD), { recursive: true });
 fs.writeFileSync(MD, md);
 fs.writeFileSync(TXT, narration);
 
+// ── audio players (Cuban voice, per day) ──
+const AUDIO_DIR = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'audio', 'pandamericano');
+const players = days.map(day => {
+  const fn = day.replace(/[^a-z0-9]+/gi, '_') + '.mp3';
+  if (!fs.existsSync(path.join(AUDIO_DIR, fn))) return '';
+  return `<div class="aud"><span>${day.replace(/_/g, ' ')}</span><audio controls preload="none" src="/pandamericano/audio/${fn}"></audio></div>`;
+}).filter(Boolean).join('');
+const audioBar = players ? `<div class="audiobar"><div class="ah">🔊 Listen — the coaching read in a Cuban voice (es-CU)</div>${players}</div>` : '';
+
 // ── web door page ──
 const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pandamericano — The Camp, Translated</title>
@@ -67,9 +76,15 @@ h2{font-size:18px;font-weight:700;margin:1.8em 0 .5em;color:#0b6e4a;border-top:1
 p{font-size:15.5px}small{color:#aeb4c2;font-size:11px;font-family:monospace}
 blockquote{border-left:3px solid #d9d6f3;margin:6px 0 16px;padding:6px 16px;color:#5b5187;background:#f7f6fc;border-radius:0 8px 8px 0;font-size:14px}
 .foot{color:#8a93a6;font-size:11px;font-family:monospace;margin-top:30px;border-top:1px solid #eef0f4;padding-top:12px}
+.audiobar{background:#f7f6fc;border:1px solid #e4e0f3;border-radius:10px;padding:14px 16px;margin:8px 0 22px}
+.audiobar .ah{font-size:12px;font-weight:700;color:#5b5187;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.aud{display:flex;align-items:center;gap:12px;margin:7px 0}
+.aud span{min-width:130px;font-size:13px;font-weight:600;color:#3a2f86;text-transform:capitalize}
+.aud audio{height:34px;flex:1}
 </style></head><body><div class="wrap">
 <a class="back" href="/pandamericano">← back to the framework</a>
 <h1>🇨🇺 The Camp, Translated</h1>
+${audioBar}
 <div id="content"></div>
 <div class="foot">${count} passages · day 1 → 17 · whisper + DeepSeek translation of the original audio · vault: 06_Methods/pandamericano-the-camp-translated.md</div>
 </div>
