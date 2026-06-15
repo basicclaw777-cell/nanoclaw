@@ -14,6 +14,7 @@ import { recordStatement, getTrajectory, getDriftAlerts, runBeliefScan, formatTr
 import { runNegativeSpaceScan } from './negative-space.js';
 import { buildAtlas, getOrBuildAtlas } from './convergence-atlas.js';
 import { smartQuery, smartQueryJSON } from './deepseek-query.js';
+import { runHunch, render as renderHunch } from './hunch-lane.js';
 import { runOracle, getOracleOutputs, formatOracleResult } from './oracle.js';
 import { addToConversation, getConversationHistory, updateMemoryAfterConversation } from './memory-system.js';
 import { registerBoxingCommands } from './boxing-commands.js';
@@ -1457,6 +1458,76 @@ bot.onText(/^\/thirdthing(?:@\w+)?\s*$/i, async (msg) => {
     const lines = ledger.slice(-10).map((t, i) => `${i + 1}. *${t.title}* (${t.type}, ${t.date})\n   ${t.description}`);
     await safeSend(chatId, `🔮 *Third Thing Ledger* (${ledger.length} total)\n\n${lines.join('\n\n')}`, { parse_mode: 'Markdown' });
   } catch (e) { await safeSend(chatId, `⚠️ thirdthing: ${e.message}`); }
+});
+
+// /relay — Triangulation Relay: two LLMs in sustained dialogue
+bot.onText(/^\/relay(?:@\w+)?\s*(stop|status|deposit|run)?\s*([\s\S]*)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const sub = (match[1] || '').toLowerCase();
+  const arg = (match[2] || '').trim();
+  try {
+    const relay = await import(path.join(process.env.HOME, 'nanoclaw', 'triangulation-relay.js'));
+
+    if (sub === 'status' || (!sub && !arg)) {
+      const s = relay.getRelayStatus();
+      if (!s.active && !s.topic) {
+        await safeSend(chatId, 'No active relay. Start one: /relay run <topic>');
+      } else {
+        await safeSend(chatId, `*Relay:* ${s.topic}\n*Round:* ${s.round}\n*Status:* ${s.status}\n*Last:* ${s.lastModel || 'none'}`, { parse_mode: 'Markdown' });
+      }
+      return;
+    }
+
+    if (sub === 'stop') {
+      const result = await relay.stopRelay();
+      if (result.error) { await safeSend(chatId, result.error); return; }
+      await safeSend(chatId, `Relay stopped: "${result.topic}" after ${result.rounds} rounds. Use /relay deposit to save.`);
+      return;
+    }
+
+    if (sub === 'deposit') {
+      const result = await relay.depositRelay();
+      if (result.error) { await safeSend(chatId, result.error); return; }
+      const disc = result.discoveries?.length ? `\n\nDiscoveries: ${result.discoveries.slice(0, 10).join(', ')}` : '';
+      await safeSend(chatId, `Relay deposited to vault. ${result.rounds} rounds.${disc}`);
+      return;
+    }
+
+    if (sub === 'run' && arg) {
+      await safeSend(chatId, `Starting Triangulation Relay: "${arg}"\nClaude (inside) vs DeepSeek (outside). This takes 2-5 minutes.`);
+
+      const ctx = await relay.gatherRelayContext();
+      const result = await relay.runFullRelay(arg, ctx, async (r) => {
+        const label = r.modelName;
+        const convergeTag = r.converging ? ' [CONVERGING]' : '';
+        const preview = r.content.slice(0, 3500);
+        await safeSend(chatId, `*Round ${r.round} — ${label}${convergeTag}*\n\n${preview}`, { parse_mode: 'Markdown' });
+      });
+
+      if (result.ok) {
+        const dep = await relay.depositRelay();
+        const disc = dep.discoveries?.length ? `\nDiscoveries: ${dep.discoveries.slice(0, 8).join(', ')}` : '';
+        await safeSend(chatId, `Relay complete. ${result.rounds.length} rounds. Auto-deposited to vault.${disc}`);
+      } else {
+        await safeSend(chatId, `Relay error: ${result.error || 'unknown'}`);
+      }
+      return;
+    }
+
+    // Injection into active relay
+    if (arg && !sub) {
+      const s = relay.getRelayStatus();
+      if (!s.active) {
+        await safeSend(chatId, 'No active relay. Start: /relay run <topic>');
+        return;
+      }
+      await safeSend(chatId, `Injecting into relay and running next round...`);
+      const result = await relay.runNextRound(arg);
+      if (result.error) { await safeSend(chatId, result.error); return; }
+      const preview = result.content.slice(0, 3500);
+      await safeSend(chatId, `*Round ${result.round} — ${result.modelName}*\n\n${preview}`, { parse_mode: 'Markdown' });
+    }
+  } catch (e) { await safeSend(chatId, `Relay error: ${e.message}`); }
 });
 
 // /priority — Global Priority Engine stats + digest
@@ -3597,6 +3668,23 @@ bot.on('message', async (msg) => {
   }
 
   // /vault search|read|list
+  if (msg.text.startsWith('/hunch ')) {
+    // The Hunch Lane (SI-44). Forge does NOT grade here — the judging is routed
+    // to the differently-biased reasoner (DeepSeek/Aletheia). Data shown first.
+    const hunch = msg.text.slice('/hunch '.length).trim();
+    if (!hunch) { safeSend(chatId, 'Usage: /hunch <your hunch in plain words>'); return; }
+    safeSend(chatId, `🧭 Lane open: "${hunch}"\nRetrieving vault → showing data → routing the grade to the differently-biased reasoner (not me)...`);
+    try {
+      const result = await runHunch(hunch);
+      const out = renderHunch(result);
+      // Telegram has a 4096-char cap; chunk if needed.
+      for (let i = 0; i < out.length; i += 3800) await safeSend(chatId, out.slice(i, i + 3800));
+    } catch (err) {
+      await safeSend(chatId, `⚠️ Hunch lane error: ${err.message}`);
+    }
+    return;
+  }
+
   if (msg.text.startsWith('/vault ')) {
     const parts = msg.text.slice('/vault '.length).trim().split(' ');
     const subCmd = parts[0]?.toLowerCase();
