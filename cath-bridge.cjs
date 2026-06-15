@@ -5063,6 +5063,10 @@ app.get(['/pandamericano/review', '/pandamericano-review.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'pandamericano-review.html'));
 });
 
+app.get(['/pandamericano/camp', '/pandamericano-camp.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'pandamericano-camp.html'));
+});
+
 app.get('/mind-map.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'mind-map.html'));
 });
