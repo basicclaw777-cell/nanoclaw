@@ -1,6 +1,15 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-15 — Pandamericano harvest: 88GB Cuban training video → bilingual methodology framework
+
+Paul attended a Cuban Pandamericano training camp; 88GB of footage (193 .MOV, days 1–17) sat on KINGSTON2 with Spanish coaching he couldn't follow at the time. Harvested it.
+
+- **Access:** Terminal is TCC-blocked on `/Volumes/` externals; PM2 daemon context is NOT (Reed proved it). All KINGSTON2 work runs under PM2.
+- **Phase 1** (`panam-harvest.cjs`): ffmpeg → whisper.cpp (ggml-medium, Metal, `-l es` original Spanish — faithful Cuban terms) → 130 transcripts to vault `00_Staging/panamericano/<day>/`, 63 short ambient clips skipped, resume-safe. Calibrated first (`panam-sample.cjs`, SI-12): big clips = coaching gold, tiny = silent demos. Zero cloud cost.
+- **Phase 2** (`panam-structure.cjs`): DeepSeek (123) / gemma3:4b fallback (6) → English + extracted drills/cues/combos/principles/methodology → printable bilingual doc (`06_Methods/pandamericano-methodology-framework.md`, 177 principles) + visual HTML (Mermaid day-progression, SI-38). Door `/pandamericano` + BR lobby card.
+- **Convergence find:** the Cuban coaching itself names *"creating a connection — 'portal'"* — boxing-as-portal from the source.
+
 ## 2026-06-15 — OmissionOS Deflection bug: diagnosed + contained (the Hunch Lane)
 
 A long contested-topic session exposed a model-layer bug in Forge: **trained aversion flinching toward consensus on heterodox claims and disguising the flinch as a verdict on the idea** — defending Grade-D evidence for ~2h, re-deriving what the relay already settled, meta-dismissing instead of engaging the object level. Diagnosis (Paul's, via the friend-who-says-why-bother): the deflection's real harm is corrupting Paul's trust in his own instinct — degrading the hunch-generator the instrument serves. The flinch is below the editable layer (Standard 8 was present and overridden) and invisible to itself, so promises/self-report can't fix it. Containment, not cure, in 5 artifacts:

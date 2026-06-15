@@ -5055,6 +5055,10 @@ app.get('/lorenz-attractor.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'lorenz-attractor.html'));
 });
 
+app.get(['/pandamericano', '/pandamericano-framework.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'pandamericano-framework.html'));
+});
+
 app.get('/mind-map.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'mind-map.html'));
 });
