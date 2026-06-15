@@ -2407,3 +2407,9 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 - PM2: cathedral-smoke-test, cron 25 5 * * * (05:25 HKT daily)
 - Script: ~/Cathedral/smoke-test.js — 177-check health scan
 - Distinguishes cron one-shots (stopped between runs = normal) from autorestart crash loops
+
+### Babylon / Akkadian Translator — Ancient Corpus Programme #5 (2026-06-15)
+- `babylon-translator.js` (ESM, nanoclaw) — Akkadian transliteration → English with **literal vs `[inferred]` separated** (verifier-ready) + entity extraction + classification. DeepSeek primary, local hermes3 fallback. **Cost-metered + budget-capped $5/run** (SI-21/22), writes `spend.log` + Telegram summary. Modes: `--calibrate` / `--prod` (KINGSTON2) / local.
+- `babylon-fetch.js` — CDLI ATF acquisition → `segments.json`. Reusable `parseATF()` parser, **self-tested (`--selftest` PASSED)**. Gold-genre filter (astronomy/math).
+- CALIBRATED twice: star-list (12/12 MUL.APIN constellations) + **hard running text** (Hammurabi §1 raw hyphenated sign-transliteration + §196), translations cross-checked vs ehammurabi.org. ~$0.001/calibration. Caught + fixed a prompt regression (strict "literal" framing made it echo transliteration; fixed with an explicit English example).
+- STATUS: pipeline **validated end-to-end on real data; NOT yet run at scale.** Remaining deliberate prod step — validate the CDLI bulk pull (network/size) in the TCC-permitted env, run `--prod` with the spend governor watched, then wire Rosetta convergence + dashboard door + PM2 trigger (SI-10 ①④ pending).
