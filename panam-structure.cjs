@@ -159,6 +159,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:#475067;mar
 </style></head><body><div class="wrap">
 <h1>🥊 Pandamericano Methodology Framework</h1>
 <div class="sub">Cuban training camp, days 1–17 · harvested from 88GB of coaching audio Paul attended · Spanish original + English · ${new Date().toISOString().slice(0,10)}</div>
+<a href="/pandamericano/review" style="display:inline-block;margin:14px 0 4px;background:#0e9f6e;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:10px 18px;border-radius:8px">📋 Summary · Review · Development plan →</a>
 <div class="card"><h2>The Progression (day 1 → 17)</h2>
 <div class="mermaid">graph LR\n${dayNodes}\n${dayEdges}</div></div>
 <div class="card"><h2>Core Principles (transferable)</h2><div class="princ">${topPrinc.map(p=>`<span>${p.replace(/</g,'&lt;').slice(0,80)}</span>`).join('')||'<span>pending transcription</span>'}</div></div>
