@@ -15,6 +15,7 @@ import { runNegativeSpaceScan } from './negative-space.js';
 import { buildAtlas, getOrBuildAtlas } from './convergence-atlas.js';
 import { smartQuery, smartQueryJSON } from './deepseek-query.js';
 import { runHunch, render as renderHunch } from './hunch-lane.js';
+import { queryPanam, formatPanam } from './panam-query.js';
 import { runOracle, getOracleOutputs, formatOracleResult } from './oracle.js';
 import { addToConversation, getConversationHistory, updateMemoryAfterConversation } from './memory-system.js';
 import { registerBoxingCommands } from './boxing-commands.js';
@@ -3668,6 +3669,21 @@ bot.on('message', async (msg) => {
   }
 
   // /vault search|read|list
+  if (msg.text.startsWith('/panam ')) {
+    // Query the harvested Pandamericano coaching. Grounded only in the transcripts.
+    const q = msg.text.slice('/panam '.length).trim();
+    if (!q) { safeSend(chatId, 'Usage: /panam <question> — e.g. "what did they say about footwork on day 8"'); return; }
+    safeSend(chatId, `🇨🇺 Searching the camp footage: "${q}"...`);
+    try {
+      const r = await queryPanam(q);
+      const out = formatPanam(r, q);
+      for (let i = 0; i < out.length; i += 3800) await safeSend(chatId, out.slice(i, i + 3800));
+    } catch (err) {
+      await safeSend(chatId, `⚠️ /panam error: ${err.message}`);
+    }
+    return;
+  }
+
   if (msg.text.startsWith('/hunch ')) {
     // The Hunch Lane (SI-44). Forge does NOT grade here — the judging is routed
     // to the differently-biased reasoner (DeepSeek/Aletheia). Data shown first.
