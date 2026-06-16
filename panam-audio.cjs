@@ -9,7 +9,10 @@ const STAGE_NAME = SLUG === 'pandamericano' ? 'panamericano' : SLUG;
 const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', STAGE_NAME);
 const OUT = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'audio', SLUG);
 const EDGE = path.join(process.env.HOME, 'Library', 'Python', '3.9', 'bin', 'edge-tts');
-const VOICE = 'es-CU-ManuelNeural'; // Cuban Spanish, male
+// node panam-audio.cjs <slug> <lang>   lang = es (Cuban Spanish) | en (English)
+const LANG = (process.argv[3] || 'es').toLowerCase();
+const VOICE = LANG === 'en' ? 'en-US-GuyNeural' : 'es-CU-ManuelNeural';
+const SUFFIX = LANG === 'en' ? '.en' : ''; // english → <day>.en.mp3 ; spanish keeps <day>.mp3
 const TMP = path.join(process.env.HOME, 'nanoclaw', 'panam-audio-tmp.txt');
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -24,9 +27,11 @@ function load() {
       try {
         const s = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
         const sp = (s._spanish || '').replace(/\n+/g, ' ').trim();
-        if (s.thin || sp.length < 80) continue;
+        const en = (s.english || '').replace(/\n+/g, ' ').trim();
+        const text = LANG === 'en' ? en : sp;
+        if (s.thin || text.length < 80) continue;
         const rawDay = /^MVI_\d+/.test(day) ? 'main-sessions' : day;
-        out.push({ day: rawDay, clip: f.replace('.struct.json', ''), spanish: sp });
+        out.push({ day: rawDay, clip: f.replace('.struct.json', ''), text });
       } catch (_) {}
     }
   }
@@ -39,10 +44,10 @@ const days = [...new Set(items.map(i => i.day))].sort((a, b) => dayNum(a) - dayN
 
 for (const day of days) {
   const text = items.filter(i => i.day === day).sort((a, b) => a.clip.localeCompare(b.clip))
-    .map(i => i.spanish).join('\n\n');
+    .map(i => i.text).join('\n\n');
   if (!text.trim()) continue;
   fs.writeFileSync(TMP, text);
-  const mp3 = path.join(OUT, `${day.replace(/[^a-z0-9]+/gi, '_')}.mp3`);
+  const mp3 = path.join(OUT, `${day.replace(/[^a-z0-9]+/gi, '_')}${SUFFIX}.mp3`);
   try {
     execSync(`"${EDGE}" --voice ${VOICE} --file "${TMP}" --write-media "${mp3}"`, { timeout: 300000, stdio: 'pipe' });
     const kb = Math.round(fs.statSync(mp3).size / 1024);

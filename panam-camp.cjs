@@ -60,11 +60,17 @@ fs.writeFileSync(TXT, narration);
 // ── audio players (Cuban voice, per day) ──
 const AUDIO_DIR = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'audio', SLUG);
 const players = days.map(day => {
-  const fn = day.replace(/[^a-z0-9]+/gi, '_') + '.mp3';
-  if (!fs.existsSync(path.join(AUDIO_DIR, fn))) return '';
-  return `<div class="aud"><span>${day.replace(/_/g, ' ')}</span><audio controls preload="none" src="${ROUTE}/audio/${fn}"></audio></div>`;
+  const base = day.replace(/[^a-z0-9]+/gi, '_');
+  const es = `${base}.mp3`, en = `${base}.en.mp3`;
+  const hasEs = fs.existsSync(path.join(AUDIO_DIR, es));
+  const hasEn = fs.existsSync(path.join(AUDIO_DIR, en));
+  if (!hasEs && !hasEn) return '';
+  let row = `<div class="aud"><span>${day.replace(/_/g, ' ')}</span><div class="auds">`;
+  if (hasEn) row += `<div class="al"><b>EN</b><audio controls preload="none" src="${ROUTE}/audio/${en}"></audio></div>`;
+  if (hasEs) row += `<div class="al"><b>ES</b><audio controls preload="none" src="${ROUTE}/audio/${es}"></audio></div>`;
+  return row + `</div></div>`;
 }).filter(Boolean).join('');
-const audioBar = players ? `<div class="audiobar"><div class="ah">🔊 Listen — the coaching read in a Cuban voice (es-CU)</div>${players}</div>` : '';
+const audioBar = players ? `<div class="audiobar"><div class="ah">🔊 Listen — English (en) + the original Cuban Spanish (es-CU)</div>${players}</div>` : '';
 
 // ── web door page ──
 const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -81,9 +87,12 @@ blockquote{border-left:3px solid #d9d6f3;margin:6px 0 16px;padding:6px 16px;colo
 .foot{color:#8a93a6;font-size:11px;font-family:monospace;margin-top:30px;border-top:1px solid #eef0f4;padding-top:12px}
 .audiobar{background:#f7f6fc;border:1px solid #e4e0f3;border-radius:10px;padding:14px 16px;margin:8px 0 22px}
 .audiobar .ah{font-size:12px;font-weight:700;color:#5b5187;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-.aud{display:flex;align-items:center;gap:12px;margin:7px 0}
-.aud span{min-width:130px;font-size:13px;font-weight:600;color:#3a2f86;text-transform:capitalize}
-.aud audio{height:34px;flex:1}
+.aud{display:flex;align-items:flex-start;gap:12px;margin:9px 0}
+.aud span{min-width:130px;font-size:13px;font-weight:600;color:#3a2f86;text-transform:capitalize;padding-top:4px}
+.auds{display:flex;flex-direction:column;gap:5px;flex:1}
+.al{display:flex;align-items:center;gap:8px}
+.al b{font-size:10px;font-weight:700;color:#7c3aed;min-width:22px}
+.al audio{height:30px;flex:1}
 </style></head><body><div class="wrap">
 <a class="back" href="${ROUTE}">← back to the framework</a>
 <h1>🇨🇺 The Camp, Translated</h1>
