@@ -31,7 +31,8 @@ try { manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')); } catch (_) 
 let done = 0, skipped = 0, gold = 0;
 for (const src of list) {
   const rel = src.slice(BASE.length + 1);            // e.g. day1/MVI_2230.MOV
-  const day = (rel.split('/')[0] || 'root').replace(/[^a-z0-9]+/gi, '_');
+  // flat files (no day folder) → main-sessions; day folders keep their name
+  const day = (rel.includes('/') ? rel.split('/')[0] : 'main-sessions').replace(/[^a-z0-9]+/gi, '_');
   const base = path.basename(rel).replace(/\.MOV$/i, '');
   const dayDir = path.join(OUT, day);
   fs.mkdirSync(dayDir, { recursive: true });

@@ -12,6 +12,7 @@ const NAME = process.argv[2] || 'panamericano';
 const CAMPS = {
   panamericano: { stage: 'panamericano', slug: 'pandamericano', title: 'Pandamericano Methodology Framework', route: '/pandamericano' },
   cuba2014:     { stage: 'cuba2014',     slug: 'cuba2014',     title: 'Cuba 2014 Methodology Framework',     route: '/cuba2014' },
+  morecuba:     { stage: 'morecuba',     slug: 'morecuba',     title: 'Cuba — More Footage Framework',         route: '/morecuba' },
 };
 const C = CAMPS[NAME] || { stage: NAME, slug: NAME, title: NAME + ' Framework', route: '/' + NAME };
 const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', C.stage);
