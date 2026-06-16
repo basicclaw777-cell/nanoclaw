@@ -2,8 +2,10 @@
 // /pandamericano door so it's findable from the lobby room, not just the vault.
 const fs = require('fs');
 const path = require('path');
-const MD = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', 'pandamericano-review-and-development.md');
-const OUT = path.join(process.env.HOME, 'nanoclaw', 'pandamericano-review.html');
+const SLUG = process.argv[2] || 'pandamericano';
+const ROUTE = SLUG === 'pandamericano' ? '/pandamericano' : '/' + SLUG;
+const MD = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', `${SLUG}-review-and-development.md`);
+const OUT = path.join(process.env.HOME, 'nanoclaw', `${SLUG}-review.html`);
 
 let md = fs.readFileSync(MD, 'utf8').replace(/^---[\s\S]*?---\n/, ''); // strip frontmatter
 const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,7 +25,7 @@ blockquote{border-left:3px solid #0e9f6e;margin:0;padding:4px 16px;color:#475067
 em{color:#0b6e4a;font-style:normal;font-weight:600}
 .foot{color:#8a93a6;font-size:11px;font-family:monospace;margin-top:30px;border-top:1px solid #eef0f4;padding-top:12px}
 </style></head><body><div class="wrap">
-<a class="back" href="/pandamericano">← back to the framework</a>
+<a class="back" href="${ROUTE}">← back to the framework</a>
 <div id="content"></div>
 <div class="foot">vault: 06_Methods/pandamericano-review-and-development.md · harvested from 88GB Cuban camp footage</div>
 </div>

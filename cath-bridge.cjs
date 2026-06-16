@@ -2158,6 +2158,25 @@ app.get('/gym-eyes/virtual-tutor', (req, res) => {
   res.sendFile(tutorPath);
 });
 
+// Film Room — harvested external lessons, indexed by the 10 blocks
+const FILM_ROOM_DIR = path.join(HOME, 'cathedral-vault', '00_Staging', 'film-room');
+app.get('/gym-eyes/film-room', (req, res) => {
+  const p = path.join(HOME, 'basic-reflex', 'gym-eyes', 'film-room.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Film Room not found');
+  res.sendFile(p);
+});
+app.get('/gym-eyes/film-room/index', (req, res) => {
+  const p = path.join(FILM_ROOM_DIR, 'index.json');
+  if (!fs.existsSync(p)) return res.json({ lessons: [], done_ids: [] });
+  res.type('application/json').send(fs.readFileSync(p, 'utf8'));
+});
+app.get('/gym-eyes/film-room/card/:file', (req, res) => {
+  const f = path.basename(req.params.file).replace(/[^a-zA-Z0-9._-]/g, '');
+  const p = path.join(FILM_ROOM_DIR, f);
+  if (!p.endsWith('.md') || !fs.existsSync(p)) return res.status(404).send('Card not found');
+  res.type('text/markdown').send(fs.readFileSync(p, 'utf8'));
+});
+
 // Virtual Tutor API — list available comparisons
 app.get('/gym-eyes/tutor/comparisons', (req, res) => {
   const outDir = path.join(HOME, 'basic-reflex', 'gym-eyes', 'tutor_output');
@@ -5070,6 +5089,15 @@ app.get(['/pandamericano/camp', '/pandamericano-camp.html'], (req, res) => {
 app.get('/pandamericano/audio/:file', (req, res) => {
   const safe = path.basename(req.params.file).replace(/[^a-z0-9._-]/gi, ''); // path-traversal guard
   res.sendFile(path.join(VAULT, '09_Artifacts', 'audio', 'pandamericano', safe));
+});
+
+// Cuba 2014 camp (second harvest)
+app.get(['/cuba2014', '/cuba2014-framework.html'], (req, res) => res.sendFile(path.join(__dirname, 'cuba2014-framework.html')));
+app.get(['/cuba2014/review', '/cuba2014-review.html'], (req, res) => res.sendFile(path.join(__dirname, 'cuba2014-review.html')));
+app.get(['/cuba2014/camp', '/cuba2014-camp.html'], (req, res) => res.sendFile(path.join(__dirname, 'cuba2014-camp.html')));
+app.get('/cuba2014/audio/:file', (req, res) => {
+  const safe = path.basename(req.params.file).replace(/[^a-z0-9._-]/gi, '');
+  res.sendFile(path.join(VAULT, '09_Artifacts', 'audio', 'cuba2014', safe));
 });
 
 app.get('/mind-map.html', (req, res) => {

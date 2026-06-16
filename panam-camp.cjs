@@ -5,10 +5,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', 'panamericano');
-const MD = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', 'pandamericano-the-camp-translated.md');
-const HTML = path.join(process.env.HOME, 'nanoclaw', 'pandamericano-camp.html');
-const TXT = path.join(process.env.HOME, 'nanoclaw', 'pandamericano-camp-narration.txt'); // for TTS
+const SLUG = process.argv[2] || 'pandamericano';
+const STAGE_NAME = SLUG === 'pandamericano' ? 'panamericano' : SLUG;
+const ROUTE = SLUG === 'pandamericano' ? '/pandamericano' : '/' + SLUG;
+const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', STAGE_NAME);
+const MD = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', `${SLUG}-the-camp-translated.md`);
+const HTML = path.join(process.env.HOME, 'nanoclaw', `${SLUG}-camp.html`);
+const TXT = path.join(process.env.HOME, 'nanoclaw', `${SLUG}-camp-narration.txt`); // for TTS
 
 function load() {
   const out = [];
@@ -55,11 +58,11 @@ fs.writeFileSync(MD, md);
 fs.writeFileSync(TXT, narration);
 
 // ── audio players (Cuban voice, per day) ──
-const AUDIO_DIR = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'audio', 'pandamericano');
+const AUDIO_DIR = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'audio', SLUG);
 const players = days.map(day => {
   const fn = day.replace(/[^a-z0-9]+/gi, '_') + '.mp3';
   if (!fs.existsSync(path.join(AUDIO_DIR, fn))) return '';
-  return `<div class="aud"><span>${day.replace(/_/g, ' ')}</span><audio controls preload="none" src="/pandamericano/audio/${fn}"></audio></div>`;
+  return `<div class="aud"><span>${day.replace(/_/g, ' ')}</span><audio controls preload="none" src="${ROUTE}/audio/${fn}"></audio></div>`;
 }).filter(Boolean).join('');
 const audioBar = players ? `<div class="audiobar"><div class="ah">🔊 Listen — the coaching read in a Cuban voice (es-CU)</div>${players}</div>` : '';
 
@@ -82,7 +85,7 @@ blockquote{border-left:3px solid #d9d6f3;margin:6px 0 16px;padding:6px 16px;colo
 .aud span{min-width:130px;font-size:13px;font-weight:600;color:#3a2f86;text-transform:capitalize}
 .aud audio{height:34px;flex:1}
 </style></head><body><div class="wrap">
-<a class="back" href="/pandamericano">← back to the framework</a>
+<a class="back" href="${ROUTE}">← back to the framework</a>
 <h1>🇨🇺 The Camp, Translated</h1>
 ${audioBar}
 <div id="content"></div>

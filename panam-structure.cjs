@@ -7,9 +7,16 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', 'panamericano');
-const DOC   = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', 'pandamericano-methodology-framework.md');
-const HTML  = path.join(process.env.HOME, 'nanoclaw', 'pandamericano-framework.html');
+// multi-camp: node panam-structure.cjs <camp-name>   (default = panamericano)
+const NAME = process.argv[2] || 'panamericano';
+const CAMPS = {
+  panamericano: { stage: 'panamericano', slug: 'pandamericano', title: 'Pandamericano Methodology Framework', route: '/pandamericano' },
+  cuba2014:     { stage: 'cuba2014',     slug: 'cuba2014',     title: 'Cuba 2014 Methodology Framework',     route: '/cuba2014' },
+};
+const C = CAMPS[NAME] || { stage: NAME, slug: NAME, title: NAME + ' Framework', route: '/' + NAME };
+const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', C.stage);
+const DOC   = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', `${C.slug}-methodology-framework.md`);
+const HTML  = path.join(process.env.HOME, 'nanoclaw', `${C.slug}-framework.html`);
 const OLLAMA = process.env.OLLAMA_URL || 'http://localhost:11434';
 const log = (m) => console.log(`[${new Date().toISOString().slice(11,19)}] ${m}`);
 
@@ -157,9 +164,9 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:#475067;mar
 .mermaid{background:#fff;text-align:center}
 .foot{color:#8a93a6;font-size:11px;font-family:monospace;margin-top:8px}
 </style></head><body><div class="wrap">
-<h1>🥊 Pandamericano Methodology Framework</h1>
-<div class="sub">Cuban training camp, days 1–17 · harvested from 88GB of coaching audio Paul attended · Spanish original + English · ${new Date().toISOString().slice(0,10)}</div>
-<div style="margin:14px 0 4px;display:flex;gap:10px;flex-wrap:wrap"><a href="/pandamericano/review" style="display:inline-block;background:#0e9f6e;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:10px 18px;border-radius:8px">📋 Summary · Review · Development →</a><a href="/pandamericano/camp" style="display:inline-block;background:#7c3aed;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:10px 18px;border-radius:8px">🇨🇺 The Camp, Translated (read it all) →</a></div>
+<h1>🥊 ${C.title}</h1>
+<div class="sub">Cuban training camp · harvested from coaching audio Paul attended · ${days.length} days · Spanish original + English · ${new Date().toISOString().slice(0,10)}</div>
+<div style="margin:14px 0 4px;display:flex;gap:10px;flex-wrap:wrap"><a href="${C.route}/review" style="display:inline-block;background:#0e9f6e;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:10px 18px;border-radius:8px">📋 Summary · Review · Development →</a><a href="${C.route}/camp" style="display:inline-block;background:#7c3aed;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:10px 18px;border-radius:8px">🇨🇺 The Camp, Translated (read it all) →</a></div>
 <div class="card"><h2>The Progression (day 1 → 17)</h2>
 <div class="mermaid">graph LR\n${dayNodes}\n${dayEdges}</div></div>
 <div class="card"><h2>Core Principles (transferable)</h2><div class="princ">${topPrinc.map(p=>`<span>${p.replace(/</g,'&lt;').slice(0,80)}</span>`).join('')||'<span>pending transcription</span>'}</div></div>

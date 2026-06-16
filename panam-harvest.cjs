@@ -6,8 +6,10 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const BASE = '/Volumes/KINGSTON2/external drives/dark blue imation/pandamericano training';
-const OUT  = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', 'panamericano');
+// reusable: node panam-harvest.cjs "<source folder>" <camp-name>  (defaults = pandamericano)
+const BASE = process.argv[2] || '/Volumes/KINGSTON2/external drives/dark blue imation/pandamericano training';
+const NAME = process.argv[3] || 'panamericano';
+const OUT  = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', NAME);
 const TMP  = path.join(process.env.HOME, 'nanoclaw', 'panam-tmp');
 const WHISPER = '/opt/homebrew/bin/whisper-cli';
 const MODEL   = path.join(process.env.HOME, 'Cathedral/models/ggml-medium.bin');

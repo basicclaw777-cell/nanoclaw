@@ -4,8 +4,10 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', 'panamericano');
-const OUT = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'audio', 'pandamericano');
+const SLUG = process.argv[2] || 'pandamericano';
+const STAGE_NAME = SLUG === 'pandamericano' ? 'panamericano' : SLUG;
+const STAGE = path.join(process.env.HOME, 'cathedral-vault', '00_Staging', STAGE_NAME);
+const OUT = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'audio', SLUG);
 const EDGE = path.join(process.env.HOME, 'Library', 'Python', '3.9', 'bin', 'edge-tts');
 const VOICE = 'es-CU-ManuelNeural'; // Cuban Spanish, male
 const TMP = path.join(process.env.HOME, 'nanoclaw', 'panam-audio-tmp.txt');

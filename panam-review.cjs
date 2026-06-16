@@ -3,8 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const DOC = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', 'pandamericano-methodology-framework.md');
-const OUT = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', 'pandamericano-review-and-development.md');
+const SLUG = process.argv[2] || 'pandamericano'; // camp slug (pandamericano, cuba2014, ...)
+const DOC = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', `${SLUG}-methodology-framework.md`);
+const OUT = path.join(process.env.HOME, 'cathedral-vault', '06_Methods', `${SLUG}-review-and-development.md`);
 const OLLAMA = process.env.OLLAMA_URL || 'http://localhost:11434';
 
 const envPath = path.join(process.env.HOME, 'nanoclaw', '.env');
