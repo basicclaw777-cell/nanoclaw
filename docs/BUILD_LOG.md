@@ -2434,3 +2434,8 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 - `babylon-fetch.js` — CDLI ATF acquisition → `segments.json`. Reusable `parseATF()` parser, **self-tested (`--selftest` PASSED)**. Gold-genre filter (astronomy/math).
 - CALIBRATED twice: star-list (12/12 MUL.APIN constellations) + **hard running text** (Hammurabi §1 raw hyphenated sign-transliteration + §196), translations cross-checked vs ehammurabi.org. ~$0.001/calibration. Caught + fixed a prompt regression (strict "literal" framing made it echo transliteration; fixed with an explicit English example).
 - STATUS: pipeline **validated end-to-end on real data; NOT yet run at scale.** Remaining deliberate prod step — validate the CDLI bulk pull (network/size) in the TCC-permitted env, run `--prod` with the spend governor watched, then wire Rosetta convergence + dashboard door + PM2 trigger (SI-10 ①④ pending).
+
+### Security pass + Hunch Lane validation (2026-06-15→17)
+- Defensive self-audit (the banned Fable capability, pointed inward): fixed a committed DeepSeek key in `~/Cathedral/sumerian-medical-extract.py` (→ env var; Paul rotated the key), 3 path-traversal routes + 2 shell-injection sinks in `cath-bridge.cjs` (`path.basename` guards + `execFileSync` arg-arrays), verified live (traversal probe → 404). Pushed.
+- Hunch Lane (`hunch-lane.js`, SI-44) validated live on a heterodox claim — route confirmed: DeepSeek/Aletheia grades, not Forge, with vault context injected. Gap: web-data gathering still a labelled stub → judges vault-only.
+- **OPEN:** `cath-bridge.cjs` binds `0.0.0.0:8080` with ~30 unauthenticated state-changing endpoints — needs frontend-coordinated auth. See KNOWN_ISSUES.

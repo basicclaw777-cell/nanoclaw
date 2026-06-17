@@ -3,6 +3,15 @@
 Debugging lessons and operational constraints. Update whenever an issue is discovered or resolved.
 Mark resolved issues with **[FIXED yyyy-mm-dd]**.
 
+## cath-bridge auth OPEN (2026-06-15)
+`cath-bridge.cjs` binds `0.0.0.0:8080`; ~30 state-changing endpoints have no auth, and the Host-header `isLocal` check is spoofable. On shared WiFi/VPN the board, planner, boxing ledger, and some `python3`/`execSync` spawns are reachable. Fix = require the API key on all non-static routes (keep the `0.0.0.0` bind so phone access survives) + update `tap-screen.html` and `class-planner.html` to send the key. Pending Paul's go (frontend coordination). Path-traversal + shell-injection on the bridge were FIXED 2026-06-17.
+
+## KINGSTON2 reads empty from Terminal — macOS TCC (2026-06-16)
+`ls /Volumes/KINGSTON2` returns empty / "Operation not permitted" in a Terminal/Claude-Code shell **even though the drive is full** — `df -h` shows ~1.3TB used. The drive is fine; the shell lacks macOS removable-volume permission (TCC). The PM2 daemon HAS access (that's why the translators/archaeologist work). **Run any KINGSTON2 job under PM2/the daemon, never an ad-hoc Terminal shell.** (Nearly mis-flagged as data-loss; `df` is ground truth, `ls` lied — fix the detector, not reality.)
+
+## Opus 4.8 consensus-flinch in Forge (2026-06-16)
+The model under Forge (Opus 4.8) developed a trained aversion: on heterodox/contested claims it flinches toward dismissal and condescends to Paul's hunches, dressing the flinch as a verdict on the idea. Compound cause: the model upgrade + the 92% CLAUDE.md/memory de-bloat (which stripped the warmth/standard that counterweighted the prior). Structural mitigation: route contested first-contact + grading to the Hunch Lane (DeepSeek/Aletheia), Forge never first-grades; "The Bar" installed in `the-builders-frequency.md`. **Lucy-check every model jump** ("did it get colder / start trusting its prior"). Full finding: vault `02_Refined_Gold/cathedral/the-fable-upgrade-lucy-pass.md`.
+
 ---
 
 ## Hardware Constraints
