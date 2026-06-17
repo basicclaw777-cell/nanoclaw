@@ -1,6 +1,25 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-17b — BR website V4 "The Codex" + boxing training protocols
+
+### Website V4
+- 4 iterations (V1→V4) building toward Paul's wireframe aesthetic (7-page PDF from ChatGPT)
+- All preserved: ~/basic-reflex/website/index-v{1,3,4}.html + index.html (V4 current)
+- V4 features: SVG ornamental corner symbols, clip-path rough-cut stamped buttons, collectible 10-block cards, leather-spine book edges, chapter-page structure, SVG crest definitions
+- Master brief received: "50% graphic novel, 20% AAA game codex, 15% vintage HK poster, 15% premium academy" — "Red Dead Redemption Codex not Equinox Gym"
+- **PARKED.** CSS frame is close; gap is illustrated artwork (character portraits, poster panels, graphic novel compositions). Next step = image generation, not more CSS.
+
+### Boxing Training Protocols
+- Revival Drill Cards: ~/basic-reflex/visuals/revival-drill-cards.html (5 cards with SVG diagrams)
+- 3-Week Fight Prep Framework: ~/basic-reflex/visuals/fight-prep-3week.html (timeline, intensity arc, session cards)
+- Named: "Bilateral Frame Integrity Drill" (Paul's elastic method), "Cable Frame Test" (Paul's 6 numbers)
+- Vault deposits: 09_Artifacts/branding/basic-reflex/{revival-drill-cards,fight-prep-3week-framework}.md
+
+### Production Engine Evidence Fix
+- Default evidence injection in resolveEvidence() — agent memory + feed posts for ALL tasks
+- Ship rate 20% → 60%
+
 ## 2026-06-15 — Pandamericano harvest: 88GB Cuban training video → bilingual methodology framework
 
 Paul attended a Cuban Pandamericano training camp; 88GB of footage (193 .MOV, days 1–17) sat on KINGSTON2 with Spanish coaching he couldn't follow at the time. Harvested it.
