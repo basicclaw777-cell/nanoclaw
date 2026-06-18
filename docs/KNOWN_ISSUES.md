@@ -3,6 +3,12 @@
 Debugging lessons and operational constraints. Update whenever an issue is discovered or resolved.
 Mark resolved issues with **[FIXED yyyy-mm-dd]**.
 
+## Chokidar v5 glob support removed [FIXED 2026-06-19]
+- chokidar v5 silently dropped glob pattern support. `session-harvest-*.md` treated as literal filename.
+- ENOENT silently swallowed. Cartographer ran 2+ months watching nothing.
+- Fix: watch directory with depth:0 + filename filter in add handler. Also fixed wrong Ollama model (qwen3:14b → gemma3:4b).
+- Lesson: after any dependency upgrade, verify the watcher actually fires.
+
 ## cath-bridge auth OPEN (2026-06-15)
 `cath-bridge.cjs` binds `0.0.0.0:8080`; ~30 state-changing endpoints have no auth, and the Host-header `isLocal` check is spoofable. On shared WiFi/VPN the board, planner, boxing ledger, and some `python3`/`execSync` spawns are reachable. Fix = require the API key on all non-static routes (keep the `0.0.0.0` bind so phone access survives) + update `tap-screen.html` and `class-planner.html` to send the key. Pending Paul's go (frontend coordination). Path-traversal + shell-injection on the bridge were FIXED 2026-06-17.
 

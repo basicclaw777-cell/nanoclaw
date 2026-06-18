@@ -35,6 +35,7 @@ Renumbered 2026-06-12. Full prior wording + old↔new mapping in docs/BUILD_LOG.
 
 - **SI-04 · Audit before build.** Grep docs/SYSTEM_MAP.md and docs/KNOWN_ISSUES.md for collisions first. Found one → reconcile, don't fork. (BR/member/curriculum especially: br-crm/, block-config.json, punchpass-scraper.cjs already exist.)
 - **SI-05 · Plan before build.** Discuss fully before the terminal opens. When asked for input, speak freely: 4–8 real concerns + 2–4 improvements + recommended path. Name ambiguities, require resolution.
+- **SI-45 · Run the Mechanical Test before every fix.** "Given how this system actually works mechanically, can this fix produce the stated goal?" Trace each step. If any step is "and then somehow…" — don't build. If fix N+1 shares the same assumption as the previous N failed fixes, flag the wrong-problem loop BEFORE building. (6 layers over 33 days, none compounding — one question at layer 1 would have caught it.)
 - **SI-06 · Phased over maximalist.** Brief with >5 features → propose a phase split. Phase 1 usable today; stubs labelled in-UI.
 - **SI-07 · Plans are not deliverables.** Plan approved → Phase 1 runs immediately. Approved tier roadmaps are executable: every item built, no per-item discussion. "Do it" = execute ALL items, in parallel, now.
 - **SI-08 · Read the spec docs first.** Relevant @docs/ file before any build; ~/Cathedral/control-panel/DESIGN_BRIEF.md before ANY UI work (cockpit aesthetic: dark, violet/amber, monospace, single vanilla HTML file, no framework).

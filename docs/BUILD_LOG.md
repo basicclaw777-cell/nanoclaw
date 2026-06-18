@@ -1,6 +1,47 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-19 — Mechanical Test, Sensor-Actuator Audit, Loop System
+
+### The Mechanical Test (Grade A principle)
+- Vault deposit: 02_Refined_Gold/cathedral/the-mechanical-test.md
+- 33 days of non-compounding agent fixes → root cause: agents are stateless LLM calls, no fix that didn't change the prompt could work
+- Named: The Stacking Trap (adding layers to a broken foundation)
+
+### Feedback Injection Layer
+- buildFeedbackBlock() in production-engine.js — bandit scores + production history + steward grades into every agent prompt
+- Score tracker with 7-day rolling trajectories (score-history.json)
+- Steward grades injected into agent-engine.js system prompt
+
+### Sensor-Without-Actuator Audit (5 systems, all fixed)
+- Watcher insights → signal router generates corrective tasks
+- Agent health grades → signal router F-grade intervention
+- Score trajectories → signal router declining-agent tasks
+- Steward grades → injected into agent prompt
+- Bandit choices → trigger feedback to trigger-state.json
+
+### Emergence Signal Router (NEW)
+- ~/Cathedral/emergence/emergence-signal-router.js
+- Reads 4 state files → writes corrective tasks to planner-tasks.json
+- PM2 #168, cron 05:25 HKT daily
+
+### Navigation Layer
+- Agent workspace: ~/Cathedral/control-panel/agent-workspace.html (dark, violet, agent cards with grades/scores/sparklines)
+- Excalidraw agent map: ~/Cathedral/control-panel/cathedral-agent-map.excalidraw (110 elements, 23 agents)
+- /guide Telegram command (4 state files → attention + pulse + links)
+- Reactivated: morning briefing + while-you-were-gone
+- Fixed cartographer: chokidar v5 silently removed glob support (2+ months broken), wrong Ollama model
+
+### Vault Archive
+- ~/cathedral-vault/06_Methods/agent-workshop-archive.md (105KB, 24 agents)
+
+### Claude Code Loop System (NEW)
+- ~/Cathedral/loops/LOOP-CATALOG.md — 15 loop designs
+- ~/Cathedral/loops/improvement-operator.md — /loop every 2h, autonomous agent improvement
+- ~/Cathedral/loops/cathy-proactive.md — /loop every 3h, Cathy with hands
+- Both running. Use `--dangerously-skip-permissions` for overnight autonomy.
+- First night results: practice grader bug found (measured copying not quality), system avg 4.6→5.6, production-engine revived, queue draining after 11 days dark.
+
 ## 2026-06-17b — BR website V4 "The Codex" + boxing training protocols
 
 ### Website V4
