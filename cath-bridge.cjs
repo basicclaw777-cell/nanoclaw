@@ -56,7 +56,7 @@ function neuralRouteToNodes(url) {
     '/cosmology': ['bridge', 'cosmology'], '/retuning-kitchen': ['bridge', 'research'], '/scraper': ['bridge', 'scraper'],
     '/gym-eyes': ['bridge', 'gym-eyes'], '/techniques': ['bridge', 'techniques'],
     '/screening': ['bridge', 'screening'], '/cathedral-city': ['bridge', 'city'],
-    '/constellation': ['bridge', 'constellation'], '/pulse': ['bridge', 'pulse'],
+    '/constellation': ['bridge', 'constellation'], '/agent-workspace': ['bridge', 'agents'], '/pulse': ['bridge', 'pulse'],
     '/api/architect-pulse': ['bridge', 'pulse'], '/agents': ['bridge', 'dialogue'],
     '/villa': ['bridge', 'monitor'], '/control': ['bridge', 'sentinel'],
     '/hermes': ['bridge', 'dispatch'],
@@ -2177,6 +2177,88 @@ app.get('/gym-eyes/film-room/card/:file', (req, res) => {
   res.type('text/markdown').send(fs.readFileSync(p, 'utf8'));
 });
 
+// ── The Oracle ──────────────────────────────────────────────────────────────
+// Ask the Cathedral what it knows; it answers in Paul's voice from the vault, cited.
+// RAG: gold-weighted semantic retrieval → read top sources → frontier synthesis.
+// Trust hierarchy — a Grade-A gold doc outranks a raw staging draft every time.
+const ORACLE_TRUST = {
+  '02_Refined_Gold': 1.0,
+  '06_Methods': 0.9,
+  '06_Basic_Reflex_Syllabus': 0.9,
+  'boxing': 0.9,
+  '00_Staging': 0.3,
+};
+function oracleTrust(domain) {
+  return ORACLE_TRUST[domain] !== undefined ? ORACLE_TRUST[domain] : 0.6;
+}
+
+async function oracleSynthesize(question, context) {
+  const system = "You are The Oracle — the Cathedral's synthesis voice for Paul (boxing coach, Hong Kong; "
+    + "sovereign AI research system). Answer the question ONLY from the numbered SOURCES below, in Paul's own "
+    + "frames and a plain, direct, concrete voice (no hedging, no filler). Cite sources inline as [n]. "
+    + "If the sources don't cover it, say so plainly — never invent. Synthesize across sources; don't just list them.";
+  const user = `QUESTION: ${question}\n\nSOURCES:\n${context}`;
+  const key = process.env.DEEPSEEK_API_KEY;
+  if (key) {
+    try {
+      const r = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'deepseek-chat', temperature: 0.3,
+          messages: [{ role: 'system', content: system }, { role: 'user', content: user }] }),
+      });
+      if (r.ok) { const d = await r.json(); return { answer: d.choices[0].message.content, engine: 'deepseek' }; }
+      console.error('[oracle] deepseek HTTP', r.status);
+    } catch (e) { console.error('[oracle] deepseek err', e.message); }
+  }
+  // Sovereign fallback — local qwen3 (make this the default when the M5 Max lands)
+  try {
+    const r = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'qwen3:14b', prompt: system + '\n\n' + user, stream: false,
+        options: { temperature: 0.3 } }),
+    });
+    const d = await r.json();
+    return { answer: (d.response || '').replace(/<think>[\s\S]*?<\/think>/g, '').trim(), engine: 'qwen3-local' };
+  } catch (e) {
+    return { answer: 'Synthesis engine unavailable: ' + e.message, engine: 'none' };
+  }
+}
+
+app.get('/oracle', (req, res) => {
+  const p = path.join(NANOCLAW, 'oracle.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Oracle not found');
+  res.sendFile(p);
+});
+
+app.get('/oracle/ask', async (req, res) => {
+  const q = (req.query.q || '').toString().trim();
+  if (!q) return res.status(400).json({ error: 'q query param required' });
+  try {
+    const vaultSearch = require(path.join(NANOCLAW, 'vault-search-bridge.cjs'));
+    const pool = await vaultSearch.semanticSearch(q, 30);            // wide pool
+    const ranked = pool
+      .map(r => ({ ...r, w: r.score * oracleTrust(r.domain) }))      // gold-weighted rerank
+      .sort((a, b) => b.w - a.w)
+      .slice(0, 8);
+    const sources = ranked.map((r, i) => {
+      const full = r.file_path.startsWith('/') ? r.file_path
+        : path.join(HOME, 'cathedral-vault', r.file_path);
+      let text = '';
+      try { text = fs.readFileSync(full, 'utf8').replace(/^---[\s\S]*?---\n/, '').slice(0, 2200); } catch {}
+      return { n: i + 1, path: r.file_path.replace(HOME + '/cathedral-vault/', ''),
+        title: r.title, domain: r.domain, score: +Number(r.score).toFixed(3),
+        weight: oracleTrust(r.domain), text };
+    }).filter(s => s.text);
+    if (!sources.length) return res.json({ question: q, answer: 'No vault sources matched.', citations: [] });
+    const context = sources.map(s => `[${s.n}] ${s.title} (${s.domain})\n${s.text}`).join('\n\n---\n\n');
+    const { answer, engine } = await oracleSynthesize(q, context);
+    res.json({ question: q, answer, engine, citations: sources.map(({ text, ...c }) => c) });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Virtual Tutor API — list available comparisons
 app.get('/gym-eyes/tutor/comparisons', (req, res) => {
   const outDir = path.join(HOME, 'basic-reflex', 'gym-eyes', 'tutor_output');
@@ -2479,6 +2561,29 @@ app.get('/cathedral-city/team-programme', (req, res) => {
     res.send(html);
   } catch (err) {
     res.status(500).send(`Team programme dashboard not found: ${err.message}`);
+  }
+});
+
+// Serve Agent Improvement Tracker dashboard
+app.get('/agent-improvement', (req, res) => {
+  const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'agent-improvement.html');
+  try {
+    const html = fs.readFileSync(dashPath, 'utf8');
+    res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Agent improvement dashboard not found: ${err.message}`);
+  }
+});
+
+// API: agent improvement score history + trajectories
+app.get('/api/agent-improvement', (req, res) => {
+  try {
+    const historyPath = path.join(HOME, 'Cathedral', 'emergence', 'score-history.json');
+    const data = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+    res.json(data);
+  } catch (err) {
+    res.json({ agents: {}, lastUpdated: null, error: err.message });
   }
 });
 
@@ -5100,6 +5205,15 @@ app.get('/cuba2014/audio/:file', (req, res) => {
   res.sendFile(path.join(VAULT, '09_Artifacts', 'audio', 'cuba2014', safe));
 });
 
+// More Cuba (camp #3)
+app.get(['/morecuba', '/morecuba-framework.html'], (req, res) => res.sendFile(path.join(__dirname, 'morecuba-framework.html')));
+app.get(['/morecuba/review', '/morecuba-review.html'], (req, res) => res.sendFile(path.join(__dirname, 'morecuba-review.html')));
+app.get(['/morecuba/camp', '/morecuba-camp.html'], (req, res) => res.sendFile(path.join(__dirname, 'morecuba-camp.html')));
+app.get('/morecuba/audio/:file', (req, res) => {
+  const safe = path.basename(req.params.file).replace(/[^a-z0-9._-]/gi, '');
+  res.sendFile(path.join(VAULT, '09_Artifacts', 'audio', 'morecuba', safe));
+});
+
 app.get('/mind-map.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'mind-map.html'));
 });
@@ -5798,6 +5912,22 @@ app.get('/api/relay/latest', async (req, res) => {
 
     res.json({ ok: true, content, file: latest });
   } catch (e) { res.json({ ok: false, error: e.message }); }
+});
+
+// ── Agent Workspace ──────────────────────────────────────────────────────────
+app.get('/agent-workspace', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'agent-workspace.html'));
+});
+app.get('/api/agent-workspace', (req, res) => {
+  const fsx = require('fs');
+  const readJson = (p, d) => { try { return JSON.parse(fsx.readFileSync(p, 'utf8')); } catch { return d; } };
+  const registry   = readJson(path.join(CATH, 'agents', 'registry.json'), { agents: {} });
+  const health     = readJson(path.join(CATH, 'agents', 'agent-health.json'), {});
+  const scores     = readJson(path.join(CATH, 'emergence', 'score-history.json'), { agents: {} });
+  const profiles   = readJson(path.join(CATH, 'agents', 'character-profiles.json'), {});
+  const tasks      = readJson(path.join(CATH, 'emergence', 'planner-tasks.json'), []);
+  const production = readJson(path.join(CATH, 'emergence', 'production-state.json'), {});
+  res.json({ generated_at: new Date().toISOString(), registry, health, scores, profiles, tasks, production });
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
