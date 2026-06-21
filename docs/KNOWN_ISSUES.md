@@ -163,3 +163,7 @@ Symptom: machine slows after vault commits — `mds_stores` re-indexes the vault
 Fix (permanent): `~/cathedral-vault/.metadata_never_index` marker → mdworker skips the vault. Already in place.
 Do NOT delete the marker. Obsidian + Cathedral search cover vault search; OS Spotlight does not need it.
 If OS-level vault search ever "breaks," this is why — intended.
+
+## Box RAM ceiling (16GB) — local-LLM batch jobs (2026-06-21)
+- qwen3:14b distill 500s under concurrent Whisper load (Film Room). Workaround: gemma3:4b, or rent/API (Oracle defaults to DeepSeek synthesis for this reason). Real fix = M5 Max 128GB upgrade (~Oct).
+- Gym Eyes PersonTracker over-swaps on some sparring footage (IMG_2911: 315 corrections) — biometric distance poorly scaled. Needs ground-truth labels + tuning before the sparring floor locks.

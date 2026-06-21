@@ -32,3 +32,8 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 
 ## Ancient Corpus pipeline
 - **Babylon Translator** · `babylon-translator.js` + `babylon-fetch.js` (nanoclaw) · trigger: manual `--prod` (deliberate prod run, pending) · Akkadian→English + entities, cost-metered, DeepSeek/hermes3 · calibrated 2026-06-15, bulk run pending · doc: vault `02_Refined_Gold/cathedral/the-non-western-veins.md` + BUILD_LOG 2026-06-15
+
+## Cathedral knowledge
+- **The Oracle** · cath-bridge.cjs `/oracle` + `/oracle/ask` · trigger: localhost:8080/oracle (8888 sidebar) · vault RAG, gold-weighted, DeepSeek synth, cited · doc: BUILD_LOG 2026-06-21 night
+- **The Quarry** · `quarry-watcher.js` (PM2 `quarry`) · trigger: drop file in ~/Downloads/quarry/ · capture+route+audio-transcribe+notify · doc: BUILD_LOG 2026-06-21 night
+- **Film Room** · `~/basic-reflex/gym-eyes/film_room.py` + `/gym-eyes/film-room` · trigger: `python3 film_room.py --channel <url>` · YouTube->lesson cards by 10-block · PARKED (distill RAM) · doc: BUILD_LOG 2026-06-21 night
