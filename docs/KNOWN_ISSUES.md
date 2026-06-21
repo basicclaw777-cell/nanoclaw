@@ -157,3 +157,9 @@ curl -s --max-time 10 http://localhost:11434/api/chat \
   -d '{"model":"hermes3","messages":[{"role":"user","content":"ping"}],"stream":false}' \
   | python3 -c "import json,sys; print(json.load(sys.stdin)['message']['content'][:50])"
 ```
+
+### Vault Spotlight exclusion (2026-06-21)
+Symptom: machine slows after vault commits — `mds_stores` re-indexes the vault each time (89min accumulated CPU, 400k+ pageins observed).
+Fix (permanent): `~/cathedral-vault/.metadata_never_index` marker → mdworker skips the vault. Already in place.
+Do NOT delete the marker. Obsidian + Cathedral search cover vault search; OS Spotlight does not need it.
+If OS-level vault search ever "breaks," this is why — intended.

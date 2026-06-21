@@ -2499,3 +2499,8 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 - Defensive self-audit (the banned Fable capability, pointed inward): fixed a committed DeepSeek key in `~/Cathedral/sumerian-medical-extract.py` (→ env var; Paul rotated the key), 3 path-traversal routes + 2 shell-injection sinks in `cath-bridge.cjs` (`path.basename` guards + `execFileSync` arg-arrays), verified live (traversal probe → 404). Pushed.
 - Hunch Lane (`hunch-lane.js`, SI-44) validated live on a heterodox claim — route confirmed: DeepSeek/Aletheia grades, not Forge, with vault context injected. Gap: web-data gathering still a labelled stub → judges vault-only.
 - **OPEN:** `cath-bridge.cjs` binds `0.0.0.0:8080` with ~30 unauthenticated state-changing endpoints — needs frontend-coordinated auth. See KNOWN_ISSUES.
+
+### Machine cleanup + permanent Spotlight fix (2026-06-21)
+- Recurring post-commit slowdown traced to Spotlight re-indexing the vault. Permanent fix: `.metadata_never_index` marker in `~/cathedral-vault`. See KNOWN_ISSUES.
+- Killed stale `claude` session PID 92979 (idle since 4Jun, 81MB). Verified ≠ own PID before kill.
+- No purge needed (compressor coping). PM2 all healthy/stopped.
