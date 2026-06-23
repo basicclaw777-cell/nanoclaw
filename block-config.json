@@ -15,7 +15,12 @@
       "maxComboLength": 0,
       "rhythmEngineUnlocked": false,
       "engine": "Body+Mind",
-      "gate": "Hold a correct guard for a full round, hands up, calm and ready — stance and mindset set."
+      "gate": "Hold a correct guard for a full round, hands up, calm and ready — stance and mindset set.",
+      "gateCriteria": [
+        {"id": "guard_hold", "behaviour": "Maintain correct guard position for full 3-min round", "reps": 1, "passThreshold": 1, "detectable": "auto"},
+        {"id": "stance_width", "behaviour": "Feet shoulder-width, weight balanced", "reps": 1, "passThreshold": 1, "detectable": "auto"},
+        {"id": "calm_ready", "behaviour": "No freezing, no panic posture, breathing controlled", "reps": 1, "passThreshold": 1, "detectable": "coach"}
+      ]
     },
     {
       "num": 2, "name": "Level",
@@ -29,7 +34,12 @@
       "maxComboLength": 0,
       "rhythmEngineUnlocked": false,
       "engine": "Body",
-      "gate": "Move in every direction in balance with guard intact — no crossing feet, range kept."
+      "gate": "Move in every direction in balance with guard intact — no crossing feet, range kept.",
+      "gateCriteria": [
+        {"id": "4dir_movement", "behaviour": "Move forward, back, left, right without crossing feet", "reps": 4, "passThreshold": 4, "detectable": "auto"},
+        {"id": "guard_during_move", "behaviour": "Guard stays up during all directional movement", "reps": 4, "passThreshold": 3, "detectable": "auto"},
+        {"id": "balance_on_stop", "behaviour": "Balanced stance on every stop (no stumble/lean)", "reps": 4, "passThreshold": 3, "detectable": "hybrid"}
+      ]
     },
     {
       "num": 3, "name": "Angle",
@@ -37,13 +47,19 @@
       "stage": "2-3",
       "sessions_to_advance": 8,
       "session_types": ["class", "padwork", "technique"],
-      "punches": ["jab", "jab_body", "cross", "rear_body"],
+      "punches": ["jab", "body_jab", "cross", "body_cross"],
       "defenses": ["parry", "catch"],
       "footwork": ["step", "snap"],
       "maxComboLength": 2,
       "rhythmEngineUnlocked": false,
       "engine": "Body",
-      "gate": "Throw straight punches off a turn/angle and return to guard, on balance."
+      "gate": "Throw straight punches off a turn/angle and return to guard, on balance.",
+      "gateCriteria": [
+        {"id": "jab_on_angle", "behaviour": "Throw jab after pivot/turn, land clean", "reps": 5, "passThreshold": 3, "detectable": "auto"},
+        {"id": "cross_on_angle", "behaviour": "Throw cross after pivot/turn, land clean", "reps": 5, "passThreshold": 3, "detectable": "auto"},
+        {"id": "return_to_guard", "behaviour": "Hands return to guard after every punch", "reps": 10, "passThreshold": 8, "detectable": "auto"},
+        {"id": "balance_after_punch", "behaviour": "On balance after punch (no falling forward/overreaching)", "reps": 10, "passThreshold": 7, "detectable": "hybrid"}
+      ]
     },
     {
       "num": 4, "name": "Inside",
@@ -51,97 +67,141 @@
       "stage": "2-3",
       "sessions_to_advance": 8,
       "session_types": ["class", "padwork", "technique"],
-      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
       "defenses": ["parry", "catch", "front_block", "hook_block", "body_block"],
       "footwork": ["step", "snap", "pop"],
       "maxComboLength": 3,
       "rhythmEngineUnlocked": false,
       "engine": "Body",
-      "gate": "Land hooks, crosses and body shots in close while protecting the centerline."
+      "gate": "Land hooks, crosses and body shots in close while protecting the centerline.",
+      "gateCriteria": [
+        {"id": "hook_land", "behaviour": "Land lead hook on pads/bag with correct form (elbow at 90°)", "reps": 10, "passThreshold": 7, "detectable": "auto"},
+        {"id": "body_shot_level", "behaviour": "Drop level on body shots (knees bend, not waist bend)", "reps": 10, "passThreshold": 6, "detectable": "hybrid"},
+        {"id": "centerline_guard", "behaviour": "Non-punching hand protects chin during close-range exchanges", "reps": 10, "passThreshold": 7, "detectable": "auto"},
+        {"id": "combo_variety", "behaviour": "Throw 3-punch combos mixing head and body targets", "reps": 5, "passThreshold": 3, "detectable": "auto"}
+      ]
     },
     {
       "num": 5, "name": "Rhythm",
       "focus": "Timing, broken rhythm",
       "stage": "3",
       "sessions_to_advance": 10,
+      "boutMinimum": 3,
       "session_types": ["class", "padwork", "technique", "sparring"],
-      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
       "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "bob_weave_left", "bob_weave_right"],
       "footwork": ["step", "snap", "pop", "reset", "beat"],
       "maxComboLength": 5,
       "rhythmEngineUnlocked": true,
       "engine": "Emotion",
-      "gate": "Break rhythm to land while staying composed under live exchange — compose under pressure, don't panic. (The 4->5 wall: the emotion engine.)"
+      "gate": "Break rhythm to land while staying composed under live exchange — compose under pressure, don't panic. (The 4->5 wall: the emotion engine.)",
+      "gateCriteria": [
+        {"id": "rhythm_break", "behaviour": "Change tempo mid-combo (pause-then-punch or double-up)", "reps": 5, "passThreshold": 3, "detectable": "hybrid"},
+        {"id": "composure_under_fire", "behaviour": "Maintain guard and form when opponent pressures (no panic shells, no wild swinging)", "reps": 3, "passThreshold": 2, "detectable": "coach"},
+        {"id": "live_exchange_land", "behaviour": "Land clean scoring punch during live sparring exchange", "reps": 5, "passThreshold": 3, "detectable": "hybrid"},
+        {"id": "recovery_after_hit", "behaviour": "Reset stance and guard within 2 seconds of taking a clean shot", "reps": 3, "passThreshold": 2, "detectable": "coach"}
+      ]
     },
     {
       "num": 6, "name": "Counter",
       "focus": "Defense-to-offense integration",
       "stage": "3-4",
       "sessions_to_advance": 10,
+      "boutMinimum": 4,
       "session_types": ["class", "padwork", "technique", "sparring"],
-      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
       "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
       "footwork": ["step", "snap", "pop", "reset", "beat"],
       "maxComboLength": 5,
       "rhythmEngineUnlocked": true,
       "engine": "Mind+Body",
-      "gate": "Defend and counter in one motion — defense becomes offense."
+      "gate": "Defend and counter in one motion — defense becomes offense.",
+      "gateCriteria": [
+        {"id": "slip_counter", "behaviour": "Slip then counter-punch within 1 second (single motion)", "reps": 5, "passThreshold": 3, "detectable": "auto"},
+        {"id": "parry_counter", "behaviour": "Parry incoming and return fire before opponent resets", "reps": 5, "passThreshold": 3, "detectable": "auto"},
+        {"id": "block_counter", "behaviour": "Block then immediately counter (no pause between defense and offense)", "reps": 5, "passThreshold": 3, "detectable": "hybrid"},
+        {"id": "defense_variety", "behaviour": "Use 3+ different defensive responses in one sparring round", "reps": 1, "passThreshold": 1, "detectable": "coach"}
+      ]
     },
     {
       "num": 7, "name": "Pressure",
       "focus": "Technique under fatigue",
       "stage": "4",
       "sessions_to_advance": 12,
+      "boutMinimum": 5,
       "session_types": ["class", "padwork", "sparring"],
-      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
       "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
       "footwork": ["step", "snap", "pop", "reset", "beat"],
       "maxComboLength": 5,
       "rhythmEngineUnlocked": true,
       "engine": "Emotion+Body",
-      "gate": "Hold technique and composure under fatigue — form doesn't collapse late in the round."
+      "gate": "Hold technique and composure under fatigue — form doesn't collapse late in the round.",
+      "gateCriteria": [
+        {"id": "late_round_form", "behaviour": "Guard height and punch form maintained in final 30 seconds of round 3+", "reps": 1, "passThreshold": 1, "detectable": "auto"},
+        {"id": "fatigue_composure", "behaviour": "No wild swinging or panic when tired — controlled output", "reps": 1, "passThreshold": 1, "detectable": "coach"},
+        {"id": "technique_under_load", "behaviour": "Execute clean 3-punch combo after 2 minutes of continuous work", "reps": 3, "passThreshold": 2, "detectable": "hybrid"}
+      ]
     },
     {
       "num": 8, "name": "Escape",
       "focus": "Ring craft, rope/corner escape",
       "stage": "4-5",
       "sessions_to_advance": 12,
+      "boutMinimum": 6,
       "session_types": ["class", "sparring"],
-      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
       "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
       "footwork": ["step", "snap", "pop", "reset", "beat"],
       "maxComboLength": 6,
       "rhythmEngineUnlocked": true,
       "engine": "Emotion",
-      "gate": "Get off the ropes / out of the corner under pressure without panicking — ring craft."
+      "gate": "Get off the ropes / out of the corner under pressure without panicking — ring craft.",
+      "gateCriteria": [
+        {"id": "rope_escape", "behaviour": "Escape ropes using footwork (pivot out, not push through)", "reps": 3, "passThreshold": 2, "detectable": "coach"},
+        {"id": "corner_escape", "behaviour": "Exit corner under pressure using angle/pivot", "reps": 3, "passThreshold": 2, "detectable": "coach"},
+        {"id": "escape_composure", "behaviour": "No panicked clinching or turning away during escape", "reps": 3, "passThreshold": 2, "detectable": "coach"}
+      ]
     },
     {
       "num": 9, "name": "Control",
       "focus": "Strategy, opponent reading",
       "stage": "5",
       "sessions_to_advance": 15,
+      "boutMinimum": 8,
       "session_types": ["sparring"],
-      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
       "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
       "footwork": ["step", "snap", "pop", "reset", "beat"],
       "maxComboLength": 8,
       "rhythmEngineUnlocked": true,
       "engine": "Mind",
-      "gate": "Read and control a sparring partner — impose pace, dictate the exchanges."
+      "gate": "Read and control a sparring partner — impose pace, dictate the exchanges.",
+      "gateCriteria": [
+        {"id": "pace_control", "behaviour": "Dictate the tempo of a round (partner follows your rhythm, not vice versa)", "reps": 1, "passThreshold": 1, "detectable": "coach"},
+        {"id": "pattern_read", "behaviour": "Identify and exploit opponent habit mid-round (call it then act on it)", "reps": 2, "passThreshold": 1, "detectable": "coach"},
+        {"id": "range_control", "behaviour": "Maintain preferred fighting distance for majority of round", "reps": 1, "passThreshold": 1, "detectable": "hybrid"}
+      ]
     },
     {
       "num": 10, "name": "Arena",
       "focus": "Full integration, independence",
       "stage": "5-6",
       "sessions_to_advance": 0,
+      "boutMinimum": 10,
       "session_types": ["sparring"],
-      "punches": ["jab", "jab_body", "cross", "rear_body", "lead_hook", "lead_body", "rear_hook", "lead_uppercut", "rear_uppercut", "overhand"],
+      "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
       "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
       "footwork": ["step", "snap", "pop", "reset", "beat"],
       "maxComboLength": 999,
       "rhythmEngineUnlocked": true,
       "engine": "All three",
-      "gate": "Spar independently, integrating all three engines — the coach steps back."
+      "gate": "Spar independently, integrating all three engines — the coach steps back.",
+      "gateCriteria": [
+        {"id": "independent_spar", "behaviour": "Complete 3 rounds of sparring without coach intervention or corner instruction", "reps": 1, "passThreshold": 1, "detectable": "coach"},
+        {"id": "self_adjust", "behaviour": "Make tactical adjustment mid-fight without being told (observable strategy shift)", "reps": 1, "passThreshold": 1, "detectable": "coach"},
+        {"id": "three_engine_integration", "behaviour": "Demonstrate body technique + mental strategy + emotional composure in same round", "reps": 1, "passThreshold": 1, "detectable": "coach"}
+      ]
     }
   ]
 }

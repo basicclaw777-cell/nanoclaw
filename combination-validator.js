@@ -15,16 +15,20 @@
 
 const PUNCHES = {
   // Orthodox stance assumed. Mirror for southpaw.
-  jab:            { hand: 'lead',  trajectory: 'straight', weightExit: 'neutral',  powerLevel: 'light',  commitmentGap: false },
-  cross:          { hand: 'rear',  trajectory: 'straight', weightExit: 'forward',  powerLevel: 'heavy',  commitmentGap: true  },
-  lead_hook:      { hand: 'lead',  trajectory: 'lateral',  weightExit: 'rear',     powerLevel: 'heavy',  commitmentGap: true  },
-  rear_hook:      { hand: 'rear',  trajectory: 'lateral',  weightExit: 'lead',     powerLevel: 'heavy',  commitmentGap: true  },
-  lead_uppercut:  { hand: 'lead',  trajectory: 'vertical', weightExit: 'loaded_lead',  powerLevel: 'heavy', commitmentGap: true },
-  rear_uppercut:  { hand: 'rear',  trajectory: 'vertical', weightExit: 'loaded_rear',  powerLevel: 'heavy', commitmentGap: true },
-  lead_body:      { hand: 'lead',  trajectory: 'lateral',  weightExit: 'rear',     powerLevel: 'medium', commitmentGap: true  },
-  rear_body:      { hand: 'rear',  trajectory: 'straight', weightExit: 'forward',  powerLevel: 'medium', commitmentGap: true  },
-  jab_body:       { hand: 'lead',  trajectory: 'straight', weightExit: 'neutral',  powerLevel: 'light',  commitmentGap: false },
-  overhand:       { hand: 'rear',  trajectory: 'arc',      weightExit: 'forward',  powerLevel: 'heavy',  commitmentGap: true  },
+  // target: head|body — separate learning units (confirmed against Cuban codex RAC≠RAA + Paul's floor).
+  jab:                 { hand: 'lead',  trajectory: 'straight',  target: 'head', weightExit: 'neutral',      powerLevel: 'light',  commitmentGap: false },
+  cross:               { hand: 'rear',  trajectory: 'straight',  target: 'head', weightExit: 'forward',      powerLevel: 'heavy',  commitmentGap: true  },
+  lead_hook:           { hand: 'lead',  trajectory: 'lateral',   target: 'head', weightExit: 'rear',         powerLevel: 'heavy',  commitmentGap: true  },
+  rear_hook:           { hand: 'rear',  trajectory: 'lateral',   target: 'head', weightExit: 'lead',         powerLevel: 'heavy',  commitmentGap: true  },
+  lead_uppercut:       { hand: 'lead',  trajectory: 'vertical',  target: 'head', weightExit: 'loaded_lead',  powerLevel: 'heavy',  commitmentGap: true  },
+  rear_uppercut:       { hand: 'rear',  trajectory: 'vertical',  target: 'head', weightExit: 'loaded_rear',  powerLevel: 'heavy',  commitmentGap: true  },
+  overhand:            { hand: 'rear',  trajectory: 'arc',       target: 'head', weightExit: 'forward',      powerLevel: 'heavy',  commitmentGap: true  },
+  body_jab:            { hand: 'lead',  trajectory: 'straight',  target: 'body', weightExit: 'neutral',      powerLevel: 'light',  commitmentGap: false },
+  body_cross:          { hand: 'rear',  trajectory: 'straight',  target: 'body', weightExit: 'forward',      powerLevel: 'medium', commitmentGap: true  },
+  body_hook:           { hand: 'lead',  trajectory: 'lateral',   target: 'body', weightExit: 'rear',         powerLevel: 'medium', commitmentGap: true  },
+  body_uppercut_lead:  { hand: 'lead',  trajectory: 'vertical',  target: 'body', weightExit: 'rear',         powerLevel: 'heavy',  commitmentGap: true  },
+  body_uppercut_rear:  { hand: 'rear',  trajectory: 'vertical',  target: 'body', weightExit: 'lead',         powerLevel: 'heavy',  commitmentGap: true  },
+  shovel_hook:         { hand: 'lead',  trajectory: 'diagonal',  target: 'body', weightExit: 'loaded_lead',  powerLevel: 'heavy',  commitmentGap: true  },
 };
 
 // ─── WEIGHT STATE TRANSITION RULES ──────────────────────────────────────────
@@ -35,60 +39,70 @@ const PUNCHES = {
 
 const WEIGHT_TRANSITIONS = {
   neutral: {
-    // From neutral, everything is available
     jab: true, cross: true, lead_hook: true, rear_hook: true,
-    lead_uppercut: true, rear_uppercut: true, lead_body: true,
-    rear_body: true, jab_body: true, overhand: true,
+    lead_uppercut: true, rear_uppercut: true, overhand: true,
+    body_jab: true, body_cross: true, body_hook: true,
+    body_uppercut_lead: true, body_uppercut_rear: true, shovel_hook: true,
   },
   forward: {
-    // Weight forward (after cross, rear_body): rear hand spent, lead hand loaded
+    // Weight forward (after cross, body_cross): rear hand spent, lead hand loaded
     jab: true, cross: false, lead_hook: true, rear_hook: false,
-    lead_uppercut: true, rear_uppercut: false, lead_body: true,
-    rear_body: false, jab_body: true, overhand: false,
+    lead_uppercut: true, rear_uppercut: false, overhand: false,
+    body_jab: true, body_cross: false, body_hook: true,
+    body_uppercut_lead: true, body_uppercut_rear: false, shovel_hook: true,
     _reason: 'Weight is forward — rear hand has no base to fire from',
   },
   rear: {
-    // Weight shifted to rear side (after lead_hook, lead_body)
+    // Weight shifted to rear side (after lead_hook, body_hook)
     jab: false, cross: true, lead_hook: false, rear_hook: true,
-    lead_uppercut: false, rear_uppercut: true, lead_body: false,
-    rear_body: true, jab_body: false, overhand: true,
+    lead_uppercut: false, rear_uppercut: true, overhand: true,
+    body_jab: false, body_cross: true, body_hook: false,
+    body_uppercut_lead: false, body_uppercut_rear: true, shovel_hook: false,
     _reason: 'Weight is on rear side — lead hand has no base to fire from',
   },
   lead: {
-    // Weight shifted to lead side (after rear_hook)
+    // Weight shifted to lead side (after rear_hook, body_uppercut_rear)
     jab: true, cross: false, lead_hook: true, rear_hook: false,
-    lead_uppercut: true, rear_uppercut: false, lead_body: true,
-    rear_body: false, jab_body: true, overhand: false,
+    lead_uppercut: true, rear_uppercut: false, overhand: false,
+    body_jab: true, body_cross: false, body_hook: true,
+    body_uppercut_lead: true, body_uppercut_rear: false, shovel_hook: true,
     _reason: 'Weight is on lead side — rear hand has no base to fire from',
   },
   loaded_lead: {
-    // Lead side loaded down (after lead_uppercut) — committed low
+    // Lead side loaded down (after lead_uppercut, shovel_hook)
     jab: false, cross: true, lead_hook: false, rear_hook: true,
-    lead_uppercut: false, rear_uppercut: true, lead_body: false,
-    rear_body: true, jab_body: false, overhand: true,
-    _reason: 'Lead side loaded low from uppercut — cross or rear hook follow naturally',
+    lead_uppercut: false, rear_uppercut: true, overhand: true,
+    body_jab: false, body_cross: true, body_hook: false,
+    body_uppercut_lead: false, body_uppercut_rear: true, shovel_hook: false,
+    _reason: 'Lead side loaded low — cross or rear hook follow naturally',
   },
   loaded_rear: {
-    // Rear side loaded down (after rear_uppercut) — committed low
+    // Rear side loaded down (after rear_uppercut)
     jab: true, cross: false, lead_hook: true, rear_hook: false,
-    lead_uppercut: true, rear_uppercut: false, lead_body: true,
-    rear_body: false, jab_body: true, overhand: false,
-    _reason: 'Rear side loaded low from uppercut — jab or lead hook follow naturally',
+    lead_uppercut: true, rear_uppercut: false, overhand: false,
+    body_jab: true, body_cross: false, body_hook: true,
+    body_uppercut_lead: true, body_uppercut_rear: false, shovel_hook: true,
+    _reason: 'Rear side loaded low — jab or lead hook follow naturally',
   },
 };
 
 // ─── DEFENSE DEFINITIONS ────────────────────────────────────────────────────
 
 const DEFENSES = {
-  slip_left:      { axis: 'lateral',    weightExit: 'lead',    loadsCounter: ['lead_hook', 'lead_uppercut', 'lead_body'] },
+  slip_left:      { axis: 'lateral',    weightExit: 'lead',    loadsCounter: ['lead_hook', 'lead_uppercut', 'body_hook'] },
   slip_right:     { axis: 'lateral',    weightExit: 'rear',    loadsCounter: ['cross', 'rear_hook', 'rear_uppercut', 'overhand'] },
-  duck:           { axis: 'sagittal',   weightExit: 'neutral', loadsCounter: ['lead_uppercut', 'rear_uppercut', 'lead_body', 'rear_body'] },
+  duck:           { axis: 'sagittal',   weightExit: 'neutral', loadsCounter: ['lead_uppercut', 'rear_uppercut', 'body_hook', 'body_cross'] },
   pull_back:      { axis: 'sagittal',   weightExit: 'rear',    loadsCounter: ['cross', 'overhand'] },
   bob_weave_left: { axis: 'rotational', weightExit: 'lead',    loadsCounter: ['lead_hook', 'lead_uppercut'] },
   bob_weave_right:{ axis: 'rotational', weightExit: 'rear',    loadsCounter: ['cross', 'rear_hook', 'rear_uppercut'] },
   parry:          { axis: 'static',     weightExit: 'neutral', loadsCounter: ['jab', 'cross'] },
   catch:          { axis: 'static',     weightExit: 'neutral', loadsCounter: ['jab', 'cross', 'lead_hook', 'rear_hook'] },
   shoulder_roll:  { axis: 'rotational', weightExit: 'rear',    loadsCounter: ['cross', 'rear_hook', 'overhand'] },
+  // Stub atoms — recognised by validator so block-config chains don't hard-reject.
+  // axis/weightExit/loadsCounter: ELICITATION-PENDING. Do not fill by inference.
+  front_block:    { axis: null, weightExit: null, loadsCounter: [], _stub: true },
+  hook_block:     { axis: null, weightExit: null, loadsCounter: [], _stub: true },
+  body_block:     { axis: null, weightExit: null, loadsCounter: [], _stub: true },
 };
 
 // ─── DEFENSE AXIS COMPATIBILITY ─────────────────────────────────────────────
@@ -289,7 +303,7 @@ function validateDefenseChain(sequence) {
 
     // Check axis compatibility with previous defense
     const prevDef = DEFENSES[sequence[i - 1]];
-    if (prevDef) {
+    if (prevDef && prevDef.axis && def.axis) {
       const compat = AXIS_COMPATIBILITY[prevDef.axis][def.axis];
       results.transitions.push({
         position: i + 1,
@@ -309,6 +323,14 @@ function validateDefenseChain(sequence) {
           warning: `${sequence[i-1]} (${prevDef.axis}) → ${defName} (${def.axis}): same axis compounds instability`,
         });
       }
+    } else if (def._stub || (prevDef && prevDef._stub)) {
+      results.transitions.push({
+        position: i + 1,
+        action: defName,
+        verdict: 'VALID',
+        axis: def.axis,
+        compatibility: 'stub',
+      });
     }
   }
 
@@ -636,6 +658,27 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   const t8 = validateIntegratedSequence('parry', ['lead_uppercut']);
   console.log(`  Defense → Counter: ${t8.defense.valid ? '✓' : '✗'} ${t8.defense.reason}`);
   console.log(`  Integrated: ${t8.integrated ? '✓' : '✗ CHAIN BROKEN'}`);
+
+  // Test 9: New punches — body_uppercut_rear → body_jab (rear→lead exit, body_jab is lead hand from lead state)
+  console.log('\nTEST 9: Body Uppercut (Rear) → Body Jab');
+  const t9 = validatePunchCombo(['body_uppercut_rear', 'body_jab']);
+  console.log(`  Result: ${t9.valid ? '✓ VALID' : '✗ INVALID'}`);
+  console.log(`  Weight trace: ${t9.weightTrace.join(' → ')}`);
+  console.log();
+
+  // Test 10: Shovel hook → cross (shovel exits loaded_lead, cross is rear hand — valid)
+  console.log('TEST 10: Shovel Hook → Cross');
+  const t10 = validatePunchCombo(['shovel_hook', 'cross']);
+  console.log(`  Result: ${t10.valid ? '✓ VALID' : '✗ INVALID'}`);
+  console.log(`  Weight trace: ${t10.weightTrace.join(' → ')}`);
+  console.log();
+
+  // Test 11: Stub defense — front_block recognised but axis null
+  console.log('TEST 11: Defense chain with stub — Front Block → Slip Right');
+  const t11 = validateDefenseChain(['front_block', 'slip_right']);
+  t11.transitions.forEach(t => {
+    console.log(`  [${t.position}] ${t.action} (${t.axis}): ${t.verdict}`);
+  });
 
   console.log('\n═══════════════════════════════════════════════════════════');
 }
