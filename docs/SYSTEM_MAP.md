@@ -7,7 +7,8 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 
 ## Cymatic Choir
 - **Forge Mirror Log** · `~/cathedral-vault/02_Refined_Gold/cathedral/forge-mirror-log.md` · trigger: session-closer Step 0 (end of session) · read-in: the-builders-frequency.md (session start) · doc: the-cymatic-choir.md
-- **Choir Room** · `~/cathedral-vault/09_Artifacts/choir-room.html` · static prototype, no door yet · doc: the-cymatic-choir.md
+- **Choir Dispatch** · `~/nanoclaw/choir-dispatch.js` (ESM) · trigger: CLI `node choir-dispatch.js` or POST `/choir/dispatch` · reads voice logs + cath-state + emergence → hermes3 → chord.json · doc: the-cymatic-choir.md
+- **Choir Room** · `~/cathedral-vault/09_Artifacts/choir-room.html` · route `/choir` (cath-bridge) · fetches live chord from `/choir/data` · keyboard: T=timeline, D=dispatch · doc: the-cymatic-choir.md
 
 ## Research lanes
 - **The Hunch Lane** · `hunch-lane.js` (nanoclaw, ESM) · trigger: `/hunch <hunch>` (telegram-bot.js) + CLI `node hunch-lane.js "..."` · retrieve-before-derive → show-raw-data → route grade to differently-biased reasoner (DeepSeek/Aletheia, NOT Forge) · fixes OmissionOS Deflection (CLAUDE.md SI-44) · doc: vault `02_Refined_Gold/cathedral/omissionos-in-forge-2026-06-15.md`

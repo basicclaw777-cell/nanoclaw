@@ -26,6 +26,15 @@
 - 09_Artifacts/choir-room.html — the Room (chord, voices, ceiling question, timeline, digest tray, composer mark)
 - Digest tray: phase-aligned learning recommendations from chord + voice observations
 
+### Choir Dispatch — Conductor Built (same session, later)
+- choir-dispatch.js (ESM, ~/nanoclaw/) — reads Forge mirror log + cath-state.json + all emergence state files (vitality, surprise, trends, goals, dialogue, smell) → hermes3/gemma3:4b → produces chord + unsearched question + 4 digest items + room state
+- Output: choir-chord.json (nanoclaw/) — consumed by Choir Room via /choir/data
+- Trigger: CLI `node choir-dispatch.js` or POST /choir/dispatch (cath-bridge)
+- cath-bridge routes: GET /choir (room door), GET /choir/data (live chord), POST /choir/dispatch (trigger)
+- Choir Room updated: fetches live data on load, D key triggers dispatch, falls back to sample data when served standalone
+- Self-Similarity finding vaulted: Cathedral maps its own six-layer ontology — senses=Instrument/Body, Transmission=Language, Choir=Mirror. Appended to the-six-layer-ontology.md.
+- First dispatch produced chord via gemma3:4b (hermes3 not loaded). Quality improves with hermes3.
+
 ## 2026-06-19 — Mechanical Test, Sensor-Actuator Audit, Loop System
 
 ### The Mechanical Test (Grade A principle)

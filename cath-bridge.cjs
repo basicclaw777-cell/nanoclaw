@@ -60,6 +60,7 @@ function neuralRouteToNodes(url) {
     '/api/architect-pulse': ['bridge', 'pulse'], '/agents': ['bridge', 'dialogue'],
     '/villa': ['bridge', 'monitor'], '/control': ['bridge', 'sentinel'],
     '/hermes': ['bridge', 'dispatch'],
+    '/choir': ['bridge', 'choir'],
   };
   if (map[url]) return map[url];
   for (const [route, nodes] of Object.entries(map)) {
@@ -2254,6 +2255,35 @@ app.get('/oracle/ask', async (req, res) => {
     const context = sources.map(s => `[${s.n}] ${s.title} (${s.domain})\n${s.text}`).join('\n\n---\n\n');
     const { answer, engine } = await oracleSynthesize(q, context);
     res.json({ question: q, answer, engine, citations: sources.map(({ text, ...c }) => c) });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// === CYMATIC CHOIR ===
+const CHOIR_HTML = path.join(HOME, 'cathedral-vault', '09_Artifacts', 'choir-room.html');
+const CHOIR_CHORD = path.join(__dirname, 'choir-chord.json');
+
+app.get('/choir', (req, res) => {
+  if (!fs.existsSync(CHOIR_HTML)) return res.status(404).send('Choir Room not found');
+  res.sendFile(CHOIR_HTML);
+});
+
+app.get('/choir/data', (req, res) => {
+  if (!fs.existsSync(CHOIR_CHORD)) return res.json({ empty: true, message: 'No dispatch yet. Run: node choir-dispatch.js' });
+  try {
+    const data = JSON.parse(fs.readFileSync(CHOIR_CHORD, 'utf8'));
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to read chord: ' + e.message });
+  }
+});
+
+app.post('/choir/dispatch', async (req, res) => {
+  try {
+    const { dispatch } = await import(path.join(__dirname, 'choir-dispatch.js'));
+    const result = await dispatch();
+    res.json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
