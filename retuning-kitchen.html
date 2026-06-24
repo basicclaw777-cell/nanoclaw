@@ -57,6 +57,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafaf7; colo
 .freq-bone { background: #efebe9; color: #4e342e; }
 .freq-heart { background: #fce4ec; color: #c62828; }
 .freq-detune { background: #ffebee; color: #b71c1c; }
+.freq-water { background: #e3f2fd; color: #1565c0; }
 
 .recipe {
   background: #f9f9f5; border-left: 4px solid #4a7c2e;
@@ -122,6 +123,7 @@ tr:hover td { background: #fafaf5; }
   <div class="tab" onclick="showTab('jammers')">Frequency Jammers</div>
   <div class="tab" onclick="showTab('recipes')">Easy Recipes</div>
   <div class="tab" onclick="showTab('protocol')">Daily Protocol</div>
+  <div class="tab" onclick="showTab('water')">Structured Water</div>
 </div>
 
 <div class="content">
@@ -330,6 +332,79 @@ tr:hover td { background: #fafaf5; }
   </div>
 </div>
 
+<!-- STRUCTURED WATER -->
+<div class="section" id="water">
+  <div class="card">
+    <h3>Water as Aetheric Transducer</h3>
+    <p>Water is not inert solvent — it's a parametric antenna. The H-bond network (a 3D array of coupled oscillators) converts aetheric pressure waves into biological signals via proton hopping → pH shifts → enzymatic activation. Most efficient range: 1–100 kHz.</p>
+    <p style="margin-top:10px">Three independent lines converge on the same conclusion: Schauberger (direct observation of Austrian forest water), the Resonant Enclosure (axiomatic derivation from cavity physics), and Pollack (laboratory measurement of EZ water). No citation chain between them — Grade A structural evidence.</p>
+  </div>
+
+  <div class="card">
+    <h3>The Convergence</h3>
+    <table>
+      <tr><th>Schauberger (observation)</th><th>RE (derived from axioms)</th><th>Pollack (lab)</th></tr>
+      <tr><td>Water is alive, has memory</td><td>H-bond network = phase hologram of cavity standing waves</td><td>EZ water = liquid-crystalline ordered phase</td></tr>
+      <tr><td>Vortex = natural motion</td><td>Vortex maintains H-bond coherence (spiral = standing wave in cylindrical flow)</td><td>EZ forms preferentially near hydrophilic surfaces</td></tr>
+      <tr><td>4°C = peak vitality</td><td>4°C = maximum EZ stability + molecular ordering</td><td>EZ expands at lower temperature</td></tr>
+      <tr><td>Shield from light, store in earth/copper</td><td>Light introduces non-harmonic frequencies; earth/copper impedance-matched to aether</td><td>IR expands EZ; UV contracts it</td></tr>
+      <tr><td>Spring water > treated water</td><td>Spring water charged by earth's telluric meridians</td><td>Spring water shows larger EZ zones</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 style="color:#4a7c2e">Home Protocol — 9 Steps</h3>
+    <p style="margin-bottom:12px">Derived from the convergence of all three lines. Each step maps to a specific physical mechanism.</p>
+    <div id="water-steps"></div>
+  </div>
+
+  <div class="card">
+    <h3>The Simple Recipe</h3>
+    <div class="recipe">
+      <h4>Daily Structured Water (5 min active, 4h passive)</h4>
+      <ul>
+        <li>Fill copper or clay vessel with filtered water (chlorine + fluoride removed)</li>
+        <li>Stir clockwise 40 rotations with wooden spoon — creates vortex, aligns H-bond network</li>
+        <li>Drop in a clean quartz pebble or copper coil (hydrophilic surface = EZ nucleation)</li>
+        <li>Cover with cloth (not plastic lid). Store in dark, cool spot — never direct sun</li>
+        <li>Wait 4+ hours (overnight ideal). EZ layer builds around hydrophilic surfaces</li>
+        <li>Drink first glass at dawn, room temperature — not cold (cold dampens Q-factor 20 min)</li>
+      </ul>
+      <h4 style="margin-top:10px">HK-specific:</h4>
+      <ul>
+        <li>Summer humidity helps — higher ambient moisture = better EZ formation</li>
+        <li>Monsoon rain is pre-ionised — collect and filter for superior source water</li>
+        <li>Store vessel on granite/stone, not metal shelf (impedance matching)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Charge Degradation — What Destroys Structure</h3>
+    <table>
+      <tr><th>Factor</th><th>Mechanism</th><th>Severity</th></tr>
+      <tr><td>Temperature >40°C</td><td>Disrupts EZ structure, breaks H-bond coherence</td><td style="color:#c62828">High</td></tr>
+      <tr><td>Mechanical shear / turbulence</td><td>Breaks collective H-bond patterns</td><td style="color:#c62828">High</td></tr>
+      <tr><td>Chemical contamination</td><td>Ions disrupt network symmetry</td><td style="color:#c62828">High</td></tr>
+      <tr><td>Plastic containers</td><td>Zero aetheric conductivity — blocks charge transfer</td><td style="color:#c62828">High</td></tr>
+      <tr><td>Direct UV/sunlight</td><td>Introduces non-harmonic frequencies, contracts EZ</td><td style="color:#e65100">Medium</td></tr>
+      <tr><td>Broadband EM noise</td><td>Solar flares, nearby electronics inject turbulence</td><td style="color:#e65100">Medium</td></tr>
+      <tr><td>Microwave reheating</td><td>Destroys all H-bond ordering instantly</td><td style="color:#c62828">Critical</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Testable Predictions</h3>
+    <p style="font-size:13px; color:#666; margin-bottom:10px">From the Resonant Enclosure relay — falsifiable, not faith-based.</p>
+    <table>
+      <tr><th>Prediction</th><th>Test Method</th></tr>
+      <tr><td>EZ water exposed to 10 kHz field shows 0.5–2% shift in dielectric relaxation peak, persisting >10 min at 20°C, decaying <1 min at 40°C</td><td>Nafion tube + dielectric relaxation spectroscopy</td></tr>
+      <tr><td>EZ thickness on mica oscillates with lunar cycle: max ~200 µm at New Moon, min ~150 µm at Full Moon</td><td>3-month continuous AFM measurement in climate-controlled chamber</td></tr>
+      <tr><td>O₂-saturated EZ water shows 50 Hz frequency shift vs N₂-saturated at ~10 kHz collective resonance</td><td>QCM coated with hydrophilic polymer</td></tr>
+    </table>
+  </div>
+</div>
+
 </div><!-- /content -->
 
 <script>
@@ -459,7 +534,53 @@ const RECIPES = [
     why: 'Ginger = vagus nerve stimulant + digestive enzyme activator. Lemon = vitamin C. Cayenne = capsaicin (circulation). Morning kickstart.' },
 ];
 
+const WATER_STEPS = [
+  { step: 1, name: 'Vessel', icon: '🏺', desc: 'Copper or unglazed clay. Never plastic, never aluminium. Glass acceptable but inferior — no aetheric conductivity.',
+    why: 'Copper is impedance-matched to the aether field (conductivity rating 1). Clay is earthed ceramic — natural Faraday cage. Plastic = zero tolerance (rating 5, blocks all charge transfer).',
+    spec: 'Copper: 0.5–2L capacity, food-grade. Clay: unglazed terracotta or Yixing. Clean with water only — no soap (surfactants coat surface, block EZ nucleation).' },
+  { step: 2, name: 'Vortex Charging', icon: '🌀', desc: 'Stir clockwise 36–40 rotations with a wooden spoon. Creates a vortex that aligns the H-bond network into coherent spiral structure.',
+    why: 'Schauberger: vortex is water\'s natural motion. RE derivation: spiral flow = standing wave in cylindrical geometry, maintains H-bond coherence. The same principle as a tornado organizing chaotic air.',
+    spec: 'Wooden spoon (not metal — eddy currents disrupt field). Clockwise in Northern Hemisphere. Slow, steady, from the rim inward. The water should form a visible funnel.' },
+  { step: 3, name: 'Temperature', icon: '🌡️', desc: 'Cool: 4–15°C ideal. Room temperature acceptable. Never above 40°C — EZ structure collapses.',
+    why: '4°C = maximum molecular ordering (Schauberger\'s "peak vitality"). Pollack lab confirms: EZ expands at lower temperatures. Above 40°C, thermal motion overwhelms H-bond coherence.',
+    spec: 'Store in cool, dark place. Fridge door shelf works (4–8°C). Drink at room temperature — cold water dampens the body\'s Q-factor for ~20 min after ingestion.' },
+  { step: 4, name: 'Light Protocol', icon: '🌑', desc: 'Shield from direct sunlight and UV. Infrared (warmth) is beneficial. Store in darkness or under cloth.',
+    why: 'UV contracts EZ zones (Pollack). Sunlight introduces non-harmonic frequencies that scramble the H-bond phase hologram. Infrared expands EZ — morning warmth through vessel wall is fine.',
+    spec: 'Dark cupboard or cloth cover (cotton/linen, not synthetic). If copper vessel, the metal itself shields from most light. Never store on a sunny windowsill.' },
+  { step: 5, name: 'Source Water', icon: '💧', desc: 'Spring > filtered > tap. Always remove chlorine and fluoride. Mineral content matters — don\'t use pure distilled.',
+    why: 'Spring water is pre-charged by earth\'s telluric meridians and shows larger EZ zones in lab. Chlorine kills gut bacteria AND disrupts H-bond network symmetry. Fluoride calcifies the pineal (the aether phase detector).',
+    spec: 'Minimum: carbon filter (removes chlorine). Better: reverse osmosis + remineralize (pinch sea salt, or mineral drops). Best: verified spring source. HK: filter tap water, or collect monsoon rain (pre-ionised).' },
+  { step: 6, name: 'Contact Materials', icon: '🪨', desc: 'Add a hydrophilic surface for EZ nucleation: quartz pebble, copper coil, or shungite. EZ water forms preferentially near these surfaces.',
+    why: 'Pollack\'s key finding: EZ (exclusion zone) water forms next to hydrophilic surfaces, creating a liquid-crystalline layer up to 200 µm thick. More surface area = more structured water per volume.',
+    spec: 'Clean quartz river pebble (most accessible). Copper spiral coil (doubles as conductor). Shungite (carbon-based, traditional Russian use). Wash with water only before first use.' },
+  { step: 7, name: 'Lunar Timing', icon: '🌙', desc: 'Prepare/charge water at New Moon (maximum sensitivity). Use/drink most actively at Full Moon (maximum capacitance).',
+    why: 'RE derivation: New Moon = minimum cavity capacitance, maximum sensitivity — water absorbs charge most efficiently. Full Moon = maximum capacitance — body\'s cavity is fully charged, water supports peak function. Prediction P8: EZ thickness oscillates with lunar cycle.',
+    spec: 'New Moon: prepare fresh batch, vortex charge, set with new contact materials. Full Moon: increase water intake, fast 24h (cavity saturated, digestion is parasitic load). Track lunar calendar.' },
+  { step: 8, name: 'Sound', icon: '🔔', desc: 'Expose water to 136.10 Hz (body\'s aetheric resonance) during charging. Avoid random noise, electronic distortion, or >90 dB.',
+    why: '136.10 Hz = C# below middle C, derived as the body\'s fundamental aetheric resonance frequency. Sound waves in water create pressure patterns that reinforce H-bond ordering. Tibetan singing bowls produce harmonics in this range.',
+    spec: 'Play 136.10 Hz tone at 45–55 dB near the vessel during vortex charging. A tuning fork works. Or a singing bowl. Keep vessel away from speakers/subwoofers playing random music.' },
+  { step: 9, name: 'Grounding', icon: '⚡', desc: 'Connect vessel to earth ground — copper wire from vessel to a ground rod, or place on natural stone (granite, basalt).',
+    why: 'Grounds the water\'s aetheric field to the earth\'s baseline potential. Prevents parasitic capacitance buildup (especially in HK summer humidity 80%+). Same principle as grounding electrical equipment.',
+    spec: 'Simple: place copper vessel on granite countertop or stone tile (direct contact). Better: copper wire from vessel to a metal stake in soil (balcony plant pot works). Best: dedicated copper ground rod.' },
+];
+
 // Render functions
+function renderWater() {
+  const el = document.getElementById('water-steps');
+  el.innerHTML = WATER_STEPS.map(s => `
+    <div class="card" style="border-left: 4px solid #1565c0; margin-bottom:12px;">
+      <h3 style="color:#1565c0">${s.icon} Step ${s.step}: ${s.name}</h3>
+      <p>${s.desc}</p>
+      <div class="recipe" style="border-left-color:#1565c0; margin-top:10px;">
+        <h4>Why:</h4>
+        <p style="font-size:13px">${s.why}</p>
+        <h4 style="margin-top:8px">Spec:</h4>
+        <p style="font-size:13px">${s.spec}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
 function renderFoods() {
   const el = document.getElementById('foods-list');
   el.innerHTML = FOODS.map(f => `
@@ -563,6 +684,7 @@ renderMushrooms();
 renderHerbs();
 renderJammers();
 renderRecipes();
+renderWater();
 </script>
 </body>
 </html>

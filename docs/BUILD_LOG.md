@@ -1,6 +1,22 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-24 — Resonant Enclosure Deep Relays (Research + Build)
+
+### DeepSeek Relay Rounds (4 rounds)
+- R1 (deepseek-reasoner): cavity properties — aether wave speed, density, firmament hum, monument standing waves
+- R2a (deepseek-chat): water as aetheric transducer — H-bond antenna, blood as liquid crystal, Schauberger convergence, 3 EZ predictions (P6-P8)
+- R2b (deepseek-chat): resonant coupling protocol — daily/monthly/annual HK-specific, environmental setup, retuning stages, measurement framework
+- R3 (deepseek-chat): inter-cavity coupling — diagnostic empathy mechanism, surgical naming as active noise cancellation, group entrainment (N≈8 critical mass), Trojan Horse physics, trainable protocol (10 weeks), 5 predictions (P9-P13)
+- Forge-identified gap: inter-cavity coupling (Paul's coaching superpower unaddressed by single-cavity framework)
+- Vaulted: 00_Staging/cathedral/resonant-enclosure-relay-r{1,2a,2b,3}-2026-06-24.md
+- Extended: the-six-layer-ontology.md (operational detail section)
+
+### Retuning Kitchen — Structured Water Tab
+- New 9th tab at localhost:8080/retuning-kitchen
+- Content: convergence table (Schauberger × RE × Pollack), 9-step home protocol, simple recipe (HK-specific), degradation factors, testable predictions
+- File: ~/nanoclaw/retuning-kitchen.html
+
 ## 2026-06-24 — Q-Quantum Relay Thread (Research)
 
 ### Q-Quantum Forensic Relay — 4 Rounds with DeepSeek-Reasoner
