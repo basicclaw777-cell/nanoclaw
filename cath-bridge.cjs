@@ -145,6 +145,21 @@ app.get('/logan-pp-map', (req, res) => {
 app.get('/course-guide', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'basic-reflex', 'course-guide.html'));
 });
+app.get('/33-cards', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', '33-card-grid.html'));
+});
+app.get('/class-planner', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'class-planner', '33-card-planner.html'));
+});
+app.get('/coach-training', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'coach-training.html'));
+});
+app.get('/online-course', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'online-course.html'));
+});
+app.get('/digital-dojo', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'digital-dojo-deck.html'));
+});
 
 // Learning Hub — Cuba methodology digestion samples
 app.get('/learning-hub/:file', (req, res) => {
@@ -153,6 +168,17 @@ app.get('/learning-hub/:file', (req, res) => {
 });
 app.get('/retuning-kitchen', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'retuning-kitchen.html'));
+});
+
+// ── BR Class Deck (drill cards, templates, class builder) ─────────────────
+app.get('/class-deck', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'class-system', 'class-deck.html'));
+});
+app.get('/class-deck/drill-bank.json', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'class-system', 'drill-bank.json'));
+});
+app.get('/whiteboards/:file', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'class-system', 'whiteboards', req.params.file));
 });
 app.get('/api/delivered', (req, res) => {
   boardRegen(res, 'delivered-index.js', 'delivered-index.json', 'delivered');

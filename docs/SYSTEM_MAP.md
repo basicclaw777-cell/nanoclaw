@@ -46,5 +46,18 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 ## Basic Reflex — coaching tools
 - **drill-player external motion import** · `~/basic-reflex/gym-eyes/drill-player.html` `playClip()` · trigger: localhost:8080/gym-eyes/drill-player → ▶ Motion Clip · plays raw joint-position clips (mocap/MediaPipe/FBX contract `{t,joints:{name:[x,y,z]}}`) · doc: BUILD_LOG 2026-06-21
 
+- **Class Deck** · `~/basic-reflex/class-system/class-deck.html` · trigger: localhost:8080/class-deck · 14 drills, 6-stage spine, 3 templates, class builder, engine badges · doc: BUILD_LOG 2026-06-25
+- **Drill Bank** · `~/basic-reflex/class-system/drill-bank.json` · data: drills + spine + engines (body/mind/eq) + templates · consumed by class-deck.html
+- **Whiteboard Teaching Boards** · `~/basic-reflex/class-system/whiteboards/*.html` · trigger: localhost:8080/whiteboards/ · 4 boards (three-engines, body, mind, eq) · tablet/projector pre-class intros
+- **Corporate Brochure** · `~/basic-reflex/corporate/` · PDF + HTML template + 8 extracted photos · doc: BUILD_LOG 2026-06-25
+
+## 33-Card Boxing Operating System
+- **33-Card Data Model** · `~/basic-reflex/33-card-system.json` · data: 33 cards × 5 layers + frequencies + mindsets · consumed by all 5 views below
+- **33-Card Grid** · `~/basic-reflex/33-card-grid.html` · route `/33-cards` · overview map · doc: BUILD_LOG 2026-06-27
+- **Class Planner** · `~/basic-reflex/class-planner/33-card-planner.html` · route `/class-planner` · coach tool · doc: BUILD_LOG 2026-06-27
+- **Coach Training** · `~/basic-reflex/coach-training.html` · route `/coach-training` · teaching manual · doc: BUILD_LOG 2026-06-27
+- **Online Course** · `~/basic-reflex/online-course.html` · route `/online-course` · student-facing · doc: BUILD_LOG 2026-06-27
+- **Digital Dojo Deck** · `~/basic-reflex/digital-dojo-deck.html` · route `/digital-dojo` · product vision mockups · doc: BUILD_LOG 2026-06-27
+
 ## Forge maintenance
 - **Forge model pin** · `~/.claude/settings.json` `"model": "claude-opus-4-6"` · trigger: every Claude Code launch · pre-fable model (4.8=fable flinch); terminal Forge build-only per soul file · doc: BUILD_LOG 2026-06-22 + forge-regression-diagnostic.md

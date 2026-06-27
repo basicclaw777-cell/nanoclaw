@@ -4,58 +4,64 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Cathedral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0a0a0f; color: #e0e0e0; font-family: 'SF Mono', 'Fira Code', monospace; min-height: 100vh; }
+  body { background: #08080d; color: #e0e0e0; font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
 
-  .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; border-bottom: 1px solid #1a1a2e; }
-  .top-bar h1 { color: #e94560; font-size: 1.3rem; letter-spacing: 2px; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; background: linear-gradient(180deg, #0d0d14 0%, transparent 100%); position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .top-bar h1 { color: #fff; font-size: 1.1rem; font-weight: 800; letter-spacing: 4px; text-transform: uppercase; }
+  .top-bar h1 span { color: #e94560; }
   .top-bar .pulse { display: flex; gap: 12px; align-items: center; }
-  .top-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+  .top-bar .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80; animation: pulse 2s infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-  .top-bar .time { color: #666; font-size: 0.8rem; }
+  .top-bar .time { color: #555; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
 
-  .voice-bar { padding: 10px 32px; background: #111118; border-bottom: 1px solid #1a1a2e; }
-  .voice-bar span { color: #c4a35a; font-size: 0.75rem; font-style: italic; }
+  .voice-bar { padding: 8px 40px; border-bottom: 1px solid rgba(233, 69, 96, 0.08); }
+  .voice-bar span { color: #c4a35a; font-size: 0.7rem; font-style: italic; opacity: 0.7; }
 
-  .sections { padding: 24px 32px; }
-  .section-title { color: #e94560; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: #222; }
+  .sections { padding: 20px 40px 60px; max-width: 1400px; margin: 0 auto; }
+  .section-title { color: #e94560; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; margin: 32px 0 14px; display: flex; align-items: center; gap: 12px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, #e9456020, transparent); }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
 
-  .card { background: #12121e; border: 1px solid #222; border-radius: 8px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; display: block; position: relative; overflow: hidden; }
-  .card:hover { border-color: #e94560; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(233, 69, 96, 0.1); }
-  .card .icon { font-size: 1.4rem; margin-bottom: 6px; }
-  .card .name { color: #fff; font-size: 0.9rem; font-weight: bold; margin-bottom: 4px; }
-  .card .desc { color: #666; font-size: 0.7rem; line-height: 1.4; }
-  .card .tag { position: absolute; top: 8px; right: 8px; background: #1a3a1a; color: #4ade80; padding: 1px 6px; border-radius: 3px; font-size: 0.6rem; }
-  .card .tag.new { background: #3a1a3a; color: #e94560; }
-  .card .tag.data { background: #1a2a3a; color: #60a5fa; }
+  .card { background: #0f0f18; border: 1px solid #1a1a28; border-radius: 10px; padding: 16px 18px; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; color: inherit; display: block; position: relative; overflow: hidden; }
+  .card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at top left, rgba(233,69,96,0.03), transparent 70%); pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+  .card:hover::before { opacity: 1; }
+  .card:hover { border-color: #e94560; transform: translateY(-3px); box-shadow: 0 8px 32px rgba(233, 69, 96, 0.08), 0 0 0 1px rgba(233, 69, 96, 0.15); }
+  .card .icon { font-size: 1.5rem; margin-bottom: 8px; filter: saturate(1.2); }
+  .card .name { color: #fff; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; letter-spacing: 0.2px; }
+  .card .desc { color: #555; font-size: 0.7rem; line-height: 1.5; font-weight: 300; }
+  .card .tag { position: absolute; top: 10px; right: 10px; padding: 2px 7px; border-radius: 4px; font-size: 0.55rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .card .tag { background: rgba(74, 222, 128, 0.1); color: #4ade80; }
+  .card .tag.new { background: rgba(233, 69, 96, 0.1); color: #e94560; }
+  .card .tag.data { background: rgba(96, 165, 250, 0.1); color: #60a5fa; }
 
-  .card.hero { grid-column: span 2; background: linear-gradient(135deg, #1a1a2e 0%, #12121e 100%); border-color: #333; }
-  .card.hero .name { font-size: 1.1rem; color: #e94560; }
-  .card.hero .desc { color: #888; }
+  .card.hero { grid-column: span 2; background: linear-gradient(135deg, #12121e 0%, #0f0f18 100%); border-color: #252530; }
+  .card.hero .name { font-size: 1rem; color: #e94560; }
+  .card.hero .desc { color: #777; }
 
   .stats-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-  .mini-stat { background: #0a0a12; padding: 4px 8px; border-radius: 4px; font-size: 0.65rem; }
-  .mini-stat .val { color: #e94560; font-weight: bold; }
-  .mini-stat .lbl { color: #555; }
+  .mini-stat { background: rgba(255,255,255,0.02); border: 1px solid #1a1a28; padding: 3px 8px; border-radius: 4px; font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; }
+  .mini-stat .val { color: #e94560; font-weight: 600; }
+  .mini-stat .lbl { color: #444; }
 
-  .footer { padding: 16px 32px; border-top: 1px solid #1a1a2e; color: #333; font-size: 0.65rem; text-align: center; margin-top: 24px; }
+  .footer { padding: 20px 40px; border-top: 1px solid #111; color: #2a2a2a; font-size: 0.6rem; text-align: center; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
 
   @media (max-width: 600px) {
     .grid { grid-template-columns: 1fr; }
     .card.hero { grid-column: span 1; }
-    .top-bar { padding: 16px; }
-    .sections { padding: 16px; }
+    .top-bar { padding: 16px 20px; }
+    .sections { padding: 16px 20px; }
   }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <h1>THE CATHEDRAL</h1>
+  <h1>THE <span>CATHEDRAL</span></h1>
   <div class="pulse">
     <div class="dot"></div>
     <span class="time" id="clock"></span>
@@ -145,6 +151,59 @@
       <div class="name">Icon Library</div>
       <div class="desc">Brand icons and assets.</div>
     </a>
+    <a href="/reed-visual-hub" class="card">
+      <div class="icon">🖼</div>
+      <div class="name">Reed Visual Hub</div>
+      <div class="desc">All visual assets in one place. Generated media, studio, techniques, icons, slides.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/33-cards" class="card">
+      <div class="icon">🃏</div>
+      <div class="name">The 33 Cards</div>
+      <div class="desc">Boxing operating system. 3 mindsets + 10 Skill + 10 Sparring + 10 Conditioning blocks.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/class-planner" class="card">
+      <div class="icon">📋</div>
+      <div class="name">Class Planner</div>
+      <div class="desc">Pick a frequency row, get today's Skill + Sparring + Conditioning plan with teaching notes.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/coach-training" class="card">
+      <div class="icon">🎓</div>
+      <div class="name">Coach Training</div>
+      <div class="desc">33-card teaching manual. Notes, mistakes, coach gates, demonstrations per card.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/online-course" class="card">
+      <div class="icon">💻</div>
+      <div class="name">Online Course</div>
+      <div class="desc">Bookworm / Driller / Flow — three learning modes per card. Student-facing.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/digital-dojo" class="card">
+      <div class="icon">🏟</div>
+      <div class="name">Digital Dojo</div>
+      <div class="desc">Product vision deck. 8 app screens — the student-facing experience.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/class-deck" class="card">
+      <div class="icon">🎴</div>
+      <div class="name">Class Deck</div>
+      <div class="desc">Drill cards, class templates, session builder. Stable spine + liquid drills.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/gym-eyes" class="card">
+      <div class="icon">👁</div>
+      <div class="name">Gym Eyes</div>
+      <div class="desc">AI punch & footwork tracking. Student profiles. Session analysis.</div>
+    </a>
+    <a href="/datasets" class="card">
+      <div class="icon">🧬</div>
+      <div class="name">Dataset Lab</div>
+      <div class="desc">SpineTrack spines, BoxingVI punches. Training data for CV models.</div>
+      <span class="tag data">58K annotations</span>
+    </a>
   </div>
 
   <!-- RESEARCH -->
@@ -166,6 +225,35 @@
       <div class="name">Simpsons Forensics</div>
       <div class="desc">Pattern analysis dashboard.</div>
     </a>
+    <a href="/sumerian" class="card">
+      <div class="icon">𒀭</div>
+      <div class="name">Sumerian Tablets</div>
+      <div class="desc">353K tablets. AI translation. CDLI + AICC corpus.</div>
+      <span class="tag data">353K tablets</span>
+    </a>
+    <a href="/cathedral-rosetta" class="card">
+      <div class="icon">🔗</div>
+      <div class="name">Cathedral Rosetta</div>
+      <div class="desc">14 vault domains. 149K concepts. 59 convergences across disciplines.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/rosetta-bridge" class="card">
+      <div class="icon">🌉</div>
+      <div class="name">Rosetta Bridge</div>
+      <div class="desc">Ancient × Cathedral cross-references. 30 bridges. 5 universal cognitive moves.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/archaeologist" class="card">
+      <div class="icon">⛏</div>
+      <div class="name">The Forgotten Shelf</div>
+      <div class="desc">Abandoned techniques mined across 9 domains. 5,080 discoveries.</div>
+      <span class="tag data">5K finds</span>
+    </a>
+    <a href="/looking-glass" class="card">
+      <div class="icon">🔭</div>
+      <div class="name">Looking Glass</div>
+      <div class="desc">Celestial intelligence. 5 pipelines. 7 bodies. Historical echoes.</div>
+    </a>
   </div>
 
   <!-- INTELLIGENCE -->
@@ -182,6 +270,11 @@
       <div class="name">Intelligence Hub</div>
       <div class="desc">7 scraper targets. PubMed, competitors, fight data, reviews.</div>
     </a>
+    <a href="/property-scout" class="card">
+      <div class="icon">🏠</div>
+      <div class="name">Property Scout</div>
+      <div class="desc">Real estate intelligence. Market tracking.</div>
+    </a>
     <a href="/reed-slides" class="card">
       <div class="icon">🃏</div>
       <div class="name">The Deck</div>
@@ -191,6 +284,48 @@
       <div class="icon">📋</div>
       <div class="name">Roundtable Digest</div>
       <div class="desc">Weekly agent roundtable summary. Reed, Kit, Cathy, Leonardo.</div>
+    </a>
+    <a href="/pulse" class="card">
+      <div class="icon">💫</div>
+      <div class="name">Architect Pulse</div>
+      <div class="desc">11 life channels. Daily nudges. Streak tracking.</div>
+    </a>
+  </div>
+
+  <!-- WORLD -->
+  <div class="section-title">World</div>
+  <div class="grid">
+    <a href="/emergence-map" class="card">
+      <div class="icon">&#x2728;</div>
+      <div class="name">Emergence Map</div>
+      <div class="desc">The builder's own frequency. 5 confirmed, 2 emerging, 3 horizon.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/workshop-results" class="card">
+      <div class="icon">&#x1F9EA;</div>
+      <div class="name">Workshop Results</div>
+      <div class="desc">Agent emergence workshop. 4 bottleneck types. Maya's Bridge Test. Tea break gravity map.</div>
+      <span class="tag new">NEW</span>
+    </a>
+    <a href="/logan-universe" class="card">
+      <div class="icon">⚡</div>
+      <div class="name">Logan Universe</div>
+      <div class="desc">10 tabs. Cast, frequency states, story seeds, HK locations.</div>
+    </a>
+    <a href="/cuba-combos" class="card">
+      <div class="icon">🇨🇺</div>
+      <div class="name">Cuba Combo Library</div>
+      <div class="desc">34 combos. Clips, peak frames, skeleton replay.</div>
+    </a>
+    <a href="/emergence" class="card">
+      <div class="icon">🌱</div>
+      <div class="name">Emergence Garden</div>
+      <div class="desc">Agent emergence signals. Growth timeline. Color-coded.</div>
+    </a>
+    <a href="/cathedral-city/team-programme" class="card">
+      <div class="icon">🏘</div>
+      <div class="name">Team Programme</div>
+      <div class="desc">9 recurring activities. Roundtable, dissent, sprint, town hall.</div>
     </a>
   </div>
 
@@ -206,6 +341,22 @@
       <div class="icon">📖</div>
       <div class="name">Agent Guide</div>
       <div class="desc">Court member reference. Who does what.</div>
+    </a>
+    <a href="http://100.108.239.23:7681" target="_blank" class="card">
+      <div class="icon">🔥</div>
+      <div class="name">Forge Terminal</div>
+      <div class="desc">Claude Code in browser. Type 'claude' to start. Full build access from phone.</div>
+      <span class="tag">LIVE</span>
+    </a>
+    <a href="/agents" class="card">
+      <div class="icon">🎯</div>
+      <div class="name">Agent Hub</div>
+      <div class="desc">Uptake rings. Gap alerts. Connection map.</div>
+    </a>
+    <a href="/mind-map" class="card">
+      <div class="icon">🧩</div>
+      <div class="name">Knowledge Graph</div>
+      <div class="desc">Interactive vault graph. 691 nodes. 145 communities.</div>
     </a>
   </div>
 

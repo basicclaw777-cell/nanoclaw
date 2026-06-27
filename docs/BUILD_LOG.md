@@ -1,6 +1,30 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-25 — BR Class System, Three Engines Whiteboards, Corporate Brochure
+
+### Class System (`~/basic-reflex/class-system/`)
+- **drill-bank.json** — 14 drills from Paul's class (2026-06-25), 6-stage spine (Icebreaker→Warm-Up→Main Drill→Correction→Application→Finisher), 3 class templates (Mixed Level, All Beginners, Regulars Heavy). Each drill: 3 levels (beg/int/adv), equipment, group size, time range, tags, engine tags.
+- **Three Engines taxonomy** added: Body (⚡ The Machine), Mind (🧠 The Boxing Brain), EQ (🔥 The Energy). Every drill tagged with 1-2 engines. Maps to existing `block-config.json` engine field.
+- **class-deck.html** — visual card deck viewer with spine bar, tag filters, engine badges (green/blue/orange), template loader, class builder (click card → click slot). BR brand dark theme.
+- **4 whiteboard teaching boards** (`whiteboards/`): three-engines.html (master overview + formula), body-engine.html (8 qualities), mind-engine.html (6 qualities + 5-step scenario), eq-engine.html (6 qualities + Fear Gate + ring-to-life transfer). Clean/bright/white, tablet-ready. Designed for 2-min pre-class intros.
+- Routes: `/class-deck`, `/class-deck/drill-bank.json`, `/whiteboards/:file` in cath-bridge.cjs
+- Lobby card: 🎴 Class Deck in cathedral-home.html
+
+### Architecture discovery
+- Existing systems share this exact workflow: `taste-map-api.js` (context→recommendation), `drill-generator.js` (error-correction prescriptions), `drill-suggester.js` (generative from taste fingerprint), `curriculum-tracker.js` (per-member 10-block progression), `block-config.json` (already has engine tags per block). Class generator = new entry point into existing stack, not a new system.
+
+### Corporate Brochure (`~/basic-reflex/corporate/`)
+- PDF edit of Clara's original: phone number changed (6463 7347 → 9464 5361), last page photo swapped to Coach Paul (BASICA.jpeg). PyMuPDF white-rect overlay + insert_image.
+- 8 full-res photos extracted from PDF via pdfimages (poppler), stored in `corporate/photos/` with descriptive names.
+- HTML brochure template (`brochure-template.html`): 6 pages, orientation-aware slots (`data-slot`, `data-orientation`), easy photo swap. Updated text for current offerings.
+- Lesson: PyMuPDF can swap images + numbers cleanly but NOT body copy (font mismatch, white rects visible over photos).
+
+### Class debrief (Paul's voice notes)
+- 7 people, 4 new, mixed levels. Running solo since Aman left June 11. Anxiety about operator mode → insight: "build systems that take me out of operator back to builder mode."
+- Drill-reflect-drill rhythm. One-legged bagwork = "secret weapon for mixed levels." Tennis ball games = universal icebreaker.
+- Ideas captured: milestone rewards (gloves for weight loss target), drill library → class generator, whiteboard intros for Three Engines teaching.
+
 ## 2026-06-24 — Resonant Enclosure Deep Relays (Research + Build)
 
 ### DeepSeek Relay Rounds (4 rounds)
@@ -2589,3 +2613,9 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 - **Protocol banked:** `06_Methods/forge-regression-diagnostic.md` (reject trait framing → pin timing → find named change → read prior finding → pull exact model string from logs → research lever → fix both layers).
 - **Facts learned:** settings.json `model` pins on full ID (alias floats), project overrides user, `/model` switches live session, **rejects unknown keys/comments** (rationale → soul file), **permissions gate tools not reasoning** (can't deny "grading"). "fable" is also a CC model alias.
 - Cosmology docs from earlier in the session (piezoelectric-firmament audit + interlocutors) kept at Paul's request but flagged flinch-contaminated; index calibration-flag stripped on his instruction.
+
+### Trader maintenance (2026-06-27)
+- hermes3 pulled on Ollama (4.7GB). Was missing — all local LLM fallback was broken.
+- trade-logger.js: fixed circular JSON in logSignal + logDecision. Shallow `_`-key strip → deep WeakSet replacer.
+- trading-orchestrator.js config bug was stale-process (file already fixed, PM2 running old code). Restart fixed.
+- Trader (#79) restarted, clean run. Cyclical-trader (#102) cron-scheduled, normal stopped state.
