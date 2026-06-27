@@ -90,8 +90,15 @@ export function logSignal(source, asset, direction, strength, reasoning, rawData
   const d = getDb();
   let raw = null;
   if (rawData) {
-    const { _allSignals, ...clean } = rawData;
-    raw = JSON.stringify(clean);
+    const seen = new WeakSet();
+    raw = JSON.stringify(rawData, (key, value) => {
+      if (key.startsWith('_')) return undefined;
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) return '[circular]';
+        seen.add(value);
+      }
+      return value;
+    });
   }
   return d.prepare(`
     INSERT INTO signals (source, asset, direction, strength, reasoning, raw_data)
@@ -133,14 +140,19 @@ export function closeTrade(tradeId, exitPrice) {
 
 export function logDecision(asset, action, reasoning, signalsUsed, bullSummary, bearSummary, riskCheck, outcome) {
   const d = getDb();
-  const cleanSignals = (Array.isArray(signalsUsed) ? signalsUsed : [signalsUsed]).map(s => {
-    const { _allSignals, ...rest } = s || {};
-    return rest;
+  const seen = new WeakSet();
+  const safeStringify = (obj) => JSON.stringify(obj, (key, value) => {
+    if (key.startsWith('_')) return undefined;
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) return '[circular]';
+      seen.add(value);
+    }
+    return value;
   });
   return d.prepare(`
     INSERT INTO decisions (asset, action, reasoning, signals_used, bull_summary, bear_summary, risk_check, outcome)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(asset, action, reasoning, JSON.stringify(cleanSignals), bullSummary, bearSummary, riskCheck, outcome);
+  `).run(asset, action, reasoning, safeStringify(signalsUsed), bullSummary, bearSummary, riskCheck, outcome);
 }
 
 // ── Analytics ────────────────────────────────────────────────────────────────

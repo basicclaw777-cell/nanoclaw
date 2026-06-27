@@ -167,3 +167,9 @@ If OS-level vault search ever "breaks," this is why — intended.
 ## Box RAM ceiling (16GB) — local-LLM batch jobs (2026-06-21)
 - qwen3:14b distill 500s under concurrent Whisper load (Film Room). Workaround: gemma3:4b, or rent/API (Oracle defaults to DeepSeek synthesis for this reason). Real fix = M5 Max 128GB upgrade (~Oct).
 - Gym Eyes PersonTracker over-swaps on some sparring footage (IMG_2911: 315 corrections) — biometric distance poorly scaled. Needs ground-truth labels + tuning before the sparring floor locks.
+
+## Shallow key-stripping doesn't prevent nested circular refs [FIXED 2026-06-27]
+- When stripping `_`-prefixed keys to sanitize objects for JSON.stringify, a shallow strip (top-level Object.entries only) misses nested references. Use a WeakSet-based replacer in JSON.stringify that filters at all depths. Applied to trade-logger.js logSignal + logDecision.
+
+## PM2 error traces reflect running code, not disk code
+- If a file was edited but the PM2 process wasn't restarted, stack traces point to OLD line numbers/code. Check `ls -la` mtime vs PM2 uptime before debugging current source. Caught on trading-orchestrator.js "config is not defined" — bug was already fixed on disk, error was from stale process.
