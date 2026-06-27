@@ -1,6 +1,24 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-27 — 33-Card Boxing Operating System + Digital Dojo
+
+### 33-Card System Data Model (`~/basic-reflex/33-card-system.json`)
+- Single source of truth: 3 mindsets + 30 block cards (10 Skill + 10 Sparring + 10 Conditioning)
+- 5 layers per card: client, technical, liveThread, coach, online (bookworm/driller/flow)
+- 10 "frequencies" — horizontal row themes linking same-numbered cards across pillars
+- Pillar 1 populated from block-config.json + 10-blocks-live-thread.md; Pillars 2-3 from ChatGPT relay
+
+### 5 Views (all served via cath-bridge, lobby cards added)
+- **33-Card Grid** · `~/basic-reflex/33-card-grid.html` · route `/33-cards` · overview map
+- **Class Planner** · `~/basic-reflex/class-planner/33-card-planner.html` · route `/class-planner` · coach picks frequency → today's plan
+- **Coach Training** · `~/basic-reflex/coach-training.html` · route `/coach-training` · teaching manual per card
+- **Online Course** · `~/basic-reflex/online-course.html` · route `/online-course` · Bookworm/Driller/Flow per card
+- **Digital Dojo Deck** · `~/basic-reflex/digital-dojo-deck.html` · route `/digital-dojo` · 8 phone screen mockups (product vision)
+
+### ChatGPT image prompts
+- 2 variants (photorealistic + graphic poster) for 10-block cover image — not generated, prompts stored in conversation
+
 ## 2026-06-25 — BR Class System, Three Engines Whiteboards, Corporate Brochure
 
 ### Class System (`~/basic-reflex/class-system/`)
