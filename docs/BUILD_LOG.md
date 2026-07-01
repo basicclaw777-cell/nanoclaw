@@ -1,6 +1,21 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-02 — DeepSeek Relay Harvest: Mycelium-Comet-Neural-Microcosm
+
+**What:** Harvested Paul's DeepSeek chat into 5 vault deposits via 3 parallel agents. Source: ~/Downloads/Mycelium-Comet-Neural-Microcosm-Insight.txt
+
+**Deposits:**
+1. `cross-domain-branching-grammar-2026-07-01.md` — 5-domain mechanism table, 3+2 forensic readability split, known limits, falsifiable test protocol
+2. `forgotten-shelf-branching-reads-2026-07-01.md` — 6 sources + 3 living researchers + 4 inverse-problem prior art
+3. `forensic-branching-reconstruction-2026-07-01.md` — Paul's original insight (read branching backward), vault-graph-as-cognitive-mycelium mapping
+4. `the-cold-core-counter-pattern-2026-07-01.md` — Stillness counter-pattern, the anti-build
+5. `the-pulse.md` (extended) — Pulse Ledger: temporal half of branching
+
+**Also:** Patched branching grammar with DeepSeek round-2 corrections (3+2 split, known limits section, living leads). No code builds this session.
+
+---
+
 ## 2026-06-29 — Vault Brain Visual Graph
 
 **What:** Interactive d3.js force-directed graph of the entire vault brain. 1907 nodes (non-Staging/Archive) colored by 23 domains, 13794 cross-domain edges from embedding similarity. Cockpit aesthetic. The visual layer on top of vault-brain's associative push.
@@ -2747,8 +2762,51 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 
 ---
 
+## 2026-07-02b — Gym Eyes Platform Unification
+
+### Nav Bar — All 6 Modules
+- Identical bottom nav wired to: the-grid, drill-player, the-guard, virtual-tutor, analytics-dashboard, homework
+- Each page highlights itself as active. Bebas Neue labels, Unicode icons, black/gold.
+- Three.js pages (drill-player, virtual-tutor): renderer/camera resized, overlays repositioned above nav
+- HTML pages (analytics, homework): body flex column, content wrapper flex:1 + overflow:auto
+
+### Hub Landing Page (`hub.html` — complete rewrite)
+- BR shield logo (inline SVG) + "GYM EYES BY BASIC REFLEX" (Anton, staggered fade-up)
+- Metallic skeleton in static guard-up pose, "BR" on torso, reuses Guard rendering functions
+- Radar pattern (6 concentric circles + crosshairs) behind figure
+- 4 callout boxes (ANALYZE/UNDERSTAND/DOMINATE/IMPROVE) with progressive reveal + dashed SVG connectors
+- "LOADING ENVIRONMENT" cosmetic progress bar (~3s)
+- "DISCIPLINE BUILDS FREEDOM" tagline on load complete
+- Full gym environment: ropes, overhead light, 2 heavy bags + speed bag, wall text, floor zone, 40 dust motes, grain, vignette
+- 6-module nav bar, all links live, no active state
+- Concept image from ChatGPT used as spec
+
+---
+
 ### Trader maintenance (2026-06-27)
 - hermes3 pulled on Ollama (4.7GB). Was missing — all local LLM fallback was broken.
 - trade-logger.js: fixed circular JSON in logSignal + logDecision. Shallow `_`-key strip → deep WeakSet replacer.
 - trading-orchestrator.js config bug was stale-process (file already fixed, PM2 running old code). Restart fixed.
 - Trader (#79) restarted, clean run. Cyclical-trader (#102) cron-scheduled, normal stopped state.
+
+## 2026-07-02b — Fight Prep Coaching Audio + Mind Map
+
+### Coaching Audio → Telegram
+- ~1200-word script mapping Paul's coaching methods to 3-week fight prep technical program
+- Methods covered: Diagnostic Empathy (W1), Fear Gate (W1-W2), Three Engines (arc across weeks), Witness Chain (all spars), Trojan Horse (underlying), Sugar Principle (W3)
+- Edge-tts BrianNeural -5% speed, 2.3MB MP3, sent via Telegram Bot API curl
+
+### Fight Prep Coaching Mind Map
+- `~/basic-reflex/visuals/fight-prep-mindmap.html`: 3-section visual
+- Section 1: SVG mind map — central Fight Prep node → 3 weeks → sessions, with Three Engines + Coaching Methods + Gym Eyes tools on right, dashed cross-connections
+- Section 2: Three Engines Arc — bar charts showing Body/Mind/Emotion focus per week (Body peaks W1, Mind peaks W2, Emotion peaks W3)
+- Section 3: Connection Grid — 10 rows (PT1 through Fight Day) × 3 columns (Technical / Method / Gym Eyes Tool)
+- Clean/bright BR aesthetic
+
+### Gym Eyes × Fight Prep Connection (conceptual mapping)
+- The Guard (built 2026-07-01) = Week 1 coverage diagnostic
+- The Questions = Fear Gate framework (5 universal diagnostics)
+- detector.py = Witness Chain delta (punch count Spar 1 vs 2)
+- drill-player = combo demo for PT3
+- calibrate.py = Sugar Principle data
+- This IS the closed-loop coach first real wiring opportunity
