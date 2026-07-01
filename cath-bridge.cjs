@@ -139,6 +139,17 @@ app.get('/map', (req, res) => {
 app.get('/enclosure', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'enclosure-map.html'));
 });
+app.get('/vortex-lab', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'vortex-lab.html'));
+});
+app.get('/vault-graph', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'vault-graph.html'));
+});
+app.get('/api/vault-graph', (req, res) => {
+  const p = path.join(NANOCLAW, 'vault-graph-data.json');
+  if (require('fs').existsSync(p)) return res.sendFile(p);
+  res.status(404).json({ error: 'Run: node vault-graph-data.js' });
+});
 app.get('/logan-pp-map', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'logan-pp-map.html'));
 });
@@ -2169,6 +2180,22 @@ app.get('/gym-eyes/showcase', (req, res) => {
   const reportPath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'showcase_report.html');
   if (!fs.existsSync(reportPath)) return res.status(404).send('No showcase report yet. Run: python3 showcase.py');
   res.sendFile(reportPath);
+});
+
+// The Guard — Defensive Intelligence System
+app.get('/gym-eyes/the-guard', (req, res) => {
+  const fsx = require('fs');
+  const p = path.join(HOME, 'basic-reflex', 'gym-eyes', 'the-guard.html');
+  if (!fsx.existsSync(p)) return res.status(404).send('The Guard not found');
+  res.sendFile(p);
+});
+
+// The Grid — Footwork visualization
+app.get('/gym-eyes/the-grid', (req, res) => {
+  const fsx = require('fs');
+  const p = path.join(HOME, 'basic-reflex', 'gym-eyes', 'the-grid.html');
+  if (!fsx.existsSync(p)) return res.status(404).send('The Grid not found');
+  res.sendFile(p);
 });
 
 // Drill Player — 3D skeleton boxer visualization
@@ -5984,6 +6011,26 @@ app.get('/api/agent-workspace', (req, res) => {
   const tasks      = readJson(path.join(CATH, 'emergence', 'planner-tasks.json'), []);
   const production = readJson(path.join(CATH, 'emergence', 'production-state.json'), {});
   res.json({ generated_at: new Date().toISOString(), registry, health, scores, profiles, tasks, production });
+});
+
+// ── Prospector ────────────────────────────────────────────────────────────────
+
+app.get('/api/prospector', (req, res) => {
+  const fs = require('fs');
+  const dir = path.join(HOME, 'cathedral-vault', '00_Staging', 'prospector');
+  try {
+    if (!fs.existsSync(dir)) return res.json([]);
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort().reverse();
+    const data = [];
+    for (const f of files) {
+      try { data.push(JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'))); } catch {}
+    }
+    res.json(data);
+  } catch { res.json([]); }
+});
+
+app.get('/prospector', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'prospector.html'));
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

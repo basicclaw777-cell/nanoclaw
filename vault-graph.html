@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vault Brain — Visual Graph</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #09090f;
+    color: #a1a1aa;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+  }
+
+  #sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: #0f0f18;
+    border-right: 1px solid #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid #1a1a2e;
+  }
+
+  #sidebar-header h1 {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7c3aed;
+    margin-bottom: 4px;
+  }
+
+  #stats {
+    font-size: 10px;
+    color: #52525b;
+    line-height: 1.6;
+  }
+
+  #controls {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1a1a2e;
+  }
+
+  #controls label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #52525b;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  #search {
+    width: 100%;
+    background: #09090f;
+    border: 1px solid #27274a;
+    border-radius: 4px;
+    padding: 6px 8px;
+    color: #e4e4e7;
+    font-family: inherit;
+    font-size: 11px;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  #search:focus { border-color: #7c3aed; }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .slider-row input[type=range] {
+    flex: 1;
+    accent-color: #7c3aed;
+    height: 4px;
+  }
+  .slider-val {
+    font-size: 11px;
+    color: #7c3aed;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  #domains {
+    padding: 8px 16px;
+    border-bottom: 1px solid #1a1a2e;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  #domains::-webkit-scrollbar { width: 4px; }
+  #domains::-webkit-scrollbar-track { background: transparent; }
+  #domains::-webkit-scrollbar-thumb { background: #27274a; border-radius: 2px; }
+
+  .domain-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .domain-row:hover { color: #e4e4e7; }
+  .domain-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .domain-name { flex: 1; font-size: 10px; }
+  .domain-count { font-size: 10px; color: #52525b; }
+  .domain-row.off { opacity: 0.3; }
+  .domain-row.off .domain-dot { background: #333 !important; }
+
+  #detail {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  #detail::-webkit-scrollbar { width: 4px; }
+  #detail::-webkit-scrollbar-track { background: transparent; }
+  #detail::-webkit-scrollbar-thumb { background: #27274a; border-radius: 2px; }
+
+  #detail h2 {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e4e4e7;
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  #detail .domain-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  #detail .path {
+    font-size: 9px;
+    color: #3f3f46;
+    margin-bottom: 12px;
+    word-break: break-all;
+  }
+  #detail .conn-list { list-style: none; }
+  #detail .conn-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid #1a1a2e;
+    cursor: pointer;
+  }
+  #detail .conn-list li:hover { color: #e4e4e7; }
+  .conn-sim {
+    font-size: 10px;
+    color: #7c3aed;
+    margin-right: 6px;
+  }
+  .conn-domain {
+    font-size: 9px;
+    color: #52525b;
+    margin-left: 4px;
+  }
+  .conn-title { font-size: 11px; }
+  .tag {
+    display: inline-block;
+    padding: 1px 5px;
+    border: 1px solid #27274a;
+    border-radius: 3px;
+    font-size: 9px;
+    color: #52525b;
+    margin: 2px 2px 2px 0;
+  }
+
+  #graph-container {
+    flex: 1;
+    position: relative;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #tooltip {
+    position: absolute;
+    background: #0f0f18;
+    border: 1px solid #27274a;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: #e4e4e7;
+    pointer-events: none;
+    display: none;
+    max-width: 260px;
+    z-index: 10;
+  }
+  #tooltip .tt-domain {
+    font-size: 9px;
+    color: #52525b;
+    text-transform: uppercase;
+  }
+
+  .placeholder {
+    padding: 40px 16px;
+    text-align: center;
+    color: #3f3f46;
+    font-size: 11px;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h1>Vault Brain</h1>
+    <div id="stats">Loading...</div>
+  </div>
+
+  <div id="controls">
+    <label>Search</label>
+    <input type="text" id="search" placeholder="type to find...">
+
+    <label>Similarity threshold</label>
+    <div class="slider-row">
+      <input type="range" id="threshold" min="65" max="95" value="80" step="1">
+      <span class="slider-val" id="threshold-val">0.80</span>
+    </div>
+
+    <label>Edge limit per node</label>
+    <div class="slider-row">
+      <input type="range" id="edgeLimit" min="1" max="20" value="5" step="1">
+      <span class="slider-val" id="edgeLimit-val">5</span>
+    </div>
+  </div>
+
+  <div id="domains"></div>
+
+  <div id="detail">
+    <div class="placeholder">
+      Click a node to see its connections.<br><br>
+      Scroll to zoom. Drag to pan.<br>
+      Click + drag nodes.
+    </div>
+  </div>
+</div>
+
+<div id="graph-container">
+  <canvas id="canvas"></canvas>
+  <div id="tooltip"></div>
+</div>
+
+<script>
+const DOMAIN_COLORS = [
+  '#7c3aed', '#f59e0b', '#10b981', '#ef4444', '#3b82f6',
+  '#ec4899', '#14b8a6', '#f97316', '#8b5cf6', '#06b6d4',
+  '#84cc16', '#e11d48', '#6366f1', '#22d3ee', '#a3e635',
+  '#fb923c', '#c084fc', '#2dd4bf', '#fbbf24', '#f472b6',
+  '#34d399', '#818cf8', '#facc15'
+];
+
+let graph = null;
+let sim = null;
+let nodes = [];
+let edges = [];
+let visibleNodes = new Set();
+let visibleEdges = [];
+let domainEnabled = {};
+let selectedNode = null;
+let hoveredNode = null;
+let threshold = 0.80;
+let edgeLimit = 5;
+let searchTerm = '';
+let transform = { x: 0, y: 0, k: 1 };
+let dragging = null;
+let panning = false;
+let panStart = { x: 0, y: 0 };
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const container = document.getElementById('graph-container');
+const tooltip = document.getElementById('tooltip');
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = container.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+async function loadData() {
+  const resp = await fetch('/api/vault-graph');
+  graph = await resp.json();
+  init();
+}
+
+function init() {
+  nodes = graph.nodes.map(n => ({
+    ...n,
+    x: (Math.random() - 0.5) * 800,
+    y: (Math.random() - 0.5) * 600,
+    vx: 0,
+    vy: 0,
+    radius: Math.max(3, Math.min(12, 2 + Math.sqrt(n.connections)))
+  }));
+  edges = graph.edges;
+
+  // Enable all domains
+  for (const d of graph.domains) {
+    domainEnabled[d.name] = true;
+  }
+
+  document.getElementById('stats').innerHTML =
+    `${graph.connectedFiles} nodes · ${graph.edgeCount} edges<br>` +
+    `${graph.domains.length} domains · threshold ${graph.simThreshold}`;
+
+  renderDomains();
+  filterAndLayout();
+
+  // Center view
+  const rect = container.getBoundingClientRect();
+  transform.x = rect.width / 2;
+  transform.y = rect.height / 2;
+  transform.k = 0.8;
+
+  requestAnimationFrame(tick);
+}
+
+function renderDomains() {
+  const el = document.getElementById('domains');
+  el.innerHTML = graph.domains
+    .filter(d => d.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .map(d => `
+      <div class="domain-row ${domainEnabled[d.name] ? '' : 'off'}" data-domain="${d.name}">
+        <span class="domain-dot" style="background:${DOMAIN_COLORS[graph.domains.indexOf(d) % DOMAIN_COLORS.length]}"></span>
+        <span class="domain-name">${d.name}</span>
+        <span class="domain-count">${d.count}</span>
+      </div>
+    `).join('');
+
+  el.querySelectorAll('.domain-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const d = row.dataset.domain;
+      domainEnabled[d] = !domainEnabled[d];
+      row.classList.toggle('off');
+      filterAndLayout();
+    });
+  });
+}
+
+function filterAndLayout() {
+  visibleNodes = new Set();
+  const nodeEdgeCounts = new Map();
+
+  // Collect edges meeting threshold + domain filter
+  const candidateEdges = edges.filter(e => {
+    if (e.similarity < threshold) return false;
+    const sn = nodes[e.source];
+    const tn = nodes[e.target];
+    if (!domainEnabled[sn.domain] || !domainEnabled[tn.domain]) return false;
+    if (searchTerm) {
+      const st = searchTerm.toLowerCase();
+      const sMatch = sn.title.toLowerCase().includes(st) || sn.domain.toLowerCase().includes(st);
+      const tMatch = tn.title.toLowerCase().includes(st) || tn.domain.toLowerCase().includes(st);
+      if (!sMatch && !tMatch) return false;
+    }
+    return true;
+  });
+
+  // Apply edge limit per node
+  const nodeEdges = new Map();
+  for (const e of candidateEdges) {
+    for (const id of [e.source, e.target]) {
+      if (!nodeEdges.has(id)) nodeEdges.set(id, []);
+      nodeEdges.get(id).push(e);
+    }
+  }
+  // Sort each node's edges by similarity desc, keep top edgeLimit
+  const keptEdges = new Set();
+  for (const [id, es] of nodeEdges) {
+    es.sort((a, b) => b.similarity - a.similarity);
+    for (const e of es.slice(0, edgeLimit)) {
+      keptEdges.add(e);
+    }
+  }
+
+  visibleEdges = [...keptEdges];
+  for (const e of visibleEdges) {
+    visibleNodes.add(e.source);
+    visibleNodes.add(e.target);
+  }
+}
+
+// Simple force simulation (no d3 dependency)
+let simRunning = true;
+let alpha = 1;
+const ALPHA_DECAY = 0.002;
+const ALPHA_MIN = 0.001;
+
+function tick() {
+  if (alpha > ALPHA_MIN) {
+    simulate();
+    alpha = Math.max(ALPHA_MIN, alpha - ALPHA_DECAY);
+  }
+  draw();
+  requestAnimationFrame(tick);
+}
+
+function simulate() {
+  const vnArr = [...visibleNodes];
+  const n = vnArr.length;
+  if (n === 0) return;
+
+  // Repulsion (Barnes-Hut would be better but this works for <2000)
+  const REP = 300 * alpha;
+  for (let i = 0; i < n; i++) {
+    const a = nodes[vnArr[i]];
+    for (let j = i + 1; j < n; j++) {
+      const b = nodes[vnArr[j]];
+      let dx = b.x - a.x;
+      let dy = b.y - a.y;
+      let d2 = dx * dx + dy * dy;
+      if (d2 < 1) { dx = 0.5; dy = 0.5; d2 = 0.5; }
+      const f = REP / d2;
+      const fx = dx * f;
+      const fy = dy * f;
+      a.vx -= fx;
+      a.vy -= fy;
+      b.vx += fx;
+      b.vy += fy;
+    }
+  }
+
+  // Attraction along edges
+  const ATTR = 0.02 * alpha;
+  const TARGET_DIST = 60;
+  for (const e of visibleEdges) {
+    const a = nodes[e.source];
+    const b = nodes[e.target];
+    let dx = b.x - a.x;
+    let dy = b.y - a.y;
+    let d = Math.sqrt(dx * dx + dy * dy) || 1;
+    const f = (d - TARGET_DIST) * ATTR * e.similarity;
+    const fx = (dx / d) * f;
+    const fy = (dy / d) * f;
+    a.vx += fx;
+    a.vy += fy;
+    b.vx -= fx;
+    b.vy -= fy;
+  }
+
+  // Domain clustering — gentle pull toward domain centroid
+  const CLUSTER = 0.3 * alpha;
+  const centroids = {};
+  const counts = {};
+  for (const idx of vnArr) {
+    const n = nodes[idx];
+    if (!centroids[n.domain]) { centroids[n.domain] = { x: 0, y: 0 }; counts[n.domain] = 0; }
+    centroids[n.domain].x += n.x;
+    centroids[n.domain].y += n.y;
+    counts[n.domain]++;
+  }
+  for (const d in centroids) {
+    centroids[d].x /= counts[d];
+    centroids[d].y /= counts[d];
+  }
+  for (const idx of vnArr) {
+    const nd = nodes[idx];
+    const c = centroids[nd.domain];
+    nd.vx += (c.x - nd.x) * CLUSTER;
+    nd.vy += (c.y - nd.y) * CLUSTER;
+  }
+
+  // Center gravity
+  const CG = 0.01 * alpha;
+  for (const idx of vnArr) {
+    const nd = nodes[idx];
+    nd.vx -= nd.x * CG;
+    nd.vy -= nd.y * CG;
+  }
+
+  // Apply velocity with damping
+  const DAMP = 0.6;
+  for (const idx of vnArr) {
+    const nd = nodes[idx];
+    if (nd === dragging) continue;
+    nd.vx *= DAMP;
+    nd.vy *= DAMP;
+    nd.x += nd.vx;
+    nd.y += nd.vy;
+  }
+}
+
+function draw() {
+  const rect = container.getBoundingClientRect();
+  ctx.clearRect(0, 0, rect.width, rect.height);
+
+  ctx.save();
+  ctx.translate(transform.x, transform.y);
+  ctx.scale(transform.k, transform.k);
+
+  // Edges
+  for (const e of visibleEdges) {
+    const a = nodes[e.source];
+    const b = nodes[e.target];
+    const opacity = Math.max(0.04, (e.similarity - 0.65) * 2);
+    ctx.strokeStyle = `rgba(124, 58, 237, ${opacity})`;
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  }
+
+  // Nodes
+  for (const idx of visibleNodes) {
+    const n = nodes[idx];
+    const color = DOMAIN_COLORS[n.domainIdx % DOMAIN_COLORS.length];
+    const isSelected = selectedNode === n;
+    const isHovered = hoveredNode === n;
+
+    // Glow for selected/hovered
+    if (isSelected || isHovered) {
+      ctx.fillStyle = color + '33';
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.radius + 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = isSelected ? '#e4e4e7' : color;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Label for selected/hovered or large nodes
+    if ((isSelected || isHovered) && transform.k > 0.4) {
+      ctx.fillStyle = '#e4e4e7';
+      ctx.font = `${10 / transform.k}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText(n.title.slice(0, 40), n.x, n.y - n.radius - 4);
+    } else if (n.connections > 30 && transform.k > 0.5) {
+      ctx.fillStyle = '#52525b';
+      ctx.font = `${8 / transform.k}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText(n.title.slice(0, 25), n.x, n.y - n.radius - 3);
+    }
+  }
+
+  // Highlight selected node edges
+  if (selectedNode) {
+    for (const e of visibleEdges) {
+      if (nodes[e.source] === selectedNode || nodes[e.target] === selectedNode) {
+        const a = nodes[e.source];
+        const b = nodes[e.target];
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  ctx.restore();
+}
+
+// Hit detection
+function nodeAt(screenX, screenY) {
+  const wx = (screenX - transform.x) / transform.k;
+  const wy = (screenY - transform.y) / transform.k;
+  let best = null, bestD = Infinity;
+  for (const idx of visibleNodes) {
+    const n = nodes[idx];
+    const dx = n.x - wx;
+    const dy = n.y - wy;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    const hitR = n.radius + 4;
+    if (d < hitR && d < bestD) {
+      best = n;
+      bestD = d;
+    }
+  }
+  return best;
+}
+
+// Detail panel
+function showDetail(node) {
+  if (!node) {
+    document.getElementById('detail').innerHTML = `
+      <div class="placeholder">Click a node to see its connections.</div>`;
+    return;
+  }
+
+  const color = DOMAIN_COLORS[node.domainIdx % DOMAIN_COLORS.length];
+  const conns = visibleEdges
+    .filter(e => nodes[e.source] === node || nodes[e.target] === node)
+    .map(e => {
+      const other = nodes[e.source] === node ? nodes[e.target] : nodes[e.source];
+      return { ...other, similarity: e.similarity };
+    })
+    .sort((a, b) => b.similarity - a.similarity);
+
+  const tagsHtml = node.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+  document.getElementById('detail').innerHTML = `
+    <h2>${node.title}</h2>
+    <span class="domain-badge" style="background:${color}22;color:${color};border:1px solid ${color}44">${node.domain}</span>
+    <div class="path">${node.rel}</div>
+    ${tagsHtml ? `<div style="margin-bottom:10px">${tagsHtml}</div>` : ''}
+    <div style="font-size:10px;color:#52525b;margin-bottom:8px">${conns.length} connections shown</div>
+    <ul class="conn-list">
+      ${conns.map(c => {
+        const cc = DOMAIN_COLORS[c.domainIdx % DOMAIN_COLORS.length];
+        return `<li data-id="${c.id}">
+          <span class="conn-sim">${(c.similarity * 100).toFixed(0)}%</span>
+          <span class="conn-title">${c.title}</span>
+          <span class="conn-domain" style="color:${cc}">${c.domain}</span>
+        </li>`;
+      }).join('')}
+    </ul>
+  `;
+
+  document.querySelectorAll('.conn-list li').forEach(li => {
+    li.addEventListener('click', () => {
+      const id = parseInt(li.dataset.id);
+      const target = nodes.find(n => n.id === id);
+      if (target) {
+        selectedNode = target;
+        showDetail(target);
+        // Pan to node
+        const rect = container.getBoundingClientRect();
+        transform.x = rect.width / 2 - target.x * transform.k;
+        transform.y = rect.height / 2 - target.y * transform.k;
+      }
+    });
+  });
+}
+
+// Events
+canvas.addEventListener('mousedown', e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const hit = nodeAt(x, y);
+
+  if (hit) {
+    dragging = hit;
+    dragging.fx = dragging.x;
+    dragging.fy = dragging.y;
+  } else {
+    panning = true;
+    panStart.x = e.clientX;
+    panStart.y = e.clientY;
+  }
+});
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  if (dragging) {
+    dragging.x = (x - transform.x) / transform.k;
+    dragging.y = (y - transform.y) / transform.k;
+    dragging.vx = 0;
+    dragging.vy = 0;
+    return;
+  }
+
+  if (panning) {
+    transform.x += e.clientX - panStart.x;
+    transform.y += e.clientY - panStart.y;
+    panStart.x = e.clientX;
+    panStart.y = e.clientY;
+    return;
+  }
+
+  const hit = nodeAt(x, y);
+  hoveredNode = hit;
+  canvas.style.cursor = hit ? 'pointer' : 'grab';
+
+  if (hit) {
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX - container.getBoundingClientRect().left + 12) + 'px';
+    tooltip.style.top = (e.clientY - container.getBoundingClientRect().top - 20) + 'px';
+    tooltip.innerHTML = `<b>${hit.title}</b><br><span class="tt-domain">${hit.domain}</span> · ${hit.connections} connections`;
+  } else {
+    tooltip.style.display = 'none';
+  }
+});
+
+canvas.addEventListener('mouseup', e => {
+  if (dragging) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const hit = nodeAt(x, y);
+    if (hit === dragging) {
+      selectedNode = dragging;
+      showDetail(dragging);
+    }
+    dragging = null;
+  }
+  panning = false;
+});
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  const zoom = e.deltaY > 0 ? 0.9 : 1.1;
+  const newK = Math.max(0.1, Math.min(5, transform.k * zoom));
+  const ratio = newK / transform.k;
+
+  transform.x = mx - (mx - transform.x) * ratio;
+  transform.y = my - (my - transform.y) * ratio;
+  transform.k = newK;
+}, { passive: false });
+
+// Controls
+document.getElementById('threshold').addEventListener('input', e => {
+  threshold = parseInt(e.target.value) / 100;
+  document.getElementById('threshold-val').textContent = threshold.toFixed(2);
+  filterAndLayout();
+  alpha = 0.5;
+});
+
+document.getElementById('edgeLimit').addEventListener('input', e => {
+  edgeLimit = parseInt(e.target.value);
+  document.getElementById('edgeLimit-val').textContent = edgeLimit;
+  filterAndLayout();
+  alpha = 0.3;
+});
+
+let searchTimeout;
+document.getElementById('search').addEventListener('input', e => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchTerm = e.target.value.trim();
+    filterAndLayout();
+    alpha = 0.5;
+  }, 200);
+});
+
+window.addEventListener('resize', resize);
+resize();
+loadData();
+</script>
+</body>
+</html>
