@@ -1,6 +1,71 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-06-29 — Vault Brain Visual Graph
+
+**What:** Interactive d3.js force-directed graph of the entire vault brain. 1907 nodes (non-Staging/Archive) colored by 23 domains, 13794 cross-domain edges from embedding similarity. Cockpit aesthetic. The visual layer on top of vault-brain's associative push.
+
+**Files:**
+- `~/nanoclaw/vault-graph.html` — Canvas-rendered force graph, sidebar detail panel, search, domain toggles, similarity/edge-limit sliders
+- `~/nanoclaw/vault-graph-data.js` (ESM) — reads vault_embeddings, computes cross-domain connections (cosine sim > 0.65, top-8 per node), outputs JSON
+- `~/nanoclaw/vault-graph-data.json` — 1.1MB generated graph data
+
+**Route:** `localhost:8080/vault-graph` (cath-bridge)
+**API:** `localhost:8080/api/vault-graph` (serves the JSON)
+
+**Controls:** similarity threshold slider (0.65–0.95, default 0.80), edge limit per node (1–20, default 5), free-text search, per-domain toggle on/off. Click node → sidebar with title, domain, path, tags, ranked connections. Click connection → pans to that node.
+
+**Performance:** Data generation: 2 seconds for 1909 files. Canvas rendering with custom force simulation (repulsion + edge attraction + domain clustering + center gravity).
+
+**Refresh:** Run `node vault-graph-data.js` after vault changes. Could be wired into vault-brain watcher for auto-refresh.
+
+---
+
+## 2026-06-29 — Vault Brain: Associative Push on Deposit
+
+**What:** When a vault file is created or changed, vault-brain.js finds cross-domain connections via embedding similarity and pushes the top 3 to Telegram. Brain function #1: the vault now PUSHES associations instead of waiting to be queried.
+
+**Files:**
+- `~/nanoclaw/vault-brain.js` (ESM) — watcher + association engine + Telegram push
+- `~/nanoclaw/vault-brain-runner.cjs` — PM2 CJS wrapper (PM2 can't run ESM directly)
+
+**How it works:**
+1. Chokidar watches `~/cathedral-vault/**/*.md` (depth 3, excludes .obsidian/archive/trash)
+2. On add/change: reads the new file's embedding from vault_embeddings SQLite
+3. Compares against ALL other embeddings, scores by: similarity + cross-domain bonus - tag overlap - already-linked penalty
+4. Filters for cross-domain, >60% similarity, not already [[wikilinked]]
+5. Pushes top 3 connections to Telegram with domain tags and similarity scores
+
+**Scoring:** `score = similarity + 0.3 (cross-domain) - 0.15 per shared tag - 0.4 if already linked`
+
+**Dependencies:** vault-embedder (must be running to keep embeddings fresh), Ollama nomic-embed-text, better-sqlite3
+
+**PM2:** `vault-brain` (via vault-brain-runner.cjs). Cooldown: 5min between pushes. awaitWriteFinish: 5s.
+
+**Test results:** Five Fingerprints → Perfection Detector (81%), Paul's Cognitive Evolution (80%); Kairos Calibration → GI.SHID Measuring Rod (82%), Perfection Detector (81%), OmissionOS in Forge (81%); Social Scaffolding → Self-Generation-Spectrum (83%), design-principles (82%). All real cross-domain connections, not noise.
+
+**Also this session:**
+- Vault deposits: Five Fingerprints (06_Methods), Kairos Protocol (06_Methods), Kairos Calibration (06_Methods), Social Scaffolding Principle (02_Refined_Gold/epistemology)
+- Updated: henderson-vortex-field-notes.md (Stuttgart 1952 details: Pöpel, 3-pipe setup, Leoben CFD falsification, third explanation)
+- Updated: forms-are-a-language.md (convergent equation dr/dθ=k·r, Henderson vortex force chain)
+
+## 2026-06-28 — Vortex Lab: Parametric Horn Generator
+
+### vortex-lab.html (~/nanoclaw/)
+- Single vanilla HTML file, Three.js (CDN v0.170), cockpit aesthetic
+- Parametric vortex horn from logarithmic spiral hyperboloid math
+- 7 sliders: height, top/bottom radius, taper curve, twist turns, vein count, vein depth
+- 2 resolution controls: radial segments, height segments
+- Display: wireframe overlay, auto-rotate, skeleton mode (veins only — for print)
+- 5 presets: Henderson, Schauberger, Nautilus, Horn, Tornado
+- STL export (binary) for 3D printing or simulation import (SimScale/Blender)
+- JSON parameter export/import
+- MeshPhysicalMaterial with transmission (glass-like water appearance)
+- Route: `/vortex-lab` via cath-bridge.cjs
+- Lobby card: Research district, 🌀 icon
+- Origin: Henderson vortex observation (Wan Chai, 2026-06-27) + DeepSeek relay thread
+- Connected vault docs: forms-are-a-language.md, henderson-vortex-field-notes.md
+
 ## 2026-06-27 — 33-Card Boxing Operating System + Digital Dojo
 
 ### 33-Card System Data Model (`~/basic-reflex/33-card-system.json`)
@@ -2631,6 +2696,41 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 - **Protocol banked:** `06_Methods/forge-regression-diagnostic.md` (reject trait framing → pin timing → find named change → read prior finding → pull exact model string from logs → research lever → fix both layers).
 - **Facts learned:** settings.json `model` pins on full ID (alias floats), project overrides user, `/model` switches live session, **rejects unknown keys/comments** (rationale → soul file), **permissions gate tools not reasoning** (can't deny "grading"). "fable" is also a CC model alias.
 - Cosmology docs from earlier in the session (piezoelectric-firmament audit + interlocutors) kept at Paul's request but flagged flinch-contaminated; index calibration-flag stripped on his instruction.
+
+---
+
+## 2026-07-01 — The Guard + The Questions + The Prospector
+
+### The Guard — Defensive Intelligence System
+- `~/basic-reflex/gym-eyes/the-guard.html`: single-page interactive guard analysis tool
+- **Layer 1 (Coverage):** Front-view BR-05 skeleton (graphite limbs, brass joints). 4 draggable defense points (2 gloves, 2 elbows). Gold translucent shield polygon. 8 target zones with aircraft color progression (graphite→gold→white→red pulsing). 5 guard presets with smooth eased transitions (280ms lerp).
+- **Layer 2 (Toolkit):** 9 defensive tools (Catch, Parry, Block, Slip, Roll, Shoulder Roll, Footwork, Clinch, Catch & Shoot) enable/disable based on guard geometry in real time. Each tool has a geometric test function.
+- **The Questions (sidebar):** 5 diagnostic questions with live-computed answers: Can I be hit? Where am I open? What can I do from here? What am I giving up? Can I get back?
+- **Counter-Intel:** "How To Beat This Guard" — 3 best combos + strategy paragraph per preset.
+- **Presets:** Long Guard (not "High Guard"), Shell, Peek-a-boo, Philly Shell, Dropped Guard
+- Core insight: defense = micro systems (loadouts per guard, not isolated techniques). "Defense is geometry, not choreography."
+- Mirrored skeleton (character faces viewer): character's left = positive X = viewer's right
+
+### The Questions — Standalone Onboarding
+- `~/basic-reflex/gym-eyes/the-questions.html`: full-page onboarding for 5 universal diagnostic questions
+- Staggered fade-up, cross-domain tags (boxing/guitar/chess/investing/cooking/life), links to Guard layer
+- "These are not boxing questions. They are teaching questions."
+
+### The Prospector — Decision Exhaust Scanner
+- `~/Cathedral/agents/the-prospector.js` (CJS): scans session harvests through hermes3
+- `~/nanoclaw/prompts/prospector-analysis.txt`: structured 3-lens LLM prompt
+- `~/Cathedral/control-panel/prospector.html`: dashboard (filter by type, expandable cards, stats)
+- Three lenses: B-Sides (rejected options), Unasked Questions (should have been asked), Unseen Connections (shared patterns)
+- PM2: `decision-prospector`, cron `0 12 * * *` UTC (20:00 HKT daily)
+- API: `localhost:8080/api/prospector` · Route: `localhost:8080/prospector`
+- Telegram brief per session with gold counts
+- State: `~/Cathedral/agents/prospector-state.json`
+
+### Bug Fixes
+- `the-guard.html`: duplicate `let hovered = null` (line 558) caused ReferenceError killing canvas render — removed
+- `cath-bridge.cjs`: prospector API route needed `const fs = require('fs')` inside handler (cath-bridge pattern)
+
+---
 
 ### Trader maintenance (2026-06-27)
 - hermes3 pulled on Ollama (4.7GB). Was missing — all local LLM fallback was broken.

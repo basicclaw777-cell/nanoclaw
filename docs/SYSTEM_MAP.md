@@ -10,6 +10,13 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Choir Dispatch** · `~/nanoclaw/choir-dispatch.js` (ESM) · trigger: CLI `node choir-dispatch.js` or POST `/choir/dispatch` · reads voice logs + cath-state + emergence → hermes3 → chord.json · doc: the-cymatic-choir.md
 - **Choir Room** · `~/cathedral-vault/09_Artifacts/choir-room.html` · route `/choir` (cath-bridge) · fetches live chord from `/choir/data` · keyboard: T=timeline, D=dispatch · doc: the-cymatic-choir.md
 
+## Vault intelligence
+- **Vault Brain** · `~/nanoclaw/vault-brain.js` + `vault-brain-runner.cjs` · PM2 `vault-brain` (always-on chokidar watcher) · cross-domain association push to Telegram on vault deposit · doc: BUILD_LOG 2026-06-29
+- **Vault Graph** · `~/nanoclaw/vault-graph.html` + `vault-graph-data.js` · route `/vault-graph` (cath-bridge) · API `/api/vault-graph` · d3 force graph, 1907 nodes × 23 domains · doc: BUILD_LOG 2026-06-29
+
+## Research tools
+- **Vortex Lab** · `~/nanoclaw/vortex-lab.html` · route `/vortex-lab` (cath-bridge) · Three.js parametric vortex horn generator with STL export · doc: BUILD_LOG 2026-06-28
+
 ## Research lanes
 - **The Hunch Lane** · `hunch-lane.js` (nanoclaw, ESM) · trigger: `/hunch <hunch>` (telegram-bot.js) + CLI `node hunch-lane.js "..."` · retrieve-before-derive → show-raw-data → route grade to differently-biased reasoner (DeepSeek/Aletheia, NOT Forge) · fixes OmissionOS Deflection (CLAUDE.md SI-44) · doc: vault `02_Refined_Gold/cathedral/omissionos-in-forge-2026-06-15.md`
 
@@ -43,7 +50,12 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **The Quarry** · `quarry-watcher.js` (PM2 `quarry`) · trigger: drop file in ~/Downloads/quarry/ · capture+route+audio-transcribe+notify · doc: BUILD_LOG 2026-06-21 night
 - **Film Room** · `~/basic-reflex/gym-eyes/film_room.py` + `/gym-eyes/film-room` · trigger: `python3 film_room.py --channel <url>` · YouTube->lesson cards by 10-block · PARKED (distill RAM) · doc: BUILD_LOG 2026-06-21 night
 
+## Decision intelligence
+- **The Prospector** · `~/Cathedral/agents/the-prospector.js` + `~/Cathedral/control-panel/prospector.html` · PM2 `decision-prospector` cron `0 12 * * *` UTC · 3-lens exhaust scan (B-Sides, Unasked, Connections) · API `/api/prospector` · route `/prospector` · doc: BUILD_LOG 2026-07-01
+
 ## Basic Reflex — coaching tools
+- **The Guard** · `~/basic-reflex/gym-eyes/the-guard.html` · route `/gym-eyes/the-guard` (if wired) · 3-layer defensive intelligence (coverage + toolkit + questions + counter-intel), 5 presets · doc: BUILD_LOG 2026-07-01
+- **The Questions** · `~/basic-reflex/gym-eyes/the-questions.html` · standalone · 5 universal diagnostic questions, cross-domain onboarding · doc: BUILD_LOG 2026-07-01
 - **drill-player external motion import** · `~/basic-reflex/gym-eyes/drill-player.html` `playClip()` · trigger: localhost:8080/gym-eyes/drill-player → ▶ Motion Clip · plays raw joint-position clips (mocap/MediaPipe/FBX contract `{t,joints:{name:[x,y,z]}}`) · doc: BUILD_LOG 2026-06-21
 
 - **Class Deck** · `~/basic-reflex/class-system/class-deck.html` · trigger: localhost:8080/class-deck · 14 drills, 6-stage spine, 3 templates, class builder, engine badges · doc: BUILD_LOG 2026-06-25
