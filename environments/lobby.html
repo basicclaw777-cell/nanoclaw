@@ -218,7 +218,8 @@ const ROOMS = [
   // ── Basic Reflex ──
   { d:'br', icon:'🥊', name:'Gym Floor',        orc:'Corner',          desc:'Members, attendance, profiles. 72 active, 10 archetypes. Punchpass scraper daily.', route:'/punchpass' },
   { d:'br', icon:'🇨🇺', name:'Pandamericano Framework', orc:'Forge', desc:'Cuban training camp methodology, harvested from 88GB of coaching audio Paul attended — days 1–17, 177 principles, Spanish original + English + Cuban-voice audio. The coaching you couldn\'t follow at the time, now a framework.', route:'/pandamericano' },
-  { d:'br', icon:'🥥', name:'Cuba 2014 Framework', orc:'Forge', desc:'Second Cuban camp harvested — 77GB, 115 transcripts incl. Coach Pedrosso, 161 principles. Framework + review + camp narrative + Cuban-voice audio. Building the cross-camp convergence corpus.', route:'/cuba2014' },
+  { d:'br', icon:'🥥', name:'Cuba 2014 Framework', orc:'Forge', desc:'Second Cuban camp harvested — 77GB, 115 transcripts incl. Coach Pedrosso, 161 principles. Framework + review + camp narrative + EN/ES audio. Building the cross-camp convergence corpus.', route:'/cuba2014' },
+  { d:'br', icon:'🌴', name:'More Cuba Framework', orc:'Forge', desc:'Third Cuban camp — 19GB, 19 transcripts. Framework + review + camp narrative + EN/ES audio. Camp 3 of the Cuban methodology corpus.', route:'/morecuba' },
   { d:'br', icon:'📊', name:'Operations',       orc:'Ops Agent',       desc:'KPI dashboard, P&L, MPF / insurance / HR compliance. The BR command surface.', route:'/dashboard', merge:'BR ops surfaces consolidated here — see also Gym Floor, Work, BR Command Centre.' },
   { d:'br', icon:'💬', name:'Client Comms',     orc:'Comms Engine',    desc:'566 lapsed members, expiry & birthday alerts, 11 WhatsApp templates. Nothing auto-sends.', route:'/comms' },
   { d:'br', icon:'🚀', name:'Growth',           orc:'Growth Agent',    desc:'Content calendar, corporate outreach, newsletter, SEO.', route:'/growth' },
@@ -231,6 +232,7 @@ const ROOMS = [
   { d:'gymeyes', icon:'🔬', name:'Engineering Lab',    orc:'Scope',         desc:'CV detection, hardware R&D, pipeline engineering. Gym Eyes, CNN training, multi-cam. Drill Player + Cuba Combos live here.', route:'/gym-eyes', merge:'Drill Player and Cuba Combo Library run as workspaces inside this lab.' },
   { d:'gymeyes', icon:'🥊', name:'Cuba Combo Library', orc:'Cuba Extractor', desc:'34 combos extracted from Havana 2018 coach demos. Animated replay, peak frames, frequency map.', route:'http://localhost:8080/cuba-combos', ext:true },
   { d:'gymeyes', icon:'🏋', name:'Drill Player',       orc:'Gym Eyes',      desc:'3D skeleton boxer visualization. Plays detected drill sequences. 6 punch types, slips/rolls, partner drills.', route:'http://localhost:8080/gym-eyes/drill-player', ext:true },
+  { d:'gymeyes', icon:'🛡', name:'The Guard',           orc:'Gym Eyes',      desc:'Interactive defensive intelligence. Drag gloves, see coverage %, coaching toolkit, counter-intel, stress test vs 4 archetypes. Environment layer.', route:'http://localhost:8080/gym-eyes/the-guard', ext:true },
   { d:'gymeyes', icon:'📝', name:'Student Homework',   orc:'Virtual Tutor', desc:'Students upload combo video, get instant automated coaching. Score + per-joint breakdown + coaching tips. Zero coach workload.', route:'http://localhost:8080/gym-eyes/homework', ext:true },
 
   // ── Visual & Content Studio ──
@@ -245,6 +247,7 @@ const ROOMS = [
   { d:'agents', icon:'🔄', name:'Pipeline Control', orc:'Pipeline Runner',     desc:'Multi-agent review chains. Content (Muse→Maya→Reed→Orc) + Research pipelines. Token economics.', route:'http://localhost:8080/pipeline', ext:true },
   { d:'agents', icon:'🧠', name:'Mnemonic Library', orc:'Memory Architecture', desc:'40 memory devices across 13 agents. Anchors, pegs, loci, stories. Searchable reference.', route:'http://localhost:8080/mnemonic-library', ext:true },
   { d:'agents', icon:'📰', name:'Newsfeed',         orc:'Chronicle',           desc:'Live feed of everything in the Cathedral: research, reflections, heartbeats, escalations.', route:'/newsfeed' },
+  { d:'agents', icon:'📈', name:'Production',       orc:'Production Engine',   desc:'What the autonomous agents shipped last night, scored 0–10. Per-agent latest score, trend sparkline, system average. Regenerates live. Surfaced from pm2 logs nobody reads.', route:'http://localhost:8888/production-digest.html', ext:true },
 
   // ── Knowledge Graphs & Maps ──
   { d:'maps', icon:'🗺', name:'The Cathedral Map', orc:'Cartographer', desc:'The whole system in one view. 5 zones, 30+ nodes, connections. Drag to explore, click for detail. The capstone object.', route:'/map' },
@@ -269,6 +272,7 @@ const ROOMS = [
   { d:'research', icon:'📜', name:'The Forgotten Shelf',  orc:'Archaeologist (Court #28)', desc:'5,080+ forgotten techniques across 8 domains, plus the Goldmine sources (patents, dissertations, failed trials, Soviet sports science). FTS5 search.', route:'http://localhost:8080/archaeologist', ext:true, merge:'Merged with the Goldmine Programme — goldmines are the Archaeologist\'s expansion targets.' },
   { d:'research', icon:'🦋', name:'The Lorenz Attractor', orc:'Forge', desc:'Live RK4-integrated strange attractor. The Grade-A calibration standard: a simple deterministic rule producing complex ordered geometry — the control every geometry-as-law claim is tested against. Spin, tune σ/ρ/β, light/dark.', route:'/lorenz-attractor.html' },
   { d:'research', icon:'𒀀', name:'Sumerian Observatory', orc:'Sage',                  desc:'135K tablets translated, 620K+ entities, Sitchin forensic audit (7F 1D). Oldest written records on Earth.', route:'/sumerian-observatory.html' },
+  { d:'research', icon:'🌀', name:'Vortex Lab',           orc:'Forge',                desc:'Parametric vortex horn generator. Three.js live 3D. Sliders: taper, twist, veins, radius. STL export for printing or simulation. Schauberger research tool.', route:'/vortex-lab' },
 
   // ── Property & Finance ──
   { d:'property', icon:'🏢', name:'Property Scout', orc:'Scout', desc:'HK industrial property intelligence. 5 golden zones, 16 units, leverage calculator. Sun→Wed→Thu cycle.', route:'http://localhost:8080/property-scout', ext:true },

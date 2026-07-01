@@ -2732,6 +2732,21 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 
 ---
 
+## 2026-07-01c — Guard Environment Layer + Visual Polish
+
+### Environment Layer (`the-guard.html`)
+- 5 canvas-rendered gym atmosphere elements: ring ropes (3 + 2 posts), overhead industrial light (fixture + cone + bulb glow), gym silhouettes (heavy bag + speed bag at 3.5%), floor zone (line + reflection gradient), dust particles (35 motes, upward drift, spotlight-aware brightness)
+- 3 visual polish elements: canvas grain (128px noise tile), vignette (radial dark edges), BR branding ("THE GUARD" / "BASIC REFLEX" in Anton font on-canvas)
+- Full render stack: grain → ropes → silhouettes → spotlight → overhead light → branding → shield → skeleton → gloves → targets → impacts → floor → dust → vignette
+- Anton font loaded via Google Fonts (was only Bebas Neue before)
+
+### Front Door Wiring
+- `hub.html`: added red "The Guard / Defensive Intelligence" tool card
+- `lobby.html`: added 🛡 card in gymeyes district
+- Both doors were missing — SI-10 catch
+
+---
+
 ### Trader maintenance (2026-06-27)
 - hermes3 pulled on Ollama (4.7GB). Was missing — all local LLM fallback was broken.
 - trade-logger.js: fixed circular JSON in logSignal + logDecision. Shallow `_`-key strip → deep WeakSet replacer.
