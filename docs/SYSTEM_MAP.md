@@ -41,6 +41,7 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 ## Boxing training visuals
 - **Revival Drill Cards** · `~/basic-reflex/visuals/revival-drill-cards.html` · manual/printable · 5 cards with SVG diagrams · vault: 09_Artifacts/branding/basic-reflex/revival-drill-cards.md
 - **Fight Prep 3-Week** · `~/basic-reflex/visuals/fight-prep-3week.html` · manual/printable · timeline + session cards · vault: 09_Artifacts/branding/basic-reflex/fight-prep-3week-framework.md
+- **Fight Prep Mind Map** · `~/basic-reflex/visuals/fight-prep-mindmap.html` · manual · coaching methods + Gym Eyes mapped to 3-week program · doc: BUILD_LOG 2026-07-02b
 
 ## Ancient Corpus pipeline
 - **Babylon Translator** · `babylon-translator.js` + `babylon-fetch.js` (nanoclaw) · trigger: manual `--prod` (deliberate prod run, pending) · Akkadian→English + entities, cost-metered, DeepSeek/hermes3 · calibrated 2026-06-15, bulk run pending · doc: vault `02_Refined_Gold/cathedral/the-non-western-veins.md` + BUILD_LOG 2026-06-15
