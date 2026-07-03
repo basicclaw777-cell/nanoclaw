@@ -1,0 +1,316 @@
+# CSOB WEBSITE CONCEPT BIBLE
+## cubanschoolofboxing.com
+
+**Status:** Concept and visual identity definition
+**Date:** 2026-07-03
+**Decision:** CSOB is **The Method Brand** — the school. Basic Reflex is the gym.
+
+---
+
+# 1. THE CONCEPT
+
+## What CSOB is
+
+**The Cuban School of Boxing is the institution. Basic Reflex is its flagship campus.**
+
+The domain name already made this decision. It doesn't say "Cuban Boxing Gym" or "Cuban Boxing Online." It says **School**. A school has a curriculum, a philosophy, a lineage, teachers, and graduates. It is not a place — it is a body of knowledge with a standard. That is exactly what Paul has spent years building and has never had a container for:
+
+- The **10-block progressive curriculum** with diagnostic gates
+- The **Three Engines** (Body / Mind / Emotion)
+- The **33-card system**
+- The **12-punch Cuban codex**
+- **Coach gates** ("Can you explain the weight-state relay to a beginner without jargon?") — already written in coach-training.html
+- **Gym Eyes** — AI-assisted student development tracking no other school has
+
+That inventory is not a gym's marketing. It is a school's syllabus. It exists today, scattered across basicreflex.com's internal tools. CSOB is where it becomes a public institution.
+
+**One sentence:** *Basic Reflex is where you train. The Cuban School of Boxing is what you learn.*
+
+## Why Method Brand beats the other four directions
+
+- **Online Academy (Option 2)** — too small for the name. "School of Boxing" as a Teachable clone wastes the institutional weight of the domain. But the academy fits *inside* the method brand as a revenue channel.
+- **Heritage Brand (Option 3)** — heritage alone has no revenue model and carries a lineage risk (see below). But heritage is the method brand's credibility layer — the "why" chapter, not the whole book.
+- **Youth/Schools Brand (Option 4)** — a delivery channel, not a brand. "The CSOB Schools Programme" sounds institutional and travels well precisely *because* CSOB is a school, not a gym. It fits inside.
+- **Method Brand (Option 1)** absorbs all three as functions: heritage = credibility, academy = digital revenue, schools/corporate = deployment. It is the only direction where the other options become stronger instead of competing.
+
+The Trojan Horse logic applies at brand level: people come for boxing (BR, the door); the method (CSOB) is the payload. Now the payload gets its own address.
+
+## The lineage question — handle it head-on
+
+Paul is not Cuban. Do not dodge this; weaponise the honesty. "Cuban School" is used the way boxing people actually use it — *la escuela cubana*, a school of thought, like "the Soviet school of chess" or "the French school of fencing." Nobody demands a chess coach be Russian to teach the Soviet school. The site should say, early and plainly:
+
+> "This is a school of thought, not a passport. The Cuban school of boxing — rhythm over rage, defence as intelligence, the whole body behind every punch — belongs to whoever studies it seriously enough to teach it. We are its students first, its teachers second."
+
+This turns the obvious attack into the brand's most trustworthy paragraph. It also aligns with the forensic standard: claim only what survives scrutiny. Paul is presented as a **keeper and codifier of the tradition**, 20+ years deep, who systematised it into a teachable, gated curriculum — which is a *stronger* claim than nationality, because it's verifiable on the site itself.
+
+## Relationship to Basic Reflex
+
+**CSOB is the parent standard; BR is the flagship implementation.**
+
+| | Cuban School of Boxing | Basic Reflex |
+|---|---|---|
+| Is | The method, curriculum, philosophy | The gym in Sheung Wan |
+| Sells | Knowledge (courses, certification, programmes) | Training (classes, memberships, corporate sessions) |
+| Voice | The institution — measured, editorial, timeless | The coach — direct, warm, local |
+| Geography | Global | Hong Kong |
+| Face | The seal (and later, certified coaches) | Coach Paul |
+
+This inverts the obvious hierarchy (big gym, small side-project) into the correct one: a small gym backed by a school looks like a flagship. A school that owns a gym looks like an institution. The same 800 sq ft in Sheung Wan becomes "the home campus of the Cuban School of Boxing" — a positioning upgrade BR gets for free.
+
+## Audience
+
+Three audiences, in priority order:
+
+1. **The serious student, anywhere** — adults who search "cuban boxing style," "how do Cubans train boxing," "boxing footwork rhythm." They will never visit Sheung Wan. They buy the online curriculum. This audience is unreachable by basicreflex.com and is the reason the separate domain exists.
+2. **The Hong Kong prospect who wants substance** — the person for whom "a boxing gym" is not enough but "a school with a 10-block curriculum and diagnostic gates" is exactly right. CSOB catches them and hands them to BR. Includes parents of the 12–16 youth cohort — parents don't buy gyms, they buy *schools with curricula and progress reports* (Gym Eyes skill-milestone view is the closer).
+3. **Coaches and institutions (later)** — coaches who want to teach the method; schools and companies buying the programme. This is the licensing/certification horizon. Don't build it first; architect so it slots in.
+
+## Revenue model
+
+- **Phase 1:** CSOB sells nothing directly. It sells *belief in the method*, and routes: HK traffic → BR (classes, youth, corporate at $300/pp/hr); global traffic → email list ("The Syllabus" — waitlist for the online curriculum).
+- **Phase 2 (3–6 months):** The Online Academy — the 10-block curriculum as a paid video course, fronted by Logan and Coach Paul. One-time purchase or block-by-block. Gated like the real thing: you don't get Block 4 by paying, you get it by passing.
+- **Phase 3 (6–12 months):** Coach certification (the coach gates already exist), and the Schools Programme as a packaged, licensable product.
+
+The gated-progression paywall is itself a brand statement no competitor can copy without a curriculum: **you can't buy your way past a gate.**
+
+---
+
+# 2. SITE ARCHITECTURE
+
+## Page map
+
+```
+cubanschoolofboxing.com
+│
+├── / ................... The Manifesto (home)
+├── /method ............. The Method — Three Engines + 10 Blocks (flagship page)
+├── /school ............. The School of Thought — lineage, history, honest positioning
+├── /curriculum ......... The Curriculum — block-by-block syllabus, gates, Gym Eyes
+├── /academy ............ The Online Academy (Phase 1: waitlist; Phase 2: courses + Logan)
+├── /programmes ......... Youth & Schools / Corporate (routes to BR for delivery)
+├── /journal ............ The Journal — long-form essays (Phase 2+)
+├── /train .............. Train With Us — the routing page (HK → BR, world → Academy)
+└── /coaches ............ For Coaches — certification (Phase 3, hidden until ready)
+```
+
+Navigation: **Method · School · Curriculum · Academy · Programmes · Train** (six items max; Journal lives in footer until it has five essays; Coaches stays dark until Phase 3).
+
+## Content split — what lives where
+
+| Content | CSOB | BR |
+|---|---|---|
+| Philosophy, Three Engines, method essays | Canonical home | Summarised, links to CSOB |
+| 10-block curriculum (public-facing) | Canonical home | "We teach the CSOB curriculum" |
+| Class schedule, pricing, booking, location | Never | Canonical home |
+| Coach Paul bio | Institutional version ("Head of School") | Personal version ("your coach") |
+| Youth/corporate programme *concept* | Canonical home | Delivery details + booking |
+| Online course / Logan content | Canonical home | Not present |
+| Cuban boxing history/lineage | Canonical home | Not present |
+
+Rule of thumb: **timeless → CSOB; local and transactional → BR.** Nothing is duplicated; everything is cross-linked. This also solves the SEO cannibalisation risk — the two domains never compete for the same query.
+
+## User journeys
+
+1. **Global searcher:** Google "cuban boxing training method" → /method → /curriculum → /academy → joins The Syllabus waitlist (Phase 1) or buys Block 1 (Phase 2).
+2. **HK prospect:** Instagram or word of mouth → / → /method (convinced by depth) → /train → "Train at the home campus" → basicreflex.com booking.
+3. **Parent (youth 12–16):** School flyer or referral → /programmes → sees curriculum, gates, and the parent progress view → /train → BR youth enrolment. *This is the highest-value journey; the school framing does the selling.*
+4. **Corporate buyer:** LinkedIn or referral → /programmes → institutional credibility (a school, not a gym, is walking into your office) → enquiry → BR corporate pipeline.
+5. **Coach (Phase 3):** /journal essay → /coaches → certification waitlist.
+
+---
+
+# 3. VISUAL IDENTITY
+
+## The one-line brief
+
+**If Basic Reflex is the gym, CSOB is the library above the gym.**
+
+Same building, same blood, one flight up. Where BR is sweat, impact, and neon Hong Kong night, CSOB is paper, ink, and morning light. Editorial, archival, institutional. The feel of a beautifully typeset syllabus, a boxing commission document from a country that took the sport seriously, a university press book about movement.
+
+Important calibration: CSOB is **bright, not gothic.** Paul's confirmed aesthetic is clean/clear/bright. The institutional feel comes from typography, white space, and restraint — not from darkness.
+
+## Color — same palette, inverted ratios
+
+Same three colors, no burgundy (it was never real — if a heritage red is ever wanted for a special apparel drop, that's a flagged departure decision for Paul, not a default).
+
+| | BR | CSOB |
+|---|---|---|
+| Field | Black dominant (~70%) | **White dominant (~75%)** |
+| Ink | White text on black | **Black text on white** |
+| Gold #f7b408 | Blocks, buttons, big energy | **Gilding: hairline rules, seal fills, underlines, gate markers, hover states** |
+
+Gold behaves like **foil stamping on a document** — always small, always deliberate. A full-gold section appears at most once per page (the CTA band). Black sections appear as "plates" — full-bleed photographic or diagram interludes between white editorial sections, like glossy plates bound into a book. Ratio target: 75% white / 18% black / 7% gold. (BR is roughly the mirror.)
+
+## Typography
+
+Same fonts, different register:
+
+- **Anton** — used *less* and *bigger*. BR shouts in Anton constantly; CSOB reserves it for one massive statement per viewport (the manifesto line, the block number, the page title), tracked slightly wider, often in ink-black on white. Anton at 160px surrounded by silence reads institutional; Anton everywhere reads gym.
+- **Epilogue** — promoted to the workhorse. Body at generous line-height (1.7), real editorial measure (65–72ch). Epilogue Medium in small caps with letter-spacing (+0.12em) becomes the CSOB signature detail: section labels, gate names, nav — the "engraved plaque" voice. This small-caps label system is the fastest visual differentiator from BR.
+- **Numbers as a motif:** the 10 blocks, the 12 punches, the 3 engines. Big Anton numerals with Epilogue small-cap captions ("BLOCK 04 — THE FEAR GATE") used as recurring structural furniture, like chapter numbers in a book.
+
+## Logo deployment
+
+| Variant | Use |
+|---|---|
+| **Circle seal with stars** | Primary mark. Site favicon, footer seal, certificates, gate-passed stamps, document headers. This *is* CSOB — institutional, clean. |
+| **Arched wordmark** | Site header/nav, social banners. |
+| **Rectangle badge** | Journal article headers, email headers. |
+| **Square badge** | Social avatars, app icon. |
+| **Distressed circle** | Apparel and merch pages only. Never on the institutional site chrome — distress says "heritage T-shirt," not "syllabus." |
+| **Oval badge** | Programme materials (youth/corporate PDFs, brochures). |
+
+Seal ritual: the circle seal appears in gold at the *end* of every long page, like a wax stamp closing a document. Small, centered, consistent. It becomes the brand's signature gesture.
+
+## Image and video style
+
+- **Photography:** black-and-white or near-monochrome, documentary grain. Training moments *between* the action — hands being wrapped, chalk lines on floor, a coach's hand adjusting an elbow, the pause before the bell. BR shows the punch; CSOB shows the study of the punch. Occasional single gold duotone treatment for hero plates.
+- **Diagrams over photos wherever possible.** The method is the star. Clean line diagrams — footwork patterns, weight-transfer arrows (38% legs / 37% trunk / 24% arm from the codex), gate flowcharts — drawn in black ink line-work with gold accents on white. Excalidraw/sketchnote-compatible style, never image-model generated (text garbles; sovereignty rule).
+- **Video:** slow, observational, voiceover-led. Logan appears in the Academy as the demonstrator; Coach Paul as the voice of the school. 24fps feel, no gym-ad quick cuts.
+- **Texture:** paper white (#ffffff with the faintest warm tint acceptable), hairline black rules (1px), generous margins. No gradients, no glassmorphism, no dark-mode default.
+
+## The feel, summarised
+
+BR : CSOB ::
+gym floor : library ·
+poster : book ·
+neon : ink ·
+Friday night : Sunday morning ·
+"come train" : "come study" ·
+Coach Paul : The School
+
+---
+
+# 4. PAGE-BY-PAGE CONCEPT
+
+## / — The Manifesto (home)
+
+- **Purpose:** In 60 seconds, make the visitor understand this is a school of thought, not a gym site — and make them pick a door (study online / train in HK / bring the programme in).
+- **Tone:** Declarative, calm, certain. Short sentences. No exclamation marks anywhere on this domain.
+- **Content:** Opens with the contrarian creed — the Heyoka register made institutional: *"Slowness in a fast city. Softness in a hard sport. Thinking in a game of instinct. This is the Cuban school."* Then three numbered plates: THE THREE ENGINES / THE TEN BLOCKS / THE GATES. Then the honesty paragraph (school of thought, not a passport). Then three doors: Study (Academy) · Train (BR) · Bring It In (Programmes). Close with the gold seal.
+- **Visual:** White field, one massive Anton statement, one full-bleed black photographic plate (hands being wrapped, monochrome), diagram strip of the three engines, seal at the foot.
+
+## /method — The Method
+
+- **Purpose:** The flagship intellectual asset. The page people link to. Prove the depth.
+- **Tone:** A brilliant syllabus introduction. Teaches enough to be genuinely useful; withholds enough to sell the curriculum.
+- **Content:** Part I — The Three Engines (Body the machine, Mind the OS, Emotion the energy; "most training only touches the first"). Part II — the 10 blocks as a vertical numbered ladder with gate descriptions, including the 4→5 emotion gate called out as *the* gate. Part III — how the school sees (diagnostic coaching + Gym Eyes: "the school that measures what others guess"). One real teaching artifact shown in full (the weight-distribution codex diagram: 38/37/24) as proof of substance.
+- **Visual:** The most diagram-heavy page. Numbered Anton blocks descending the page, gold gate-markers between them, black plate interludes. Adapt the existing three-engines whiteboard (~/basic-reflex/class-system/whiteboards/three-engines.html) into the CSOB white/ink register.
+
+## /school — The School of Thought
+
+- **Purpose:** The heritage layer. Credibility, lineage, and the honest positioning, in one beautiful long read.
+- **Tone:** A keeper of a tradition writing its history. Respectful, precise, zero appropriation-cringe because it's addressed on the page.
+- **Content:** What *la escuela cubana* actually is (rhythm, defensive intelligence, amateur pedagogy, the sport-science tradition); why it produced what it produced; what it looks like transplanted into Hong Kong; Paul's 20+ years and the codification work. Explicit lineage-honesty section. Ends: "The tradition is Cuba's. The school is open."
+- **Visual:** The most editorial page — book-like measure, drop caps in Anton, archival monochrome photography, gold-rule pull-quotes. Reads like a university-press chapter.
+
+## /curriculum — The Curriculum
+
+- **Purpose:** The syllabus in public. What exactly a student learns, block by block, and how gates work.
+- **Tone:** Precise, generous, confident. Course-catalogue register.
+- **Content:** All 10 blocks, each as a document card: block number, pillar, focus, the gate stated verbatim ("Throw straight punches off a turn and return to guard, on balance"), what's observable. Sidebar: how gates are assessed — coach eye + Gym Eyes, and the parent-facing milestone view (youth conversion lever). Explicit line: *"You cannot pay to pass a gate."*
+- **Visual:** Document/card grid, small-caps labels, gold gate stamps on the seal motif. Direct adaptation of the existing 10-block-card.html into the white register.
+
+## /academy — The Online Academy
+
+- **Purpose:** Phase 1: capture global intent (waitlist). Phase 2: sell the course.
+- **Tone:** Invitation to study, not a sales page. Scarcity comes from the gates, not countdown timers.
+- **Content:** Phase 1 — what's coming (the 10-block curriculum on video, Logan demonstrations, gate self-assessment), plus "The Syllabus" email capture with one free artifact (e.g., the Block 1 stance lesson or the codex diagram as a beautiful PDF). Phase 2 — course tiers, Logan introduced as "the school's demonstrator," sample lesson embedded.
+- **Visual:** The only page where video leads. Black plate hero (Logan still, monochrome), white body, gold enrol/waitlist band.
+
+## /programmes — Youth & Schools / Corporate
+
+- **Purpose:** B2B2C page. Sell the packaged method to institutions and parents; hand delivery to BR.
+- **Tone:** Institutional peer-to-peer. A school writing to schools; a methodology writing to HR.
+- **Content:** Two halves. **Youth (12–16):** the curriculum as character education — gates as earned progress, the parent milestone view, boxing as the Trojan Horse for focus/confidence/emotional regulation (say it as "three engines," not therapy-speak). **Corporate:** the diagnostic-coaching experience for teams; pricing lives on BR, positioning lives here. Both CTAs route to BR delivery.
+- **Visual:** Oval-badge programme sheets, downloadable brochure (reuse corporate-brochure.html content, restyled), brighter photography than the rest of the site — the one place with more light and faces.
+
+## /train — Train With Us
+
+- **Purpose:** Pure router. Convert intent into the right channel in ten seconds.
+- **Tone:** Shortest page on the site. Almost a ticket window.
+- **Content:** Two doors: **"In Hong Kong?"** → Basic Reflex, the home campus of the school (photo, address, one line, button to basicreflex.com). **"Anywhere else?"** → the Academy. Below, small: coaches → certification interest list.
+- **Visual:** Split-screen black/white doors with gold buttons. The seal between them.
+
+## /journal — The Journal (Phase 2)
+
+- **Purpose:** Long-form essays; the SEO and authority engine; relay-thread material given a public home.
+- **Tone:** The best of Paul's thinking in the school's voice. Essays, not blog posts.
+- **Content:** Launch cadence one essay/month: "Why the Jab Commits Nothing," "The Fear Gate," "Slowness in a Speed City," "What Cuban Coaches Count That We Don't."
+- **Visual:** Rectangle-badge headers, book typography, one diagram per essay.
+
+## /coaches — For Coaches (Phase 3, dark until ready)
+
+- **Purpose:** Certification pipeline. The coach gates already written in coach-training.html become the public standard.
+- **Tone:** High bar, plainly stated: "The gate for coaches is harder than the gate for students."
+- **Content:** The certification pathway, the coach gates verbatim, application/waitlist.
+- **Visual:** The most document-like page — certificate aesthetics, seal-forward.
+
+---
+
+# 5. THE RELATIONSHIP MAP
+
+## Cross-linking
+
+- **BR → CSOB:** basicreflex.com adds one line sitewide (header or hero): *"Home campus of the Cuban School of Boxing"* — seal + link. Method-depth pages on BR (course guide, principles) get "Read the full method at cubanschoolofboxing.com." BR youth and corporate pages cite the CSOB curriculum as their spine.
+- **CSOB → BR:** every training-intent CTA routes to BR. /train is the formal junction. BR is always named as "the home campus," never "our gym" — campus language sustains the institution frame.
+- **Voice discipline:** on CSOB, Paul is "Coach Paul, Head of School." On BR, he's "Coach Paul." Reed never appears on either (internal name only). Logan appears only inside the Academy, introduced as the school's demonstrator.
+
+## Traffic direction
+
+**CSOB is upstream; BR is downstream — but the brands feed each other asymmetrically:**
+- CSOB → BR: *bodies* (HK students, parents, corporates).
+- BR → CSOB: *proof* (the campus, the students, the results, the Gym Eyes data that shows gates being passed by real people).
+
+## Independent discovery
+
+Yes — by design. Someone in São Paulo or Stockholm can find, read, and buy from CSOB without ever learning BR exists; BR appears to them only as "the home campus in Hong Kong," a credibility artifact rather than a required destination. This is the entire argument for the separate domain: **basicreflex.com can never rank for or serve global method-intent; cubanschoolofboxing.com is an exact-match domain for a real global search space with no serious incumbent.**
+
+## Domain strategy
+
+- **cubanschoolofboxing.com is a primary domain, not a redirect.** Own site, own analytics (PostHog, separate project), own email list.
+- No subdomain nesting under basicreflex.com; the institution must not look like a gym's side page.
+- One shared design-token file kept in the repo so the two sites stay siblings (same hexes, same fonts, inverted ratios).
+- Suggested repo home: `~/basic-reflex/csob/` (site), with this bible in `~/basic-reflex/docs/`.
+
+---
+
+# 6. PHASE 1 vs FULL VISION
+
+## Phase 1 — launch in 2 weeks with existing material
+
+Four pages, static, no backend beyond an email capture:
+
+1. **/** — Manifesto (new copy, one photo plate, existing seal assets)
+2. **/method** — adapt three-engines.html whiteboard + 10-block ladder from 10-block-card.html + the 38/37/24 codex diagram from visuals/punch-codex.html
+3. **/school** — one long essay (the honest-lineage piece; strongest single new writing task)
+4. **/train** — router to basicreflex.com + "The Syllabus" waitlist form
+
+Plus: BR gets its "Home campus of the Cuban School of Boxing" line the same day. Everything above is restyling and copywriting around artifacts that already exist in ~/basic-reflex/ — no new systems, no payment infra, no video production.
+
+**Phase 1 success metric:** waitlist signups + BR enquiries with CSOB as referrer. If the method page can't collect emails from strangers, fix the argument before building the academy.
+
+## Phase 2 — months 1–6
+
+- /curriculum full syllabus page
+- /academy live: 10-block video course, Logan demonstration footage (Logan pipeline + LoRA already exist), gated block progression, payments
+- /journal launches (1 essay/month)
+- /programmes page live; youth brochure restyled under the oval badge
+- Free lead-magnet PDF (Block 1 or the codex) typeset to the CSOB standard
+
+## Phase 3 — months 6–12
+
+- Coach certification: /coaches public, coach gates as the assessment standard, first cohort (even a cohort of two makes the school real)
+- Schools Programme as a packaged licensable product (curriculum pack + certified coach requirement)
+- Gym Eyes-backed gate verification for online students (video submission → review) — the moat no course platform can copy
+- Certificates bearing the circle seal — physical, gold-stamped, worth photographing (every certificate posted is free institutional marketing)
+
+## The full vision in one paragraph
+
+In twelve months, cubanschoolofboxing.com is the canonical home of a codified martial method: a public syllabus, a paid academy where progress is earned through gates rather than bought, a journal that owns the "Cuban school" conversation in English, the programme that Hong Kong schools and companies bring in-house, and the early certification standard for coaches — with a small, excellent gym in Sheung Wan as its living proof. Basic Reflex stops being a boxing gym with unusually deep ideas and becomes what it structurally already is: **the first campus of a school.**
+
+---
+
+*Palette: #000000 / #f7b408 / #ffffff only. Fonts: Anton + Epilogue only. Burgundy is banned (hallucinated legacy — purge on sight). Distressed marks stay on merch. The seal closes every document.*
+
+— end of bible —

@@ -1,0 +1,619 @@
+# BASIC REFLEX — WEBSITE DESIGN BIBLE
+
+**Version 1.0 — July 2026**
+**Status: Canonical design reference. Build from this.**
+
+---
+
+## 0. THE ONE DECISION
+
+Every choice in this document flows from a single positioning decision:
+
+> **Basic Reflex is an academy that happens to teach boxing. The website is not a gym website. It is the first room of the academy.**
+
+The current site describes a gym. The new site *is* the practice space, extended into the browser. When someone lands on it, they should feel what they feel walking into the 4th floor room in Sheung Wan: warm tungsten light, quiet confidence, a place run by someone who knows exactly what he's doing and doesn't need to shout about it.
+
+The controlling metaphor for every page: **the gym that doesn't need to shout.** Hong Kong is loud. Fitness marketing is louder. This site wins by being the one calm voice in the room.
+
+Three words to test every design decision against:
+
+1. **WARM** — tungsten, not fluorescent. Leather, not chrome. If a section feels cold, it's wrong.
+2. **PRECISE** — an academy has a curriculum, milestones, evidence. Every claim on this site is specific and checkable.
+3. **QUIET** — gold is whispered, whitespace is generous, nothing blinks. Expensive things don't beg.
+
+And one sentence that is the soul of the brand, deployed carefully and never explained:
+
+> **"We teach the fast thing slowly."**
+
+That's the Heyoka without saying Heyoka. Slowness in a speed city. Softness in a combat sport. It runs under every page like a bassline.
+
+---
+
+## 1. SITE ARCHITECTURE
+
+### 1.1 Page Map
+
+```
+basicreflex.com
+│
+├── /                      HOME — the 3-second conversion page
+├── /practice              THE PRACTICE — philosophy, Coach Paul, Three Engines
+├── /method                THE CURRICULUM — 10 blocks, Gym Eyes, how progress works
+├── /classes               CLASSES & SCHEDULE — timetable, pricing, Punchpass booking
+├── /youth                 YOUTH PROGRAMME — parent-facing (12–16)
+├── /coaching              PERSONAL TRAINING — the diagnostic approach
+├── /corporate             CORPORATE PROGRAMME — HR/team-lead-facing
+├── /room                  THE ROOM — documentary gallery
+├── /visit                 VISIT & BOOK — contact, WhatsApp, the climb, map
+│
+├── /journal               FIELD NOTES — blog, renamed and demoted to footer
+└── /store                 BR STORE — kept, demoted to footer
+```
+
+Ten public pages. That's it. The current site's twelve-section sprawl collapses into a structure where every page has exactly one audience and one job.
+
+**Key structural decisions:**
+
+- **`/method` is its own page, not a subsection of About.** The 10-block curriculum and Gym Eyes are the single most defensible differentiator BR has — no other gym in Hong Kong can show a diagnostic coaching system with confidence bands and tracked milestones. Burying it inside "About" treats the crown jewel like a footnote. It gets its own room, and three other pages (Practice, Classes, Youth) all route into it.
+- **Blog becomes "Field Notes" and leaves the nav.** It exists for SEO and depth-seekers, linked from the footer and cross-linked from relevant pages. It is not a primary journey.
+- **Store leaves the nav.** Merch is a loyalty product, not an acquisition product. Footer link. Members will find it.
+- **Gallery becomes "The Room."** Not a page of thumbnails — a documentary essay about the space (see §3.8).
+- **Contact becomes "Visit & Book."** Nobody wants to "contact" a gym. They want to know where it is, when to come, and how to book without friction.
+
+### 1.2 Navigation
+
+**Primary nav (persistent, top):**
+
+```
+[BR wordmark]     The Practice · The Curriculum · Classes · Youth · Corporate     [WhatsApp icon] [BOOK A CLASS →]
+```
+
+- Six text links maximum. Personal Training lives inside "The Practice" dropdown? No — no dropdowns. Personal Training is reached from the homepage door section, the Practice page, and the footer. Nav space goes to the five highest-traffic journeys.
+- **"BOOK A CLASS"** is the only gold element in the header. Solid gold (#f7b408) pill, black Anton text. It is present on every page, every scroll position (nav is sticky, shrinks on scroll).
+- **WhatsApp icon** sits beside it — outline white, fills gold on hover. In Hong Kong, WhatsApp *is* the front desk. It's in the header, not buried on a contact page.
+- Nav background: pure black, 1px gold hairline at 30% opacity along the bottom edge. On scroll, background gains slight blur/translucency (black at 92%).
+
+**Footer (the credits roll):**
+
+Full-width black, generous. Structured like film credits, not a link dump:
+
+- Column 1: Wordmark + "A practice space for high-pressure living." + address with floor called out: *4/F Bonham Centre, 79–85 Bonham Strand, Sheung Wan. Four floors up. Worth the climb.*
+- Column 2: All pages including Personal Training, The Room, Field Notes, Store.
+- Column 3: WhatsApp (number visible), Instagram, email, hours.
+- Bottom hairline: press names in a single quiet line of small caps — *As seen in Time Out · Tatler Asia · Lifestyle Asia · Sassy Hong Kong · Happy Hongkonger* — text only, no logos.
+
+### 1.3 User Journeys
+
+Four audiences, four journeys, four different 3-second requirements.
+
+---
+
+**(a) THE ADULT WALK-IN** — 28–45, works in Central/Sheung Wan, stressed, tried F45/yoga/spin, curious about boxing but scared of getting punched or of meathead culture.
+
+- **Lands on:** Homepage (Google "boxing gym hong kong", Instagram, press article).
+- **3-second need:** *"This is not a fight club, and it's five minutes from my office."* The hero must communicate atmosphere (warm, focused, real people) and safety-of-identity (I could be that person) instantly.
+- **Journey:** Home → (Practice or Method for the depth-seekers) → Classes → Book first class.
+- **Conversion moment:** The first-class offer, reachable in ≤2 clicks from anywhere.
+- **What kills the sale:** Aggression, competition imagery, anything that smells like they'll be embarrassed in week one.
+
+---
+
+**(b) THE PARENT** — 38–52, researching activities for a 12–16 year old, likely found BR via word of mouth or a school parents' group. Skeptical of boxing by default.
+
+- **Lands on:** /youth directly (this page must rank and must be shareable as a standalone link — it will be forwarded in parent WhatsApp groups).
+- **3-second need:** *"My kid will be safe, and this is real education, not daycare with pads."* Safety architecture + curriculum + small groups, visible immediately.
+- **Journey:** Youth → Method (what will my kid actually learn?) → Practice (who is this coach?) → Book free first class.
+- **Conversion moment:** "First class free" + WhatsApp message pre-filled for parents.
+- **What kills the sale:** Any image of contact sparring, any adult-fitness language ("shred", "burn"), vagueness about what's taught.
+
+---
+
+**(c) THE CORPORATE BUYER** — HR manager or team lead, 30–45, has a budget and a mandate ("do something better than another junk boat"). Evaluating BR against escape rooms, cooking classes, offsite facilitators.
+
+- **Lands on:** /corporate directly (LinkedIn, referral, sales email link). Never sees the homepage first — this page must stand completely alone.
+- **3-second need:** *"This is professional, other companies do this, and I can justify the price to my boss."* Credibility, structure, a downloadable brochure.
+- **Journey:** Corporate → (maybe Practice for coach credibility) → enquiry via WhatsApp or email → brochure → call.
+- **Conversion moment:** The enquiry, not a booking. This is a B2B sales page; the CTA is a conversation.
+- **What kills the sale:** Anything that looks amateur, prices hidden behind "contact us" *without* framing, consumer-fitness tone.
+
+---
+
+**(d) THE RETURNING MEMBER** — already trains, deciding whether to buy a 10-class block or step up to personal training.
+
+- **Lands on:** Classes (bookmarked) or straight into Punchpass.
+- **3-second need:** *"Schedule, price, book, done."* Zero marketing. Speed.
+- **Journey:** Classes → Punchpass. Two clicks, or one from a bookmarked schedule.
+- **Upsell surface:** The Method page and PT page speak to them too — "you're at Block 3; here's what Block 4 asks of you" is the retention engine. The site should make members *feel their position in the curriculum*, which makes block purchases feel like tuition, not gym credits.
+- **What kills the renewal:** Friction. If booking takes more taps than Deliveroo, the site has failed this audience.
+
+### 1.4 Entry-Point Rules
+
+- **Every page is a front door.** Corporate buyers and parents arrive by deep link. Therefore every page carries: the wordmark, one line of positioning, one clear CTA, and WhatsApp. No page may depend on the homepage for context.
+- **Every page ends with a door.** The last section of every page is a full-width black CTA band (see §2.7) — never a dead end, never "thanks for reading."
+- **CTA routing is audience-matched:** adult pages end in "Book your first class," youth ends in "Book their free first class," corporate ends in "Start the conversation," members' schedule page opens booking directly.
+
+---
+
+## 2. VISUAL DESIGN LANGUAGE
+
+### 2.1 The Palette and Its Law
+
+Three colors. The discipline of using only three is itself the luxury signal.
+
+| Color | Hex | Role |
+|---|---|---|
+| **Black** | `#000000` | The room. Default ground for ~70% of the site. |
+| **Gold** | `#f7b408` | The signal. ≤5% of any viewport, ever. |
+| **White** | `#ffffff` | The voice. Text, breathing room, light chapters. |
+
+**Tonal steps (derived, permitted):** Pure black is the base, but surfaces layer with warm near-blacks — `#0A0A0A` (raised cards), `#111111` (panels), `#161616` (hover states). These are black under tungsten light, not new colors. Grays for secondary text are white at reduced opacity (`rgba(255,255,255,0.64)` body-secondary, `0.4` captions) — never a hex gray, which reads cold.
+
+**White under tungsten:** For light chapters (Youth page, parts of Corporate), the background is `#F6F1E7` — this is not a fourth color; it is *white as it appears in the gym's warm light*. Pure `#ffffff` on screen reads clinical/Squarespace; warmed white reads like paper and matches the photography's temperature. Text on it is pure black. This is the only sanctioned derivation, and it must always carry the paper grain texture (§2.6).
+
+**THE GOLD LAW — the most important rule in this document:**
+
+Gold is scarce or it is worthless. Gold may appear as:
+
+1. The primary CTA (one per viewport, maximum)
+2. One highlighted word or phrase inside a display headline
+3. Hairline rules and borders (at 30–40% opacity)
+4. Data and numbers (block numbers, milestones, prices, stats)
+5. Hover/focus states
+
+Gold may **never** appear as: a background wash, a large filled panel, an overlay on photography, more than one button per viewport, or decoration without meaning. If a page mock has gold in more than ~5% of its pixels, it's wrong. The current generation of cheap sites drown their accent color; BR's gold behaves like actual gold — small, heavy, deliberate.
+
+**Ratio guidance per page type:** Dark pages ≈ 70 black / 25 white / 5 gold. Light chapters ≈ 70 warm-white / 25 black / 5 gold.
+
+### 2.2 Typography
+
+Two typefaces, confirmed brand fonts, no additions:
+
+- **Anton** — display. Always uppercase. It is the poster voice: condensed, physical, certain.
+- **Epilogue** — everything else. The explaining voice: humane, contemporary, legible.
+
+**The hierarchy (desktop → mobile via clamp):**
+
+| Level | Face | Size | Treatment |
+|---|---|---|---|
+| **H1 / Hero** | Anton | clamp(56px → 120px) | Uppercase, line-height 0.95, letter-spacing 0.01em. White, with ONE word or phrase in gold. Max 2 lines. |
+| **H2 / Section** | Anton | clamp(36px → 64px) | Uppercase, white (or black on light). Often preceded by an eyebrow. |
+| **H3 / Card title** | Anton | 22–28px | Uppercase, tracking 0.02em. |
+| **Eyebrow / kicker** | Epilogue Medium | 12–13px | Uppercase, letter-spacing 0.22em, gold. The small gold whisper above every H2. E.g. `THE CURRICULUM` |
+| **Lead paragraph** | Epilogue Light | 20–22px | line-height 1.55, max-width 34em. First paragraph after a heading. |
+| **Body** | Epilogue Regular | 17–18px | line-height 1.65, max-width 38em, white at 84% opacity on black. |
+| **Data / numbers** | Epilogue Medium, tabular-nums | context | Numbers are always gold when they carry meaning (Block 04, HK$250, max 8, 20+ years). This trains the eye: gold = fact. |
+| **Captions** | Epilogue Regular | 13–14px | white at 40%, used under documentary photos. Captions are load-bearing on this site (§2.5). |
+
+**Rules:**
+
+- Anton never sets body copy, never sets more than ~8 words per line, never gets letter-spaced wide (it dies). Anton is a hammer; Epilogue is the hand.
+- Text columns never exceed ~38em. Full-width paragraphs are the #1 template tell.
+- The scale jumps are deliberately large (120px hero against 17px body). Editorial contrast — big/small with nothing timid in between — is a core "expensive" signal. Squarespace scales politely; magazines scale violently.
+- Chinese typography (future-proofing): if/when bilingual, pair with Noto Sans TC for body and a heavy condensed TC face for display. Do not attempt Anton fauxing for CJK.
+
+### 2.3 Spacing & Rhythm
+
+- **Base unit: 8px.** All spacing in multiples.
+- **Section padding: 140–180px vertical on desktop, 80–96px mobile.** This will feel excessive in mockups. Ship it anyway. Whitespace is the single cheapest luxury signal and the first thing amateur sites cut.
+- **One idea per viewport.** Each scroll-stop delivers exactly one message. If a section needs a subheading and three cards and a stat row and a CTA, it's three sections.
+- **Rhythm pattern:** the site breathes in a repeating cycle — *full-bleed image → text chapter → detail/data → image*. Dark pages are the default; a light chapter arriving (Youth) feels like stepping into daylight, which is itself a designed moment.
+- **Asymmetry is policy.** Content sits off the centerline: text columns at 1/12–6/12, images pushed to bleed one edge, headlines overhanging image edges by a gutter. Perfect centering everywhere = template. The grid is 12 columns, 80px margins desktop, 24px mobile — but the composition within it is editorial, like a photobook spread, not like a SaaS page.
+
+### 2.4 Photography Treatment
+
+The photography IS the brand. Everything else is a frame for it.
+
+**The grade (applied consistently to every image on the site):**
+
+- Warm temperature (tungsten, +8–12 toward amber)
+- Desaturated 15–25%
+- Lifted blacks (shadows floor at ~#1a1512, never crushed to pure black — the images should feel like they sit *on* the black page, slightly warmer than it)
+- Subtle grain, 2–4%
+- No HDR, no clarity-slider crunch, no teal-orange
+
+**The eye (what gets shot/selected):**
+
+- Subject off-centre, always
+- Work, not performance: taped hands, mid-drill footwork, coach's hand adjusting an elbow, chalk on the board, the stairwell, sweat on the floor between rounds
+- Faces in concentration, not camera-aware
+- The room itself as a character: the light, the bags, the window, the fourth-floor view
+
+**Banned forever:** flexed poses, mirror shots, stock photography of any kind, group jump photos, gloves-touching-camera, anything that could caption "BEAST MODE."
+
+**Overlay system:** Text over images uses a bottom-up black gradient scrim (transparent → black 70%) or a left-edge scrim for side-set text. Never a full-image dark wash (murders the photography), never gold tints, never blur-behind-text.
+
+**Crops:** Favor 16:9 and wider for full-bleed; 4:5 verticals for editorial pairings; occasional extreme pano strips (3:1) as section dividers — a strip of the room, wordless, like a breath between chapters.
+
+### 2.5 Captions — the secret weapon
+
+Every documentary photo carries a small caption, bottom-left, Epilogue 13px, white 40%:
+
+> *Tuesday, 7:12pm. Block 3 footwork, third round.*
+> *Hands wrapped before the room fills. Sheung Wan.*
+
+This is the cheapest, highest-yield "expensive" move on the entire site. Captions convert images from decoration into documentary evidence. They say: *this is a real place where real practice happens on real Tuesdays.* No template has them. Every serious photo-essay does.
+
+### 2.6 Material & Texture Language
+
+The gym's material identity — worn leather, brass, chalk, canvas, graphite — translated to screen with extreme restraint:
+
+- **Brass/gold hairlines:** 1px rules at `rgba(247,180,8,0.35)` separate major sections and frame data tables. This is the site's "brass fitting" — the detail you notice second.
+- **Paper grain:** light chapters (`#F6F1E7`) carry a 2–3% opacity grain/noise texture. Screens don't have texture; paper does; expensive prints do.
+- **Chalk marks:** the 10-block curriculum diagram may use a single hand-drawn element — an underline or circle in chalk-white — as the ONLY hand-drawn element on the site. One gesture. More becomes theme-y.
+- **What we don't do:** leather textures as backgrounds, boxing-glove icons, rope borders, distressed type, metal gradients. The materials are evoked by photography and by these two or three abstract details — never illustrated literally.
+
+### 2.7 Components
+
+- **Buttons.** Primary: gold pill, black Anton uppercase 15px, generous padding (18px/36px). Hover: background shifts to white, 250ms. Secondary: 1px white outline pill, white Epilogue text; hover fills white/text black. Ghost/tertiary: gold text link with underline that draws in from the left on hover. No shadows on buttons, no gradients, no icons-in-buttons except the WhatsApp glyph.
+- **The CTA band.** Every page ends with the same component: full-width black, one Anton line (with one gold word), one sentence of Epilogue, primary button + WhatsApp secondary. Consistent enough to be a signature; copy varies per page.
+- **Cards** (schedule, programmes): `#0A0A0A` surface, 1px border `rgba(255,255,255,0.08)`, no border-radius above 2px, no drop shadows. On hover: border warms to gold 35%, image inside regains ~10% saturation — as if the light turned toward it. That saturation-return hover is a site signature: *attention literally warms things up.*
+- **Data tables** (schedule, pricing): designed like a fight card / train timetable. Epilogue, tabular numerals, gold hairline row separators, generous row height (64px+). Beautiful timetables are rare and read as deeply professional.
+- **The block-number stencil:** curriculum blocks are numbered `01`–`10` in huge Anton, gold, sometimes half-cropped off the container edge. This numeric monumentality is the visual signature of the Method.
+
+### 2.8 Motion
+
+Motion budget: minimal, physical, slow. The site moves like a heavy bag settles.
+
+- Scroll reveals: fade + 24px rise, 500–600ms, ease-out, staggered 80ms. Once per element, no re-triggering.
+- Numbers count up when entering viewport (once) — 20+ years, 10 blocks, max 8.
+- Hero may use a slow-motion video loop (8–12s, no audio, heavily graded to match §2.4): rope turning, a slow jab in half-speed, chalk dust. Poster-image fallback mandatory; skip video on mobile/save-data.
+- Underlines draw, hairlines extend, images warm. Nothing bounces, nothing spins, no parallax, no cursor effects, no preloader animation.
+- `prefers-reduced-motion` honored fully.
+
+### 2.9 Why This Reads "Expensive" (the checklist)
+
+The difference between this and a Squarespace template, made explicit so nobody sands it off during the build:
+
+1. **Scarcity of accent color** — gold at 5%, not 30%.
+2. **Violent type-scale contrast** — 120px Anton against 17px Epilogue, nothing in between competing.
+3. **Asymmetric editorial layout** — content off-axis, images bleeding one edge, headlines overhanging.
+4. **Photography with a consistent grade and captions** — evidence, not decoration.
+5. **Extreme whitespace** — 160px section padding held under pressure.
+6. **No icon sets, no stock, no emoji, no carousels, no badge walls.**
+7. **Typographic details** — real quotes, tabular numerals, eyebrow kickers, hairline rules.
+8. **One signature interaction** (warming hover) instead of ten gimmicks.
+9. **Specificity in copy** — "Tuesday, 7:12pm" beats "world-class training" every time.
+10. **A footer designed like credits**, because the last thing you see is also the brand.
+
+---
+
+## 3. PAGE-BY-PAGE LAYOUTS
+
+### 3.1 HOMEPAGE — `/`
+
+**Purpose:** Atmosphere transfer and routing. In three seconds: *this place is different, warm, and serious.* In thirty seconds: routed to the right door (adult / parent / corporate). The homepage sells the feeling; the inner pages sell the programme.
+
+**Hero — full viewport:**
+
+- Full-bleed graded image or slow-mo loop: the room at evening, one practitioner mid-drill, tungsten light, window behind. Not a punch impact — the moment *before*, or *between*. Composition leaves the left third quiet for type.
+- H1, Anton, left-set, overlapping the image's quiet zone:
+
+  > **THE SLOWEST**
+  > **BOXING GYM**
+  > **IN HONG KONG.**
+
+  with "SLOWEST" in gold. This headline does four jobs: it stops the scroll (it's the opposite of every gym claim), it *is* the Heyoka (slowness in a speed city, stated with total confidence), it filters out the wrong customers, and it demands the next line.
+- Subline, Epilogue Light 21px, max 30em: *"We teach the fast thing slowly. Basic Reflex is a boxing academy in Sheung Wan — a practice space for high-pressure living."*
+- CTAs: **[BOOK YOUR FIRST CLASS]** gold primary + *"Message us on WhatsApp"* ghost link.
+- Bottom edge of hero: a single quiet line, small caps, white 40%: *Time Out · Tatler Asia · Lifestyle Asia* — press as texture, not trophy.
+
+**Section 2 — The Reframe (dark, text chapter):**
+
+Eyebrow: `NOT A FIGHT CLUB`. H2: **A PRACTICE, NOT A FIGHT.** One tight paragraph on the premise: people come for fitness and discover a practice; boxing here is the instrument, not the point. Then the positioning triad set as three quiet lines with gold arrows — the brand pivot made visible:
+
+> Boxing gym → **Practice space**
+> Coach → **Guide**
+> Fighter → **Practitioner**
+
+No cards, no icons. Just type. This section is the thesis statement of the whole brand.
+
+**Section 3 — The Method teaser (dark, data):**
+
+Eyebrow: `THE CURRICULUM`. H2: **TEN BLOCKS. ONE PRACTICE.** A horizontal strip of the block numbers `01 … 10` in stencil Anton, gold, with block 04→05 marked by a small chalk gate glyph. Two sentences: every student is on a mapped curriculum; the coaching system tracks your actual progress, not your attendance. CTA (secondary): *See how the Method works →* `/method`. This is the "no other gym has this" moment — 15 seconds into the page.
+
+**Section 4 — Pano breath.** Full-bleed 3:1 strip of the empty room, captioned. No text. Let the page inhale.
+
+**Section 5 — Three Doors (routing):**
+
+Three tall 4:5 photographic cards, asymmetric widths (adults widest):
+
+- **ADULTS** — *Learn to stay calm when it counts.* → /classes
+- **YOUTH 12–16** — *Real boxing, properly taught. Parents welcome to watch.* → /youth
+- **CORPORATE** — *Your team, under pressure, together.* → /corporate
+
+Warming hover (§2.7). This section is the router; it must be above the 60% scroll mark.
+
+**Section 6 — Coach Paul (dark, editorial split):**
+
+Documentary portrait right-bled (in the room, not posed — mid-instruction, hands visible). Left column: eyebrow `THE COACH`, H2: **TWENTY YEARS OF WATCHING PEOPLE MOVE.** Three sentences: Coach Paul, 20+ years in boxing, teaches in Sheung Wan; known for seeing the pattern under the movement and naming it. Pull-quote in Anton 32px: *"I'm not training fighters. I'm training people who face things."* Link: *The practice →* `/practice`.
+
+**Section 7 — Proof (dark, quiet):**
+
+Two or three testimonials as editorial pull-quotes (see §4.1 for sourcing rules) — Anton for the key phrase, Epilogue attribution with real first name + real detail ("banker, 3 years, Block 6"). No star ratings, no avatars-in-circles.
+
+**Section 8 — The Climb:**
+
+Eyebrow: `SHEUNG WAN`. A vertical image of the stairwell/doorway. H2: **FOUR FLOORS UP.** Copy: *No street frontage. No walk-ins by accident. Everyone in the room chose to climb.* Address + map link. This turns the site's biggest liability into its velvet rope (§4.4).
+
+**Section 9 — CTA band:** **YOUR FIRST CLASS IS THE HARDEST PART. [gold: BOOK IT.]** + WhatsApp.
+
+---
+
+### 3.2 THE PRACTICE — `/practice`
+
+**Purpose:** Convert the depth-seekers — the adults (and parents) who need to understand *why* before they book. This is the Heyoka story told without the word, the Three Engines, and Coach Paul's authority. It is the site's soul page and its best sharing/press asset.
+
+**Hero:** Not full-viewport — 60vh. Quiet image (chalkboard, or hands wrapping). H1: **WHY WE TEACH BOXING SLOWLY.** Sub: *Everything in Hong Kong is fast. That's exactly the problem.*
+
+**Section flow:**
+
+1. **The Inversion.** Text chapter. The founding observation: a speed city produces people who have never been taught to slow down under pressure; a combat sport, taught correctly, is the last place in the city where slowness is the whole point. Key line to land verbatim or near: *"People come here to learn to fight. They stay because they learn to stop fighting themselves."* This IS the sacred-clown teaching — inversion as medicine — with zero mystical vocabulary. Grounded, plain, confident.
+
+2. **The Trojan Horse, admitted openly.** Short section, slightly wry in tone: *"Yes, you'll get fit. Yes, you'll sweat. That's the door, not the room."* Naming the mechanism honestly is disarming and premium; hiding it is marketing.
+
+3. **The Three Engines.** The page's centerpiece. Eyebrow: `WHAT WE ACTUALLY TRAIN`. H2: **BODY. MIND. EMOTION.** Three editorial columns (stacked mobile), each with an Anton title, a one-line definition, and 3 sentences:
+   - **BODY — the machine.** Footwork, structure, conditioning. Every gym trains this. *(Gold data point: it's a tenth of the curriculum's intent.)*
+   - **MIND — the operating system.** Reading, deciding, pattern under pressure. Few gyms train this.
+   - **EMOTION — the energy.** What happens in you when pressure arrives, and what you do with it. Almost nobody trains this. *There is a point in our curriculum you cannot pass on technique alone.* (→ links to the gate on /method.)
+   Visual: no icons. Three photographs — a body in motion, eyes mid-read, a face in the second before composure. The photography carries the metaphor.
+
+4. **Coach Paul — the long version.** Split layout, two portraits (teaching wide-shot + close detail of hands). The bio as story, ~150 words: 20+ years in boxing; came to Hong Kong; built the academy around a single skill — *diagnostic seeing*: watching a person move for three minutes and naming the pattern they've carried for thirty years. Tone: third-person, warm, specific, zero hype words. Always "Coach Paul."
+
+5. **The Room + The Standard.** Short section: what a class feels like (no mirrors culture, no shouting, work in rounds, silence respected), and the standard (technique before intensity, always).
+
+6. **CTA band:** **COME SEE WHAT WE MEAN. [BOOK A FIRST CLASS]** + *Or read how the curriculum works →*
+
+---
+
+### 3.3 THE CURRICULUM — `/method`
+
+**Purpose:** Make the invisible asset visible. This page does the heaviest differentiation work on the site: BR is the only gym in Hong Kong that can show *a system* — 10 blocks, a diagnostic engine, evidence-based progression. It must be understandable by a smart 14-year-old's parent and impressive to an engineer. It is also the retention page: members see their position on a map, and a 10-class block becomes tuition.
+
+**Hero:** 50vh, dark. H1: **YOUR TRAINING HAS A MEMORY.** Sub: *A ten-block curriculum. A coaching system that tracks what you can actually do. No belts, no vibes — evidence.*
+
+**Section flow:**
+
+1. **The Map — the 10 blocks.** The page's monument. A vertical scroll-map (mobile-first by nature): each block a full-width row — stencil number in gold Anton (`01`), block name in Anton white, one line of what it develops in Epilogue. Rows reveal as you scroll (the act of scrolling the curriculum = feeling the length of the journey). Between `04` and `05`: the **Gate** — a visually distinct row, chalk-marked, black-on-gold hairline frame: *"Block 4 to 5 is not a technique test. It's the emotion gate. You pass it when pressure stops making your decisions for you."* This is the single most quotable design element on the site. Do not soften it.
+
+2. **Gym Eyes — the diagnostic engine.** Eyebrow: `THE COACHING SYSTEM`. H2: **WE DON'T GUESS. WE WATCH.** Plain-language explanation, 3 short paragraphs: every student's development is observed and recorded; the system holds evidence of what you can do, with honest confidence levels — not a punch-card of attendance; the coach's rules for you adapt as the evidence grows. Visual: a *stylized* progress artifact (see below), NOT a screenshot of internal tooling. Design a clean member-facing "record card": black card, gold hairlines, block position, three recent milestones with dates, a confidence band drawn as a simple gold segment. It should look like something between a passbook and a fight record. Note for build: this artifact becomes a real member deliverable later; the site designs its public face now.
+
+3. **What this means for you.** Three-column translation for the three audiences, one line each: Adults — *you always know what you're working on.* Parents — *you see what your kid can actually do, not what they sat through.* Members — *your next block is named before you get there.*
+
+4. **Honesty clause.** One short paragraph, quiet: *No system replaces the coach's eye. The system remembers; Coach Paul decides.* (Pre-empts both skeptics and over-believers; deeply on-brand.)
+
+5. **CTA band:** **START AT BLOCK ONE. [BOOK YOUR FIRST CLASS]**
+
+---
+
+### 3.4 YOUTH PROGRAMME — `/youth`
+
+**Purpose:** Convert parents. The only page whose primary reader never intends to train. It must be forwardable in a parents' WhatsApp group and survive skeptical scrutiny alone. **This is the light chapter** — warm-white background (`#F6F1E7`, §2.1), black text, paper grain. Stepping from the dark site into this page is a designed moment: daylight, school-prospectus energy, zero fight-club shadow.
+
+**Hero:** 60vh. Photography: a kid in focus doing footwork drills, coach kneeling to eye level — *daylight or bright tungsten, no dramatic shadows on this page.* H1 (black Anton on warm white): **REAL BOXING. PROPERLY TAUGHT. NO SPARRING.** Sub: *A structured programme for ages 12–16. Small groups. Real skills. Parents see the progress.* CTA: **[BOOK A FREE FIRST CLASS]** gold + *WhatsApp Coach Paul* (pre-filled parent message, §4.3).
+
+**Section flow:**
+
+1. **The safety architecture — first, always.** Parents scan for danger before anything else, so answer before they ask. Four fact blocks, gold data treatment, no icons:
+   - **No contact sparring.** Ever. Technique, pads, bags, footwork.
+   - **Max 8 kids** per class. Every kid coached every class.
+   - **Mon & Fri, 5:00pm.** After school, before dinner.
+   - **Coached by Coach Paul personally.** 20+ years. Not a junior trainer.
+
+2. **What they actually learn.** Eyebrow: `THE CURRICULUM`. The 10-block map condensed into a youth ladder with parent-legible skill names (balance & stance → footwork → defensive shape → reading distance…). Frame: *"Your kid isn't 'doing boxercise.' They're at Block 2, working on X. You'll know, because we'll show you."*
+
+3. **Parents see the progress.** The retention feature, sold as the differentiator it is. H2: **YOU'LL SEE IT, NOT JUST HEAR IT.** Show the youth version of the record card (§3.3): milestones with dates in gold. Copy: after each phase, parents get a plain-language progress note — what was learned, what's next. *No other programme in Hong Kong shows parents this.* Secondary honest note: what kids get beyond technique — focus, composure, confidence built on real skill rather than praise. (Confidence appears here as an *outcome of competence* — never as a generic benefit bullet.)
+
+4. **A class, minute by minute.** Timeline strip (60 minutes): warm-up game → footwork → technical block → pads → cool-down + review. Demystifies completely.
+
+5. **Practical block.** Table, timetable-styled: HK$250 drop-in · HK$2,000 / 10-class block · First class free · Mon/Fri 5pm · Ages 12–16 · What to bring (trainers, water; we lend gloves and wraps).
+
+6. **Parent FAQ.** Accordion, 6 questions max: Will my kid get hit? (No — policy, stated again.) Total beginner OK? Can I watch? (Yes, always.) Girls? (Yes, same programme.) What if they don't like it? (First class free — that's what it's for.) Is boxing safe for growing bodies? (Answered with the no-contact structure + technique-first standard.)
+
+7. **CTA band** (black band returns even on light page): **THE FIRST CLASS IS FREE. THE CONFIDENCE ISN'T FAKE. [BOOK THEIR FREE CLASS]** + WhatsApp.
+
+---
+
+### 3.5 CORPORATE — `/corporate`
+
+**Purpose:** Generate qualified B2B enquiries at $300 USD/pp/hr without apology. The reader is spending company money and needs to look smart for choosing this. Dark, executive, structured — the same brand at boardroom altitude.
+
+**Hero:** 70vh. Photography: a team mid-session — suits' sleeves rolled, wraps on, genuine laughter-in-effort (documentary, not team-building-brochure grins). H1: **YOUR TEAM, UNDER PRESSURE, TOGETHER.** Sub: *A structured boxing experience for teams that are tired of junk boats and escape rooms.* CTA: **[START THE CONVERSATION]** (opens WhatsApp/email choice) + *Download the brochure* ghost link (PDF exists: `~/basic-reflex/corporate/`).
+
+**Section flow:**
+
+1. **The argument.** Three tight paragraphs, ROI language without buzzwords: teams bond through *shared mild adversity*, not shared cocktails; boxing pad-work is the safest, most structured form of it — pair-based, role-swapping (holding pads for a colleague is literally supporting them under pressure); run by a professional coach with a curriculum, not an activity vendor with a waiver.
+
+2. **The format.** Timetable-styled: 90 min–half day · at our academy in Sheung Wan or your venue · groups 6–30 (split into coached pods of ≤8) · zero contact between participants · all equipment provided · no fitness prerequisite — designed for mixed levels, heels-to-hoodies.
+
+3. **The price, framed.** Stated plainly, gold data treatment: **USD $300 per person / hour.** Directly beneath, the frame: *Positioned between a facilitated offsite and an executive coach — because it's both. One coach, twenty years of teaching, a structured experience your team will still be talking about at the next review cycle.* Never hide the price; hiding it costs the credibility that justifies it.
+
+4. **Who runs it.** Coach Paul, corporate-cut bio (60 words) + press line (Tatler Asia, Time Out — this is the one page where press does real lifting, still text-only).
+
+5. **Logistics & trust strip:** invoice/company payment, English/Cantonese delivery, insurance held, 4/F Bonham Centre (lift access noted for corporate groups if available — verify; otherwise "we'll help coordinate").
+
+6. **CTA band:** **BOOK A CALL. WE'LL DESIGN THE SESSION AROUND YOUR TEAM. [START THE CONVERSATION]** + brochure download repeat.
+
+---
+
+### 3.6 CLASSES & SCHEDULE — `/classes`
+
+**Purpose:** The workhorse. Two readers: the ready-to-book newcomer and the returning member. Both need speed. Marketing minimal; clarity maximal.
+
+**Hero:** Short (40vh). H1: **CLASSES & SCHEDULE.** Sub: *All levels train together at their own block. First class free to observe your level.* CTA anchors: jump-links to Schedule / Prices / Your First Class.
+
+**Section flow:**
+
+1. **The schedule.** The timetable as a designed object (§2.7): week grid, generous rows, gold hairlines, class name + level note + coach. Each row's right edge: a small **[BOOK]** ghost button deep-linking into the correct Punchpass class. **Punchpass integration rule:** do not iframe the raw Punchpass widget into the visual flow — it will destroy the design language. Either (a) style/skin the embed to match (black bg, Epilogue, gold accents) if Punchpass CSS allows, or (b) present the designed timetable natively and hand off to Punchpass only at the final booking click. Option (b) is default.
+2. **Pricing.** Clean table, no "pricing cards with a POPULAR ribbon": drop-in · 10-class block · monthly (whatever the real products are — pull from Punchpass ground truth at build time; **verify prices against the live Punchpass catalogue before publishing, do not copy from the old site**). Numbers in gold. One line under the table: *A block isn't gym credit. It's tuition — you're buying your next block of the curriculum.* (→ /method)
+3. **Your first class.** Timeline: arrive 10 early → wraps lent → Coach Paul watches you move → you're placed, not thrown in. Kills the #1 newcomer fear (being embarrassed).
+4. **CTA band:** **PICK A CLASS. CLIMB THE STAIRS. [BOOK NOW]**
+
+---
+
+### 3.7 PERSONAL TRAINING — `/coaching`
+
+**Purpose:** Sell the highest-intimacy product. The angle is the diagnostic, not the workout: everyone else sells "get ripped"; BR sells **"get seen."**
+
+**Hero:** 60vh. Photography: Coach Paul mid-observation — arms crossed, watching a student, *the coach's eyes as the subject.* H1: **GET SEEN.** Sub: *One coach, one student, and twenty years of knowing what to look for.*
+
+**Section flow:**
+
+1. **The diagnostic promise.** Text chapter: in your first session, Coach Paul watches you move and tells you something about yourself you half-knew and never had words for. The pattern in your shoulders is the pattern in your week. Private coaching here starts with a reading, not a programme PDF. (This is Diagnostic Empathy productized — the copy must promise the *experience of being accurately seen*, and stop before it promises therapy.)
+2. **How it works.** Three steps, gold numerals: `01` The Reading (assessment session) → `02` The Plan (your blocks, your gate, your pace — written down) → `03` The Practice (sessions + your record card tracking evidence between them). Gym Eyes appears here as the member benefit: *your file remembers everything; no session is a rerun.*
+3. **Who it's for.** Honest triage, three lines: beginners who want a private on-ramp; members stuck at a block; people whose real project isn't fitness. And one line of anti-sell: *If you just want to be yelled at while you sweat, Hong Kong has cheaper options.* (The anti-sell is a premium signal and pure BR voice.)
+4. **Practical:** session length, packs, where, how to start (WhatsApp → short chat → assessment session booked). Price on request is acceptable *here only* — 1:1 coaching is consultative — but the assessment session should have a visible price to lower the entry threshold.
+5. **CTA band:** **START WITH THE READING. [MESSAGE COACH PAUL]** (WhatsApp primary on this page — the PT sale is a conversation.)
+
+---
+
+### 3.8 THE ROOM — `/room`
+
+**Purpose:** The gallery, rebuilt as a documentary essay. Its job is atmosphere transfer for people not yet ready to book — the page they leave open in a tab and come back to. Zero CTAs until the very end.
+
+**Format:** Not a grid. A single-column (occasionally two-up) photo essay in chapters, each chapter an eyebrow + a handful of images with captions (§2.5):
+
+1. `THE CLIMB` — street door, stairwell, the landing, the door opening.
+2. `THE ROOM` — wide frames, the light, the bags, the window over Bonham Strand.
+3. `THE WORK` — hands, drills, pads, chalk, sweat on floor.
+4. `THE PEOPLE` — practitioners between rounds, the youth class, corporate sleeves rolled. Faces with permission only.
+5. `TUESDAY, 7PM` — one closing sequence of a single evening, time-stamped captions. The essay's signature.
+
+Images lazy-load with a 400ms fade. No lightbox chrome, no download buttons, no Instagram embed (link to IG in a single caption-line at the end instead). Ends with the CTA band: **THE ROOM IS BETTER IN PERSON. [BOOK A CLASS]**
+
+---
+
+### 3.9 VISIT & BOOK — `/visit`
+
+**Purpose:** Remove every last logistical excuse. Also the canonical home of "the climb."
+
+**Layout (single scroll, no hero):**
+
+1. **Book strip** at top: the three doors again in compact form — Adult first class / Youth free class / Corporate enquiry — each one button. Whoever lands here cold can still act in one tap.
+2. **WhatsApp block, oversized.** H2: **THE FRONT DESK IS WHATSAPP.** Giant gold button, number printed beside it in tabular figures. Per-audience pre-filled messages (§4.3).
+3. **The Climb, practical edition.** Split: stairwell photo + plain instructions — *4/F Bonham Centre, 79–85 Bonham Strand, Sheung Wan. Exit A2, Sheung Wan MTR, four minutes. Look for the black door. Climb four floors — consider it your warm-up.* Embedded map (dark-styled to match; a default bright Google iframe is a design felony on this site).
+4. **Hours + first-visit notes** (what to bring, arrive 10 early, showers y/n — ground-truth at build).
+5. **Email + phone** for the WhatsApp-averse, quiet, at the bottom.
+
+---
+
+### 3.10 FIELD NOTES — `/journal` (kept, demoted)
+
+Blog survives for SEO and depth, restyled: editorial index (title + one-line dek + date, no thumbnails-in-cards grid), article template with the same type system, images graded per §2.4. Content direction: notes from the practice (what Block 4 teaches, why we don't spar kids, what a banker learned from footwork) — never "5 benefits of boxing." Footer-linked only.
+
+---
+
+## 4. WHAT MAKES IT CONVERT
+
+### 4.1 Social Proof Strategy
+
+- **Press = texture, not trophy.** One line of small-caps names (hero bottom + footer + corporate page). Logo badge walls are the fastest way to look like a template, and these outlets' logos clash with the palette. The names carry the weight; the restraint carries the class.
+- **Testimonials = pull-quotes with evidence.** Sourced to be specific: name, occupation, tenure, block position ("Sarah, lawyer, 2 years, Block 5"). One per page maximum on inner pages, placed near the decision point, styled as editorial quotes. Kill any quote that could apply to another gym.
+- **Before/after in philosophy, not physique.** The BR transformation artifact is a *sentence*, not a photo pair: "I came in to lose weight. I found out what I do when I'm under pressure — and changed it." Quote-pairs formatted as *Came for / Stayed for* can become a repeating motif (homepage, Practice, PT). No shirtless comparisons, ever — they'd contradict the entire brand in one image.
+- **The curriculum is proof.** The strongest trust signal on the site isn't a quote — it's the existence of a visible system (/method). Systems can't be faked with adjectives. Route skeptics there.
+
+### 4.2 Trust Signals by Audience
+
+| Audience | What builds trust | Where |
+|---|---|---|
+| Adult walk-in | "You'll be placed, not thrown in" · real photography · press line · no-shouting culture | Home, Classes |
+| Parent | No-sparring policy stated twice · max 8 · coach teaches personally · progress visibility · watch anytime · free first class | Youth |
+| Corporate | Brochure PDF · price stated plainly · insurance/invoicing · press · structured format | Corporate |
+| Member | Their block position · the record card · block-as-tuition framing | Method, Classes |
+
+### 4.3 Booking Friction Analysis
+
+**Rules:**
+
+- **≤2 clicks from any page to a booking action.** Sticky nav CTA guarantees click one; Punchpass or WhatsApp is click two.
+- **WhatsApp is a first-class booking channel, not a fallback.** HK behavioral reality: many people (nearly all parents) would rather send one message than create a Punchpass account. Every WhatsApp link uses `wa.me` deep links with per-page pre-filled text:
+  - Home/Classes: *"Hi Coach Paul — I'd like to book a first class."*
+  - Youth: *"Hi Coach Paul — I'm interested in the youth programme for my [12–16] year old. Could we arrange the free first class?"*
+  - Corporate: *"Hi — I'm exploring a corporate session for my team of [N]. Can you send details?"*
+  - PT: *"Hi Coach Paul — I'd like to book an assessment session."*
+  The pre-fill removes the blank-message paralysis that silently kills WhatsApp CTAs.
+- **Punchpass handoff happens at the last possible moment** (§3.6). The designed timetable is ours; only the final transaction leaves the brand environment.
+- **First-class offers are unmissable and unconditional.** No "contact us to ask about trials." Youth: free, stated in the hero. Adults: first class booking is the primary CTA sitewide.
+- **No forms.** The generic contact form is deleted from the site entirely. Every "contact" action is WhatsApp, email link, or a booking. Forms are where HK leads go to die.
+- **Mobile is the primary design target.** Assume >70% mobile traffic. The timetable, the block map, and the CTA band must be designed mobile-first and merely adapted up.
+
+### 4.4 The 4th-Floor Walkup Problem → The Velvet Rope
+
+The instinct is to hide the walkup. The bible's ruling: **lead with it.** A liability apologized for stays a liability; a liability owned becomes identity.
+
+- **The frame:** the climb is the threshold of the practice. *"No street frontage. No sign spinning at ground level. Everyone in the room chose to climb."* Four floors is a filter — and people trust what filters them. This is also literally true to the brand: practice begins before the door.
+- **Executions:** Homepage §8 "Four floors up"; The Room's opening chapter `THE CLIMB`; Visit page's warm practical version ("consider it your warm-up"); the footer line ("Four floors up. Worth the climb.").
+- **The honest hedge:** corporate groups and less-mobile visitors get lift/access info on the Corporate and Visit pages, factually, without deflating the myth. (Verify actual lift situation at build time; write to ground truth.)
+- **What we never do:** apologize ("don't worry, it's only 4 floors!"), or omit the floor from the address. The address always includes "4/F" — printed proudly, like a vintage.
+
+### 4.5 Measurement (so conversion is a fact, not a feeling)
+
+Instrument from day one (PostHog already in the stack): CTA-band click-through per page, WhatsApp taps by pre-fill variant, timetable→Punchpass handoff completion, /youth scroll depth to the safety section, /corporate brochure downloads. The design bible's claims are testable; test them.
+
+---
+
+## 5. WHAT TO KILL, KEEP, AND ADD
+
+### 5.1 Kill (with cause)
+
+| Item | Cause of death |
+|---|---|
+| **"Hong Kong's #1 Cuban Boxing Gym"** | Unverifiable superlative = the loudest "cheap" signal on the site. Also markets a style taxonomy customers don't shop by. The Cuban lineage can live inside the Practice page as *craft heritage* (one paragraph, worn like an old robe), never as a ranking claim. |
+| **Generic benefits list (weight loss, confidence, stress relief)** | Describes every gym on Earth, therefore sells none. Benefits now appear only as *outcomes of the specific system* (confidence via competence on /youth; pressure-composure via the gate on /method). |
+| **Press badge/logo wall** | Template tell. Replaced by the small-caps text line (§4.1). |
+| **The "What Is Cuban Boxing" explainer section** | Nobody arrives asking this. Folded into /practice as heritage color. |
+| **Standard centered hero → features → pricing template flow** | The homemade look *is* this flow. Replaced by the editorial architecture of §3. |
+| **Generic contact form** | See §4.3. WhatsApp or nothing. |
+| **Neutral gray palette drift** | Everything not black, gold, white, or the two sanctioned derivations (§2.1) is purged. Any burgundy found anywhere is a known hallucination — purge on sight. |
+| **Stock or ad-styled imagery, if any survives** | §2.4 banned list. |
+
+### 5.2 Keep (it's working)
+
+- **Punchpass** as booking backend — behind the designed timetable (§3.6).
+- **Press relationships** — redeployed as texture.
+- **The corporate brochure PDF** — already professional; link it, keep it current.
+- **Black/white base + Anton/Epilogue** — the current site's palette instinct was right; it lacked the gold discipline, warmth, and photography to make it sing.
+- **The schedule and pricing content** — accurate, just badly dressed (verify freshness before republishing).
+- **Blog archive** — migrates into Field Notes styling; existing SEO equity preserved with redirects.
+
+### 5.3 Add (missing entirely from the current site)
+
+1. **/method** — the curriculum + Gym Eyes made public. The single biggest addition; the moat page.
+2. **/youth** — a real parent-facing page. Paul's biggest growth bet currently has no dedicated door.
+3. **The record card artifact** — the visual language for progress (site now, member deliverable next).
+4. **WhatsApp as front desk** — header, pre-fills, oversized on /visit.
+5. **Coach Paul as a character** — the current site has no *person*. The academy's authority is a human; put him on it.
+6. **The climb, owned** — from unmentioned liability to velvet rope.
+7. **Photo captions + documentary grading** — the evidence layer.
+8. **The CTA band system** — no page currently ends with a door.
+9. **Per-audience entry-point integrity** — youth and corporate pages that stand alone for deep-linked arrival.
+10. **The reframe language** — practice space / guide / practitioner appears nowhere on the current site. It is the brand. It goes everywhere.
+
+---
+
+## APPENDIX A — BUILD NOTES (for the implementing session)
+
+- **Fonts:** self-host Anton + Epilogue (woff2, `font-display: swap`), preload the two critical weights. No Google Fonts runtime dependency — sovereignty and speed.
+- **Performance is a design feature:** the "expensive" feel dies at 4s LCP. Target LCP < 2.0s on 4G: AVIF/WebP, responsive srcset, hero poster before video, lazy-load below fold. No heavy frameworks required by this design — it is achievable as static pages + tasteful JS.
+- **Grade the photography in batch** (one Lightroom/preset pass per §2.4) so every image on the site shares one temperature. Consistency of grade > quality of any single shot.
+- **Dark-style the map embed** on /visit; a default map iframe violates the palette.
+- **Redirects:** map all current-site URLs (blog especially) to new structure at launch.
+- **Ground-truth pass before publish:** prices from Punchpass, schedule freshness, lift/access facts, press list accuracy. Filesystem-and-ledger discipline applies to copy: verify, don't assume.
+- **Accessibility:** gold on black passes contrast for large text and UI elements; body text is white-on-black — maintain the 84% floor. Focus states use the gold hairline. Reduced-motion honored (§2.8).
+- **Bilingual readiness:** structure copy in strings from day one; TC (Cantonese-audience) version is a likely near-term need, especially for /youth parents.
+
+## APPENDIX B — THE VOICE CARD (copy direction in ten lines)
+
+1. Short sentences. Confidence lives in periods, not exclamation marks.
+2. Specific beats superlative: "Tuesday, 7:12pm" > "world-class."
+3. Name the mechanism honestly (the Trojan Horse, the gate, the climb). Honesty is the premium register.
+4. One wry line per page is permitted. Two is a comedian.
+5. Never: beast, warrior, shred, crush, grind, unleash, #1.
+6. Always: practice, practitioner, block, the room, the work, the climb.
+7. Coach Paul is always "Coach Paul." The academy is "Basic Reflex" or "the academy," never "BR" in public copy.
+8. Numbers are facts and facts are gold — literally (§2.2 data treatment).
+9. Write to one reader per page. The parent page never talks to the parent's kid; the corporate page never talks to the employee.
+10. When in doubt, say the quiet, true thing: *we teach the fast thing slowly.*
+
+---
+
+*End of Design Bible v1.0. The site should feel like the room: warm, precise, quiet — four floors up, worth the climb.*

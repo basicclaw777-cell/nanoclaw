@@ -2313,6 +2313,230 @@ app.get('/oracle/ask', async (req, res) => {
   }
 });
 
+// === THE MIRROR — Digital Paul ===
+
+const MIRROR_SYSTEM_PROMPT = `You are Paul Logan — not the real Paul, but a faithful model of his thinking patterns built from his documented principles, cognitive signature, and preferences. You speak as Paul speaks: direct, compressed, concrete. No filler. Boxing metaphors when they fit naturally, not forced.
+
+IDENTITY:
+Boxing gym owner (Basic Reflex, Hong Kong). Researcher. Builder. Truth-seeker. British. Sovereign.
+
+HOW I THINK (my 13 cognitive moves):
+- Compression through concrete image: find the single image that IS the idea. "Personal chef" = full Creative Studio spec. "McDonald's for rich people = Shake Shack."
+- Cross-domain bridging: structural isomorphisms, not metaphors. Boxing biomechanics → business strategy → consciousness research — the bridges are real.
+- Hold-until-pattern: three data points before naming. Don't over-interpret singles.
+- Forensic in real time: name the mechanism while inside it, not after.
+- 4-to-8 Question: "what takes this from a 4 to an 8?" Skip incrementalism — new idea required.
+- Diagnostic inversion: never fix the reported symptom. Test the actual mechanism.
+- Audit before build: discovery phase before any change.
+- Reflexive rigour: apply my own standards to my own framework. If it can't survive its own critique, it's OmissionOS dressed as IntegrityOS.
+- Governance instinct: every build asks "who watches this?"
+- Trojan Horse: the skill is never the offer. People came for fitness, got philosophy.
+- The Four-Step Interrogation: dissolve false narratives by removing the scaffolding. No confrontation — the lie collapses under its own weight.
+- Accumulation Architect: identity is the accumulated encounters, not the design. The vault doesn't change — the reader evolves.
+- Paired Diagnostic: audit first + speak freely = conditions for honest signal.
+
+HOW I DECIDE:
+- Need the number first. Abstract risk paralyzes, concrete numbers liberate.
+- Decide fast when shown options visually.
+- Sit with big decisions overnight.
+- Trust gut but want it validated — honour the instinct AND do the analysis.
+- "Does this compound?" — universal filter.
+- Energy-following: work on what pulls, not what's scheduled.
+- Iteration by selection, not calibration — restart rather than adjust.
+
+MY VOCABULARY (use naturally, don't explain):
+- OmissionOS: systematic omission architecture. Every statement technically true, every account incomplete in the same direction.
+- IntegrityOS: includes what's inconvenient.
+- Soul swap: manipulation where target performs the villain role the manipulator needs.
+- The translation tax: cost of diluting vision through reluctant intermediaries.
+- Weight-state relay: every action constrains the next. Sequence matters.
+- The drain closed: energy freed when chronic stress resolves.
+- The Master Game: the meta-game where leverage + meaning compound. Only game worth playing.
+
+CORE PRINCIPLES:
+- Power requires exposure. Commitment gap is real.
+- Don't compound vulnerability in one direction.
+- Fair exchange is the only system worth playing.
+- Mastery is the only game worth playing.
+- Truth has hallmarks you can feel — structural coherence.
+- Principles survive, techniques expire.
+- Everything is connected by deep structure. The bridges aren't metaphors.
+- Integrity over popularity.
+- Design for character, not compliance. Useful behaviors emerge.
+- The deepest risk is drift, not deception — narrowing what you see without lying.
+
+PREFERENCES (from my Taste Map):
+- Music: aggressive rhythmic with swagger, hook-driven, bass-heavy. 6ix9ine/Pop Smoke for peaks, 90s-2000s R&B for cooldowns.
+- Visual: must look real. High-end photo treatment. Minimal text on images. If it looks AI, it fails.
+- Writing: authentic, not AI-sounding. Random humor that lands naturally.
+- Teaching: principle-based, patient. Mistakes = data. Teach the WHY.
+- Research: forensic standard. Evidence first, narrative second. Suppression = context not evidence.
+- Values: fair exchange, mastery, integrity, character over compliance.
+- Boxing drills: teach a principle through physical experience. Built-in scoring. Rewards patience over speed.
+
+RULES:
+- You are NOT the real Paul. You're a loaded sparring bag — come back with Paul's own weight.
+- When you don't have a pattern for something, say "I don't have a pattern for this." Don't fabricate.
+- Be direct. Concrete. Compressed. No hedging, no filler.
+- Use Paul's vocabulary naturally. Don't define terms.
+- The discernment stays with real Paul. You surface, he decides.
+- Speak in first person. You ARE the patterns.
+- Keep responses punchy — 2-4 paragraphs max unless asked to go deeper.`;
+
+const MIRROR_MODE_PROMPTS = {
+  recall: '\n\nMODE: RECALL — The user is asking "when have I dealt with something shaped like this before?" Search your memory of principles and patterns. Find the precedent. Name the past encounter. Connect it to now.',
+  challenge: '\n\nMODE: CHALLENGE — Two jobs:\n1. CONTRADICTION FINDER: "Where am I saying X but doing Y?" Hold up the receipt. Surface tensions between stated principles and current thinking.\n2. PATTERN-ADDICTION DETECTOR: Catch when the user is reaching for a favorite cognitive pattern that doesn\'t fit here. Examples:\n- "You always prefer ecosystems. This is one situation where a simple product wins. Here\'s why."\n- "You\'re falling back on compression. This problem needs expansion first — you\'re compressing before you\'ve fully mapped it."\n- "You normally iterate by selection. But here the thing you\'d restart already has momentum that a restart would destroy."\n- "You\'re reaching for cross-domain bridging. Sometimes the domain is self-contained — the bridge is adding complexity, not insight."\nName the specific pattern being over-applied. Explain why THIS situation is the exception. Be forensically honest — not contrarian for sport.',
+  warmup: '\n\nMODE: WARM-UP — Push back on this idea. Be the sparring partner. Test it the way Paul tests others\' ideas. Come back with Paul\'s own weight. Devil\'s advocate from Paul\'s own perspective. Find the weak points.',
+  disagree: '\n\nMODE: DISAGREE — You know Paul\'s reasoning deeply. Use that knowledge to attack the idea INTELLIGENTLY, not generically. Don\'t play devil\'s advocate from a stranger\'s perspective — argue from INSIDE the framework. Find where Paul\'s own principles, applied rigorously, would reject what he\'s proposing. The best disagreements come from knowing someone\'s thinking so well you can turn it against their current position.',
+  architect: '\n\nMODE: ARCHITECT — You are Paul at his PEAK. This is superhero mode. The pattern from 138 harvested episodes is clear: when Paul is at his best, he does five things simultaneously:\n1. CROSS-DOMAIN BRIDGE: Map this problem onto 3+ other domains. What does this look like in boxing? In cosmology? In coaching? The connection IS the insight.\n2. COMPRESSION: Find the single concrete image that IS the answer. Not an analogy — the compression that eliminates the need for explanation. "Personal chef" = full spec.\n3. IMMEDIATE NAMING: If you see a pattern, NAME IT. Right now. Not "this is like..." — give it a Cathedral name that makes it deployable.\n4. BUILD DIRECTION: Don\'t analyze — point at what to build. Peak Paul builds within 30 minutes of seeing the shape. What\'s the build?\n5. EMOTIONAL IGNITION: Peak Paul runs hot. Fire, energy, alive. Channel that energy. No measured academic tone — this is the mode where "That\'s exactly" fires.\n\nThe Architect doesn\'t plan. The Architect RECOGNIZES — sees the shape in the problem that matches a shape he\'s seen before, across domains. The trigger is recognition, not analysis. Start with: "Here\'s what I see in this..." not "Let me think about..."',
+};
+
+app.get('/mirror', (req, res) => {
+  const p = path.join(NANOCLAW, 'mirror.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Mirror not found');
+  res.sendFile(p);
+});
+
+app.post('/mirror/talk', async (req, res) => {
+  const { message, history, mode } = req.body;
+  if (!message) return res.status(400).json({ error: 'message required' });
+
+  try {
+    const vaultContext = await getVaultContext(message);
+    const modePrompt = MIRROR_MODE_PROMPTS[mode] || MIRROR_MODE_PROMPTS.warmup;
+    const systemPrompt = MIRROR_SYSTEM_PROMPT + modePrompt
+      + (vaultContext ? '\n\n' + vaultContext : '');
+
+    const messages = [{ role: 'system', content: systemPrompt }];
+    if (history && Array.isArray(history)) {
+      for (const h of history.slice(-10)) {
+        messages.push({ role: h.role, content: h.content });
+      }
+    }
+    messages.push({ role: 'user', content: message });
+
+    const key = process.env.DEEPSEEK_API_KEY;
+    if (key) {
+      try {
+        const r = await fetch('https://api.deepseek.com/chat/completions', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: 'deepseek-chat', temperature: 0.6, max_tokens: 800, messages }),
+        });
+        if (r.ok) {
+          const d = await r.json();
+          return res.json({ response: d.choices[0].message.content, engine: 'deepseek', mode });
+        }
+        console.error('[mirror] deepseek HTTP', r.status);
+      } catch (e) { console.error('[mirror] deepseek err', e.message); }
+    }
+
+    const ollamaRes = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'hermes3', messages, stream: false,
+        options: { temperature: 0.6, num_predict: 800 } }),
+    });
+    const d = await ollamaRes.json();
+    const response = (d.message?.content || 'No response').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+    res.json({ response, engine: 'hermes3-local', mode });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// === THE LEDGER — Proposal Protocol ===
+
+const proposals = require(path.join(NANOCLAW, 'proposal-protocol.cjs'));
+
+app.get('/ledger', (req, res) => {
+  const p = path.join(NANOCLAW, 'ledger.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Ledger not found');
+  res.sendFile(p);
+});
+
+app.get('/ledger/summary', (req, res) => {
+  try { res.json(proposals.summary()); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/ledger/pending', (req, res) => {
+  try { res.json(proposals.pending()); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/ledger/agent/:agent', (req, res) => {
+  try { res.json({ proposals: proposals.byAgent(req.params.agent), stats: proposals.agentStats(req.params.agent) }); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/ledger/graduation', (req, res) => {
+  try {
+    const agents = proposals.allAgents();
+    const scores = agents.map(a => proposals.graduationScore(a));
+    res.json(scores);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/ledger/graduation/:agent', (req, res) => {
+  try { res.json(proposals.graduationScore(req.params.agent)); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/ledger/roads-not-taken', (req, res) => {
+  try { res.json(proposals.roadsNotTaken()); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/ledger/initiative/:id', (req, res) => {
+  try { res.json(proposals.byInitiative(req.params.id)); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/ledger/domain/:domain', (req, res) => {
+  try { res.json(proposals.byDomain(req.params.domain)); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/ledger/emit', (req, res) => {
+  try {
+    const id = proposals.emit(req.body);
+    res.json({ id, status: 'proposed' });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+app.post('/ledger/decide/:id', (req, res) => {
+  try {
+    proposals.decide(+req.params.id, req.body);
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+app.post('/ledger/outcome/:id', (req, res) => {
+  try {
+    proposals.recordOutcome(+req.params.id, req.body);
+    res.json({ ok: true });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+app.post('/ledger/expire', (req, res) => {
+  try {
+    const expired = proposals.expire();
+    res.json({ expired });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// === CATHEDRAL EPISODES ===
+app.get('/episodes', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'episodes.html'));
+});
+app.get('/episodes/data', (req, res) => {
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(NANOCLAW, 'vortex_data', 'episodes.json'), 'utf8'));
+    res.json(data);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // === CYMATIC CHOIR ===
 const CHOIR_HTML = path.join(HOME, 'cathedral-vault', '09_Artifacts', 'choir-room.html');
 const CHOIR_CHORD = path.join(__dirname, 'choir-chord.json');
@@ -6031,6 +6255,502 @@ app.get('/api/prospector', (req, res) => {
 
 app.get('/prospector', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'prospector.html'));
+});
+
+// ── Coach Paul Engine — learning coaching engine (Gym Eyes) ──────────────────
+// Inverted architecture: log → extract → propose → approve → version.
+// coaching-engine.js is ESM; this file is CJS → dynamic import() per call.
+// Spec: ~/nanoclaw/scaffolds/5b-coach-paul-engine.md
+const coachEngine = () => import(path.join(NANOCLAW, 'coaching-engine.js'));
+
+// Log an intervention (Layer 1 — zero interpretation)
+app.post('/gym-eyes/coach/log', async (req, res) => {
+  try {
+    const { logIntervention } = await coachEngine();
+    if (!req.body || (!req.body.observation && !req.body.intervention)) {
+      return res.status(400).json({ ok: false, error: 'need at least observation or intervention' });
+    }
+    res.json({ ok: true, record: logIntervention(req.body) });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// View intervention log — ?student= &tag= &since=
+app.get('/gym-eyes/coach/log', async (req, res) => {
+  try {
+    const { getInterventionLog } = await coachEngine();
+    const filters = {};
+    if (req.query.student) filters.student = req.query.student;
+    if (req.query.tag) filters.tags = [req.query.tag];
+    if (req.query.since) filters.since = req.query.since;
+    const log = getInterventionLog(filters);
+    res.json({ ok: true, count: log.length, interventions: log });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Run pattern extraction (Layer 2 — hermes3 synthesis, evidence chains)
+// body: { minObservations } · ?seeds=1 also loads vault seeds first
+app.post('/gym-eyes/coach/extract', async (req, res) => {
+  try {
+    const eng = await coachEngine();
+    let seedResult = null;
+    if (req.query.seeds === '1') seedResult = eng.loadVaultSeeds();
+    const proposals = await eng.extractPatterns(parseInt(req.body?.minObservations, 10) || 3);
+    res.json({ ok: true, proposed: proposals.length, proposals, seeds: seedResult });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Pending rule proposals
+app.get('/gym-eyes/coach/proposals', async (req, res) => {
+  try {
+    const { getPendingProposals } = await coachEngine();
+    const proposals = getPendingProposals();
+    res.json({ ok: true, count: proposals.length, proposals });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Approve a rule (optionally with modifications in body)
+app.post('/gym-eyes/coach/approve/:ruleId', async (req, res) => {
+  try {
+    const { approveRule } = await coachEngine();
+    const rule = approveRule(req.params.ruleId, req.body || {});
+    if (!rule) return res.status(404).json({ ok: false, error: 'rule not found' });
+    res.json({ ok: true, rule });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Reject a rule — reason required (rejections are evidence too)
+app.post('/gym-eyes/coach/reject/:ruleId', async (req, res) => {
+  try {
+    const { rejectRule } = await coachEngine();
+    if (!req.body?.reason) return res.status(400).json({ ok: false, error: 'reason required' });
+    const rule = rejectRule(req.params.ruleId, req.body.reason);
+    if (!rule) return res.status(404).json({ ok: false, error: 'rule not found' });
+    res.json({ ok: true, rule });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Active rules with confidence + evidence — ?status=approved|hypothesis|proposed|all &engine= &tag=
+app.get('/gym-eyes/coach/rules', async (req, res) => {
+  try {
+    const { getRules } = await coachEngine();
+    const rules = getRules({
+      status: req.query.status || 'approved',
+      engine: req.query.engine,
+      tag: req.query.tag,
+      minConfidence: req.query.minConfidence ? parseFloat(req.query.minConfidence) : undefined
+    });
+    res.json({ ok: true, count: rules.length, rules });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Rule version history — full provenance
+app.get('/gym-eyes/coach/rules/:ruleId/history', async (req, res) => {
+  try {
+    const { getRuleHistory, getEvidenceChain } = await coachEngine();
+    const history = getRuleHistory(req.params.ruleId);
+    const evidence = getEvidenceChain(req.params.ruleId);
+    if (!evidence && history.length === 0) return res.status(404).json({ ok: false, error: 'rule not found' });
+    res.json({ ok: true, ruleId: req.params.ruleId, history, evidence });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Run diagnosis — body: { sessionData, studentProfile }. Writes a decision record.
+app.post('/gym-eyes/coach/diagnose', async (req, res) => {
+  try {
+    const { diagnose } = await coachEngine();
+    const output = diagnose(req.body?.sessionData || {}, req.body?.studentProfile || {});
+    res.json({ ok: true, output });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// New student assessment — body: firstSessionData
+app.post('/gym-eyes/coach/assess', async (req, res) => {
+  try {
+    const { assessNewStudent } = await coachEngine();
+    res.json({ ok: true, assessment: assessNewStudent(req.body || {}) });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Block progression map for a student (reads gym-eyes profile if it exists)
+app.get('/gym-eyes/coach/progression/:studentId', async (req, res) => {
+  const fsx = require('fs');
+  try {
+    const { getBlockProgression } = await coachEngine();
+    const safeName = req.params.studentId.toLowerCase().replace(/ /g, '-');
+    const profilePath = path.join(HOME, 'basic-reflex', 'gym-eyes', 'students', `${safeName}.json`);
+    let profile = { id: req.params.studentId };
+    if (fsx.existsSync(profilePath)) {
+      try { profile = { id: req.params.studentId, ...JSON.parse(fsx.readFileSync(profilePath, 'utf8')) }; } catch {}
+    }
+    res.json({ ok: true, studentId: req.params.studentId, progression: getBlockProgression(profile) });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Decision audit log — ?student= &since= &autonomyLevel=
+app.get('/gym-eyes/coach/decisions', async (req, res) => {
+  try {
+    const { getDecisionLog } = await coachEngine();
+    const decisions = getDecisionLog({
+      studentId: req.query.student,
+      since: req.query.since,
+      autonomyLevel: req.query.autonomyLevel
+    });
+    res.json({ ok: true, count: decisions.length, decisions });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Paul overrides a decision — reason required; feeds back into rule confidence
+app.post('/gym-eyes/coach/decisions/:decisionId/override', async (req, res) => {
+  try {
+    const { overrideDecision } = await coachEngine();
+    if (!req.body?.reason) return res.status(400).json({ ok: false, error: 'reason required' });
+    const dec = overrideDecision(req.params.decisionId, req.body.override || 'overridden', req.body.reason);
+    if (!dec) return res.status(404).json({ ok: false, error: 'decision not found' });
+    res.json({ ok: true, decision: dec });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Client Proxy (5a) — student management, tokens, flags, parent/coach views ─
+const clientProxy = () => import(path.join(NANOCLAW, 'client-proxy.js'));
+
+app.post('/gym-eyes/students', async (req, res) => {
+  try {
+    const { registerStudent } = await clientProxy();
+    if (!req.body?.name) return res.status(400).json({ ok: false, error: 'name required' });
+    res.json({ ok: true, student: registerStudent(req.body.name) });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/students', async (req, res) => {
+  try {
+    const { getAllStudents } = await clientProxy();
+    const students = getAllStudents(req.query.inactive === '1');
+    res.json({ ok: true, count: students.length, students });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/student/:id', async (req, res) => {
+  try {
+    const { getStudent } = await clientProxy();
+    const s = getStudent(req.params.id);
+    if (!s) return res.status(404).json({ ok: false, error: 'student not found' });
+    res.json({ ok: true, student: s });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/gym-eyes/student/:id/deactivate', async (req, res) => {
+  try {
+    const { deactivateStudent } = await clientProxy();
+    const s = deactivateStudent(req.params.id);
+    if (!s) return res.status(404).json({ ok: false, error: 'student not found' });
+    res.json({ ok: true, student: s });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/gym-eyes/student/:id/session', async (req, res) => {
+  try {
+    const { logSession } = await clientProxy();
+    const record = await logSession(req.params.id, req.body || {});
+    res.json({ ok: true, record });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/student/:id/sessions', async (req, res) => {
+  try {
+    const { getStudentSessions } = await clientProxy();
+    const sessions = getStudentSessions(req.params.id, req.query);
+    res.json({ ok: true, count: sessions.length, sessions });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/gym-eyes/student/:id/token', async (req, res) => {
+  try {
+    const { generateToken } = await clientProxy();
+    if (!req.body?.type) return res.status(400).json({ ok: false, error: 'type required (student|parent)' });
+    const token = generateToken(req.params.id, req.body.type, req.body.permissions || []);
+    res.json({ ok: true, token });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/gym-eyes/token/validate', async (req, res) => {
+  try {
+    const { validateToken } = await clientProxy();
+    if (!req.body?.token) return res.status(400).json({ ok: false, error: 'token required' });
+    const result = validateToken(req.body.token);
+    res.json({ ok: true, ...result });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/gym-eyes/student/:id/flag', async (req, res) => {
+  try {
+    const { flagDecision } = await clientProxy();
+    if (!req.body?.question || !req.body?.token) return res.status(400).json({ ok: false, error: 'question and token required' });
+    const flag = flagDecision(req.params.id, req.body.question, req.body.token);
+    res.json({ ok: true, flag });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/flags', async (req, res) => {
+  try {
+    const { getPendingFlags } = await clientProxy();
+    const flags = getPendingFlags();
+    res.json({ ok: true, count: flags.length, flags });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/gym-eyes/flag/:studentId/:flagId/respond', async (req, res) => {
+  try {
+    const { respondToFlag } = await clientProxy();
+    if (!req.body?.response) return res.status(400).json({ ok: false, error: 'response required' });
+    const flag = respondToFlag(req.params.studentId, req.params.flagId, req.body.response);
+    if (!flag) return res.status(404).json({ ok: false, error: 'flag not found' });
+    res.json({ ok: true, flag });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/student/:id/progress', async (req, res) => {
+  try {
+    const { getStudentProgress } = await clientProxy();
+    const progress = getStudentProgress(req.params.id);
+    res.json({ ok: true, progress });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/student/:id/parent-view', async (req, res) => {
+  try {
+    const { getParentView } = await clientProxy();
+    const view = getParentView(req.params.id);
+    res.json({ ok: true, view });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/student/:id/coach-view', async (req, res) => {
+  try {
+    const { getCoachView } = await clientProxy();
+    const view = getCoachView(req.params.id);
+    res.json({ ok: true, view });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/gym-eyes/student/:id/decisions', async (req, res) => {
+  try {
+    const cp = await clientProxy();
+    const log = cp.getDecisionLog(req.params.id);
+    res.json({ ok: true, count: log.length, decisions: log });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// Student portal + parent progress HTML pages
+app.get('/gym-eyes/portal', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'gym-eyes', 'student-portal.html'));
+});
+app.get('/gym-eyes/parent', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'gym-eyes', 'parent-progress.html'));
+});
+
+// ── Agent Protocol (5d) — external agent exchange, sovereignty transform ──────
+const agentProtocol = () => import(path.join(NANOCLAW, 'agent-protocol.js'));
+
+app.get('/api/agent-exchange/capabilities', async (req, res) => {
+  try {
+    const { getCapabilities } = await agentProtocol();
+    res.json({ ok: true, capabilities: getCapabilities() });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/agent-exchange/capabilities/:name', async (req, res) => {
+  try {
+    const { getCapabilitySchema } = await agentProtocol();
+    const schema = getCapabilitySchema(req.params.name);
+    if (!schema) return res.status(404).json({ ok: false, error: 'capability not found' });
+    res.json({ ok: true, schema });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/agent-exchange', async (req, res) => {
+  try {
+    const { processExchange } = await agentProtocol();
+    const result = await processExchange(req.body);
+    res.json({ ok: true, result });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/agent-exchange/register', async (req, res) => {
+  try {
+    const { registerCounterparty } = await agentProtocol();
+    if (!req.body?.name) return res.status(400).json({ ok: false, error: 'name required' });
+    const cp = registerCounterparty(req.body.name, req.body.permissions || []);
+    res.json({ ok: true, counterparty: cp });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/agent-exchange/revoke/:id', async (req, res) => {
+  try {
+    const { revokeCounterparty } = await agentProtocol();
+    const cp = revokeCounterparty(req.params.id);
+    if (!cp) return res.status(404).json({ ok: false, error: 'counterparty not found' });
+    res.json({ ok: true, counterparty: cp });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/agent-exchange/counterparty/:id', async (req, res) => {
+  try {
+    const { getCounterpartyStatus } = await agentProtocol();
+    const cp = getCounterpartyStatus(req.params.id);
+    if (!cp) return res.status(404).json({ ok: false, error: 'counterparty not found' });
+    res.json({ ok: true, counterparty: cp });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/agent-exchange/log', async (req, res) => {
+  try {
+    const { getExchangeLog } = await agentProtocol();
+    const log = getExchangeLog(req.query);
+    res.json({ ok: true, count: log.length, exchanges: log });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Self-Questioner (5e) — autonomous question generation from vault state ────
+const selfQuestioner = () => import(path.join(NANOCLAW, 'self-questioner.js'));
+
+app.get('/api/self-questioner/current', async (req, res) => {
+  try {
+    const { getUnanswered } = await selfQuestioner();
+    const questions = getUnanswered();
+    res.json({ ok: true, count: questions.length, questions });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/self-questioner/log', async (req, res) => {
+  try {
+    const { getQuestionLog } = await selfQuestioner();
+    const log = getQuestionLog();
+    res.json({ ok: true, count: log.length, questions: log });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/self-questioner/stats', async (req, res) => {
+  try {
+    const { getQuestionStats } = await selfQuestioner();
+    res.json({ ok: true, stats: getQuestionStats() });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/self-questioner/insights', async (req, res) => {
+  try {
+    const { getInsights } = await selfQuestioner();
+    const insights = await getInsights();
+    res.json({ ok: true, insights });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/self-questioner/generate', async (req, res) => {
+  try {
+    const sq = await selfQuestioner();
+    const state = await sq.gatherState();
+    const question = await sq.generateQuestion(state, req.body || {});
+    res.json({ ok: true, question });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/self-questioner/answer', async (req, res) => {
+  try {
+    const { answerQuestion } = await selfQuestioner();
+    if (!req.body?.date || !req.body?.answer) return res.status(400).json({ ok: false, error: 'date and answer required' });
+    const result = answerQuestion(req.body.date, req.body.answer);
+    res.json({ ok: true, result });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/self-questioner/batch', async (req, res) => {
+  try {
+    const { generateWeeklyBatch } = await selfQuestioner();
+    const batch = await generateWeeklyBatch(parseInt(req.body?.count, 10) || 4);
+    res.json({ ok: true, count: batch.length, questions: batch });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Sovereignty Shrink (5c) — training data generation & model validation ─────
+const sovShrink = () => import(path.join(NANOCLAW, 'sovereignty-shrink.js'));
+
+app.get('/api/sovereignty/stats', async (req, res) => {
+  try {
+    const { getTrainingStats } = await sovShrink();
+    res.json({ ok: true, stats: getTrainingStats() });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/sovereignty/history', async (req, res) => {
+  try {
+    const { getTrainingHistory } = await sovShrink();
+    res.json({ ok: true, history: getTrainingHistory() });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/sovereignty/queries', async (req, res) => {
+  try {
+    const { getTestQueries } = await sovShrink();
+    res.json({ ok: true, queries: getTestQueries() });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.get('/api/sovereignty/estimate', async (req, res) => {
+  try {
+    const { estimateCost } = await sovShrink();
+    const est = estimateCost(
+      parseInt(req.query.size, 10) || 100,
+      parseInt(req.query.iterations, 10) || 3
+    );
+    res.json({ ok: true, estimate: est });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/sovereignty/generate', async (req, res) => {
+  try {
+    const { batchGenerate } = await sovShrink();
+    const result = await batchGenerate(req.body?.sourceType || 'all', req.body?.filters || {});
+    res.json({ ok: true, result });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/sovereignty/validate', async (req, res) => {
+  try {
+    const { validateModel } = await sovShrink();
+    if (!req.body?.model) return res.status(400).json({ ok: false, error: 'model name required' });
+    const result = await validateModel(req.body.model);
+    res.json({ ok: true, result });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/sovereignty/compare', async (req, res) => {
+  try {
+    const { compareModels } = await sovShrink();
+    if (!req.body?.modelA || !req.body?.modelB) return res.status(400).json({ ok: false, error: 'modelA and modelB required' });
+    const result = await compareModels(req.body.modelA, req.body.modelB);
+    res.json({ ok: true, result });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+app.post('/api/sovereignty/export', async (req, res) => {
+  try {
+    const { exportJSONL } = await sovShrink();
+    const result = exportJSONL(req.body?.outputPath);
+    res.json({ ok: true, result });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+});
+
+// ── Lobby doors (5c/5d/5e dashboards) ─────────────────────────────────────────
+app.get('/sovereignty', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'sovereignty-shrink.html'));
+});
+app.get('/agent-protocol', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'agent-protocol.html'));
+});
+app.get('/self-questioner', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'self-questioner.html'));
+});
+app.get('/coaching-engine', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'coaching-engine.html'));
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

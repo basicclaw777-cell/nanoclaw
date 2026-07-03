@@ -1,6 +1,71 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-03 — Scaffold completion + Website Design Bibles + Multi-model review relay
+
+**Scaffold 5a-5e fully wired (continued from 2026-07-03 early session):**
+- 5b coaching engine lobby door built (`~/Cathedral/control-panel/coaching-engine.html`, 351 lines, cockpit aesthetic)
+- Serve route `/coaching-engine` wired in cath-bridge.cjs
+- All 4 scaffold lobby doors now live: /sovereignty, /agent-protocol, /self-questioner, /coaching-engine
+
+**BR Website Design Bible v1.1** (`~/basic-reflex/docs/BR_WEBSITE_DESIGN_BIBLE.md`):
+- Fable-authored, ~670 lines. Complete redesign spec for basicreflex.com
+- Key decisions: "THE SLOWEST BOXING GYM IN HONG KONG" headline, Gold Law (<=5%), 4th-floor velvet rope, WhatsApp front desk, /method as standalone moat page, youth page as light chapter
+- 10-page architecture with per-audience user journeys (adult, parent, corporate, member)
+- v1.1 additions from Gemini review: mobile gold rule, corporate form exception, photography pipeline, Punchpass strategy, video delivery, member portal architecture, system telemetry
+
+**CSOB Website Concept Bible v1.1** (`~/basic-reflex/docs/CSOB_WEBSITE_CONCEPT_BIBLE.md`):
+- Fable-authored, ~330 lines. Concept for cubanschoolofboxing.com (domain owned, unused)
+- Decision: CSOB = the Method Brand (the institution). BR = flagship campus.
+- "Basic Reflex is where you train. The Cuban School of Boxing is what you learn."
+- Lineage honesty: "a school of thought, not a passport"
+- Phase 1 (2 weeks): 4 pages from existing artifacts. Phase 2: online academy with Logan. Phase 3: coach certification.
+- v1.1: Logan aesthetic bridging spec, data sovereignty section
+
+**Multi-model review relay (5 reviews received):**
+- Gym Eyes Visual Standard → Gemini: Overall A, 70% deterministic
+- BR + CSOB bibles → Gemini (Response A + B): convergent findings on corporate form ban, photography dependency, mobile gold rule, Logan aesthetic gap, system telemetry, data sovereignty — all folded into v1.1
+- Integration audit (5a/5b/5c) → Gemini: top risk = concurrent I/O on JSON, SQLite migration recommended (deferred)
+- Logan Bible → Gemini: passes independent existence test, opposing force is thinnest section
+
+**Review bundle #5** created: `~/nanoclaw/docs/chatgpt-review-bundles/split/5-PASTE-FIRST-prompt.txt` + source files
+
+**Decisions:**
+- Logan opposing force = OmissionOS coach archetype (narcs/prettas in coaching uniform)
+- Fable designs, Forge builds: next session Fable produces homepage HTML reference, Forge builds remaining pages
+- SQLite migration for 5a/5b scoped but deferred
+
+## 2026-07-02 — The Mirror + The Ledger + Autonomy Spectrum
+
+**What:** Three interconnected systems from GPT relay threads — a Digital Paul you can argue with, a universal proposal protocol for agent graduation, and a new Cathedral principle.
+
+**The Mirror** (`mirror.html`, route `/mirror`):
+- Conversational Digital Paul built from Paul Kernel (inverted to first person) + 13 cognitive moves + Taste Map preferences + vault RAG context per query
+- 4 modes: Warm-up (sparring partner), Recall (pattern precedent), Challenge (contradiction finder + pattern-addiction detector), Disagree (argues from inside Paul's own framework)
+- DeepSeek primary, hermes3 fallback. System prompt ~2000 tokens.
+- Mirror Evolution Audit (`mirror-evolution.js`): monthly cron, compares recent vault activity against identity docs, surfaces unnamed patterns and principle strain. First run found "Three-Body Relay" unnamed pattern.
+
+**The Ledger / Proposal Protocol** (`proposal-protocol.cjs` + `ledger.html`, route `/ledger`):
+- Universal contract: agents emit proposals → Paul decides (4 decline buckets: agent_wrong, paul_context, world_changed, right_wrong_timing) → outcomes tracked → calibration error computed
+- Evidence Engine: 4 gates (Reliability, Calibration, Value, Containment) weighted 0.30/0.30/0.25/0.15 + trust decay (0.995^days)
+- Graduation levels: simulation (<0.35) → shadow (0.35+) → limited (0.5+) → trusted (0.65+) → autonomous (0.8+)
+- Domain containment scores: finance 0.6, coaching 0.9, gym 0.8, research 1.0, builder 0.85, entrepreneur 0.7
+- REST API: 12 endpoints on `/ledger/*` (emit, decide, outcome, summary, pending, graduation, roads-not-taken, agent, domain, initiative, expire)
+- Dashboard: 4 tabs (Pending with accept/decline buttons, Graduation cards with gate scores, Roads Not Taken, Emit form)
+- SQLite `proposals` table in metrics.db (no collision with existing `ledger` table)
+
+**The Autonomy Spectrum** (vault principle):
+- Autonomy is a spectrum, not a switch. Three layers: Plumbing (already autonomous), Operational (earnable), Strategic (Paul only)
+- Vaulted at `02_Refined_Gold/cathedral/the-autonomy-spectrum.md`
+- 10-Block Graduation Protocol mapped from boxing progression
+
+**Files:** mirror.html, mirror-evolution.js, proposal-protocol.js (ESM), proposal-protocol.cjs (CJS), ledger.html, prompts/gpt-relay-mirror-ledger.md
+**Routes:** /mirror, /mirror/talk, /ledger, /ledger/* (12 API endpoints)
+**Lobby:** Mirror in Personal district, Ledger in Agents district
+**Manifest:** mirror-evolution added (cron `0 10 1 * *`)
+
+---
+
 ## 2026-07-02 — DeepSeek Relay Harvest: Mycelium-Comet-Neural-Microcosm
 
 **What:** Harvested Paul's DeepSeek chat into 5 vault deposits via 3 parallel agents. Source: ~/Downloads/Mycelium-Comet-Neural-Microcosm-Insight.txt
@@ -2810,3 +2875,77 @@ Gotcha: ~/basic-reflex has NO git remote — local commits only (nanoclaw + cath
 - drill-player = combo demo for PT3
 - calibrate.py = Sugar Principle data
 - This IS the closed-loop coach first real wiring opportunity
+
+## 2026-07-03 — Coach Paul Engine (5b — learning coaching engine)
+
+Built the learning coaching engine per scaffolds/5b-coach-paul-engine.md. NOT a decision tree — inverted architecture: Paul coaches → interventions logged → hermes3 pattern extraction → rule proposals with evidence chains + confidence → Paul approves → version-controlled rules → confidence-gated autonomy (AUTO 90%+ / RECOMMEND 70-89% / ASK 50-69% / COLLECT <50%). "Git for coaching philosophy."
+
+### Files
+- `~/nanoclaw/coaching-engine.js` (ESM, new) — full engine: logIntervention, getInterventionLog, extractPatterns (tag clustering → hermes3 synthesis w/ verbatim-quote fallback, duplicate-evidence-set dedupe), getPendingProposals, approveRule/rejectRule/modifyRule (changelog snapshots = version control), getRules, getRuleChangelog, diagnose (confidence-gated, Paul's language quoted verbatim from evidence, writes decision record), assessNewStudent (engine signals + starting block, capped at 4 — fear gate never assumed passed), detectPlateau (flatline <5% spread over 3+ sessions, engine attribution, 4→5 wall aware), updateConfidence (+0.03/-0.05), getEvidenceChain, getDecisionLog, overrideDecision (feeds confidence), getRuleVersion (reconstructs from changelog snapshots), getRuleHistory, getBlockProgression, loadVaultSeeds. CLI: `node coaching-engine.js seeds|extract|proposals|rules`.
+- `~/nanoclaw/prompts/coach-pattern-synthesis.txt` (new) — hermes3 synthesis prompt, evidence-only + keep-Paul's-words rules (SI-15).
+- Stores (new): `coaching-interventions.json`, `coaching-rules.json`, `coaching-changelog.json`, `coaching-decisions.json`.
+- `cath-bridge.cjs` — 13 routes under `/gym-eyes/coach/*` (log, extract, proposals, approve/:id, reject/:id, rules, rules/:id/history, diagnose, assess, progression/:studentId, decisions, decisions/:id/override). CJS→ESM via dynamic import().
+- `telegram-bot.js` — `/coach` command family (log, proposals, approve, reject, rules, diagnose, confidence, changelog, decisions, override, extract, seeds). Plain text, no parse_mode.
+
+### Vault seeds loaded as HYPOTHESES (27, confidence 0.60, status 'hypothesis' — need outcome validation, never auto-fire)
+6 diagnostic-empathy components + 4 three-engines seeds + 3 fear-gate seeds + 13 cognitive-signature meta-skills + 1 block-progression map. Sources: diagnostic-empathy-with-surgical-naming.md, the-three-engines.md, the-fear-gate-model.md, pauls-cognitive-signature.md.
+
+### Verified (isolated-HOME test + live smoke test, all 9 spec criteria)
+4 similar interventions → 1 proposal (0.74, hermes3-synthesized, 3/4 success rate); approve → v1.0 active; diagnose fires rule with Paul's verbatim words + decision record; override → confidence 0.74→0.69 + reason logged; modify → v1.1, confidence reset 0.60, v1.0 reconstructable from changelog snapshot; plateau detected at 4→5 wall w/ fear-gate reading; seeds idempotent. cath-bridge + cathedral-bot restarted, routes live on 8080, smoke data purged.
+
+### Outstanding
+No lobby card / dashboard door yet (SI-10④) — engine is API+Telegram only; needs a /gym-eyes hub tile or coach.html next session.
+
+## 2026-07-03 — Agent Protocol (5d): sovereign agent-to-agent exchange
+
+### Built
+`~/nanoclaw/agent-protocol.js` (ESM) from scaffolds/agent-protocol-stub.js per scaffolds/5d-agent-protocol.md v2. Capability-based (A2A Agent Card pattern, closed + permissioned): counterparties invoke capabilities, never agents. Exports: getCapabilities, getCapabilitySchema, validatePayload, validateInbound, processExchange, registerCounterparty, revokeCounterparty, getCounterpartyStatus, getExchangeLog. Stores created: agent-capabilities.json (EvaluateBoxingSession v1.0 + GetStudentProgress v1.0), agent-protocol-registry.json (empty), agent-protocol-log.json (empty).
+
+### processExchange pipeline
+envelope validation (protocol/capability/version/key/permission → 400/401) → rate limit per counterparty rateLimit "N/day|hour|min" counted from exchange log, 429 + retry-after, rejections logged but don't consume budget → payload validation against inputSchema with field-level errors → route: EvaluateBoxingSession → coaching-engine diagnose() with SOVEREIGNTY TRANSFORM (strips confidence/ruleId/evidence/paulsWords/decisionRecord; outbound = diagnoses{area,finding,priority} + prescriptions{drill,description,frequency,duration} + constraints_acknowledged + next_check(+14d)); GetStudentProgress → gym-eyes-students.json 4-field subset, 404 if unknown. Every attempt logged: counterparty, capability, version, payloadSize, startedAt/completedAt, responseTime, status. 500s never leak internals outbound (detail goes to log only).
+
+### Verified (isolated-HOME test, 32/32)
+Register→key; valid exchange→coaching response; sovereignty leak-scan clean (no confidence/ruleId/evidence/decision/paulsWords in outbound JSON); version mismatch→400; wrong key→401; malformed payload→field-named errors; unknown student→404; log has timing; rate limit→429+retry-after; revoke→401; unknown capability rejected. Real store files untouched by tests.
+
+### Outstanding
+cath-bridge routes (`/api/agent-exchange/*`) + Telegram `/agent` commands — Paul wires (files intentionally not modified). No door yet (SI-10④) — counterparty/exchange view could join the future gym-eyes hub. gym-eyes-students.json does not exist yet — GetStudentProgress returns 404 until Gym Eyes writes it (handles array or {students:[]} shapes). Async task support (taskId/pollUrl) deferred — diagnose() is sync and fast.
+
+## 2026-07-03 — Client Proxy Layer (5a): student/parent access with authorization boundary
+
+### Built
+`~/nanoclaw/client-proxy.js` (ESM) per scaffolds/5a-client-proxy.md v2. Exports: registerStudent, deactivateStudent, getStudent, findStudentByName, getAllStudents, logSession, getStudentSessions, generateToken, validateToken, revokeToken, flagDecision, respondToFlag, getPendingFlags, getStudentProgress, getParentView, getCoachView, getDecisionLog, overrideDecision. Stores created empty: gym-eyes-students.json, gym-eyes-decisions.json. Doors: ~/basic-reflex/gym-eyes/student-portal.html (progress + milestones + drills + homework submission) and parent-progress.html (read-only summary + "Question this" flag flow) — both token-gated via ?token=stp_..., both to GYM_EYES_VISUAL_STANDARD.md (reading-room layout, warm dark #0d0b08, gold trio, Anton/Bebas/DM Sans, grain+vignette+patina, coach-voice errors). Deliberate deviation: no internal gym-nav on client pages (would link outsiders into internal rooms); BR identity footer instead.
+
+### Authorization layer
+Scoped tokens `stp_<32hex>` (crypto.randomBytes) live on the profile; student → submit_homework+view_own_progress, parent → view_progress+question_decision. validateToken requires token AND student active; deactivateStudent kills all its tokens. flagDecision enforces token↔student match + question_decision perm (student tokens refused). Views are the boundary: getStudentProgress/getParentView strip rules, evidence chains, confidence, Paul's notes; getCoachView returns everything. Flags are never auto-resolved — respondToFlag is Paul-only by design.
+
+### Coaching-engine plug
+logSession lazily imports coaching-engine.js and runs diagnose(); decision record (gym-eyes-decisions.json) carries rulesApplied + confidenceScores + engineDecisionId link into coaching-decisions.json. Engine silent/unavailable → record still written (rulesApplied []) with caller's coachingNotes (virtual_tutor.py scoring) as prescriptions. overrideDecision forwards linked overrides to the engine so rule confidence takes the hit.
+
+### Verified (CLI, live engine loaded, stores reset to [] after)
+register→student_001; student+parent tokens with correct scopes; student token refused on flagDecision, parent token accepted; respond→resolved+visible in parent view; sanitized views leak-checked (no rules/confidence/evidence keys); prescription fallback to coachingNotes when no rules fire; decision records link engineDecisionId; override writes humanOverride+reason+date; revoke→"token revoked"; deactivate→parent token dead; active-only vs all listing; drift-color grep on both HTML files clean. Engine-side test records purged from coaching-decisions.json.
+
+### Outstanding
+cath-bridge routes + `/student` Telegram commands — Paul wires (cath-bridge.cjs/telegram-bot.js intentionally untouched). Telegram notify-on-flag happens at that wiring (flagDecision returns studentName for the message). Homework upload endpoint (`POST /gym-eyes/my/homework`) needs multipart handling + homework_processor.py hookup at the bridge. Trend currently reads comboAccuracy over last 3 sessions — refine when improvement-velocity analytics land (test criterion 10).
+
+## 2026-07-03 — Sovereignty Shrink (5c): distillation pipeline, pre-hardware half
+
+### Built
+`~/nanoclaw/sovereignty-shrink.js` (ESM) per scaffolds/5c-sovereignty-shrink.md. Exports: generateTrainingPair, batchGenerate, getTrainingStats, exportJSONL, getTestQueries, scoreResponse, validateModel, compareModels, logTrainingRun, getTrainingHistory, estimateCost, trainModel (HARDWARE-GATED STUB), INSTRUCTION_TYPES. Stores: sovereignty-training-data.json (pairs), sovereignty-training-log.json (runs), sovereignty-test-queries.json (25 curated queries: 5 diagnostic / 5 prescription / 5 metaphor / 5 edge-case / 5 anti-pattern, each with expected-lexicon + domain-keywords + must-avoid). Prompt: prompts/training-data-gen.txt (SI-15 compliant — Cathedral context + evidence-only rule + Paul's coaching frame).
+
+### Data generator
+Four source readers: vault nuggets (02_Refined_Gold + 06_Methods, coaching-keyword filtered, heading-section split, quality 0.9/0.75), coaching rules (approved+hypothesis from coaching-rules.json, quality=confidence), interventions with outcomes (coaching-interventions.json, positive-outcome pairs 0.85), taste anchors (taste-map.json meta_pattern + rejections + domain clusters). Every source yields one DETERMINISTIC base pair (ground truth, works with Ollama down) + 3-5 hermes3-diversified phrasings. Pairs carry source/source_type/instruction_type (6 types incl. fear_gate_assessment)/domain/quality_score. Dedupe by sha1(instruction+output). exportJSONL → training/data/cathedral-training.jsonl with minQuality filter.
+
+### Validation harness
+Deterministic 4-dim scoring (same yardstick for base/distilled/frontier): lexicon_match (per-query terms 0.7 + general Paul lexicon 0.3), domain_accuracy (query substance keywords), reasoning_depth (causal connectors + prescription present + not-a-wall-of-text), pauls_voice (must_avoid list −0.4 each + slop patterns −0.25, with rejection-context guard). compareModels computes improvementPctBOverA + passesShrinkGate (>20% = spec acceptance).
+
+### Verified (live, hermes3 up)
+64 pairs generated (25 taste, 27 rules, 12 vault incl. 10 hermes3 variants; interventions store empty — 0 logged yet). JSONL export 64 lines. Harness discriminates: base hermes3 scored 0.36 composite (anti_pattern 0.24) while a hand-written Paul-correct answer scored 0.86 on the same query — that gap IS the signal the distilled model must close. compareModels ran gemma3:4b vs hermes3 end-to-end. estimateCost: 500 pairs × 1000 iters ≈ 1.1h on M5 Max vs 6.5h/INFEASIBLE on M4 16GB. Cost tracker round-trip logged run_1783019592645 (dryRun).
+
+### Outstanding
+Training itself blocked until M5 Mac Studio (~Oct 2026) — trainModel() stub documents the exact MLX command sequence for that day. Bulk vault generation (500+ pair criterion) is a long hermes3 run — kick off `node sovereignty-shrink.js generate vault` overnight when wanted (currently 64 pairs, readyForTraining:false). cath-bridge routes + Telegram command + door pending (cath-bridge.cjs/telegram-bot.js intentionally untouched, SI-10④ flag). Throughput numbers in estimateCost are planning estimates — recalibrate from the first real M5 run via logTrainingRun.
+
+## 2026-07-03 — Cognitive Reflection Protocol (The Mirror's conversation design language)
+- Wrote `~/cathedral-vault/06_Methods/cognitive-reflection-protocol.md` (v1.0.0) — interaction protocol for The Mirror, interface-independent (chat/voice/AR/embodied).
+- Six composable response modes (REFLECT/CHALLENGE/CONNECT/HOLD/WITNESS/SILENCE; WITNESS+SILENCE exclusive), confidence bands on every reflection, Constitutional Constraint (evidence-auditable reflections), 5-question provenance records, self-calibration from rejections, escalation rules, Mirror-vs-Cathy boundary, Parrot Test, 12 anti-patterns.
+- Calibrated against `paul-decision-architecture.md` (exists, referenced as primary source). Appendix C: gap analysis vs current mirror.html + mirror-evolution.js (largest gaps: no pattern-history memory, no calibration loop, no per-reflection confidence/provenance, no SILENCE path). Appendix D: 5-phase upgrade path.
+- Filed by Fable.

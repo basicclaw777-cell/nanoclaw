@@ -26,6 +26,16 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 ## Loops
 - **Loop System** · `~/Cathedral/loops/` · interactive Claude Code `/loop` + `--dangerously-skip-permissions` · 15 designs, 2 active (improvement-operator, cathy-proactive) · doc: loops/LOOP-CATALOG.md
 
+- **Coach Paul Engine** · `~/nanoclaw/coaching-engine.js` (ESM) · trigger: `/coach` (telegram-bot.js) + 13 REST routes `/gym-eyes/coach/*` (cath-bridge) + CLI `node coaching-engine.js seeds|extract` · learning loop: log→extract(hermes3)→propose→approve→version, confidence-gated autonomy, 27 vault-seed hypotheses · stores: coaching-{interventions,rules,changelog,decisions}.json · doc: scaffolds/5b-coach-paul-engine.md + BUILD_LOG 2026-07-03
+
+- **Agent Protocol (sovereign A2A exchange)** · `~/nanoclaw/agent-protocol.js` (ESM) · trigger: `/agent` (telegram-bot.js) + 7 REST routes `/api/agent-exchange/*` (cath-bridge) + CLI `node agent-protocol.js caps|register|status|log` · capability-based (EvaluateBoxingSession v1.0 → coaching-engine diagnose(), GetStudentProgress v1.0 → gym-eyes-students.json), keyed counterparties, per-counterparty rate limits, sovereignty transform strips all internals from outbound · stores: agent-{capabilities,protocol-registry,protocol-log}.json · doc: scaffolds/5d-agent-protocol.md + BUILD_LOG 2026-07-03
+
+- **Client Proxy Layer (Gym Eyes students/parents)** · `~/nanoclaw/client-proxy.js` (ESM) · trigger: `/student` (telegram-bot.js) + 16 REST routes `/gym-eyes/student*`, `/gym-eyes/flags`, `/gym-eyes/portal`, `/gym-eyes/parent` (cath-bridge) + CLI `node client-proxy.js register|token|flag|progress|...` · student profiles + scoped stp_ tokens (student/parent), flag→Paul-resolves workflow, decision record per session (plugs coaching-engine diagnose(), degrades gracefully), sanitized views (students/parents NEVER see rules/evidence/confidence) · stores: gym-eyes-{students,decisions}.json · doors: ~/basic-reflex/gym-eyes/{student-portal,parent-progress}.html (token-gated via ?token=) · doc: scaffolds/5a-client-proxy.md + BUILD_LOG 2026-07-03
+
+- **Self-Questioner (autonomous vault reflection)** · `~/nanoclaw/self-questioner.js` (ESM) · trigger: `/sq` (telegram-bot.js) + 7 REST routes `/api/self-questioner/*` (cath-bridge) + CLI `node self-questioner.js state|question|batch|stats|insights` · gatherState reads vault folders, coaching-rules, taste-map, vault-graph, staging, git log → hermes3 generates diagnostic questions → Paul answers → cross-question insights · Jaccard dedup (>0.55), 3 retries · stores: self-questioner-log.json · prompt: prompts/self-questioner.txt · doc: scaffolds/5e-self-questioner.md + BUILD_LOG 2026-07-03
+
+- **Sovereignty Shrink (distillation pipeline, pre-hardware)** · `~/nanoclaw/sovereignty-shrink.js` (ESM) · trigger: `/shrink` (telegram-bot.js) + 8 REST routes `/api/sovereignty/*` (cath-bridge) + CLI `node sovereignty-shrink.js generate|stats|export|queries|validate|compare|estimate|history|train` · data generator (vault nuggets + coaching rules + interventions + taste anchors → hermes3-diversified instruction pairs), 25-query validation harness (lexicon/reasoning/domain/voice, `compareModels` = the >20% shrink gate), cost tracker + M5 estimator · LoRA training STUBBED — hardware-gated until M5 Mac Studio ~Oct 2026 · stores: sovereignty-{training-data,training-log,test-queries}.json, JSONL export → training/data/ · prompt: prompts/training-data-gen.txt · doc: scaffolds/5c-sovereignty-shrink.md + BUILD_LOG 2026-07-03
+
 ## Boxing harvest
 - **Pandamericano harvest** · `panam-harvest.cjs` (whisper.cpp ES transcription) + `panam-structure.cjs` (DeepSeek→gemma3 structuring) · trigger: manual `pm2 start` (must run under PM2 — daemon has KINGSTON2 disk access; Terminal is TCC-blocked) · 88GB Cuban camp video → 130 Spanish transcripts (vault 00_Staging/panamericano) → bilingual framework · zero-to-pennies cost · door `/pandamericano` · doc: vault `06_Methods/pandamericano-methodology-framework.md`. Calibration sampler: `panam-sample.cjs`. Query: `/panam <question>` (telegram-bot.js → `panam-query.js`, retrieval + grounded answer, DeepSeek/gemma).
 
@@ -35,8 +45,25 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 
 - **Agent Workspace** · `~/Cathedral/control-panel/agent-workspace.html` · route `/agent-workspace` (cath-bridge.cjs) · 23 agents, grades, scores, sparklines · doc: BUILD_LOG 2026-06-19
 
+## The Mirror — Digital Paul
+- **The Mirror** · `~/nanoclaw/mirror.html` · route `/mirror` (cath-bridge.cjs ~line 2316) · conversational Digital Paul, 4 modes (Warm-up/Recall/Challenge/Disagree), DeepSeek+hermes3, vault RAG per query · doc: BUILD_LOG 2026-07-01
+- **Mirror Evolution Audit** · `~/nanoclaw/mirror-evolution.js` · PM2 `mirror-evolution` cron `0 10 1 * *` (1st of month 18:00 HKT) · monthly drift detection vs Paul Kernel + Cognitive Sig + Taste Map · doc: BUILD_LOG 2026-07-01
+
+## The Ledger — Proposal Protocol
+- **Proposal Protocol** · `~/nanoclaw/proposal-protocol.cjs` (CJS) + `proposal-protocol.js` (ESM) · SQLite `proposals` table in metrics.db · Evidence Engine + graduation scoring · doc: BUILD_LOG 2026-07-01
+- **Ledger Dashboard** · `~/nanoclaw/ledger.html` · route `/ledger` (cath-bridge.cjs) · 4 tabs: Pending, Graduation, Roads Not Taken, Emit · doc: BUILD_LOG 2026-07-01
+- **Ledger REST API** · cath-bridge.cjs routes `/ledger/*` · emit, decide, outcome, summary, pending, graduation, roads-not-taken, agent, domain, initiative · doc: BUILD_LOG 2026-07-01
+
+## Scaffold lobby doors (5a-5e dashboards, cockpit aesthetic)
+- **Sovereignty Shrink Door** · `~/Cathedral/control-panel/sovereignty-shrink.html` · route `/sovereignty` (cath-bridge.cjs) · stats, history, queries, cost estimate · doc: BUILD_LOG 2026-07-03
+- **Agent Protocol Door** · `~/Cathedral/control-panel/agent-protocol.html` · route `/agent-protocol` (cath-bridge.cjs) · capabilities, registry, exchange log · doc: BUILD_LOG 2026-07-03
+- **Self-Questioner Door** · `~/Cathedral/control-panel/self-questioner.html` · route `/self-questioner` (cath-bridge.cjs) · current question, log, stats, insights · doc: BUILD_LOG 2026-07-03
+- **Coaching Engine Door** · `~/Cathedral/control-panel/coaching-engine.html` · route `/coaching-engine` (cath-bridge.cjs) · confidence bands, proposals, interventions, decision audit · doc: BUILD_LOG 2026-07-03
+
 ## BR website
 - **BR Website V4** · `~/basic-reflex/website/index.html` · manual (no deploy yet) · 4 versions preserved (v1,v3,v4) · parked, needs artwork gen · doc: BUILD_LOG 2026-06-17b
+- **BR Website Design Bible v1.1** · `~/basic-reflex/docs/BR_WEBSITE_DESIGN_BIBLE.md` · Fable-authored, Gemini-reviewed · 10-page architecture, visual language, conversion strategy · doc: BUILD_LOG 2026-07-03
+- **CSOB Website Concept Bible v1.1** · `~/basic-reflex/docs/CSOB_WEBSITE_CONCEPT_BIBLE.md` · Fable-authored, Gemini-reviewed · Method brand concept, "institution + campus" · doc: BUILD_LOG 2026-07-03
 
 ## Boxing training visuals
 - **Revival Drill Cards** · `~/basic-reflex/visuals/revival-drill-cards.html` · manual/printable · 5 cards with SVG diagrams · vault: 09_Artifacts/branding/basic-reflex/revival-drill-cards.md
