@@ -98,6 +98,7 @@ const MANIFEST = {
   'gym-digest':          { intended: 'cron', cron: '0 12 * * 0',    reason: 'Sun 20:00 HKT — weekly gym summary' },
   'memory-consolidator': { intended: 'cron', cron: '0 4 * * 0',     reason: 'Sun 12:00 HKT — agent memory maintenance' },
   'archaeologist-weekly': { intended: 'cron', cron: '0 19 * * 0',   reason: 'Sun 03:00 HKT — deep archaeologist sweep' },
+  'mirror-evolution':     { intended: 'cron', cron: '0 10 1 * *',   reason: '1st of month 18:00 HKT — Mirror self-audit: principles vs practice drift' },
 
   // ── DAILY CRONS ──
   'curiosity-loop':      { intended: 'cron', cron: '0 20 * * *',    reason: 'Daily 04:00 HKT — agent research + feed + cross-agent DMs' },
@@ -132,6 +133,7 @@ const MANIFEST = {
   'roundtable':          { intended: 'cron', cron: '0 16 * * 0',    reason: 'Sunday midnight HKT — autonomous agent roundtable' },
   'accountability-buddies': { intended: 'cron', cron: '0 18 * * 6', reason: 'Sunday 02:00 HKT — buddy pairs, follow-through check' },
   'dissent-round':       { intended: 'cron', cron: '30 17 * * 6',   reason: 'Sunday 01:30 HKT — structured debate on contradictions' },
+  'cognitive-bridge':    { intended: 'cron', cron: '0 21 * * 6',     reason: 'Sunday 05:00 HKT — cognitive synthesis (kernel gaps, behavioral patterns)' },
   'memory-consolidator': { intended: 'cron', cron: '0 4 * * 0',     reason: 'Sunday — memory decay, graduation, self-assessment' },
   'gym-digest':          { intended: 'cron', cron: '0 12 * * 0',    reason: 'Sunday 20:00 HKT — weekly gym report' },
   'long-term-portfolio': { intended: 'cron', cron: '0 0 * * 1',     reason: 'Monday 08:00 HKT — weekly portfolio review' },
