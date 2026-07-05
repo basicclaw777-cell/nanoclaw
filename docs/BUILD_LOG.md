@@ -2949,3 +2949,25 @@ Training itself blocked until M5 Mac Studio (~Oct 2026) — trainModel() stub do
 - Six composable response modes (REFLECT/CHALLENGE/CONNECT/HOLD/WITNESS/SILENCE; WITNESS+SILENCE exclusive), confidence bands on every reflection, Constitutional Constraint (evidence-auditable reflections), 5-question provenance records, self-calibration from rejections, escalation rules, Mirror-vs-Cathy boundary, Parrot Test, 12 anti-patterns.
 - Calibrated against `paul-decision-architecture.md` (exists, referenced as primary source). Appendix C: gap analysis vs current mirror.html + mirror-evolution.js (largest gaps: no pattern-history memory, no calibration loop, no per-reflection confidence/provenance, no SILENCE path). Appendix D: 5-phase upgrade path.
 - Filed by Fable.
+
+## 2026-07-05 — A.P. cognitive twin, Observatory, Affordance Collapse, Foundry concept, sense fixes
+
+**A.P. — Cognitive Twin Persona** (`~/basic-reflex/alters/alter-paul.md`):
+- ~4000 tokens, merges Kernel + Cognitive Signature (13 skills) + Practitioner Elicitation + decision firmware
+- Named "A.P." by Paul. Forge build — no sanitization.
+
+**Alter Visual Template** (`~/basic-reflex/alters/alter-template.html`, Fable):
+- 1,581 lines. Space Grotesk + JetBrains Mono, ink-navy + amber. Interactive SVG radar (5-15 skills).
+- Reusable: 4 CSS vars for per-alter theming, one config object for content.
+
+**Cathedral Observatory** (`~/basic-reflex/alters/cathedral-observatory.html`, Fable):
+- ~1,270 lines. 13-sense health dashboard. KEY: confidence distinction (UNCHECKED vs CHECKED).
+- 6 sections: ECG pulse, organ grid, routing graph, pulse variance, dormancy alerts, entropy.
+
+**Vault concepts filed:**
+- `affordance-collapse-and-epistemic-fertility.md` — when safety kills fertility before capability. Three Safety Layers (epistemic/exploration/output) as separable goals.
+- `the-cathedral-foundry.md` — three generations (Cathedral → Foundry → Gardener). 12 tools mapped. Agent Genome + Design Critic = highest-leverage next move.
+
+**Fixes:**
+- cognitive_bridge: added to PM2 manifest (was never wired, 55 days dormant). Sunday 05:00 HKT.
+- smell: diagnosed — api_calls.jsonl feed dead since May 26 (cath_api.py bypassed by Node.js migration). Not yet fixed.

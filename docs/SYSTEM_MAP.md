@@ -99,5 +99,10 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Online Course** · `~/basic-reflex/online-course.html` · route `/online-course` · student-facing · doc: BUILD_LOG 2026-06-27
 - **Digital Dojo Deck** · `~/basic-reflex/digital-dojo-deck.html` · route `/digital-dojo` · product vision mockups · doc: BUILD_LOG 2026-06-27
 
+## Cognitive Twins (Alter system)
+- **A.P.** · `~/basic-reflex/alters/alter-paul.md` · persona file, load into any agent · doc: BUILD_LOG 2026-07-05
+- **Alter Template** · `~/basic-reflex/alters/alter-template.html` · visual dossier, parameterized per alter · doc: BUILD_LOG 2026-07-05
+- **Cathedral Observatory** · `~/basic-reflex/alters/cathedral-observatory.html` · 13-sense health dashboard · doc: BUILD_LOG 2026-07-05
+
 ## Forge maintenance
 - **Forge model pin** · `~/.claude/settings.json` `"model": "claude-opus-4-6"` · trigger: every Claude Code launch · pre-fable model (4.8=fable flinch); terminal Forge build-only per soul file · doc: BUILD_LOG 2026-06-22 + forge-regression-diagnostic.md

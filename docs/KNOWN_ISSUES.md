@@ -171,5 +171,8 @@ If OS-level vault search ever "breaks," this is why — intended.
 ## Shallow key-stripping doesn't prevent nested circular refs [FIXED 2026-06-27]
 - When stripping `_`-prefixed keys to sanitize objects for JSON.stringify, a shallow strip (top-level Object.entries only) misses nested references. Use a WeakSet-based replacer in JSON.stringify that filters at all depths. Applied to trade-logger.js logSignal + logDecision.
 
+## Smell data feed dead (2026-07-05)
+`~/Cathedral/api_calls.jsonl` last written 2026-05-26. `cath_api.py` writes it on every `call_cath()`, but the Telegram bot + most agents migrated to Node.js native DeepSeek calls (SI-25), which bypass cath_api.py entirely. Smell sense re-scans the same frozen 20 entries every run. Fix: either wire Node.js callers to also log to api_calls.jsonl, or redirect smell to monitor wherever API calls are actually tracked now.
+
 ## PM2 error traces reflect running code, not disk code
 - If a file was edited but the PM2 process wasn't restarted, stack traces point to OLD line numbers/code. Check `ls -la` mtime vs PM2 uptime before debugging current source. Caught on trading-orchestrator.js "config is not defined" — bug was already fixed on disk, error was from stale process.
