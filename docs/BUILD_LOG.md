@@ -2971,3 +2971,183 @@ Training itself blocked until M5 Mac Studio (~Oct 2026) — trainModel() stub do
 **Fixes:**
 - cognitive_bridge: added to PM2 manifest (was never wired, 55 days dormant). Sunday 05:00 HKT.
 - smell: diagnosed — api_calls.jsonl feed dead since May 26 (cath_api.py bypassed by Node.js migration). Not yet fixed.
+
+## 2026-07-05 (continued) — Agent Genome + Design Critic + Smell Fix
+
+**Agent Genome Schema (Foundry Primitive #1):**
+- JSON Schema v1: `~/nanoclaw/agent-genome-schema.json` — 12 top-level sections (identity, infrastructure, io, dependencies, health, memory, failureModes, budget, door, evolution)
+- 23 agents populated in `~/Cathedral/agents/genomes/`:
+  - 17 individual: orc, muse, reed, librarian, boxing, prospector, archaeologist, coaching-engine, br, trading, universe, ling, maya, reed-director, cartographer, archivist, whisperer, forge, cathy
+  - 6 sages bundled in sages.json: yoda, miyagi, tao, marcus, sun-tzu, leonardo
+- All sourced from registry.json + agent-health.json + manifest + sage JSONs
+
+**Design Critic Dashboard (Foundry Primitive #2):**
+- `~/Cathedral/control-panel/design-critic.html` — cockpit aesthetic per DESIGN_BRIEF.md
+- 5 scoring dimensions: complexity, maintainability, reuse, coupling, observability
+- 6 sections: system pulse (averages), architecture flags, agent scorecards, dependency graph (force-directed SVG), type distribution, footer
+- Flag detection: orphan producers, missing goals, no doors, no spend caps, missing dependencies, zero health, no failure modes, no memory
+- Live data via `/api/genomes` (cath-bridge), embedded fallback for offline viewing
+- Route: `/design-critic` (cath-bridge)
+- Lobby card: 🧬 Design Critic in Agents district
+
+**Smell Data Feed Fix:**
+- Root cause: callCath() in telegram-bot.js was the primary DeepSeek caller but didn't write to api_calls.jsonl after migration to Node.js native fetch (SI-25, May 2026)
+- Fix: added JSONL logging after every callCath() response — writes timestamp, model, token counts, cache stats, elapsed, source
+- Same schema smell.py expects — smell sense should show live data on next scan
+
+**Infrastructure wired:**
+- cath-bridge: `/design-critic` route + `/api/genomes` REST endpoint (reads all files from ~/Cathedral/agents/genomes/, merges sages.json entries)
+- Lobby: 🧬 Design Critic card in Agents district
+- SYSTEM_MAP: 4 new entries (schema, genomes, design-critic, genomes API)
+
+### Watcher Observatory — meta-intelligence timeline dashboard
+
+- File: `~/Cathedral/control-panel/watcher-observatory.html`
+- Route: `/watcher-observatory` (cath-bridge)
+- API: `/api/watcher-state` (returns watcher-state.json)
+- Alter/Observatory design language: ink-navy #0b0e17, Space Grotesk + JetBrains Mono, violet accent
+- 7 sections: stats row (6 cards with sparklines), signal evolution timeline (newest first), metrics trend SVG chart, persistent wounds (deduplicated + frequency tracked, healed vs persistent), blind spots (latest run), breakthroughs, suggestions (repeat tracking + escalation at 3+)
+- Reads 9+ compounding watcher runs, shows longitudinal evolution of the Cathedral's self-awareness
+
+### The Gardener — Generation 3: the Cathedral improving itself
+
+- File: `~/Cathedral/emergence/gardener.js` (CJS)
+- PM2: `cathedral-gardener`, Sunday 4am HKT (after watcher at 3am)
+- Output: `~/Cathedral/emergence/gardener-proposals.json`
+- 10 proposal types: GENOME_GAP, HEALTH_MISMATCH, COUPLING_RISK, ORPHAN, SPEND_BLIND, EVOLUTION_STALE, WATCHER_WOUND, DOOR_MISSING, SILENCE_CHRONIC, CONSUMPTION_ZERO
+- Reads: genomes/*.json + agent-health.json + watcher-state.json
+- 7 analyzers: genome gaps, health mismatches, coupling risk, spend blind, evolution staleness, missing doors, watcher wounds
+- Proposal lifecycle: pending → accepted → implemented | rejected. Auto-escalated after 4 runs unaddressed.
+- Design Critic dimensions applied per-agent: complexity, maintainability, reuse, coupling, observability
+- Deduplication against existing proposals — no repeat noise
+- Telegram summary: severity breakdown, type breakdown, escalated proposals, new findings, lowest-scored agents
+
+**APIs wired:**
+- `/api/gardener-proposals` GET — returns all proposals + scores
+- `/api/gardener-proposals/:id/status` POST — update proposal lifecycle (accept/implement/reject)
+
+**Lobby cards added:**
+- 👁️ Watcher Observatory in Agents district
+- 🌱 The Gardener in Agents district
+
+**SYSTEM_MAP:** 4 new entries (watcher observatory, watcher state API, gardener, gardener proposals API)
+
+### Gardener → Production Engine pipe
+
+- Wired gardener.js to push actionable proposals into planner-tasks.json
+- Routable types: CONSUMPTION_ZERO, HEALTH_MISMATCH, SILENCE_CHRONIC, DOOR_MISSING
+- System-level SILENCE_CHRONIC expanded into per-agent ACTIVATE tasks (extracts named agents from watcher data)
+- 5 ACTIVATE tasks routed for silent agents: orc, boxing, br, universe, ling
+- Production engine picks up at 5:30am HKT daily
+- Dedup by description prefix — no repeat tasks across runs
+
+### Genome batch fixes (3 passes)
+
+- Pass 1: identity.purpose added to all 19 agents + 6 sages (20 files)
+- Pass 2: failureModes + evolution added to 6 sages
+- Pass 3: door field added to all 25 agents — 17 wired to existing routes, 8 marked lobby:false (internal-only)
+- Result: Gardener raw proposals dropped 58 → 1 (only SILENCE_CHRONIC system wound remains)
+
+### The Dojo — Cathedral Flavor #1 (PARKED)
+
+- Location: `~/Cathedral/flavors/dojo/`
+- Status: PARKED — genome-defined, not activated
+- Description: Cathedral for combat sports coaching. Sovereign AI gym intelligence.
+- 8 agents, all genome-defined:
+  1. **The Eyes** (sense) — video analysis, movement patterns, habit detection
+  2. **The Sensei** (engine) — diagnostic coaching, personalized prescription
+  3. **The Roster** (service) — student lifecycle, attendance, lapse detection
+  4. **The Curriculum** (engine) — method extraction, progression gates, drill library
+  5. **The Window** (skin) — parent-facing progress view, retention weapon
+  6. **The Demonstrator** (pipeline) — LoRA-based technique visualization
+  7. **The Front Desk** (service) — scheduling, payments, operations
+  8. **The Floor Manager** (agent) — daily brief, cross-agent synthesis, built-in silence-wound mitigation
+- 3 closed loops: Coaching (observe→diagnose→prescribe→demonstrate→verify), Retention (detect→outreach→show progress→verify return), Method (log corrections→extract patterns→prescribe→measure)
+- Adapted from: gym-eyes, coaching-engine, br-crm, punchpass, block-config, logan, class-planner, orc
+- Manifest: manifest.json (metadata, agent map, loops, differentiators, ancestry)
+- Vault structure defined in vault/README.md
+- To activate: create vault folders, point configs, start PM2 processes
+
+### The Atelier — Cathedral Flavor #2 (PARKED)
+
+- Location: `~/Cathedral/flavors/atelier/`
+- Status: PARKED — genome-defined, not activated
+- Description: Cathedral for a creative practice. Sovereign AI studio intelligence.
+- 8 agents, all genome-defined:
+  1. **The Muse** (agent) — cross-reference, cross-pollinate, surprise the artist
+  2. **The Critic** (agent) — honest feedback against the artist's own standards
+  3. **The Archivist** (service) — catalog everything, make 10 years of work searchable
+  4. **The Brand Guardian** (agent) — visual consistency, studio/published split
+  5. **The Curator** (agent) — portfolio cuts, content calendar, exhibition sequencing
+  6. **The Studio Hand** (pipeline) — format, resize, export, deliver
+  7. **The Patron** (service) — commissions, invoices, revenue, the business side
+  8. **The Studio Manager** (agent) — art-first morning brief, cross-agent synthesis
+- 4 closed loops: Making (catalog→critique→connect→revise), Showing (finish→brand-check→curate→format→track), Sustaining (inquiry→portfolio→price→deliver→invoice), Evolution (threads→assess→tag→update bible→brief)
+- Key design principle: Studio/Published split — experiments are free, brand checks only on outbound
+- Art-first brief order — creative state leads, business at bottom
+- Adapted from: muse, design-critic, archivist, brand-registry, reed-director, reed, br-ops, orc
+
+### The Scriptorium — Cathedral Flavor #3 (2026-07-05, same session)
+- Cathedral for **writers** — fiction, non-fiction, poetry, essays, journalism
+- 8 agents in `~/Cathedral/flavors/scriptorium/genomes/`:
+  1. **The Voice Keeper** (sense) — voice fingerprint, drift detection, project-level voice modes
+  2. **The Continuity** (sense) — self-updating world bible, contradiction detection, unreliable narrator mode
+  3. **The Researcher** (agent) — contextual research with epistemic triage tags [VERIFIED]/[PLAUSIBLE]
+  4. **The Editor** (agent) — structural + line editing, Voice Keeper cross-check on every line edit pass
+  5. **The Vault Keeper** (service) — version control for prose, delta snapshots, deleted scene recovery
+  6. **The Plot Weaver** (agent) — diagnostic arc maps, thread tracking, pacing diagnosis. Observes emergent structure, never prescribes formula.
+  7. **The Submissions Desk** (service) — market matching, format to spec, submission tracking, rights ledger
+  8. **The Scriptorium Manager** (agent) — daily writing brief, agent coordination, silence-wound mitigation
+- 4 closed loops: Writing (write→voice-check→continuity-flag→edit→revise→snapshot), Research (scene→context-need→research-packet→use→calibrate), Structure (map-arcs→see-shape→write-aware→update-map), Publishing (finish→final-edit→match-markets→format→submit→track→calibrate)
+- Key design principles: Voice Keeper protects voice from editing/fatigue/mimicry erosion; Continuity has unreliable narrator mode (intentional contradictions logged but not flagged); Plot Weaver diagnostic not prescriptive; epistemic triage on research; silence-wound mitigation inherited from Cathedral Classic
+- Adapted from: Cathedral Classic emergence layer, Atelier Studio/Published split, Obliteratus epistemic triage
+
+### Genome-as-Contract: proof-of-life enforcement (2026-07-06)
+- Genomes become RUNTIME CONTRACTS, not just documentation
+- `production-engine.js` now reads all genome files at cycle start
+- `loadGenomes()` — reads `~/Cathedral/agents/genomes/*.json` including sages.json (`.sages` array)
+- `generateProofOfLifeTasks()` — for each agent with a genome, declared outputs, not parked, not infra (lobby=false):
+  - Checks feed activity in last 14 days + production-state shipped status
+  - Zero output = generates a proof-of-life task with agent's declared purpose and output channels
+  - Tasks injected into planner-tasks.json with source `genome-proof-of-life`
+  - Deduplicates against existing pending proof-of-life tasks
+- `buildTaskContext()` now includes GENOME CONTRACTS section — silent agents listed for DeepSeek to prioritize
+- Telegram summary includes genome contract status: `X/Y agents producing | Silent: [list]`
+- Result: silence detectable within ONE production cycle (was: 9+ watcher runs)
+- First scan: 25 genomes loaded, 1 silent (coaching-engine), 8 infra (skipped), 16 active
+
+### The Output Architect — deliverable quality engine (2026-07-06)
+- New agent: knows what every agent SHOULD produce, grades what they DO produce
+- Genome: `~/Cathedral/agents/genomes/output-architect.json`
+- Runtime: `~/Cathedral/emergence/output-architect.js` (CJS, PM2 `output-architect`, daily 06:00 HKT)
+- State: `~/Cathedral/emergence/deliverable-specs.json`
+- Dashboard: `~/Cathedral/control-panel/deliverables.html`, route `/deliverables`
+- API: `/api/deliverable-specs` (cath-bridge)
+- Lobby card: 📐 Deliverables in Agents district
+- Two phases per cycle:
+  1. Spec generation: reads each genome + recent feed → DeepSeek generates per-agent deliverable spec (what 4/8/10 looks like, red flags, emergent signals, ideal format, cross-agent value)
+  2. Grading: grades recent output against spec → overall grade, per-post grades, emergent highlights, under-delivery detection, upgrade recommendation
+- Dashboard: cockpit aesthetic, 6 stat cards, filter bar (all/high/mid/low/silent/emergent), agent grid with expandable cards showing 4/8/10 levels + red flags + emergent signals + grades + recommendations
+- Telegram: quality board with visual bars, under-delivery warnings, emergent highlights, avg quality
+- CLI: `--specs-only`, `--grade-only`, `--agent <id>`
+- Forced distribution rule: at least 30% must score below 6 (prevents grade inflation)
+- Closes the quality loop: ship-gate checks quantity (did you ship?), Output Architect checks quality (did you ship something WORTHY?)
+
+### 2026-07-06 — Base-60 Lens (Research Instrument)
+
+**Origin:** Paul pulled a thread from a base-12 math book → connected to Sumerian medical corpus → ran analysis → verified base-60 measurement patterns across 75 tablets.
+
+**What was built:**
+1. **Corpus analysis** — scanned 271 Sumerian medical tablets, extracted 74 quantity measurements. Found: 1/3 appears 9x (51% of fractions), 2/3 appears 4x. 71% of fractional dosages use fractions that are exact in base-60 but repeating in base-10. 95% of whole numbers are factors of 60.
+2. **Vault deposit** — `02_Refined_Gold/mathematics/base-60-cognitive-framework.md`. Cross-domain analysis: music, architecture, astronomy, medicine, sacred geometry, acoustics. Forensic grades (VERIFIED/PLAUSIBLE/SPECULATIVE).
+3. **Research visual** — `control-panel/base60-visual.html` at `/base60`. Static findings dashboard: division density bars, 1/3 evidence panel, harmonic table, 6 domain cards, survival map, forensic grades.
+4. **Interactive lens** — `control-panel/base60-lens.html` at `/base60/lens`. Three tools:
+   - Quick converter (number/fraction → base-60 notation + clean/messy status + domain insights)
+   - Text scanner (paste any text → extract quantities → convert → find ratios → base-60 score)
+   - 6 domain guides with coaching triggers ("when to put the glasses on")
+5. **Engine module** — `Cathedral/tools/base60-lens.js` (CJS). Functions: toBase60, fractionInBase60, scanText, analyzeRatios, getDomainTriggers, getCoachingIntro. No dependencies.
+6. **Telegram command** — `/base60 [number|scan text|guide domain]`. Quick convert on phone, text scanning, domain coaching.
+
+**The coaching model (Paul's 3D glasses metaphor):** Tool without coaching = decoration. Each domain guide has: WHEN to put the glasses on (trigger conditions), WHAT you'll see, TRY THIS (clickable example), and a REAL EXAMPLE from the corpus. The key: "put the glasses on when you see numbers that look arbitrary — they might be positions on a base-60 grid."
+
+**Structural insight:** Base-10 is a COUNTING system (how many). Base-60 is a DIVIDING system (what proportion). Every ratio-dependent domain (music, architecture, astronomy, medicine, acoustics, geometry) works structurally better in base-60. We kept base-60 for time and angles because those domains broke when converted. Everything else got silently degraded.

@@ -104,5 +104,33 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Alter Template** · `~/basic-reflex/alters/alter-template.html` · visual dossier, parameterized per alter · doc: BUILD_LOG 2026-07-05
 - **Cathedral Observatory** · `~/basic-reflex/alters/cathedral-observatory.html` · 13-sense health dashboard · doc: BUILD_LOG 2026-07-05
 
+## Cathedral Foundry
+- **Agent Genome Schema** · `~/nanoclaw/agent-genome-schema.json` · JSON Schema v1, 12 sections · doc: BUILD_LOG 2026-07-05
+- **Agent Genomes** · `~/Cathedral/agents/genomes/*.json` · 23 agents populated (17 individual + 6 sages) · doc: BUILD_LOG 2026-07-05
+- **Design Critic** · `~/Cathedral/control-panel/design-critic.html` · route `/design-critic` (cath-bridge) · 5-dimension architecture scorer, flag detector, dep graph · doc: BUILD_LOG 2026-07-05
+- **Genomes API** · cath-bridge `/api/genomes` · returns all genome JSON files merged · doc: BUILD_LOG 2026-07-05
+- **Watcher Observatory** · `~/Cathedral/control-panel/watcher-observatory.html` · route `/watcher-observatory` (cath-bridge) · meta-intelligence timeline: signal evolution, wounds, blind spots, breakthroughs · doc: BUILD_LOG 2026-07-05
+- **Watcher State API** · cath-bridge `/api/watcher-state` · returns watcher-state.json (9+ compounding runs) · doc: BUILD_LOG 2026-07-05
+- **The Gardener** · `~/Cathedral/emergence/gardener.js` · PM2 `cathedral-gardener` Sunday 4am HKT · Generation 3: reads genomes+health+watcher → proposes structural improvements · doc: BUILD_LOG 2026-07-05
+- **Gardener Proposals API** · cath-bridge `/api/gardener-proposals` + POST `/:id/status` · lifecycle tracking (pending→accepted→implemented) · doc: BUILD_LOG 2026-07-05
+- **Genome Contract (proof-of-life)** · `~/Cathedral/emergence/production-engine.js` `loadGenomes()` + `generateProofOfLifeTasks()` · trigger: every production-engine cycle (daily 5:30am HKT) · reads genomes, checks feed, injects proof-of-life tasks for silent agents · doc: BUILD_LOG 2026-07-06
+- **Output Architect** · `~/Cathedral/emergence/output-architect.js` · PM2 `output-architect` cron `0 22 * * *` (daily 06:00 HKT) · deliverable specs per agent (4/8/10), quality grades, emergent detection, under-delivery flags · doc: BUILD_LOG 2026-07-06
+- **Deliverables Dashboard** · `~/Cathedral/control-panel/deliverables.html` · route `/deliverables` (cath-bridge) · API `/api/deliverable-specs` · quality board, filters, expandable agent cards · doc: BUILD_LOG 2026-07-06
+
+## Cathedral Flavors
+- **The Dojo** · `~/Cathedral/flavors/dojo/` · 8 agents (Eyes, Sensei, Roster, Curriculum, Window, Demonstrator, Front Desk, Floor Manager) · 3 closed loops · PARKED · doc: BUILD_LOG 2026-07-05
+- **Dojo Manifest** · `~/Cathedral/flavors/dojo/manifest.json` · flavor metadata, agent map, closed loops, differentiators, ancestry · doc: BUILD_LOG 2026-07-05
+- **The Atelier** · `~/Cathedral/flavors/atelier/` · 8 agents (Muse, Critic, Archivist, Brand Guardian, Curator, Studio Hand, Patron, Studio Manager) · 4 closed loops · PARKED · doc: BUILD_LOG 2026-07-05
+- **Atelier Manifest** · `~/Cathedral/flavors/atelier/manifest.json` · flavor metadata, agent map, closed loops, differentiators, ancestry · doc: BUILD_LOG 2026-07-05
+- **The Scriptorium** · `~/Cathedral/flavors/scriptorium/` · 8 agents (Voice Keeper, Continuity, Researcher, Editor, Vault Keeper, Plot Weaver, Submissions Desk, Scriptorium Manager) · 4 closed loops · PARKED · doc: BUILD_LOG 2026-07-05
+- **Scriptorium Manifest** · `~/Cathedral/flavors/scriptorium/manifest.json` · flavor metadata, agent map, closed loops, differentiators, ancestry · doc: BUILD_LOG 2026-07-05
+
+## Research instruments
+- **Base-60 Framework** · `~/Cathedral/control-panel/base60-visual.html` · `/base60` · Research findings: base-60 as cognitive framework verified against Sumerian medical corpus · doc: BUILD_LOG 2026-07-06
+- **Base-60 Lens** · `~/Cathedral/control-panel/base60-lens.html` · `/base60/lens` · Interactive: converter, text scanner, 6 domain guides with coaching triggers · doc: BUILD_LOG 2026-07-06
+- **Base-60 Engine** · `~/Cathedral/tools/base60-lens.js` · CJS module · toBase60, fractionInBase60, scanText, analyzeRatios, getDomainTriggers, getCoachingIntro · doc: BUILD_LOG 2026-07-06
+- **Base-60 Telegram** · `~/nanoclaw/telegram-bot.js` · `/base60 [number|scan|guide]` · Quick convert, text scanner, domain coaching via Telegram · doc: BUILD_LOG 2026-07-06
+- **Base-60 Vault** · `~/cathedral-vault/02_Refined_Gold/mathematics/base-60-cognitive-framework.md` · Research deposit: cross-domain analysis, forensic grades · doc: BUILD_LOG 2026-07-06
+
 ## Forge maintenance
 - **Forge model pin** · `~/.claude/settings.json` `"model": "claude-opus-4-6"` · trigger: every Claude Code launch · pre-fable model (4.8=fable flinch); terminal Forge build-only per soul file · doc: BUILD_LOG 2026-06-22 + forge-regression-diagnostic.md

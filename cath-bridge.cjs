@@ -6257,6 +6257,98 @@ app.get('/prospector', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'prospector.html'));
 });
 
+// ── Watcher Observatory — meta-intelligence timeline ─────────────────────────
+app.get('/watcher-observatory', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'watcher-observatory.html'));
+});
+
+app.get('/api/watcher-state', (req, res) => {
+  const fs = require('fs');
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(HOME, 'Cathedral', 'emergence', 'watcher-state.json'), 'utf8'));
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── Gardener — Generation 3 proposals ────────────────────────────────────────
+app.get('/api/gardener-proposals', (req, res) => {
+  const fs = require('fs');
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(HOME, 'Cathedral', 'emergence', 'gardener-proposals.json'), 'utf8'));
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/gardener-proposals/:id/status', (req, res) => {
+  const fs = require('fs');
+  const filePath = path.join(HOME, 'Cathedral', 'emergence', 'gardener-proposals.json');
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const proposal = data.proposals.find(p => p.id === req.params.id);
+    if (!proposal) return res.status(404).json({ error: 'not found' });
+    proposal.status = req.body.status || 'accepted';
+    proposal.statusChanged = new Date().toISOString();
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    res.json({ ok: true, proposal });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── Base-60 Cognitive Framework — research visual + interactive lens ──────────
+app.get('/base60', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'base60-visual.html'));
+});
+app.get('/base60/lens', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'base60-lens.html'));
+});
+
+// ── Output Architect — deliverable specs + quality grades ─────────────────────
+app.get('/deliverables', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'deliverables.html'));
+});
+
+app.get('/api/deliverable-specs', (req, res) => {
+  const fs = require('fs');
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(HOME, 'Cathedral', 'emergence', 'deliverable-specs.json'), 'utf8'));
+    res.json(data);
+  } catch (e) {
+    res.json({ specs: {}, grades: {}, emergent: [], lastRun: null, runs: 0 });
+  }
+});
+
+// ── Design Critic — Foundry architecture analyzer ────────────────────────────
+app.get('/design-critic', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'design-critic.html'));
+});
+
+app.get('/api/genomes', (req, res) => {
+  const genomesDir = path.join(HOME, 'Cathedral', 'agents', 'genomes');
+  const fs = require('fs');
+  try {
+    const files = fs.readdirSync(genomesDir).filter(f => f.endsWith('.json'));
+    const genomes = [];
+    for (const f of files) {
+      try {
+        const data = JSON.parse(fs.readFileSync(path.join(genomesDir, f), 'utf8'));
+        if (data.sages) {
+          genomes.push(...data.sages);
+        } else if (data.id) {
+          genomes.push(data);
+        }
+      } catch (e) { /* skip malformed */ }
+    }
+    res.json(genomes);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ── Coach Paul Engine — learning coaching engine (Gym Eyes) ──────────────────
 // Inverted architecture: log → extract → propose → approve → version.
 // coaching-engine.js is ESM; this file is CJS → dynamic import() per call.

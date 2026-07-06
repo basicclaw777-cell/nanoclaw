@@ -577,6 +577,7 @@ RESEARCH
 /council [topic] — Genius Council debate
 /predict [seed] — pattern completion
 /cosmos [track#] — cosmology research
+/base60 [number] — sexagesimal lens (convert/scan/guide)
 
 CREATIVE
 /reed [caption on photo] — visual generation
@@ -585,6 +586,7 @@ CREATIVE
 /ling draft [pillar] [topic] — generate content draft
 
 SYSTEM
+/guide — what needs attention right now
 /projects — project status board
 /rhythm — schedule status
 /physician — full sense diagnosis
@@ -1257,6 +1259,106 @@ bot.onText(/^\/emergence(?:@\w+)?\s*(ingest|stats|stale)?\s*$/i, async (msg, mat
       { timeout: 30000, encoding: 'utf8' });
     await safeSend(chatId, `🌱 *Emergence Board — ${sub}*\n\`\`\`\n${(out || 'done').slice(0, 1200)}\n\`\`\`\n_Board → Emergence tab_`, { parse_mode: 'Markdown' });
   } catch (e) { await safeSend(chatId, `⚠️ emergence: ${e.message}`); }
+});
+
+// /guide — Quick orientation: what needs attention, where to find it
+bot.onText(/^\/guide(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  try {
+    const BASE = path.join(process.env.HOME, 'Cathedral');
+    const readJSON = (f) => { try { return JSON.parse(fs.readFileSync(path.join(BASE, f), 'utf-8')); } catch { return null; } };
+
+    const monitor = readJSON('emergence/monitor-state.json');
+    const health  = readJSON('agents/agent-health.json');
+    const tasks   = readJSON('emergence/planner-tasks.json');
+    const prod    = readJSON('emergence/production-state.json');
+
+    // --- Attention items ---
+    const attention = [];
+
+    // Emergence alerts from senses
+    if (monitor?.senses_summary) {
+      for (const [sense, info] of Object.entries(monitor.senses_summary)) {
+        if (info.status === 'alert' || info.status === 'attention') {
+          const short = info.mirror_voice?.split('.')[0] || sense;
+          attention.push(`${sense}: ${short}`);
+        }
+      }
+    }
+
+    // Declining/weak agents (grade D or F)
+    const weak = [];
+    if (health) {
+      for (const [name, info] of Object.entries(health)) {
+        const g = info.stewardGrade;
+        if (g === 'D' || g === 'F') weak.push(`${name} (${g})`);
+      }
+      if (weak.length) attention.push(`Weak agents: ${weak.join(', ')}`);
+    }
+
+    // Stale/pending tasks
+    if (tasks) {
+      const pending = tasks.filter(t => t.status === 'pending').length;
+      const stale = tasks.filter(t => {
+        if (!t.ts) return false;
+        const age = (Date.now() - new Date(t.ts).getTime()) / 86400000;
+        return age > 7 && t.status === 'in-progress';
+      });
+      if (pending > 0) attention.push(`${pending} pending planner tasks`);
+      if (stale.length > 0) attention.push(`${stale.length} tasks in-progress >7 days`);
+    }
+
+    // --- System pulse ---
+    let agentCount = 0, improving = 0, declining = 0;
+    const gradeMap = { A: 4, B: 3, C: 2, D: 1, F: 0 };
+    if (health) {
+      const agents = Object.entries(health);
+      agentCount = agents.length;
+      for (const [, info] of agents) {
+        const g = gradeMap[info.stewardGrade] ?? -1;
+        if (g >= 3) improving++;
+        if (g <= 1 && g >= 0) declining++;
+      }
+    }
+
+    let lastCycle = 'unknown';
+    let cycleShipped = 0;
+    let cycleTasks = 0;
+    if (prod?.cycles?.length) {
+      const last = prod.cycles[prod.cycles.length - 1];
+      const d = last.date ? new Date(last.date).toISOString().slice(0, 10) : '?';
+      lastCycle = d;
+      cycleTasks = last.tasks?.length || 0;
+      cycleShipped = (last.results || []).filter(r => r.shipped).length;
+    }
+
+    const score = monitor?.score ?? '?';
+    const scoreDate = monitor?.last_run ? new Date(monitor.last_run).toISOString().slice(0, 10) : '';
+
+    // --- Compose ---
+    const attBlock = attention.length
+      ? attention.map(a => `  - ${a}`).join('\n')
+      : '  All clear.';
+
+    const text = `Cathedral Guide
+
+Attention:
+${attBlock}
+
+System pulse:
+  ${agentCount} agents tracked — ${improving} strong (A/B), ${declining} declining (D/F)
+  Last cycle: ${lastCycle} — ${cycleTasks} tasks, ${cycleShipped} shipped
+  Monitor score: ${score} (${scoreDate})
+
+Where to look:
+  /workspace — agent goals + grades
+  /emergence — what's emerging
+  /feed — agent feed
+  /physician — full health check
+  /priority — what matters now`;
+
+    await safeSend(chatId, text);
+  } catch (e) { await safeSend(chatId, `Guide failed: ${e.message}`); }
 });
 
 // /reignite — Emergence Reigniter: turn dead cross-agent asks into live tasks
@@ -3153,6 +3255,27 @@ async function callCath(query, history = []) {
   const elapsed = ((Date.now() - startMs) / 1000).toFixed(1);
   const usage = data.usage || {};
   console.log(`[callCath] done ${elapsed}s in=${usage.prompt_tokens || '?'} out=${usage.completion_tokens || '?'}`);
+
+  // Log to api_calls.jsonl so smell sense has live data
+  try {
+    const logEntry = JSON.stringify({
+      timestamp: new Date().toISOString(),
+      model: 'deepseek-chat',
+      query_words: query.split(/\s+/).length,
+      response_words: text.split(/\s+/).length,
+      input_tokens: usage.prompt_tokens || 0,
+      output_tokens: usage.completion_tokens || 0,
+      cache_read_input_tokens: usage.prompt_cache_hit_tokens || 0,
+      cache_creation_input_tokens: usage.prompt_cache_miss_tokens || 0,
+      elapsed_s: parseFloat(elapsed),
+      source: 'callCath'
+    });
+    const fs = require('fs');
+    fs.appendFileSync(require('path').join(require('os').homedir(), 'Cathedral', 'api_calls.jsonl'), logEntry + '\n');
+  } catch (e) {
+    console.error('[callCath] api_calls.jsonl log failed:', e.message);
+  }
+
   return text.trim();
 }
 
@@ -5355,6 +5478,115 @@ bot.onText(/^\/taste(?:@\w+)?\s+drills\s*$/i, async (msg) => {
   safeSend(msg.chat.id, tasteMap.formatProfile('boxing_drills'));
 });
 
+// ── Taste Practice commands ──────────────────────────────────────────────────
+
+const TP_LOG_PATH = path.join(process.env.HOME, 'nanoclaw', 'taste-practice-log.json');
+const TP_DOMAINS = ['music', 'visual_style', 'writing_voice', 'teaching_tone', 'class_energy', 'research_style', 'decision_making', 'values', 'collaboration', 'boxing_drills', 'film', 'ai', 'design', 'coaching', 'tools'];
+
+function loadTpLog() {
+  try { return JSON.parse(fs.readFileSync(TP_LOG_PATH, 'utf8')); }
+  catch { return []; }
+}
+
+function saveTpLog(log) {
+  fs.writeFileSync(TP_LOG_PATH, JSON.stringify(log, null, 2));
+}
+
+function getTpStreak(log) {
+  if (!log.length) return 0;
+  const dates = [...new Set(log.map(d => d.date))].sort().reverse();
+  let streak = 0;
+  const now = new Date();
+  for (let i = 0; i < dates.length; i++) {
+    const expected = new Date(now - i * 86400000).toISOString().split('T')[0];
+    const prev = new Date(now - (i + 1) * 86400000).toISOString().split('T')[0];
+    if (dates[i] === expected || dates[i] === prev) streak++;
+    else break;
+  }
+  return streak;
+}
+
+bot.onText(/^\/tp(?:@\w+)?\s*$/, async (msg) => {
+  safeSend(msg.chat.id, `*TASTE PRACTICE*\n\n\`/tp [what] — [why] — [connects to]\`\n\`/tp log\` — last 7 deposits\n\`/tp streak\` — current streak\n\n_Deposit anything that pulled you today._`, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/tp(?:@\w+)?\s+log\s*$/i, async (msg) => {
+  const log = loadTpLog();
+  if (!log.length) return safeSend(msg.chat.id, 'No deposits yet. Start with /tp [what] — [why] — [connects to]');
+  const recent = log.slice(-7).reverse();
+  let text = '📋 *Last 7 Taste Deposits*\n\n';
+  for (const d of recent) {
+    text += `*${d.date}* — ${d.what}\n`;
+    if (d.why) text += `  ↳ _${d.why}_\n`;
+    if (d.connects && d.connects.length) text += `  ⟶ ${d.connects.join(', ')}\n`;
+    text += '\n';
+  }
+  text += `Total: ${log.length} · Streak: ${getTpStreak(log)} 🔥`;
+  safeSend(msg.chat.id, text, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/tp(?:@\w+)?\s+streak\s*$/i, async (msg) => {
+  const log = loadTpLog();
+  const streak = getTpStreak(log);
+  const total = log.length;
+  const domains = {};
+  for (const d of log) {
+    for (const c of (d.connects || [])) {
+      domains[c] = (domains[c] || 0) + 1;
+    }
+  }
+  const topDomains = Object.entries(domains).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  let text = `🔥 *Taste Practice*\n\nStreak: *${streak}* day${streak !== 1 ? 's' : ''}\nTotal deposits: *${total}*\n`;
+  if (topDomains.length) {
+    text += '\nTop domains:\n';
+    for (const [name, count] of topDomains) text += `  ${name}: ${count}\n`;
+  }
+  safeSend(msg.chat.id, text, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/tp(?:@\w+)?\s+(.+)/i, async (msg, match) => {
+  const raw = match[1].trim();
+  if (/^(log|streak)\s*$/i.test(raw)) return;
+
+  const chatId = msg.chat.id;
+  const parts = raw.split(/\s*[—–]\s*/);
+  const what = parts[0] || raw;
+  const why = parts[1] || '';
+  const connectsRaw = parts[2] || '';
+  const connects = connectsRaw ? connectsRaw.split(/[,\s]+/).map(s => s.trim().toLowerCase()).filter(Boolean) : [];
+
+  const deposit = {
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toISOString().split('T')[1].slice(0, 5),
+    what,
+    why,
+    connects,
+    raw
+  };
+
+  const log = loadTpLog();
+  log.push(deposit);
+  saveTpLog(log);
+
+  let fed = [];
+  for (const domain of connects) {
+    if (TP_DOMAINS.includes(domain)) {
+      const anchorGroup = domain === 'music' ? 'anchors_broader' : 'anchors';
+      const anchor = { item: what, signal: why, source: 'taste_practice' };
+      addAnchor(domain, anchorGroup, anchor);
+      fed.push(domain);
+    }
+  }
+
+  const streak = getTpStreak(log);
+  let reply = `✅ Deposited: *${what}*`;
+  if (why) reply += `\n↳ _${why}_`;
+  if (fed.length) reply += `\n⟶ Fed to Taste Map: ${fed.join(', ')}`;
+  reply += `\n\n🔥 Streak: ${streak} · Total: ${log.length}`;
+
+  safeSend(chatId, reply, { parse_mode: 'Markdown' });
+});
+
 // ── Curator commands ──────────────────────────────────────────────────────
 
 bot.onText(/^\/curator(?:@\w+)?\s*$/, async (msg) => {
@@ -6959,6 +7191,27 @@ bot.onText(/^\/feed\s+(.+)/i, async (msg, match) => {
   }
 });
 
+// ── Pattern Ledger (Muse's suggestion) ───────────────────────────────────────
+
+bot.onText(/^\/patterns(?:@\w+)?\s*$/i, async (msg) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  try {
+    const { getAllPatterns } = require(process.env.HOME + '/Cathedral/agents/pattern-ledger-utils');
+    const entries = getAllPatterns(10);
+    if (!entries.length) { await safeSend(chatId, 'Pattern ledger is empty.'); return; }
+    const lines = ['*Pattern Ledger* (latest 10)\n'];
+    for (const e of entries) {
+      const v = e.verified ? 'VERIFIED' : 'unverified';
+      lines.push(`*${e.constant}* — ${e.domain_a} x ${e.domain_b}`);
+      lines.push(`_${(e.description || '').slice(0, 120)}_ [${v}] (${e.agent}, ${e.ts.slice(0, 10)})\n`);
+    }
+    await safeSend(chatId, lines.join('\n'), { parse_mode: 'Markdown' });
+  } catch (err) {
+    await safeSend(chatId, `Error: ${err.message}`);
+  }
+});
+
 // ── Higgsfield tester commands ────────────────────────────────────────────────
 
 bot.onText(/^\/hftest(?:@\w+)?\s*$/i, async (msg) => {
@@ -8402,5 +8655,913 @@ bot.onText(/^\/ledger(?:@\w+)?(?:\s+(.+))?$/s, async (msg, match) => {
     safeSend(chatId, text);
   } catch (e) {
     safeSend(chatId, `Ledger error: ${e.message}`);
+  }
+});
+
+// ── /coach — Coach Paul Engine (learning coaching engine, Gym Eyes) ──────────
+// Inverted architecture: Paul coaches → /coach log → extract → propose → approve.
+// All output PLAIN TEXT (no parse_mode — rule ids contain underscores that break Markdown).
+// Spec: ~/nanoclaw/scaffolds/5b-coach-paul-engine.md
+
+bot.onText(/^\/coach(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const raw = (match[1] || '').trim();
+  const [sub, ...restParts] = raw.split(/\s+/);
+  const rest = restParts.join(' ').trim();
+
+  try {
+    const eng = await import('./coaching-engine.js');
+
+    // /coach — help
+    if (!sub) {
+      safeSend(chatId,
+        'Coach Paul Engine — the learning loop\n\n' +
+        '/coach log [obs] — log intervention (@Student first word, #tags, "|" splits observation | what you did | outcome)\n' +
+        '/coach proposals — pending rule proposals\n' +
+        '/coach approve [id] — approve a rule\n' +
+        '/coach reject [id] [reason] — reject with reason\n' +
+        '/coach rules — active rules summary\n' +
+        '/coach diagnose [student] — run diagnosis\n' +
+        '/coach confidence — rules by confidence (lowest first)\n' +
+        '/coach changelog — recent rule changes\n' +
+        '/coach decisions [student] — decision audit trail\n' +
+        '/coach override [decisionId] [reason] — override a recommendation\n' +
+        '/coach extract — run pattern extraction now\n' +
+        '/coach seeds — load vault seeds as hypotheses');
+      return;
+    }
+
+    // /coach log @Alex guard dropping after the 3 | told him touch his chin | stayed up #guard #physical_cue
+    if (sub === 'log') {
+      if (!rest) { safeSend(chatId, 'Usage: /coach log @Student what you saw | what you did | outcome #tags'); return; }
+      let text = rest;
+      let student = null;
+      const at = text.match(/@(\w+)/);
+      if (at) { student = at[1]; text = text.replace(at[0], '').trim(); }
+      const tags = [...text.matchAll(/#(\w+)/g)].map(m => m[1].toLowerCase());
+      text = text.replace(/#\w+/g, '').trim();
+      const parts = text.split('|').map(s => s.trim()).filter(Boolean);
+      const record = eng.logIntervention({
+        student,
+        observation: parts[0] || text,
+        intervention: parts[1] || null,
+        outcome: parts[2] || null,
+        tags,
+        source: 'telegram'
+      });
+      const tagNote = tags.length ? ` tags: ${tags.join(', ')}` : ' (no #tags — tag it so patterns can cluster)';
+      safeSend(chatId, `Logged ${record.id}${student ? ' for ' + student : ''}.${tagNote}`);
+      return;
+    }
+
+    // /coach proposals
+    if (sub === 'proposals') {
+      const props = eng.getPendingProposals();
+      if (!props.length) { safeSend(chatId, 'No pending proposals. Log interventions, then /coach extract.'); return; }
+      let out = `${props.length} pending rule proposal(s):\n`;
+      for (const p of props.slice(0, 8)) {
+        out += `\n${p.id}\n  "${p.rule}"\n  confidence ${Math.round(p.confidence * 100)}% | ${p.evidence.observation_count} observations | ${p.evidence.success_rate}\n  approve: /coach approve ${p.id}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    // /coach approve rule_xxx
+    if (sub === 'approve') {
+      if (!rest) { safeSend(chatId, 'Usage: /coach approve [ruleId]'); return; }
+      const rule = eng.approveRule(restParts[0]);
+      safeSend(chatId, rule
+        ? `Approved v${rule.version}: "${rule.rule}"\nConfidence ${Math.round(rule.confidence * 100)}% — ${rule.confidence >= 0.9 ? 'AUTO band' : rule.confidence >= 0.7 ? 'RECOMMEND band' : 'ASK band'}. Evidence: ${rule.evidence?.observation_count ?? 0} interventions.`
+        : `Rule not found: ${restParts[0]}`);
+      return;
+    }
+
+    // /coach reject rule_xxx reason...
+    if (sub === 'reject') {
+      const ruleId = restParts[0];
+      const reason = restParts.slice(1).join(' ');
+      if (!ruleId || !reason) { safeSend(chatId, 'Usage: /coach reject [ruleId] [reason] — reason required, rejections are evidence too.'); return; }
+      const rule = eng.rejectRule(ruleId, reason);
+      safeSend(chatId, rule ? `Rejected ${ruleId}: ${reason}` : `Rule not found: ${ruleId}`);
+      return;
+    }
+
+    // /coach rules
+    if (sub === 'rules') {
+      const rules = eng.getRules();
+      const hyps = eng.getRules({ status: 'hypothesis' });
+      if (!rules.length) { safeSend(chatId, `No approved rules yet. ${hyps.length} vault-seed hypotheses waiting for outcome data.\n/coach proposals to review pending.`); return; }
+      let out = `${rules.length} active rule(s) (+${hyps.length} hypotheses):\n`;
+      for (const r of rules.slice(0, 10)) {
+        out += `\n${r.id} v${r.version} — ${Math.round(r.confidence * 100)}%\n  "${r.rule}"\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    // /coach diagnose Alex
+    if (sub === 'diagnose') {
+      if (!rest) { safeSend(chatId, 'Usage: /coach diagnose [student]'); return; }
+      const student = restParts[0];
+      // Build session data from the student's recent logged interventions + gym-eyes profile if present
+      const recent = eng.getInterventionLog({ student }).slice(-10);
+      const sessionData = {
+        tags: [...new Set(recent.flatMap(i => i.tags || []))],
+        observations: recent.map(i => i.observation).filter(Boolean)
+      };
+      let profile = { id: student, name: student };
+      try {
+        const p = path.join(process.env.HOME, 'basic-reflex', 'gym-eyes', 'students', `${student.toLowerCase().replace(/ /g, '-')}.json`);
+        if (fs.existsSync(p)) profile = { id: student, ...JSON.parse(fs.readFileSync(p, 'utf8')) };
+      } catch {}
+      const out = eng.diagnose(sessionData, profile);
+      if (!out.diagnoses.length) {
+        safeSend(chatId, `No rules fired for ${student} (${recent.length} logged interventions, ${out.confidenceBreakdown.collecting} below 50% collecting silently).\nDecision record: ${out.decisionRecord.decisionId}`);
+        return;
+      }
+      let txt = `Diagnosis — ${student} (${out.date})\n`;
+      for (const d of out.diagnoses.slice(0, 5)) {
+        const band = d.level === 'auto_executed' ? 'AUTO' : d.level === 'recommended' ? 'RECOMMEND' : 'ASK PAUL';
+        txt += `\n[${band} ${Math.round(d.confidence * 100)}%] ${d.diagnosis}\n`;
+        if (d.prescription) txt += `  Do: ${d.prescription}\n`;
+        if (d.paulsWords.length) txt += `  Your words: "${d.paulsWords[0]}"\n`;
+      }
+      if (out.overallAssessment.dominantGap) txt += `\nDominant gap: ${out.overallAssessment.dominantGap}`;
+      txt += `\nDecision record: ${out.decisionRecord.decisionId} (override: /coach override ${out.decisionRecord.decisionId} [reason])`;
+      safeSend(chatId, txt);
+      return;
+    }
+
+    // /coach confidence — lowest first = needs more evidence
+    if (sub === 'confidence') {
+      const rules = eng.getRules({ status: 'all' }).filter(r => ['approved', 'hypothesis'].includes(r.status));
+      if (!rules.length) { safeSend(chatId, 'No rules yet.'); return; }
+      rules.sort((a, b) => a.confidence - b.confidence);
+      let out = 'Rules by confidence (lowest first — these need more evidence):\n';
+      for (const r of rules.slice(0, 15)) {
+        out += `\n${Math.round(r.confidence * 100)}% [${r.status}] ${r.id}\n  ${r.rule.slice(0, 100)}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    // /coach changelog
+    if (sub === 'changelog') {
+      const fsp = path.join(process.env.HOME, 'nanoclaw', 'coaching-changelog.json');
+      let log = [];
+      try { log = JSON.parse(fs.readFileSync(fsp, 'utf8')); } catch {}
+      if (!log.length) { safeSend(chatId, 'Changelog empty — no rule changes yet.'); return; }
+      let out = 'Recent rule changes:\n';
+      for (const c of log.slice(-8).reverse()) {
+        out += `\n${c.date} ${c.ruleId} (v${c.version})\n  ${c.change}\n  Why: ${c.reason}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    // /coach decisions [student]
+    if (sub === 'decisions') {
+      const decisions = eng.getDecisionLog(rest ? { studentId: restParts[0] } : {});
+      if (!decisions.length) { safeSend(chatId, 'No decision records yet.'); return; }
+      let out = `${decisions.length} decision(s)${rest ? ' for ' + restParts[0] : ''}:\n`;
+      for (const d of decisions.slice(-8).reverse()) {
+        out += `\n${d.decisionId} ${d.date} [${d.autonomyLevel}] ${d.type}${d.studentId ? ' — ' + d.studentId : ''}\n`;
+        if (d.output?.diagnoses?.length) out += `  ${String(d.output.diagnoses[0]).slice(0, 100)}\n`;
+        if (d.humanOverride) out += `  OVERRIDDEN: ${d.overrideReason}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    // /coach override dec_xxx reason...
+    if (sub === 'override') {
+      const decisionId = restParts[0];
+      const reason = restParts.slice(1).join(' ');
+      if (!decisionId || !reason) { safeSend(chatId, 'Usage: /coach override [decisionId] [reason] — reason required, it feeds confidence.'); return; }
+      const dec = eng.overrideDecision(decisionId, 'Paul overrode via Telegram', reason);
+      safeSend(chatId, dec
+        ? `Overridden ${decisionId}. Confidence dropped on ${dec.rulesApplied.length} rule(s). Reason logged: ${reason}`
+        : `Decision not found: ${decisionId}`);
+      return;
+    }
+
+    // /coach extract — run pattern extraction now
+    if (sub === 'extract') {
+      safeSend(chatId, 'Running pattern extraction (hermes3)...');
+      const props = await eng.extractPatterns(3);
+      safeSend(chatId, props.length
+        ? `${props.length} new rule proposal(s). /coach proposals to review.`
+        : 'No new patterns — need 3+ interventions sharing a tag that no live rule covers yet.');
+      return;
+    }
+
+    // /coach seeds — load vault methodology as hypotheses
+    if (sub === 'seeds') {
+      const r = eng.loadVaultSeeds();
+      safeSend(chatId, `Vault seeds: ${r.loaded} loaded, ${r.skipped} already present.${r.missingFiles.length ? '\nMissing files:\n' + r.missingFiles.join('\n') : ''}\nAll seeds are hypotheses at 60% — they need outcome data to become rules.`);
+      return;
+    }
+
+    safeSend(chatId, `Unknown subcommand "${sub}". /coach for usage.`);
+  } catch (e) {
+    safeSend(chatId, `Coach engine error: ${e.message}`);
+  }
+});
+
+// ── /student — Client Proxy (student management, tokens, flags) ──────────────
+
+bot.onText(/^\/student(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const raw = (match[1] || '').trim();
+  const [sub, ...restParts] = raw.split(/\s+/);
+  const rest = restParts.join(' ').trim();
+
+  try {
+    const cp = await import('./client-proxy.js');
+
+    if (!sub) {
+      safeSend(chatId,
+        'Student Management (Client Proxy)\n\n' +
+        '/student add [name] — register new student\n' +
+        '/student list — all active students\n' +
+        '/student [name] — lookup by name\n' +
+        '/student deactivate [name] — deactivate\n' +
+        '/student token [name] [student|parent] — generate access token\n' +
+        '/student progress [name] — progress summary\n' +
+        '/student flags — pending parent flags\n' +
+        '/student respond [studentId] [flagId] [response] — respond to flag');
+      return;
+    }
+
+    if (sub === 'add') {
+      if (!rest) { safeSend(chatId, 'Usage: /student add [name]'); return; }
+      const s = cp.registerStudent(rest);
+      safeSend(chatId, `Registered: ${s.name} (${s.id})`);
+      return;
+    }
+
+    if (sub === 'list') {
+      const students = cp.getAllStudents();
+      if (!students.length) { safeSend(chatId, 'No students registered. /student add [name]'); return; }
+      let out = `${students.length} student(s):\n`;
+      for (const s of students) {
+        out += `\n${s.name} (${s.id}) — ${s.sessions?.length || 0} sessions`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    if (sub === 'deactivate') {
+      if (!rest) { safeSend(chatId, 'Usage: /student deactivate [name]'); return; }
+      const found = cp.findStudentByName(rest);
+      if (!found) { safeSend(chatId, `Student not found: ${rest}`); return; }
+      cp.deactivateStudent(found.id);
+      safeSend(chatId, `Deactivated: ${found.name}`);
+      return;
+    }
+
+    if (sub === 'token') {
+      const name = restParts[0];
+      const type = restParts[1] || 'student';
+      if (!name) { safeSend(chatId, 'Usage: /student token [name] [student|parent]'); return; }
+      const found = cp.findStudentByName(name);
+      if (!found) { safeSend(chatId, `Student not found: ${name}`); return; }
+      const token = cp.generateToken(found.id, type, []);
+      safeSend(chatId, `Token (${type}) for ${found.name}:\n${token.token}\nExpires: ${token.expires}`);
+      return;
+    }
+
+    if (sub === 'progress') {
+      if (!rest) { safeSend(chatId, 'Usage: /student progress [name]'); return; }
+      const found = cp.findStudentByName(rest);
+      if (!found) { safeSend(chatId, `Student not found: ${rest}`); return; }
+      const p = cp.getStudentProgress(found.id);
+      let out = `Progress — ${found.name}\n`;
+      out += `Sessions: ${p.totalSessions || 0}\n`;
+      if (p.currentBlock) out += `Current block: ${p.currentBlock}\n`;
+      if (p.streaks) out += `Streak: ${p.streaks.current || 0} sessions\n`;
+      safeSend(chatId, out);
+      return;
+    }
+
+    if (sub === 'flags') {
+      const flags = cp.getPendingFlags();
+      if (!flags.length) { safeSend(chatId, 'No pending flags.'); return; }
+      let out = `${flags.length} pending flag(s):\n`;
+      for (const f of flags.slice(0, 8)) {
+        out += `\n${f.studentId} flag ${f.id}\n  "${f.question}"\n  /student respond ${f.studentId} ${f.id} [your response]`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    if (sub === 'respond') {
+      const studentId = restParts[0];
+      const flagId = restParts[1];
+      const response = restParts.slice(2).join(' ');
+      if (!studentId || !flagId || !response) { safeSend(chatId, 'Usage: /student respond [studentId] [flagId] [response]'); return; }
+      const flag = cp.respondToFlag(studentId, flagId, response);
+      safeSend(chatId, flag ? `Responded to flag ${flagId}` : `Flag not found: ${flagId}`);
+      return;
+    }
+
+    // Default: lookup by name
+    const found = cp.findStudentByName(sub + (rest ? ' ' + rest : ''));
+    if (found) {
+      const view = cp.getCoachView(found.id);
+      let out = `${found.name} (${found.id})\n`;
+      out += `Status: ${found.status || 'active'}\n`;
+      out += `Sessions: ${view.totalSessions || 0}\n`;
+      if (view.currentBlock) out += `Block: ${view.currentBlock}\n`;
+      if (view.lastSession) out += `Last: ${view.lastSession}\n`;
+      safeSend(chatId, out);
+    } else {
+      safeSend(chatId, `Student not found: ${sub}${rest ? ' ' + rest : ''}. /student add [name] to register.`);
+    }
+  } catch (e) {
+    safeSend(chatId, `Student error: ${e.message}`);
+  }
+});
+
+// ── /agent — Agent Protocol (external agent exchange) ────────────────────────
+
+bot.onText(/^\/agent(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const raw = (match[1] || '').trim();
+  const [sub, ...restParts] = raw.split(/\s+/);
+  const rest = restParts.join(' ').trim();
+
+  try {
+    const ap = await import('./agent-protocol.js');
+
+    if (!sub) {
+      safeSend(chatId,
+        'Agent Protocol — external agent exchange\n\n' +
+        '/agent caps — list capabilities\n' +
+        '/agent register [name] — register counterparty\n' +
+        '/agent revoke [id] — revoke counterparty\n' +
+        '/agent status [id] — counterparty status\n' +
+        '/agent log — exchange log');
+      return;
+    }
+
+    if (sub === 'caps') {
+      const caps = ap.getCapabilities();
+      let out = `${caps.length} capability(ies):\n`;
+      for (const c of caps) {
+        out += `\n${c.name} v${c.version}\n  ${c.description}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    if (sub === 'register') {
+      if (!rest) { safeSend(chatId, 'Usage: /agent register [name]'); return; }
+      const cp = ap.registerCounterparty(rest);
+      safeSend(chatId, `Registered counterparty: ${cp.name} (${cp.id})\nAPI key: ${cp.apiKey}`);
+      return;
+    }
+
+    if (sub === 'revoke') {
+      if (!rest) { safeSend(chatId, 'Usage: /agent revoke [id]'); return; }
+      const cp = ap.revokeCounterparty(restParts[0]);
+      safeSend(chatId, cp ? `Revoked: ${cp.name}` : `Not found: ${restParts[0]}`);
+      return;
+    }
+
+    if (sub === 'status') {
+      if (!rest) { safeSend(chatId, 'Usage: /agent status [id]'); return; }
+      const cp = ap.getCounterpartyStatus(restParts[0]);
+      if (!cp) { safeSend(chatId, `Not found: ${restParts[0]}`); return; }
+      safeSend(chatId, `${cp.name} (${cp.id})\nStatus: ${cp.status}\nRegistered: ${cp.registered}\nLast exchange: ${cp.lastExchange || 'never'}\nTotal exchanges: ${cp.exchangeCount || 0}`);
+      return;
+    }
+
+    if (sub === 'log') {
+      const log = ap.getExchangeLog();
+      if (!log.length) { safeSend(chatId, 'No exchanges yet.'); return; }
+      let out = `${log.length} exchange(s):\n`;
+      for (const e of log.slice(-8).reverse()) {
+        out += `\n${e.date} ${e.capability} from ${e.counterparty}\n  ${e.status}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    safeSend(chatId, `Unknown subcommand "${sub}". /agent for usage.`);
+  } catch (e) {
+    safeSend(chatId, `Agent protocol error: ${e.message}`);
+  }
+});
+
+// ── /sq — Self-Questioner (autonomous question generation) ───────────────────
+
+bot.onText(/^\/sq(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const raw = (match[1] || '').trim();
+  const [sub, ...restParts] = raw.split(/\s+/);
+  const rest = restParts.join(' ').trim();
+
+  try {
+    const sq = await import('./self-questioner.js');
+
+    if (!sub) {
+      const unanswered = sq.getUnanswered();
+      if (unanswered.length) {
+        let out = `${unanswered.length} unanswered question(s):\n`;
+        for (const q of unanswered.slice(0, 3)) {
+          out += `\n${q.date}\n  "${q.question}"\n  /sq answer ${q.date} [your answer]\n`;
+        }
+        out += '\n/sq force — generate new question\n/sq stats — question stats\n/sq log — full history';
+        safeSend(chatId, out);
+      } else {
+        safeSend(chatId,
+          'Self-Questioner — autonomous question generation\n\n' +
+          '/sq — show unanswered questions\n' +
+          '/sq force — generate new question now\n' +
+          '/sq answer [date] [answer] — answer a question\n' +
+          '/sq stats — question statistics\n' +
+          '/sq log — full question history\n' +
+          '/sq insights — cross-question insights');
+      }
+      return;
+    }
+
+    if (sub === 'force') {
+      safeSend(chatId, 'Gathering vault state + generating question (hermes3)...');
+      const state = await sq.gatherState();
+      const question = await sq.generateQuestion(state);
+      safeSend(chatId, `New question:\n\n"${question.question}"\n\n/sq answer ${question.date} [your answer]`);
+      return;
+    }
+
+    if (sub === 'answer') {
+      const date = restParts[0];
+      const answer = restParts.slice(1).join(' ');
+      if (!date || !answer) { safeSend(chatId, 'Usage: /sq answer [date] [your answer]'); return; }
+      const result = sq.answerQuestion(date, answer);
+      safeSend(chatId, result ? `Answer logged for ${date}.` : `Question not found for date: ${date}`);
+      return;
+    }
+
+    if (sub === 'stats') {
+      const stats = sq.getQuestionStats();
+      safeSend(chatId, `Self-Questioner stats:\n  Total: ${stats.total}\n  Answered: ${stats.answered}\n  Unanswered: ${stats.unanswered}\n  Answer rate: ${Math.round(stats.answerRate * 100)}%`);
+      return;
+    }
+
+    if (sub === 'log') {
+      const log = sq.getQuestionLog();
+      if (!log.length) { safeSend(chatId, 'No questions generated yet. /sq force'); return; }
+      let out = `${log.length} question(s):\n`;
+      for (const q of log.slice(-8).reverse()) {
+        out += `\n${q.date} [${q.answer ? 'answered' : 'pending'}]\n  "${q.question.slice(0, 100)}"\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    if (sub === 'insights') {
+      safeSend(chatId, 'Generating cross-question insights...');
+      const insights = await sq.getInsights();
+      safeSend(chatId, insights ? `Insights:\n\n${JSON.stringify(insights, null, 2).slice(0, 3000)}` : 'Not enough answered questions for insights.');
+      return;
+    }
+
+    safeSend(chatId, `Unknown subcommand "${sub}". /sq for usage.`);
+  } catch (e) {
+    safeSend(chatId, `Self-questioner error: ${e.message}`);
+  }
+});
+
+// ── /shrink — Sovereignty Shrink (training data pipeline) ────────────────────
+
+bot.onText(/^\/shrink(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const raw = (match[1] || '').trim();
+  const [sub, ...restParts] = raw.split(/\s+/);
+  const rest = restParts.join(' ').trim();
+
+  try {
+    const ss = await import('./sovereignty-shrink.js');
+
+    if (!sub) {
+      safeSend(chatId,
+        'Sovereignty Shrink — training data pipeline\n\n' +
+        '/shrink stats — training data stats\n' +
+        '/shrink generate — batch generate training pairs\n' +
+        '/shrink validate [model] — validate model against test queries\n' +
+        '/shrink compare [modelA] [modelB] — compare two models\n' +
+        '/shrink estimate [size] [iterations] — cost estimate\n' +
+        '/shrink export — export JSONL for training\n' +
+        '/shrink history — training run history');
+      return;
+    }
+
+    if (sub === 'stats') {
+      const stats = ss.getTrainingStats();
+      let out = 'Training data stats:\n';
+      out += `  Total pairs: ${stats.totalPairs}\n`;
+      if (stats.byType) {
+        out += '  By type:\n';
+        for (const [k, v] of Object.entries(stats.byType)) out += `    ${k}: ${v}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    if (sub === 'generate') {
+      safeSend(chatId, 'Generating training pairs (hermes3)...');
+      const result = await ss.batchGenerate(rest || 'all');
+      safeSend(chatId, `Generated ${result.generated || 0} pair(s). ${result.skipped || 0} skipped. /shrink stats`);
+      return;
+    }
+
+    if (sub === 'validate') {
+      if (!rest) { safeSend(chatId, 'Usage: /shrink validate [model] (e.g. hermes3)'); return; }
+      safeSend(chatId, `Validating ${restParts[0]}...`);
+      const result = await ss.validateModel(restParts[0]);
+      safeSend(chatId, `Validation — ${restParts[0]}:\n  Score: ${Math.round(result.averageScore * 100)}%\n  Passed: ${result.passed}/${result.total}`);
+      return;
+    }
+
+    if (sub === 'compare') {
+      if (restParts.length < 2) { safeSend(chatId, 'Usage: /shrink compare [modelA] [modelB]'); return; }
+      safeSend(chatId, `Comparing ${restParts[0]} vs ${restParts[1]}...`);
+      const result = await ss.compareModels(restParts[0], restParts[1]);
+      safeSend(chatId, `${restParts[0]}: ${Math.round(result.modelA.averageScore * 100)}%\n${restParts[1]}: ${Math.round(result.modelB.averageScore * 100)}%\nWinner: ${result.winner}`);
+      return;
+    }
+
+    if (sub === 'estimate') {
+      const size = parseInt(restParts[0], 10) || 100;
+      const iters = parseInt(restParts[1], 10) || 3;
+      const est = ss.estimateCost(size, iters);
+      safeSend(chatId, `Cost estimate (${size} pairs, ${iters} iterations):\n  ${JSON.stringify(est, null, 2)}`);
+      return;
+    }
+
+    if (sub === 'export') {
+      const result = ss.exportJSONL();
+      safeSend(chatId, `Exported ${result.count} pairs to ${result.path}`);
+      return;
+    }
+
+    if (sub === 'history') {
+      const hist = ss.getTrainingHistory();
+      if (!hist.length) { safeSend(chatId, 'No training runs yet.'); return; }
+      let out = `${hist.length} run(s):\n`;
+      for (const h of hist.slice(-5).reverse()) {
+        out += `\n${h.date} — ${h.model || 'unknown'}\n  ${JSON.stringify(h.metrics || {}).slice(0, 100)}\n`;
+      }
+      safeSend(chatId, out);
+      return;
+    }
+
+    safeSend(chatId, `Unknown subcommand "${sub}". /shrink for usage.`);
+  } catch (e) {
+    safeSend(chatId, `Shrink error: ${e.message}`);
+  }
+});
+
+// ── Base-60 Lens ──────────────────────────────────────────────────────────────
+
+// Try to load the external engine; fall back to inline implementation
+let base60Engine = null;
+try {
+  // ~/Cathedral/tools/ has its own package.json with type:module
+  // Try dynamic import first (ESM), then createRequire fallback (CJS)
+  const enginePath = path.join(process.env.HOME, 'Cathedral', 'tools', 'base60-lens.js');
+  if (fs.existsSync(enginePath)) {
+    try {
+      base60Engine = await import(enginePath);
+      // Handle default export wrapping
+      if (base60Engine.default && typeof base60Engine.default === 'object') {
+        base60Engine = base60Engine.default;
+      }
+    } catch {
+      // ESM import failed — try CJS via createRequire
+      const { createRequire } = await import('module');
+      const require = createRequire(import.meta.url);
+      base60Engine = require(enginePath);
+    }
+    console.log('[base60] External engine loaded from Cathedral/tools/base60-lens.js');
+  }
+} catch (e) {
+  console.log(`[base60] External engine not available (${e.message}), using inline fallback`);
+}
+
+// ── Inline base-60 conversion (fallback when external module not present) ──
+
+const BASE60_DOMAINS = {
+  time: {
+    label: 'Time',
+    numbers: [60, 3600, 86400, 24, 12, 7, 365.25, 29.53059],
+    triggers: ['second', 'minute', 'hour', 'day', 'week', 'month', 'year', 'calendar', 'clock']
+  },
+  astronomy: {
+    label: 'Astronomy',
+    numbers: [360, 29.53059, 27.32166, 365.25, 25920, 2160, 72, 12],
+    triggers: ['orbit', 'cycle', 'precession', 'zodiac', 'eclipse', 'degree', 'planet', 'moon', 'synodic']
+  },
+  geometry: {
+    label: 'Geometry',
+    numbers: [360, 180, 90, 60, 45, 30, 120, 72, 36],
+    triggers: ['angle', 'triangle', 'circle', 'polygon', 'degree', 'hexagon', 'pentagon']
+  },
+  music: {
+    label: 'Music / Acoustics',
+    numbers: [1.5, 1.333, 1.25, 1.2, 2, 0.5, 0.666, 0.75],
+    triggers: ['frequency', 'ratio', 'harmonic', 'octave', 'fifth', 'fourth', 'resonance', 'interval', 'tuning']
+  },
+  metrology: {
+    label: 'Ancient Metrology',
+    numbers: [20.63, 0.5236, 1.7, 6, 12, 60, 360],
+    triggers: ['cubit', 'digit', 'palm', 'foot', 'stadium', 'measure', 'unit', 'weight']
+  }
+};
+
+function toBase60(num) {
+  if (typeof num !== 'number' || !isFinite(num)) return { repr: 'NaN', clean: false };
+  const negative = num < 0;
+  num = Math.abs(num);
+  const intPart = Math.floor(num);
+  let fracPart = num - intPart;
+
+  // Convert integer part
+  const intDigits = [];
+  if (intPart === 0) {
+    intDigits.push(0);
+  } else {
+    let n = intPart;
+    while (n > 0) {
+      intDigits.unshift(n % 60);
+      n = Math.floor(n / 60);
+    }
+  }
+
+  // Convert fractional part (up to 6 sexagesimal places)
+  const fracDigits = [];
+  let f = fracPart;
+  for (let i = 0; i < 6 && f > 1e-10; i++) {
+    f *= 60;
+    const d = Math.floor(f + 1e-10);
+    fracDigits.push(d);
+    f -= d;
+  }
+
+  // Build representation (Babylonian-style with semicolon separator)
+  const intStr = intDigits.join(',');
+  const fracStr = fracDigits.length ? ';' + fracDigits.join(',') : '';
+  const repr = (negative ? '-' : '') + intStr + fracStr;
+
+  // "Clean" = terminates exactly (no trailing residue)
+  const clean = f < 1e-9;
+
+  return { repr, clean, intDigits, fracDigits };
+}
+
+function fromFraction(text) {
+  const fracMatch = text.match(/^(-?\d+)\s*\/\s*(\d+)$/);
+  if (fracMatch) {
+    const num = parseInt(fracMatch[1], 10);
+    const den = parseInt(fracMatch[2], 10);
+    if (den === 0) return null;
+    return { value: num / den, display: `${num}/${den}` };
+  }
+  const numVal = parseFloat(text);
+  if (!isNaN(numVal)) return { value: numVal, display: text };
+  return null;
+}
+
+function classifyCleanness(b60) {
+  if (b60.clean && b60.fracDigits.length === 0) return 'INTEGER — perfectly clean';
+  if (b60.clean) return 'CLEAN — terminates exactly in base-60';
+  return 'MESSY — infinite in base-60';
+}
+
+function domainInsight(num) {
+  // Check if this number resonates with known domain constants
+  for (const [key, domain] of Object.entries(BASE60_DOMAINS)) {
+    for (const known of domain.numbers) {
+      const ratio = num / known;
+      if (Math.abs(ratio - Math.round(ratio)) < 0.001 && ratio > 0) {
+        return `${domain.label}: ${num} = ${Math.round(ratio)}x ${known}`;
+      }
+      if (Math.abs(num - known) / known < 0.01) {
+        return `${domain.label}: matches ${known}`;
+      }
+    }
+  }
+  // Check if it's a factor/multiple of 60
+  if (num > 0 && 60 % num === 0) return `Factor of 60 (60/${num} = ${60 / num})`;
+  if (num > 0 && num % 60 === 0) return `Multiple of 60 (${num}/60 = ${num / 60})`;
+  return '';
+}
+
+function extractNumbers(text) {
+  const nums = [];
+  // Match decimals, fractions, integers
+  const pattern = /(-?\d+\.\d+|-?\d+\/\d+|-?\d+)/g;
+  let m;
+  while ((m = pattern.exec(text)) !== null) {
+    const parsed = fromFraction(m[1]);
+    if (parsed) nums.push(parsed);
+  }
+  return nums;
+}
+
+bot.onText(/^\/base60(?:@\w+)?(?:\s+([\s\S]*))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const raw = (match[1] || '').trim();
+
+  try {
+    // ── No args: show help + coaching intro ──
+    if (!raw) {
+      const help = `BASE-60 LENS
+
+Put on the 3D glasses. Every number you encounter
+has a second life in sexagesimal — the system the
+Babylonians built 4,000 years ago and we still use
+for time, angles, and coordinates.
+
+Clean in base-60 = the ancients could express it
+exactly. Messy = they couldn't, and probably didn't
+design around it.
+
+USAGE
+\`/base60 <number>\`
+  Quick convert. Decimals, fractions, integers.
+  e.g. /base60 0.333  or  /base60 1/3  or  /base60 360
+
+\`/base60 scan <text>\`
+  Extract all numbers from text, convert each,
+  score how "base-60 native" the set is.
+
+\`/base60 guide\`
+  When to put the glasses on — coaching triggers
+  for all domains.
+
+\`/base60 guide <domain>\`
+  Coaching triggers for a specific domain.
+  Domains: time, astronomy, geometry, music, metrology`;
+      await safeSend(chatId, help);
+      return;
+    }
+
+    // ── Guide mode ──
+    if (raw.startsWith('guide')) {
+      const domain = raw.replace(/^guide\s*/i, '').trim().toLowerCase();
+
+      if (!domain) {
+        // Show all domains
+        let guide = `BASE-60 LENS — WHEN TO PUT THE GLASSES ON
+
+The question isn't "is this base-60?" — it's
+"does this number become cleaner or dirtier
+when you convert it?"
+
+If a measurement from an ancient system converts
+CLEAN, someone probably chose it BECAUSE it was
+clean in their number system.\n\n`;
+
+        for (const [key, d] of Object.entries(BASE60_DOMAINS)) {
+          guide += `${d.label.toUpperCase()}\n`;
+          guide += `  Triggers: ${d.triggers.join(', ')}\n`;
+          guide += `  Key numbers: ${d.numbers.slice(0, 5).map(n => {
+            const b = toBase60(n);
+            return `${n} → ${b.repr} ${b.clean ? '(clean)' : ''}`;
+          }).join(', ')}\n\n`;
+        }
+        guide += `Use /base60 guide <domain> for deeper coaching.`;
+        await safeSend(chatId, guide);
+        return;
+      }
+
+      const d = BASE60_DOMAINS[domain];
+      if (!d) {
+        const keys = Object.keys(BASE60_DOMAINS).join(', ');
+        await safeSend(chatId, `Unknown domain "${domain}". Available: ${keys}`);
+        return;
+      }
+
+      let out = `BASE-60 LENS — ${d.label.toUpperCase()}\n\n`;
+      out += `Trigger words: ${d.triggers.join(', ')}\n\n`;
+      out += `Key constants:\n`;
+      for (const n of d.numbers) {
+        const b = toBase60(n);
+        const status = classifyCleanness(b);
+        const insight = domainInsight(n);
+        out += `\`${String(n).padEnd(12)}\` → \`${b.repr.padEnd(15)}\` ${status}`;
+        if (insight) out += `\n    ${insight}`;
+        out += '\n';
+      }
+      out += `\nWhen scanning ${d.label.toLowerCase()} texts, convert every\n`;
+      out += `measurement. Clean numbers cluster around design\n`;
+      out += `choices; messy numbers are likely approximations\n`;
+      out += `or later corruptions.`;
+      await safeSend(chatId, out);
+      return;
+    }
+
+    // ── Scan mode ──
+    if (raw.startsWith('scan ')) {
+      const text = raw.slice(5).trim();
+      if (!text) {
+        await safeSend(chatId, 'Usage: /base60 scan <text with numbers>');
+        return;
+      }
+
+      const nums = extractNumbers(text);
+      if (nums.length === 0) {
+        await safeSend(chatId, 'No numbers found in that text.');
+        return;
+      }
+
+      let cleanCount = 0;
+      let out = `BASE-60 SCAN — ${nums.length} number(s) found\n\n`;
+
+      for (const { value, display } of nums) {
+        const b = toBase60(value);
+        const status = b.clean ? 'CLEAN' : 'MESSY';
+        if (b.clean) cleanCount++;
+        const insight = domainInsight(value);
+        out += `\`${display.padEnd(14)}\` → \`${b.repr.padEnd(15)}\` ${status}`;
+        if (insight) out += `\n    ${insight}`;
+        out += '\n';
+      }
+
+      // Check ratios between found numbers
+      const ratios = [];
+      if (nums.length >= 2) {
+        out += '\nRATIOS:\n';
+        for (let i = 0; i < nums.length && i < 6; i++) {
+          for (let j = i + 1; j < nums.length && j < 6; j++) {
+            if (nums[j].value !== 0) {
+              const ratio = nums[i].value / nums[j].value;
+              const b = toBase60(ratio);
+              if (b.clean) {
+                out += `  ${nums[i].display}/${nums[j].display} = \`${ratio.toFixed(6)}\` → \`${b.repr}\` CLEAN\n`;
+                ratios.push({ a: nums[i].display, b: nums[j].display, ratio, b60: b.repr });
+              }
+            }
+          }
+        }
+        if (ratios.length === 0) out += '  No clean ratios found between these numbers.\n';
+      }
+
+      const score = nums.length > 0 ? Math.round((cleanCount / nums.length) * 100) : 0;
+      out += `\nSCORE: ${cleanCount}/${nums.length} clean (${score}%)`;
+      if (score >= 80) out += ' — strongly base-60 native';
+      else if (score >= 50) out += ' — partial base-60 design';
+      else if (score > 0) out += ' — mostly decimal/modern';
+      else out += ' — no base-60 signal';
+
+      await safeSend(chatId, out);
+      return;
+    }
+
+    // ── Quick convert mode ──
+    const parsed = fromFraction(raw);
+    if (!parsed) {
+      await safeSend(chatId, `Could not parse "${raw}" as a number.\nTry: /base60 29.53059  or  /base60 1/3  or  /base60 360`);
+      return;
+    }
+
+    const b60 = toBase60(parsed.value);
+    const status = classifyCleanness(b60);
+    const insight = domainInsight(parsed.value);
+
+    let out = `BASE-60 CONVERT\n\n`;
+    out += `Input:    \`${parsed.display}\`\n`;
+    out += `Base-60:  \`${b60.repr}\`\n`;
+    out += `Status:   ${status}\n`;
+    if (insight) out += `Domain:   ${insight}\n`;
+
+    // Extra context for fractions
+    if (parsed.display.includes('/')) {
+      const dec = parsed.value;
+      out += `Decimal:  \`${dec}\`\n`;
+    }
+
+    // Show what 1/3 looks like vs 1/5 to illustrate the principle
+    if (b60.clean && !b60.fracDigits.length) {
+      out += `\nThis is a pure integer — base-60 native.`;
+    } else if (b60.clean) {
+      out += `\nTerminates in base-60. The Babylonians could\nexpress this exactly — no approximation needed.`;
+    } else {
+      out += `\nDoes NOT terminate in base-60. This would have\nbeen an approximation in the Babylonian system.`;
+    }
+
+    await safeSend(chatId, out);
+
+  } catch (e) {
+    console.error('[base60] Error:', e);
+    await safeSend(chatId, `Base-60 error: ${e.message}`);
   }
 });
