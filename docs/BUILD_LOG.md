@@ -1,6 +1,65 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-07 — Autonomy Constitution + Trading Pipeline Completion
+
+**Trading Pipeline — Full 9-Step Execution Gate** (`cyclical-trader.js`):
+- Wired matchmaker fight decision + balance check blocks into step [9/9]
+- Three gates: (1) matchmaker fight=false → skip all entries, (2) direction restriction filtering, (3) isBlocked() per signal
+- Live test confirmed: all 9 steps, balance check blocking new shorts (100% directional, score 35/100), matchmaker passing
+
+**The Autonomy Constitution** — vault spec + contract code + second-domain proof:
+- Spec: `~/cathedral-vault/02_Refined_Gold/cathedral/the-autonomy-constitution.md` (~400 lines)
+- 12 organs across 5 levels (PURPOSE→PERCEPTION→GOVERNANCE→EXECUTION→LEARNING). Organs not layers — simultaneous function. Universal interface: observe/evaluate/recommend/enforce/explain. Escalation: PASS/CONTINUE/PAUSE/ESCALATE/ABORT. Blackboard shared state. Identity as configuration. Fleet recursive pattern.
+- Cybernetics lineage: Ashby's Requisite Variety, Beer's VSM, Boyd's OODA, Senge's learning organizations
+- Origin: ChatGPT relay — Paul sent architecture prompt, GPT produced 12-organ extension + "organs not layers" insight + constitution naming
+
+**Governance Contract Code** (`~/nanoclaw/governance/`):
+- `organ.js` — AgentOrgan base class (5 methods + run() orchestrator)
+- `escalation.js` — 5 signals + resolveSignals() (highest severity wins)
+- `state-bus.js` — StateBus shared state blackboard (6 namespaces, JSON-backed)
+- `chassis.js` — AutonomyChassis orchestrator (register/run/enforce/explain/report)
+- `test-chassis.js` — 7 tests, trading + Reed domains both pass
+- `examples/` — trading-matchmaker.js, reed-matchmaker.js, reed-corner.js
+
+**Reed Governance** (`~/nanoclaw/reed-studio/reed-governance.js`):
+- 7 organs on standard chassis: ReedMatchmaker, ReedRegime, ReedReferee, ReedQuartermaster, ReedBalanceCheck, ReedCorner, ReedCutMan
+- Wraps existing scattered code (generation-guard, metrics-tracker, studio-orc) onto universal interface
+- Referee enforces brand rules as code: catches burgundy #8B2020 + Reed→Coach Paul naming (SI-39)
+- Same chassis, two domains — proof the contract is domain-agnostic
+
+**Agent Genome Schema** (`agent-genome-schema.json`):
+- Added `governance` section: chassisVersion, identityConfig (7 fields), organs (12 entries), stateFiles
+- Added `$defs/organEntry` for per-organ metadata
+
+**92-Agent Audit + 7-Phase Rollout Plan:**
+- Full inventory: 35 online, 57 cron, 8 generators, 3 watchers
+- Tiered: Tier 1 (spend risk, 8 agents) → Tier 2 (decision quality, 10) → Tier 3 (relay, ~10) → Tier 4 (skip, ~60)
+- Phases: spend governors → knowledge quality → decision quality → fleet commander → identity config → learning loop → fleet dashboard
+
+## 2026-07-07 night — Archaeological Vault Deposit (104 old Claude conversations)
+
+**Source:** Two Claude account exports in `~/Downloads/other clauds /` — 84 + 20 conversations spanning Jul 16 2023 – Mar 27 2026. Scanned by 3 parallel specialist agents (boxing methodology, systems/identity, cross-domain/forgotten shelf).
+
+**10 vault deposits created** in `~/cathedral-vault/00_Staging/cathedral/`:
+
+| File | Grade | Content |
+|------|-------|---------|
+| cathedral-fossil-record-2026-07-07.md | Refined_Gold | Timeline of 15 Cathedral feature first-appearances (Jul 2023 – Jan 2026). Founding statement. Meta-finding: the 5-step cross-domain algorithm. |
+| three-engines-lineage-2026-07-07.md | Refined_Gold | 8-point evolution: Mind/Heart/Body libraries (Aug 2023) → Three Engines (Body/Mind/Emotion, one currency = ENERGY) |
+| forgotten-shelf-mixlab-2026-07-07.md | Refined_Gold | MixLab Evolution Engine (Sep 2023). Ice cream → dance → language → military → chess → boxing. The branching grammar 2 years before naming. |
+| forgotten-shelf-hierarchy-of-mastery-2026-07-07.md | Refined_Gold | 4 Levels (Laws>Principles>Frameworks>Systems), 5 Universes, named drills (Zero Runway, Three-Meeting, 60-Second Corner, Cutman's Mentality), True North app spec, proto-agent architecture |
+| forgotten-shelf-gestalt-boxing-2026-07-07.md | Refined_Gold | Hermetic-Gestalt-Design-Combat tetrad. 4 epistemological domains. Gestalt-to-boxing perceptual pedagogy (figure-ground=feints, closure=combo anticipation). Publishable. |
+| forgotten-shelf-aetheric-codex-2026-07-07.md | Staging | 4 Geometric Tests (hex/linear/circular/triangular), Refraction Search, Seed Crystals, Thought Stream |
+| forgotten-shelf-vortex-boxing-2026-07-07.md | Staging | Schauberger-to-boxing: trout principle, Corkscrew/Vortex/Trout drills, D.A.N.C.E. protocol, 1-2-4-7 learning algorithm |
+| forgotten-shelf-master-drill-criteria-2026-07-07.md | Refined_Gold | 9 Master Drill criteria (scoring rubric). Smart Bag Projection System (buildable). Trigger Management shadow boxing. Guard-to-Homebase mapping. |
+| forgotten-shelf-proto-systems-2026-07-07.md | Staging | 10-Step Empowerment Equation, 5-Concept Teaching Architecture, 24 Boxing Principles, 12-Book Series, Healing Letterbox pipeline, SAGE multi-agent framework |
+| origin-paul-identity-archaeology-2026-07-07.md | Refined_Gold | Origin statement, Wanderer's Path (P10), Lost Athletic Drive, Heyoka seed (Oct 2024 — 20 months before brand pivot), Builder's Wound, Imposter Pattern, Quality Control instinct, 7 consistent identity threads |
+
+**Key discovery:** Paul has been running the same algorithm since Day 1 (Jul 2023). Take a principle, map it cross-domain, extract the structural invariant, build a framework, evolve through more domains. The Cathedral wasn't designed — it was named. Every current system has a fossil in these conversations.
+
+**Also built this session:** Boxing NEAT simulation (`~/nanoclaw/boxing-sim/` — 4 files: neat-config.txt, fighter.py, world.py, main.py). Matador vs Bull neuroevolution. Headless eval + visual replay of best per generation. Excalidraw anastomosis diagram (`~/basic-reflex/visuals/cathedral-mycelium-anastomosis.excalidraw`).
+
 ## 2026-07-03 — Scaffold completion + Website Design Bibles + Multi-model review relay
 
 **Scaffold 5a-5e fully wired (continued from 2026-07-03 early session):**

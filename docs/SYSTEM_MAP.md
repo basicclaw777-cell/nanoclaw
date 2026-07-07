@@ -20,6 +20,14 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 ## Research lanes
 - **The Hunch Lane** · `hunch-lane.js` (nanoclaw, ESM) · trigger: `/hunch <hunch>` (telegram-bot.js) + CLI `node hunch-lane.js "..."` · retrieve-before-derive → show-raw-data → route grade to differently-biased reasoner (DeepSeek/Aletheia, NOT Forge) · fixes OmissionOS Deflection (CLAUDE.md SI-44) · doc: vault `02_Refined_Gold/cathedral/omissionos-in-forge-2026-06-15.md`
 
+## Governance (Autonomy Constitution)
+- **AgentOrgan** · `~/nanoclaw/governance/organ.js` (ESM) · base class: observe/evaluate/recommend/enforce/explain · doc: BUILD_LOG 2026-07-07
+- **Escalation** · `~/nanoclaw/governance/escalation.js` (ESM) · 5 signals (PASS→ABORT) + resolveSignals() · doc: BUILD_LOG 2026-07-07
+- **StateBus** · `~/nanoclaw/governance/state-bus.js` (ESM) · shared state blackboard, 6 namespaces, JSON-backed · doc: BUILD_LOG 2026-07-07
+- **AutonomyChassis** · `~/nanoclaw/governance/chassis.js` (ESM) · orchestrates organs by level, enforce/explain/report · doc: BUILD_LOG 2026-07-07
+- **Reed Governance** · `~/nanoclaw/reed-studio/reed-governance.js` (ESM) · 7 organs on standard chassis, wraps existing Reed code · doc: BUILD_LOG 2026-07-07
+- **Constitution Spec** · `~/cathedral-vault/02_Refined_Gold/cathedral/the-autonomy-constitution.md` · 12 organs, 5 levels, cybernetics lineage · doc: BUILD_LOG 2026-07-07
+
 ## Agent improvement
 - **Emergence Signal Router** · `~/Cathedral/emergence/emergence-signal-router.js` · PM2 #168 cron 05:25 HKT · reads monitor/watcher/health/scores → generates corrective planner tasks · doc: BUILD_LOG 2026-06-19
 

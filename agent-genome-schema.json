@@ -1,0 +1,413 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cathedral://agent-genome/v1",
+  "title": "Agent Genome",
+  "description": "Standardized DNA schema for every Cathedral agent. The foundational primitive of the Foundry.",
+  "type": "object",
+  "required": ["id", "name", "type", "generation", "identity", "infrastructure", "io", "health"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique slug (kebab-case). Matches registry key, PM2 name, or sage filename."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["agent", "sage", "skin", "service", "pipeline", "sense", "engine"],
+      "description": "Agent classification. agent=autonomous actor, sage=conversational persona, skin=response style overlay, service=always-on infrastructure, pipeline=run-and-exit data flow, sense=monitoring/detection, engine=stateful processing loop."
+    },
+    "generation": {
+      "type": "string",
+      "enum": ["cathedral", "foundry", "gardener"],
+      "description": "Which Foundry generation this belongs to. Cathedral=helps Paul think, Foundry=knows how Cathedrals get built, Gardener=improves the Foundry."
+    },
+    "version": {
+      "type": "integer",
+      "default": 1,
+      "description": "Genome version. Increment on structural changes."
+    },
+    "born": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this agent was first built."
+    },
+
+    "identity": {
+      "type": "object",
+      "description": "Who this agent IS — persona, purpose, style.",
+      "required": ["description", "goal"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "One-line role description."
+        },
+        "goal": {
+          "type": "string",
+          "description": "What success looks like for this agent."
+        },
+        "style": {
+          "type": "string",
+          "description": "How this agent thinks and communicates."
+        },
+        "contextFile": {
+          "type": "string",
+          "description": "Path to persona/context markdown file."
+        },
+        "voice": {
+          "type": "string",
+          "description": "Voice description for sages/characters."
+        },
+        "openingLine": {
+          "type": "string",
+          "description": "First thing this agent says when invoked."
+        },
+        "interests": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What this agent actively seeks knowledge about."
+        },
+        "relevance": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Topics this agent should be routed for."
+        }
+      }
+    },
+
+    "infrastructure": {
+      "type": "object",
+      "description": "How this agent runs — PM2, model, resources.",
+      "required": ["model"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "LLM used: deepseek, hermes3, gemma3:4b, claude-opus-4-6, etc."
+        },
+        "pm2": {
+          "type": "object",
+          "properties": {
+            "processName": {
+              "type": "string",
+              "description": "PM2 process name from manifest."
+            },
+            "intended": {
+              "type": "string",
+              "enum": ["online", "cron", "stopped", "dead"],
+              "description": "Intended run state."
+            },
+            "cronExpression": {
+              "type": ["string", "null"],
+              "description": "Cron schedule if applicable."
+            }
+          }
+        },
+        "maxContextTokens": {
+          "type": "integer",
+          "description": "Context window budget for this agent."
+        },
+        "maxTokens": {
+          "type": "integer",
+          "description": "Max output tokens per response."
+        },
+        "sessionTimeout": {
+          "type": "integer",
+          "description": "Session timeout in milliseconds."
+        },
+        "codeFiles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Source files this agent owns or operates on."
+        },
+        "stateFiles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "JSON/data files this agent reads and writes."
+        }
+      }
+    },
+
+    "io": {
+      "type": "object",
+      "description": "What goes in, what comes out.",
+      "properties": {
+        "triggers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["telegram", "cron", "watcher", "webhook", "manual", "api", "feed", "signal"]
+              },
+              "detail": {
+                "type": "string",
+                "description": "Command name, cron expression, watched path, endpoint, etc."
+              }
+            }
+          },
+          "description": "What causes this agent to run."
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Data sources consumed: vault sections, state files, APIs, other agents."
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "target"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["telegram", "file", "feed", "api", "state", "vault", "dashboard"]
+              },
+              "target": {
+                "type": "string",
+                "description": "Where output lands: file path, Telegram chat, endpoint, etc."
+              }
+            }
+          },
+          "description": "Where this agent's output goes."
+        },
+        "vaultSections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Vault paths this agent has read access to."
+        }
+      }
+    },
+
+    "dependencies": {
+      "type": "object",
+      "description": "What this agent needs from and gives to other agents.",
+      "properties": {
+        "dependsOn": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Agent IDs this agent requires to function."
+        },
+        "consumesFrom": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Agent IDs whose output this agent reads."
+        },
+        "producesFor": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Agent IDs that consume this agent's output."
+        },
+        "blockedBy": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Agent IDs that must complete before this agent can run."
+        }
+      }
+    },
+
+    "health": {
+      "type": "object",
+      "description": "Current health state — mirrors and extends agent-health.json.",
+      "properties": {
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Overall health score 0-10."
+        },
+        "stewardGrade": {
+          "type": "string",
+          "enum": ["A", "B", "C", "D", "F"],
+          "description": "Feed steward grade."
+        },
+        "intelligenceClass": {
+          "type": "string",
+          "enum": ["SYNTHETIC", "STRUCTURED", "EMERGENT"],
+          "description": "Quality tier of agent's output."
+        },
+        "graduated": {
+          "type": "integer",
+          "description": "Number of findings graduated to Refined Gold."
+        },
+        "decayed": {
+          "type": "integer",
+          "description": "Number of findings decayed."
+        },
+        "lastActive": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last time this agent produced output."
+        }
+      }
+    },
+
+    "memory": {
+      "type": "object",
+      "description": "Memory system for this agent.",
+      "properties": {
+        "memoryFile": {
+          "type": "string",
+          "description": "Path to persistent memory markdown."
+        },
+        "harvestCount": {
+          "type": "integer",
+          "description": "Number of harvested insights in memory."
+        },
+        "lastConsolidated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last memory consolidation run."
+        }
+      }
+    },
+
+    "failureModes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["mode", "symptom"],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "description": "Name of the failure mode."
+          },
+          "symptom": {
+            "type": "string",
+            "description": "How to detect this failure."
+          },
+          "mitigation": {
+            "type": "string",
+            "description": "What to do when this failure occurs."
+          }
+        }
+      },
+      "description": "Known failure patterns for this agent."
+    },
+
+    "budget": {
+      "type": "object",
+      "description": "Cost constraints for agents calling paid APIs.",
+      "properties": {
+        "costPerRun": {
+          "type": "string",
+          "description": "Approximate cost per execution."
+        },
+        "dailyCap": {
+          "type": "string",
+          "description": "Maximum daily spend."
+        },
+        "weeklyCap": {
+          "type": "string",
+          "description": "Maximum weekly spend."
+        },
+        "paidApi": {
+          "type": "string",
+          "description": "Which paid API this agent calls: deepseek, openai, fal, higgsfield, etc."
+        }
+      }
+    },
+
+    "door": {
+      "type": "object",
+      "description": "Visual interface for this agent, if any.",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "File path to HTML dashboard."
+        },
+        "route": {
+          "type": "string",
+          "description": "cath-bridge route (e.g. /prospector)."
+        },
+        "lobbyDistrict": {
+          "type": "string",
+          "description": "Which lobby district this door appears in."
+        }
+      }
+    },
+
+    "evolution": {
+      "type": "object",
+      "description": "How this agent improves over time.",
+      "properties": {
+        "bestVersionConditions": {
+          "type": "string",
+          "description": "What this agent said it needs to reach its best version."
+        },
+        "currentVersion": {
+          "type": "integer",
+          "description": "Self-reported evolution version."
+        },
+        "lastEvolveDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Last evolution assessment."
+        }
+      }
+    },
+
+    "governance": {
+      "type": "object",
+      "description": "Autonomy Constitution — which organs this agent implements. See the-autonomy-constitution.md.",
+      "properties": {
+        "chassisVersion": {
+          "type": "integer",
+          "default": 1,
+          "description": "Constitution version this agent implements."
+        },
+        "identityConfig": {
+          "type": "object",
+          "description": "Identity as configuration — colors every organ's decisions.",
+          "properties": {
+            "style": { "type": "string", "description": "Operating style (e.g. contrarian, conservative, speculative)." },
+            "riskTolerance": { "type": "number", "minimum": 0, "maximum": 1, "description": "0.0 = ultra-conservative, 1.0 = aggressive." },
+            "timeHorizon": { "type": "string", "enum": ["immediate", "short", "medium", "long"], "description": "Decision time horizon." },
+            "confidenceBaseline": { "type": "number", "minimum": 0, "maximum": 1, "description": "Starting confidence before track record." },
+            "escalationThreshold": { "type": "number", "minimum": 0, "maximum": 1, "description": "Uncertainty level that triggers ESCALATE." },
+            "learningRate": { "type": "number", "minimum": 0, "maximum": 1, "description": "How fast Corner adjustments take effect." },
+            "autonomyLevel": { "type": "string", "enum": ["autonomous", "supervised", "manual"], "description": "How much human oversight required." }
+          }
+        },
+        "organs": {
+          "type": "object",
+          "description": "Which constitutional organs this agent implements. Key = organ name, value = implementation details.",
+          "properties": {
+            "missionCommander": { "$ref": "#/$defs/organEntry" },
+            "scout": { "$ref": "#/$defs/organEntry" },
+            "matchmaker": { "$ref": "#/$defs/organEntry" },
+            "regimeDetector": { "$ref": "#/$defs/organEntry" },
+            "referee": { "$ref": "#/$defs/organEntry" },
+            "quartermaster": { "$ref": "#/$defs/organEntry" },
+            "confidence": { "$ref": "#/$defs/organEntry" },
+            "balanceCheck": { "$ref": "#/$defs/organEntry" },
+            "corner": { "$ref": "#/$defs/organEntry" },
+            "scorekeeper": { "$ref": "#/$defs/organEntry" },
+            "historian": { "$ref": "#/$defs/organEntry" },
+            "cutMan": { "$ref": "#/$defs/organEntry" }
+          }
+        },
+        "stateFiles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Shared state JSON files this agent's organs read/write."
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "organEntry": {
+      "type": "object",
+      "properties": {
+        "implemented": { "type": "boolean", "description": "Whether this organ exists as running code." },
+        "file": { "type": "string", "description": "Source file implementing this organ." },
+        "level": { "type": "string", "enum": ["PURPOSE", "PERCEPTION", "GOVERNANCE", "EXECUTION", "LEARNING"] },
+        "governingQuestion": { "type": "string", "description": "The question this organ answers." }
+      }
+    }
+  }
+}

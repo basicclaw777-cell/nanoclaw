@@ -28,6 +28,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
 import dotenv from 'dotenv';
+import { detectAllRegimes, applyRegimeFilter } from './regime-detector.js';
+import { runCorner, loadCornerAdvice } from './the-corner.js';
+import { shouldFight } from './the-matchmaker.js';
+import { checkBalance, isBlocked } from './balance-check.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
@@ -39,7 +43,7 @@ const STRATEGY_SCRIPT = path.join(__dirname, 'strategies', 'cathedral-strategies
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-const CYCLICAL_STRATEGIES = ['historical_cycles', 'lunar_cycles', 'gann_geometry', 'fibonacci_time'];
+const CYCLICAL_STRATEGIES = ['historical_cycles', 'lunar_cycles', 'gann_geometry', 'fibonacci_time', 'harmonic_year', 'harmonic_432', 'sexagesimal_cycles'];
 
 // ── DB Setup ────────────────────────────────────────────────────────────────
 
@@ -278,9 +282,99 @@ function checkPositions(prices, portfolio) {
   return closedCount;
 }
 
+// ── Confidence Sizing — throw harder when landing, lighter when not ─────────
+
+function getConfidenceMultiplier() {
+  const recent = getDb().prepare(`
+    SELECT pnl FROM cyclical_trades WHERE status = 'closed'
+    ORDER BY closed_at DESC LIMIT 8
+  `).all();
+
+  if (recent.length < 3) return { mult: 1.0, reason: 'too few trades' };
+
+  const wins = recent.filter(t => t.pnl > 0).length;
+  const winRate = wins / recent.length;
+
+  // Streak detection
+  let streak = 0;
+  const firstWin = recent[0]?.pnl > 0;
+  for (const t of recent) {
+    if ((t.pnl > 0) === firstWin) streak++;
+    else break;
+  }
+
+  let mult = 1.0;
+  let reason = `${wins}/${recent.length} recent`;
+
+  if (winRate >= 0.75) {
+    mult = 1.3;
+    reason += ' — hot hand, sizing up';
+  } else if (winRate >= 0.6) {
+    mult = 1.15;
+    reason += ' — winning, slight boost';
+  } else if (winRate <= 0.25) {
+    mult = 0.5;
+    reason += ' — cold, halving size';
+  } else if (winRate <= 0.38) {
+    mult = 0.7;
+    reason += ' — below average, reducing';
+  }
+
+  // Streak override
+  if (!firstWin && streak >= 4) {
+    mult = Math.min(mult, 0.4);
+    reason = `${streak}-loss streak — minimum size`;
+  } else if (firstWin && streak >= 4) {
+    mult = Math.max(mult, 1.25);
+    reason = `${streak}-win streak — pressing advantage`;
+  }
+
+  return { mult: +mult.toFixed(2), reason };
+}
+
+// ── The Cut Man — stop the bleeding during drawdown ─────────────────────────
+
+function getCutManLimits(portfolio) {
+  const startBalance = portfolio.starting_balance || portfolio.start_balance || 5000;
+  const drawdownPct = ((startBalance - portfolio.balance) / startBalance) * 100;
+
+  let maxConcurrent = portfolio.max_concurrent || 8;
+  let positionCap = 500;
+  let status = 'healthy';
+
+  if (drawdownPct >= 20) {
+    // Critical — survival mode
+    maxConcurrent = 1;
+    positionCap = 200;
+    status = 'CRITICAL';
+  } else if (drawdownPct >= 15) {
+    // Hurt — minimal exposure
+    maxConcurrent = 2;
+    positionCap = 250;
+    status = 'HURT';
+  } else if (drawdownPct >= 10) {
+    // Bleeding — reduce aggression
+    maxConcurrent = 4;
+    positionCap = 350;
+    status = 'BLEEDING';
+  } else if (drawdownPct >= 5) {
+    // Bruised — slight caution
+    maxConcurrent = 6;
+    positionCap = 450;
+    status = 'BRUISED';
+  }
+
+  return {
+    maxConcurrent,
+    positionCap,
+    status,
+    drawdownPct: +drawdownPct.toFixed(1),
+  };
+}
+
 // ── Trade Execution ─────────────────────────────────────────────────────────
 
-function executeTrade(signal, prices, portfolio) {
+function executeTrade(signal, prices, portfolio, confidenceMult = 1.0, positionCap = 500) {
   const priceData = prices[signal.asset];
   if (!priceData || !priceData.price) return null;
 
@@ -288,9 +382,10 @@ function executeTrade(signal, prices, portfolio) {
   const direction = signal.direction;
   const isLong = direction === 'long';
 
-  // Position sizing
+  // Position sizing — base × confidence multiplier, capped by cut man
   const maxPositionValue = portfolio.balance * portfolio.max_position_pct;
-  const positionValue = Math.min(maxPositionValue, 500); // cap at $500 per trade
+  const baseSize = Math.min(maxPositionValue, positionCap);
+  const positionValue = +(baseSize * confidenceMult).toFixed(2);
 
   const stopLoss = isLong
     ? entryPrice * (1 - portfolio.stop_loss_pct)
@@ -324,7 +419,7 @@ async function run() {
   const portfolio = loadPortfolio();
 
   // Step 1: Check existing positions
-  console.log('[1/3] Checking positions...');
+  console.log('[1/9] Checking positions...');
   const closedCount = checkPositions(prices, portfolio);
   const openPositions = getOpenPositions();
   if (closedCount > 0) console.log(`  Closed ${closedCount} positions`);
@@ -339,18 +434,133 @@ async function run() {
     console.log('  No open positions');
   }
 
-  // Step 2: Generate cyclical signals
-  console.log('\n[2/3] Generating cyclical signals...');
-  const signals = generateSignals();
-  console.log(`  ${signals.length} signals generated`);
-
-  for (const s of signals) {
-    console.log(`    ${s.asset} ${s.direction} (${s.type}) str=${s.strength}`);
+  // Step 2: The Matchmaker — should we even be fighting?
+  console.log('\n[2/9] The Matchmaker...');
+  const fightDecision = shouldFight();
+  if (fightDecision.fight) {
+    console.log(`  FIGHT: ${fightDecision.reasons[0]}`);
+    if (fightDecision.allowed_direction) console.log(`  RESTRICTION: ${fightDecision.allowed_direction}`);
+    if (fightDecision.warnings.length) console.log(`  WARNING: ${fightDecision.warnings.join(', ')}`);
+  } else {
+    console.log(`  SIT OUT: ${fightDecision.reasons.join('; ')}`);
+    console.log('  No new positions will be opened this run.');
   }
 
-  // Step 3: Execute trades
-  console.log('\n[3/3] Executing trades...');
+  // Step 3: Balance check — am I falling over?
+  console.log('\n[3/9] Balance check...');
+  const balance = checkBalance();
+  console.log(`  Score: ${balance.score}/100 | ${balance.long_count}L/${balance.short_count}S`);
+  for (const [check, status] of Object.entries(balance.analysis)) {
+    if (!status.startsWith('OK') && !status.startsWith('empty')) {
+      console.log(`  ${check}: ${status}`);
+    }
+  }
+  if (balance.blocks.length > 0) {
+    for (const b of balance.blocks) {
+      console.log(`  BLOCK: ${b.reason}`);
+    }
+  }
+
+  // Step 4: Regime detection — read the other fighter
+  console.log('\n[4/9] Detecting market regime...');
+  let regimes = {};
+  try {
+    // Run regime detector as standalone — it handles its own data fetching
+    execFileSync('node', [path.join(__dirname, 'regime-detector.js')], {
+      timeout: 45000, encoding: 'utf8', stdio: 'pipe',
+    });
+    const regimeState = JSON.parse(fs.readFileSync(path.join(__dirname, 'regime-state.json'), 'utf8'));
+    regimes = regimeState.regimes || {};
+    for (const [sym, r] of Object.entries(regimes)) {
+      const muted = Object.entries(r.strategy_multipliers).filter(([, v]) => v <= 0.3).map(([k]) => k);
+      console.log(`  ${sym}: ${r.regime} (${r.confidence}%)${muted.length ? ` — muting: ${muted.join(', ')}` : ''}`);
+    }
+  } catch (e) {
+    // Fallback: read existing regime-state.json if available
+    const regimePath = path.join(__dirname, 'regime-state.json');
+    if (fs.existsSync(regimePath)) {
+      const regimeState = JSON.parse(fs.readFileSync(regimePath, 'utf8'));
+      regimes = regimeState.regimes || {};
+      console.log(`  Using cached regime state (${Object.keys(regimes).length} assets)`);
+    } else {
+      console.log(`  Regime detection failed (${e.message}) — using unfiltered signals`);
+    }
+  }
+
+  // Step 3: Generate cyclical signals
+  console.log('\n[5/9] Generating cyclical signals...');
+  const rawSignals = generateSignals();
+  console.log(`  ${rawSignals.length} raw signals`);
+
+  // Step 4: Apply regime filter + corner advice — adjust signal strength
+  console.log('\n[6/9] Applying regime filter + corner advice...');
+
+  // Run the corner between rounds
+  let cornerAdvice = {};
+  try {
+    const corner = runCorner();
+    cornerAdvice = corner.multipliers || {};
+    const benched = corner.strategy_rankings?.filter(s => s.corner_multiplier < 0.5) || [];
+    const boosted = corner.strategy_rankings?.filter(s => s.corner_multiplier > 1.1) || [];
+    if (boosted.length) console.log(`  Corner BOOST: ${boosted.map(s => s.strategy).join(', ')}`);
+    if (benched.length) console.log(`  Corner BENCH: ${benched.map(s => s.strategy).join(', ')}`);
+  } catch (e) {
+    console.log(`  Corner failed (${e.message}) — using flat weights`);
+  }
+
+  const signals = rawSignals
+    .map(s => {
+      // Apply regime multiplier
+      const regime = regimes[s.asset];
+      let adjusted = regime ? applyRegimeFilter(s, regime) : { ...s };
+
+      // Apply corner multiplier (stacks with regime)
+      const cornerMult = cornerAdvice[s.type || s.source] ?? 1.0;
+      if (cornerMult !== 1.0) {
+        adjusted.strength = +(adjusted.strength * cornerMult).toFixed(3);
+        adjusted.corner_multiplier = cornerMult;
+      }
+
+      return adjusted;
+    })
+    .sort((a, b) => (b.strength || 0) - (a.strength || 0));
+
+  const belowThreshold = signals.filter(s => s.strength < 0.45).length;
+  if (belowThreshold > 0) {
+    console.log(`  ${belowThreshold} signals below 0.45 threshold after filtering`);
+  }
+
+  for (const s of signals) {
+    const tags = [];
+    if (s.regime) tags.push(s.regime + (s.regime_multiplier < 1 ? '×' + s.regime_multiplier : ''));
+    if (s.corner_multiplier && s.corner_multiplier !== 1.0) tags.push('corner×' + s.corner_multiplier);
+    const tagStr = tags.length ? ` [${tags.join(' ')}]` : '';
+    console.log(`    ${s.asset} ${s.direction} (${s.type}) str=${s.strength}${tagStr}`);
+  }
+
+  // Step 5: Confidence sizing + Cut man
+  const confidence = getConfidenceMultiplier();
+  const cutMan = getCutManLimits(portfolio);
+
+  console.log(`\n[7/9] Confidence sizing: ×${confidence.mult} (${confidence.reason})`);
+  console.log(`[8/9] Cut man: ${cutMan.status} (${cutMan.drawdownPct}% drawdown) — max ${cutMan.maxConcurrent} positions, $${cutMan.positionCap} cap`);
+
+  // Step 7: Execute trades
+  console.log('\n[9/9] Executing trades...');
   let tradesOpened = 0;
+  const effectiveMaxConcurrent = Math.min(portfolio.max_concurrent, cutMan.maxConcurrent);
+
+  // Gate 1: Matchmaker says sit out — no new entries at all
+  if (!fightDecision.fight) {
+    console.log('  MATCHMAKER: Sitting out — no new trades this run.');
+    for (const signal of signals) {
+      getDb().prepare(`
+        INSERT INTO cyclical_signals_log (asset, direction, strength, strategy, reasoning, action_taken)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).run(signal.asset, signal.direction, signal.strength, signal.type || signal.source,
+        signal.reasoning, 'matchmaker_sit_out');
+    }
+  } else {
 
   for (const signal of signals) {
     // Log signal
@@ -360,6 +570,25 @@ async function run() {
     `).run(signal.asset, signal.direction, signal.strength, signal.type || signal.source,
       signal.reasoning, 'pending');
 
+    // Gate 2: Matchmaker direction restriction
+    if (fightDecision.allowed_direction) {
+      if (fightDecision.allowed_direction === 'long_only' && signal.direction === 'short') {
+        console.log(`  ${signal.asset} SHORT blocked — matchmaker says long_only`);
+        continue;
+      }
+      if (fightDecision.allowed_direction === 'short_only' && signal.direction === 'long') {
+        console.log(`  ${signal.asset} LONG blocked — matchmaker says short_only`);
+        continue;
+      }
+    }
+
+    // Gate 3: Balance check blocks
+    const blockReason = isBlocked(signal, balance);
+    if (blockReason) {
+      console.log(`  ${signal.asset} ${signal.direction} blocked — balance: ${blockReason}`);
+      continue;
+    }
+
     // Skip if already have position on this asset+strategy
     const existing = openPositions.find(p => p.asset === signal.asset && p.strategy === (signal.type || signal.source));
     if (existing) {
@@ -367,9 +596,9 @@ async function run() {
       continue;
     }
 
-    // Skip if at max concurrent
-    if (openPositions.length + tradesOpened >= portfolio.max_concurrent) {
-      console.log(`  Max concurrent (${portfolio.max_concurrent}) reached — skipping ${signal.asset}`);
+    // Skip if at max concurrent (cut man adjusted)
+    if (openPositions.length + tradesOpened >= effectiveMaxConcurrent) {
+      console.log(`  Max concurrent (${effectiveMaxConcurrent}${cutMan.status !== 'healthy' ? ' [CUT MAN]' : ''}) reached — skipping ${signal.asset}`);
       continue;
     }
 
@@ -379,14 +608,16 @@ async function run() {
       continue;
     }
 
-    const result = executeTrade(signal, prices, portfolio);
+    const result = executeTrade(signal, prices, portfolio, confidence.mult, cutMan.positionCap);
     if (result) {
       console.log(`  NEW: ${result.direction} ${result.asset} @ $${result.entryPrice}`);
-      console.log(`    SL: $${result.stopLoss.toFixed(2)} | TP: $${result.takeProfit.toFixed(2)} | Size: $${result.positionValue.toFixed(2)}`);
+      console.log(`    SL: $${result.stopLoss.toFixed(2)} | TP: $${result.takeProfit.toFixed(2)} | Size: $${result.positionValue.toFixed(2)} (×${confidence.mult})`);
       console.log(`    Strategy: ${signal.type} — ${signal.reasoning.substring(0, 80)}`);
       tradesOpened++;
     }
   }
+
+  } // end matchmaker fight gate
 
   // Save portfolio
   savePortfolio(portfolio);
