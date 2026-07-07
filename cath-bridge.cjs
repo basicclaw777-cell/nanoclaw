@@ -5531,6 +5531,18 @@ app.get('/logan-universe', (req, res) => {
   res.sendFile(path.join(__dirname, 'logan-universe.html'));
 });
 
+// ── Aether Universe Dashboard ─────────────────────────────────────────────────
+
+app.get('/aether-universe', (req, res) => {
+  res.sendFile(path.join(__dirname, 'aether-universe.html'));
+});
+
+// ── Universe Engine Map ──────────────────────────────────────────────────────
+
+app.get('/universe-map', (req, res) => {
+  res.sendFile(path.join(__dirname, 'universe-map.html'));
+});
+
 app.get('/logan-universe/assets', (req, res) => {
   const dirs = [
     { label: 'Logan (Vault)', dir: path.join(HOME, 'cathedral-vault/09_Artifacts/logan') },
@@ -6843,6 +6855,72 @@ app.get('/self-questioner', (req, res) => {
 });
 app.get('/coaching-engine', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'coaching-engine.html'));
+});
+app.get('/boxing-game', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'boxing-game.html'));
+});
+app.get('/boxing-floor', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'boxing-floor.html'));
+});
+app.get('/boxing-defense', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'boxing-defense.html'));
+});
+app.get('/boxing-fullfight', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'boxing-fullfight.html'));
+});
+
+// ── Quarry — mobile drop zone (phone → Cathedral) ────────────────────────────
+const QUARRY_DIR = path.join(HOME, 'Downloads', 'quarry');
+if (!fs.existsSync(QUARRY_DIR)) fs.mkdirSync(QUARRY_DIR, { recursive: true });
+
+const quarryUpload = multer({
+  dest: QUARRY_DIR,
+  limits: { fileSize: 500 * 1024 * 1024 },
+});
+
+app.post('/quarry/upload', quarryUpload.array('files', 20), (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'No files received' });
+  }
+  const results = [];
+  for (const file of req.files) {
+    const ext = path.extname(file.originalname) || '';
+    const dest = path.join(QUARRY_DIR, file.originalname);
+    // Rename from multer temp name to original filename
+    try {
+      // Avoid overwriting: append timestamp if exists
+      let finalDest = dest;
+      if (fs.existsSync(dest)) {
+        const base = path.basename(file.originalname, ext);
+        finalDest = path.join(QUARRY_DIR, `${base}-${Date.now()}${ext}`);
+      }
+      fs.renameSync(file.path, finalDest);
+      results.push({ name: path.basename(finalDest), size: file.size, type: file.mimetype });
+    } catch (e) {
+      results.push({ name: file.originalname, error: e.message });
+    }
+  }
+  console.log(`[quarry] ${results.length} file(s) dropped: ${results.map(r => r.name).join(', ')}`);
+  res.json({ ok: true, files: results });
+});
+
+app.get('/quarry', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'quarry-mobile.html'));
+});
+
+app.get('/quarry/list', (req, res) => {
+  try {
+    const files = fs.readdirSync(QUARRY_DIR)
+      .filter(f => !f.startsWith('.'))
+      .map(f => {
+        const stat = fs.statSync(path.join(QUARRY_DIR, f));
+        return { name: f, size: stat.size, modified: stat.mtime.toISOString() };
+      })
+      .sort((a, b) => new Date(b.modified) - new Date(a.modified));
+    res.json({ ok: true, files });
+  } catch (e) {
+    res.json({ ok: false, error: e.message });
+  }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

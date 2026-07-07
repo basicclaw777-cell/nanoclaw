@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aether Universe — Hexad of Resonance</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #f7f8fa; --surface: #ffffff; --surface-2: #f1f3f6; --surface-3: #e8eaef;
+  --border: #e0e3ea; --border-hover: #c8cdd6;
+  --text: #1a1d24; --text-muted: #475067; --text-dim: #8a93a6;
+  --aria: #7c5cbf; --aria-light: #b39ddb; --aria-bg: rgba(124,92,191,0.08);
+  --vora: #0d7c8c; --vora-light: #26c6da; --vora-bg: rgba(13,124,140,0.08);
+  --hum: #c49000; --hum-light: #ffc107; --hum-bg: rgba(196,144,0,0.08);
+  --hex: #4a6741; --hex-light: #66bb6a; --hex-bg: rgba(74,103,65,0.08);
+  --tempo: #c24040; --tempo-light: #ef5350; --tempo-bg: rgba(194,64,64,0.08);
+  --sparky: #d65f00; --sparky-light: #ff9800; --sparky-bg: rgba(214,95,0,0.08);
+  --accent: #5c6bc0;
+  --radius: 12px; --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.1);
+}
+body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; min-height:100vh; -webkit-font-smoothing:antialiased; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+.header { padding:24px 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; background:var(--surface); }
+.header-back { background:var(--surface-2); border:1px solid var(--border); color:var(--text-muted); padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:inherit; text-decoration:none; }
+.header-back:hover { border-color:var(--border-hover); color:var(--text); text-decoration:none; }
+.header h1 { font-size:22px; font-weight:700; letter-spacing:-0.5px; }
+.header h1 span { color:var(--aria); }
+.header-sub { font-size:12px; color:var(--text-dim); margin-left:auto; }
+
+.nav { display:flex; gap:2px; padding:0 32px; background:var(--surface); border-bottom:1px solid var(--border); overflow-x:auto; }
+.nav-tab { padding:12px 18px; font-size:12px; font-weight:600; color:var(--text-dim); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:all 0.2s; letter-spacing:0.5px; text-transform:uppercase; }
+.nav-tab:hover { color:var(--text-muted); }
+.nav-tab.active { color:var(--aria); border-bottom-color:var(--aria); }
+
+.view { display:none; max-width:1200px; margin:0 auto; padding:24px 32px 60px; }
+.view.active { display:block; }
+
+.section-title { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin:24px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.section-title:first-child { margin-top:0; }
+
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:12px; box-shadow:var(--shadow); }
+.card:hover { border-color:var(--border-hover); }
+.card-title { font-size:15px; font-weight:600; margin-bottom:6px; }
+.card-meta { font-size:11px; color:var(--text-dim); margin-bottom:8px; }
+.card-body { font-size:13px; color:var(--text-muted); line-height:1.6; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+@media (max-width:768px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+
+/* Character cards */
+.char-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; position:relative; overflow:hidden; box-shadow:var(--shadow); transition:all 0.2s; }
+.char-card:hover { box-shadow:var(--shadow-hover); transform:translateY(-2px); }
+.char-glow { position:absolute; top:-40px; right:-40px; width:120px; height:120px; border-radius:50%; opacity:0.12; pointer-events:none; }
+.char-icon { font-size:28px; margin-bottom:10px; }
+.char-name { font-size:17px; font-weight:700; margin-bottom:2px; }
+.char-role { font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+.char-catch { font-size:13px; font-style:italic; margin-bottom:10px; line-height:1.5; }
+.char-detail { font-size:12px; color:var(--text-muted); line-height:1.6; }
+.char-detail dt { font-weight:600; color:var(--text); margin-top:6px; }
+.char-detail dd { margin-left:0; }
+
+.char-card.aria { border-left:3px solid var(--aria); }
+.char-card.aria .char-glow { background:var(--aria); }
+.char-card.aria .char-role { color:var(--aria); }
+.char-card.vora { border-left:3px solid var(--vora); }
+.char-card.vora .char-glow { background:var(--vora); }
+.char-card.vora .char-role { color:var(--vora); }
+.char-card.hum { border-left:3px solid var(--hum); }
+.char-card.hum .char-glow { background:var(--hum); }
+.char-card.hum .char-role { color:var(--hum); }
+.char-card.hex { border-left:3px solid var(--hex); }
+.char-card.hex .char-glow { background:var(--hex); }
+.char-card.hex .char-role { color:var(--hex); }
+.char-card.tempo { border-left:3px solid var(--tempo); }
+.char-card.tempo .char-glow { background:var(--tempo); }
+.char-card.tempo .char-role { color:var(--tempo); }
+.char-card.sparky { border-left:3px solid var(--sparky); }
+.char-card.sparky .char-glow { background:var(--sparky); }
+.char-card.sparky .char-role { color:var(--sparky); }
+
+/* Combo matrix */
+.combo-table { width:100%; border-collapse:collapse; background:var(--surface); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+.combo-table th { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); text-align:left; padding:10px 14px; border-bottom:2px solid var(--border); background:var(--surface-2); }
+.combo-table td { font-size:13px; color:var(--text-muted); padding:12px 14px; border-bottom:1px solid var(--surface-2); }
+.combo-table tr:hover td { background:var(--surface-2); }
+.combo-name { font-weight:600; color:var(--text); }
+
+/* Book cards */
+.book-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; box-shadow:var(--shadow); }
+.book-num { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+.book-title { font-size:14px; font-weight:600; margin-bottom:4px; }
+.book-lesson { font-size:12px; color:var(--text-muted); font-style:italic; }
+
+/* Curriculum */
+.course-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; box-shadow:var(--shadow); }
+.course-code { font-size:10px; font-weight:700; letter-spacing:1px; color:var(--accent); margin-bottom:4px; }
+.course-name { font-size:14px; font-weight:600; margin-bottom:6px; }
+.course-desc { font-size:12px; color:var(--text-muted); line-height:1.5; }
+.course-practical { font-size:11px; color:var(--text-dim); margin-top:6px; font-style:italic; }
+
+/* Cognitive table */
+.cog-table { width:100%; border-collapse:collapse; background:var(--surface); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+.cog-table th { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); text-align:left; padding:10px 14px; border-bottom:2px solid var(--border); background:var(--surface-2); }
+.cog-table td { font-size:13px; color:var(--text-muted); padding:12px 14px; border-bottom:1px solid var(--surface-2); }
+.cog-table tr:hover td { background:var(--surface-2); }
+
+/* Curriculum map */
+.curmap-table { width:100%; border-collapse:collapse; background:var(--surface); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+.curmap-table th { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); text-align:left; padding:10px 14px; border-bottom:2px solid var(--border); background:var(--surface-2); }
+.curmap-table td { font-size:13px; color:var(--text-muted); padding:12px 14px; border-bottom:1px solid var(--surface-2); }
+.curmap-table tr:hover td { background:var(--surface-2); }
+.curmap-guide { font-weight:600; color:var(--text); }
+
+/* Axiom cards */
+.axiom-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; box-shadow:var(--shadow); }
+.axiom-num { font-size:28px; font-weight:800; color:var(--surface-3); margin-bottom:4px; }
+.axiom-name { font-size:14px; font-weight:700; margin-bottom:6px; color:var(--text); }
+.axiom-body { font-size:12px; color:var(--text-muted); line-height:1.5; }
+
+/* Prompt cards */
+.prompt-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:12px; box-shadow:var(--shadow); }
+.prompt-title { font-size:14px; font-weight:600; margin-bottom:8px; }
+.prompt-text { font-size:12px; color:var(--text-muted); line-height:1.7; font-family:'SF Mono','Fira Code',monospace; background:var(--surface-2); padding:12px; border-radius:var(--radius-sm); white-space:pre-wrap; }
+.prompt-copy { display:inline-block; margin-top:8px; font-size:11px; font-weight:600; color:var(--accent); cursor:pointer; padding:4px 10px; border:1px solid var(--accent); border-radius:4px; }
+.prompt-copy:hover { background:var(--accent); color:#fff; }
+
+/* Source docs */
+.source-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; box-shadow:var(--shadow); }
+.source-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+.source-path { font-size:12px; font-family:'SF Mono','Fira Code',monospace; color:var(--text-muted); word-break:break-all; }
+.source-date { font-size:11px; color:var(--text-dim); margin-top:4px; }
+.source-desc { font-size:12px; color:var(--text-muted); margin-top:6px; line-height:1.5; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="header-back" href="/env/lobby">Lobby</a>
+  <h1><span>Aether</span> Universe</h1>
+  <div class="header-sub">The Hexad of Resonance &middot; World Bible</div>
+</div>
+
+<div class="nav" id="nav">
+  <div class="nav-tab active" data-view="overview">Overview</div>
+  <div class="nav-tab" data-view="characters">The Hexad</div>
+  <div class="nav-tab" data-view="books">Book Series</div>
+  <div class="nav-tab" data-view="combos">Combo Matrix</div>
+  <div class="nav-tab" data-view="curriculum">Academy</div>
+  <div class="nav-tab" data-view="cognitive">Cognitive Ops</div>
+  <div class="nav-tab" data-view="animation">Animation</div>
+  <div class="nav-tab" data-view="visdev">Visual Dev</div>
+  <div class="nav-tab" data-view="prompts">Prompts</div>
+  <div class="nav-tab" data-view="sources">Sources</div>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="view active" id="v-overview">
+  <div class="card" style="border-left:3px solid var(--aria);">
+    <div class="card-title">The Hexad of Resonance</div>
+    <div class="card-meta">Kids' science universe &middot; Compression engine for adult learning &middot; Tesla &middot; Schauberger &middot; Russell</div>
+    <div class="card-body">
+      Six characters personifying physics principles. If a character can't explain a concept to a 7-year-old, Paul doesn't truly understand it yet. Teaching IS the instrument.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="font-size:18px;font-style:italic;text-align:center;color:var(--text);padding:16px 0;">
+      Resonance + Medium = Form
+    </div>
+    <div class="card-body" style="text-align:center;font-size:13px;">
+      "To change the form, you do not apply more force. You change the resonance of the medium."
+    </div>
+  </div>
+
+  <div class="section-title">The Foundational Axioms</div>
+  <div class="grid-2">
+    <div class="axiom-card">
+      <div class="axiom-num">01</div>
+      <div class="axiom-name">The Plenum</div>
+      <div class="axiom-body">The universe is a continuous, dynamic, intelligent medium (Aether). It is both the substance and the message.</div>
+    </div>
+    <div class="axiom-card">
+      <div class="axiom-num">02</div>
+      <div class="axiom-name">Resonance as Law</div>
+      <div class="axiom-body">All sustained phenomena are harmonic interactions within the medium. Vibration and sympathetic resonance are primary causes, not secondary effects.</div>
+    </div>
+    <div class="axiom-card">
+      <div class="axiom-num">03</div>
+      <div class="axiom-name">Primacy of the Field</div>
+      <div class="axiom-body">Discrete "objects" are localized, coherent disturbances of the medium &mdash; standing waves, vortices, or nodules of condensed energy.</div>
+    </div>
+    <div class="axiom-card">
+      <div class="axiom-num">04</div>
+      <div class="axiom-name">The Directional Gradient</div>
+      <div class="axiom-body">The medium has a fundamental directionality &mdash; a vertical harmonic stack from subtle to dense. "Up" and "down" as qualities of potential.</div>
+    </div>
+  </div>
+
+  <div class="section-title">The Map &mdash; Cartography of Resonance</div>
+  <div class="grid-3">
+    <div class="card" style="border-top:3px solid var(--aria);">
+      <div class="card-title">The Cosmic Domain</div>
+      <div class="card-meta">THE SOURCE</div>
+      <div class="card-body">High-frequency, unformed potential.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--hex);">
+      <div class="card-title">The Earth-Domain</div>
+      <div class="card-meta">THE FORM</div>
+      <div class="card-body">Where frequencies balance into standing waves to create physical reality.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--sparky);">
+      <div class="card-title">The Abyss</div>
+      <div class="card-meta">THE DISSOLUTION</div>
+      <div class="card-body">Where form breaks back down into the medium.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Character 07 &mdash; The Static</div>
+  <div class="card" style="border-left:3px solid #999; margin-bottom:12px;">
+    <div class="card-title">The Dissonance</div>
+    <div class="card-meta">Not evil &mdash; the absence of resonance</div>
+    <div class="card-body" style="font-style:italic;font-size:14px;margin-bottom:12px;">
+      "Every silence believes it is forever... until someone remembers the song."
+    </div>
+    <div class="card-body">
+      The Static does not burn, freeze, or attack. It simply convinces the universe to stop singing. Everything touched becomes quieter, slower, duller &mdash; until it forgets what it was meant to become. The enemy isn't "badness." The enemy is disconnection.
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Personality</div>
+      <div class="card-body">Never shouts. Whispers. Slowly. Almost kindly. <em>"Maybe don't try." "Maybe tomorrow." "Maybe it doesn't matter."</em> Power comes from convincing people to stop believing in themselves.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Visual Design</div>
+      <div class="card-body">Faceless. Semi-transparent smoke, drifting ash, grey particles. No internal glow &mdash; absorbs light. Bloom disappears, god rays dissolve. Colour fades to monochrome in its presence.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Shape Language</div>
+      <div class="card-body">Flowing smoke. Broken waves. Interrupted circles. Incomplete spirals. Collapsed geometry. Every shape feels unfinished &mdash; resonance trying and failing to exist.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Materials</div>
+      <div class="card-body">Ash, fog, cold smoke, fine graphite dust, old paper, weathered stone, faded glass. Unlike the Guardians &mdash; no internal glow.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Motion</div>
+      <div class="card-body">Never walks. Never flies. Drifts &mdash; like fog entering a room. Edges continuously evaporate. Pieces disappear, then quietly reform elsewhere. Never hurries.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Environmental Effect</div>
+      <div class="card-body">Flowers close. Water stops shimmering. Wind becomes still. Music fades. Particles disappear. Light loses bloom. The environment doesn't die &mdash; it forgets how to be alive.</div>
+    </div>
+  </div>
+  <div class="card" style="border-left:3px solid var(--sparky); margin-top:12px;">
+    <div class="card-title">Sparky's Relationship</div>
+    <div class="card-body">Sparky is not the villain. His impulsive nature makes him the easiest Guardian to influence. When overwhelmed, grey wisps appear inside his plasma. His sparks go erratic, colours dull, laughter fades. The audience thinks he's becoming dangerous &mdash; but he is <em>disappearing</em>.<br><br>
+    The Guardians never fight Sparky. They surround him. Hum restores his rhythm. Tempo reminds him to breathe. Vora makes him laugh. Hex gives him safety. Aria reaches out her hand. The light returns. The Static retreats.</div>
+  </div>
+  <div class="card" style="margin-top:12px; background:var(--surface-2);">
+    <div class="card-title">Art Direction</div>
+    <div class="card-body">Vast, faceless being of semi-transparent grey fog, ash, graphite dust. Melancholy rather than frightening. Beautiful rather than monstrous. Ancient, inevitable. Luminous environments slowly losing colour where the fog passes. Glow-Wave design language. Cinematic volumetric lighting. Inspired by <em>Ori and the Blind Forest</em>, <em>Journey</em>, <em>Elemental</em>.<br><br><strong>"This is not a monster. This is what hope looks like when it is forgotten."</strong></div>
+  </div>
+
+  <div class="section-title">Connected Project</div>
+  <div class="card">
+    <div class="card-title">The Aetheric Building Codex (Boxing Geometry)</div>
+    <div class="card-meta">Separate but related system</div>
+    <div class="card-body">8-level geometric progression (Point&rarr;Torus) &middot; 6 punches as geometric forms &middot; Cameraman perspective layer &middot; Footwork Manifold. Same physics roots applied to boxing movement.</div>
+  </div>
+</div>
+
+<!-- ═══ CHARACTERS ═══ -->
+<div class="view" id="v-characters">
+  <div class="section-title">The Six Resonance Guides</div>
+  <div class="grid-2">
+    <div class="char-card aria">
+      <div class="char-glow"></div>
+      <div class="char-icon">🌊</div>
+      <div class="char-name">Aria the Aether</div>
+      <div class="char-role">The Medium</div>
+      <div class="char-catch">"I am the Silence between the Notes."</div>
+      <div class="char-detail">
+        <dt>Physics Root</dt><dd>The Aether / Zero-Point Field</dd>
+        <dt>Role</dt><dd>The "water" in which everything swims. The invisible blanket connecting all things.</dd>
+        <dt>Core Lesson</dt><dd>Connection. Nothing is separate. We are all notes in the same symphony.</dd>
+        <dt>Visual</dt><dd>Background "hums" with light whenever a character acts.</dd>
+        <dt>Sound</dt><dd>Ambient pad / Silence</dd>
+        <dt>Milestone</dt><dd><strong>The Awareness of the Ocean</strong> &mdash; student can explain that space is a conductor, not a vacuum.</dd>
+      </div>
+    </div>
+    <div class="char-card vora">
+      <div class="char-glow"></div>
+      <div class="char-icon">🌀</div>
+      <div class="char-name">Vora the Vortex</div>
+      <div class="char-role">The Builder</div>
+      <div class="char-catch">"Spin in to begin!"</div>
+      <div class="char-detail">
+        <dt>Physics Root</dt><dd>Viktor Schauberger's Implosion</dd>
+        <dt>Role</dt><dd>Creating density through inward spirals. A swirling, iridescent creature made of luminous water and air.</dd>
+        <dt>Core Lesson</dt><dd>Moving toward the center creates energy; moving away wastes it. Nature loves a curve.</dd>
+        <dt>Visual</dt><dd>Leaves a trail of cooling blue spirals behind her.</dd>
+        <dt>Sound</dt><dd>Flute / Wind instruments (432Hz)</dd>
+        <dt>Milestone</dt><dd><strong>The Centripetal Shift</strong> &mdash; student can create a self-sustaining water vortex and explain why the center is cooler.</dd>
+      </div>
+    </div>
+    <div class="char-card hum">
+      <div class="char-glow"></div>
+      <div class="char-icon">🐝</div>
+      <div class="char-name">Hum the Honeybee</div>
+      <div class="char-role">The Messenger</div>
+      <div class="char-catch">"Find the frequency, find the friend."</div>
+      <div class="char-detail">
+        <dt>Physics Root</dt><dd>Nikola Tesla's Induction</dd>
+        <dt>Role</dt><dd>Wireless transmission of energy and information. A golden bee whose wings glow with different frequencies.</dd>
+        <dt>Core Lesson</dt><dd>Connection isn't about volume; it's about alignment. Sympathetic resonance allows work without touch.</dd>
+        <dt>Visual</dt><dd>Emits golden concentric rings that "ping" other objects.</dd>
+        <dt>Sound</dt><dd>Strings / Violin (Vibration)</dd>
+        <dt>Milestone</dt><dd><strong>The Sympathetic Match</strong> &mdash; student can tune an object to match a hidden frequency and wake up a distant receiver.</dd>
+      </div>
+    </div>
+    <div class="char-card hex">
+      <div class="char-glow"></div>
+      <div class="char-icon">💎</div>
+      <div class="char-name">Hex</div>
+      <div class="char-role">The Foundation</div>
+      <div class="char-catch">"I am the Still Point in the Song."</div>
+      <div class="char-detail">
+        <dt>Physics Root</dt><dd>Nodal Points / Chladni Geometry / Standing Waves</dd>
+        <dt>Role</dt><dd>The stabilization of matter. Sits perfectly still at the center of a vibrating pond.</dd>
+        <dt>Core Lesson</dt><dd>Stability isn't about weight; it's about finding the still point. Stillness is the highest form of power.</dd>
+        <dt>Visual</dt><dd>His footsteps create temporary geometric mandalas on the ground.</dd>
+        <dt>Sound</dt><dd>Bass / Drums (Earth tones)</dd>
+        <dt>Milestone</dt><dd><strong>The Nodal Discovery</strong> &mdash; student can find the specific Note to turn chaotic dust into a perfect geometric pattern.</dd>
+      </div>
+    </div>
+    <div class="char-card tempo">
+      <div class="char-glow"></div>
+      <div class="char-icon">💓</div>
+      <div class="char-name">Tempo</div>
+      <div class="char-role">The Life-Force</div>
+      <div class="char-catch">"In for the seed, out for the light."</div>
+      <div class="char-detail">
+        <dt>Physics Root</dt><dd>Walter Russell's Universal One (The Rhythmic Wave)</dd>
+        <dt>Role</dt><dd>The cycle of expansion and contraction. Lives in the Cosmic Ocean, constantly expands and contracts.</dd>
+        <dt>Core Lesson</dt><dd>Life is a rhythm; you must give back what you take in. Everything breathes.</dd>
+        <dt>Visual</dt><dd>Body subtly grows and shrinks with a soft "thrumming" sound.</dd>
+        <dt>Sound</dt><dd>Heartbeat / Breathing rhythm</dd>
+        <dt>Milestone</dt><dd><strong>The Rhythmic Exchange</strong> &mdash; student can chart the Inhale (Gravity/Growth) and Exhale (Radiation/Light) of a natural cycle.</dd>
+      </div>
+    </div>
+    <div class="char-card sparky">
+      <div class="char-glow"></div>
+      <div class="char-icon">⚡</div>
+      <div class="char-name">Sparky the Static</div>
+      <div class="char-role">The Warning</div>
+      <div class="char-catch">"Push harder, get hotter!"</div>
+      <div class="char-detail">
+        <dt>Physics Root</dt><dd>Entropy / Friction / Explosion</dd>
+        <dt>Role</dt><dd>The teacher of "what not to do." Jagged, crackling character made of sharp angles and sparks.</dd>
+        <dt>Core Lesson</dt><dd>Force wastes energy; flow multiplies it. Fighting the medium creates heat and waste.</dd>
+        <dt>Visual</dt><dd>Jagged, strobe-light movements with crackling red/orange sparks.</dd>
+        <dt>Sound</dt><dd>Distortion / Static crackle</dd>
+        <dt>Milestone</dt><dd><strong>The Friction Transformation</strong> &mdash; student can identify a "noisy" system and suggest how to cool it with resonance.</dd>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BOOK SERIES ═══ -->
+<div class="view" id="v-books">
+  <div class="section-title">Season 1 &mdash; Solo Journeys</div>
+  <div class="grid-3">
+    <div class="book-card" style="border-left:3px solid var(--vora);">
+      <div class="book-num">Book 1</div>
+      <div class="book-title">Vora and the Rusty River</div>
+      <div class="book-lesson">Nature loves a curve.</div>
+    </div>
+    <div class="book-card" style="border-left:3px solid var(--hum);">
+      <div class="book-num">Book 2</div>
+      <div class="book-title">Hum's Silent Song</div>
+      <div class="book-lesson">Connection is alignment, not volume.</div>
+    </div>
+    <div class="book-card" style="border-left:3px solid var(--sparky);">
+      <div class="book-num">Book 3</div>
+      <div class="book-title">Sparky's Big Burnout</div>
+      <div class="book-lesson">Force wastes; flow multiplies.</div>
+    </div>
+    <div class="book-card" style="border-left:3px solid var(--hex);">
+      <div class="book-num">Book 4</div>
+      <div class="book-title">Hex's Balancing Act</div>
+      <div class="book-lesson">Stability is finding the still point.</div>
+    </div>
+    <div class="book-card" style="border-left:3px solid var(--tempo);">
+      <div class="book-num">Book 5</div>
+      <div class="book-title">Tempo and the Great Balloon</div>
+      <div class="book-lesson">Life is a rhythm.</div>
+    </div>
+    <div class="book-card" style="border-left:3px solid var(--aria);">
+      <div class="book-num">Book 6</div>
+      <div class="book-title">Aria's Invisible Blanket</div>
+      <div class="book-lesson">Nothing is separate.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Season 2 &mdash; Harmonic Duos</div>
+  <div class="grid-2">
+    <div class="book-card">
+      <div class="book-num">Book 7</div>
+      <div class="book-title">Vora &amp; Sparky: The Steam Mystery</div>
+      <div class="book-lesson">Directed heat is power.</div>
+    </div>
+    <div class="book-card">
+      <div class="book-num">Book 8</div>
+      <div class="book-title">Hum &amp; Tempo: The Forest's First Beat</div>
+      <div class="book-lesson">Information needs a heartbeat.</div>
+    </div>
+    <div class="book-card">
+      <div class="book-num">Book 9</div>
+      <div class="book-title">Hex &amp; Aria: The Storm Shelter</div>
+      <div class="book-lesson">Anchor to source = unshakeable.</div>
+    </div>
+    <div class="book-card">
+      <div class="book-num">Book 10</div>
+      <div class="book-title">Vora &amp; Hex: The Spiral Staircase</div>
+      <div class="book-lesson">Flow + Foundation = structures that grow like shells.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Season 3 &mdash; The Event</div>
+  <div class="card" style="border-left:3px solid var(--accent);">
+    <div class="card-title">Book 11: The Hexad vs. The Great Dissonance</div>
+    <div class="card-body">Void Entity absorbs all sound and color. Characters form Hexagonal Circuit. Climax: Torus of Light re-tunes the Dissonance into the Plenum.</div>
+  </div>
+</div>
+
+<!-- ═══ COMBO MATRIX ═══ -->
+<div class="view" id="v-combos">
+  <div class="section-title">Combo Move Matrix</div>
+  <table class="combo-table">
+    <tr><th>Combo</th><th>Characters</th><th>Result</th><th>Lesson</th></tr>
+    <tr><td class="combo-name">Steam-Engine</td><td>Vora + Sparky</td><td>Vapor Vortex</td><td>Directed heat is power</td></tr>
+    <tr><td class="combo-name">Heartbeat</td><td>Hum + Tempo</td><td>Living Drum</td><td>Information needs a heartbeat to become life</td></tr>
+    <tr><td class="combo-name">Crystal Cathedral</td><td>Hex + Aria</td><td>Sanctuary Dome</td><td>Anchor to source = unshakeable</td></tr>
+    <tr><td class="combo-name">Lightning Rod</td><td>Hum + Sparky</td><td>Cold Electricity</td><td>Friction becomes flow with frequency</td></tr>
+  </table>
+</div>
+
+<!-- ═══ ACADEMY ═══ -->
+<div class="view" id="v-curriculum">
+  <div class="section-title">Year 1 &mdash; Semester 1: Fundamentals of the Medium</div>
+  <div class="grid-3">
+    <div class="course-card">
+      <div class="course-code">PLN 101</div>
+      <div class="course-name">Introduction to the Plenum</div>
+      <div class="course-desc">The universe as fluidic intelligent substance.</div>
+      <div class="course-practical">Practical: "Vessel Training" &mdash; perceiving the Hum of the Medium.</div>
+    </div>
+    <div class="course-card">
+      <div class="course-code">VIB 102</div>
+      <div class="course-name">Cymatics &amp; Nodal Geometry</div>
+      <div class="course-desc">How frequencies create physical shapes.</div>
+      <div class="course-practical">Practical: Creating stable geometric landscapes using sound on a vibrating membrane.</div>
+    </div>
+    <div class="course-card">
+      <div class="course-code">BIO 105</div>
+      <div class="course-name">The Biological Antenna</div>
+      <div class="course-desc">The human body as a resonant circuit.</div>
+      <div class="course-practical">Practical: Measuring Field Coherence of plants, observing Golden Spiral growth.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Year 1 &mdash; Semester 2: Dynamics of Flow</div>
+  <div class="grid-3">
+    <div class="course-card">
+      <div class="course-code">IMP 201</div>
+      <div class="course-name">The Art of Implosion</div>
+      <div class="course-desc">Schauberger Method &mdash; Implosion vs Explosion.</div>
+      <div class="course-practical">Practical: Building a Suction-Turbine.</div>
+    </div>
+    <div class="course-card">
+      <div class="course-code">TEL 204</div>
+      <div class="course-name">Longitudinal Wave Mechanics</div>
+      <div class="course-desc">Tesla Legacy &mdash; energy through sympathetic resonance.</div>
+      <div class="course-practical">Practical: Wireless lighting of a bulb.</div>
+    </div>
+    <div class="course-card">
+      <div class="course-code">RUS 207</div>
+      <div class="course-name">The Universal Breath</div>
+      <div class="course-desc">Russell &mdash; Two-Way Motion: inhale of gravity, exhale of radiation.</div>
+      <div class="course-practical">Practical: Mapping Tidal Breathing of the local environment.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Year 1 Final Exam</div>
+  <div class="card" style="border-left:3px solid var(--accent);">
+    <div class="card-title">The Tuning</div>
+    <div class="card-body">Given a dissonant system, identify the discordant frequency and introduce a Harmonic Correction to restore order.</div>
+  </div>
+
+  <div class="section-title">Curriculum Translation Map</div>
+  <table class="curmap-table">
+    <tr><th>Standard Science</th><th>Guide</th><th>New Understanding</th></tr>
+    <tr><td>Gravity</td><td class="curmap-guide">Tempo &amp; Vora</td><td>Universe inhaling and spiraling inward</td></tr>
+    <tr><td>Electricity</td><td class="curmap-guide">Hum</td><td>Energy induced through sympathetic vibration</td></tr>
+    <tr><td>Solids &amp; Matter</td><td class="curmap-guide">Hex</td><td>Standing waves at Nodal Points</td></tr>
+    <tr><td>Entropy &amp; Heat</td><td class="curmap-guide">Sparky</td><td>Results of friction against the medium</td></tr>
+    <tr><td>Vacuum of Space</td><td class="curmap-guide">Aria</td><td>Plenum conducting all light and life</td></tr>
+    <tr><td>Mechanics / Motors</td><td class="curmap-guide">Vora</td><td>Implosion &mdash; cooling instead of heating</td></tr>
+  </table>
+</div>
+
+<!-- ═══ COGNITIVE OPS ═══ -->
+<div class="view" id="v-cognitive">
+  <div class="section-title">The Hexad as Cognitive Operators (Adult Reasoning)</div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-body">Beyond children's stories. Each character becomes a thinking step &mdash; a six-stage reasoning process for brainstorming, design reviews, systems thinking, architecture, and creative problem-solving.</div>
+  </div>
+  <table class="cog-table">
+    <tr><th>Character</th><th>Thinking Step</th></tr>
+    <tr><td style="font-weight:600;color:var(--aria);">Aria</td><td>Define the system boundary and relationships</td></tr>
+    <tr><td style="font-weight:600;color:var(--sparky);">Sparky</td><td>Identify inefficiencies, conflict, or misconceptions</td></tr>
+    <tr><td style="font-weight:600;color:var(--hum);">Hum</td><td>Detect patterns, frequencies, and hidden connections</td></tr>
+    <tr><td style="font-weight:600;color:var(--hex);">Hex</td><td>Locate stable structures and constraints</td></tr>
+    <tr><td style="font-weight:600;color:var(--tempo);">Tempo</td><td>Analyze cycles, timing, and feedback loops</td></tr>
+    <tr><td style="font-weight:600;color:var(--vora);">Vora</td><td>Synthesize the solution into coherent organization</td></tr>
+  </table>
+</div>
+
+<!-- ═══ ANIMATION ═══ -->
+<div class="view" id="v-animation">
+  <div class="section-title">Animation Style: "Glow-Wave" Minimalist</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Visual Language</div>
+      <div class="card-body">Soft gradients, no black outlines, characters emit own light. Particle effects show invisible fields. Think Soul / Inner Workings.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sonic Branding</div>
+      <div class="card-body">Each character has a specific instrument/frequency. Theme song uses all six layered. Hidden melody mechanic for viral challenge.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Character Sound Palette</div>
+  <table class="combo-table">
+    <tr><th>Character</th><th>Instrument</th><th>Quality</th></tr>
+    <tr><td class="combo-name" style="color:var(--aria)">Aria</td><td>Ambient pad</td><td>Silence / omnipresent</td></tr>
+    <tr><td class="combo-name" style="color:var(--vora)">Vora</td><td>Flute / Wind</td><td>432Hz, cooling flow</td></tr>
+    <tr><td class="combo-name" style="color:var(--hum)">Hum</td><td>Strings / Violin</td><td>Vibration, resonant</td></tr>
+    <tr><td class="combo-name" style="color:var(--hex)">Hex</td><td>Bass / Drums</td><td>Earth tones, grounding</td></tr>
+    <tr><td class="combo-name" style="color:var(--tempo)">Tempo</td><td>Heartbeat</td><td>Breathing rhythm, cyclic</td></tr>
+    <tr><td class="combo-name" style="color:var(--sparky)">Sparky</td><td>Distortion / Static</td><td>Crackling, dissonant</td></tr>
+  </table>
+
+  <div class="section-title">AR App: The Resonance Finder</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Vortex Snap</div>
+      <div class="card-body">Camera detects spirals &rarr; Vora appears</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Frequency Finder</div>
+      <div class="card-body">Mic detects steady hum &rarr; Hum appears</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Geometry Hunt</div>
+      <div class="card-body">Camera detects hexagons &rarr; Hex appears</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VISUAL DEV ═══ -->
+<div class="view" id="v-visdev">
+  <div class="section-title">Master Style Prompt &mdash; DNA for Every Image</div>
+  <div class="prompt-card" style="border-left:3px solid var(--aria);">
+    <div class="prompt-title">Glow-Wave DNA (attach to all images)</div>
+    <div class="prompt-text">Academy of Resonance visual development artwork. Premium animated feature concept art. Shared "Glow-Wave" design language. Soft luminous edges instead of outlines. Semi-translucent bodies made from living energy rather than flesh. Rich internal bioluminescent glow. Rounded, iconic silhouettes readable in black. Pixar-quality emotional design, Journey atmosphere, Ori and the Blind Forest magical lighting, Elemental material rendering, Apple industrial design simplicity. Cinematic volumetric lighting, heavy subsurface scattering, atmospheric perspective, premium color grading, shallow depth of field, soft bloom, macro particle effects, 8K feature-film quality, emotionally warm, scientifically mystical, collectible franchise aesthetic.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="section-title">Hero Images</div>
+
+  <div class="prompt-card">
+    <div class="prompt-title">01 &mdash; The Hexad of Resonance (Cast Poster)</div>
+    <div class="prompt-text">Six elemental guardians stand together overlooking the luminous world of the Academy of Resonance. Aria floats serenely at the center, Vora spirals playfully through flowing currents, Hum radiates concentric golden harmonics, Hex stands like an ancient crystal guardian, Tempo pulses with warm rhythmic light, while Sparky crackles with joyful electrical energy at the front. Every character shares the same Glow-Wave visual language with translucent living-energy bodies, expressive eyes, soft luminous edges and unique particle systems. Behind them stretches a vast landscape of floating islands, glowing rivers, giant harmonic rings, crystalline mountains and celestial clouds. Above everything hangs an enormous luminous resonance field connecting every part of the world. This should feel like the official theatrical poster for a $200 million Pixar fantasy adventure.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-title">02 &mdash; The Foundational Axioms (Mythological Mural)</div>
+    <div class="prompt-text">A monumental illuminated mural depicting the Four Foundational Axioms of Resonance as symbolic visual scenes rather than written science. At the top, the infinite Plenum appears as an endless ocean of luminous living light from which galaxies gently emerge. Below, waves of resonance weave together into harmonic interference patterns creating beautiful forms. Further down, coherent standing waves condense into mountains, trees, animals and planets, revealing matter as organized vibration. Finally, an immense vertical harmonic column stretches from subtle luminous realms above to dense crystalline worlds below, illustrating the Directional Gradient. Everything is painted in the Academy of Resonance Glow-Wave style with rich cinematic lighting, ethereal atmosphere and sacred geometry subtly hidden throughout.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-title">03 &mdash; The Map of Resonance (Cross-Section Atlas)</div>
+    <div class="prompt-text">A breathtaking cross-sectional map of reality titled "The Cartography of Resonance." Three vast interconnected realms are shown vertically. At the top lies The Source, an ocean of infinite luminous possibility composed of flowing light, harmonic waves and celestial energy with no fixed form. In the center floats the Earth Domain where standing waves condense into forests, oceans, mountains, civilizations and the six Guardians. Beneath everything stretches The Abyss, a mysterious realm where matter dissolves back into flowing resonance, appearing as beautiful grey-blue currents returning to the living medium. Enormous streams of harmonic energy connect every level. The composition feels like an ancient cosmic atlas painted with Pixar-level artistry, Journey-inspired architecture, Ori-style lighting and Apple design restraint.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-title">04 &mdash; The Plenum (Hero Image)</div>
+    <div class="prompt-text">The Plenum visualized as an infinite living medium filling all existence. Instead of empty space, the universe is composed of flowing translucent luminous energy, subtle interference waves, microscopic vortices, harmonic currents and intelligent light. Galaxies appear as gentle whirlpools inside an endless cosmic ocean. Tiny standing waves condense into stars while larger currents weave through space like auroras beneath water. Nothing appears separate; everything exists as one continuous field. The scene should communicate profound peace, wonder and interconnectedness, rendered with breathtaking cinematic realism and Glow-Wave aesthetics.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-title">05 &mdash; Resonance Creates Form (Philosophy in One Picture)</div>
+    <div class="prompt-text">A cinematic scientific fantasy illustration showing invisible resonance creating physical reality. Concentric harmonic waves travel through a luminous medium until beautiful standing wave patterns begin condensing into flowers, crystals, birds, mountains and planets. Nothing is assembled mechanically; everything gently emerges from resonance. The six Guardians observe as living embodiments of the process, demonstrating that form arises naturally when frequencies become coherent. Rich volumetric lighting, glowing particle systems, sacred geometry, translucent materials and premium feature-animation quality.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-title">06 &mdash; The Static (Opposite Poster)</div>
+    <div class="prompt-text">The Static, the great Dissonance, emerges silently across a luminous world. A colossal faceless being composed entirely of semi-transparent grey fog, graphite dust, ash and dissolving smoke drifts through glowing forests and harmonic landscapes. It has no face, no eyes and no mouth—only the suggestion of a humanoid presence constantly dissolving. Rather than attacking, it absorbs colour, silences particles and extinguishes bloom. In the foreground Sparky's brilliant orange glow begins fading as tiny grey wisps creep into his luminous body, while the distant Guardians rush toward him. The contrast between vibrant resonance and quiet desaturation creates an emotionally powerful image. Beautiful, melancholy and haunting rather than frightening. Pixar emotional storytelling with the atmosphere of Journey and Ori, cinematic volumetric lighting and premium animated-feature quality.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-title">07 &mdash; The Moment of Resonance (Emotional Poster)</div>
+    <div class="prompt-text">Aria gently reaches toward Sparky as the Static surrounds him. Hum's golden resonance waves begin restoring harmony while Tempo's heartbeat light spreads through the ground. Vora's spirals weave fresh energy into the air and Hex anchors the space with glowing crystalline geometry. The grey fog begins fracturing as colour and music return to the world. The image captures the central message of the Academy of Resonance: connection overcomes dissonance. No battle, no weapons—only harmony restoring what was fading. Epic cinematic composition, premium feature-film concept art, Glow-Wave visual language, emotionally uplifting and iconic.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="section-title">The Resonance Bible (Capstone)</div>
+  <div class="prompt-card" style="border-left:3px solid var(--accent);">
+    <div class="prompt-title">08 &mdash; The Resonance Bible (Fold-Out Infographic)</div>
+    <div class="prompt-text">The Resonance Bible — a breathtaking fold-out infographic and worldbuilding masterpiece for the Academy of Resonance, designed as the definitive visual guide to the universe. The composition reads from top to bottom like a sacred scientific map, combining elegant infographic clarity with premium animated-feature concept art.
+
+At the very top is THE SOURCE: an infinite ocean of luminous living energy known as the Plenum, composed of flowing auroras, harmonic waves, subtle vortices and intelligent light. This realm has no fixed form, only endless possibility. Soft pearlescent whites, cyan, moon silver and pale gold dominate.
+
+Descending into the center is THE EARTH DOMAIN: standing waves condense into mountains, forests, rivers, crystals, clouds and living creatures. At the heart stand the six Guardians arranged in a perfect hexagon around a glowing resonance symbol:
+• Aria – luminous flowing plasma, calm and radiant.
+• Vora – spirals of water, air and crystal.
+• Hum – concentric golden resonance rings.
+• Hex – warm crystalline geometry and protective forms.
+• Tempo – rhythmic pulsing heart-light.
+• Sparky – joyful red-orange electrical plasma.
+Each emits their own unique particle system while all share the Glow-Wave visual language.
+
+Surrounding them are the Four Foundational Axioms illustrated symbolically:
+1. The Plenum — the universe as one continuous medium.
+2. Resonance as Law — harmonic waves creating order.
+3. Primacy of the Field — standing waves condensing into matter.
+4. Directional Gradient — a vertical harmonic spectrum from subtle to dense.
+Elegant icons, sacred geometry and flowing connecting lines integrate the concepts naturally into the artwork.
+
+Below lies THE ABYSS: a beautiful, mysterious realm where coherent form dissolves back into the medium. Grey-blue currents, fading standing waves and dissolving geometry return to flowing light.
+
+Emerging from one side is Character 07 — The Static. A vast faceless being made from drifting grey fog and graphite ash, absorbing colour and silencing particles. Rather than attacking, it slowly desaturates the world around it. Opposite it, warm luminous currents from the Guardians push back with resonance rather than force.
+
+The entire composition is unified by enormous harmonic rings, flowing energy currents and subtle sacred geometry connecting every realm. Labels appear as elegant engraved titles integrated into the design, with premium Apple-inspired typography and minimalist information panels.
+
+Visual style: Pixar-quality feature animation concept art, Journey atmosphere, Ori and the Blind Forest magical lighting, Elemental material rendering, Avatar spirit-world grandeur, Apple industrial design elegance. Soft luminous Glow-Wave aesthetic, semi-translucent living energy, cinematic volumetric lighting, subsurface scattering, atmospheric perspective, rich bloom, ultra-detailed, collectible franchise world guide, museum-quality infographic, 8K, vertical poster suitable for printing.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+</div>
+
+<!-- ═══ PROMPTS ═══ -->
+<div class="view" id="v-prompts">
+  <div class="section-title">Lore Master (Content Generation)</div>
+  <div class="prompt-card">
+    <div class="prompt-title">Lore Master</div>
+    <div class="prompt-text">Acting as the Lead Architect of the Hexad Universe, use the Master Codex and the Resonance Team-Up Matrix to create [INSERT: Story/Activity/AR Script/Episode/Lesson Plan]. Ensure the tone follows the 'Glow-Wave' aesthetic and focuses on the 'Science of Abundance.' When describing character interactions, always reference their specific physics roots. If a 'Combo Move' is involved, describe the visual and sonic 'Harmonic Result.'</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="section-title">Hexad Conversation Generator (v2)</div>
+  <div class="prompt-card">
+    <div class="prompt-title">Six-Stage Dialogue</div>
+    <div class="prompt-text">Using the Hexad Master Codex, explain [TOPIC] as a dialogue:
+1) Aria establishes the field
+2) Sparky shows friction/misunderstanding
+3) Hum introduces hidden pattern
+4) Hex grounds with geometry
+5) Tempo describes the rhythm
+6) Vora resolves through coherent flow.
+
+Output: one-sentence summary, one metaphor, one child experiment, one Academy lesson.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+
+  <div class="section-title">Topic Explorer (v2)</div>
+  <div class="prompt-card">
+    <div class="prompt-title">Five-Layer Analysis</div>
+    <div class="prompt-text">Analyze [TOPIC] through the Resonance Map in five layers:
+1) Observable phenomenon
+2) Resonant interpretation
+3) Medium disturbance
+4) Directional movement
+5) Hexad interpretation.
+
+Conclude with story analogy, everyday observation, Academy experiment, parent translation. Avoid equations. Prefer imagery.</div>
+    <div class="prompt-copy" onclick="copyPrompt(this)">Copy</div>
+  </div>
+</div>
+
+<!-- ═══ SOURCES ═══ -->
+<div class="view" id="v-sources">
+  <div class="section-title">Source Files</div>
+  <div class="grid-2">
+    <div class="source-card">
+      <div class="source-label">Boxing Geometry Codex (Gemini)</div>
+      <div class="source-path">~/Downloads/aether universe/Google-Gemini (1).pdf</div>
+      <div class="source-date">84 pages &middot; 2025-12-31</div>
+      <div class="source-desc">ABC Framework, 8-level geometric progression, 6 punches mapped to geometry, cameraman perspectives, footwork manifold, ~20 infographics.</div>
+    </div>
+    <div class="source-card">
+      <div class="source-label">Hexad of Resonance (Gemini)</div>
+      <div class="source-path">~/Downloads/Google-Gemini.md</div>
+      <div class="source-date">1,335 lines &middot; 2026-01-15</div>
+      <div class="source-desc">Plenum cosmology, Academy curriculum, 6 characters, book series, animation bible, combo matrix, AR concept, viral strategy, prompts.</div>
+    </div>
+    <div class="source-card">
+      <div class="source-label">ChatGPT Refinement</div>
+      <div class="source-path">~/Downloads/Resonance-Universe-Framework.md</div>
+      <div class="source-date">608 lines &middot; 2026-07-07</div>
+      <div class="source-desc">4 upgraded v2 prompts, cognitive operators table, name audit (Eddie&rarr;Hex, Pulse&rarr;Tempo), character cards session started.</div>
+    </div>
+    <div class="source-card">
+      <div class="source-label">World Bible (Consolidated)</div>
+      <div class="source-path">~/basic-reflex/aether-universe/world-bible.md</div>
+      <div class="source-date">Assembled 2026-07-07</div>
+      <div class="source-desc">Full consolidated codex. All characters, curriculum, books, combos, animation bible, prompts, cognitive operators.</div>
+    </div>
+    <div class="source-card" style="border-left:3px solid var(--aria);">
+      <div class="source-label">Character Sheets &amp; Concept Art (ChatGPT)</div>
+      <div class="source-path">~/Downloads/accademy of resonance.pdf</div>
+      <div class="source-date">13.9MB &middot; 5 pages &middot; 2026-07-07</div>
+      <div class="source-desc">7 production-bible character sheets (hero illustration, material breakdown, internal anatomy, expression sheet, silhouette, colour strip, relationship map, collector card footer) + Foundational Axioms mural + Plenum hero image. Visual consistency confirmed &mdash; Glow-Wave DNA held across all 7.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Next Steps (Parked)</div>
+  <div class="card">
+    <div class="card-body">
+      &bull; Premium illustrated character cards (ChatGPT session stopped at Aria)<br>
+      &bull; First chapter of "Vora and the Rusty River"<br>
+      &bull; Connect to Cathedral: Logan for character gen, Reed for visual direction, Content Studio for episodes<br>
+      &bull; NotebookLM setup with full codex<br>
+      &bull; Character name finalization (Eddie&rarr;Hex, Pulse&rarr;Tempo &mdash; ChatGPT suggestions, not yet confirmed)
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('v-' + tab.dataset.view).classList.add('active');
+  });
+});
+
+function copyPrompt(btn) {
+  const text = btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+</script>
+</body>
+</html>

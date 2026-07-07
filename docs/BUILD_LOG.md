@@ -1,6 +1,32 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-07 session 2 — Aether Universe + Universe Engine + Universe Map
+
+**Aether Universe Dashboard** (`~/nanoclaw/aether-universe.html`):
+- 10-tab interactive dashboard (Overview, Characters, Books, Combos, Academy, Cognitive Ops, Animation, Prompts, Visual Dev, Sources)
+- Full Static villain section, 8 hero image prompts in Visual Dev tab
+- Route: /aether-universe · Lobby: Studio district
+
+**World Bible** (`~/basic-reflex/aether-universe/world-bible.md`):
+- Full consolidated codex: 6 characters, 4 axioms, curriculum, 11 books, combo matrix, animation bible, cognitive operators, villain (The Static), visual dev bible
+
+**Character Sheets** (`~/basic-reflex/aether-universe/character-sheets.pdf`):
+- 13.9MB, 5 pages, 7 character sheets + Axioms mural + Plenum hero
+
+**Logan Universe Villain** (`~/nanoclaw/logan-universe.html`):
+- New villain tab: The OmissionOS Coach — 3 faces (Narcissist, Pretta, Ego Coach), defeat mechanism (IntegrityOS)
+
+**Universe Template** (`~/basic-reflex/universe-template.md`):
+- 8-question IP development protocol extracted from Logan + Hexad pattern
+
+**Universe Engine vault method** (`~/cathedral-vault/06_Methods/the-universe-engine.md`):
+- Grade A: "A universe is a topic made complete." 8 questions, 4 forcing functions, taxonomy
+
+**Universe Engine Map** (`~/nanoclaw/universe-map.html`):
+- Interactive SVG mind map: Cathedral → Engine → 2 universes + 4 candidates + 8 questions + methods
+- Draggable, zoomable, color-coded by type. Route: /universe-map · Lobby: Maps district
+
 ## 2026-07-07 — Autonomy Constitution + Trading Pipeline Completion
 
 **Trading Pipeline — Full 9-Step Execution Gate** (`cyclical-trader.js`):

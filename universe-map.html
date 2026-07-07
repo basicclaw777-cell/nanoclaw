@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Universe Engine — Map</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #f7f8fa; --surface: #ffffff; --surface-2: #f1f3f6;
+  --border: #e0e3ea; --border-hover: #c8cdd6;
+  --text: #1a1d24; --text-muted: #475067; --text-dim: #8a93a6;
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,sans-serif; min-height:100vh; overflow:hidden; }
+svg { width:100vw; height:100vh; cursor:grab; }
+svg:active { cursor:grabbing; }
+.header { position:fixed; top:0; left:0; right:0; z-index:10; padding:16px 24px; display:flex; align-items:center; gap:14px; background:rgba(247,248,250,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--border); }
+.header-back { background:var(--surface); border:1px solid var(--border); color:var(--text-muted); padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:inherit; text-decoration:none; }
+.header-back:hover { border-color:var(--border-hover); color:var(--text); text-decoration:none; }
+.header h1 { font-size:18px; font-weight:700; letter-spacing:-0.3px; }
+.header h1 span { color:#7c5cbf; }
+.header-sub { font-size:12px; color:var(--text-dim); margin-left:auto; }
+.legend { position:fixed; bottom:20px; left:20px; z-index:10; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 18px; box-shadow:var(--shadow); font-size:11px; }
+.legend-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.legend-row:last-child { margin:0; }
+.legend-dot { width:10px; height:10px; border-radius:50%; }
+.tooltip { position:fixed; z-index:20; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:10px 14px; box-shadow:0 4px 16px rgba(0,0,0,0.12); font-size:12px; max-width:280px; pointer-events:none; display:none; }
+.tooltip-title { font-weight:700; margin-bottom:3px; font-size:13px; }
+.tooltip-type { font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; }
+.tooltip-body { color:var(--text-muted); line-height:1.5; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="header-back" href="/env/lobby">Lobby</a>
+  <h1>The <span>Universe</span> Engine</h1>
+  <div class="header-sub">A Topic Made Complete</div>
+</div>
+
+<div class="legend">
+  <div class="legend-row"><div class="legend-dot" style="background:#7c5cbf"></div> Engine / Meta</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#2196f3"></div> Universe (complete)</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#ff9800"></div> Topic (could become universe)</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#4caf50"></div> Business</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#e91e63"></div> Method</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#78909c"></div> Component (8 questions)</div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-title" id="tt-title"></div>
+  <div class="tooltip-type" id="tt-type"></div>
+  <div class="tooltip-body" id="tt-body"></div>
+</div>
+
+<svg id="graph" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<script>
+const NODES = [
+  // Center
+  { id:'engine', label:'Universe\nEngine', x:600, y:400, r:42, color:'#7c5cbf', type:'Engine', desc:'A topic made complete. 8 questions → a self-sustaining world. The completion protocol.' },
+  { id:'cathedral', label:'The\nCathedral', x:600, y:180, r:36, color:'#7c5cbf', type:'Meta-structure', desc:'The engine that produces universes, businesses, and methods. The factory, not the product.' },
+
+  // Universes
+  { id:'hexad', label:'Hexad of\nResonance', x:280, y:340, r:34, color:'#2196f3', type:'Universe (complete)', desc:'6 characters, 4 axioms, Academy curriculum, 11 books, combo matrix, The Static, visual dev bible, cognitive operators. Kids\' science → adult reasoning.' },
+  { id:'logan', label:'Logan\nUniverse', x:920, y:340, r:34, color:'#2196f3', type:'Universe (complete)', desc:'11 characters, 3 frequency states, 10-block spine, 4 arcs, OmissionOS villain. Boxing manga → self-mastery.' },
+
+  // Business
+  { id:'br', label:'Basic\nReflex', x:920, y:160, r:30, color:'#4caf50', type:'Business', desc:'Real-world boxing gym. Contains universe material (Three Engines, OmissionOS, 10-block) but serves real customers. The mine, not the refined output.' },
+
+  // Topics (candidates)
+  { id:'cosmology', label:'Cosmology', x:140, y:520, r:24, color:'#ff9800', type:'Topic (candidate)', desc:'15 tracks, 17-layer audit, convergence detector. Missing: characters, villain, visual DNA, interaction matrix, content prompts.' },
+  { id:'ancient', label:'Ancient\nCorpus', x:300, y:580, r:24, color:'#ff9800', type:'Topic (candidate)', desc:'4 corpuses, 5 methods, convergence maps. Missing: characters, villain, visual DNA, growth spine.' },
+  { id:'enclosure', label:'Resonant\nEnclosure', x:140, y:380, r:22, color:'#ff9800', type:'Topic (candidate)', desc:'6 deposits, sacred geometry, mercury circuit. Missing: characters, interaction matrix, content prompts.' },
+  { id:'base60', label:'Base-60\nLens', x:440, y:580, r:22, color:'#ff9800', type:'Topic (candidate)', desc:'Converter, scanner, 6 domain guides. Missing: characters, villain, visual DNA, growth spine.' },
+
+  // Methods
+  { id:'trojan', label:'Trojan\nHorse', x:440, y:200, r:22, color:'#e91e63', type:'Method', desc:'Embed the real thing inside what they already want. Door → Room → Payload → Recognition. Every universe IS a Trojan Horse.' },
+  { id:'pp', label:'Principled\nPractice', x:760, y:200, r:22, color:'#e91e63', type:'Method', desc:'7-stage cycle. Embedded in Logan as the growth spine. Not a universe itself — a method that universes use.' },
+  { id:'fourto8', label:'4-to-8', x:600, y:600, r:20, color:'#e91e63', type:'Method', desc:'"What takes this from a 4 to an 8?" The Universe Engine IS the 4-to-8 applied to IP development.' },
+
+  // 8 Questions (around engine)
+  { id:'q1', label:'Characters', x:460, y:310, r:16, color:'#78909c', type:'Question 1', desc:'What are the principles, and who embodies them? Each character IS a principle.' },
+  { id:'q2', label:'World\nRules', x:500, y:260, r:16, color:'#78909c', type:'Question 2', desc:'What must always be true? 3-5 laws. Generative, learnable by a child, deep enough for an adult.' },
+  { id:'q3', label:'Growth\nSpine', x:560, y:240, r:16, color:'#78909c', type:'Question 3', desc:'How does someone progress? Stages, gates, final test. Connection to real learning.' },
+  { id:'q4', label:'Interaction\nMatrix', x:640, y:240, r:16, color:'#78909c', type:'Question 4', desc:'What happens when characters combine? Combinatorial, not additive. Named combos.' },
+  { id:'q5', label:'Villain', x:700, y:260, r:16, color:'#78909c', type:'Question 5', desc:'The shadow. Absence or corruption of the core value. Whispers, not shouts. The hardest question.' },
+  { id:'q6', label:'Visual\nDNA', x:740, y:310, r:16, color:'#78909c', type:'Question 6', desc:'Master style prompt, character sheets, colour system. Makes it tangible and tool-ready.' },
+  { id:'q7', label:'Adult\nApp', x:740, y:480, r:16, color:'#78909c', type:'Question 7', desc:'The Trojan Horse. The real use underneath. Consulting, workshops, cognitive operators.' },
+  { id:'q8', label:'Content\nPrompts', x:460, y:480, r:16, color:'#78909c', type:'Question 8', desc:'Conversation Generator, Lore Master, Topic Explorer, Identity Frame. Makes the universe generative.' },
+
+  // Forcing functions
+  { id:'f1', label:'Kids\nVersion', x:360, y:440, r:15, color:'#78909c', type:'Forcing Function', desc:'Forces simplicity. If a character can\'t explain it to a 7-year-old, you don\'t truly understand it.' },
+  { id:'f2', label:'Adult\nVersion', x:840, y:440, r:15, color:'#78909c', type:'Forcing Function', desc:'Forces utility. If characters can\'t function as thinking steps, the principles aren\'t structural.' },
+  { id:'f3', label:'Visual\nVersion', x:840, y:370, r:15, color:'#78909c', type:'Forcing Function', desc:'Forces concreteness. A character sheet demands material, colour, silhouette, anatomy. Can\'t hide.' },
+  { id:'f4', label:'The\nVillain', x:360, y:370, r:15, color:'#78909c', type:'Forcing Function', desc:'Forces honesty. Every domain has a shadow. Naming it is the hardest question.' },
+];
+
+const EDGES = [
+  // Cathedral → Engine
+  { from:'cathedral', to:'engine', label:'produces' },
+  // Engine → Universes
+  { from:'engine', to:'hexad', label:'completed' },
+  { from:'engine', to:'logan', label:'completed' },
+  // Business → Universe
+  { from:'br', to:'logan', label:'source material', dash:true },
+  // Cathedral → Business
+  { from:'cathedral', to:'br', label:'serves' },
+  // Methods → Engine
+  { from:'trojan', to:'engine', label:'every universe is one' },
+  { from:'fourto8', to:'engine', label:'applied to IP' },
+  // Method → Universe
+  { from:'pp', to:'logan', label:'growth spine' },
+  // Topics → Engine (candidates)
+  { from:'cosmology', to:'engine', label:'candidate', dash:true },
+  { from:'ancient', to:'engine', label:'candidate', dash:true },
+  { from:'enclosure', to:'engine', label:'candidate', dash:true },
+  { from:'base60', to:'engine', label:'candidate', dash:true },
+  // Hexad connections
+  { from:'enclosure', to:'hexad', label:'feeds', dash:true },
+  { from:'cosmology', to:'hexad', label:'feeds', dash:true },
+  // 8 Questions → Engine
+  { from:'q1', to:'engine' }, { from:'q2', to:'engine' }, { from:'q3', to:'engine' }, { from:'q4', to:'engine' },
+  { from:'q5', to:'engine' }, { from:'q6', to:'engine' }, { from:'q7', to:'engine' }, { from:'q8', to:'engine' },
+  // Forcing functions → Engine
+  { from:'f1', to:'engine' }, { from:'f2', to:'engine' }, { from:'f3', to:'engine' }, { from:'f4', to:'engine' },
+];
+
+const svg = document.getElementById('graph');
+let viewBox = { x:0, y:0, w:1200, h:800 };
+let drag = null, pan = null;
+
+function render() {
+  svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+  let html = '<defs><marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#c8cdd6"/></marker></defs>';
+
+  // Edges
+  for (const e of EDGES) {
+    const a = NODES.find(n => n.id === e.from);
+    const b = NODES.find(n => n.id === e.to);
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const ux = dx/dist, uy = dy/dist;
+    const x1 = a.x + ux * a.r, y1 = a.y + uy * a.r;
+    const x2 = b.x - ux * b.r, y2 = b.y - uy * b.r;
+    const dashAttr = e.dash ? 'stroke-dasharray="6,4"' : '';
+    html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#d0d5dd" stroke-width="1.5" ${dashAttr} marker-end="url(#arrow)"/>`;
+    if (e.label) {
+      const mx = (x1+x2)/2, my = (y1+y2)/2;
+      html += `<text x="${mx}" y="${my-5}" text-anchor="middle" font-size="9" fill="#8a93a6" font-family="Inter,sans-serif">${e.label}</text>`;
+    }
+  }
+
+  // Nodes
+  for (const n of NODES) {
+    const isSmall = n.r <= 16;
+    html += `<g class="node" data-id="${n.id}" style="cursor:pointer">`;
+    html += `<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.color}" opacity="0.12" stroke="${n.color}" stroke-width="2"/>`;
+    const lines = n.label.split('\n');
+    const fontSize = isSmall ? 8 : (n.r > 36 ? 12 : 10);
+    const lineH = fontSize + 2;
+    const startY = n.y - ((lines.length - 1) * lineH) / 2;
+    for (let i = 0; i < lines.length; i++) {
+      html += `<text x="${n.x}" y="${startY + i * lineH}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize}" font-weight="600" fill="${n.color}" font-family="Inter,sans-serif">${lines[i]}</text>`;
+    }
+    html += '</g>';
+  }
+
+  svg.innerHTML = html;
+
+  // Attach events
+  svg.querySelectorAll('.node').forEach(g => {
+    g.addEventListener('mouseenter', e => showTooltip(e, g.dataset.id));
+    g.addEventListener('mouseleave', hideTooltip);
+    g.addEventListener('mousedown', e => startDrag(e, g.dataset.id));
+  });
+}
+
+function showTooltip(e, id) {
+  const n = NODES.find(n => n.id === id);
+  const tt = document.getElementById('tooltip');
+  document.getElementById('tt-title').textContent = n.label.replace('\n', ' ');
+  document.getElementById('tt-type').textContent = n.type;
+  document.getElementById('tt-type').style.color = n.color;
+  document.getElementById('tt-body').textContent = n.desc;
+  tt.style.display = 'block';
+  tt.style.left = (e.clientX + 16) + 'px';
+  tt.style.top = (e.clientY - 10) + 'px';
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').style.display = 'none';
+}
+
+function startDrag(e, id) {
+  e.stopPropagation();
+  drag = { id, startX: e.clientX, startY: e.clientY, node: NODES.find(n => n.id === id) };
+  drag.origX = drag.node.x;
+  drag.origY = drag.node.y;
+}
+
+svg.addEventListener('mousedown', e => {
+  if (!drag) pan = { startX: e.clientX, startY: e.clientY, origX: viewBox.x, origY: viewBox.y };
+});
+
+window.addEventListener('mousemove', e => {
+  if (drag) {
+    const scale = viewBox.w / svg.clientWidth;
+    drag.node.x = drag.origX + (e.clientX - drag.startX) * scale;
+    drag.node.y = drag.origY + (e.clientY - drag.startY) * scale;
+    render();
+  } else if (pan) {
+    const scale = viewBox.w / svg.clientWidth;
+    viewBox.x = pan.origX - (e.clientX - pan.startX) * scale;
+    viewBox.y = pan.origY - (e.clientY - pan.startY) * scale;
+    render();
+  }
+});
+
+window.addEventListener('mouseup', () => { drag = null; pan = null; });
+
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = e.deltaY > 0 ? 1.08 : 0.92;
+  const rect = svg.getBoundingClientRect();
+  const mx = viewBox.x + (e.clientX - rect.left) / rect.width * viewBox.w;
+  const my = viewBox.y + (e.clientY - rect.top) / rect.height * viewBox.h;
+  viewBox.w *= factor; viewBox.h *= factor;
+  viewBox.x = mx - (e.clientX - rect.left) / rect.width * viewBox.w;
+  viewBox.y = my - (e.clientY - rect.top) / rect.height * viewBox.h;
+  render();
+}, { passive: false });
+
+render();
+</script>
+</body>
+</html>

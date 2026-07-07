@@ -28,6 +28,13 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Reed Governance** · `~/nanoclaw/reed-studio/reed-governance.js` (ESM) · 7 organs on standard chassis, wraps existing Reed code · doc: BUILD_LOG 2026-07-07
 - **Constitution Spec** · `~/cathedral-vault/02_Refined_Gold/cathedral/the-autonomy-constitution.md` · 12 organs, 5 levels, cybernetics lineage · doc: BUILD_LOG 2026-07-07
 
+## Universe Engine
+- **Aether Universe Dashboard** · `~/nanoclaw/aether-universe.html` · route `/aether-universe` (cath-bridge) · Lobby: Studio · doc: BUILD_LOG 2026-07-07 s2
+- **Logan Universe Dashboard** · `~/nanoclaw/logan-universe.html` · route `/logan-universe` (cath-bridge) · Lobby: Studio · doc: BUILD_LOG 2026-07-07 s2
+- **Universe Engine Map** · `~/nanoclaw/universe-map.html` · route `/universe-map` (cath-bridge) · Lobby: Maps · doc: BUILD_LOG 2026-07-07 s2
+- **Universe Template** · `~/basic-reflex/universe-template.md` · manual · doc: BUILD_LOG 2026-07-07 s2
+- **Universe Engine (method)** · `~/cathedral-vault/06_Methods/the-universe-engine.md` · vault method, Grade A · doc: BUILD_LOG 2026-07-07 s2
+
 ## Agent improvement
 - **Emergence Signal Router** · `~/Cathedral/emergence/emergence-signal-router.js` · PM2 #168 cron 05:25 HKT · reads monitor/watcher/health/scores → generates corrective planner tasks · doc: BUILD_LOG 2026-06-19
 
