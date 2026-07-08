@@ -1,6 +1,10 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-08 — Scout Cascade Diagnosis (no builds)
+
+Diagnosed forgotten shelf base-60 scout failure from previous session. Agent cascade: 1 orchestrator → 5 domain scouts → each spawned 3-5 sub-agents = ~25 total → rate limit domino. Output files contain JSONL orchestration logs only, no synthesized findings. Vault already holds ChatGPT relay (B+, 11 structural findings) from prior session. Recommendation: re-run with single focused agents per domain. Permission prompt flood fixed prior session via `~/.claude/settings.json` permissions.allow rules.
+
 ## 2026-07-07 session 2 — Aether Universe + Universe Engine + Universe Map
 
 **Aether Universe Dashboard** (`~/nanoclaw/aether-universe.html`):
