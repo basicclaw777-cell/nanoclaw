@@ -60,8 +60,15 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 
 - **Agent Workspace** · `~/Cathedral/control-panel/agent-workspace.html` · route `/agent-workspace` (cath-bridge.cjs) · 23 agents, grades, scores, sparklines · doc: BUILD_LOG 2026-06-19
 
+## Cathedral Episodes
+- **Episode Harvester** · `~/nanoclaw/cathedral-episodes.js` (ESM) · trigger: manual `node cathedral-episodes.js` · harvests Code .jsonl + web export → signal extraction → `vortex_data/episodes.json` · doc: BUILD_LOG 2026-07-02 session 2
+- **Episodes Dashboard** · `~/nanoclaw/episodes.html` · route `/episodes` (cath-bridge.cjs) · timeline, season filters, signal pills · doc: BUILD_LOG 2026-07-02 session 2
+- **Episode Narrator** · `~/nanoclaw/episode-narrator.js` (ESM) · trigger: manual · DeepSeek script → edge-tts → Telegram · doc: BUILD_LOG 2026-07-02 session 2
+- **Chatterbox TTS** · `~/nanoclaw/chatterbox-narrate.py` (single) + `chatterbox-batch.py` (batch) · trigger: manual · venv `~/chatterbox-venv` (Python 3.12) · local sovereign TTS, MPS ~24 it/s · doc: BUILD_LOG 2026-07-08 session 2
+- **Narration Generator** · `~/nanoclaw/gen-narrations.js` (ESM) · trigger: manual · DeepSeek → 3 narration scripts (Architect/Fires/Living Graph) · doc: BUILD_LOG 2026-07-08 session 2
+
 ## The Mirror — Digital Paul
-- **The Mirror** · `~/nanoclaw/mirror.html` · route `/mirror` (cath-bridge.cjs ~line 2316) · conversational Digital Paul, 4 modes (Warm-up/Recall/Challenge/Disagree), DeepSeek+hermes3, vault RAG per query · doc: BUILD_LOG 2026-07-01
+- **The Mirror** · `~/nanoclaw/mirror.html` · route `/mirror` (cath-bridge.cjs ~line 2316) · conversational Digital Paul, 5 modes (Warm-up/Recall/Challenge/Disagree/Architect), DeepSeek+hermes3, vault RAG per query · doc: BUILD_LOG 2026-07-01
 - **Mirror Evolution Audit** · `~/nanoclaw/mirror-evolution.js` · PM2 `mirror-evolution` cron `0 10 1 * *` (1st of month 18:00 HKT) · monthly drift detection vs Paul Kernel + Cognitive Sig + Taste Map · doc: BUILD_LOG 2026-07-01
 
 ## The Ledger — Proposal Protocol
