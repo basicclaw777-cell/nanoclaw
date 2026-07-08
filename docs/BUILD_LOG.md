@@ -1,6 +1,34 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-08 session 2 — Chatterbox TTS Narrations
+
+Fixed Chatterbox Perth watermarker (`apply_watermark` method name, not `apply`). Generated 4 Cathedral Episode narrations via sovereign pipeline: DeepSeek (script) → Chatterbox TTS (local, MPS ~24 it/s) → MP3 → Telegram.
+
+**Clips delivered:**
+1. Cathedral Story (2:25) — full season recap, 7 seasons
+2. The Architect (1:30) — superhero alter pattern: cross-domain bridging + emotional ignition + principle naming + immediate building
+3. The Fires (1:37) — crises that wrote Standing Instructions
+4. The Living Graph (1:57) — 30 principles as a network, not a list
+
+**Files:** `chatterbox-narrate.py` (single), `chatterbox-batch.py` (batch), `gen-narrations.js` (DeepSeek script generator). Audio: `~/nanoclaw/vortex_data/episode-audio/`. Chatterbox venv: `~/chatterbox-venv` (Python 3.12).
+
+**Pipeline:** Repeatable for any Cathedral narrative. ~5 min per clip, zero TTS API cost.
+
+## 2026-07-02 session 2 — Cathedral Episodes Harvester + Narrator
+
+**Episode Harvester** (`cathedral-episodes.js`, ESM): Harvests from Claude Code .jsonl sessions + claude.ai web export. Signal extraction: ~30 principles, ~25 topics, breakthrough/crisis/emotion markers. 7 seasons (S1 The Instrument → S7 The Governor). Weight scoring. Output: `vortex_data/episodes.json`.
+
+**Episodes Dashboard** (`episodes.html`, route `/episodes`): Timeline view, season filter pills, search, expandable cards with signal pills. Color-coded: gold=high weight, green=breakthrough, red=crisis.
+
+**Episode Narrator** (`episode-narrator.js`): DeepSeek generates documentary narration → edge-tts → Telegram. File: `vortex_data/episode-audio/cathedral-story.mp3`.
+
+**Mirror Architect Mode** (5th mode): Added to mirror.html + cath-bridge MIRROR_MODE_PROMPTS. Channels peak-Paul cognitive signature. Ember-colored chip + 2 starter prompts.
+
+## 2026-07-08 session 3 — Forgotten Shelf Base-60 Full Survey (81 findings)
+
+Ran 7 Forgotten Shelf scouts (Opus 4.6 subagents, WebSearch, no cascading) across: ternary computing, sexagesimal navigation, musical tuning, 60-fold symmetry, pedagogy, Babylonian mathematics, sacred geometry. 81 total findings. Vault deposit: `00_Staging/cathedral/forgotten-shelf-base60-full-survey-2026-07-08.md` (Grade A-). Key: BitNet b1.58 (ternary AI on single CPU), zigzag/goal-year prediction for trading, three-valued classification for Taste Map/Gym Eyes, fraction difficulty as base-10 artifact (untested hypothesis), 60° geometry winning every open engineering competition. Demystified all 7 domains for Paul in plain English. Agent orchestration: 3 parallel at peak, single-domain focus, no sub-agent spawning — validated fix for cascade failure.
+
 ## 2026-07-08 — Scout Cascade Diagnosis (no builds)
 
 Diagnosed forgotten shelf base-60 scout failure from previous session. Agent cascade: 1 orchestrator → 5 domain scouts → each spawned 3-5 sub-agents = ~25 total → rate limit domino. Output files contain JSONL orchestration logs only, no synthesized findings. Vault already holds ChatGPT relay (B+, 11 structural findings) from prior session. Recommendation: re-run with single focused agents per domain. Permission prompt flood fixed prior session via `~/.claude/settings.json` permissions.allow rules.
