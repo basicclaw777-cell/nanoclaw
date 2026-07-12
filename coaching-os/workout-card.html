@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workout</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #fafafa; color: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; padding: 0; }
+
+.card { max-width: 480px; margin: 0 auto; background: white; min-height: 100vh; }
+
+.header { background: #1a1a1a; color: white; padding: 24px 20px; text-align: center; }
+.header .brand { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #f7b408; margin-bottom: 4px; }
+.header h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.header .meta { font-size: 12px; color: #a1a1aa; }
+
+.rounds { padding: 16px 20px; }
+.round { padding: 16px 0; border-bottom: 1px solid #f0f0f0; }
+.round:last-child { border: none; }
+.round-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.round-num { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #f7b408; }
+.round-time { font-size: 11px; color: #71717a; }
+.round-name { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+.round-desc { font-size: 13px; color: #52525b; line-height: 1.5; }
+.round-level { font-size: 11px; color: #71717a; margin-top: 6px; padding: 4px 8px; background: #f5f5f5; border-radius: 4px; display: inline-block; }
+
+.footer { padding: 20px; text-align: center; border-top: 1px solid #f0f0f0; }
+.footer .coach { font-size: 12px; color: #71717a; }
+.footer .cta { font-size: 11px; color: #f7b408; margin-top: 4px; }
+
+.notes { padding: 12px 20px; background: #fafafa; border-top: 1px solid #f0f0f0; }
+.notes h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin-bottom: 8px; }
+.notes p { font-size: 12px; color: #52525b; line-height: 1.6; }
+
+.empty { padding: 60px 20px; text-align: center; color: #71717a; }
+
+@media print {
+  body { background: white; }
+  .card { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="card" id="card">
+  <div class="empty" id="loading">Loading workout...</div>
+</div>
+
+<script>
+const API = 'http://localhost:8080/coaching';
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const classId = params.get('class');
+  const level = params.get('level') || 'intermediate';
+
+  if (!classId) {
+    document.getElementById('loading').textContent = 'No workout ID. Add ?class=ID to URL.';
+    return;
+  }
+
+  try {
+    const cls = await fetch(`${API}/classes/${classId}`).then(r => r.json());
+    const allDrills = await fetch(`${API}/drills`).then(r => r.json());
+
+    const drillMap = {};
+    for (const d of allDrills) drillMap[d.id] = d;
+
+    render(cls, drillMap, level);
+  } catch (e) {
+    document.getElementById('loading').textContent = 'Error loading workout: ' + e.message;
+  }
+}
+
+function render(cls, drillMap, level) {
+  const segments = cls.segments.filter(s => s.drill_id);
+  const totalTime = segments.reduce((sum, s) => sum + (s.duration_minutes || 5), 0);
+
+  let roundsHTML = '';
+  segments.forEach((seg, i) => {
+    const drill = drillMap[seg.drill_id];
+    if (!drill) return;
+
+    const levels = drill.levels ? JSON.parse(drill.levels) : null;
+    const levelText = levels ? levels[level] || levels.intermediate || '' : '';
+    const time = seg.duration_minutes || 5;
+
+    roundsHTML += `
+      <div class="round">
+        <div class="round-header">
+          <span class="round-num">Round ${i + 1}</span>
+          <span class="round-time">${time} min</span>
+        </div>
+        <div class="round-name">${drill.name}</div>
+        <div class="round-desc">${drill.description || seg.segment_name || ''}</div>
+        ${levelText ? `<div class="round-level">${level}: ${levelText}</div>` : ''}
+      </div>
+    `;
+  });
+
+  document.getElementById('card').innerHTML = `
+    <div class="header">
+      <div class="brand">Basic Reflex</div>
+      <h1>${cls.title}</h1>
+      <div class="meta">${segments.length} rounds · ~${totalTime} min · ${level}</div>
+    </div>
+    <div class="rounds">${roundsHTML}</div>
+    ${cls.notes ? `<div class="notes"><h3>Coach Notes</h3><p>${cls.notes}</p></div>` : ''}
+    <div class="footer">
+      <div class="coach">Coach Paul · Basic Reflex Boxing</div>
+      <div class="cta">Train smart. Move well.</div>
+    </div>
+  `;
+
+  document.title = cls.title + ' — Basic Reflex';
+}
+
+init();
+</script>
+</body>
+</html>

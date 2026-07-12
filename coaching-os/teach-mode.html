@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Teach Mode</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #09090f; color: #e4e4e7; font-family: 'JetBrains Mono', 'SF Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+
+.header { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1c1c2e; }
+.header h1 { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #71717a; }
+.header .back { color: #7c3aed; text-decoration: none; font-size: 12px; }
+.timer { font-size: 24px; color: #7c3aed; font-variant-numeric: tabular-nums; }
+
+.segment-nav { display: flex; gap: 2px; padding: 8px 16px; overflow-x: auto; }
+.seg-pip { flex: 1; height: 4px; border-radius: 2px; background: #27272a; min-width: 20px; cursor: pointer; transition: background 200ms; }
+.seg-pip.active { background: #7c3aed; }
+.seg-pip.done { background: #10b981; }
+
+.card { padding: 24px 20px; min-height: calc(100vh - 120px); display: flex; flex-direction: column; }
+.card .segment-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #52525b; margin-bottom: 4px; }
+.card .drill-name { font-size: 28px; font-weight: 500; color: #e4e4e7; margin-bottom: 16px; line-height: 1.2; }
+.card .drill-desc { font-size: 14px; color: #a1a1aa; margin-bottom: 24px; line-height: 1.6; }
+
+.cues { flex: 1; }
+.cue { padding: 12px 16px; margin-bottom: 8px; border-radius: 6px; border-left: 3px solid; }
+.cue-watch_for { background: #0c1a2e; border-color: #3b82f6; }
+.cue-common_error { background: #1a0c0c; border-color: #ef4444; }
+.cue-key_phrase { background: #0c1a12; border-color: #10b981; }
+.cue-progression_trigger { background: #1a150c; border-color: #f59e0b; }
+.cue .cue-type { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin-bottom: 4px; }
+.cue .cue-text { font-size: 15px; line-height: 1.5; }
+
+.levels { margin-top: 16px; padding: 12px; background: #0f0f17; border-radius: 6px; }
+.levels h3 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #52525b; margin-bottom: 8px; }
+.level { padding: 6px 0; border-bottom: 1px solid #1c1c2e; font-size: 12px; }
+.level:last-child { border: none; }
+.level .level-name { color: #7c3aed; font-size: 10px; text-transform: uppercase; }
+.level .level-desc { color: #a1a1aa; margin-top: 2px; }
+
+.nav-buttons { display: flex; gap: 12px; padding: 16px; position: fixed; bottom: 0; left: 0; right: 0; background: #09090f; border-top: 1px solid #1c1c2e; }
+.nav-btn { flex: 1; padding: 14px; border-radius: 6px; border: 1px solid #27272a; background: transparent; color: #a1a1aa; font-family: inherit; font-size: 14px; cursor: pointer; }
+.nav-btn:active { background: #1c1c2e; }
+.nav-btn.primary { background: #7c3aed; border-color: #7c3aed; color: white; }
+.nav-btn.done { background: #10b981; border-color: #10b981; color: white; }
+
+.empty-state { text-align: center; padding: 60px 20px; color: #52525b; }
+.empty-state h2 { font-size: 16px; color: #71717a; margin-bottom: 8px; }
+
+.observation-bar { position: fixed; bottom: 64px; left: 0; right: 0; padding: 8px 16px; display: none; }
+.observation-bar.visible { display: flex; gap: 8px; }
+.obs-input { flex: 1; background: #0f0f17; border: 1px solid #27272a; border-radius: 4px; padding: 8px 12px; color: #e4e4e7; font-family: inherit; font-size: 13px; }
+.obs-input:focus { outline: none; border-color: #7c3aed; }
+.obs-btn { padding: 8px 12px; background: #7c3aed; border: none; border-radius: 4px; color: white; font-family: inherit; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back" href="/coaching-os">&larr; Planner</a>
+  <h1 id="classTitle">Teach Mode</h1>
+  <div class="timer" id="timer">0:00</div>
+</div>
+
+<div class="segment-nav" id="segNav"></div>
+<div class="card" id="card"></div>
+
+<div class="observation-bar" id="obsBar">
+  <input type="text" class="obs-input" id="obsInput" placeholder="Quick observation...">
+  <button class="obs-btn" onclick="saveObservation()">Log</button>
+</div>
+
+<div class="nav-buttons">
+  <button class="nav-btn" onclick="prevSegment()">&larr; Prev</button>
+  <button class="nav-btn" onclick="toggleObs()">Note</button>
+  <button class="nav-btn primary" onclick="nextSegment()">Next &rarr;</button>
+</div>
+
+<script>
+const API = 'http://localhost:8080/coaching';
+let classData = null, currentIdx = 0, timerInterval = null, startTime = null;
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const classId = params.get('class');
+
+  if (!classId) {
+    document.getElementById('card').innerHTML = '<div class="empty-state"><h2>No class loaded</h2><p>Open a class from the planner, or add ?class=ID to the URL</p></div>';
+    return;
+  }
+
+  try {
+    classData = await fetch(`${API}/classes/${classId}`).then(r => r.json());
+    document.getElementById('classTitle').textContent = classData.title;
+
+    // Load cues for each drill
+    for (const seg of classData.segments) {
+      if (seg.drill_id) {
+        seg.cues = await fetch(`${API}/cues/${seg.drill_id}`).then(r => r.json()).catch(() => []);
+        seg.drill = await fetch(`${API}/drills`).then(r => r.json()).then(all => all.find(d => d.id === seg.drill_id));
+      }
+    }
+
+    renderNav();
+    renderCard();
+    startTimer();
+  } catch (e) {
+    document.getElementById('card').innerHTML = `<div class="empty-state"><h2>Error</h2><p>${e.message}</p></div>`;
+  }
+}
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const m = Math.floor(elapsed / 60);
+    const s = elapsed % 60;
+    document.getElementById('timer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+  }, 1000);
+}
+
+function renderNav() {
+  const el = document.getElementById('segNav');
+  el.innerHTML = classData.segments.map((s, i) =>
+    `<div class="seg-pip ${i === currentIdx ? 'active' : ''} ${i < currentIdx ? 'done' : ''}" onclick="goTo(${i})"></div>`
+  ).join('');
+}
+
+function renderCard() {
+  const seg = classData.segments[currentIdx];
+  if (!seg) return;
+
+  const el = document.getElementById('card');
+  const drill = seg.drill;
+  const cues = seg.cues || [];
+
+  if (!drill) {
+    el.innerHTML = `
+      <div class="segment-label">${seg.segment_name || 'Segment ' + seg.segment_num}</div>
+      <div class="drill-name" style="color:#52525b;">No drill assigned</div>
+    `;
+    renderNav();
+    return;
+  }
+
+  const levels = drill.levels ? JSON.parse(drill.levels) : null;
+  const cueHTML = cues.map(c => `
+    <div class="cue cue-${c.cue_type}">
+      <div class="cue-type">${c.cue_type.replace(/_/g, ' ')}</div>
+      <div class="cue-text">${c.text}</div>
+    </div>
+  `).join('');
+
+  const levelHTML = levels ? `
+    <div class="levels">
+      <h3>Levels</h3>
+      ${Object.entries(levels).map(([k, v]) => `
+        <div class="level">
+          <div class="level-name">${k}</div>
+          <div class="level-desc">${v}</div>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  el.innerHTML = `
+    <div class="segment-label">${seg.segment_name || 'Segment ' + seg.segment_num}</div>
+    <div class="drill-name">${drill.name}</div>
+    <div class="drill-desc">${drill.description || ''}</div>
+    <div class="cues">${cueHTML || '<div style="color:#3f3f46;font-size:12px;">No cues yet for this drill</div>'}</div>
+    ${levelHTML}
+  `;
+
+  renderNav();
+}
+
+function nextSegment() {
+  if (currentIdx < classData.segments.length - 1) {
+    currentIdx++;
+    renderCard();
+  }
+}
+
+function prevSegment() {
+  if (currentIdx > 0) {
+    currentIdx--;
+    renderCard();
+  }
+}
+
+function goTo(idx) {
+  currentIdx = idx;
+  renderCard();
+}
+
+function toggleObs() {
+  const bar = document.getElementById('obsBar');
+  bar.classList.toggle('visible');
+  if (bar.classList.contains('visible')) {
+    document.getElementById('obsInput').focus();
+  }
+}
+
+async function saveObservation() {
+  const text = document.getElementById('obsInput').value.trim();
+  if (!text) return;
+
+  const seg = classData.segments[currentIdx];
+  try {
+    await fetch(`${API}/observations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        class_id: classData.id,
+        drill_id: seg?.drill_id || null,
+        observation: text,
+        engine: null
+      })
+    });
+    document.getElementById('obsInput').value = '';
+    document.getElementById('obsBar').classList.remove('visible');
+  } catch (e) { console.error(e); }
+}
+
+// Swipe support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const diff = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(diff) > 60) {
+    if (diff > 0) prevSegment();
+    else nextSegment();
+  }
+});
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextSegment();
+  if (e.key === 'ArrowLeft') prevSegment();
+});
+
+init();
+</script>
+</body>
+</html>

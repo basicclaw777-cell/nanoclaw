@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coaching OS — Series Graph</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #09090f; color: #e4e4e7; font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 13px; padding: 24px; }
+h1 { font-size: 14px; text-transform: uppercase; letter-spacing: 3px; color: #71717a; margin-bottom: 8px; }
+.subtitle { color: #52525b; font-size: 11px; margin-bottom: 24px; }
+a { color: #7c3aed; text-decoration: none; }
+
+.layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+@media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+
+.graph-area { position: relative; min-height: 500px; background: #0a0a12; border: 1px solid #1c1c2e; border-radius: 6px; overflow: hidden; }
+
+canvas { width: 100%; height: 100%; display: block; }
+
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+.panel { background: #0f0f17; border: 1px solid #1c1c2e; border-radius: 6px; padding: 16px; }
+.panel h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #52525b; margin-bottom: 12px; }
+
+.series-card { padding: 10px; border-radius: 4px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; transition: all 150ms; }
+.series-card:hover { background: #1c1c2e; border-color: #27272a; }
+.series-card.selected { border-color: #7c3aed; background: #1c1c2e; }
+.series-card .name { font-size: 12px; color: #e4e4e7; }
+.series-card .meta { font-size: 10px; color: #52525b; margin-top: 2px; }
+
+.edge-list { max-height: 200px; overflow-y: auto; }
+.edge-item { padding: 6px 8px; font-size: 11px; display: flex; gap: 8px; align-items: center; }
+.edge-type { font-size: 9px; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+.edge-FOLLOWS { background: #064e3b; color: #10b981; }
+.edge-PREPARES { background: #1e1b4b; color: #818cf8; }
+.edge-REINFORCES { background: #1a150c; color: #f59e0b; }
+.edge-CONTRASTS { background: #1a0c0c; color: #ef4444; }
+.edge-COMBINES { background: #0c1a12; color: #10b981; }
+.edge-ALTERNATIVE { background: #1c1c2e; color: #71717a; }
+.edge-ADVANCES { background: #0c1a2e; color: #3b82f6; }
+.edge-SIMPLIFIES { background: #1c1c2e; color: #a1a1aa; }
+.edge-DEFENDS { background: #1a0c0c; color: #fb923c; }
+
+.detail-panel { display: none; }
+.detail-panel.visible { display: block; }
+.detail-title { font-size: 16px; margin-bottom: 8px; }
+.detail-desc { font-size: 12px; color: #a1a1aa; margin-bottom: 12px; }
+.detail-meta { font-size: 10px; color: #52525b; display: flex; flex-wrap: wrap; gap: 8px; }
+.detail-meta span { padding: 2px 8px; border: 1px solid #27272a; border-radius: 3px; }
+
+.filter-btns { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+.filter-btn { padding: 3px 8px; border: 1px solid #27272a; border-radius: 4px; background: transparent; color: #71717a; cursor: pointer; font-size: 10px; font-family: inherit; }
+.filter-btn.active { border-color: #7c3aed; color: #7c3aed; }
+</style>
+</head>
+<body>
+
+<h1>Series Graph</h1>
+<div class="subtitle"><a href="/coaching-os">&larr; Planner</a> · 18 series · 16 connections</div>
+
+<div class="layout">
+  <div class="graph-area">
+    <canvas id="graphCanvas"></canvas>
+  </div>
+
+  <div class="sidebar">
+    <div class="panel">
+      <h2>Filter by Layer</h2>
+      <div class="filter-btns" id="filters"></div>
+    </div>
+
+    <div class="panel detail-panel" id="detailPanel">
+      <h2>Selected Series</h2>
+      <div class="detail-title" id="detailTitle"></div>
+      <div class="detail-desc" id="detailDesc"></div>
+      <div class="detail-meta" id="detailMeta"></div>
+      <div style="margin-top:12px;">
+        <h2>Connections</h2>
+        <div class="edge-list" id="edgeList"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>All Series</h2>
+      <div id="seriesList" style="max-height:300px;overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8080/coaching';
+let series = [], edges = [], selected = null;
+let nodes = [], links = [];
+
+async function init() {
+  [series, edges] = await Promise.all([
+    fetch(`${API}/series`).then(r => r.json()),
+    fetch(`${API}/edges`).then(r => r.json()).catch(() => [])
+  ]);
+
+  renderFilters();
+  renderSeriesList();
+  buildGraph();
+  animate();
+}
+
+function renderFilters() {
+  const layers = ['all', 'technique', 'concept', 'combo_family', 'style', 'physical'];
+  document.getElementById('filters').innerHTML = layers.map(l =>
+    `<button class="filter-btn ${l === 'all' ? 'active' : ''}" onclick="filterSeries('${l}')">${l === 'combo_family' ? 'combo' : l}</button>`
+  ).join('');
+}
+
+function filterSeries(layer) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderSeriesList(layer === 'all' ? null : layer);
+  buildGraph(layer === 'all' ? null : layer);
+}
+
+function renderSeriesList(filterLayer) {
+  const filtered = filterLayer ? series.filter(s => s.theme_layer === filterLayer) : series;
+  document.getElementById('seriesList').innerHTML = filtered.map(s => `
+    <div class="series-card ${selected?.id === s.id ? 'selected' : ''}" onclick="selectSeries('${s.id}')">
+      <div class="name">${s.name}</div>
+      <div class="meta">${s.theme_layer || '—'} · ${s.total_sessions || '?'} sessions · ${s.lifecycle}</div>
+    </div>
+  `).join('');
+}
+
+async function selectSeries(id) {
+  selected = series.find(s => s.id === id);
+  renderSeriesList();
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('visible');
+  document.getElementById('detailTitle').textContent = selected.name;
+  document.getElementById('detailDesc').textContent = selected.description || '';
+
+  const range = JSON.parse(selected.block_range || '[1,10]');
+  document.getElementById('detailMeta').innerHTML = `
+    <span>${selected.theme_layer}</span>
+    <span>Blocks ${range[0]}-${range[1]}</span>
+    <span>${selected.total_sessions || '?'} sessions</span>
+    <span>${selected.lifecycle}</span>
+  `;
+
+  // Get edges for this series
+  const seriesEdges = edges.filter(e => e.from_id === id || e.to_id === id);
+  document.getElementById('edgeList').innerHTML = seriesEdges.map(e => {
+    const other = e.from_id === id ? series.find(s => s.id === e.to_id) : series.find(s => s.id === e.from_id);
+    const direction = e.from_id === id ? '→' : '←';
+    return `<div class="edge-item">
+      <span class="edge-type edge-${e.edge_type}">${e.edge_type}</span>
+      <span>${direction} ${other?.name || '?'}</span>
+    </div>`;
+  }).join('') || '<div style="color:#52525b;font-size:11px;">No connections</div>';
+
+  highlightNode(id);
+}
+
+// ── Canvas Graph ────────────────────────────────────────────────
+
+const canvas = document.getElementById('graphCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  W = canvas.width = rect.width * 2;
+  H = canvas.height = rect.height * 2;
+  ctx.scale(1, 1);
+}
+
+const LAYER_COLORS = {
+  technique: '#10b981', concept: '#818cf8', combo_family: '#f59e0b',
+  style: '#ef4444', physical: '#3b82f6'
+};
+
+function buildGraph(filterLayer) {
+  resize();
+  const filtered = filterLayer ? series.filter(s => s.theme_layer === filterLayer) : series;
+  const ids = new Set(filtered.map(s => s.id));
+
+  nodes = filtered.map((s, i) => {
+    const angle = (i / filtered.length) * Math.PI * 2;
+    const radius = Math.min(W, H) * 0.35;
+    return {
+      id: s.id, name: s.name, layer: s.theme_layer,
+      x: W / 2 + Math.cos(angle) * radius,
+      y: H / 2 + Math.sin(angle) * radius,
+      vx: 0, vy: 0, radius: 16
+    };
+  });
+
+  links = edges.filter(e => ids.has(e.from_id) && ids.has(e.to_id));
+}
+
+function highlightNode(id) {
+  // Redraw with highlight
+}
+
+function animate() {
+  // Simple force-directed layout
+  for (let iter = 0; iter < 3; iter++) {
+    // Repulsion between nodes
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[j].x - nodes[i].x;
+        const dy = nodes[j].y - nodes[i].y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const force = 8000 / (dist * dist);
+        const fx = (dx / dist) * force;
+        const fy = (dy / dist) * force;
+        nodes[i].vx -= fx; nodes[i].vy -= fy;
+        nodes[j].vx += fx; nodes[j].vy += fy;
+      }
+    }
+
+    // Attraction along edges
+    for (const link of links) {
+      const a = nodes.find(n => n.id === link.from_id);
+      const b = nodes.find(n => n.id === link.to_id);
+      if (!a || !b) continue;
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const force = (dist - 200) * 0.01;
+      const fx = (dx / dist) * force;
+      const fy = (dy / dist) * force;
+      a.vx += fx; a.vy += fy;
+      b.vx -= fx; b.vy -= fy;
+    }
+
+    // Center gravity
+    for (const node of nodes) {
+      node.vx += (W / 2 - node.x) * 0.001;
+      node.vy += (H / 2 - node.y) * 0.001;
+      node.x += node.vx * 0.5;
+      node.y += node.vy * 0.5;
+      node.vx *= 0.8;
+      node.vy *= 0.8;
+      node.x = Math.max(40, Math.min(W - 40, node.x));
+      node.y = Math.max(40, Math.min(H - 40, node.y));
+    }
+  }
+
+  draw();
+  requestAnimationFrame(animate);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw edges
+  for (const link of links) {
+    const a = nodes.find(n => n.id === link.from_id);
+    const b = nodes.find(n => n.id === link.to_id);
+    if (!a || !b) continue;
+
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.strokeStyle = selected && (link.from_id === selected.id || link.to_id === selected.id) ? '#7c3aed' : '#27272a';
+    ctx.lineWidth = selected && (link.from_id === selected.id || link.to_id === selected.id) ? 3 : 1;
+    ctx.stroke();
+  }
+
+  // Draw nodes
+  for (const node of nodes) {
+    const isSelected = selected?.id === node.id;
+    const isConnected = selected && links.some(l =>
+      (l.from_id === selected.id && l.to_id === node.id) ||
+      (l.to_id === selected.id && l.from_id === node.id)
+    );
+
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, isSelected ? 20 : 14, 0, Math.PI * 2);
+    ctx.fillStyle = isSelected ? '#7c3aed' : (isConnected ? LAYER_COLORS[node.layer] || '#52525b' : '#1c1c2e');
+    ctx.fill();
+    ctx.strokeStyle = LAYER_COLORS[node.layer] || '#52525b';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = isSelected || isConnected ? '#e4e4e7' : '#71717a';
+    ctx.font = `${isSelected ? 13 : 11}px monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText(node.name.length > 16 ? node.name.slice(0, 14) + '…' : node.name, node.x, node.y + 30);
+  }
+}
+
+// Click detection
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * (W / rect.width);
+  const y = (e.clientY - rect.top) * (H / rect.height);
+  for (const node of nodes) {
+    const dx = node.x - x, dy = node.y - y;
+    if (dx * dx + dy * dy < 400) {
+      selectSeries(node.id);
+      return;
+    }
+  }
+});
+
+window.addEventListener('resize', () => { resize(); buildGraph(); });
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coaching OS — Class Planner</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #09090f; color: #e4e4e7; font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 13px; line-height: 1.5; padding: 24px; }
+h1 { font-size: 14px; text-transform: uppercase; letter-spacing: 3px; color: #71717a; margin-bottom: 24px; }
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #52525b; margin-bottom: 12px; }
+
+.layout { display: grid; grid-template-columns: 280px 1fr 300px; gap: 24px; max-width: 1400px; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.panel { background: #0f0f17; border: 1px solid #1c1c2e; border-radius: 6px; padding: 16px; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+
+/* Theme picker */
+.theme-layers { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+.layer-btn { padding: 4px 8px; border: 1px solid #27272a; border-radius: 4px; background: transparent; color: #a1a1aa; cursor: pointer; font-size: 11px; font-family: inherit; }
+.layer-btn.active { border-color: #7c3aed; color: #7c3aed; }
+.theme-list { max-height: 400px; overflow-y: auto; }
+.theme-item { padding: 8px 10px; border-radius: 4px; cursor: pointer; margin-bottom: 2px; transition: background 150ms ease-out; }
+.theme-item:hover { background: #1c1c2e; }
+.theme-item.selected { background: #1c1c2e; border-left: 2px solid #7c3aed; }
+.theme-item .name { color: #e4e4e7; font-size: 12px; }
+.theme-item .meta { color: #52525b; font-size: 10px; margin-top: 2px; }
+
+/* Class builder */
+.class-header { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.class-title-input { background: transparent; border: 1px solid #27272a; border-radius: 4px; padding: 6px 10px; color: #e4e4e7; font-family: inherit; font-size: 14px; flex: 1; min-width: 200px; }
+.class-title-input:focus { outline: none; border-color: #7c3aed; }
+.template-select { background: #0f0f17; border: 1px solid #27272a; border-radius: 4px; padding: 6px 10px; color: #a1a1aa; font-family: inherit; font-size: 11px; }
+
+.segments { display: flex; flex-direction: column; gap: 8px; }
+.segment { background: #0a0a12; border: 1px solid #1c1c2e; border-radius: 6px; padding: 12px; transition: border-color 150ms ease-out; }
+.segment:hover { border-color: #27272a; }
+.segment.active { border-color: #7c3aed; }
+.segment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.segment-num { color: #7c3aed; font-size: 11px; font-weight: 500; }
+.segment-name { color: #a1a1aa; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.segment-time { color: #52525b; font-size: 10px; }
+.segment-drill { display: flex; align-items: center; gap: 8px; }
+.segment-drill .drill-name { color: #e4e4e7; font-size: 12px; flex: 1; }
+.segment-drill .drill-domain { color: #52525b; font-size: 10px; padding: 2px 6px; border: 1px solid #27272a; border-radius: 3px; }
+
+.drill-slot { border: 1px dashed #27272a; border-radius: 4px; padding: 8px; text-align: center; color: #3f3f46; font-size: 11px; cursor: pointer; transition: all 150ms ease-out; }
+.drill-slot:hover { border-color: #7c3aed; color: #7c3aed; }
+
+.energy-bar { display: flex; gap: 2px; margin-top: 8px; }
+.energy-pip { flex: 1; height: 4px; border-radius: 2px; background: #1c1c2e; }
+.energy-pip.low { background: #10b981; }
+.energy-pip.med { background: #f59e0b; }
+.energy-pip.high { background: #ef4444; }
+
+/* Drill browser */
+.drill-search { width: 100%; background: transparent; border: 1px solid #27272a; border-radius: 4px; padding: 6px 10px; color: #e4e4e7; font-family: inherit; font-size: 12px; margin-bottom: 12px; }
+.drill-search:focus { outline: none; border-color: #7c3aed; }
+.drill-list { max-height: 500px; overflow-y: auto; }
+.drill-item { padding: 8px 10px; border-radius: 4px; cursor: pointer; margin-bottom: 2px; transition: background 150ms ease-out; border: 1px solid transparent; }
+.drill-item:hover { background: #1c1c2e; border-color: #27272a; }
+.drill-item .drill-title { color: #e4e4e7; font-size: 12px; }
+.drill-item .drill-info { color: #52525b; font-size: 10px; margin-top: 2px; display: flex; gap: 8px; }
+.drill-item .engine-tag { font-size: 9px; padding: 1px 4px; border-radius: 2px; }
+.engine-body { background: #064e3b; color: #10b981; }
+.engine-mind { background: #1e1b4b; color: #818cf8; }
+.engine-eq { background: #431407; color: #fb923c; }
+
+/* Status bar */
+.status-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f0f17; border-top: 1px solid #1c1c2e; padding: 8px 24px; display: flex; gap: 24px; font-size: 11px; color: #52525b; }
+.status-bar .stat { display: flex; gap: 6px; align-items: center; }
+.status-bar .stat-value { color: #a1a1aa; }
+
+/* Buttons */
+.btn { padding: 6px 12px; border-radius: 4px; border: 1px solid #27272a; background: transparent; color: #a1a1aa; font-family: inherit; font-size: 11px; cursor: pointer; transition: all 150ms ease-out; }
+.btn:hover { border-color: #7c3aed; color: #7c3aed; }
+.btn-primary { background: #7c3aed; border-color: #7c3aed; color: white; }
+.btn-primary:hover { background: #6d28d9; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+  <h1 style="margin:0;">Coaching OS — Class Planner</h1>
+  <div style="display:flex;gap:8px;">
+    <a href="/coaching-intel" class="btn">Intelligence</a>
+    <a href="/series-graph" class="btn">Graph</a>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- Left: Theme Picker -->
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Theme</h2>
+      <button class="btn" onclick="randomTheme()">Spin</button>
+    </div>
+    <div class="theme-layers" id="layerFilters"></div>
+    <div class="theme-list" id="themeList"></div>
+  </div>
+
+  <!-- Center: Class Builder -->
+  <div class="panel">
+    <div class="class-header">
+      <input type="text" class="class-title-input" id="classTitle" placeholder="Class title (auto-fills from theme)">
+      <select class="template-select" id="templateSelect" onchange="loadTemplate()"></select>
+      <button class="btn" onclick="newClass()">New</button>
+      <button class="btn" onclick="markTaught()">Taught</button>
+      <button class="btn" onclick="launchTeach()" style="background:#10b981;border-color:#10b981;color:white;">Teach</button>
+      <button class="btn" onclick="shareWorkout()">Share</button>
+      <button class="btn btn-primary" onclick="saveClass()">Save</button>
+    </div>
+    <div class="segments" id="segments"></div>
+    <div class="energy-bar" id="energyBar"></div>
+  </div>
+
+  <!-- Right: Drill Browser + Saved Classes -->
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Drills</h2>
+      <span id="drillCount" style="color:#52525b;font-size:10px;"></span>
+    </div>
+    <input type="text" class="drill-search" id="drillSearch" placeholder="Search drills..." oninput="filterDrills()">
+    <div class="drill-list" id="drillList"></div>
+
+    <div style="margin-top:16px;border-top:1px solid #1c1c2e;padding-top:12px;">
+      <h2>Quick Add Drill</h2>
+      <div id="quickAdd" style="margin-top:8px;">
+        <input type="text" class="drill-search" id="qaName" placeholder="Drill name" style="margin-bottom:4px;">
+        <div style="display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;">
+          <select class="template-select" id="qaDomain" style="flex:1;">
+            <option value="footwork">Footwork</option>
+            <option value="defense">Defense</option>
+            <option value="combos">Combos</option>
+            <option value="conditioning">Conditioning</option>
+            <option value="warm_up">Warm-Up</option>
+            <option value="icebreaker">Icebreaker</option>
+            <option value="mindset">Mindset</option>
+            <option value="strategy">Strategy</option>
+          </select>
+          <select class="template-select" id="qaMode" style="flex:1;">
+            <option value="shadow">Shadow</option>
+            <option value="partner">Partner</option>
+            <option value="pads">Pads</option>
+            <option value="bag">Bag</option>
+            <option value="solo">Solo</option>
+            <option value="group">Group</option>
+          </select>
+        </div>
+        <input type="text" class="drill-search" id="qaDesc" placeholder="One-line description (optional)" style="margin-bottom:4px;">
+        <button class="btn btn-primary" onclick="quickAddDrill()" style="width:100%;">+ Add Drill</button>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;border-top:1px solid #1c1c2e;padding-top:12px;">
+      <h2>Saved Classes</h2>
+      <div id="classList" style="max-height:200px;overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="status-bar">
+  <div class="stat">Drills: <span class="stat-value" id="statDrills">0</span></div>
+  <div class="stat">Themes: <span class="stat-value" id="statThemes">0</span></div>
+  <div class="stat">Series: <span class="stat-value" id="statSeries">0</span></div>
+  <div class="stat">Template: <span class="stat-value" id="statTemplate">—</span></div>
+</div>
+
+<script>
+const API = 'http://localhost:8080/coaching';
+let themes = [], drills = [], templates = [], currentTheme = null, activeSegment = null;
+
+async function init() {
+  try {
+    const [t, d, tp, stats] = await Promise.all([
+      fetch(`${API}/themes`).then(r => r.json()),
+      fetch(`${API}/drills`).then(r => r.json()),
+      fetch(`${API}/templates`).then(r => r.json()),
+      fetch(`${API}/stats`).then(r => r.json())
+    ]);
+    themes = t; drills = d; templates = tp;
+    document.getElementById('statDrills').textContent = stats.drills || drills.length;
+    document.getElementById('statThemes').textContent = stats.themes || themes.length;
+    document.getElementById('statSeries').textContent = stats.series || 0;
+  } catch (e) {
+    // Fallback: load from embedded data if API not available
+    console.warn('API unavailable, using embedded data');
+    loadEmbeddedData();
+  }
+  renderLayers();
+  renderThemes();
+  renderTemplateSelect();
+  renderDrills();
+  loadTemplate();
+}
+
+function loadEmbeddedData() {
+  // Will be populated by the API route — for now use empty
+  themes = []; drills = []; templates = [];
+}
+
+function renderLayers() {
+  const layers = ['all', 'technique', 'concept', 'combo_family', 'style', 'physical'];
+  const labels = { all: 'All', technique: 'Technique', concept: 'Concept', combo_family: 'Combo', style: 'Style', physical: 'Physical' };
+  const el = document.getElementById('layerFilters');
+  el.innerHTML = layers.map(l =>
+    `<button class="layer-btn ${l === 'all' ? 'active' : ''}" onclick="filterThemes('${l}')">${labels[l]}</button>`
+  ).join('');
+}
+
+function filterThemes(layer) {
+  document.querySelectorAll('.layer-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderThemes(layer === 'all' ? null : layer);
+}
+
+function renderThemes(filterLayer) {
+  const filtered = filterLayer ? themes.filter(t => t.layer === filterLayer) : themes;
+  const el = document.getElementById('themeList');
+  el.innerHTML = filtered.map(t => `
+    <div class="theme-item ${currentTheme?.id === t.id ? 'selected' : ''}" onclick="selectTheme('${t.id}')">
+      <div class="name">${t.name}</div>
+      <div class="meta">${t.layer} · ${(JSON.parse(t.engines || '[]')).join('+')}</div>
+    </div>
+  `).join('');
+}
+
+function selectTheme(id) {
+  currentTheme = themes.find(t => t.id === id);
+  renderThemes();
+  document.getElementById('classTitle').value = currentTheme?.name || '';
+  suggestDrills();
+}
+
+function randomTheme() {
+  if (!themes.length) return;
+  const t = themes[Math.floor(Math.random() * themes.length)];
+  selectTheme(t.id);
+}
+
+function renderTemplateSelect() {
+  const sel = document.getElementById('templateSelect');
+  sel.innerHTML = templates.map(t =>
+    `<option value="${t.id}">${t.name}</option>`
+  ).join('');
+  if (!templates.length) {
+    sel.innerHTML = '<option>paul_8 (default)</option>';
+  }
+}
+
+function loadTemplate() {
+  const sel = document.getElementById('templateSelect');
+  const tmpl = templates.find(t => t.id === sel.value);
+  const segments = tmpl ? JSON.parse(tmpl.segments) : getDefaultSegments();
+  document.getElementById('statTemplate').textContent = tmpl?.name || 'Paul 8';
+  renderSegments(segments);
+}
+
+function getDefaultSegments() {
+  return [
+    { num: 1, name: 'Warm-Up', purpose: 'General movement', time_range: [5, 8] },
+    { num: 2, name: 'Coordination', purpose: 'Fun challenge', time_range: [5, 10] },
+    { num: 3, name: 'Agility', purpose: 'Line drills, reactions', time_range: [5, 8] },
+    { num: 4, name: 'Footwork', purpose: 'Boxing-specific', time_range: [5, 10] },
+    { num: 5, name: 'Bagwork', purpose: 'Technique on bags', time_range: [10, 15] },
+    { num: 6, name: 'Padwork', purpose: 'Partner pads', time_range: [8, 12] },
+    { num: 7, name: 'Partner Drill', purpose: 'Live work', time_range: [8, 12] },
+    { num: 8, name: 'Conditioning', purpose: 'Finisher', time_range: [5, 10] }
+  ];
+}
+
+function renderSegments(segments) {
+  currentSegments = segments;
+  const el = document.getElementById('segments');
+  el.innerHTML = segments.map((s, i) => `
+    <div class="segment ${activeSegment === i ? 'active' : ''}" onclick="selectSegment(${i})">
+      <div class="segment-header">
+        <div><span class="segment-num">${s.num}</span> <span class="segment-name">${s.name}</span></div>
+        <span class="segment-time">${s.time_range[0]}-${s.time_range[1]} min</span>
+      </div>
+      <div class="drill-slot" id="slot-${i}" onclick="event.stopPropagation(); selectSegment(${i})">
+        + drop drill here
+      </div>
+    </div>
+  `).join('');
+
+  renderEnergyBar(segments);
+}
+
+function renderEnergyBar(segments) {
+  const el = document.getElementById('energyBar');
+  const curve = segments.map((_, i) => {
+    const peak = segments.length * 0.6;
+    const dist = Math.abs(i - peak) / segments.length;
+    return dist < 0.2 ? 'high' : dist < 0.5 ? 'med' : 'low';
+  });
+  el.innerHTML = curve.map(c => `<div class="energy-pip ${c}"></div>`).join('');
+}
+
+function selectSegment(idx) {
+  activeSegment = idx;
+  document.querySelectorAll('.segment').forEach((s, i) => s.classList.toggle('active', i === idx));
+  if (currentTheme) suggestDrills();
+}
+
+function renderDrills(filtered) {
+  const list = filtered || drills;
+  const el = document.getElementById('drillList');
+  document.getElementById('drillCount').textContent = `${list.length} drills`;
+  el.innerHTML = list.map(d => {
+    const engines = JSON.parse(d.engines || '["body"]');
+    const engineTags = engines.map(e => `<span class="engine-tag engine-${e}">${e}</span>`).join('');
+    return `
+      <div class="drill-item" onclick="assignDrill('${d.id}')">
+        <div class="drill-title">${d.name}</div>
+        <div class="drill-info">
+          <span>${d.domain}</span>
+          <span>${d.mode || '—'}</span>
+          ${engineTags}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filterDrills() {
+  const q = document.getElementById('drillSearch').value.toLowerCase();
+  if (!q) { renderDrills(); return; }
+  const filtered = drills.filter(d =>
+    d.name.toLowerCase().includes(q) ||
+    d.domain.toLowerCase().includes(q) ||
+    (d.description || '').toLowerCase().includes(q)
+  );
+  renderDrills(filtered);
+}
+
+async function suggestDrills() {
+  if (!currentTheme) return;
+  const segName = activeSegment !== null ? currentSegments[activeSegment]?.name : '';
+  try {
+    const url = `${API}/suggest?theme_id=${currentTheme.id}&segment_name=${encodeURIComponent(segName || '')}&limit=12`;
+    const suggested = await fetch(url).then(r => r.json());
+    renderDrills(suggested);
+  } catch {
+    const themeEngines = JSON.parse(currentTheme.engines || '[]');
+    const sorted = [...drills].sort((a, b) => {
+      const aEngines = JSON.parse(a.engines || '[]');
+      const bEngines = JSON.parse(b.engines || '[]');
+      const aScore = aEngines.filter(e => themeEngines.includes(e)).length;
+      const bScore = bEngines.filter(e => themeEngines.includes(e)).length;
+      return bScore - aScore;
+    });
+    renderDrills(sorted);
+  }
+}
+
+let currentSegments = [];
+let segmentDrills = {};
+let editingClassId = null;
+
+function assignDrill(drillId) {
+  if (activeSegment === null) { activeSegment = 0; }
+  const drill = drills.find(d => d.id === drillId);
+  if (!drill) return;
+
+  segmentDrills[activeSegment] = drill;
+  const slot = document.getElementById(`slot-${activeSegment}`);
+  if (slot) {
+    const engines = JSON.parse(drill.engines || '["body"]');
+    slot.innerHTML = `
+      <div class="segment-drill">
+        <span class="drill-name">${drill.name}</span>
+        <span class="drill-domain">${drill.domain}</span>
+        <button class="btn" style="padding:2px 6px;font-size:9px;margin-left:auto;" onclick="event.stopPropagation();clearSlot(${activeSegment})">×</button>
+      </div>`;
+    slot.style.border = 'none';
+    slot.style.cursor = 'default';
+  }
+  // Auto-advance to next empty segment
+  const maxSeg = currentSegments.length - 1;
+  let next = activeSegment + 1;
+  while (next <= maxSeg && segmentDrills[next]) next++;
+  activeSegment = Math.min(next, maxSeg);
+  document.querySelectorAll('.segment').forEach((s, i) => s.classList.toggle('active', i === activeSegment));
+  suggestDrills();
+}
+
+function clearSlot(idx) {
+  delete segmentDrills[idx];
+  const slot = document.getElementById(`slot-${idx}`);
+  if (slot) {
+    slot.innerHTML = '+ drop drill here';
+    slot.style.border = '1px dashed #27272a';
+    slot.style.cursor = 'pointer';
+  }
+}
+
+async function saveClass() {
+  const title = document.getElementById('classTitle').value;
+  if (!title) return;
+
+  const segments = currentSegments.map((s, i) => ({
+    num: s.num,
+    name: s.name,
+    drill_id: segmentDrills[i]?.id || null,
+    notes: null,
+    duration: s.time_range ? Math.round((s.time_range[0] + s.time_range[1]) / 2) : null
+  }));
+
+  const body = {
+    title,
+    theme_id: currentTheme?.id || null,
+    template_id: document.getElementById('templateSelect').value || 'paul_8',
+    segments
+  };
+
+  try {
+    let resp;
+    if (editingClassId) {
+      resp = await fetch(`${API}/classes/${editingClassId}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+      });
+    } else {
+      resp = await fetch(`${API}/classes`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+      });
+    }
+    const data = await resp.json();
+    if (data.ok) {
+      editingClassId = data.id || editingClassId;
+      loadClassList();
+      showToast('Class saved');
+    }
+  } catch (e) { console.error(e); }
+}
+
+async function loadClassList() {
+  try {
+    const classes = await fetch(`${API}/classes`).then(r => r.json());
+    const el = document.getElementById('classList');
+    if (!el) return;
+    el.innerHTML = classes.map(c => `
+      <div class="theme-item" onclick="loadClass('${c.id}')">
+        <div class="name">${c.title}</div>
+        <div class="meta">${c.status} · ${c.taught_date || c.created}</div>
+      </div>
+    `).join('') || '<div style="color:#52525b;padding:8px;font-size:11px;">No saved classes yet</div>';
+  } catch {}
+}
+
+async function loadClass(id) {
+  try {
+    const cls = await fetch(`${API}/classes/${id}`).then(r => r.json());
+    editingClassId = cls.id;
+    document.getElementById('classTitle').value = cls.title;
+    if (cls.theme_id) {
+      currentTheme = themes.find(t => t.id === cls.theme_id);
+      renderThemes();
+    }
+    if (cls.template_id) {
+      document.getElementById('templateSelect').value = cls.template_id;
+    }
+    loadTemplate();
+
+    // Fill segments with saved drills
+    segmentDrills = {};
+    if (cls.segments) {
+      for (const seg of cls.segments) {
+        if (seg.drill_id) {
+          const drill = drills.find(d => d.id === seg.drill_id);
+          if (drill) {
+            const idx = seg.segment_num - 1;
+            segmentDrills[idx] = drill;
+            setTimeout(() => {
+              const slot = document.getElementById(`slot-${idx}`);
+              if (slot) {
+                slot.innerHTML = `
+                  <div class="segment-drill">
+                    <span class="drill-name">${drill.name}</span>
+                    <span class="drill-domain">${drill.domain}</span>
+                    <button class="btn" style="padding:2px 6px;font-size:9px;margin-left:auto;" onclick="event.stopPropagation();clearSlot(${idx})">×</button>
+                  </div>`;
+                slot.style.border = 'none';
+              }
+            }, 50);
+          }
+        }
+      }
+    }
+  } catch (e) { console.error(e); }
+}
+
+function newClass() {
+  editingClassId = null;
+  segmentDrills = {};
+  document.getElementById('classTitle').value = '';
+  currentTheme = null;
+  renderThemes();
+  loadTemplate();
+}
+
+async function markTaught() {
+  if (!editingClassId) return;
+  await fetch(`${API}/classes/${editingClassId}/taught`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: new Date().toISOString().split('T')[0] })
+  });
+  loadClassList();
+  showToast('Marked as taught');
+}
+
+async function quickAddDrill() {
+  const name = document.getElementById('qaName').value.trim();
+  if (!name) return;
+  const body = {
+    name,
+    domain: document.getElementById('qaDomain').value,
+    mode: document.getElementById('qaMode').value,
+    description: document.getElementById('qaDesc').value.trim() || null,
+    engines: ['body']
+  };
+  try {
+    const resp = await fetch(`${API}/drills`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      // Refresh drill list
+      drills = await fetch(`${API}/drills`).then(r => r.json());
+      renderDrills();
+      document.getElementById('qaName').value = '';
+      document.getElementById('qaDesc').value = '';
+      document.getElementById('statDrills').textContent = drills.length;
+      showToast(`Added: ${name}`);
+    }
+  } catch (e) { console.error(e); }
+}
+
+function launchTeach() {
+  if (!editingClassId) { showToast('Save class first'); return; }
+  window.open(`/teach?class=${editingClassId}`, '_blank');
+}
+
+function shareWorkout() {
+  if (!editingClassId) { showToast('Save class first'); return; }
+  const url = `${window.location.origin}/workout?class=${editingClassId}`;
+  navigator.clipboard.writeText(url).then(() => showToast('Workout link copied!')).catch(() => {
+    prompt('Share this link:', url);
+  });
+}
+
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:48px;left:50%;transform:translateX(-50%);background:#7c3aed;color:white;padding:6px 16px;border-radius:4px;font-size:11px;z-index:999;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+init();
+loadClassList();
+</script>
+</body>
+</html>

@@ -16,6 +16,9 @@ const VAULT    = path.join(HOME, 'cathedral-vault');
 
 app.use(express.json());
 
+// Mount Coaching OS write API
+require('./coaching-os/coaching-api.cjs')(app);
+
 // ── Neural Bus event emitter ─────────────────────────────────────────────────
 // Fire-and-forget POST to neural-bus on every request (non-blocking)
 const NEURAL_BUS_URL = 'http://127.0.0.1:8078/event';
@@ -1958,6 +1961,78 @@ app.post('/class-planner/archive', (req, res) => {
   for (const c of Object.values(plan.classes)) { c.notes = ''; }
   fs.writeFileSync(planPath, JSON.stringify(plan, null, 2));
   res.json({ ok: true, archived: history.length });
+});
+
+// ── Coaching OS (SQLite-backed class planner) ────────────────────────────────
+const COACHING_DB_PATH = path.join(process.env.HOME, 'nanoclaw', 'coaching-os', 'coaching.db');
+
+app.get('/coaching-os', (req, res) => {
+  const p = path.join(process.env.HOME, 'nanoclaw', 'coaching-os', 'coaching-planner.html');
+  if (!fs.existsSync(p)) return res.status(404).send('Not found');
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(p);
+});
+
+function getCoachingDb() {
+  const Database = require('better-sqlite3');
+  return new Database(COACHING_DB_PATH, { readonly: true });
+}
+
+app.get('/coaching/drills', (req, res) => {
+  try {
+    const db = getCoachingDb();
+    const drills = db.prepare('SELECT * FROM drills ORDER BY domain, name').all();
+    db.close();
+    res.json(drills);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/coaching/themes', (req, res) => {
+  try {
+    const db = getCoachingDb();
+    const themes = db.prepare('SELECT * FROM themes ORDER BY layer, name').all();
+    db.close();
+    res.json(themes);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/coaching/templates', (req, res) => {
+  try {
+    const db = getCoachingDb();
+    const templates = db.prepare('SELECT * FROM segment_templates').all();
+    db.close();
+    res.json(templates);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/coaching/series', (req, res) => {
+  try {
+    const db = getCoachingDb();
+    const series = db.prepare('SELECT * FROM series ORDER BY name').all();
+    db.close();
+    res.json(series);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/coaching/series/:id/graph', (req, res) => {
+  try {
+    const db = getCoachingDb();
+    const edges = db.prepare('SELECT * FROM series_edges WHERE from_id = ? OR to_id = ?').all(req.params.id, req.params.id);
+    db.close();
+    res.json(edges);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/coaching/stats', (req, res) => {
+  try {
+    const db = getCoachingDb();
+    const drills = db.prepare('SELECT count(*) as c FROM drills').get().c;
+    const themes = db.prepare('SELECT count(*) as c FROM themes').get().c;
+    const series = db.prepare('SELECT count(*) as c FROM series').get().c;
+    const classes = db.prepare('SELECT count(*) as c FROM classes').get().c;
+    db.close();
+    res.json({ drills, themes, series, classes });
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // ── Boxing loop — reverse link (CRM tap → outcome ledger) ────────────────────
@@ -6921,6 +6996,61 @@ app.get('/quarry/list', (req, res) => {
   } catch (e) {
     res.json({ ok: false, error: e.message });
   }
+});
+
+// ── WhatsApp Agent — AI-powered inbound messaging ───────────────────────────
+
+const waAgent = require('./whatsapp-agent.cjs');
+const waWebhook = waAgent.createWebhookHandler();
+
+app.get('/wa', (req, res) => res.sendFile(path.join(__dirname, 'whatsapp-dashboard.html')));
+app.get('/br-taster', (req, res) => res.sendFile(path.join(__dirname, 'br-taster.html')));
+
+app.get('/wa/dashboard', (req, res) => {
+  const data = waAgent.getDashboardData();
+  data.apiConfigured = !!(process.env.WHATSAPP_TOKEN && process.env.WHATSAPP_PHONE_ID);
+  res.json(data);
+});
+
+app.get('/wa/webhook', (req, res) => {
+  const result = waWebhook.verify(req.query);
+  res.status(result.status).send(result.body);
+});
+
+app.post('/wa/webhook', async (req, res) => {
+  const result = await waWebhook.receive(req.body);
+  res.status(result.status).json({ status: result.body });
+});
+
+app.post('/wa/toggle', (req, res) => {
+  const { agent } = req.body;
+  if (!agent) return res.json({ error: 'agent required' });
+  const result = waAgent.toggleAutoReply(agent);
+  res.json({ autoReply: result });
+});
+
+app.post('/wa/approve', async (req, res) => {
+  const { id, customReply } = req.body;
+  if (!id) return res.json({ error: 'id required' });
+  const result = await waAgent.approveMessage(id, customReply);
+  res.json(result);
+});
+
+app.post('/wa/skip', (req, res) => {
+  const { id } = req.body;
+  const queuePath = path.join(__dirname, 'comms-engine', 'outbox', 'wa-inbound-queue.json');
+  let queue = [];
+  try { queue = JSON.parse(fs.readFileSync(queuePath, 'utf-8')); } catch {}
+  const item = queue.find(q => q.id === id);
+  if (item) { item.status = 'skipped'; fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2)); }
+  res.json({ ok: true });
+});
+
+app.post('/wa/test', async (req, res) => {
+  const { message, phone } = req.body;
+  if (!message) return res.json({ error: 'message required' });
+  const result = await waAgent.handleIncoming(phone || '85200000000', message, 'test');
+  res.json(result);
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
