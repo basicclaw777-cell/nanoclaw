@@ -5,6 +5,14 @@
 
 _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 
+## Coaching OS
+- **Coaching Planner** · `~/nanoclaw/coaching-os/coaching-planner.html` · route `/coaching-os` · doc: BUILD_LOG 2026-07-13
+- **Teach Mode** · `~/nanoclaw/coaching-os/teach-mode.html` · route `/teach?class=ID` · doc: BUILD_LOG 2026-07-13
+- **Workout Card** · `~/nanoclaw/coaching-os/workout-card.html` · route `/workout?class=ID` · doc: BUILD_LOG 2026-07-13
+- **Coaching Intelligence** · `~/nanoclaw/coaching-os/intelligence.cjs` · route `/coaching-intel` · doc: BUILD_LOG 2026-07-13
+- **Series Graph** · `~/nanoclaw/coaching-os/series-graph.html` · route `/series-graph` · doc: BUILD_LOG 2026-07-13
+- **Coaching API** · `~/nanoclaw/coaching-os/coaching-api.cjs` · mounted by cath-bridge · 13 endpoints · doc: BUILD_LOG 2026-07-13
+
 ## Cymatic Choir
 - **Forge Mirror Log** · `~/cathedral-vault/02_Refined_Gold/cathedral/forge-mirror-log.md` · trigger: session-closer Step 0 (end of session) · read-in: the-builders-frequency.md (session start) · doc: the-cymatic-choir.md
 - **Choir Dispatch** · `~/nanoclaw/choir-dispatch.js` (ESM) · trigger: CLI `node choir-dispatch.js` or POST `/choir/dispatch` · reads voice logs + cath-state + emergence → hermes3 → chord.json · doc: the-cymatic-choir.md

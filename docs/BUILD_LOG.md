@@ -1,6 +1,20 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-13 — Coaching OS Full Build (Phases 0-5)
+
+SQLite-backed class planning & teaching system. Reconciles two existing drill banks
+into unified schema. 5 views, 13 API endpoints, 49 coaching cues.
+
+Views: /coaching-os (planner), /teach (live), /workout (student card),
+/coaching-intel (intelligence), /series-graph (curriculum network).
+
+DB: 60 drills, 22 themes (5 layers), 18 series (16 typed edges), 3 templates.
+Intelligence: freshness scoring, coverage gaps, layer balance, weekly summary.
+
+Files: ~/nanoclaw/coaching-os/ (11 files). Routes in cath-bridge.cjs.
+Integration: Layers 1-3 feeding existing coaching-engine.js (Layer 4).
+
 ## 2026-07-08 session 2 — Chatterbox TTS Narrations
 
 Fixed Chatterbox Perth watermarker (`apply_watermark` method name, not `apply`). Generated 4 Cathedral Episode narrations via sovereign pipeline: DeepSeek (script) → Chatterbox TTS (local, MPS ~24 it/s) → MP3 → Telegram.
