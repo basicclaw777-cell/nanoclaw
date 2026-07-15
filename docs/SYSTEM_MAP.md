@@ -46,6 +46,14 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 ## Agent improvement
 - **Emergence Signal Router** · `~/Cathedral/emergence/emergence-signal-router.js` · PM2 #168 cron 05:25 HKT · reads monitor/watcher/health/scores → generates corrective planner tasks · doc: BUILD_LOG 2026-06-19
 
+## Aether Universe Tools
+- **Resonance Engine** · `~/basic-reflex/aether-universe/resonance-engine.html` · route `/resonance-engine` · doc: BUILD_LOG 2026-07-15
+- **Thinking Companion** · `~/basic-reflex/aether-universe/thinking-companion.html` · route `/thinking-companion` · doc: BUILD_LOG 2026-07-15
+- **Mission Generator** · `~/nanoclaw/mission-generator.js` (ESM) · CLI `node mission-generator.js "topic" --band cadets` · doc: BUILD_LOG 2026-07-15
+
+## Gym Front Door
+- **Gym Lobby** · `~/basic-reflex/gym-lobby.html` · route `/gym` · doc: BUILD_LOG 2026-07-15
+
 ## Loops
 - **Loop System** · `~/Cathedral/loops/` · interactive Claude Code `/loop` + `--dangerously-skip-permissions` · 15 designs, 2 active (improvement-operator, cathy-proactive) · doc: loops/LOOP-CATALOG.md
 

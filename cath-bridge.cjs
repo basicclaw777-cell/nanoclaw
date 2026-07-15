@@ -159,6 +159,15 @@ app.get('/logan-pp-map', (req, res) => {
 app.get('/course-guide', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'basic-reflex', 'course-guide.html'));
 });
+app.get('/gym', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'gym-lobby.html'));
+});
+app.get('/thinking-companion', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'aether-universe', 'thinking-companion.html'));
+});
+app.get('/resonance-engine', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'aether-universe', 'resonance-engine.html'));
+});
 app.get('/33-cards', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', '33-card-grid.html'));
 });
@@ -7051,6 +7060,106 @@ app.post('/wa/test', async (req, res) => {
   if (!message) return res.json({ error: 'message required' });
   const result = await waAgent.handleIncoming(phone || '85200000000', message, 'test');
   res.json(result);
+});
+
+// ── Forensic Relay Engine ────────────────────────────────────────────────────
+
+app.get('/forensic-relay', (req, res) => {
+  res.sendFile(path.join(process.env.HOME, 'Cathedral', 'control-panel', 'forensic-relay.html'));
+});
+
+app.post('/api/forensic-relay', async (req, res) => {
+  try {
+    const { runForensicRelay } = await import('./forensic-relay-engine.js');
+    const { domain, context } = req.body;
+    if (!domain) return res.json({ error: 'domain required' });
+    const result = await runForensicRelay(domain, context || '');
+    res.json({
+      prospector: result.prospector,
+      ap_sequence: result.ap_sequence,
+      masterPrompt: result.masterPrompt,
+      files: result.files,
+    });
+  } catch (e) {
+    console.error('[forensic-relay] Error:', e);
+    res.json({ error: e.message });
+  }
+});
+
+app.get('/api/forensic-relay/history', (req, res) => {
+  const relayDir = path.join(__dirname, 'experiments', 'forensic-relay');
+  if (!fs.existsSync(relayDir)) return res.json({ scans: [] });
+  const files = fs.readdirSync(relayDir)
+    .filter(f => f.endsWith('-data.json'))
+    .sort()
+    .reverse();
+  const scans = files.map(f => {
+    try {
+      const data = JSON.parse(fs.readFileSync(path.join(relayDir, f), 'utf8'));
+      return { file: f, domain: data.domain, date: data.timestamp };
+    } catch { return null; }
+  }).filter(Boolean);
+  res.json({ scans });
+});
+
+app.get('/api/forensic-relay/scan', (req, res) => {
+  const { file } = req.query;
+  if (!file) return res.json({ error: 'file required' });
+  const relayDir = path.join(__dirname, 'experiments', 'forensic-relay');
+  const filePath = path.join(relayDir, file);
+  if (!fs.existsSync(filePath)) return res.json({ error: 'not found' });
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    res.json({
+      prospector: data.prospector,
+      ap_sequence: data.ap_sequence,
+      masterPrompt: data.ap_sequence?.master_prompt,
+    });
+  } catch (e) { res.json({ error: e.message }); }
+});
+
+// ── Extraction Cycle routes ──────────────────────────────────────────────────
+
+app.get('/extraction-cycle', (req, res) => {
+  res.sendFile(path.join(process.env.HOME, 'Cathedral', 'control-panel', 'extraction-cycle.html'));
+});
+
+app.post('/api/extraction-cycle', async (req, res) => {
+  try {
+    const { runExtractionCycle } = await import('./extraction-cycle.js');
+    const { domains, contexts } = req.body;
+    const result = await runExtractionCycle(domains || [], contexts || {});
+    res.json(result);
+  } catch (e) {
+    console.error('[extraction-cycle] Error:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/extraction-cycle/history', (req, res) => {
+  const cycleDir = path.join(__dirname, 'experiments', 'extraction-cycle');
+  if (!fs.existsSync(cycleDir)) return res.json([]);
+  const files = fs.readdirSync(cycleDir)
+    .filter(f => f.endsWith('.json'))
+    .sort().reverse()
+    .slice(0, 20);
+  res.json(files);
+});
+
+app.get('/api/extraction-cycle/report', (req, res) => {
+  const { file } = req.query;
+  if (!file) return res.json({ error: 'file required' });
+  const cycleDir = path.join(__dirname, 'experiments', 'extraction-cycle');
+  const reportFile = file.replace('.json', '-report.md');
+  const reportPath = path.join(cycleDir, reportFile);
+  if (fs.existsSync(reportPath)) {
+    return res.type('text/markdown').send(fs.readFileSync(reportPath, 'utf8'));
+  }
+  const dataPath = path.join(cycleDir, file);
+  if (!fs.existsSync(dataPath)) return res.json({ error: 'not found' });
+  try {
+    res.json(JSON.parse(fs.readFileSync(dataPath, 'utf8')));
+  } catch (e) { res.json({ error: e.message }); }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

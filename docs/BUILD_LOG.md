@@ -1,6 +1,28 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-15 — Six Operations + Gym Lobby + Idiot's Guide
+
+**Methods vaulted (2 new, Refined_Gold):**
+- The Six Operations (06_Methods/the-six-operations.md) — universal cognitive taxonomy: ORGANIZE, OBSERVE, OPTIMIZE, STRUCTURE, SEQUENCE, CONNECT. Born from Resonance Engine's Golden Rule. Adult companion to kids' Hexad. De Bono comparison included.
+- The Import Protocol (06_Methods/the-import-protocol.md) — AUDIT→GAP→CONSTRAINED PROMPT. Standing procedure for all frontier-model prompts.
+
+**Code built:**
+- Mission Generator (Loop 2): ~/nanoclaw/mission-generator.js (ESM, CLI + batch). Prompt: ~/nanoclaw/prompts/mission-generator.txt. hermes3 follows ~70%, production needs bigger model.
+- Gym Lobby: ~/basic-reflex/gym-lobby.html — mobile-first front door to 71 systems. 10 sections incl Social & Content.
+- Thinking Companion: ~/basic-reflex/aether-universe/thinking-companion.html — 4-screen app, 6 lenses, dual-lens support.
+- Resonance Engine HTML: ~/basic-reflex/aether-universe/resonance-engine.html — 2,885 lines, 58 tables, bright design.
+
+**Cath-bridge routes added:** /gym, /thinking-companion, /resonance-engine
+
+**Fable prompts written (3):** Content Calibration (Loop 3), Aether Pipeline (Loop 4), Idiot's Guide Series Bible (8 deliverables, merged ChatGPT comedy analysis).
+
+**Fable output received:** Coach Paul Session Engine (~/basic-reflex/coach-paul-session-engine.md, 1,038 lines, 6 deliverables). Flagged: coaching-engine.js Block 5 stale vs block-config.json.
+
+**Content:** Idiot's Guide series bible + 2 Episode 1 scripts (origin + gym story) in ~/basic-reflex/content/. Comedy architecture: status inversion under sincerity, "competence is kindness" AI philosophy, Jeeves & Wooster tradition.
+
+**Key finding:** The Delivery Gap — 71 built systems, 0 used daily from gym (localhost-only). Fix = Tailscale + Gym Lobby. Diagnosed via expert roleplay interview.
+
 ## 2026-07-13 — Coaching OS Full Build (Phases 0-5)
 
 SQLite-backed class planning & teaching system. Reconciles two existing drill banks
