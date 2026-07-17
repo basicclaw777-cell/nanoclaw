@@ -6992,6 +6992,74 @@ app.get('/quarry', (req, res) => {
   res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'quarry-mobile.html'));
 });
 
+// ── The Court — Mobile agent chat (DeepSeek-backed) ─────────────────────────
+
+app.get('/court', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'court-mobile.html'));
+});
+
+app.post('/court/chat', async (req, res) => {
+  const { agent_id, message, history } = req.body;
+  if (!agent_id || !message) return res.status(400).json({ error: 'agent_id and message required' });
+
+  const agents = loadAllAgents();
+  const agent = agents.find(a => a.id === agent_id);
+  if (!agent) return res.status(404).json({ error: `Agent not found: ${agent_id}` });
+
+  try {
+    const vaultContext = await getVaultContext(message);
+
+    const systemPrompt = agent.systemPrompt +
+      '\n\n---\n\n## WHO YOU ARE SPEAKING TO\n' + paulKernel +
+      vaultContext +
+      '\n\nKeep responses concise — 2-4 paragraphs max unless asked for detail.';
+
+    const messages = [{ role: 'system', content: systemPrompt }];
+    if (history) {
+      for (const h of history.slice(-10)) {
+        messages.push({ role: h.role, content: h.content });
+      }
+    }
+    messages.push({ role: 'user', content: message });
+
+    const deepseekKey = process.env.DEEPSEEK_API_KEY;
+    if (deepseekKey) {
+      const dsRes = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${deepseekKey}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages,
+          temperature: 0.7,
+          max_tokens: 1000
+        })
+      });
+      const data = await dsRes.json();
+      const response = data.choices?.[0]?.message?.content || 'No response';
+      return res.json({ agent: agent.name, response });
+    }
+
+    // Fallback to Ollama if no DeepSeek key
+    const ollamaRes = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'hermes3',
+        messages,
+        stream: false,
+        options: { temperature: 0.7, num_predict: 500 }
+      })
+    });
+    const data = await ollamaRes.json();
+    res.json({ agent: agent.name, response: data.message?.content || 'No response' });
+  } catch(e) {
+    res.status(500).json({ error: `Chat error: ${e.message}` });
+  }
+});
+
 app.get('/quarry/list', (req, res) => {
   try {
     const files = fs.readdirSync(QUARRY_DIR)

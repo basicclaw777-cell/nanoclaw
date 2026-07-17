@@ -1,6 +1,31 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-17 — Phone Bridge + Mobile Court + Gym Eyes Pipeline
+
+**Phone Bridge:**
+- Quarry upload endpoint: POST /quarry/upload (multer, 20 files, 500MB) in cath-bridge.cjs
+- Quarry mobile page: ~/Cathedral/control-panel/quarry-mobile.html (iOS PWA, black/gold)
+- Tailscale reconnected (iPhone offline 22 days → both green)
+- Pipeline proven: phone photo/video → quarry → Gym Eyes → Telegram
+
+**Gym Eyes from Phone:**
+- Ran detector.py on phone-dropped video. Fighter 1: 26 punches (J:6 C:7 H:13), Fighter 2: 4 punches.
+- Annotated video 146MB → 22MB (ffmpeg crf 28) → Telegram delivered.
+
+**Mobile Court (NEW):**
+- ~/Cathedral/control-panel/court-mobile.html — mobile-first agent chat
+- Route: /court, endpoint: POST /court/chat (DeepSeek primary, Ollama fallback)
+- 30+ agents (council, sages, skins), vault context injected, conversation history
+- Forge sage added: ~/nanoclaw/sages/forge.json (thinking partner proxy)
+
+**Fable Use Cases (completed from prior context):**
+- Relay Thread Seeds: ~/Cathedral/relay-seeds.js (~350 lines CJS, 6 tension types)
+- Logan Story Engine: ~/Cathedral/logan-story-engine.js (~550 lines CJS, 14 seeds, 9 chars)
+- Mind map: ~/Cathedral/control-panel/fable-use-cases.html
+
+**Phone Home Screen Doors:** /env, /gym, /quarry, /court, /forensic-relay, /thinking-companion, /resonance-engine
+
 ## 2026-07-15 — Six Operations + Gym Lobby + Idiot's Guide
 
 **Methods vaulted (2 new, Refined_Gold):**
@@ -3304,3 +3329,21 @@ Training itself blocked until M5 Mac Studio (~Oct 2026) — trainModel() stub do
 **The coaching model (Paul's 3D glasses metaphor):** Tool without coaching = decoration. Each domain guide has: WHEN to put the glasses on (trigger conditions), WHAT you'll see, TRY THIS (clickable example), and a REAL EXAMPLE from the corpus. The key: "put the glasses on when you see numbers that look arbitrary — they might be positions on a base-60 grid."
 
 **Structural insight:** Base-10 is a COUNTING system (how many). Base-60 is a DIVIDING system (what proportion). Every ratio-dependent domain (music, architecture, astronomy, medicine, acoustics, geometry) works structurally better in base-60. We kept base-60 for time and angles because those domains broke when converted. Everything else got silently degraded.
+
+### 2026-07-16 — Beacon: SEO Architecture + 39K-Page Static Site
+
+**Origin:** Paul asked "what if we had an expert SEO" → thought experiment → "shouldn't we build one?" → 4-model architecture synthesis → build.
+
+**What was built:**
+1. **4-model SEO architecture** — Fable 5 primary, ChatGPT/Gemini/DeepSeek compared. Key divergence found: YMYL trap (medical schema). Synthesis: `~/Cathedral/beacon/ARCHITECTURE.md`
+2. **Static site generator** — `beacon/generate.js`, ~500 lines CJS. Reads JSONL tablet data + cross-corpus JSON → 39,550 pure static HTML pages (<10KB each)
+3. **DeepSeek title generation** — `beacon/generate-titles.js`. 23,875 descriptive titles for tablets. Resumable, checkpoints to disk.
+4. **Plant/ailment normalization** — `beacon/normalize-plants.js`. 778→600 canonical plants, 300→255 canonical ailments.
+5. **Entity pages** — 598 plant pages + 255 ailment pages, cross-linked via entity chips
+6. **OpenArt Beat 3** — "Hum Listens" (GPT Image 2, 9:16, style ref from book-02-hum.jpg)
+
+**Key architectural decisions:**
+- History, not health (avoid MedicalEntity schema — YMYL kill zone)
+- Graph-canonical: knowledge graph is the product, pages are views (ChatGPT insight)
+- Gated tranche indexation, GSC metrics → bandit brain (Fable insight)
+- Single domain, subdirectory silos (all 4 models agreed)

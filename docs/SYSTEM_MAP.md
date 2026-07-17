@@ -172,3 +172,16 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 
 ## Forge maintenance
 - **Forge model pin** · `~/.claude/settings.json` `"model": "claude-opus-4-6"` · trigger: every Claude Code launch · pre-fable model (4.8=fable flinch); terminal Forge build-only per soul file · doc: BUILD_LOG 2026-06-22 + forge-regression-diagnostic.md
+
+## SEO / Public deployment
+- **Beacon Architecture** · `~/Cathedral/beacon/ARCHITECTURE.md` · 4-model SEO synthesis · doc: BUILD_LOG 2026-07-16
+- **Beacon Generator** · `~/Cathedral/beacon/generate.js` · `node generate.js` · 39,550-page static site from tablet corpus · doc: BUILD_LOG 2026-07-16
+- **Beacon Title Gen** · `~/Cathedral/beacon/generate-titles.js` · `node generate-titles.js` · DeepSeek batch, resumable · doc: BUILD_LOG 2026-07-16
+- **Beacon Normalizer** · `~/Cathedral/beacon/normalize-plants.js` · `node normalize-plants.js` · plant/ailment canonical mapping · doc: BUILD_LOG 2026-07-16
+- **Beacon Output** · `~/Cathedral/beacon/dist/` · 39,550 HTML pages · `python3 -m http.server 8877` to preview · doc: BUILD_LOG 2026-07-16
+- **Court Mobile** · `~/Cathedral/control-panel/court-mobile.html` · route `/court` · Mobile agent chat, DeepSeek, 30+ agents · doc: BUILD_LOG 2026-07-17
+- **Quarry Mobile** · `~/Cathedral/control-panel/quarry-mobile.html` · route `/quarry` · Phone file upload to Cathedral · doc: BUILD_LOG 2026-07-17
+- **Relay Thread Seeds** · `~/Cathedral/relay-seeds.js` · CLI `--generate/--from-vault/--launch` · Provocation architect for relay conditions · doc: BUILD_LOG 2026-07-17
+- **Logan Story Engine** · `~/Cathedral/logan-story-engine.js` · CLI `--scene/--arc/--moment/--diagnostic` · Narrative generator from Character Bible · doc: BUILD_LOG 2026-07-17
+- **Fable Use Cases Map** · `~/Cathedral/control-panel/fable-use-cases.html` · static · Interactive SVG mind map of 6 Fable use cases · doc: BUILD_LOG 2026-07-17
+- **Forge Sage** · `~/nanoclaw/sages/forge.json` · `/court` agent picker · Forge conversational proxy for Court · doc: BUILD_LOG 2026-07-17
