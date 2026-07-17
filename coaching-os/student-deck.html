@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Student Deck — Basic Reflex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0a;
+  --card-black: #0d0d0d;
+  --gold: #f7b408;
+  --gold-dim: rgba(247, 180, 8, 0.55);
+  --gold-faint: rgba(247, 180, 8, 0.22);
+  --blue: #3b82f6;
+  --red: #ef4444;
+  --white: #ffffff;
+  --grey: rgba(255, 255, 255, 0.55);
+  --grid-line: rgba(255, 255, 255, 0.07);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: none;
+  touch-action: pan-x;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Grid overlay pattern ─────────────────────────────────── */
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Corner ticks ─────────────────────────────────────────── */
+.corner-ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.corner-ticks::before,
+.corner-ticks::after,
+.corner-ticks .bl::before,
+.corner-ticks .br::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(255,255,255,0.28);
+  border-style: solid;
+}
+.corner-ticks::before {
+  top: 16px; left: 16px;
+  border-width: 1px 0 0 1px;
+}
+.corner-ticks::after {
+  top: 16px; right: 16px;
+  border-width: 1px 1px 0 0;
+}
+.corner-ticks .bl::before {
+  bottom: 16px; left: 16px;
+  border-width: 0 0 1px 1px;
+}
+.corner-ticks .br::before {
+  bottom: 16px; right: 16px;
+  border-width: 0 1px 1px 0;
+}
+
+/* ── Slide container ──────────────────────────────────────── */
+.deck-viewport {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.deck-track {
+  display: flex;
+  height: calc(100vh - 40px);
+  transition: transform 300ms ease-out;
+  will-change: transform;
+}
+
+.slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.slide-inner {
+  position: relative;
+  min-height: 100%;
+  padding: 48px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  background: var(--card-black);
+}
+
+/* ── Typography ───────────────────────────────────────────── */
+.display {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(38px, 5.5vw, 76px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+.micro {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.body-text {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+}
+
+/* ── Title slide ──────────────────────────────────────────── */
+.slide-title .slide-inner {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.brand-line {
+  font-family: 'Anton', sans-serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.class-title {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(42px, 7vw, 86px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: var(--white);
+  max-width: 90%;
+}
+
+.class-meta {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--grey);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.class-meta .sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--grey);
+  display: inline-block;
+}
+
+.coach-name {
+  font-family: 'Anton', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  margin-top: 12px;
+}
+
+/* ── Round slide ──────────────────────────────────────────── */
+.round-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 0;
+}
+
+.round-number {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(90px, 15vw, 140px);
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.drill-name {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(32px, 5vw, 48px);
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
+}
+
+.drill-desc {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: clamp(15px, 2.2vw, 18px);
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+  max-width: 680px;
+  flex: 1;
+}
+
+.drill-notes {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.45);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.level-box {
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+}
+
+.level-box .level-tag {
+  font-family: 'Anton', sans-serif;
+  font-size: 13px;
+  color: var(--gold);
+  background: var(--black);
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.level-box .level-text {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.75);
+}
+
+/* Duration badge */
+.duration-badge {
+  font-family: 'Anton', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  background: var(--black);
+  border: 1px solid var(--gold-faint);
+  padding: 6px 16px;
+  border-radius: 100px;
+  display: inline-block;
+  margin-top: 16px;
+}
+
+/* Engine bar */
+.engine-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+.engine-bar.body { background: var(--gold); }
+.engine-bar.mind { background: var(--blue); }
+.engine-bar.eq   { background: var(--red); }
+.engine-bar.mixed {
+  background: linear-gradient(90deg, var(--gold) 0%, var(--blue) 50%, var(--red) 100%);
+}
+
+/* Timer button */
+.timer-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-dim);
+  background: transparent;
+  color: var(--gold);
+  font-family: 'Anton', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms ease-out;
+  z-index: 5;
+  -webkit-tap-highlight-color: transparent;
+}
+.timer-btn:hover, .timer-btn:active {
+  border-color: var(--gold);
+  box-shadow: 0 0 8px rgba(247,180,8,0.8);
+}
+
+/* Timer overlay */
+.timer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,10,0.92);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.timer-overlay.active { display: flex; }
+
+.timer-display {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(80px, 18vw, 160px);
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  transition: opacity 200ms;
+}
+
+.timer-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--grey);
+  margin-bottom: 8px;
+}
+
+.timer-cancel {
+  margin-top: 32px;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey);
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 10px 28px;
+  border-radius: 100px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.timer-cancel:active { background: rgba(255,255,255,0.05); }
+
+.timer-done {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(60px, 14vw, 120px);
+  color: var(--gold);
+  animation: timerFlash 0.4s ease-in-out 3;
+}
+
+@keyframes timerFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Completion slide ─────────────────────────────────────── */
+.slide-complete .slide-inner {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.complete-title {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(38px, 6vw, 72px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 1.05;
+}
+
+.complete-summary {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--grey);
+}
+
+.complete-motto {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 8px;
+}
+
+.complete-coach {
+  font-family: 'Anton', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  margin-top: 20px;
+}
+
+/* ── Landing slide (no class ID) ──────────────────────────── */
+.class-list {
+  list-style: none;
+  margin-top: 20px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.class-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.class-list-item:hover, .class-list-item:active {
+  border-color: var(--gold-faint);
+  background: rgba(247,180,8,0.04);
+}
+
+.class-list-item .cli-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+
+.class-list-item .cli-meta {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--grey);
+}
+
+.instructions {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--grey);
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* ── Error slide ──────────────────────────────────────────── */
+.error-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 36px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+}
+
+.error-detail {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--grey);
+  line-height: 1.6;
+  text-align: center;
+  max-width: 400px;
+}
+
+/* ── Dot navigation ───────────────────────────────────────── */
+.dot-nav {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--black);
+  position: relative;
+  z-index: 10;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--grey);
+  opacity: 0.3;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.dot.active {
+  background: var(--gold);
+  opacity: 1;
+  box-shadow: 0 0 6px rgba(247,180,8,0.5);
+}
+
+.slide-counter {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.3);
+  margin-left: 12px;
+}
+
+/* ── Hideable nav bar ─────────────────────────────────────── */
+.nav-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  color: var(--grey);
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 200ms;
+}
+.nav-toggle:hover { background: rgba(255,255,255,0.1); }
+
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10,10,10,0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 16px;
+  display: none;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  z-index: 190;
+}
+.nav-bar.visible { display: flex; }
+
+.nav-bar a {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 150ms;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-bar a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+.nav-bar a.current { color: var(--gold); }
+
+/* ── Loading state ────────────────────────────────────────── */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--grey);
+}
+
+.loading-state .spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--gold-faint);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .slide-inner { padding: 40px 24px 32px; }
+  .round-number { font-size: clamp(80px, 22vw, 120px); }
+}
+
+@media (min-width: 1024px) {
+  .slide-inner { padding: 60px 80px 48px; }
+  .drill-desc { font-size: 20px; }
+}
+
+@media (min-width: 1400px) {
+  .slide-inner { padding: 80px 120px 60px; }
+}
+</style>
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" onclick="toggleNav()">&#x2026;</button>
+<nav class="nav-bar" id="navBar">
+  <a href="/coaching-os">Builder</a>
+  <a href="/student-deck" class="current">Deck</a>
+  <a href="/coaching-intel">Intel</a>
+  <a href="/coaching-os">Planner</a>
+</nav>
+
+<div id="app">
+  <div class="loading-state">
+    <div class="spinner"></div>
+    Loading...
+  </div>
+</div>
+
+<!-- Timer overlay -->
+<div class="timer-overlay" id="timerOverlay">
+  <div class="timer-label">ROUND TIMER</div>
+  <div class="timer-display" id="timerDisplay">0:00</div>
+  <button class="timer-cancel" onclick="cancelTimer()">TAP TO CANCEL</button>
+</div>
+
+<script>
+const API = 'http://localhost:8080/coaching';
+
+// ── State ────────────────────────────────────────────────────────
+let currentSlide = 0;
+let totalSlides = 0;
+let timerInterval = null;
+let timerSeconds = 0;
+let touchStartX = 0;
+let touchStartY = 0;
+let touchDeltaX = 0;
+let isDragging = false;
+let navVisible = false;
+
+// ── Init ─────────────────────────────────────────────────────────
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const classId = params.get('class');
+  const level = params.get('level') || 'intermediate';
+
+  if (!classId) {
+    await showLanding();
+    return;
+  }
+
+  try {
+    const [clsRes, drillsRes] = await Promise.all([
+      fetch(`${API}/classes/${classId}`),
+      fetch(`${API}/drills`)
+    ]);
+
+    if (!clsRes.ok) {
+      showError(classId, clsRes.status === 404 ? 'Class not found' : 'Server error');
+      return;
+    }
+
+    const cls = await clsRes.json();
+    const drills = await drillsRes.json();
+
+    const drillMap = {};
+    for (const d of drills) drillMap[d.id] = d;
+
+    renderDeck(cls, drillMap, level);
+  } catch (e) {
+    showError(classId, 'Cannot reach the API. Make sure the server is running.');
+  }
+}
+
+// ── Landing (no class ID) ────────────────────────────────────────
+async function showLanding() {
+  let classesHTML = '';
+  try {
+    const res = await fetch(`${API}/classes`);
+    const classes = await res.json();
+
+    if (classes.length) {
+      classesHTML = '<ul class="class-list">';
+      for (const c of classes) {
+        const statusLabel = c.status === 'taught' ? 'Taught' : c.status === 'planned' ? 'Planned' : 'Draft';
+        classesHTML += `
+          <a class="class-list-item" href="?class=${c.id}">
+            <div>
+              <div class="cli-title">${esc(c.title)}</div>
+              <div class="cli-meta">${statusLabel}${c.taught_date ? ' &middot; ' + c.taught_date : ''}</div>
+            </div>
+            <div style="color:var(--gold);font-family:'Anton';font-size:20px;">&rsaquo;</div>
+          </a>
+        `;
+      }
+      classesHTML += '</ul>';
+    }
+  } catch (_) {}
+
+  document.getElementById('app').innerHTML = `
+    <div class="slide" style="height:100vh;">
+      <div class="slide-inner" style="justify-content:center;align-items:center;text-align:center;">
+        <div class="grid-bg"></div>
+        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
+        <div class="brand-line" style="position:relative;z-index:2;">BASIC REFLEX</div>
+        <div class="display" style="color:var(--white);position:relative;z-index:2;margin-bottom:8px;">STUDENT DECK</div>
+        <p class="instructions" style="position:relative;z-index:2;">
+          Select a class below, or add <strong style="color:var(--gold);">?class=CLASS_ID</strong> to the URL.
+          <br>Optionally add <strong style="color:var(--gold);">&level=beginner</strong> or <strong style="color:var(--gold);">advanced</strong>.
+        </p>
+        <div style="position:relative;z-index:2;width:100%;display:flex;justify-content:center;">
+          ${classesHTML || '<p class="instructions" style="margin-top:12px;">No classes found.</p>'}
+        </div>
+        <div class="coach-name" style="position:relative;z-index:2;margin-top:24px;">Coach Paul</div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Error state ──────────────────────────────────────────────────
+function showError(classId, message) {
+  document.getElementById('app').innerHTML = `
+    <div class="slide" style="height:100vh;">
+      <div class="slide-inner" style="justify-content:center;align-items:center;text-align:center;">
+        <div class="grid-bg"></div>
+        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
+        <div class="error-title" style="position:relative;z-index:2;">ERROR</div>
+        <div class="error-detail" style="position:relative;z-index:2;">
+          ${esc(message)}
+          <br><br>
+          Class ID: <strong style="color:var(--white);">${esc(classId)}</strong>
+          <br><br>
+          Check the URL and try again.
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Render deck ──────────────────────────────────────────────────
+function renderDeck(cls, drillMap, level) {
+  const segments = (cls.segments || []).filter(s => s.drill_id);
+  const totalTime = segments.reduce((sum, s) => sum + (s.duration_minutes || 3), 0);
+
+  let slidesHTML = '';
+
+  // ── Title slide
+  slidesHTML += `
+    <div class="slide slide-title">
+      <div class="slide-inner">
+        <div class="grid-bg"></div>
+        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
+        <div class="brand-line">BASIC REFLEX</div>
+        <div class="class-title">${esc(cls.title)}</div>
+        <div class="class-meta">
+          <span>${segments.length} rounds</span>
+          <span class="sep"></span>
+          <span>~${totalTime} min</span>
+          <span class="sep"></span>
+          <span>${capitalize(level)}</span>
+        </div>
+        <div class="coach-name">Coach Paul</div>
+      </div>
+    </div>
+  `;
+
+  // ── Round slides
+  segments.forEach((seg, i) => {
+    const drill = drillMap[seg.drill_id];
+    if (!drill) return;
+
+    const time = seg.duration_minutes || 3;
+    const engines = safeJSON(drill.engines, ['body']);
+    const levels = safeJSON(drill.levels, null);
+    const levelText = levels ? (levels[level] || levels.intermediate || '') : '';
+    const primaryEngine = engines[0] || 'body';
+    const engineClass = engines.length > 1 ? 'mixed' : primaryEngine;
+    const drillNotes = seg.drill_notes || '';
+
+    slidesHTML += `
+      <div class="slide slide-round">
+        <div class="slide-inner">
+          <div class="grid-bg"></div>
+          <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
+          <button class="timer-btn" onclick="startTimer(${time * 60}, event)" title="Start ${time} min timer">&#9654;</button>
+          <div class="round-label">ROUND</div>
+          <div class="round-number">${i + 1}</div>
+          <div class="drill-name">${esc(drill.name)}</div>
+          <div class="drill-desc">
+            ${esc(drill.description || seg.segment_name || '')}
+            ${drillNotes ? `<div class="drill-notes">${esc(drillNotes)}</div>` : ''}
+          </div>
+          ${levelText ? `
+            <div class="level-box">
+              <div class="level-tag">${capitalize(level)}</div>
+              <div class="level-text">${esc(levelText)}</div>
+            </div>
+          ` : ''}
+          <div class="duration-badge">${time} MIN</div>
+          <div class="engine-bar ${engineClass}"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  // ── Completion slide
+  slidesHTML += `
+    <div class="slide slide-complete">
+      <div class="slide-inner">
+        <div class="grid-bg"></div>
+        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
+        <div class="complete-title">SESSION COMPLETE</div>
+        <div class="complete-summary">${segments.length} rounds &middot; ${totalTime} minutes</div>
+        <div class="complete-motto">Train smart. Move well.</div>
+        <div class="complete-coach">Coach Paul &middot; Basic Reflex Boxing</div>
+      </div>
+    </div>
+  `;
+
+  totalSlides = segments.length + 2; // title + rounds + completion
+
+  // ── Build dot nav
+  let dotsHTML = '';
+  for (let i = 0; i < totalSlides; i++) {
+    dotsHTML += `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`;
+  }
+
+  document.getElementById('app').innerHTML = `
+    <div class="deck-viewport" id="viewport">
+      <div class="deck-track" id="track">
+        ${slidesHTML}
+      </div>
+    </div>
+    <div class="dot-nav" id="dotNav">
+      ${dotsHTML}
+      <span class="slide-counter" id="slideCounter">1 / ${totalSlides}</span>
+    </div>
+  `;
+
+  document.title = `${cls.title} — Basic Reflex`;
+  setupNavigation();
+}
+
+// ── Navigation ───────────────────────────────────────────────────
+function setupNavigation() {
+  const viewport = document.getElementById('viewport');
+  if (!viewport) return;
+
+  // Touch events
+  viewport.addEventListener('touchstart', onTouchStart, { passive: true });
+  viewport.addEventListener('touchmove', onTouchMove, { passive: false });
+  viewport.addEventListener('touchend', onTouchEnd, { passive: true });
+
+  // Keyboard
+  document.addEventListener('keydown', onKeyDown);
+
+  // Click zones
+  viewport.addEventListener('click', onClickNav);
+}
+
+function onTouchStart(e) {
+  if (document.getElementById('timerOverlay').classList.contains('active')) return;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  touchDeltaX = 0;
+  isDragging = false;
+
+  const track = document.getElementById('track');
+  if (track) track.style.transition = 'none';
+}
+
+function onTouchMove(e) {
+  if (document.getElementById('timerOverlay').classList.contains('active')) return;
+  const dx = e.touches[0].clientX - touchStartX;
+  const dy = e.touches[0].clientY - touchStartY;
+
+  // If vertical scroll dominates, let it through
+  if (!isDragging && Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 10) return;
+
+  if (Math.abs(dx) > 10) {
+    isDragging = true;
+    e.preventDefault();
+  }
+
+  if (isDragging) {
+    touchDeltaX = dx;
+    const track = document.getElementById('track');
+    const base = -currentSlide * 100;
+    const pct = (dx / window.innerWidth) * 100;
+    track.style.transform = `translateX(${base + pct}%)`;
+  }
+}
+
+function onTouchEnd() {
+  if (!isDragging) return;
+  isDragging = false;
+
+  const track = document.getElementById('track');
+  track.style.transition = 'transform 300ms ease-out';
+
+  const threshold = window.innerWidth * 0.2;
+  if (touchDeltaX < -threshold && currentSlide < totalSlides - 1) {
+    goToSlide(currentSlide + 1);
+  } else if (touchDeltaX > threshold && currentSlide > 0) {
+    goToSlide(currentSlide - 1);
+  } else {
+    goToSlide(currentSlide); // snap back
+  }
+}
+
+function onKeyDown(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    nextSlide();
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    prevSlide();
+  } else if (e.key === 'Escape') {
+    cancelTimer();
+  }
+}
+
+function onClickNav(e) {
+  // Don't navigate if clicking a button
+  if (e.target.closest('button')) return;
+  if (document.getElementById('timerOverlay').classList.contains('active')) return;
+
+  const x = e.clientX;
+  const w = window.innerWidth;
+  if (x < w * 0.35) {
+    prevSlide();
+  } else if (x > w * 0.65) {
+    nextSlide();
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+}
+
+function prevSlide() {
+  if (currentSlide > 0) goToSlide(currentSlide - 1);
+}
+
+function goToSlide(n) {
+  currentSlide = n;
+  const track = document.getElementById('track');
+  if (track) {
+    track.style.transition = 'transform 300ms ease-out';
+    track.style.transform = `translateX(-${n * 100}%)`;
+  }
+
+  // Update dots
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach((d, i) => d.classList.toggle('active', i === n));
+
+  // Update counter
+  const counter = document.getElementById('slideCounter');
+  if (counter) counter.textContent = `${n + 1} / ${totalSlides}`;
+}
+
+// ── Timer ────────────────────────────────────────────────────────
+function startTimer(seconds, e) {
+  if (e) e.stopPropagation();
+  timerSeconds = seconds;
+
+  const overlay = document.getElementById('timerOverlay');
+  const display = document.getElementById('timerDisplay');
+
+  overlay.classList.add('active');
+  updateTimerDisplay();
+
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    if (timerSeconds <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerSeconds = 0;
+
+      // Show TIME flash
+      display.innerHTML = '<div class="timer-done">TIME</div>';
+
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        display.textContent = '0:00';
+      }, 3000);
+      return;
+    }
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const display = document.getElementById('timerDisplay');
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  display.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function cancelTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  const overlay = document.getElementById('timerOverlay');
+  overlay.classList.remove('active');
+}
+
+// ── Nav bar toggle ───────────────────────────────────────────────
+function toggleNav() {
+  navVisible = !navVisible;
+  document.getElementById('navBar').classList.toggle('visible', navVisible);
+}
+
+// ── Helpers ──────────────────────────────────────────────────────
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function capitalize(s) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+}
+
+function safeJSON(str, fallback) {
+  if (!str) return fallback;
+  if (typeof str === 'object') return str;
+  try { return JSON.parse(str); }
+  catch { return fallback; }
+}
+
+// ── Boot ─────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

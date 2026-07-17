@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coaching OS — Drill Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0a;
+  --card-black: #0d0d0d;
+  --gold: #f7b408;
+  --gold-dim: rgba(247, 180, 8, 0.55);
+  --gold-faint: rgba(247, 180, 8, 0.22);
+  --blue: #3b82f6;
+  --red: #ef4444;
+  --white: #ffffff;
+  --grey: rgba(255, 255, 255, 0.55);
+  --grid-line: rgba(255, 255, 255, 0.07);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ── NAV BAR ─────────────────────────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 40px;
+  background: var(--black);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 28px;
+}
+.nav-brand {
+  font-family: 'Anton', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 20px; }
+.nav-links a {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--white);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 150ms;
+}
+.nav-links a:hover { opacity: 1; }
+.nav-links a.active { color: var(--gold); opacity: 1; }
+
+/* ── FILTER BAR ──────────────────────────────────────────── */
+.filter-bar {
+  position: sticky;
+  top: 40px;
+  z-index: 90;
+  background: var(--black);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 24px 12px;
+}
+.search-row {
+  margin-bottom: 10px;
+}
+.search-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 10px 14px 10px 38px;
+  color: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 200ms;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='rgba(255,255,255,0.35)' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cline x1='11' y1='11' x2='15' y2='15'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 12px center;
+}
+.search-input:focus { border-color: var(--gold); }
+.search-input::placeholder { color: rgba(255,255,255,0.28); }
+
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.filter-section:last-child { margin-bottom: 0; }
+
+.filter-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-right: 4px;
+  position: relative;
+  padding-right: 14px;
+}
+.filter-label::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 1px;
+  height: 12px;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.15);
+}
+
+.pill {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 5px 12px 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  transition: all 150ms;
+  text-transform: capitalize;
+}
+.pill:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+.pill.active {
+  background: var(--gold-faint);
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+.pill-engine-body.active { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.5); color: #10b981; }
+.pill-engine-mind.active { background: rgba(129,140,248,0.15); border-color: rgba(129,140,248,0.5); color: #818cf8; }
+.pill-engine-eq.active { background: rgba(251,146,60,0.15); border-color: rgba(251,146,60,0.5); color: #fb923c; }
+
+.filter-select {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 5px 10px 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--black);
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+}
+.filter-select:focus { border-color: var(--gold); }
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.active-filter-pill {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px 3px;
+  border-radius: 4px;
+  background: var(--gold);
+  color: var(--black);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: opacity 150ms;
+}
+.active-filter-pill:hover { opacity: 0.8; }
+.active-filter-pill .x { font-size: 12px; line-height: 1; }
+
+.results-count {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ── MASONRY GRID ────────────────────────────────────────── */
+.masonry-wrap {
+  padding: 20px 24px 100px;
+}
+.masonry {
+  columns: 3;
+  column-gap: 16px;
+}
+@media (max-width: 1100px) { .masonry { columns: 2; } }
+@media (max-width: 640px) { .masonry { columns: 1; } }
+
+/* ── DRILL CARD ──────────────────────────────────────────── */
+.drill-card {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  background: var(--card-black);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 200ms ease-out, transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+.drill-card:hover {
+  border-color: var(--gold-faint);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.drill-card.expanded {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 8px rgba(247,180,8,0.15);
+}
+
+/* Grid overlay */
+.drill-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* Corner ticks */
+.drill-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    /* top-left */
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px 8px / 18px 1px no-repeat,
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px 8px / 1px 18px no-repeat,
+    /* top-right */
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 8px) 8px / 18px 1px no-repeat,
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 8px - 1px + 18px) 8px / 1px 18px no-repeat,
+    /* bottom-left */
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px calc(100% - 8px - 1px) / 18px 1px no-repeat,
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px calc(100% - 8px - 18px) / 1px 18px no-repeat,
+    /* bottom-right */
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 8px) calc(100% - 8px - 1px) / 18px 1px no-repeat,
+    linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 8px - 1px + 18px) calc(100% - 8px - 18px) / 1px 18px no-repeat;
+}
+
+/* Fix corner tick alignment */
+.drill-card::after {
+  background:
+    /* TL horizontal */ linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px 8px / 18px 1px no-repeat,
+    /* TL vertical */   linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px 8px / 1px 18px no-repeat,
+    /* TR horizontal */ linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 26px) 8px / 18px 1px no-repeat,
+    /* TR vertical */   linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 9px) 8px / 1px 18px no-repeat,
+    /* BL horizontal */ linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px calc(100% - 9px) / 18px 1px no-repeat,
+    /* BL vertical */   linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) 8px calc(100% - 26px) / 1px 18px no-repeat,
+    /* BR horizontal */ linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 26px) calc(100% - 9px) / 18px 1px no-repeat,
+    /* BR vertical */   linear-gradient(rgba(255,255,255,0.28), rgba(255,255,255,0.28)) calc(100% - 9px) calc(100% - 26px) / 1px 18px no-repeat;
+}
+
+.card-inner {
+  position: relative;
+  z-index: 2;
+  padding: 20px 22px;
+}
+
+.card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.drill-name {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--white);
+  line-height: 1.3;
+}
+
+.engine-dots {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  padding-top: 5px;
+}
+.engine-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0.15;
+  transition: opacity 150ms;
+}
+.engine-dot.active { opacity: 1; }
+.engine-dot.body { background: #10b981; }
+.engine-dot.mind { background: #818cf8; }
+.engine-dot.eq { background: #fb923c; }
+
+.drill-desc {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.tag-domain {
+  font-family: 'Anton', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(247,180,8,0.15);
+  padding: 4px 9px 3px;
+  border-radius: 4px;
+}
+.tag-mode {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.06);
+  padding: 4px 9px 3px;
+  border-radius: 4px;
+}
+
+/* Block range bar */
+.block-bar {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+.block-seg {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+  transition: background 200ms;
+}
+.block-seg.filled { background: var(--gold); }
+
+/* Energy demand */
+.energy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.energy-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.energy-bars {
+  display: flex;
+  gap: 3px;
+}
+.energy-bar-seg {
+  width: 12px;
+  height: 6px;
+  border-radius: 1.5px;
+  background: rgba(255,255,255,0.1);
+}
+.energy-bar-seg.filled.low { background: #10b981; }
+.energy-bar-seg.filled.med { background: #fb923c; }
+.energy-bar-seg.filled.high { background: #ef4444; }
+.energy-bar-seg.filled.max { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.6); }
+
+/* ── EXPANDED STATE ──────────────────────────────────────── */
+.card-expand {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 200ms ease-out;
+}
+.drill-card.expanded .card-expand {
+  max-height: 1200px;
+  transition: max-height 300ms ease-out;
+}
+
+.expand-inner {
+  padding: 0 22px 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.expand-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 12px 0 16px;
+}
+
+/* Levels section */
+.levels-section { margin-bottom: 14px; }
+.level-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.level-badge {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold);
+  flex-shrink: 0;
+  width: 85px;
+  padding-top: 2px;
+}
+.level-text {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+
+/* Cues section */
+.cues-section { margin-top: 4px; }
+.cue-group { margin-bottom: 12px; }
+.cue-group:last-child { margin-bottom: 0; }
+.cue-type-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 6px;
+  position: relative;
+  display: inline-block;
+  padding-right: 0;
+}
+.cue-type-label::after {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.cue-type-label.watch_for { color: #fb923c; }
+.cue-type-label.common_error { color: #ef4444; }
+.cue-type-label.progression_trigger { color: #10b981; }
+.cue-type-label.key_phrase { color: #818cf8; }
+
+.cue-text {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+  padding-left: 12px;
+  border-left: 2px solid rgba(255,255,255,0.08);
+  margin-bottom: 6px;
+}
+
+.cues-loading {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--grey);
+  font-style: italic;
+}
+
+.cue-engine-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* ── ADD DRILL FAB ───────────────────────────────────────── */
+.fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: none;
+  color: var(--black);
+  font-family: 'Anton', sans-serif;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(247,180,8,0.35);
+  transition: transform 150ms, box-shadow 150ms;
+  z-index: 200;
+}
+.fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(247,180,8,0.6);
+}
+
+/* ── MODAL ───────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+}
+
+.modal-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+.form-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--grey);
+  display: block;
+  margin-bottom: 6px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 200ms;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+.form-textarea { resize: vertical; min-height: 70px; }
+.form-select { -webkit-appearance: none; cursor: pointer; }
+
+.engine-checks {
+  display: flex;
+  gap: 12px;
+}
+.engine-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.engine-check input { display: none; }
+.engine-check .check-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+}
+.engine-check input:checked + .check-box {
+  border-color: var(--gold);
+  background: var(--gold-faint);
+}
+.engine-check input:checked + .check-box::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+.engine-check.body input:checked + .check-box { border-color: #10b981; background: rgba(16,185,129,0.2); }
+.engine-check.body input:checked + .check-box::after { background: #10b981; }
+.engine-check.mind input:checked + .check-box { border-color: #818cf8; background: rgba(129,140,248,0.2); }
+.engine-check.mind input:checked + .check-box::after { background: #818cf8; }
+.engine-check.eq input:checked + .check-box { border-color: #fb923c; background: rgba(251,146,60,0.2); }
+.engine-check.eq input:checked + .check-box::after { background: #fb923c; }
+
+.engine-check span {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+.block-range-inputs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.block-range-inputs .form-select { width: 70px; }
+.block-range-inputs .to-label {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--grey);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+.btn-cancel {
+  padding: 8px 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 150ms;
+}
+.btn-cancel:hover { border-color: rgba(255,255,255,0.3); }
+.btn-save {
+  padding: 8px 22px;
+  border: none;
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--black);
+  font-family: 'Anton', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: box-shadow 150ms, transform 150ms;
+}
+.btn-save:hover { box-shadow: 0 0 12px rgba(247,180,8,0.5); transform: translateY(-1px); }
+
+/* ── EMPTY STATE ─────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+}
+.empty-state h2 {
+  font-family: 'Anton', sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 8px;
+}
+.empty-state p {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── SCROLLBAR ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="/coaching">COACHING OS</a>
+  <div class="nav-links">
+    <a href="/workout-builder">Builder</a>
+    <a href="/drill-library" class="active">Library</a>
+    <a href="/student-deck">Deck</a>
+    <a href="/visual-bible">Bible</a>
+    <a href="/coaching">Planner</a>
+    <a href="/coaching-intel">Intel</a>
+  </div>
+</nav>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="search-row">
+    <input class="search-input" type="text" id="searchInput" placeholder="Search drills...">
+  </div>
+
+  <div class="filter-section">
+    <span class="filter-label">Domain</span>
+    <button class="pill domain-pill" data-domain="footwork">Footwork</button>
+    <button class="pill domain-pill" data-domain="defense">Defense</button>
+    <button class="pill domain-pill" data-domain="combos">Combos</button>
+    <button class="pill domain-pill" data-domain="conditioning">Conditioning</button>
+    <button class="pill domain-pill" data-domain="warm_up">Warm Up</button>
+    <button class="pill domain-pill" data-domain="icebreaker">Icebreaker</button>
+    <button class="pill domain-pill" data-domain="mindset">Mindset</button>
+    <button class="pill domain-pill" data-domain="strategy">Strategy</button>
+  </div>
+
+  <div class="filter-section">
+    <span class="filter-label">Engine</span>
+    <button class="pill pill-engine-body engine-pill" data-engine="body">Body</button>
+    <button class="pill pill-engine-mind engine-pill" data-engine="mind">Mind</button>
+    <button class="pill pill-engine-eq engine-pill" data-engine="eq">Emotion</button>
+
+    <span class="filter-label" style="margin-left: 12px;">Block</span>
+    <select class="filter-select" id="blockMin">
+      <option value="">Min</option>
+      <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+      <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+      <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <select class="filter-select" id="blockMax">
+      <option value="">Max</option>
+      <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+      <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+      <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+
+    <span class="filter-label" style="margin-left: 12px;">Mode</span>
+    <button class="pill mode-pill" data-mode="shadow">Shadow</button>
+    <button class="pill mode-pill" data-mode="partner">Partner</button>
+    <button class="pill mode-pill" data-mode="pads">Pads</button>
+    <button class="pill mode-pill" data-mode="bag">Bag</button>
+    <button class="pill mode-pill" data-mode="solo">Solo</button>
+    <button class="pill mode-pill" data-mode="group">Group</button>
+
+    <span class="results-count" id="resultsCount"></span>
+  </div>
+
+  <div class="active-filters" id="activeFilters"></div>
+</div>
+
+<!-- MASONRY GRID -->
+<div class="masonry-wrap">
+  <div class="masonry" id="masonry"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <h2>No drills found</h2>
+    <p>Try adjusting your filters or add a new drill.</p>
+  </div>
+</div>
+
+<!-- ADD DRILL FAB -->
+<button class="fab" id="fabAdd" title="Add drill">+</button>
+
+<!-- ADD DRILL MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">Add Drill</div>
+
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input class="form-input" type="text" id="newName" placeholder="e.g. Mirror Footwork">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" id="newDesc" placeholder="What the drill trains..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Domain</label>
+      <select class="form-select" id="newDomain">
+        <option value="footwork">Footwork</option>
+        <option value="defense">Defense</option>
+        <option value="combos">Combos</option>
+        <option value="conditioning">Conditioning</option>
+        <option value="warm_up">Warm Up</option>
+        <option value="icebreaker">Icebreaker</option>
+        <option value="mindset">Mindset</option>
+        <option value="strategy">Strategy</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Mode</label>
+      <select class="form-select" id="newMode">
+        <option value="">-- select --</option>
+        <option value="shadow">Shadow</option>
+        <option value="partner">Partner</option>
+        <option value="pads">Pads</option>
+        <option value="bag">Bag</option>
+        <option value="solo">Solo</option>
+        <option value="group">Group</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Engines</label>
+      <div class="engine-checks">
+        <label class="engine-check body"><input type="checkbox" value="body" checked><span class="check-box"></span><span>Body</span></label>
+        <label class="engine-check mind"><input type="checkbox" value="mind"><span class="check-box"></span><span>Mind</span></label>
+        <label class="engine-check eq"><input type="checkbox" value="eq"><span class="check-box"></span><span>Emotion</span></label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Block Range</label>
+      <div class="block-range-inputs">
+        <select class="form-select" id="newBlockMin">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+        <span class="to-label">to</span>
+        <select class="form-select" id="newBlockMax">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="10" selected>10</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Equipment</label>
+      <input class="form-input" type="text" id="newEquipment" placeholder="e.g. cones, jump rope">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-save" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8080/coaching';
+let allDrills = [];
+let expandedId = null;
+let cuesCache = {};
+
+// ── FILTERS STATE ──────────────────────────────────────────
+const filters = {
+  search: '',
+  domains: new Set(),
+  engines: new Set(),
+  modes: new Set(),
+  blockMin: null,
+  blockMax: null,
+};
+
+// ── INIT ───────────────────────────────────────────────────
+async function init() {
+  try {
+    const res = await fetch(`${API}/suggest?limit=500`);
+    allDrills = await res.json();
+    render();
+  } catch (e) {
+    document.getElementById('masonry').innerHTML = `<div class="empty-state"><h2>Error</h2><p>${e.message}</p></div>`;
+  }
+}
+
+// ── RENDER MASONRY ─────────────────────────────────────────
+function render() {
+  const filtered = applyFilters(allDrills);
+  const grid = document.getElementById('masonry');
+  const empty = document.getElementById('emptyState');
+  const count = document.getElementById('resultsCount');
+
+  count.textContent = `${filtered.length} DRILL${filtered.length !== 1 ? 'S' : ''}`;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(d => cardHTML(d)).join('');
+  renderActiveFilters();
+}
+
+function cardHTML(d) {
+  const engines = parseJSON(d.engines, ['body']);
+  const levels = parseJSON(d.levels, null);
+  const isExpanded = expandedId === d.id;
+  const energyLevel = energyIndex(d.energy_demand);
+  const energyClass = energyLevel <= 1 ? 'low' : energyLevel <= 2 ? 'med' : energyLevel <= 3 ? 'high' : 'max';
+
+  let levelsHTML = '';
+  if (levels) {
+    levelsHTML = '<div class="levels-section">';
+    for (const [lvl, text] of Object.entries(levels)) {
+      if (text) {
+        levelsHTML += `<div class="level-row"><span class="level-badge">${lvl}</span><span class="level-text">${esc(text)}</span></div>`;
+      }
+    }
+    levelsHTML += '</div>';
+  }
+
+  return `
+    <div class="drill-card ${isExpanded ? 'expanded' : ''}" data-id="${d.id}" onclick="toggleCard('${d.id}')">
+      <div class="card-inner">
+        <div class="card-top-row">
+          <div class="drill-name">${esc(d.name)}</div>
+          <div class="engine-dots">
+            <div class="engine-dot body ${engines.includes('body') ? 'active' : ''}"></div>
+            <div class="engine-dot mind ${engines.includes('mind') ? 'active' : ''}"></div>
+            <div class="engine-dot eq ${engines.includes('eq') ? 'active' : ''}"></div>
+          </div>
+        </div>
+        ${d.description ? `<div class="drill-desc">${esc(d.description)}</div>` : ''}
+        <div class="card-tags">
+          <span class="tag-domain">${esc(formatDomain(d.domain))}</span>
+          ${d.mode ? `<span class="tag-mode">${esc(d.mode)}</span>` : ''}
+        </div>
+        <div class="block-bar">
+          ${blockBarHTML(d.block_min || 1, d.block_max || 10)}
+        </div>
+        <div class="energy-row">
+          <span class="energy-label">Energy</span>
+          <div class="energy-bars">
+            ${[1,2,3,4].map(i => `<div class="energy-bar-seg ${i <= energyLevel ? 'filled ' + energyClass : ''}"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="card-expand">
+        <div class="expand-inner">
+          <div class="expand-divider"></div>
+          ${levelsHTML}
+          <div class="cues-container" id="cues-${d.id}">
+            ${isExpanded ? '<div class="cues-loading">Loading cues...</div>' : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function blockBarHTML(min, max) {
+  let html = '';
+  for (let i = 1; i <= 10; i++) {
+    html += `<div class="block-seg ${i >= min && i <= max ? 'filled' : ''}"></div>`;
+  }
+  return html;
+}
+
+function energyIndex(demand) {
+  switch ((demand || 'medium').toLowerCase()) {
+    case 'low': return 1;
+    case 'medium': return 2;
+    case 'high': return 3;
+    case 'max': return 4;
+    default: return 2;
+  }
+}
+
+// ── CARD EXPAND / COLLAPSE ─────────────────────────────────
+async function toggleCard(id) {
+  if (expandedId === id) {
+    expandedId = null;
+  } else {
+    expandedId = id;
+  }
+  render();
+
+  if (expandedId) {
+    await loadCues(expandedId);
+    // Scroll the expanded card into view
+    setTimeout(() => {
+      const card = document.querySelector(`.drill-card[data-id="${expandedId}"]`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
+}
+
+async function loadCues(drillId) {
+  const container = document.getElementById(`cues-${drillId}`);
+  if (!container) return;
+
+  if (cuesCache[drillId]) {
+    renderCues(container, cuesCache[drillId]);
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/cues/${drillId}`);
+    const cues = await res.json();
+    cuesCache[drillId] = cues;
+    renderCues(container, cues);
+  } catch (e) {
+    container.innerHTML = '<div class="cues-loading">Could not load cues.</div>';
+  }
+}
+
+function renderCues(container, cues) {
+  if (!cues || cues.length === 0) {
+    container.innerHTML = '<div class="cues-loading">No coaching cues yet.</div>';
+    return;
+  }
+
+  const grouped = {};
+  for (const c of cues) {
+    if (!grouped[c.cue_type]) grouped[c.cue_type] = [];
+    grouped[c.cue_type].push(c);
+  }
+
+  const typeLabels = {
+    watch_for: 'Watch For',
+    common_error: 'Common Error',
+    progression_trigger: 'Progression Trigger',
+    key_phrase: 'Key Phrase',
+  };
+
+  let html = '<div class="cues-section">';
+  for (const [type, items] of Object.entries(grouped)) {
+    html += `<div class="cue-group">`;
+    html += `<div class="cue-type-label ${type}">${typeLabels[type] || type}</div>`;
+    for (const item of items) {
+      const dotColor = item.engine === 'body' ? '#10b981' : item.engine === 'mind' ? '#818cf8' : item.engine === 'eq' ? '#fb923c' : 'transparent';
+      html += `<div class="cue-text">${item.engine ? `<span class="cue-engine-dot" style="background:${dotColor}"></span>` : ''}${esc(item.text)}</div>`;
+    }
+    html += `</div>`;
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ── FILTERS ────────────────────────────────────────────────
+function applyFilters(drills) {
+  return drills.filter(d => {
+    // Search
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      const haystack = `${d.name} ${d.description || ''} ${d.domain} ${d.mode || ''}`.toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    // Domain
+    if (filters.domains.size > 0 && !filters.domains.has(d.domain)) return false;
+    // Mode
+    if (filters.modes.size > 0 && !filters.modes.has(d.mode)) return false;
+    // Engine
+    if (filters.engines.size > 0) {
+      const eng = parseJSON(d.engines, ['body']);
+      if (![...filters.engines].some(e => eng.includes(e))) return false;
+    }
+    // Block range
+    if (filters.blockMin !== null) {
+      if ((d.block_max || 10) < filters.blockMin) return false;
+    }
+    if (filters.blockMax !== null) {
+      if ((d.block_min || 1) > filters.blockMax) return false;
+    }
+    return true;
+  });
+}
+
+function renderActiveFilters() {
+  const el = document.getElementById('activeFilters');
+  let html = '';
+  for (const d of filters.domains) {
+    html += `<span class="active-filter-pill" onclick="removeDomain('${d}')">${formatDomain(d)} <span class="x">&times;</span></span>`;
+  }
+  for (const e of filters.engines) {
+    html += `<span class="active-filter-pill" onclick="removeEngine('${e}')">${e === 'eq' ? 'Emotion' : e.charAt(0).toUpperCase() + e.slice(1)} <span class="x">&times;</span></span>`;
+  }
+  for (const m of filters.modes) {
+    html += `<span class="active-filter-pill" onclick="removeMode('${m}')">${m} <span class="x">&times;</span></span>`;
+  }
+  if (filters.blockMin !== null) {
+    html += `<span class="active-filter-pill" onclick="clearBlockMin()">Block &ge; ${filters.blockMin} <span class="x">&times;</span></span>`;
+  }
+  if (filters.blockMax !== null) {
+    html += `<span class="active-filter-pill" onclick="clearBlockMax()">Block &le; ${filters.blockMax} <span class="x">&times;</span></span>`;
+  }
+  el.innerHTML = html;
+}
+
+// Filter event handlers
+document.querySelectorAll('.domain-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const d = btn.dataset.domain;
+    if (filters.domains.has(d)) { filters.domains.delete(d); btn.classList.remove('active'); }
+    else { filters.domains.add(d); btn.classList.add('active'); }
+    render();
+  });
+});
+
+document.querySelectorAll('.engine-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const e = btn.dataset.engine;
+    if (filters.engines.has(e)) { filters.engines.delete(e); btn.classList.remove('active'); }
+    else { filters.engines.add(e); btn.classList.add('active'); }
+    render();
+  });
+});
+
+document.querySelectorAll('.mode-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const m = btn.dataset.mode;
+    if (filters.modes.has(m)) { filters.modes.delete(m); btn.classList.remove('active'); }
+    else { filters.modes.add(m); btn.classList.add('active'); }
+    render();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  filters.search = e.target.value;
+  render();
+});
+
+document.getElementById('blockMin').addEventListener('change', (e) => {
+  filters.blockMin = e.target.value ? parseInt(e.target.value) : null;
+  render();
+});
+
+document.getElementById('blockMax').addEventListener('change', (e) => {
+  filters.blockMax = e.target.value ? parseInt(e.target.value) : null;
+  render();
+});
+
+function removeDomain(d) {
+  filters.domains.delete(d);
+  document.querySelector(`.domain-pill[data-domain="${d}"]`).classList.remove('active');
+  render();
+}
+function removeEngine(e) {
+  filters.engines.delete(e);
+  document.querySelector(`.engine-pill[data-engine="${e}"]`).classList.remove('active');
+  render();
+}
+function removeMode(m) {
+  filters.modes.delete(m);
+  document.querySelector(`.mode-pill[data-mode="${m}"]`).classList.remove('active');
+  render();
+}
+function clearBlockMin() {
+  filters.blockMin = null;
+  document.getElementById('blockMin').value = '';
+  render();
+}
+function clearBlockMax() {
+  filters.blockMax = null;
+  document.getElementById('blockMax').value = '';
+  render();
+}
+
+// ── ADD DRILL MODAL ────────────────────────────────────────
+const fabBtn = document.getElementById('fabAdd');
+const overlay = document.getElementById('modalOverlay');
+const cancelBtn = document.getElementById('modalCancel');
+const saveBtn = document.getElementById('modalSave');
+
+fabBtn.addEventListener('click', () => overlay.classList.add('open'));
+cancelBtn.addEventListener('click', () => overlay.classList.remove('open'));
+overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+saveBtn.addEventListener('click', async () => {
+  const name = document.getElementById('newName').value.trim();
+  if (!name) { document.getElementById('newName').focus(); return; }
+
+  const engines = [];
+  document.querySelectorAll('.engine-check input:checked').forEach(cb => engines.push(cb.value));
+
+  const equipStr = document.getElementById('newEquipment').value.trim();
+
+  const body = {
+    name,
+    description: document.getElementById('newDesc').value.trim() || null,
+    domain: document.getElementById('newDomain').value,
+    mode: document.getElementById('newMode').value || null,
+    engines: engines.length ? engines : ['body'],
+    block_min: parseInt(document.getElementById('newBlockMin').value),
+    block_max: parseInt(document.getElementById('newBlockMax').value),
+    equipment: equipStr ? equipStr.split(',').map(s => s.trim()).filter(Boolean) : null,
+  };
+
+  try {
+    const res = await fetch(`${API}/drills`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error('Save failed');
+    overlay.classList.remove('open');
+    // Reset form
+    document.getElementById('newName').value = '';
+    document.getElementById('newDesc').value = '';
+    document.getElementById('newEquipment').value = '';
+    document.querySelectorAll('.engine-check input').forEach(cb => cb.checked = cb.value === 'body');
+    // Reload
+    await init();
+  } catch (e) {
+    alert('Error saving drill: ' + e.message);
+  }
+});
+
+// ── HELPERS ────────────────────────────────────────────────
+function parseJSON(str, fallback) {
+  if (!str) return fallback;
+  try { return typeof str === 'string' ? JSON.parse(str) : str; }
+  catch { return fallback; }
+}
+
+function formatDomain(d) {
+  if (!d) return '';
+  return d.replace(/_/g, ' ');
+}
+
+function esc(s) {
+  if (!s) return '';
+  const el = document.createElement('span');
+  el.textContent = s;
+  return el.innerHTML;
+}
+
+// ── LAUNCH ─────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

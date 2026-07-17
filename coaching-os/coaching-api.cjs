@@ -60,6 +60,30 @@ module.exports = function mountCoachingApi(app) {
     res.sendFile(p);
   });
 
+  // ── Drill library (Pinterest-style drill browser) ──────────────────
+  app.get('/drill-library', (req, res) => {
+    const p = path.join(process.env.HOME, 'nanoclaw', 'coaching-os', 'drill-library.html');
+    if (!fs.existsSync(p)) return res.status(404).send('Not found');
+    res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+    res.sendFile(p);
+  });
+
+  // ── Workout builder (drag-and-drop class builder) ─────────────────
+  app.get('/workout-builder', (req, res) => {
+    const p = path.join(process.env.HOME, 'nanoclaw', 'coaching-os', 'workout-builder.html');
+    if (!fs.existsSync(p)) return res.status(404).send('Not found');
+    res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+    res.sendFile(p);
+  });
+
+  // ── Student deck (Keynote-style workout presentation) ──────────────
+  app.get('/student-deck', (req, res) => {
+    const p = path.join(process.env.HOME, 'nanoclaw', 'coaching-os', 'student-deck.html');
+    if (!fs.existsSync(p)) return res.status(404).send('Not found');
+    res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+    res.sendFile(p);
+  });
+
   // ── Workout card (student-facing) ─────────────────────────────────
   app.get('/workout', (req, res) => {
     const p = path.join(process.env.HOME, 'nanoclaw', 'coaching-os', 'workout-card.html');
@@ -299,6 +323,16 @@ module.exports = function mountCoachingApi(app) {
 
       db.close();
       res.json(results);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ── List all drills ────────────────────────────────────────────────
+  app.get('/coaching/drills', (req, res) => {
+    try {
+      const db = getDb();
+      const drills = db.prepare('SELECT * FROM drills ORDER BY domain, name').all();
+      db.close();
+      res.json(drills);
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 

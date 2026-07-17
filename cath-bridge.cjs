@@ -162,6 +162,83 @@ app.get('/course-guide', (req, res) => {
 app.get('/gym', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'gym-lobby.html'));
 });
+
+// ── PT Tracker — Private training session tracker ───────────────────────────
+
+const PT_DATA = path.join(HOME, 'basic-reflex', 'pt-data.json');
+
+function loadPT() {
+  try { return JSON.parse(fs.readFileSync(PT_DATA, 'utf8')); }
+  catch { return { clients: [] }; }
+}
+function savePT(data) { fs.writeFileSync(PT_DATA, JSON.stringify(data, null, 2)); }
+
+app.get('/pt', (req, res) => {
+  res.sendFile(path.join(HOME, 'basic-reflex', 'pt-tracker.html'));
+});
+
+app.get('/pt/clients', (req, res) => {
+  const data = loadPT();
+  res.json(data.clients);
+});
+
+app.post('/pt/client', (req, res) => {
+  const { name, sessions } = req.body;
+  if (!name) return res.status(400).json({ error: 'name required' });
+  const data = loadPT();
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now().toString(36);
+  const client = {
+    id,
+    name,
+    total_purchased: sessions || 10,
+    total_used: 0,
+    remaining: sessions || 10,
+    history: [],
+    created: new Date().toISOString()
+  };
+  data.clients.push(client);
+  savePT(data);
+  res.json(client);
+});
+
+app.post('/pt/session', (req, res) => {
+  const { client_id, note } = req.body;
+  if (!client_id) return res.status(400).json({ error: 'client_id required' });
+  const data = loadPT();
+  const client = data.clients.find(c => c.id === client_id);
+  if (!client) return res.status(404).json({ error: 'client not found' });
+  if (client.remaining <= 0) return res.status(400).json({ error: 'no sessions remaining' });
+
+  client.remaining--;
+  client.total_used++;
+  client.history.push({
+    date: new Date().toISOString(),
+    note: note || ''
+  });
+  savePT(data);
+  res.json({ ok: true, remaining: client.remaining });
+});
+
+app.post('/pt/add-sessions', (req, res) => {
+  const { client_id, sessions } = req.body;
+  if (!client_id) return res.status(400).json({ error: 'client_id required' });
+  const data = loadPT();
+  const client = data.clients.find(c => c.id === client_id);
+  if (!client) return res.status(404).json({ error: 'client not found' });
+
+  const count = sessions || 10;
+  client.total_purchased += count;
+  client.remaining += count;
+  savePT(data);
+  res.json({ ok: true, remaining: client.remaining, total_purchased: client.total_purchased });
+});
+
+app.delete('/pt/client/:id', (req, res) => {
+  const data = loadPT();
+  data.clients = data.clients.filter(c => c.id !== req.params.id);
+  savePT(data);
+  res.json({ ok: true });
+});
 app.get('/thinking-companion', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'aether-universe', 'thinking-companion.html'));
 });

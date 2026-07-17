@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workout Builder — Coaching OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0a;
+  --card-black: #0d0d0d;
+  --gold: #f7b408;
+  --gold-dim: rgba(247, 180, 8, 0.55);
+  --gold-faint: rgba(247, 180, 8, 0.22);
+  --blue: #3b82f6;
+  --red: #ef4444;
+  --white: #ffffff;
+  --grey: rgba(255, 255, 255, 0.55);
+  --grid-line: rgba(255, 255, 255, 0.07);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+}
+
+/* ── NAV BAR ────────────────────────────────────────────────────── */
+.nav-bar {
+  height: 40px;
+  background: var(--black);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.nav-brand {
+  font-family: 'Anton', sans-serif;
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-links { display: flex; gap: 18px; }
+.nav-links a {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--white);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 150ms;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a.active { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+.panel {
+  overflow-y: auto;
+  padding: 16px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.panel:last-child { border-right: none; }
+.panel-right { border-left: 1px solid rgba(255,255,255,0.06); border-right: none; }
+
+/* ── LABELS (Fable style) ───────────────────────────────────────── */
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.label-text {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--grey);
+  white-space: nowrap;
+}
+.label-row::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.14);
+}
+
+/* ── CARDS (Fable grid + corner ticks) ──────────────────────────── */
+.card {
+  background: var(--card-black);
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 39px, var(--grid-line) 39px, var(--grid-line) 40px
+  ), repeating-linear-gradient(
+    90deg, transparent, transparent 39px, var(--grid-line) 39px, var(--grid-line) 40px
+  );
+  border-radius: 14px;
+  padding: 14px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.card::before, .card::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+.card::before {
+  top: 6px; left: 6px;
+  border-top: 1px solid rgba(255,255,255,0.28);
+  border-left: 1px solid rgba(255,255,255,0.28);
+}
+.card::after {
+  bottom: 6px; right: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.28);
+  border-right: 1px solid rgba(255,255,255,0.28);
+}
+
+/* ── FORM ELEMENTS ──────────────────────────────────────────────── */
+select, input[type="text"], input[type="number"], textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 7px 10px;
+  color: var(--white);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  width: 100%;
+  outline: none;
+  transition: border-color 150ms;
+}
+select:focus, input:focus, textarea:focus { border-color: var(--gold-dim); }
+select { cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+textarea { resize: vertical; min-height: 60px; }
+
+/* ── FILTER PILLS ───────────────────────────────────────────────── */
+.pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.pill {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  padding: 4px 8px 3px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: var(--grey);
+  cursor: pointer;
+  transition: all 150ms;
+}
+.pill:hover { border-color: var(--gold-dim); color: var(--gold); }
+.pill.active { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+/* ── DRILL CARDS (left panel) ───────────────────────────────────── */
+.drill-list { overflow-y: auto; flex: 1; }
+.drill-card {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: grab;
+  margin-bottom: 4px;
+  border: 1px solid transparent;
+  transition: all 150ms;
+  position: relative;
+}
+.drill-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+.drill-card.dragging { opacity: 0.4; }
+.drill-card .drill-name {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.drill-card .drill-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.drill-tag {
+  font-family: 'Anton', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 2px 6px 1px;
+  border-radius: 3px;
+}
+.tag-domain { background: rgba(247,180,8,0.15); color: var(--gold); }
+.tag-mode { background: rgba(255,255,255,0.08); color: var(--grey); }
+
+/* Engine dots */
+.engine-dots { display: flex; gap: 3px; align-items: center; }
+.engine-dot { width: 7px; height: 7px; border-radius: 50%; }
+.engine-dot.body { background: #10b981; }
+.engine-dot.mind { background: #818cf8; }
+.engine-dot.eq { background: #fb923c; }
+
+/* Energy bars */
+.energy-pips { display: flex; gap: 2px; align-items: center; }
+.energy-pip { width: 4px; height: 10px; border-radius: 1px; background: rgba(255,255,255,0.12); }
+.energy-pip.filled-low { background: #10b981; }
+.energy-pip.filled-medium { background: #f59e0b; }
+.energy-pip.filled-high { background: #ef4444; }
+.energy-pip.filled-max { background: #dc2626; }
+
+/* Block range */
+.block-range {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.35);
+}
+
+/* ── CENTER PANEL — Timeline ────────────────────────────────────── */
+.timeline-header {
+  margin-bottom: 16px;
+}
+.class-title-input {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  color: var(--white);
+  width: 100%;
+  padding: 8px 0;
+  outline: none;
+  transition: border-color 150ms;
+}
+.class-title-input:focus { border-color: var(--gold-dim); }
+.class-title-input::placeholder { color: rgba(255,255,255,0.2); }
+
+.round-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 24px;
+}
+
+.round-slot {
+  border-radius: 11px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--card-black);
+  padding: 12px 14px;
+  transition: all 200ms;
+  position: relative;
+}
+.round-slot.drag-over {
+  border-color: var(--gold);
+  box-shadow: 0 0 8px rgba(247,180,8,0.3);
+}
+
+.round-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.round-num {
+  font-family: 'Anton', sans-serif;
+  font-size: 16px;
+  color: var(--gold);
+  min-width: 24px;
+}
+.segment-name-input {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: none;
+  color: var(--grey);
+  flex: 1;
+  padding: 2px 0;
+  outline: none;
+}
+.segment-name-input:focus { color: var(--white); }
+
+.duration-input {
+  width: 48px !important;
+  text-align: center;
+  font-size: 11px;
+  padding: 3px 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  color: var(--grey);
+}
+.duration-suffix {
+  font-size: 9px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Drop zone */
+.drop-zone {
+  border: 1px dashed rgba(255,255,255,0.13);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  color: rgba(255,255,255,0.18);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  cursor: default;
+  transition: all 200ms;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.drop-zone.drag-over {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(247,180,8,0.05);
+}
+
+/* Filled drill in slot */
+.slot-drill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: grab;
+  transition: all 150ms;
+}
+.slot-drill:hover { border-color: rgba(255,255,255,0.16); }
+.slot-drill:active { cursor: grabbing; }
+.slot-drill .drill-name {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--white);
+  flex: 1;
+}
+.slot-drill .slot-tags {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.remove-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.2);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 150ms;
+  line-height: 1;
+}
+.remove-btn:hover { color: var(--red); background: rgba(239,68,68,0.12); }
+
+/* ── RIGHT PANEL ────────────────────────────────────────────────── */
+.section { margin-bottom: 20px; }
+.section-gap { margin-bottom: 10px; }
+
+/* Energy curve chart */
+.energy-curve {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 80px;
+  padding: 8px 0;
+}
+.energy-bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+  transition: height 300ms, background 300ms;
+  position: relative;
+}
+.energy-bar.low { background: #10b981; }
+.energy-bar.medium { background: #f59e0b; }
+.energy-bar.high { background: #ef4444; }
+.energy-bar.max { background: #dc2626; }
+.energy-bar.empty { background: rgba(255,255,255,0.06); height: 4px !important; }
+.energy-bar-label {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  color: rgba(255,255,255,0.3);
+  font-weight: 700;
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: var(--grey);
+  cursor: pointer;
+  transition: all 150ms;
+}
+.btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.btn-gold {
+  background: var(--gold);
+  color: var(--black);
+  border-color: var(--gold);
+  font-weight: 800;
+}
+.btn-gold:hover { box-shadow: 0 0 8px rgba(247,180,8,0.8); color: var(--black); }
+.btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Saved classes list */
+.class-item {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 150ms;
+  border: 1px solid transparent;
+}
+.class-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+.class-item .ci-title {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--white);
+}
+.class-item .ci-meta {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 2px;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--gold);
+  color: var(--black);
+  font-family: 'Anton', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 10px 24px 8px;
+  border-radius: 6px;
+  z-index: 999;
+  opacity: 0;
+  transition: transform 300ms, opacity 300ms;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* Engine tag pills (for right panel) */
+.engine-tag-body { background: #064e3b; color: #10b981; }
+.engine-tag-mind { background: #1e1b4b; color: #818cf8; }
+.engine-tag-eq { background: #431407; color: #fb923c; }
+
+/* ── SCROLLBAR ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .layout { grid-template-columns: 240px 1fr 260px; }
+}
+@media (max-width: 860px) {
+  html, body { overflow: auto; }
+  .layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .panel { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); max-height: none; }
+  .panel-left { order: 2; }
+  .panel-center { order: 1; }
+  .panel-right { order: 3; border-left: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV BAR -->
+<nav class="nav-bar">
+  <a href="/coaching-os" class="nav-brand">COACHING OS</a>
+  <div class="nav-links">
+    <a href="/workout-builder" class="active">Builder</a>
+    <a href="/drill-library">Library</a>
+    <a href="/student-deck">Deck</a>
+    <a href="/visual-bible">Bible</a>
+    <a href="/coaching-os">Planner</a>
+    <a href="/coaching-intel">Intel</a>
+  </div>
+</nav>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- ═══ LEFT PANEL — Drill Library ═══ -->
+  <div class="panel panel-left" id="panelLeft">
+    <div class="label-row"><span class="label-text">Drill Library</span></div>
+
+    <!-- Block filter -->
+    <div class="section-gap">
+      <select id="blockFilter" onchange="applyFilters()">
+        <option value="">All Blocks</option>
+        <option value="1">Block 1</option>
+        <option value="2">Block 2</option>
+        <option value="3">Block 3</option>
+        <option value="4">Block 4</option>
+        <option value="5">Block 5</option>
+        <option value="6">Block 6</option>
+        <option value="7">Block 7</option>
+        <option value="8">Block 8</option>
+        <option value="9">Block 9</option>
+        <option value="10">Block 10</option>
+      </select>
+    </div>
+
+    <!-- Domain filter pills -->
+    <div class="pills" id="domainPills"></div>
+
+    <!-- Search -->
+    <div class="section-gap">
+      <input type="text" id="drillSearch" placeholder="Search drills..." oninput="applyFilters()">
+    </div>
+
+    <!-- Drill list -->
+    <div class="drill-list" id="drillList"></div>
+  </div>
+
+  <!-- ═══ CENTER PANEL — Class Timeline ═══ -->
+  <div class="panel panel-center" id="panelCenter">
+    <div class="timeline-header">
+      <input type="text" class="class-title-input" id="classTitle" placeholder="Class title...">
+    </div>
+    <div class="round-slots" id="roundSlots"></div>
+  </div>
+
+  <!-- ═══ RIGHT PANEL — Class Info ═══ -->
+  <div class="panel panel-right" id="panelRight">
+    <div class="label-row"><span class="label-text">Class Info</span></div>
+
+    <!-- Theme selector -->
+    <div class="section-gap">
+      <select id="themeSelect" onchange="onThemeChange()">
+        <option value="">Select theme...</option>
+      </select>
+    </div>
+
+    <!-- Block target -->
+    <div class="section-gap">
+      <select id="blockTarget">
+        <option value="">Block target...</option>
+        <option value="1">Block 1</option>
+        <option value="2">Block 2</option>
+        <option value="3">Block 3</option>
+        <option value="4">Block 4</option>
+        <option value="5">Block 5</option>
+        <option value="6">Block 6</option>
+        <option value="7">Block 7</option>
+        <option value="8">Block 8</option>
+        <option value="9">Block 9</option>
+        <option value="10">Block 10</option>
+      </select>
+    </div>
+
+    <!-- Notes -->
+    <div class="section-gap">
+      <textarea id="classNotes" placeholder="Coach notes..."></textarea>
+    </div>
+
+    <!-- Energy curve -->
+    <div class="section">
+      <div class="label-row"><span class="label-text">Energy Curve</span></div>
+      <div class="energy-curve" id="energyCurve"></div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="section">
+      <div class="label-row"><span class="label-text">Actions</span></div>
+      <div class="btn-row">
+        <button class="btn" onclick="newClass()">New</button>
+        <button class="btn-gold btn" onclick="saveClass()">Save</button>
+      </div>
+    </div>
+
+    <!-- Saved classes -->
+    <div class="section">
+      <div class="label-row"><span class="label-text">Saved Classes</span></div>
+      <div id="classList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════
+const API = window.location.origin + '/coaching';
+let allDrills = [];
+let themes = [];
+let editingClassId = null;
+let activeDomainFilter = null;
+
+// Segments: [{num, name, drill: null|drillObj, duration}]
+const DEFAULT_SEGMENTS = [
+  { num: 1, name: 'Warm-Up', drill: null, duration: 6 },
+  { num: 2, name: 'Coordination', drill: null, duration: 8 },
+  { num: 3, name: 'Agility', drill: null, duration: 6 },
+  { num: 4, name: 'Footwork', drill: null, duration: 8 },
+  { num: 5, name: 'Bagwork', drill: null, duration: 12 },
+  { num: 6, name: 'Padwork', drill: null, duration: 10 },
+  { num: 7, name: 'Partner Drill', drill: null, duration: 10 },
+  { num: 8, name: 'Conditioning', drill: null, duration: 8 }
+];
+let segments = JSON.parse(JSON.stringify(DEFAULT_SEGMENTS));
+
+const DOMAINS = ['footwork','defense','combos','conditioning','warm_up','icebreaker','mindset','strategy'];
+const ENERGY_MAP = { low: 1, medium: 2, high: 3, max: 4 };
+const ENERGY_COLORS = { low: 'low', medium: 'medium', high: 'high', max: 'max' };
+
+// ══════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════
+async function init() {
+  renderDomainPills();
+  renderSegments();
+  renderEnergyCurve();
+
+  try {
+    const [drillsRes, themesRes, classesRes] = await Promise.all([
+      fetch(API + '/drills').then(r => r.json()),
+      fetch(API + '/themes').then(r => r.json()),
+      fetch(API + '/classes').then(r => r.json())
+    ]);
+    allDrills = drillsRes;
+    themes = themesRes;
+    renderDrillList(allDrills);
+    renderThemeSelect();
+    renderClassList(classesRes);
+  } catch (e) {
+    console.warn('API unavailable:', e);
+    renderDrillList([]);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// DOMAIN PILLS
+// ══════════════════════════════════════════════════════════════════
+function renderDomainPills() {
+  const el = document.getElementById('domainPills');
+  el.innerHTML = DOMAINS.map(d =>
+    `<button class="pill" data-domain="${d}" onclick="toggleDomain('${d}')">${d.replace('_',' ')}</button>`
+  ).join('');
+}
+
+function toggleDomain(domain) {
+  if (activeDomainFilter === domain) {
+    activeDomainFilter = null;
+  } else {
+    activeDomainFilter = domain;
+  }
+  document.querySelectorAll('#domainPills .pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.domain === activeDomainFilter);
+  });
+  applyFilters();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// DRILL FILTERING
+// ══════════════════════════════════════════════════════════════════
+function applyFilters() {
+  const block = document.getElementById('blockFilter').value;
+  const query = document.getElementById('drillSearch').value.toLowerCase().trim();
+  let filtered = allDrills;
+
+  if (block) {
+    const b = parseInt(block);
+    filtered = filtered.filter(d => d.block_min <= b && d.block_max >= b);
+  }
+  if (activeDomainFilter) {
+    filtered = filtered.filter(d => d.domain === activeDomainFilter);
+  }
+  if (query) {
+    filtered = filtered.filter(d =>
+      d.name.toLowerCase().includes(query) ||
+      (d.domain || '').toLowerCase().includes(query) ||
+      (d.description || '').toLowerCase().includes(query) ||
+      (d.mode || '').toLowerCase().includes(query)
+    );
+  }
+  renderDrillList(filtered);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// DRILL LIST RENDERING
+// ══════════════════════════════════════════════════════════════════
+function renderDrillList(drills) {
+  const el = document.getElementById('drillList');
+  if (!drills.length) {
+    el.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.18);font-size:11px;">No drills found</div>';
+    return;
+  }
+
+  el.innerHTML = drills.map(d => {
+    const engines = safeJSON(d.engines, ['body']);
+    const engineDots = engines.map(e => `<span class="engine-dot ${e}"></span>`).join('');
+    const demand = d.energy_demand || 'medium';
+    const level = ENERGY_MAP[demand] || 2;
+    const pips = [1,2,3,4].map(i => `<span class="energy-pip ${i <= level ? 'filled-' + demand : ''}"></span>`).join('');
+
+    return `<div class="drill-card" draggable="true" data-drill-id="${d.id}"
+        ondragstart="onDrillDragStart(event, '${d.id}')"
+        ondragend="onDrillDragEnd(event)"
+        ontouchstart="onTouchStart(event, '${d.id}')"
+      >
+      <div class="drill-name">${esc(d.name)}</div>
+      <div class="drill-meta">
+        <span class="drill-tag tag-domain">${d.domain.replace('_',' ')}</span>
+        ${d.mode ? `<span class="drill-tag tag-mode">${d.mode}</span>` : ''}
+        <span class="engine-dots">${engineDots}</span>
+        <span class="energy-pips">${pips}</span>
+        <span class="block-range">B${d.block_min}-B${d.block_max}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SEGMENT / ROUND RENDERING
+// ══════════════════════════════════════════════════════════════════
+function renderSegments() {
+  const el = document.getElementById('roundSlots');
+  el.innerHTML = segments.map((seg, i) => {
+    const hasDrill = seg.drill !== null;
+    return `<div class="round-slot" data-slot="${i}"
+        ondragover="onSlotDragOver(event)" ondragleave="onSlotDragLeave(event)" ondrop="onSlotDrop(event, ${i})"
+        ontouchend="onTouchEnd(event, ${i})"
+      >
+      <div class="round-header">
+        <span class="round-num">${seg.num}</span>
+        <input type="text" class="segment-name-input" value="${esc(seg.name)}" onchange="onSegNameChange(${i}, this.value)">
+        <input type="number" class="duration-input" value="${seg.duration}" min="1" max="30" onchange="onDurationChange(${i}, this.value)">
+        <span class="duration-suffix">min</span>
+      </div>
+      <div id="dropzone-${i}">
+        ${hasDrill ? renderSlotDrill(seg.drill, i) : '<div class="drop-zone">Drop drill here</div>'}
+      </div>
+    </div>`;
+  }).join('');
+  renderEnergyCurve();
+}
+
+function renderSlotDrill(drill, slotIndex) {
+  const engines = safeJSON(drill.engines, ['body']);
+  const engineDots = engines.map(e => `<span class="engine-dot ${e}"></span>`).join('');
+  const demand = drill.energy_demand || 'medium';
+  return `<div class="slot-drill" draggable="true"
+      data-slot-index="${slotIndex}" data-drill-id="${drill.id}"
+      ondragstart="onSlotDrillDragStart(event, ${slotIndex})"
+      ondragend="onDrillDragEnd(event)"
+    >
+    <span class="drill-name">${esc(drill.name)}</span>
+    <span class="slot-tags">
+      <span class="drill-tag tag-domain">${drill.domain.replace('_',' ')}</span>
+      <span class="engine-dots">${engineDots}</span>
+    </span>
+    <button class="remove-btn" onclick="removeDrill(${slotIndex})" title="Remove">&times;</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// DRAG AND DROP — Library → Slots
+// ══════════════════════════════════════════════════════════════════
+let dragData = { type: null, drillId: null, fromSlot: null };
+
+function onDrillDragStart(e, drillId) {
+  dragData = { type: 'library', drillId, fromSlot: null };
+  e.dataTransfer.effectAllowed = 'copy';
+  e.dataTransfer.setData('text/plain', drillId);
+  e.target.classList.add('dragging');
+}
+
+function onSlotDrillDragStart(e, slotIndex) {
+  const drill = segments[slotIndex].drill;
+  if (!drill) return;
+  dragData = { type: 'reorder', drillId: drill.id, fromSlot: slotIndex };
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', drill.id);
+  e.target.closest('.slot-drill').style.opacity = '0.4';
+}
+
+function onDrillDragEnd(e) {
+  document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+  document.querySelectorAll('.slot-drill').forEach(el => el.style.opacity = '');
+  document.querySelectorAll('.round-slot').forEach(el => el.classList.remove('drag-over'));
+  document.querySelectorAll('.drop-zone').forEach(el => el.classList.remove('drag-over'));
+}
+
+function onSlotDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = dragData.type === 'reorder' ? 'move' : 'copy';
+  const slot = e.currentTarget;
+  slot.classList.add('drag-over');
+  const dz = slot.querySelector('.drop-zone');
+  if (dz) dz.classList.add('drag-over');
+}
+
+function onSlotDragLeave(e) {
+  const slot = e.currentTarget;
+  if (!slot.contains(e.relatedTarget)) {
+    slot.classList.remove('drag-over');
+    const dz = slot.querySelector('.drop-zone');
+    if (dz) dz.classList.remove('drag-over');
+  }
+}
+
+function onSlotDrop(e, slotIndex) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+
+  if (dragData.type === 'reorder' && dragData.fromSlot !== null) {
+    // Swap drills between slots
+    const fromIdx = dragData.fromSlot;
+    if (fromIdx === slotIndex) return;
+    const fromDrill = segments[fromIdx].drill;
+    const toDrill = segments[slotIndex].drill;
+    segments[slotIndex].drill = fromDrill;
+    segments[fromIdx].drill = toDrill;
+    // Swap durations if the drill provides one
+    if (fromDrill && fromDrill.time_min) {
+      segments[slotIndex].duration = Math.round(fromDrill.time_min / 60) || segments[slotIndex].duration;
+    }
+    if (toDrill && toDrill.time_min) {
+      segments[fromIdx].duration = Math.round(toDrill.time_min / 60) || segments[fromIdx].duration;
+    }
+  } else {
+    // Library drop
+    const drill = allDrills.find(d => d.id === dragData.drillId);
+    if (!drill) return;
+    segments[slotIndex].drill = drill;
+    if (drill.time_min) {
+      segments[slotIndex].duration = Math.round(drill.time_min / 60) || segments[slotIndex].duration;
+    }
+  }
+
+  dragData = { type: null, drillId: null, fromSlot: null };
+  renderSegments();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// TOUCH DRAG (mobile)
+// ══════════════════════════════════════════════════════════════════
+let touchDrillId = null;
+let touchGhost = null;
+
+function onTouchStart(e, drillId) {
+  touchDrillId = drillId;
+  const touch = e.touches[0];
+  // Create floating ghost
+  touchGhost = document.createElement('div');
+  const drill = allDrills.find(d => d.id === drillId);
+  touchGhost.textContent = drill ? drill.name : drillId;
+  touchGhost.style.cssText = `
+    position: fixed; z-index: 9999; pointer-events: none;
+    background: var(--gold); color: var(--black);
+    font-family: 'Anton', sans-serif; font-size: 12px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 6px 12px; border-radius: 6px;
+    left: ${touch.clientX - 40}px; top: ${touch.clientY - 20}px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  `;
+  document.body.appendChild(touchGhost);
+
+  const moveHandler = (ev) => {
+    ev.preventDefault();
+    const t = ev.touches[0];
+    touchGhost.style.left = (t.clientX - 40) + 'px';
+    touchGhost.style.top = (t.clientY - 20) + 'px';
+
+    // Highlight slot under touch
+    document.querySelectorAll('.round-slot').forEach(s => s.classList.remove('drag-over'));
+    const under = document.elementFromPoint(t.clientX, t.clientY);
+    if (under) {
+      const slot = under.closest('.round-slot');
+      if (slot) slot.classList.add('drag-over');
+    }
+  };
+
+  const endHandler = (ev) => {
+    document.removeEventListener('touchmove', moveHandler);
+    document.removeEventListener('touchend', endHandler);
+    if (touchGhost) { touchGhost.remove(); touchGhost = null; }
+    document.querySelectorAll('.round-slot').forEach(s => s.classList.remove('drag-over'));
+
+    if (!ev.changedTouches.length) return;
+    const t = ev.changedTouches[0];
+    const under = document.elementFromPoint(t.clientX, t.clientY);
+    if (under) {
+      const slot = under.closest('.round-slot');
+      if (slot) {
+        const idx = parseInt(slot.dataset.slot);
+        const drill = allDrills.find(d => d.id === touchDrillId);
+        if (drill && !isNaN(idx)) {
+          segments[idx].drill = drill;
+          if (drill.time_min) segments[idx].duration = Math.round(drill.time_min / 60) || segments[idx].duration;
+          renderSegments();
+        }
+      }
+    }
+    touchDrillId = null;
+  };
+
+  document.addEventListener('touchmove', moveHandler, { passive: false });
+  document.addEventListener('touchend', endHandler);
+}
+
+function onTouchEnd(e, slotIndex) {
+  // handled by touch listeners above
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SEGMENT ACTIONS
+// ══════════════════════════════════════════════════════════════════
+function removeDrill(slotIndex) {
+  segments[slotIndex].drill = null;
+  renderSegments();
+}
+
+function onSegNameChange(idx, val) {
+  segments[idx].name = val;
+}
+
+function onDurationChange(idx, val) {
+  segments[idx].duration = parseInt(val) || 5;
+  renderEnergyCurve();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// ENERGY CURVE
+// ══════════════════════════════════════════════════════════════════
+function renderEnergyCurve() {
+  const el = document.getElementById('energyCurve');
+  const bars = segments.map((seg, i) => {
+    if (!seg.drill) {
+      return `<div class="energy-bar empty"><span class="energy-bar-label">${seg.num}</span></div>`;
+    }
+    const demand = seg.drill.energy_demand || 'medium';
+    const level = ENERGY_MAP[demand] || 2;
+    const pct = (level / 4) * 100;
+    return `<div class="energy-bar ${demand}" style="height:${pct}%"><span class="energy-bar-label">${seg.num}</span></div>`;
+  });
+  el.innerHTML = bars.join('');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// THEME SELECT
+// ══════════════════════════════════════════════════════════════════
+function renderThemeSelect() {
+  const el = document.getElementById('themeSelect');
+  el.innerHTML = '<option value="">Select theme...</option>' +
+    themes.map(t => `<option value="${t.id}">${esc(t.name)} (${t.layer})</option>`).join('');
+}
+
+function onThemeChange() {
+  const id = document.getElementById('themeSelect').value;
+  if (!id) return;
+  const theme = themes.find(t => t.id === id);
+  if (theme && !document.getElementById('classTitle').value) {
+    document.getElementById('classTitle').value = theme.name;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SAVE / LOAD / NEW
+// ══════════════════════════════════════════════════════════════════
+async function saveClass() {
+  const title = document.getElementById('classTitle').value.trim();
+  if (!title) { toast('Enter a class title'); return; }
+
+  const themeId = document.getElementById('themeSelect').value || null;
+  const notes = document.getElementById('classNotes').value.trim() || null;
+
+  const segs = segments.map(s => ({
+    num: s.num,
+    name: s.name,
+    drill_id: s.drill ? s.drill.id : null,
+    notes: null,
+    duration: s.duration
+  }));
+
+  const energyCurve = segments.map(s => s.drill ? (s.drill.energy_demand || 'medium') : null);
+
+  const body = { title, theme_id: themeId, template_id: 'paul_8', segments: segs, notes, energy_curve: energyCurve };
+
+  try {
+    let resp;
+    if (editingClassId) {
+      resp = await fetch(`${API}/classes/${editingClassId}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+      });
+    } else {
+      resp = await fetch(`${API}/classes`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+      });
+    }
+    const data = await resp.json();
+    if (data.ok) {
+      editingClassId = data.id || editingClassId;
+      toast('Class saved');
+      refreshClassList();
+    } else {
+      toast('Save failed');
+    }
+  } catch (e) {
+    console.error('Save error:', e);
+    toast('Save failed — API error');
+  }
+}
+
+async function loadClass(id) {
+  try {
+    const cls = await fetch(`${API}/classes/${id}`).then(r => r.json());
+    editingClassId = cls.id;
+    document.getElementById('classTitle').value = cls.title || '';
+    document.getElementById('classNotes').value = cls.notes || '';
+
+    if (cls.theme_id) {
+      document.getElementById('themeSelect').value = cls.theme_id;
+    }
+
+    // Rebuild segments from saved data
+    if (cls.segments && cls.segments.length) {
+      segments = cls.segments.map(s => ({
+        num: s.segment_num,
+        name: s.segment_name || `Round ${s.segment_num}`,
+        drill: s.drill_id ? allDrills.find(d => d.id === s.drill_id) || null : null,
+        duration: s.duration_minutes || 5
+      }));
+    } else {
+      segments = JSON.parse(JSON.stringify(DEFAULT_SEGMENTS));
+    }
+    renderSegments();
+    toast('Loaded: ' + cls.title);
+  } catch (e) {
+    console.error('Load error:', e);
+    toast('Load failed');
+  }
+}
+
+function newClass() {
+  editingClassId = null;
+  document.getElementById('classTitle').value = '';
+  document.getElementById('classNotes').value = '';
+  document.getElementById('themeSelect').value = '';
+  document.getElementById('blockTarget').value = '';
+  segments = JSON.parse(JSON.stringify(DEFAULT_SEGMENTS));
+  renderSegments();
+  toast('New class');
+}
+
+async function refreshClassList() {
+  try {
+    const classes = await fetch(`${API}/classes`).then(r => r.json());
+    renderClassList(classes);
+  } catch {}
+}
+
+function renderClassList(classes) {
+  const el = document.getElementById('classList');
+  if (!classes || !classes.length) {
+    el.innerHTML = '<div style="padding:12px;text-align:center;color:rgba(255,255,255,0.18);font-size:10px;">No saved classes</div>';
+    return;
+  }
+  el.innerHTML = classes.map(c => `
+    <div class="class-item" onclick="loadClass('${c.id}')">
+      <div class="ci-title">${esc(c.title)}</div>
+      <div class="ci-meta">${c.status || 'draft'} &middot; ${c.taught_date || c.created || ''}</div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════════════════
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════════════════════
+function safeJSON(str, fallback) {
+  try { return JSON.parse(str); } catch { return fallback; }
+}
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
