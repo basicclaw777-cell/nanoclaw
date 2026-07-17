@@ -26,6 +26,25 @@
 
 **Phone Home Screen Doors:** /env, /gym, /quarry, /court, /forensic-relay, /thinking-companion, /resonance-engine
 
+## 2026-07-16 — The Resonant Audit (4-Model Relay)
+
+**Method:** Same question (universe/resonant cavity/spirituality) → 4 independent LLMs (Forge, DeepSeek, GPT, Gemini) → 3 rounds → convergence map → adversarial audit.
+
+**Key findings:**
+- Three Primitives: Information + Constraint + Adaptive Persistence (everything derives)
+- Damping coefficient (ζ) = leverage point; maps directly to Three Engines and coaching
+- Held Tension mathematically required (F→0 = death)
+- Paul's coaching = Friston's Free Energy Principle (syntropic phase-alignment)
+- Verdicts: DeepSeek Conditional No, GPT Conditional, Gemini Conditional Yes
+
+**Vault:** ~/cathedral-vault/02_Refined_Gold/epistemology/the-resonant-audit.md (B+)
+**Visual:** ~/basic-reflex/resonant-audit-visual.html (8-section infographic)
+**Content pipeline (4 deliverables from one relay):**
+- NotebookLM source: ~/basic-reflex/content/resonant-audit-notebooklm-source.md
+- Idiot's Guide ep: ~/basic-reflex/content/idiots-guide-ep-physics.md ("The AI Discovers That Paul Has Been Doing Neuroscience")
+- Animation storyboard: ~/basic-reflex/content/resonant-audit-animation-storyboard.md (8 beats, 14 keyframes, two visual worlds)
+- Gemini keyframes: 12 frames generated successfully from copy-paste prompts
+
 ## 2026-07-15 — Six Operations + Gym Lobby + Idiot's Guide
 
 **Methods vaulted (2 new, Refined_Gold):**
