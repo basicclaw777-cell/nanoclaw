@@ -17,10 +17,40 @@ function uid() {
   return 'cls-' + crypto.randomBytes(4).toString('hex');
 }
 
+const BLOCK_CONFIG_PATH = path.join(process.env.HOME, 'nanoclaw', 'block-config.json');
+
+let _blockCache = null;
+let _blockMtime = 0;
+function getBlockConfig() {
+  try {
+    const stat = fs.statSync(BLOCK_CONFIG_PATH);
+    if (!_blockCache || stat.mtimeMs !== _blockMtime) {
+      _blockCache = JSON.parse(fs.readFileSync(BLOCK_CONFIG_PATH, 'utf8'));
+      _blockMtime = stat.mtimeMs;
+    }
+    return _blockCache;
+  } catch { return null; }
+}
+
 module.exports = function mountCoachingApi(app) {
 
   // Mount intelligence endpoints
   require('./intelligence.cjs')(app);
+
+  // ── Block config (single source of truth) ─────────────────────────
+  app.get('/coaching/blocks', (req, res) => {
+    const config = getBlockConfig();
+    if (!config) return res.status(404).json({ error: 'block-config.json not found' });
+    res.json(config);
+  });
+
+  // ── Visual bible ──────────────────────────────────────────────────
+  app.get('/visual-bible', (req, res) => {
+    const p = path.join(process.env.HOME, 'basic-reflex', 'visuals', 'visual-bible.html');
+    if (!fs.existsSync(p)) return res.status(404).send('Not found');
+    res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+    res.sendFile(p);
+  });
 
   // ── Intelligence dashboard ─────────────────────────────────────────
   app.get('/coaching-intel', (req, res) => {
@@ -216,10 +246,15 @@ module.exports = function mountCoachingApi(app) {
   app.get('/coaching/suggest', (req, res) => {
     try {
       const db = getDb();
-      const { theme_id, segment_name, limit } = req.query;
+      const { theme_id, segment_name, limit, block } = req.query;
       const max = parseInt(limit) || 8;
+      const blockNum = block ? parseInt(block) : null;
 
       let drills = db.prepare('SELECT * FROM drills').all();
+
+      if (blockNum) {
+        drills = drills.filter(d => d.block_min <= blockNum && d.block_max >= blockNum);
+      }
 
       // Score each drill
       let theme = null;
