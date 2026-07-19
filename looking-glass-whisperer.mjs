@@ -345,12 +345,17 @@ async function run() {
   // Telegram
   const telegramText = formatTelegram(whisper, reading);
 
-  // Send to Telegram
+  // Load env once — available to both Telegram blocks
+  let token, chatId;
   try {
     const { config } = await import('dotenv');
     config();
-    const token = process.env.TELEGRAM_TOKEN;
-    const chatId = process.env.PAUL_CHAT_ID;
+    token = process.env.TELEGRAM_TOKEN;
+    chatId = process.env.PAUL_CHAT_ID;
+  } catch {}
+
+  // Send to Telegram
+  try {
     if (token && chatId) {
       const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
@@ -365,22 +370,26 @@ async function run() {
   }
 
   // Signal tracker — watch for number patterns, Fibonacci, solfeggio in sky
+  // NOTE: fullScan/recordScan/formatSignalReport need implementation.
+  // For now, check reading data directly for notable patterns.
   try {
     const now = new Date();
-    const scan = fullScan(now);
-    recordScan(scan);
-    if (scan.summary.high > 0 || scan.summary.medium >= 2) {
-      const signalText = formatSignalReport(scan);
-      if (signalText && token && chatId) {
+    const convergence = reading.signal?.convergenceScore || 0;
+    const divergence = reading.mostContested?.divergenceDeg || 0;
+
+    // Fire alert if convergence is unusually high (>85%) or divergence extreme (>25°)
+    if (convergence > 85 || divergence > 25) {
+      const alertText = `⚡ WHISPERER SIGNAL ALERT\n\nConvergence: ${convergence}% (threshold: 85%)\nDivergence: ${divergence.toFixed(1)}° (threshold: 25°)\nFrontier: ${reading.mostContested?.glyph} ${reading.mostContested?.name}\n\nThis is unusual. Check the sky.`;
+      if (token && chatId) {
         await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: chatId, text: signalText }),
+          body: JSON.stringify({ chat_id: chatId, text: alertText }),
         });
-        console.log(`  Signal report sent (${scan.summary.high} high, ${scan.summary.medium} medium)`);
+        console.log(`  Signal alert sent: convergence=${convergence}% divergence=${divergence.toFixed(1)}°`);
       }
     } else {
-      console.log(`  Signal scan: ${scan.summary.total} patterns, none above threshold`);
+      console.log(`  Signal check: convergence=${convergence}% divergence=${divergence.toFixed(1)}° (within normal range)`);
     }
   } catch (e) { console.log(`  Signal tracker: ${e.message}`); }
 
