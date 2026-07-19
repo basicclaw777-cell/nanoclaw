@@ -6,86 +6,73 @@
 <title>Student Deck — Basic Reflex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black: #0a0a0a;
-  --card-black: #0d0d0d;
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface-rest: #0c0e10;
+  --border: #2a2a2a;
   --gold: #f7b408;
   --gold-dim: rgba(247, 180, 8, 0.55);
-  --gold-faint: rgba(247, 180, 8, 0.22);
-  --blue: #3b82f6;
-  --red: #ef4444;
+  --gold-faint: rgba(247, 180, 8, 0.15);
+  --gold-glow: rgba(247, 180, 8, 0.25);
+  --engine-body: #f7b408;
+  --engine-mind: #3b82f6;
+  --engine-emotion: #f59e0b;
   --white: #ffffff;
-  --grey: rgba(255, 255, 255, 0.55);
-  --grid-line: rgba(255, 255, 255, 0.07);
+  --text-muted: #888888;
+  --text-dim: rgba(255, 255, 255, 0.35);
+  --rest-accent: #3b82f6;
+  --font-display: 'Anton', sans-serif;
+  --font-body: 'Epilogue', sans-serif;
+  --fast: 150ms;
+  --normal: 300ms;
+  --slow: 600ms;
+  --slam: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
-  background: var(--black);
+  background: var(--bg);
   color: var(--white);
-  font-family: 'Epilogue', sans-serif;
+  font-family: var(--font-body);
   height: 100%;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
-  -webkit-overflow-scrolling: none;
   touch-action: pan-x;
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* ── Grid overlay pattern ─────────────────────────────────── */
-.grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
+/* ── Progress bar (top) ────────────────────────────────────── */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  display: flex;
+  gap: 2px;
+  z-index: 50;
+  padding: 0 2px;
+  background: var(--bg);
 }
 
-/* ── Corner ticks ─────────────────────────────────────────── */
-.corner-ticks {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
+.progress-seg {
+  flex: 1;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background var(--normal) ease;
+  border-radius: 1px;
 }
-.corner-ticks::before,
-.corner-ticks::after,
-.corner-ticks .bl::before,
-.corner-ticks .br::before {
-  content: '';
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-color: rgba(255,255,255,0.28);
-  border-style: solid;
-}
-.corner-ticks::before {
-  top: 16px; left: 16px;
-  border-width: 1px 0 0 1px;
-}
-.corner-ticks::after {
-  top: 16px; right: 16px;
-  border-width: 1px 1px 0 0;
-}
-.corner-ticks .bl::before {
-  bottom: 16px; left: 16px;
-  border-width: 0 0 1px 1px;
-}
-.corner-ticks .br::before {
-  bottom: 16px; right: 16px;
-  border-width: 0 1px 1px 0;
-}
+.progress-seg.done { background: var(--white); opacity: 0.4; }
+.progress-seg.active { background: var(--gold); box-shadow: 0 0 8px var(--gold-glow); }
+.progress-seg.rest-active { background: var(--rest-accent); box-shadow: 0 0 8px rgba(59, 130, 246, 0.3); }
 
-/* ── Slide container ──────────────────────────────────────── */
+/* ── Deck viewport ─────────────────────────────────────────── */
 .deck-viewport {
   width: 100%;
   height: 100vh;
@@ -95,8 +82,8 @@ html, body {
 
 .deck-track {
   display: flex;
-  height: calc(100vh - 40px);
-  transition: transform 300ms ease-out;
+  height: 100vh;
+  transition: transform var(--normal) ease-out;
   will-change: transform;
 }
 
@@ -105,452 +92,560 @@ html, body {
   width: 100%;
   height: 100%;
   position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
 
 .slide-inner {
   position: relative;
-  min-height: 100%;
-  padding: 48px 32px 40px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--card-black);
-}
-
-/* ── Typography ───────────────────────────────────────────── */
-.display {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(38px, 5.5vw, 76px);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  line-height: 1.05;
-}
-
-.label {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 800;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--grey);
-}
-
-.micro {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 700;
-  font-size: 9px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-}
-
-.body-text {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.85);
-}
-
-/* ── Title slide ──────────────────────────────────────────── */
-.slide-title .slide-inner {
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 20px;
+  padding: 48px 32px;
 }
 
-.brand-line {
-  font-family: 'Anton', sans-serif;
+/* ── LANDING / TITLE SLIDE ─────────────────────────────────── */
+.slide-landing .slide-inner {
+  background: var(--bg);
+}
+
+.landing-brand {
+  font-family: var(--font-display);
   font-size: 14px;
-  letter-spacing: 4px;
+  letter-spacing: 6px;
   text-transform: uppercase;
   color: var(--gold);
+  opacity: 0;
+  animation: fadeSlideUp 0.5s var(--slam) 0.3s forwards;
 }
 
-.class-title {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(42px, 7vw, 86px);
-  letter-spacing: 0.03em;
+.landing-title {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 12vw, 180px);
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  line-height: 1.05;
+  line-height: 0.95;
   color: var(--white);
-  max-width: 90%;
+  margin: 20px 0 24px;
+  opacity: 0;
+  transform: scale(1.8);
+  animation: typographicSlam 0.6s var(--slam) 0.6s forwards;
 }
 
-.class-meta {
-  font-family: 'Epilogue', sans-serif;
+.landing-meta {
+  font-family: var(--font-body);
   font-weight: 500;
-  font-size: 16px;
-  color: var(--grey);
+  font-size: clamp(13px, 2vw, 20px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
+  opacity: 0;
+  animation: fadeSlideUp 0.4s ease-out 1.0s forwards;
 }
 
-.class-meta .sep {
-  width: 4px;
-  height: 4px;
+.landing-meta .slash {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: clamp(16px, 2.5vw, 24px);
+}
+
+.landing-engine {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.engine-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--grey);
   display: inline-block;
 }
+.engine-dot.body { background: var(--engine-body); }
+.engine-dot.mind { background: var(--engine-mind); }
+.engine-dot.emotion { background: var(--engine-emotion); }
 
-.coach-name {
-  font-family: 'Anton', sans-serif;
-  font-size: 16px;
-  letter-spacing: 0.05em;
-  color: var(--gold);
-  margin-top: 12px;
+.landing-begin {
+  margin-top: 48px;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 3vw, 28px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--gold);
+  border: none;
+  padding: 16px 56px;
+  border-radius: 100px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0;
+  animation: fadeSlideUp 0.4s ease-out 1.3s forwards;
+  transition: transform var(--fast), box-shadow var(--fast);
+}
+.landing-begin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px var(--gold-glow);
+}
+.landing-begin:active {
+  transform: scale(0.97);
+  box-shadow: none;
 }
 
-/* ── Round slide ──────────────────────────────────────────── */
+.landing-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+  animation: breathe 5s ease-in-out infinite;
+}
+
+@keyframes typographicSlam {
+  0%   { opacity: 0; transform: scale(1.8); }
+  60%  { opacity: 1; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeSlideUp {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 0.8; }
+}
+
+/* ── COUNTDOWN OVERLAY ─────────────────────────────────────── */
+.countdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.countdown-overlay.active { display: flex; }
+
+.countdown-num {
+  font-family: var(--font-display);
+  font-size: clamp(120px, 30vw, 300px);
+  color: var(--gold);
+  animation: countPulse 0.8s ease-out;
+}
+
+.countdown-go {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 20vw, 200px);
+  color: var(--gold);
+  animation: countPulse 0.5s ease-out;
+}
+
+@keyframes countPulse {
+  0%   { transform: scale(1.5); opacity: 0; }
+  40%  { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── ROUND SLIDE (work) ────────────────────────────────────── */
+.slide-round .slide-inner {
+  background: var(--bg);
+  gap: 0;
+}
+
 .round-label {
-  font-family: 'Epilogue', sans-serif;
+  font-family: var(--font-body);
   font-weight: 800;
-  font-size: 10px;
-  letter-spacing: 0.3em;
+  font-size: 12px;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: var(--grey);
-  margin-bottom: 0;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
 }
 
 .round-number {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(90px, 15vw, 140px);
+  font-family: var(--font-display);
+  font-size: clamp(100px, 24vw, 260px);
   color: var(--gold);
-  line-height: 1;
+  line-height: 0.9;
   margin-bottom: 8px;
 }
 
 .drill-name {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(32px, 5vw, 48px);
+  font-family: var(--font-display);
+  font-size: clamp(32px, 6vw, 72px);
   text-transform: uppercase;
   color: var(--white);
-  line-height: 1.1;
+  line-height: 1.05;
   letter-spacing: 0.02em;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  max-width: 90%;
 }
 
-.drill-desc {
-  font-family: 'Epilogue', sans-serif;
+.coaching-cue {
+  font-family: var(--font-body);
   font-weight: 500;
-  font-size: clamp(15px, 2.2vw, 18px);
-  line-height: 1.6;
-  color: rgba(255,255,255,0.85);
-  max-width: 680px;
-  flex: 1;
+  font-size: clamp(16px, 2.5vw, 28px);
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.4;
 }
 
-.drill-notes {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 400;
-  font-style: italic;
-  font-size: 15px;
-  line-height: 1.5;
-  color: rgba(255,255,255,0.45);
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+.round-timer {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 96px);
+  color: var(--white);
+  font-variant-numeric: tabular-nums;
+  margin-top: auto;
+  padding-top: 32px;
+  transition: color var(--normal), text-shadow var(--normal);
 }
-
-.level-box {
-  margin-top: 16px;
-  padding: 14px 18px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px;
-}
-
-.level-box .level-tag {
-  font-family: 'Anton', sans-serif;
-  font-size: 13px;
+.round-timer.warning {
   color: var(--gold);
-  background: var(--black);
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-shadow: 0 0 20px var(--gold-glow);
+}
+.round-timer.pulse {
+  animation: heartbeat 1s ease-in-out;
 }
 
-.level-box .level-text {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgba(255,255,255,0.75);
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15%      { transform: scale(1.06); }
+  30%      { transform: scale(1); }
 }
 
-/* Duration badge */
-.duration-badge {
-  font-family: 'Anton', sans-serif;
-  font-size: 15px;
-  letter-spacing: 0.04em;
-  color: var(--gold);
-  background: var(--black);
-  border: 1px solid var(--gold-faint);
-  padding: 6px 16px;
-  border-radius: 100px;
-  display: inline-block;
+/* ── Transport controls ────────────────────────────────────── */
+.transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   margin-top: 16px;
+  position: relative;
+  z-index: 10;
 }
 
-/* Engine bar */
-.engine-bar {
+.transport-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  color: var(--white);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: all var(--fast);
+}
+.transport-btn:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+.transport-btn:active {
+  transform: scale(0.92);
+}
+
+.transport-btn.primary {
+  width: 56px;
+  height: 56px;
+  border-color: var(--gold-dim);
+  color: var(--gold);
+  font-size: 20px;
+}
+.transport-btn.primary:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.transport-btn.reset {
+  font-size: 14px;
+  width: 40px;
+  height: 40px;
+}
+
+.engine-stripe {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 4px;
 }
-.engine-bar.body { background: var(--gold); }
-.engine-bar.mind { background: var(--blue); }
-.engine-bar.eq   { background: var(--red); }
-.engine-bar.mixed {
-  background: linear-gradient(90deg, var(--gold) 0%, var(--blue) 50%, var(--red) 100%);
+.engine-stripe.body { background: var(--engine-body); }
+.engine-stripe.mind { background: var(--engine-mind); }
+.engine-stripe.emotion { background: var(--engine-emotion); }
+.engine-stripe.mixed {
+  background: linear-gradient(90deg, var(--engine-body) 0%, var(--engine-mind) 50%, var(--engine-emotion) 100%);
 }
 
-/* Timer button */
-.timer-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid var(--gold-dim);
-  background: transparent;
-  color: var(--gold);
-  font-family: 'Anton', sans-serif;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 200ms ease-out;
-  z-index: 5;
-  -webkit-tap-highlight-color: transparent;
-}
-.timer-btn:hover, .timer-btn:active {
-  border-color: var(--gold);
-  box-shadow: 0 0 8px rgba(247,180,8,0.8);
+/* ── REST SLIDE ────────────────────────────────────────────── */
+.slide-rest .slide-inner {
+  background: var(--surface-rest);
 }
 
-/* Timer overlay */
-.timer-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(10,10,10,0.92);
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+.slide-rest .round-label { color: rgba(255,255,255,0.3); z-index: 2; }
+.slide-rest .round-number {
+  color: rgba(255,255,255,0.08);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.12);
+  font-size: clamp(80px, 20vw, 200px);
 }
-.timer-overlay.active { display: flex; }
 
-.timer-display {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(80px, 18vw, 160px);
-  color: var(--gold);
+.rest-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 7vw, 80px);
+  text-transform: uppercase;
+  color: var(--white);
   letter-spacing: 0.04em;
-  transition: opacity 200ms;
-}
-
-.timer-label {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 0.3em;
-  color: var(--grey);
   margin-bottom: 8px;
 }
 
-.timer-cancel {
-  margin-top: 32px;
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--grey);
-  background: none;
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 10px 28px;
-  border-radius: 100px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.timer-cancel:active { background: rgba(255,255,255,0.05); }
-
-.timer-done {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(60px, 14vw, 120px);
-  color: var(--gold);
-  animation: timerFlash 0.4s ease-in-out 3;
+.rest-cue {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(16px, 2.5vw, 24px);
+  color: var(--rest-accent);
+  letter-spacing: 1px;
 }
 
-@keyframes timerFlash {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
+.slide-rest .round-timer { color: rgba(255,255,255,0.5); }
+.slide-rest .round-timer.warning { color: var(--white); text-shadow: none; }
 
-/* ── Completion slide ─────────────────────────────────────── */
+/* ── COMPLETION SLIDE ──────────────────────────────────────── */
 .slide-complete .slide-inner {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  gap: 16px;
+  background: var(--bg);
+  gap: 12px;
 }
 
 .complete-title {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(38px, 6vw, 72px);
-  letter-spacing: 0.03em;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 8vw, 96px);
   text-transform: uppercase;
   color: var(--gold);
-  line-height: 1.05;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
 
 .complete-summary {
-  font-family: 'Epilogue', sans-serif;
+  font-family: var(--font-body);
   font-weight: 500;
-  font-size: 18px;
-  color: var(--grey);
-}
-
-.complete-motto {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 500;
-  font-style: italic;
-  font-size: 16px;
-  color: rgba(255,255,255,0.35);
+  font-size: clamp(16px, 2.5vw, 24px);
+  color: var(--text-muted);
   margin-top: 8px;
 }
 
+.complete-line {
+  width: 60px;
+  height: 2px;
+  background: var(--gold);
+  margin: 16px 0;
+}
+
 .complete-coach {
-  font-family: 'Anton', sans-serif;
-  font-size: 16px;
-  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+  font-size: clamp(14px, 2vw, 20px);
+  letter-spacing: 4px;
+  text-transform: uppercase;
   color: var(--gold);
-  margin-top: 20px;
 }
 
-/* ── Landing slide (no class ID) ──────────────────────────── */
-.class-list {
-  list-style: none;
-  margin-top: 20px;
-  max-width: 500px;
-  width: 100%;
+/* ── WORKOUT SELECTOR (landing, no class) ──────────────────── */
+.selector-wrap {
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg);
+  padding: 48px 24px 80px;
 }
 
-.class-list-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 10px;
+.selector-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.selector-brand {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--gold);
   margin-bottom: 8px;
-  cursor: pointer;
-  transition: all 200ms ease-out;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.class-list-item:hover, .class-list-item:active {
-  border-color: var(--gold-faint);
-  background: rgba(247,180,8,0.04);
 }
 
-.class-list-item .cli-title {
-  font-family: 'Anton', sans-serif;
-  font-size: 18px;
+.selector-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 48px);
   text-transform: uppercase;
   color: var(--white);
   letter-spacing: 0.02em;
 }
 
-.class-list-item .cli-meta {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  color: var(--grey);
+.workout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.instructions {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 500;
-  font-size: 15px;
-  color: var(--grey);
+.workout-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all var(--normal) ease;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+.workout-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+.workout-card.engine-body::before { background: var(--engine-body); }
+.workout-card.engine-mind::before { background: var(--engine-mind); }
+.workout-card.engine-emotion::before { background: var(--engine-emotion); }
+
+.workout-card:hover, .workout-card:active {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+}
+
+.wc-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.wc-engine-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.wc-meta {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.wc-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.wc-start {
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--gold);
+  border: none;
+  padding: 10px 32px;
+  border-radius: 100px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--fast), box-shadow var(--fast);
+  pointer-events: none;
+}
+
+.workout-card:hover .wc-start {
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+.selector-footer {
   text-align: center;
-  margin-top: 8px;
-  line-height: 1.6;
+  margin-top: 32px;
 }
 
-/* ── Error slide ──────────────────────────────────────────── */
+.selector-coach {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ── Error ──────────────────────────────────────────────────── */
+.error-wrap {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px;
+  background: var(--bg);
+}
+
 .error-title {
-  font-family: 'Anton', sans-serif;
+  font-family: var(--font-display);
   font-size: 36px;
   text-transform: uppercase;
-  color: var(--red);
+  color: #ef4444;
   margin-bottom: 12px;
 }
 
 .error-detail {
-  font-family: 'Epilogue', sans-serif;
+  font-family: var(--font-body);
   font-weight: 500;
   font-size: 16px;
-  color: var(--grey);
+  color: var(--text-muted);
   line-height: 1.6;
-  text-align: center;
   max-width: 400px;
 }
 
-/* ── Dot navigation ───────────────────────────────────────── */
-.dot-nav {
-  height: 40px;
+/* ── Loading ───────────────────────────────────────────────── */
+.loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: var(--black);
-  position: relative;
-  z-index: 10;
+  height: 100vh;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-muted);
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
+.loading-state .spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--gold-faint);
+  border-top-color: var(--gold);
   border-radius: 50%;
-  background: var(--grey);
-  opacity: 0.3;
-  cursor: pointer;
-  transition: all 200ms ease-out;
-  -webkit-tap-highlight-color: transparent;
+  animation: spin 0.8s linear infinite;
+  margin-right: 12px;
 }
-.dot.active {
-  background: var(--gold);
-  opacity: 1;
-  box-shadow: 0 0 6px rgba(247,180,8,0.5);
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-.slide-counter {
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  color: rgba(255,255,255,0.3);
-  margin-left: 12px;
-}
-
-/* ── Hideable nav bar ─────────────────────────────────────── */
+/* ── Nav toggle ────────────────────────────────────────────── */
 .nav-toggle {
   position: fixed;
   top: 12px;
@@ -560,7 +655,7 @@ html, body {
   border: none;
   background: rgba(255,255,255,0.06);
   border-radius: 8px;
-  color: var(--grey);
+  color: var(--text-muted);
   font-size: 16px;
   cursor: pointer;
   z-index: 200;
@@ -568,7 +663,7 @@ html, body {
   align-items: center;
   justify-content: center;
   -webkit-tap-highlight-color: transparent;
-  transition: background 200ms;
+  transition: background var(--fast);
 }
 .nav-toggle:hover { background: rgba(255,255,255,0.1); }
 
@@ -577,7 +672,7 @@ html, body {
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(10,10,10,0.88);
+  background: rgba(10,10,10,0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -592,57 +687,40 @@ html, body {
 .nav-bar.visible { display: flex; }
 
 .nav-bar a {
-  font-family: 'Epilogue', sans-serif;
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--grey);
+  color: var(--text-muted);
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 6px;
-  transition: all 150ms;
+  transition: all var(--fast);
   -webkit-tap-highlight-color: transparent;
 }
 .nav-bar a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
 .nav-bar a.current { color: var(--gold); }
 
-/* ── Loading state ────────────────────────────────────────── */
-.loading-state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  font-family: 'Epilogue', sans-serif;
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--grey);
-}
-
-.loading-state .spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--gold-faint);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-right: 12px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Responsive ───────────────────────────────────────────── */
+/* ── Monitor responsive ────────────────────────────────────── */
 @media (max-width: 480px) {
   .slide-inner { padding: 40px 24px 32px; }
-  .round-number { font-size: clamp(80px, 22vw, 120px); }
 }
 
 @media (min-width: 1024px) {
-  .slide-inner { padding: 60px 80px 48px; }
-  .drill-desc { font-size: 20px; }
+  .workout-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+  }
+  .coaching-cue { font-size: 24px; }
 }
 
 @media (min-width: 1400px) {
-  .slide-inner { padding: 80px 120px 60px; }
+  .workout-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+  }
+  .slide-inner { padding: 80px 120px; }
 }
 </style>
 </head>
@@ -652,8 +730,8 @@ html, body {
 <nav class="nav-bar" id="navBar">
   <a href="/coaching-os">Builder</a>
   <a href="/student-deck" class="current">Deck</a>
-  <a href="/coaching-intel">Intel</a>
-  <a href="/coaching-os">Planner</a>
+  <a href="/drill-library">Drills</a>
+  <a href="/workout-builder">Planner</a>
 </nav>
 
 <div id="app">
@@ -663,35 +741,30 @@ html, body {
   </div>
 </div>
 
-<!-- Timer overlay -->
-<div class="timer-overlay" id="timerOverlay">
-  <div class="timer-label">ROUND TIMER</div>
-  <div class="timer-display" id="timerDisplay">0:00</div>
-  <button class="timer-cancel" onclick="cancelTimer()">TAP TO CANCEL</button>
+<div class="countdown-overlay" id="countdownOverlay">
+  <div id="countdownDisplay"></div>
 </div>
 
 <script>
-const API = 'http://localhost:8080/coaching';
+const API = '/coaching';
 
-// ── State ────────────────────────────────────────────────────────
 let currentSlide = 0;
 let totalSlides = 0;
-let timerInterval = null;
-let timerSeconds = 0;
 let touchStartX = 0;
-let touchStartY = 0;
 let touchDeltaX = 0;
 let isDragging = false;
 let navVisible = false;
+let roundTimers = {};
+let activeTimerInterval = null;
+let isRest = [];
 
-// ── Init ─────────────────────────────────────────────────────────
+// ── Init ────────────────────────────────────────────────────
 async function init() {
   const params = new URLSearchParams(window.location.search);
   const classId = params.get('class');
-  const level = params.get('level') || 'intermediate';
 
   if (!classId) {
-    await showLanding();
+    await showSelector();
     return;
   }
 
@@ -708,178 +781,181 @@ async function init() {
 
     const cls = await clsRes.json();
     const drills = await drillsRes.json();
-
     const drillMap = {};
     for (const d of drills) drillMap[d.id] = d;
-
-    renderDeck(cls, drillMap, level);
+    renderDeck(cls, drillMap);
   } catch (e) {
-    showError(classId, 'Cannot reach the API. Make sure the server is running.');
+    showError(classId, 'Cannot reach the API.');
   }
 }
 
-// ── Landing (no class ID) ────────────────────────────────────────
-async function showLanding() {
-  let classesHTML = '';
+// ── Workout Selector (no class ID) ──────────────────────────
+async function showSelector() {
+  let cardsHTML = '';
   try {
     const res = await fetch(`${API}/classes`);
     const classes = await res.json();
 
-    if (classes.length) {
-      classesHTML = '<ul class="class-list">';
-      for (const c of classes) {
-        const statusLabel = c.status === 'taught' ? 'Taught' : c.status === 'planned' ? 'Planned' : 'Draft';
-        classesHTML += `
-          <a class="class-list-item" href="?class=${c.id}">
-            <div>
-              <div class="cli-title">${esc(c.title)}</div>
-              <div class="cli-meta">${statusLabel}${c.taught_date ? ' &middot; ' + c.taught_date : ''}</div>
-            </div>
-            <div style="color:var(--gold);font-family:'Anton';font-size:20px;">&rsaquo;</div>
-          </a>
-        `;
-      }
-      classesHTML += '</ul>';
+    for (const c of classes) {
+      const segs = (c.segments || []).filter(s => s.drill_id);
+      const mins = segs.reduce((s, seg) => s + (seg.duration_minutes || 3), 0);
+      const engineClass = 'body';
+      cardsHTML += `
+        <a class="workout-card engine-${engineClass}" href="?class=${c.id}">
+          <div class="wc-top">
+            <div class="wc-engine-dot" style="background:var(--engine-${engineClass})"></div>
+            <span class="wc-meta">${segs.length} RDS &middot; ~${mins || '?'} MIN</span>
+          </div>
+          <div class="wc-title">${esc(c.title)}</div>
+          <div class="wc-start">START WORKOUT &rarr;</div>
+        </a>
+      `;
     }
   } catch (_) {}
 
   document.getElementById('app').innerHTML = `
-    <div class="slide" style="height:100vh;">
-      <div class="slide-inner" style="justify-content:center;align-items:center;text-align:center;">
-        <div class="grid-bg"></div>
-        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
-        <div class="brand-line" style="position:relative;z-index:2;">BASIC REFLEX</div>
-        <div class="display" style="color:var(--white);position:relative;z-index:2;margin-bottom:8px;">STUDENT DECK</div>
-        <p class="instructions" style="position:relative;z-index:2;">
-          Select a class below, or add <strong style="color:var(--gold);">?class=CLASS_ID</strong> to the URL.
-          <br>Optionally add <strong style="color:var(--gold);">&level=beginner</strong> or <strong style="color:var(--gold);">advanced</strong>.
-        </p>
-        <div style="position:relative;z-index:2;width:100%;display:flex;justify-content:center;">
-          ${classesHTML || '<p class="instructions" style="margin-top:12px;">No classes found.</p>'}
-        </div>
-        <div class="coach-name" style="position:relative;z-index:2;margin-top:24px;">Coach Paul</div>
+    <div class="selector-wrap">
+      <div class="selector-header">
+        <div class="selector-brand">BASIC REFLEX</div>
+        <div class="selector-title">Today's Workouts</div>
+      </div>
+      <div class="workout-grid">
+        ${cardsHTML || '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No classes found.</p>'}
+      </div>
+      <div class="selector-footer">
+        <div class="selector-coach">Coach Paul</div>
       </div>
     </div>
   `;
 }
 
-// ── Error state ──────────────────────────────────────────────────
+// ── Error state ─────────────────────────────────────────────
 function showError(classId, message) {
   document.getElementById('app').innerHTML = `
-    <div class="slide" style="height:100vh;">
-      <div class="slide-inner" style="justify-content:center;align-items:center;text-align:center;">
-        <div class="grid-bg"></div>
-        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
-        <div class="error-title" style="position:relative;z-index:2;">ERROR</div>
-        <div class="error-detail" style="position:relative;z-index:2;">
-          ${esc(message)}
-          <br><br>
-          Class ID: <strong style="color:var(--white);">${esc(classId)}</strong>
-          <br><br>
-          Check the URL and try again.
-        </div>
+    <div class="error-wrap">
+      <div class="error-title">ERROR</div>
+      <div class="error-detail">
+        ${esc(message)}<br><br>
+        Class: <strong style="color:var(--white)">${esc(classId)}</strong>
       </div>
     </div>
   `;
 }
 
-// ── Render deck ──────────────────────────────────────────────────
-function renderDeck(cls, drillMap, level) {
+// ── Render deck ─────────────────────────────────────────────
+function renderDeck(cls, drillMap) {
   const segments = (cls.segments || []).filter(s => s.drill_id);
   const totalTime = segments.reduce((sum, s) => sum + (s.duration_minutes || 3), 0);
+  const engines = detectEngines(segments, drillMap);
+  const primaryEngine = engines[0] || 'body';
 
   let slidesHTML = '';
+  isRest = [];
 
-  // ── Title slide
+  // Landing slide
   slidesHTML += `
-    <div class="slide slide-title">
+    <div class="slide slide-landing">
       <div class="slide-inner">
-        <div class="grid-bg"></div>
-        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
-        <div class="brand-line">BASIC REFLEX</div>
-        <div class="class-title">${esc(cls.title)}</div>
-        <div class="class-meta">
-          <span>${segments.length} rounds</span>
-          <span class="sep"></span>
-          <span>~${totalTime} min</span>
-          <span class="sep"></span>
-          <span>${capitalize(level)}</span>
+        <div class="landing-vignette"></div>
+        <div class="landing-brand">BASIC REFLEX</div>
+        <div class="landing-title">${esc(cls.title)}</div>
+        <div class="landing-meta">
+          <span>${segments.length} ROUNDS</span>
+          <span class="slash">/</span>
+          <span>${totalTime} MIN</span>
+          <span class="slash">/</span>
+          <span class="landing-engine">
+            <span class="engine-dot ${primaryEngine}"></span>
+            ENGINE: ${primaryEngine.toUpperCase()}
+          </span>
         </div>
-        <div class="coach-name">Coach Paul</div>
+        <button class="landing-begin" onclick="beginWorkout()">BEGIN</button>
       </div>
     </div>
   `;
+  isRest.push(false);
 
-  // ── Round slides
+  // Round slides
   segments.forEach((seg, i) => {
     const drill = drillMap[seg.drill_id];
     if (!drill) return;
 
     const time = seg.duration_minutes || 3;
-    const engines = safeJSON(drill.engines, ['body']);
-    const levels = safeJSON(drill.levels, null);
-    const levelText = levels ? (levels[level] || levels.intermediate || '') : '';
-    const primaryEngine = engines[0] || 'body';
-    const engineClass = engines.length > 1 ? 'mixed' : primaryEngine;
-    const drillNotes = seg.drill_notes || '';
+    const drillEngines = safeJSON(drill.engines, ['body']);
+    const engine = drillEngines[0] || 'body';
+    const engineClass = drillEngines.length > 1 ? 'mixed' : engine;
+    const domain = (drill.domain || '').toLowerCase();
+    const isRestRound = domain === 'rest' || domain === 'recovery' || (drill.name || '').toLowerCase().includes('rest');
+    const cue = seg.drill_notes || drill.description || '';
+    const cueOneLine = cue.length > 80 ? cue.substring(0, 77) + '...' : cue;
 
-    slidesHTML += `
-      <div class="slide slide-round">
-        <div class="slide-inner">
-          <div class="grid-bg"></div>
-          <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
-          <button class="timer-btn" onclick="startTimer(${time * 60}, event)" title="Start ${time} min timer">&#9654;</button>
-          <div class="round-label">ROUND</div>
-          <div class="round-number">${i + 1}</div>
-          <div class="drill-name">${esc(drill.name)}</div>
-          <div class="drill-desc">
-            ${esc(drill.description || seg.segment_name || '')}
-            ${drillNotes ? `<div class="drill-notes">${esc(drillNotes)}</div>` : ''}
-          </div>
-          ${levelText ? `
-            <div class="level-box">
-              <div class="level-tag">${capitalize(level)}</div>
-              <div class="level-text">${esc(levelText)}</div>
-            </div>
-          ` : ''}
-          <div class="duration-badge">${time} MIN</div>
-          <div class="engine-bar ${engineClass}"></div>
-        </div>
+    isRest.push(isRestRound);
+    roundTimers[i + 1] = time * 60;
+
+    const transportHTML = `
+      <div class="transport">
+        <button class="transport-btn" onclick="transportPrev(event)" title="Previous round">&#9664;</button>
+        <button class="transport-btn primary" id="pauseBtn-${i + 1}" onclick="transportPause(${i + 1}, event)" title="Pause / Resume">&#10074;&#10074;</button>
+        <button class="transport-btn" onclick="transportNext(event)" title="Next round">&#9654;</button>
+        <button class="transport-btn reset" onclick="transportReset(${i + 1}, ${time * 60}, event)" title="Reset timer">&#8634;</button>
       </div>
     `;
+
+    if (isRestRound) {
+      slidesHTML += `
+        <div class="slide slide-rest" data-round="${i + 1}" data-seconds="${time * 60}">
+          <div class="slide-inner">
+            <div class="round-label">REST</div>
+            <div class="round-number">${i + 1}</div>
+            <div class="rest-title">BREATHE</div>
+            <div class="rest-cue">${esc(cueOneLine) || 'Reset. Water. Refocus.'}</div>
+            <div class="round-timer" id="timer-${i + 1}">${formatTime(time * 60)}</div>
+            ${transportHTML}
+          </div>
+        </div>
+      `;
+    } else {
+      slidesHTML += `
+        <div class="slide slide-round" data-round="${i + 1}" data-seconds="${time * 60}">
+          <div class="slide-inner">
+            <div class="round-label">ROUND</div>
+            <div class="round-number">${i + 1}</div>
+            <div class="drill-name">${esc(drill.name)}</div>
+            <div class="coaching-cue">${esc(cueOneLine)}</div>
+            <div class="round-timer" id="timer-${i + 1}">${formatTime(time * 60)}</div>
+            ${transportHTML}
+            <div class="engine-stripe ${engineClass}"></div>
+          </div>
+        </div>
+      `;
+    }
   });
 
-  // ── Completion slide
+  // Completion slide
   slidesHTML += `
     <div class="slide slide-complete">
       <div class="slide-inner">
-        <div class="grid-bg"></div>
-        <div class="corner-ticks"><div class="bl"></div><div class="br"></div></div>
-        <div class="complete-title">SESSION COMPLETE</div>
+        <div class="complete-title">SESSION<br>COMPLETE</div>
+        <div class="complete-line"></div>
         <div class="complete-summary">${segments.length} rounds &middot; ${totalTime} minutes</div>
-        <div class="complete-motto">Train smart. Move well.</div>
-        <div class="complete-coach">Coach Paul &middot; Basic Reflex Boxing</div>
+        <div class="complete-coach">Coach Paul</div>
       </div>
     </div>
   `;
+  isRest.push(false);
 
-  totalSlides = segments.length + 2; // title + rounds + completion
+  totalSlides = segments.length + 2;
 
-  // ── Build dot nav
-  let dotsHTML = '';
+  // Progress bar
+  let progressHTML = '';
   for (let i = 0; i < totalSlides; i++) {
-    dotsHTML += `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`;
+    progressHTML += `<div class="progress-seg ${i === 0 ? 'active' : ''}" data-idx="${i}"></div>`;
   }
 
   document.getElementById('app').innerHTML = `
+    <div class="progress-bar" id="progressBar">${progressHTML}</div>
     <div class="deck-viewport" id="viewport">
-      <div class="deck-track" id="track">
-        ${slidesHTML}
-      </div>
-    </div>
-    <div class="dot-nav" id="dotNav">
-      ${dotsHTML}
-      <span class="slide-counter" id="slideCounter">1 / ${totalSlides}</span>
+      <div class="deck-track" id="track">${slidesHTML}</div>
     </div>
   `;
 
@@ -887,49 +963,111 @@ function renderDeck(cls, drillMap, level) {
   setupNavigation();
 }
 
-// ── Navigation ───────────────────────────────────────────────────
+// ── Begin workout (countdown) ───────────────────────────────
+function beginWorkout() {
+  const overlay = document.getElementById('countdownOverlay');
+  const display = document.getElementById('countdownDisplay');
+  overlay.classList.add('active');
+
+  let count = 3;
+  display.innerHTML = `<div class="countdown-num">${count}</div>`;
+
+  const interval = setInterval(() => {
+    count--;
+    if (count > 0) {
+      display.innerHTML = `<div class="countdown-num">${count}</div>`;
+    } else if (count === 0) {
+      display.innerHTML = `<div class="countdown-go">GO</div>`;
+    } else {
+      clearInterval(interval);
+      overlay.classList.remove('active');
+      goToSlide(1);
+      startRoundTimer(1);
+    }
+  }, 800);
+}
+
+// ── Round timer ─────────────────────────────────────────────
+function startRoundTimer(slideIdx) {
+  stopActiveTimer();
+  const slide = document.querySelectorAll('.slide')[slideIdx];
+  if (!slide || (!slide.classList.contains('slide-round') && !slide.classList.contains('slide-rest'))) return;
+
+  const seconds = parseInt(slide.dataset.seconds) || 180;
+  const roundNum = parseInt(slide.dataset.round);
+  let remaining = seconds;
+  const timerEl = document.getElementById(`timer-${roundNum}`);
+  if (!timerEl) return;
+
+  timerEl.textContent = formatTime(remaining);
+  timerEl.classList.remove('warning', 'pulse');
+
+  activeTimerInterval = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      stopActiveTimer();
+      timerEl.textContent = '0:00';
+      timerEl.classList.add('warning');
+      // Auto-advance after 2s
+      setTimeout(() => {
+        if (currentSlide === slideIdx && currentSlide < totalSlides - 1) {
+          goToSlide(currentSlide + 1);
+          startRoundTimer(currentSlide);
+        }
+      }, 2000);
+      return;
+    }
+
+    timerEl.textContent = formatTime(remaining);
+
+    if (remaining <= 10) {
+      timerEl.classList.add('warning');
+      timerEl.classList.remove('pulse');
+      void timerEl.offsetWidth;
+      timerEl.classList.add('pulse');
+    }
+  }, 1000);
+}
+
+function stopActiveTimer() {
+  if (activeTimerInterval) {
+    clearInterval(activeTimerInterval);
+    activeTimerInterval = null;
+  }
+}
+
+// ── Navigation ──────────────────────────────────────────────
 function setupNavigation() {
   const viewport = document.getElementById('viewport');
   if (!viewport) return;
 
-  // Touch events
   viewport.addEventListener('touchstart', onTouchStart, { passive: true });
   viewport.addEventListener('touchmove', onTouchMove, { passive: false });
   viewport.addEventListener('touchend', onTouchEnd, { passive: true });
-
-  // Keyboard
   document.addEventListener('keydown', onKeyDown);
-
-  // Click zones
   viewport.addEventListener('click', onClickNav);
 }
 
 function onTouchStart(e) {
-  if (document.getElementById('timerOverlay').classList.contains('active')) return;
   touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
   touchDeltaX = 0;
   isDragging = false;
-
   const track = document.getElementById('track');
   if (track) track.style.transition = 'none';
 }
 
 function onTouchMove(e) {
-  if (document.getElementById('timerOverlay').classList.contains('active')) return;
   const dx = e.touches[0].clientX - touchStartX;
-  const dy = e.touches[0].clientY - touchStartY;
+  const dy = e.touches[0].clientY - (e.touches[0].clientY || 0);
 
-  // If vertical scroll dominates, let it through
-  if (!isDragging && Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 10) return;
-
-  if (Math.abs(dx) > 10) {
+  if (!isDragging && Math.abs(dx) > 10) {
     isDragging = true;
     e.preventDefault();
   }
 
   if (isDragging) {
     touchDeltaX = dx;
+    e.preventDefault();
     const track = document.getElementById('track');
     const base = -currentSlide * 100;
     const pct = (dx / window.innerWidth) * 100;
@@ -942,123 +1080,168 @@ function onTouchEnd() {
   isDragging = false;
 
   const track = document.getElementById('track');
-  track.style.transition = 'transform 300ms ease-out';
+  track.style.transition = `transform var(--normal) ease-out`;
 
   const threshold = window.innerWidth * 0.2;
   if (touchDeltaX < -threshold && currentSlide < totalSlides - 1) {
     goToSlide(currentSlide + 1);
+    startRoundTimer(currentSlide);
   } else if (touchDeltaX > threshold && currentSlide > 0) {
     goToSlide(currentSlide - 1);
+    startRoundTimer(currentSlide);
   } else {
-    goToSlide(currentSlide); // snap back
+    goToSlide(currentSlide);
   }
 }
 
 function onKeyDown(e) {
   if (e.key === 'ArrowRight' || e.key === ' ') {
     e.preventDefault();
-    nextSlide();
+    if (currentSlide < totalSlides - 1) {
+      goToSlide(currentSlide + 1);
+      startRoundTimer(currentSlide);
+    }
   } else if (e.key === 'ArrowLeft') {
     e.preventDefault();
-    prevSlide();
-  } else if (e.key === 'Escape') {
-    cancelTimer();
+    if (currentSlide > 0) {
+      goToSlide(currentSlide - 1);
+      startRoundTimer(currentSlide);
+    }
   }
 }
 
 function onClickNav(e) {
-  // Don't navigate if clicking a button
   if (e.target.closest('button')) return;
-  if (document.getElementById('timerOverlay').classList.contains('active')) return;
-
   const x = e.clientX;
   const w = window.innerWidth;
-  if (x < w * 0.35) {
-    prevSlide();
-  } else if (x > w * 0.65) {
-    nextSlide();
+  if (x < w * 0.35 && currentSlide > 0) {
+    goToSlide(currentSlide - 1);
+    startRoundTimer(currentSlide);
+  } else if (x > w * 0.65 && currentSlide < totalSlides - 1) {
+    goToSlide(currentSlide + 1);
+    startRoundTimer(currentSlide);
   }
-}
-
-function nextSlide() {
-  if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
-}
-
-function prevSlide() {
-  if (currentSlide > 0) goToSlide(currentSlide - 1);
 }
 
 function goToSlide(n) {
   currentSlide = n;
   const track = document.getElementById('track');
   if (track) {
-    track.style.transition = 'transform 300ms ease-out';
+    track.style.transition = `transform var(--normal) ease-out`;
     track.style.transform = `translateX(-${n * 100}%)`;
   }
 
-  // Update dots
-  const dots = document.querySelectorAll('.dot');
-  dots.forEach((d, i) => d.classList.toggle('active', i === n));
-
-  // Update counter
-  const counter = document.getElementById('slideCounter');
-  if (counter) counter.textContent = `${n + 1} / ${totalSlides}`;
+  // Update progress bar
+  document.querySelectorAll('.progress-seg').forEach((seg, i) => {
+    seg.classList.remove('active', 'done', 'rest-active');
+    if (i < n) seg.classList.add('done');
+    else if (i === n) {
+      seg.classList.add(isRest[n] ? 'rest-active' : 'active');
+    }
+  });
 }
 
-// ── Timer ────────────────────────────────────────────────────────
-function startTimer(seconds, e) {
-  if (e) e.stopPropagation();
-  timerSeconds = seconds;
+// ── Transport controls ──────────────────────────────────────
+let isPaused = false;
+let pausedRemaining = 0;
+let pausedSlide = 0;
 
-  const overlay = document.getElementById('timerOverlay');
-  const display = document.getElementById('timerDisplay');
+function transportPrev(e) {
+  e.stopPropagation();
+  if (currentSlide > 1) {
+    stopActiveTimer();
+    isPaused = false;
+    goToSlide(currentSlide - 1);
+    startRoundTimer(currentSlide);
+  }
+}
 
-  overlay.classList.add('active');
-  updateTimerDisplay();
+function transportNext(e) {
+  e.stopPropagation();
+  if (currentSlide < totalSlides - 1) {
+    stopActiveTimer();
+    isPaused = false;
+    goToSlide(currentSlide + 1);
+    startRoundTimer(currentSlide);
+  }
+}
 
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    if (timerSeconds <= 0) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      timerSeconds = 0;
+function transportPause(roundNum, e) {
+  e.stopPropagation();
+  const btn = document.getElementById(`pauseBtn-${roundNum}`);
 
-      // Show TIME flash
-      display.innerHTML = '<div class="timer-done">TIME</div>';
+  if (!isPaused && activeTimerInterval) {
+    isPaused = true;
+    pausedSlide = currentSlide;
+    const timerEl = document.getElementById(`timer-${roundNum}`);
+    const parts = timerEl.textContent.split(':');
+    pausedRemaining = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    stopActiveTimer();
+    if (btn) btn.innerHTML = '&#9654;';
+    timerEl.style.opacity = '0.5';
+  } else if (isPaused) {
+    isPaused = false;
+    const timerEl = document.getElementById(`timer-${roundNum}`);
+    if (timerEl) timerEl.style.opacity = '1';
+    if (btn) btn.innerHTML = '&#10074;&#10074;';
+    resumeTimer(roundNum, pausedRemaining);
+  }
+}
 
+function transportReset(roundNum, totalSeconds, e) {
+  e.stopPropagation();
+  stopActiveTimer();
+  isPaused = false;
+  const timerEl = document.getElementById(`timer-${roundNum}`);
+  if (timerEl) {
+    timerEl.textContent = formatTime(totalSeconds);
+    timerEl.classList.remove('warning', 'pulse');
+    timerEl.style.opacity = '1';
+  }
+  const btn = document.getElementById(`pauseBtn-${roundNum}`);
+  if (btn) btn.innerHTML = '&#10074;&#10074;';
+  startRoundTimer(currentSlide);
+}
+
+function resumeTimer(roundNum, remaining) {
+  stopActiveTimer();
+  const timerEl = document.getElementById(`timer-${roundNum}`);
+  if (!timerEl) return;
+
+  let secs = remaining;
+  timerEl.textContent = formatTime(secs);
+
+  activeTimerInterval = setInterval(() => {
+    secs--;
+    if (secs <= 0) {
+      stopActiveTimer();
+      timerEl.textContent = '0:00';
+      timerEl.classList.add('warning');
       setTimeout(() => {
-        overlay.classList.remove('active');
-        display.textContent = '0:00';
-      }, 3000);
+        if (currentSlide < totalSlides - 1) {
+          goToSlide(currentSlide + 1);
+          startRoundTimer(currentSlide);
+        }
+      }, 2000);
       return;
     }
-    updateTimerDisplay();
+    timerEl.textContent = formatTime(secs);
+    if (secs <= 10) {
+      timerEl.classList.add('warning');
+      timerEl.classList.remove('pulse');
+      void timerEl.offsetWidth;
+      timerEl.classList.add('pulse');
+    }
   }, 1000);
 }
 
-function updateTimerDisplay() {
-  const display = document.getElementById('timerDisplay');
-  const m = Math.floor(timerSeconds / 60);
-  const s = timerSeconds % 60;
-  display.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-}
-
-function cancelTimer() {
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-  const overlay = document.getElementById('timerOverlay');
-  overlay.classList.remove('active');
-}
-
-// ── Nav bar toggle ───────────────────────────────────────────────
+// ── Nav bar ─────────────────────────────────────────────────
 function toggleNav() {
   navVisible = !navVisible;
   document.getElementById('navBar').classList.toggle('visible', navVisible);
 }
 
-// ── Helpers ──────────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────
 function esc(s) {
   if (!s) return '';
   const d = document.createElement('div');
@@ -1066,8 +1249,10 @@ function esc(s) {
   return d.innerHTML;
 }
 
-function capitalize(s) {
-  return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+function formatTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 function safeJSON(str, fallback) {
@@ -1077,7 +1262,18 @@ function safeJSON(str, fallback) {
   catch { return fallback; }
 }
 
-// ── Boot ─────────────────────────────────────────────────────────
+function detectEngines(segments, drillMap) {
+  const counts = {};
+  for (const seg of segments) {
+    const drill = drillMap[seg.drill_id];
+    if (!drill) continue;
+    const engines = safeJSON(drill.engines, ['body']);
+    for (const e of engines) counts[e] = (counts[e] || 0) + 1;
+  }
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(e => e[0]);
+}
+
+// ── Boot ────────────────────────────────────────────────────
 init();
 </script>
 </body>
