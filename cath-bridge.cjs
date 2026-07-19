@@ -5332,6 +5332,10 @@ app.get('/reed-lab/gemini-log.json', (req, res) => {
   catch { res.json([]); }
 });
 app.use('/reed-lab/gemini-outbox', require('express').static(path.join(__dirname, 'reed-lab', 'gemini-outbox')));
+
+// ── Cathedral Chronicle ───────────────────────────────────────────────────────
+app.use('/chronicle', require('express').static(path.join(HOME, 'Cathedral', 'chronicle')));
+
 app.get('/api/reed-curator', (req, res) => {
   try {
     const state = JSON.parse(fs.readFileSync(path.join(__dirname, 'reed-lab', 'curator-state.json'), 'utf8'));

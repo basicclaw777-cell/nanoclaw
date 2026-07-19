@@ -185,3 +185,4 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Logan Story Engine** · `~/Cathedral/logan-story-engine.js` · CLI `--scene/--arc/--moment/--diagnostic` · Narrative generator from Character Bible · doc: BUILD_LOG 2026-07-17
 - **Fable Use Cases Map** · `~/Cathedral/control-panel/fable-use-cases.html` · static · Interactive SVG mind map of 6 Fable use cases · doc: BUILD_LOG 2026-07-17
 - **Forge Sage** · `~/nanoclaw/sages/forge.json` · `/court` agent picker · Forge conversational proxy for Court · doc: BUILD_LOG 2026-07-17
+- **PT Tracker** · `~/basic-reflex/pt-tracker.html` · route `/pt` · Mobile PT session counter · doc: BUILD_LOG 2026-07-19

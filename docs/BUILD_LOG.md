@@ -1,6 +1,13 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-19 — PT Tracker
+
+- PT Tracker: ~/basic-reflex/pt-tracker.html — mobile session counter for PT clients
+- Route: /pt, API: /pt/clients, /pt/client, /pt/session, /pt/add-sessions, /pt/client/:id
+- Data: ~/basic-reflex/pt-data.json. One-tap session deduct, optional notes, history.
+- Confirmed working from Paul's phone. First daily-use field tool.
+
 ## 2026-07-17 — Phone Bridge + Mobile Court + Gym Eyes Pipeline
 
 **Phone Bridge:**
