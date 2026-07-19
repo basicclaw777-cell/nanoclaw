@@ -1,12 +1,57 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
-## 2026-07-19 — PT Tracker
+## 2026-07-19b — CRM Drill Library + Soundboard + Atom Composer
+
+### 3 Visual Infographics
+- Coaching Signal Map: ~/basic-reflex/crm/signal-map.html · route /signal-map
+- CRM System Map: ~/basic-reflex/crm/system-map.html · route /system-map
+- Published Practice: ~/basic-reflex/crm/published-practice.html · route /practice
+
+### Drill Library Expansion (25 drills total in br-crm.db)
+- Top 6 Roots: Jab (6 foundational combos with sparring_prep arrays)
+- 2 Shopping List drills (compound intent: distract+push+two-phase, draw+counter+pivot)
+- 3 Movement/Tempo drills (lateral, feint-retreat, explosive, stance-switch)
+
+### Student-Facing Toolbox
+- Collection view: ~/basic-reflex/crm/collection.html · route /toolbox/:id
+- Combo Card Creator: ~/basic-reflex/crm/combo-cards.html · route /combos
+- Student drill/combo status tracking (learning/collected/mastered)
+
+### Soundboard + Atom Composer (sketches)
+- Spatial soundboard: ~/basic-reflex/crm/soundboard-sketch.html (regions, boards, sequencer)
+- Atom composer: ~/basic-reflex/crm/composer-sketch.html · route /composer
+- 31 atoms: 6 head + 6 body + 6 defence + 9 footwork + 6 modifiers
+- Block Guide with combo counts, auto min_block assignment
+
+### Database
+- Tables: student_drills, combos, student_combos
+- 9 combos seeded (Block 1-5), 1 test student
+- Server: ~/basic-reflex/crm/server.js (port 8085, 15+ routes)
+
+## 2026-07-19 — PT Tracker + Coaching Suite Expansion + Student Deck Redesign
 
 - PT Tracker: ~/basic-reflex/pt-tracker.html — mobile session counter for PT clients
 - Route: /pt, API: /pt/clients, /pt/client, /pt/session, /pt/add-sessions, /pt/client/:id
 - Data: ~/basic-reflex/pt-data.json. One-tap session deduct, optional notes, history.
 - Confirmed working from Paul's phone. First daily-use field tool.
+
+### Coaching Suite — 3 new tools + API
+- **Workout Builder** · `~/nanoclaw/coaching-os/workout-builder.html` · route `/workout-builder` · drag-and-drop class builder with round timeline, theme/block selectors, energy curve
+- **Drill Library** · `~/nanoclaw/coaching-os/drill-library.html` · route `/drill-library` · masonry drill browser with filter bar (domain, engine, block, mode, search), add-drill modal
+- **Student Deck** · `~/nanoclaw/coaching-os/student-deck.html` · route `/student-deck` · full redesign with GPT+Gemini design synthesis
+- **GET /coaching/drills** endpoint added to coaching-api.cjs (was missing, only POST existed)
+- All built with Fable 5 design DNA extraction (CSS vars, typography, interaction patterns from visual-bible.html)
+
+### Student Deck redesign details
+- Typographic slam landing page with 3-2-1-GO countdown
+- Massive round numbers (clamp 100-260px), one coaching cue, live countdown timer
+- Rest rounds: cooler treatment (darker surface, blue accent, "BREATHE")
+- Transport controls: prev/pause-resume/next/reset per round
+- Top segmented progress bar (gold=work, blue=rest, white=done)
+- Netflix-card workout selector with engine color stripes
+- Monitor-ready: CSS clamp() for 1920px+ gym display
+- Design principle: "gold is earned, not decoration" — gold=active/progress/selected only
 
 ## 2026-07-17 — Phone Bridge + Mobile Court + Gym Eyes Pipeline
 

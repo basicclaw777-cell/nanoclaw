@@ -11,7 +11,21 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Workout Card** · `~/nanoclaw/coaching-os/workout-card.html` · route `/workout?class=ID` · doc: BUILD_LOG 2026-07-13
 - **Coaching Intelligence** · `~/nanoclaw/coaching-os/intelligence.cjs` · route `/coaching-intel` · doc: BUILD_LOG 2026-07-13
 - **Series Graph** · `~/nanoclaw/coaching-os/series-graph.html` · route `/series-graph` · doc: BUILD_LOG 2026-07-13
-- **Coaching API** · `~/nanoclaw/coaching-os/coaching-api.cjs` · mounted by cath-bridge · 13 endpoints · doc: BUILD_LOG 2026-07-13
+- **Coaching API** · `~/nanoclaw/coaching-os/coaching-api.cjs` · mounted by cath-bridge · 14 endpoints (added GET /coaching/drills) · doc: BUILD_LOG 2026-07-13, 2026-07-19
+- **Workout Builder** · `~/nanoclaw/coaching-os/workout-builder.html` · route `/workout-builder` · doc: BUILD_LOG 2026-07-19
+- **Drill Library** · `~/nanoclaw/coaching-os/drill-library.html` · route `/drill-library` · doc: BUILD_LOG 2026-07-19
+- **Student Deck** · `~/nanoclaw/coaching-os/student-deck.html` · route `/student-deck` · redesigned 2026-07-19 (GPT+Gemini synthesis) · doc: BUILD_LOG 2026-07-19
+- **Visual Bible** · `~/basic-reflex/visuals/visual-bible.html` · route `/visual-bible` · 10 Combat HUD cards · doc: BUILD_LOG 2026-07-18
+
+## BR CRM + Drill Toolbox
+- **CRM Server** · `~/basic-reflex/crm/server.js` · port 8085 · Express + SQLite (br-crm.db) · doc: BUILD_LOG 2026-07-19b
+- **Coaching Signal Map** · `~/basic-reflex/crm/signal-map.html` · route `/signal-map` · doc: BUILD_LOG 2026-07-19b
+- **CRM System Map** · `~/basic-reflex/crm/system-map.html` · route `/system-map` · doc: BUILD_LOG 2026-07-19b
+- **Published Practice** · `~/basic-reflex/crm/published-practice.html` · route `/practice` · doc: BUILD_LOG 2026-07-19b
+- **Student Toolbox** · `~/basic-reflex/crm/collection.html` · route `/toolbox/:id` · doc: BUILD_LOG 2026-07-19b
+- **Combo Cards** · `~/basic-reflex/crm/combo-cards.html` · route `/combos` · doc: BUILD_LOG 2026-07-19b
+- **Soundboard Sketch** · `~/basic-reflex/crm/soundboard-sketch.html` · spatial drill/combo organizer · doc: BUILD_LOG 2026-07-19b
+- **Atom Composer** · `~/basic-reflex/crm/composer-sketch.html` · route `/composer` · 31 atoms, sequencer, block guide · doc: BUILD_LOG 2026-07-19b
 
 ## Cymatic Choir
 - **Forge Mirror Log** · `~/cathedral-vault/02_Refined_Gold/cathedral/forge-mirror-log.md` · trigger: session-closer Step 0 (end of session) · read-in: the-builders-frequency.md (session start) · doc: the-cymatic-choir.md
