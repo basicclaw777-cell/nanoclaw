@@ -1,6 +1,57 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-19c — Agent Governance 4 Pillars (Relay Thread Extraction)
+
+### Source
+DeepSeek relay (Automaton — AI that dies if it doesn't make money) + GPT relay (Constitutional Immutability vs Self-Improvement). Paul shared external conversations, Forge stripped for architectural parts and wired into Cathedral.
+
+### Vault Document
+- `~/cathedral-vault/02_Refined_Gold/cathedral/agent-governance-4-pillars.md` — full spec (4 pillars, integration map, implementation priority)
+- Extended `the-autonomy-constitution.md` with 4-Pillar section mapping pillars to existing organs
+
+### New Code: Causal Critic (Pillar 1 → Trading)
+- `~/nanoclaw/trader/causal-critic.js` (ESM)
+- Scores closed trades on PROCESS quality, not P&L outcome
+- Three metrics: Calibration Score (Brier Skill), Action Quality Delta, Ex-Ante Edge Score
+- Black Swan Exemption: systemic move > 3σ = freeze weights, don't punish
+- Reference Class Engine: KNN-style baseline from historical trades grouped by asset+direction
+- Rolling 20-trade Process Score per strategy (replaces raw P&L in Corner's evaluation)
+- `processLeaderboard()` — strategy ranking by logic quality, not luck
+- New SQLite tables: `process_scores`, `reference_class` (in trades.db)
+
+### New Code: Constitutional Invariants (Pillar 4 → Governance)
+- `~/nanoclaw/governance/constitutional-invariants.js` (ESM)
+- 8 executable invariants (INV-001 through INV-008): evidence-precedes-belief, no-memory-deletion, output-provenance, no-self-modification, spend-within-budget, escalation-on-uncertainty, negative-edge-abort, forensic-standard-applies-to-self
+- Drift detection: tracks health over time, alerts when cumulative erosion detected
+- Constitutional Distance metric: compares rolling 20-cycle health against historical baseline
+- Trend classification: STABLE / DRIFTING / ERODING
+
+### Architecture Decisions
+- Pillar 2 (Struggle Multiplier) → spec only, implements when Quartermaster organ runs in production
+- Pillar 3 (Death-to-Rebirth) → recognized that session harvests ARE the primitive version; formal Genome vector deferred until agent continuity is a real problem (currently Paul is the continuity)
+- Constitution as executable tests (not prose) is the key architectural shift — measurable, driftable, automatable
+
+### Wiring Completed (top 5 priority)
+- [x] Wire `causal-critic.js scoreAll()` into cyclical-trader.js post-close hook (line 428)
+- [x] Strategy elimination uses Process Score as primary signal (P&L fallback when insufficient data)
+- [x] Brand invariant: `governance/brand-invariant.js` — checks/enforces BR palette. Purged burgundy from roundtable-digest.js (10 instances), cathedral-infographic.html (2 instances), reed-studio-engine.js prompt (generator was feeding burgundy into image models)
+- [x] Spend circuit breaker: `governance/spend-circuit-breaker.js` — `canSpend()` / `guardedCall()` for any paid API caller
+- [x] Corner multipliers fed by Process Score — Rule 4 in the-corner.js: strong logic (PS>0.5) = 1.25x boost, weak logic (PS<-0.2) = 0.4x mute
+
+### First Results (100 closed trades scored)
+- relative_strength: $476 profit BUT PS=-0.837 (lucky, not good — old Corner would boost, now muted)
+- gann_geometry: $102 profit AND PS=0.287 (genuine performer — logic holds)
+- vortex_flow: $259 profit AND PS=0.121 (decent logic confirmed)
+- coinflip_3: $124 profit BUT PS=-1.000 (random, correctly punished)
+- 11 reference class groups built from 100 closed trades
+
+### Still on board
+- [ ] Wire `processLeaderboard()` into /trader/hub dashboard
+- [ ] Wire `constitutionalHealthCheck()` into cathedral-health.js
+
+---
+
 ## 2026-07-19b — CRM Drill Library + Soundboard + Atom Composer
 
 ### 3 Visual Infographics
@@ -3418,3 +3469,61 @@ Training itself blocked until M5 Mac Studio (~Oct 2026) — trainModel() stub do
 - Graph-canonical: knowledge graph is the product, pages are views (ChatGPT insight)
 - Gated tranche indexation, GSC metrics → bandit brain (Fable insight)
 - Single domain, subdirectory silos (all 4 models agreed)
+
+---
+
+## 2026-07-19d — Agent Governance 4 Pillars (items 6-10)
+
+Continuation of the 4-Pillar Governance wiring. Items 1-7 were in the previous entry (2026-07-19c).
+
+### #8: Polymarket Calibration Tracker
+- **New:** `polymarket/calibration-tracker.js` (ESM) — Brier score tracking for researcher probability estimates
+- Reconstructs P(YES) from stored position data or estimates.json
+- Records forecast vs actual on every `closePosition()` call
+- Calibration bins (0-10%, 10-20% etc) with gap detection
+- Rolling Brier score + drift alert when recent predictions degrade vs historical
+- Wired into `ledger.js` — auto-records on every close
+
+### #9: Mausoleum Compressor (Death-to-Rebirth)
+- **New:** `governance/mausoleum-compressor.js` (ESM) — compresses 528 session harvests → 20 anchors
+- Extracts anchors from `### ` headers across all harvest files
+- Scores: type weight (corrections 1.0, calibration 0.8, builds 0.5) × recency (forgetting curve e^(-0.015×days))
+- Deduplicates by title similarity, keeps top 20
+- Output: `~/cathedral-vault/02_Refined_Gold/cathedral/mausoleum-index.md`
+- First run: 839 raw anchors → 20 survivors
+
+### #10: Strategy Elimination Genome Extraction
+- **Modified:** `trader/strategy-elimination.js` — genome extraction on elimination
+- New `genome_archive` table in trades.db
+- `extractGenome(strategy)`: analyzes closed trades → best assets, direction bias, avg hold time, best hours
+- `getInheritedBias(asset, direction)`: surviving strategies query dead strategy DNA for signal boost (capped 15%)
+- Auto-extracts on elimination event (3 strikes → genome archived → inherited by survivors)
+- CLI: `genome <name>` and `genomes` commands added
+- Tested: gann_geometry genome = short bias, ETH strong, 1.9d avg hold
+
+---
+
+## 2026-07-19e — The Concierge (Cathedral Guide + Institutional Memory)
+
+Cathedral's front-door guide and institutional memory made conversational. Knows every system, every build, every research thread, every convergence.
+
+### Core Build
+- **New:** `concierge.cjs` — brain module. Context assembly from 8 sources (SYSTEM_MAP, BUILD_LOG index + keyword-matched sections, vault-state-latest.txt, cathedral-convergences.json, taste-map.json, harvest history, forge-mirror-log, agent-domains.json). DeepSeek primary, hermes3 fallback.
+- **New:** `concierge.html` — chat UI, Cathedral aesthetic (dark theme, gold accent for Concierge), quick-action buttons (7), intent tag rendering, conversation history (last 8 turns)
+- **Routes:** `GET /concierge` (serves UI) · `POST /concierge/ask` (query + history → response + engine + intents) · `GET /concierge/pending` (unresolved intents) · `POST /concierge/resolve` (mark intent resolved)
+- **Lobby card:** added to cathedral-home.html Nerve Centre section (🔑 icon, NEW tag)
+
+### 5 Modes
+1. ORIENT — "what do we have?" → walk through domains, active vs dormant vs half-built
+2. ROUTE — "I want to work on X" → point to right tools/pages/systems
+3. RIFF — "what could we build?" → gaps, open threads, unwired connections
+4. RESEARCH — "what are we researching?" → active threads, convergences, depth ratings
+5. CONNECT — "what connects to what?" → cross-domain patterns, taste-map insights
+
+### Phase 2 Upgrades (same session)
+- **Research awareness:** reads vault-state-latest.txt (21 domains, DEEP/ADEQUATE/THIN/GAP depth tags), cathedral-convergences.json (59 convergences, 14 domains), cosmology master index, agent-domains.json
+- **Taste Map connection:** reads taste-map.json (10 domains, 265 anchors), summarizes domains/dimensions/anchor counts for interest-weighted routing
+- **Feedback loop:** intent detection via [BUILD IDEA]/[RESEARCH THREAD]/[CONNECTION] tags in responses → auto-logged to concierge-log.json → surfaced to Forge via GET /concierge/pending. "Pending ideas" quick button in UI.
+
+### BUILD_LOG as index
+- BUILD_LOG too large for full context injection (~3500 lines). Solved: inject section HEADERS as index + keyword-matched full sections (top 5) per query.

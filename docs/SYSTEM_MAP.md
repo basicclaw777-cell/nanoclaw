@@ -49,6 +49,14 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **AutonomyChassis** · `~/nanoclaw/governance/chassis.js` (ESM) · orchestrates organs by level, enforce/explain/report · doc: BUILD_LOG 2026-07-07
 - **Reed Governance** · `~/nanoclaw/reed-studio/reed-governance.js` (ESM) · 7 organs on standard chassis, wraps existing Reed code · doc: BUILD_LOG 2026-07-07
 - **Constitution Spec** · `~/cathedral-vault/02_Refined_Gold/cathedral/the-autonomy-constitution.md` · 12 organs, 5 levels, cybernetics lineage · doc: BUILD_LOG 2026-07-07
+- **4-Pillar Extension** · `~/cathedral-vault/02_Refined_Gold/cathedral/agent-governance-4-pillars.md` · Causal Decoupling + Struggle Multiplier + Death-to-Rebirth + Constitutional Integrity · doc: BUILD_LOG 2026-07-19c
+- **Causal Critic** · `~/nanoclaw/trader/causal-critic.js` (ESM) · Process Score replaces P&L feedback: Calibration + AQD + EES · doc: BUILD_LOG 2026-07-19c
+- **Constitutional Invariants** · `~/nanoclaw/governance/constitutional-invariants.js` (ESM) · 8 executable invariants + drift detection · doc: BUILD_LOG 2026-07-19c
+- **Brand Invariant** · `~/nanoclaw/governance/brand-invariant.js` (ESM) · checks/enforces BR palette, blocks burgundy · doc: BUILD_LOG 2026-07-19c
+- **Spend Circuit Breaker** · `~/nanoclaw/governance/spend-circuit-breaker.js` (ESM) · canSpend()/guardedCall() for paid APIs · doc: BUILD_LOG 2026-07-19c
+- **Calibration Tracker** · `~/nanoclaw/polymarket/calibration-tracker.js` (ESM) · Brier score + drift alert on researcher forecasts · doc: BUILD_LOG 2026-07-19d
+- **Mausoleum Compressor** · `~/nanoclaw/governance/mausoleum-compressor.js` (ESM) · 528 harvests → 20 anchors, forgetting curve · doc: BUILD_LOG 2026-07-19d
+- **Genome Extraction** · `~/nanoclaw/trader/strategy-elimination.js` (modified) · dead strategy DNA → inherited bias for survivors · doc: BUILD_LOG 2026-07-19d
 
 ## Universe Engine
 - **Aether Universe Dashboard** · `~/nanoclaw/aether-universe.html` · route `/aether-universe` (cath-bridge) · Lobby: Studio · doc: BUILD_LOG 2026-07-07 s2
@@ -126,6 +134,7 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Babylon Translator** · `babylon-translator.js` + `babylon-fetch.js` (nanoclaw) · trigger: manual `--prod` (deliberate prod run, pending) · Akkadian→English + entities, cost-metered, DeepSeek/hermes3 · calibrated 2026-06-15, bulk run pending · doc: vault `02_Refined_Gold/cathedral/the-non-western-veins.md` + BUILD_LOG 2026-06-15
 
 ## Cathedral knowledge
+- **The Concierge** · `~/nanoclaw/concierge.cjs` + `~/nanoclaw/concierge.html` · route `/concierge` + `/concierge/ask` + `/concierge/pending` + `/concierge/resolve` (cath-bridge.cjs) · Cathedral guide/institutional memory, 5 modes (Orient/Route/Riff/Research/Connect), DeepSeek+hermes3, reads SYSTEM_MAP+BUILD_LOG+vault-state+convergences+taste-map+harvests+mirror-log, intent detection ([BUILD IDEA]/[RESEARCH THREAD]/[CONNECTION]) → concierge-log.json → Forge pickup · doc: BUILD_LOG 2026-07-19
 - **The Oracle** · cath-bridge.cjs `/oracle` + `/oracle/ask` · trigger: localhost:8080/oracle (8888 sidebar) · vault RAG, gold-weighted, DeepSeek synth, cited · doc: BUILD_LOG 2026-06-21 night
 - **The Quarry** · `quarry-watcher.js` (PM2 `quarry`) · trigger: drop file in ~/Downloads/quarry/ · capture+route+audio-transcribe+notify · doc: BUILD_LOG 2026-06-21 night
 - **Film Room** · `~/basic-reflex/gym-eyes/film_room.py` + `/gym-eyes/film-room` · trigger: `python3 film_room.py --channel <url>` · YouTube->lesson cards by 10-block · PARKED (distill RAM) · doc: BUILD_LOG 2026-06-21 night

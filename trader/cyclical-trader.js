@@ -32,6 +32,7 @@ import { detectAllRegimes, applyRegimeFilter } from './regime-detector.js';
 import { runCorner, loadCornerAdvice } from './the-corner.js';
 import { shouldFight } from './the-matchmaker.js';
 import { checkBalance, isBlocked } from './balance-check.js';
+import { scoreAll as scoreCausalCritic } from './causal-critic.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
@@ -43,7 +44,10 @@ const STRATEGY_SCRIPT = path.join(__dirname, 'strategies', 'cathedral-strategies
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-const CYCLICAL_STRATEGIES = ['historical_cycles', 'lunar_cycles', 'gann_geometry', 'fibonacci_time', 'harmonic_year', 'harmonic_432', 'sexagesimal_cycles'];
+// Eliminated: lunar_cycles (12% WR, -$178), fibonacci_time (0% WR), harmonic_year (0% WR)
+// Surviving: gann_geometry (80% WR, +$45), historical_cycles (67% WR, +$40)
+// On trial: sexagesimal_cycles, harmonic_432
+const CYCLICAL_STRATEGIES = ['historical_cycles', 'gann_geometry', 'sexagesimal_cycles', 'harmonic_432'];
 
 // ── DB Setup ────────────────────────────────────────────────────────────────
 
@@ -333,6 +337,8 @@ function getConfidenceMultiplier() {
 }
 
 // ── The Cut Man — stop the bleeding during drawdown ─────────────────────────
+// Struggle Multiplier: under pressure, collapse width + expand depth.
+// GREEN=5 signals, YELLOW=2, RED=1 (gauntlet-verified), BLACK=frozen.
 
 function getCutManLimits(portfolio) {
   const startBalance = portfolio.starting_balance || portfolio.start_balance || 5000;
@@ -341,27 +347,38 @@ function getCutManLimits(portfolio) {
   let maxConcurrent = portfolio.max_concurrent || 8;
   let positionCap = 500;
   let status = 'healthy';
+  let reasoningMode = 'GREEN';
+  let maxSignals = 5;
+  let verificationDepth = 1;
 
   if (drawdownPct >= 20) {
-    // Critical — survival mode
     maxConcurrent = 1;
     positionCap = 200;
     status = 'CRITICAL';
+    reasoningMode = 'BLACK';
+    maxSignals = 0;
+    verificationDepth = 0;
   } else if (drawdownPct >= 15) {
-    // Hurt — minimal exposure
-    maxConcurrent = 2;
+    maxConcurrent = 1;
     positionCap = 250;
     status = 'HURT';
+    reasoningMode = 'RED';
+    maxSignals = 1;
+    verificationDepth = 4;
   } else if (drawdownPct >= 10) {
-    // Bleeding — reduce aggression
-    maxConcurrent = 4;
+    maxConcurrent = 2;
     positionCap = 350;
     status = 'BLEEDING';
+    reasoningMode = 'YELLOW';
+    maxSignals = 2;
+    verificationDepth = 2;
   } else if (drawdownPct >= 5) {
-    // Bruised — slight caution
-    maxConcurrent = 6;
+    maxConcurrent = 4;
     positionCap = 450;
     status = 'BRUISED';
+    reasoningMode = 'YELLOW';
+    maxSignals = 3;
+    verificationDepth = 2;
   }
 
   return {
@@ -369,6 +386,9 @@ function getCutManLimits(portfolio) {
     positionCap,
     status,
     drawdownPct: +drawdownPct.toFixed(1),
+    reasoningMode,
+    maxSignals,
+    verificationDepth,
   };
 }
 
@@ -422,7 +442,13 @@ async function run() {
   console.log('[1/9] Checking positions...');
   const closedCount = checkPositions(prices, portfolio);
   const openPositions = getOpenPositions();
-  if (closedCount > 0) console.log(`  Closed ${closedCount} positions`);
+  if (closedCount > 0) {
+    console.log(`  Closed ${closedCount} positions`);
+    try {
+      const scored = scoreCausalCritic();
+      if (scored.length > 0) console.log(`  [Causal Critic] Scored ${scored.length} trades — avg process score: ${(scored.reduce((a,s) => a + (s.process_score || 0), 0) / scored.length).toFixed(3)}`);
+    } catch (e) { console.log(`  [Causal Critic] Error: ${e.message}`); }
+  }
   if (openPositions.length > 0) {
     for (const p of openPositions) {
       const cur = prices[p.asset]?.price;
@@ -543,7 +569,17 @@ async function run() {
   const cutMan = getCutManLimits(portfolio);
 
   console.log(`\n[7/9] Confidence sizing: ×${confidence.mult} (${confidence.reason})`);
-  console.log(`[8/9] Cut man: ${cutMan.status} (${cutMan.drawdownPct}% drawdown) — max ${cutMan.maxConcurrent} positions, $${cutMan.positionCap} cap`);
+  console.log(`[8/9] Cut man: ${cutMan.status} (${cutMan.drawdownPct}% drawdown) — max ${cutMan.maxConcurrent} positions, $${cutMan.positionCap} cap — mode: ${cutMan.reasoningMode} (${cutMan.maxSignals} signals, depth ${cutMan.verificationDepth})`);
+
+  // Struggle Multiplier: limit signal count under pressure
+  if (cutMan.reasoningMode === 'BLACK') {
+    console.log('  [STRUGGLE] BLACK mode — ALL trading frozen. Deep Freeze.');
+    signals.length = 0;
+  } else if (cutMan.maxSignals < signals.length) {
+    const dropped = signals.length - cutMan.maxSignals;
+    signals.length = cutMan.maxSignals;
+    console.log(`  [STRUGGLE] ${cutMan.reasoningMode} mode — taking top ${cutMan.maxSignals} signals only (dropped ${dropped} weaker)`);
+  }
 
   // Step 7: Execute trades
   console.log('\n[9/9] Executing trades...');

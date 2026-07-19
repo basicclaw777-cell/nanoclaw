@@ -14,6 +14,7 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getStrategyProcessScore } from './causal-critic.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = path.join(__dirname, 'logs', 'trades.db');
@@ -47,6 +48,13 @@ function getDb() {
         event TEXT NOT NULL,
         strategy TEXT,
         details TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS genome_archive (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timestamp TEXT DEFAULT (datetime('now')),
+        strategy TEXT NOT NULL,
+        genome TEXT NOT NULL
       );
     `);
   }
@@ -150,11 +158,17 @@ export function runElimination() {
     };
   }
 
-  // Need at least 5 closed trades total across all strategies before eliminating
+  // Load elimination config
+  const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+  const elimConfig = config.elimination || {};
+  const strikesToKill = elimConfig.strikes_to_kill || 3;
+  const minTradesBeforeElim = elimConfig.min_trades_before_elimination || 3;
+
+  // Need minimum closed trades before eliminating
   const totalClosed = results.reduce((sum, r) => sum + r.total_trades, 0);
-  if (totalClosed < 5) {
+  if (totalClosed < minTradesBeforeElim) {
     return {
-      message: `Only ${totalClosed} closed trades — need 5 before elimination starts`,
+      message: `Only ${totalClosed} closed trades — need ${minTradesBeforeElim} before elimination starts`,
       results,
     };
   }
@@ -166,18 +180,49 @@ export function runElimination() {
     return { message: 'No eligible strategies for elimination this week', results };
   }
 
-  // Protect the top cumulative earner — can't eliminate what's working overall
-  const topCumulative = [...eligible].sort((a, b) => b.cumulative_pnl - a.cumulative_pnl)[0];
-  let worst = eligible[0]; // Already sorted worst-first by weekly P&L
+  // Process Score is primary signal (Causal Decoupling — score logic, not luck)
+  // Fall back to P&L only if insufficient Process Score data
+  for (const candidate of eligible) {
+    const ps = getStrategyProcessScore(candidate.strategy);
+    candidate._processScore = ps.score;
+    candidate._psSufficient = ps.sufficient;
+  }
 
-  if (worst.strategy === topCumulative.strategy && eligible.length > 1) {
-    console.log(`[elimination] ${worst.strategy} is worst this week but TOP overall earner ($${worst.cumulative_pnl.toFixed(2)}) — protected, targeting next worst`);
-    worst = eligible[1];
+  // Re-sort: strategies with sufficient Process Score data sort by PS (worst first)
+  // Strategies without sufficient data sort by cumulative P&L (original behavior)
+  eligible.sort((a, b) => {
+    if (a._psSufficient && b._psSufficient) return (a._processScore || -2) - (b._processScore || -2);
+    if (a._psSufficient) return 1; // has data = protected from being "unknown worst"
+    if (b._psSufficient) return -1;
+    return a.weekly_pnl - b.weekly_pnl; // fallback: weekly P&L
+  });
+
+  // Protection: profitable strategies survive. PS demotes allocation (via Corner), not life/death.
+  let worst = null;
+  for (const candidate of eligible) {
+    if (candidate.cumulative_pnl > 0) {
+      const psNote = candidate._psSufficient ? ` PS: ${candidate._processScore.toFixed(3)}` : '';
+      console.log(`[elimination] ${candidate.strategy} — profitable ($${candidate.cumulative_pnl.toFixed(2)})${psNote} — protected (P&L decides life, PS decides sizing)`);
+      continue;
+    }
+    if (candidate._psSufficient && candidate._processScore > 0.3) {
+      console.log(`[elimination] ${candidate.strategy} — good logic (PS: ${candidate._processScore.toFixed(3)}) despite losses — protected`);
+      continue;
+    }
+    worst = candidate;
+    break;
+  }
+
+  if (!worst) {
+    return {
+      message: 'All active strategies are profitable overall — no elimination this week',
+      results,
+    };
   }
 
   // Give strike
   const newStrikes = worst.strikes + 1;
-  const eliminated = newStrikes >= 3;
+  const eliminated = newStrikes >= strikesToKill;
 
   d.prepare(`
     UPDATE strategy_elimination
@@ -197,9 +242,10 @@ export function runElimination() {
   // Log the event
   const weekNum = d.prepare('SELECT COUNT(DISTINCT week_number) + 1 as w FROM elimination_log').get().w;
 
+  const psLabel = worst._psSufficient ? `, PS: ${worst._processScore.toFixed(3)}` : ', PS: insufficient data';
   const event = eliminated
-    ? `ELIMINATED: ${worst.strategy} (3 strikes — weekly PnL $${worst.weekly_pnl.toFixed(2)}, cumulative $${worst.cumulative_pnl.toFixed(2)})`
-    : `STRIKE ${newStrikes}/3: ${worst.strategy} (worst performer — weekly PnL $${worst.weekly_pnl.toFixed(2)})`;
+    ? `ELIMINATED: ${worst.strategy} (3 strikes — weekly PnL $${worst.weekly_pnl.toFixed(2)}, cumulative $${worst.cumulative_pnl.toFixed(2)}${psLabel})`
+    : `STRIKE ${newStrikes}/3: ${worst.strategy} (worst performer — weekly PnL $${worst.weekly_pnl.toFixed(2)}${psLabel})`;
 
   d.prepare(`
     INSERT INTO elimination_log (week_number, event, strategy, details)
@@ -208,12 +254,18 @@ export function runElimination() {
 
   console.log(`[elimination] ${event}`);
 
+  let genome = null;
+  if (eliminated) {
+    genome = extractGenome(worst.strategy);
+  }
+
   return {
     week: weekNum,
     event,
     struck: worst.strategy,
     strikes: newStrikes,
     eliminated,
+    genome,
     active_count: active.length - (eliminated ? 1 : 0),
     results,
   };
@@ -247,6 +299,100 @@ export function getStandings() {
   };
 }
 
+// ── Genome Extraction (Death-to-Rebirth Pipeline) ───────────────────────────
+
+export function extractGenome(strategy) {
+  const d = getDb();
+
+  const trades = d.prepare(`
+    SELECT asset, direction, pnl, pnl_pct, entry_price,
+           strftime('%H', opened_at) as hour,
+           julianday(closed_at) - julianday(opened_at) as hold_days
+    FROM trades WHERE strategy = ? AND status = 'closed'
+  `).all(strategy);
+
+  if (trades.length < 3) return null;
+
+  const byAsset = {};
+  const byDirection = { long: { trades: 0, wins: 0, pnl: 0 }, short: { trades: 0, wins: 0, pnl: 0 } };
+  const byHour = {};
+
+  for (const t of trades) {
+    if (!byAsset[t.asset]) byAsset[t.asset] = { trades: 0, wins: 0, pnl: 0 };
+    byAsset[t.asset].trades++;
+    if (t.pnl > 0) byAsset[t.asset].wins++;
+    byAsset[t.asset].pnl += t.pnl;
+
+    const dir = t.direction || 'long';
+    byDirection[dir].trades++;
+    if (t.pnl > 0) byDirection[dir].wins++;
+    byDirection[dir].pnl += t.pnl;
+
+    if (t.hour) {
+      if (!byHour[t.hour]) byHour[t.hour] = { trades: 0, wins: 0 };
+      byHour[t.hour].trades++;
+      if (t.pnl > 0) byHour[t.hour].wins++;
+    }
+  }
+
+  const bestAssets = Object.entries(byAsset)
+    .filter(([, v]) => v.trades >= 2 && v.pnl > 0)
+    .sort((a, b) => b[1].pnl - a[1].pnl)
+    .slice(0, 3)
+    .map(([asset, v]) => ({ asset, winRate: v.wins / v.trades, pnl: Math.round(v.pnl * 100) / 100 }));
+
+  const directionBias = byDirection.long.pnl > byDirection.short.pnl ? 'long' : 'short';
+  const avgHoldDays = trades.reduce((s, t) => s + (t.hold_days || 0), 0) / trades.length;
+
+  const bestHours = Object.entries(byHour)
+    .filter(([, v]) => v.trades >= 2)
+    .sort((a, b) => (b[1].wins / b[1].trades) - (a[1].wins / a[1].trades))
+    .slice(0, 3)
+    .map(([hour, v]) => ({ hour: parseInt(hour), winRate: v.wins / v.trades }));
+
+  const genome = {
+    strategy,
+    totalTrades: trades.length,
+    bestAssets,
+    directionBias,
+    directionStats: {
+      long: { winRate: byDirection.long.trades > 0 ? byDirection.long.wins / byDirection.long.trades : 0, pnl: Math.round(byDirection.long.pnl * 100) / 100 },
+      short: { winRate: byDirection.short.trades > 0 ? byDirection.short.wins / byDirection.short.trades : 0, pnl: Math.round(byDirection.short.pnl * 100) / 100 },
+    },
+    avgHoldDays: Math.round(avgHoldDays * 10) / 10,
+    bestHours,
+    extractedAt: new Date().toISOString(),
+  };
+
+  d.prepare('INSERT INTO genome_archive (strategy, genome) VALUES (?, ?)').run(strategy, JSON.stringify(genome));
+  console.log(`[GENOME] Extracted from ${strategy}: ${bestAssets.length} strong assets, bias=${directionBias}, ${trades.length} trades`);
+  return genome;
+}
+
+export function getInheritedBias(asset, direction) {
+  const d = getDb();
+  const rows = d.prepare('SELECT genome FROM genome_archive ORDER BY id DESC').all();
+  if (!rows.length) return { boost: 0, sources: [] };
+
+  let totalBoost = 0;
+  const sources = [];
+
+  for (const row of rows) {
+    const genome = JSON.parse(row.genome);
+    const assetMatch = genome.bestAssets.find(a => a.asset === asset);
+    if (assetMatch) {
+      totalBoost += 0.05;
+      sources.push({ from: genome.strategy, reason: `${asset} was strong (WR: ${(assetMatch.winRate * 100).toFixed(0)}%, PnL: $${assetMatch.pnl})` });
+    }
+    if (genome.directionBias === direction && genome.directionStats[direction]?.winRate > 0.55) {
+      totalBoost += 0.03;
+      sources.push({ from: genome.strategy, reason: `${direction} bias confirmed (WR: ${(genome.directionStats[direction].winRate * 100).toFixed(0)}%)` });
+    }
+  }
+
+  return { boost: Math.min(totalBoost, 0.15), sources };
+}
+
 // ── CLI ──────────────────────────────────────────────────────────────────────
 
 if (process.argv[1]?.endsWith('strategy-elimination.js')) {
@@ -263,7 +409,22 @@ if (process.argv[1]?.endsWith('strategy-elimination.js')) {
       console.log(`${status} ${s.strategy.padEnd(25)} PnL: $${s.cumulative_pnl.toFixed(2).padStart(8)} | W/L: ${s.total_trades} trades | Win: ${s.win_rate || 0}%`);
     }
     console.log(`\nActive: ${standings.active} | Eliminated: ${standings.eliminated.join(', ') || 'none'}`);
+  } else if (arg === 'genome') {
+    const strategy = process.argv[3];
+    if (!strategy) { console.log('Usage: node strategy-elimination.js genome <strategy>'); process.exit(1); }
+    const g = extractGenome(strategy);
+    if (g) console.log(JSON.stringify(g, null, 2));
+    else console.log('Insufficient trades for genome extraction');
+  } else if (arg === 'genomes') {
+    const d = getDb();
+    const rows = d.prepare('SELECT strategy, genome FROM genome_archive ORDER BY id DESC').all();
+    if (!rows.length) { console.log('No archived genomes yet.'); process.exit(0); }
+    for (const r of rows) {
+      const g = JSON.parse(r.genome);
+      console.log(`\n[${g.strategy}] ${g.totalTrades} trades, bias=${g.directionBias}, hold=${g.avgHoldDays}d`);
+      for (const a of g.bestAssets) console.log(`  strong: ${a.asset} WR=${(a.winRate*100).toFixed(0)}% PnL=$${a.pnl}`);
+    }
   } else {
-    console.log('Usage: node strategy-elimination.js [run|standings]');
+    console.log('Usage: node strategy-elimination.js [run|standings|genome <name>|genomes]');
   }
 }
