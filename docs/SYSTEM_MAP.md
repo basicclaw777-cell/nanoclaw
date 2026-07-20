@@ -16,6 +16,8 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Drill Library** · `~/nanoclaw/coaching-os/drill-library.html` · route `/drill-library` · doc: BUILD_LOG 2026-07-19
 - **Student Deck** · `~/nanoclaw/coaching-os/student-deck.html` · route `/student-deck` · redesigned 2026-07-19 (GPT+Gemini synthesis) · doc: BUILD_LOG 2026-07-19
 - **Visual Bible** · `~/basic-reflex/visuals/visual-bible.html` · route `/visual-bible` · 10 Combat HUD cards · doc: BUILD_LOG 2026-07-18
+- **Goal Wall** · `~/basic-reflex/visuals/goal-wall.html` · route `/goal-wall` · 6 API endpoints · doc: BUILD_LOG 2026-07-20b
+- **Goal Cards** · `~/basic-reflex/visuals/goal-cards.html` · route `/goal-cards` · printable (4 types) · doc: BUILD_LOG 2026-07-20b
 
 ## BR CRM + Drill Toolbox
 - **CRM Server** · `~/basic-reflex/crm/server.js` · port 8085 · Express + SQLite (br-crm.db) · doc: BUILD_LOG 2026-07-19b

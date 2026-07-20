@@ -1,6 +1,21 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-20b — Goal Wall System + Kids Programme Recognition
+
+### Goal Wall (build completion from prior session)
+- ~/basic-reflex/visuals/goal-wall.html — mobile-first student weight tracking page
+- Routes: /goal-wall (HTML), /goal-wall/students (list), POST /goal-wall/student, POST /goal-wall/entry, POST /goal-wall/board, DELETE /goal-wall/student/:id
+- Data: ~/basic-reflex/goal-wall-data.json
+- Printable cards: ~/basic-reflex/visuals/goal-cards.html (route /goal-cards, 4 types, print-ready)
+- Bug fix: coaching-api.cjs missing `require('express')` — POST routes using express.json() crashed bridge
+
+### Kids Programme — Strategic Recognition (relay thread)
+- Kids identified as BR's highest-growth-potential demographic and drill R&D lab
+- Memory filed: project_kids_programme.md
+- Key insight: marketing bottleneck is actually a distribution problem — product already convinces (5yo story proof)
+- No code built this thread — architecture/conversation only
+
 ## 2026-07-19c — Agent Governance 4 Pillars (Relay Thread Extraction)
 
 ### Source

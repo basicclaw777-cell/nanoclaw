@@ -3,6 +3,7 @@
 // Handles: save class, load class, delete class, suggest drills, add drill
 
 const Database = require('better-sqlite3');
+const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -50,6 +51,90 @@ module.exports = function mountCoachingApi(app) {
     if (!fs.existsSync(p)) return res.status(404).send('Not found');
     res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
     res.sendFile(p);
+  });
+
+  // ── Goal cards (printable) ─────────────────────────────────────────
+  app.get('/goal-cards', (req, res) => {
+    const p = path.join(process.env.HOME, 'basic-reflex', 'visuals', 'goal-cards.html');
+    if (!fs.existsSync(p)) return res.status(404).send('Not found');
+    res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+    res.sendFile(p);
+  });
+
+  // ── Goal Wall ──────────────────────────────────────────────────────
+  const GOAL_DATA = path.join(process.env.HOME, 'basic-reflex', 'goal-wall-data.json');
+
+  function readGoals() {
+    try { return JSON.parse(fs.readFileSync(GOAL_DATA, 'utf8')); }
+    catch { return { students: [] }; }
+  }
+  function writeGoals(data) {
+    fs.writeFileSync(GOAL_DATA, JSON.stringify(data, null, 2));
+  }
+
+  app.get('/goal-wall', (req, res) => {
+    const p = path.join(process.env.HOME, 'basic-reflex', 'visuals', 'goal-wall.html');
+    if (!fs.existsSync(p)) return res.status(404).send('Not found');
+    res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+    res.sendFile(p);
+  });
+
+  app.get('/goal-wall/students', (req, res) => {
+    res.json(readGoals().students);
+  });
+
+  app.post('/goal-wall/student', express.json(), (req, res) => {
+    const { name, goal, goalType, startValue, targetValue } = req.body;
+    if (!name || !goal) return res.status(400).json({ error: 'name and goal required' });
+    const data = readGoals();
+    const id = name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + crypto.randomBytes(3).toString('hex');
+    const student = {
+      id, name, goal,
+      goalType: goalType || 'weight',
+      startValue: startValue || null,
+      targetValue: targetValue || null,
+      entries: [],
+      board: 'start',
+      created: new Date().toISOString()
+    };
+    data.students.push(student);
+    writeGoals(data);
+    res.json(student);
+  });
+
+  app.post('/goal-wall/entry', express.json(), (req, res) => {
+    const { studentId, value, note } = req.body;
+    if (!studentId || value === undefined) return res.status(400).json({ error: 'studentId and value required' });
+    const data = readGoals();
+    const student = data.students.find(s => s.id === studentId);
+    if (!student) return res.status(404).json({ error: 'Student not found' });
+    student.entries.push({
+      value: parseFloat(value),
+      note: note || '',
+      date: new Date().toISOString()
+    });
+    writeGoals(data);
+    res.json(student);
+  });
+
+  app.post('/goal-wall/board', express.json(), (req, res) => {
+    const { studentId, board } = req.body;
+    if (!studentId || !['start', 'wins', 'no-movement'].includes(board)) {
+      return res.status(400).json({ error: 'studentId and valid board required' });
+    }
+    const data = readGoals();
+    const student = data.students.find(s => s.id === studentId);
+    if (!student) return res.status(404).json({ error: 'Student not found' });
+    student.board = board;
+    writeGoals(data);
+    res.json(student);
+  });
+
+  app.delete('/goal-wall/student/:id', (req, res) => {
+    const data = readGoals();
+    data.students = data.students.filter(s => s.id !== req.params.id);
+    writeGoals(data);
+    res.json({ ok: true });
   });
 
   // ── Intelligence dashboard ─────────────────────────────────────────
