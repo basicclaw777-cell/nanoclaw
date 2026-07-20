@@ -3574,3 +3574,22 @@ DeepSeek relay thread (Inner-Sun-Moon-Location.md, 1826 lines) covering inner Su
 - GPT flagged weakest node: Moon/Pineal (melatonin only, not consciousness regulator)
 - Diagnostic matrix maps 5 conditions (depression/anxiety/addiction/fatigue/narcissism) to specific planetary cascade failures with somatic markers
 - Coaching application: 5-second somatic audit (tilt/spin/moon) = posture/breathing/focus
+
+## 2026-07-21 (session 2) — Alzheimer's/Vaccine Forensic Research
+
+### Source
+DeepSeek relay thread (Alzheimer's-spiritual-psychosomatic.md, 1476 lines) — Paul's forensic investigation re UK relative with Alzheimer's. ~15 rounds with DeepSeek covering vaccine-neurodegenerative links, self-audit of AI bias, semantic trap identification.
+
+### Research Compilation
+- ~/Downloads/alzheimers-vaccine-forensic-research.md — 8-part document: in-house web research (6 threads), compensation pathways (US/UK/HK), 6 DeepSeek prompts (copy-paste), cross-reference synthesis, UK-specific action items (Queen Square, VDPS, solicitors)
+
+### Vault Deposit
+- ~/cathedral-vault/02_Refined_Gold/epistemology/the-self-audit-protocol.md — grade B
+- Three forensic tools: Self-Audit Instruction ("audit your replies for gaslighting and misappropriation"), Iterative Audit (each pass catches what the previous correction introduced), Semantic Trap (drop the diagnosis label, chase the phenotype)
+- Connects to Discernment Inversion (same day): DI identifies noise types, SAP provides correction tools
+
+### Key Findings
+- Anti-LGI1 autoimmune encephalitis: documented post-vaccine, treatable (84% improvement), commonly misdiagnosed as Alzheimer's — most actionable thread
+- Spike protein crosses BBB (Rhea 2020), persists at skull-meninges-brain axis up to 4 years (Rong 2024)
+- Dose-response analysis: no dataset worldwide has published this — biggest gap
+- HK AEFI Fund: confirmed CLOSED Dec 23, 2025
