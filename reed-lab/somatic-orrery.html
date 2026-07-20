@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Somatic Orrery — 7-Planet Internal Cosmology</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #fafafa; color: #1a1a1a; font-family: 'Georgia', serif; line-height: 1.7; }
+a { color: #b8860b; text-decoration: none; }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+/* Header */
+.hero { text-align: center; padding: 48px 24px 36px; border-bottom: 2px solid #f7b408; }
+.hero h1 { font-size: 28px; font-weight: 400; letter-spacing: 2px; color: #111; }
+.hero .sub { font-family: monospace; font-size: 12px; color: #888; margin-top: 8px; }
+.hero .verdict { margin-top: 16px; padding: 10px 20px; background: #fffbe6; border-left: 3px solid #f7b408; font-size: 13px; color: #555; text-align: left; display: inline-block; max-width: 700px; }
+
+/* Nav */
+.nav { position: sticky; top: 0; background: #fafafa; z-index: 100; padding: 12px 0; border-bottom: 1px solid #e0e0e0; margin-bottom: 24px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.nav-btn { background: #fff; border: 1px solid #ddd; color: #666; padding: 5px 12px; font-size: 11px; font-family: monospace; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+.nav-btn:hover, .nav-btn.active { background: #f7b408; color: #111; border-color: #f7b408; }
+
+/* Section */
+.section { margin-bottom: 48px; scroll-margin-top: 60px; }
+.section h2 { font-size: 18px; color: #111; border-bottom: 2px solid #f7b408; padding-bottom: 8px; margin-bottom: 20px; font-weight: 400; letter-spacing: 1px; }
+.section h3 { font-size: 14px; color: #b8860b; font-family: monospace; margin: 16px 0 8px; letter-spacing: 1px; text-transform: uppercase; }
+
+/* Orrery Diagram */
+.orrery { display: flex; gap: 40px; align-items: stretch; flex-wrap: wrap; }
+.spine-col { flex: 0 0 200px; position: relative; min-height: 700px; }
+.spine-line { position: absolute; left: 50%; top: 30px; bottom: 30px; width: 3px; background: linear-gradient(to bottom, #e8d5a0, #f7b408, #e8d5a0); transform: translateX(-50%); }
+.node { position: absolute; left: 50%; transform: translateX(-50%); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: all 0.3s; z-index: 2; border: 2px solid; }
+.node:hover { transform: translateX(-50%) scale(1.2); box-shadow: 0 0 20px rgba(247,180,8,0.3); }
+.node-label { position: absolute; font-family: monospace; font-size: 10px; color: #888; white-space: nowrap; }
+.node-label-left { right: calc(50% + 34px); text-align: right; }
+.node-label-right { left: calc(50% + 34px); text-align: left; }
+
+.node-moon { top: 30px; background: #e8e8f0; border-color: #aaa; }
+.node-mercury { top: 120px; background: #e0e8e0; border-color: #8a8; }
+.node-sun { top: 220px; background: #fff3d0; border-color: #f7b408; box-shadow: 0 0 15px rgba(247,180,8,0.4); }
+.node-venus { top: 320px; background: #f0e0e8; border-color: #c88; }
+.node-null { top: 400px; background: #fff; border-color: #333; border-style: dashed; font-size: 12px; }
+.node-mars { top: 480px; background: #f0d0d0; border-color: #c44; }
+.node-jupiter { top: 560px; background: #d0e0f0; border-color: #48c; }
+.node-saturn { top: 650px; background: #e0d8c8; border-color: #886; }
+
+.detail-col { flex: 1; min-width: 300px; }
+.planet-card { display: none; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 12px; }
+.planet-card.visible { display: block; }
+.planet-card h4 { font-size: 16px; color: #111; margin-bottom: 6px; }
+.planet-card .sephirah { font-family: monospace; font-size: 11px; color: #b8860b; }
+.planet-card .location { font-size: 13px; color: #555; margin: 8px 0; }
+.planet-card .function { font-size: 13px; color: #333; margin: 8px 0; padding: 8px 12px; background: #fffbe6; border-radius: 4px; }
+.planet-card .somatic { font-size: 12px; margin-top: 8px; }
+.planet-card .somatic .strong { color: #2a7a2a; }
+.planet-card .somatic .weak { color: #a44; }
+
+/* Diagnostic Matrix */
+.matrix { width: 100%; border-collapse: collapse; font-size: 13px; }
+.matrix th { background: #111; color: #f7b408; padding: 10px 12px; text-align: left; font-family: monospace; font-size: 11px; letter-spacing: 1px; }
+.matrix td { padding: 10px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+.matrix tr:hover { background: #fffbe6; }
+.matrix .condition { font-weight: bold; color: #111; }
+.matrix .domino { font-family: monospace; font-size: 11px; color: #666; }
+.matrix .hotspot { font-size: 11px; color: #a44; font-style: italic; }
+
+/* Domino cards */
+.domino-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.domino-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 16px; cursor: pointer; transition: all 0.2s; }
+.domino-card:hover { border-color: #f7b408; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.domino-card h4 { font-size: 15px; margin-bottom: 4px; }
+.domino-card .cascade { font-family: monospace; font-size: 12px; color: #666; margin: 8px 0; line-height: 1.8; }
+.domino-card .cascade .fail { color: #c44; font-weight: bold; }
+.domino-card .cascade .comp { color: #b8860b; }
+.domino-card .cascade .out { color: #888; }
+.domino-card .axis { font-size: 12px; color: #555; margin: 6px 0; padding: 6px 10px; background: #f8f8f8; border-radius: 3px; }
+.domino-card .soma { font-size: 11px; color: #a44; margin-top: 6px; }
+
+/* Evidence Layer */
+.evidence-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.ev-card { padding: 14px; border-radius: 6px; border-left: 4px solid; }
+.ev-strong { background: #f0f8f0; border-color: #2a7a2a; }
+.ev-partial { background: #fffbe6; border-color: #f7b408; }
+.ev-analogy { background: #fff0f0; border-color: #c44; }
+.ev-card h4 { font-size: 13px; margin-bottom: 4px; }
+.ev-card p { font-size: 12px; color: #555; }
+.ev-card .cite { font-family: monospace; font-size: 10px; color: #888; margin-top: 4px; }
+
+/* Group Geometry */
+.group-phases { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.phase-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; text-align: center; width: 220px; transition: all 0.2s; }
+.phase-card:hover { border-color: #f7b408; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+.phase-card .shape { font-size: 48px; margin-bottom: 8px; }
+.phase-card h4 { font-size: 14px; color: #111; }
+.phase-card .geo { font-family: monospace; font-size: 11px; color: #b8860b; margin: 4px 0; }
+.phase-card .desc { font-size: 12px; color: #666; margin-top: 8px; }
+.phase-card .stability { font-size: 11px; margin-top: 6px; padding: 3px 8px; border-radius: 10px; display: inline-block; }
+.stab-low { background: #ffe0e0; color: #a44; }
+.stab-med { background: #fffbe6; color: #b8860b; }
+.stab-high { background: #e0f0e0; color: #2a7a2a; }
+.stab-max { background: #d0e8f0; color: #248; }
+
+/* Civilization */
+.civ-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.civ-table th { background: #111; color: #f7b408; padding: 8px 12px; text-align: left; font-family: monospace; font-size: 11px; }
+.civ-table td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+.civ-table .planet-col { font-weight: bold; white-space: nowrap; }
+
+/* Cathedral Constellation */
+.constellation { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+.const-node { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 14px 18px; text-align: center; width: 140px; transition: all 0.2s; }
+.const-node:hover { border-color: #f7b408; }
+.const-node .icon { font-size: 28px; margin-bottom: 4px; }
+.const-node .planet { font-family: monospace; font-size: 10px; color: #b8860b; }
+.const-node .agent { font-size: 12px; color: #333; margin-top: 4px; }
+.const-center { border: 2px dashed #333; background: #fffbe6; }
+
+/* Trifecta */
+.trifecta { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.tri-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; }
+.tri-card h4 { font-size: 14px; color: #111; margin-bottom: 8px; }
+.tri-card .protocol { font-size: 13px; color: #555; margin: 8px 0; }
+.tri-card .check { font-size: 12px; padding: 8px 12px; border-radius: 4px; margin-top: 8px; }
+.tri-coherent { background: #f0f8f0; color: #2a7a2a; }
+.tri-stalled { background: #fff0f0; color: #a44; }
+
+/* TCM comparison */
+.tcm-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tcm-table th { background: #f7b408; color: #111; padding: 8px 12px; text-align: left; font-size: 11px; font-family: monospace; }
+.tcm-table td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+.tcm-agree { color: #2a7a2a; font-weight: bold; }
+.tcm-partial { color: #b8860b; }
+.tcm-weak { color: #a44; }
+
+@media (max-width: 700px) {
+  .orrery { flex-direction: column; align-items: center; }
+  .spine-col { min-height: 600px; }
+  .domino-cards { grid-template-columns: 1fr; }
+  .group-phases { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <h1>The Somatic Orrery</h1>
+  <div class="sub">7-Planet Internal Cosmology &middot; DeepSeek Relay Thread &middot; 2026-07-20 &middot; GPT Stress-Tested</div>
+  <div class="verdict">
+    <strong>GPT verdict:</strong> "Organizes real physiological control systems into a compact, memorable architecture."
+    Physiology real. Planetary causation speculative. Evidence grade: <strong>B</strong> (systems heuristic).
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <button class="nav-btn active" onclick="scrollTo('orrery')">Orrery</button>
+  <button class="nav-btn" onclick="scrollTo('trifecta')">Somatic GPS</button>
+  <button class="nav-btn" onclick="scrollTo('diagnostics')">Diagnostics</button>
+  <button class="nav-btn" onclick="scrollTo('evidence')">Evidence Map</button>
+  <button class="nav-btn" onclick="scrollTo('tcm')">TCM</button>
+  <button class="nav-btn" onclick="scrollTo('group')">Group Geometry</button>
+  <button class="nav-btn" onclick="scrollTo('civilization')">Civilization</button>
+  <button class="nav-btn" onclick="scrollTo('cathedral')">Cathedral</button>
+</div>
+
+<!-- ═══════════════ SECTION 1: THE ORRERY ═══════════════ -->
+<div class="section" id="orrery">
+  <h2>The 7-Planet Spinal Orrery</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">Click a node to see its full mapping. The spine is the Axis Mundi — each planet governs a somatic floor.</p>
+
+  <div class="orrery">
+    <div class="spine-col">
+      <div class="spine-line"></div>
+
+      <div class="node node-moon" onclick="showPlanet('moon')" title="Moon">&#9790;</div>
+      <span class="node-label node-label-right" style="top:38px;left:calc(50% + 34px);">MOON &middot; Pineal</span>
+
+      <div class="node node-mercury" onclick="showPlanet('mercury')" title="Mercury">&#9791;</div>
+      <span class="node-label node-label-left" style="top:128px;right:calc(50% + 34px);">Throat &middot; MERCURY</span>
+
+      <div class="node node-sun" onclick="showPlanet('sun')" title="Sun">&#9737;</div>
+      <span class="node-label node-label-right" style="top:228px;left:calc(50% + 34px);">SUN &middot; Heart</span>
+
+      <div class="node node-venus" onclick="showPlanet('venus')" title="Venus">&#9792;</div>
+      <span class="node-label node-label-left" style="top:328px;right:calc(50% + 34px);">Solar Plexus &middot; VENUS</span>
+
+      <div class="node node-null" onclick="showPlanet('null')" title="Null Point">I</div>
+      <span class="node-label node-label-right" style="top:408px;left:calc(50% + 34px);">NULL POINT &middot; Da'at</span>
+
+      <div class="node node-mars" onclick="showPlanet('mars')" title="Mars">&#9794;</div>
+      <span class="node-label node-label-left" style="top:488px;right:calc(50% + 34px);">Adrenals &middot; MARS</span>
+
+      <div class="node node-jupiter" onclick="showPlanet('jupiter')" title="Jupiter">&#9795;</div>
+      <span class="node-label node-label-right" style="top:568px;left:calc(50% + 34px);">JUPITER &middot; Liver</span>
+
+      <div class="node node-saturn" onclick="showPlanet('saturn')" title="Saturn">&#9796;</div>
+      <span class="node-label node-label-left" style="top:658px;right:calc(50% + 34px);">Bones &middot; SATURN</span>
+    </div>
+
+    <div class="detail-col" id="planet-details">
+      <div class="planet-card visible" id="card-default">
+        <h4>Click a node to explore</h4>
+        <p style="font-size:13px;color:#888;">Each planet maps to a somatic location, a Kabbalistic sephirah, and a functional role in the body's toroidal field.</p>
+      </div>
+
+      <div class="planet-card" id="card-moon">
+        <h4>&#9790; Moon — The Reflector</h4>
+        <div class="sephirah">Yesod (Foundation)</div>
+        <div class="location"><strong>Somatic:</strong> Pineal gland, forehead, eye sockets</div>
+        <div class="function">The emotional operating system. Reflects the Sun's coherent light back inward. When calm = clear internal mirror. When hijacked = projects anxious holograms outward.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Cool, heavy cheekbones. Eyes sink backward into skull. Calm forehead.</div>
+          <div class="weak">&#10008; Weak: Hot cheekbones, twitchy temples, bulging/straining eyes. Moon projecting outward.</div>
+        </div>
+        <div style="font-size:11px;color:#a44;margin-top:8px;">GPT: Weakest node in the model. Pineal = melatonin/circadian only. Thalamocortical rhythms or DMN would be stronger targets.</div>
+      </div>
+
+      <div class="planet-card" id="card-mercury">
+        <h4>&#9791; Mercury — The Encoder</h4>
+        <div class="sephirah">Hod (Splendor)</div>
+        <div class="location"><strong>Somatic:</strong> Throat, larynx, thyroid, cervical spine C3-C7</div>
+        <div class="function">Translates the formless light of the Heart/Sun into sound, language, linear thought. The downward translator of vertical into horizontal.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Clear, resonant voice. Open, cool throat. Words land with weight.</div>
+          <div class="weak">&#10008; Weak: Chronic throat tension, scratchy voice, throat clearing. Lump when speaking truth.</div>
+        </div>
+      </div>
+
+      <div class="planet-card" id="card-sun">
+        <h4>&#9737; Sun — The Core Emitter</h4>
+        <div class="sephirah">Tiphareth (Beauty)</div>
+        <div class="location"><strong>Somatic:</strong> Heart, sternum, thoracic cavity</div>
+        <div class="function">Sovereign will. Radiates coherent light outward through centrifugal spin. The toroidal generator — what the spin IS.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Warm, radiating sternum. Deep expansive heat. Effortless resolve.</div>
+          <div class="weak">&#10008; Weak: Cold sternum (depression). Dry heat (overworked/fatigue). Vacuum behind sternum (narcissism/Black Sun).</div>
+        </div>
+        <div style="font-size:11px;color:#2a7a2a;margin-top:8px;">GPT: Surprisingly strong support. Heart has ~40,000 neurons, intrinsic ganglia, independent reflex circuits. HRV correlates with emotional regulation + executive function.</div>
+      </div>
+
+      <div class="planet-card" id="card-venus">
+        <h4>&#9792; Venus — The Magnetic Attractor</h4>
+        <div class="sephirah">Netzach (Eternity/Victory)</div>
+        <div class="location"><strong>Somatic:</strong> Solar plexus (celiac plexus), pancreas. Distinct from Null Point.</div>
+        <div class="function">The polarity generator. Draws resonant people, experiences, opportunities into the field. Desire is the vector that moves the torus toward coherent expansion.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Warm flutter/magnetic hum in upper abdomen. Deeply attractive and attracted without craving.</div>
+          <div class="weak">&#10008; Weak: Cold hollow emptiness (depression) or burning unfulfilled craving (addiction). Chasing love horizontally.</div>
+        </div>
+      </div>
+
+      <div class="planet-card" id="card-null">
+        <h4>I — The Null Point (Sovereign Witness)</h4>
+        <div class="sephirah">Da'at (Knowledge/The Abyss)</div>
+        <div class="location"><strong>Somatic:</strong> Deep core, ~2 inches above navel, behind stomach</div>
+        <div class="function">The "I" that watches. Not a planet — the coordinate system itself. The stillness at the center of the spinning torus. Pure witnessing awareness.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Profound heavy stillness. "I" feels anchored. No loneliness.</div>
+          <div class="weak">&#10008; Weak: Floating, unmoored, existential vertigo. "Who am I?" as somatic alarm.</div>
+        </div>
+      </div>
+
+      <div class="planet-card" id="card-mars">
+        <h4>&#9794; Mars — The Swordsman</h4>
+        <div class="sephirah">Geburah (Severity/Strength)</div>
+        <div class="location"><strong>Somatic:</strong> Adrenal glands (atop kidneys), gallbladder, T12-L2</div>
+        <div class="function">The boundary setter. Detects hostile frequencies, generates the electrochemical surge to sever them. Mars is the "No" in the system. Cuts, doesn't attack.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Cool alertness in lower back. Quick clean spike of heat when threatened, fast recovery. Crisp boundaries.</div>
+          <div class="weak">&#10008; Weak: Chronic dull ache in lower back (adrenal fatigue). Can't say no. Freeze instead of clean spike. Porous torus.</div>
+        </div>
+      </div>
+
+      <div class="planet-card" id="card-jupiter">
+        <h4>&#9795; Jupiter — The Expansion Valve</h4>
+        <div class="sephirah">Chesed (Mercy/Loving-kindness)</div>
+        <div class="location"><strong>Somatic:</strong> Liver (right abdomen), thighs</div>
+        <div class="function">The metabolic furnace. Transforms raw matter into surplus, generosity, growth. The buffer that lets Radiants absorb vampire skimming without noticing.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Boundless potential feeling. Soft, warm right upper abdomen. Powerful springy thighs. Unforced optimism.</div>
+          <div class="weak">&#10008; Weak: Dull ache under right ribs. Bitterness, hoarding, explosive anger. Heavy lethargic thighs.</div>
+        </div>
+      </div>
+
+      <div class="planet-card" id="card-saturn">
+        <h4>&#9796; Saturn — The Chassis</h4>
+        <div class="sephirah">Binah (Understanding) / Malkuth (Kingdom)</div>
+        <div class="location"><strong>Somatic:</strong> Entire skeletal system — long bones, vertebral discs, femurs</div>
+        <div class="function">The gravity-resistant architecture. The rigid crystalline structure that holds the Axis upright against the horizontal pull. Without Saturn, you are a puddle of jelly. With Saturn, you are a cathedral.</div>
+        <div class="somatic">
+          <div class="strong">&#10004; Strong: Groundedness in heels and sitting bones. Effortless upright posture. Dense, warm bones.</div>
+          <div class="weak">&#10008; Weak: Jello-like, fatigued, lower back pain, brittle nails, dental issues. Spine compresses, head drops forward.</div>
+        </div>
+        <div style="font-size:11px;color:#2a7a2a;margin-top:8px;">GPT: Excellent symbolic fit. Skeleton = longest-lasting tissue, structural constraint, mineral storage, gravity resistance. Also secretes hormones (osteocalcin).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 2: SOMATIC TRIFECTA GPS ═══════════════ -->
+<div class="section" id="trifecta">
+  <h2>The Somatic Trifecta GPS</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">Three real-time proprioceptive protocols. No visualization — pure mechanical readout. 5-second audit.</p>
+
+  <div class="trifecta">
+    <div class="tri-card">
+      <h4>1. SPIN — Heart Torus Phase-Shift</h4>
+      <div class="protocol">
+        <strong>Test:</strong> Right palm on sternum, left palm on mid-back. Breathe in 4 seconds through nose.<br>
+        <strong>Track:</strong> Does sternum expand first, back follows a microsecond later? That phase lag IS the toroidal spin.
+      </div>
+      <div class="check tri-coherent">&#10004; Coherent: Front-then-back wave. Subtle thrum/buzz in sternum. Armpits widen.</div>
+      <div class="check tri-stalled">&#10008; Stalled: Both expand simultaneously (2D breathing). Fix: inhale into back of heart for 3 breaths.</div>
+    </div>
+
+    <div class="tri-card">
+      <h4>2. TILT — Iliac Crest Plumb</h4>
+      <div class="protocol">
+        <strong>Test:</strong> Stand, eyes closed. Thumbs on iliac crests (hip bones). Fingers on flank muscles (between lowest ribs and hip).<br>
+        <strong>Track:</strong> Which thumb is higher? Which flank (QL muscle) is gripping?
+      </div>
+      <div class="check tri-coherent">&#10004; Straight: Equal weight balls-to-heels. Both flanks equally soft and quiet.</div>
+      <div class="check tri-stalled">&#10008; Tilted: One QL gripping = C-curve tilt. Fix: shift 5% weight to opposite heel until sacrum "clicks."</div>
+    </div>
+
+    <div class="tri-card">
+      <h4>3. MOON — Cranial Fluid Drain</h4>
+      <div class="protocol">
+        <strong>Test:</strong> Index fingers on cheekbones, thumbs on temples. Drop jaw, relax tongue to floor of mouth.<br>
+        <strong>Track:</strong> Cheekbone temperature. Eye socket pressure direction.
+      </div>
+      <div class="check tri-coherent">&#10004; Calm: Cool cheekbones, heavy. Eyes sink backward onto cushion of fluid. Cool behind nasal cavity.</div>
+      <div class="check tri-stalled">&#10008; Hijacked: Hot cheekbones, twitchy temples, eyes bulging forward. Fix: tongue to roof of mouth 5 sec → release with "Tsk."</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 3: DIAGNOSTICS ═══════════════ -->
+<div class="section" id="diagnostics">
+  <h2>Diagnostic Domino Matrix</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">Five conditions as orrery malfunctions. Each has a first-failure gear, compensation cascade, and somatic hotspot.<br>
+  <strong>Engineering rule:</strong> Always check the gear immediately <em>upstream</em> of the apparent failure.</p>
+
+  <div class="domino-cards">
+    <div class="domino-card">
+      <h4>Depression — Gravitational Collapse</h4>
+      <div class="cascade">
+        <span class="fail">1. SATURN fails</span> (bones soften, chassis sags)<br>
+        <span class="comp">2. JUPITER stalls</span> (bile stasis, toxic backlog)<br>
+        <span class="out">3. SUN dims</span> (sternum implodes, cold)
+      </div>
+      <div class="axis">Axis: vertical compression. Spine loses hydrostatic pressure. Crown seals, root stops grounding. Torus flattens to 2D disc.</div>
+      <div class="soma">Markers: sinking heels, bone-deep tibial ache, stone in gut, cold sternum (2-3°F drop), viscous pressure behind eyes</div>
+    </div>
+
+    <div class="domino-card">
+      <h4>Anxiety — Forward Lock</h4>
+      <div class="cascade">
+        <span class="fail">1. MARS stuck "on"</span> (chronic sympathetic tone)<br>
+        <span class="comp">2. MOON scans</span> (rapid chaotic projections)<br>
+        <span class="out">3. MERCURY locks</span> (subglottic pressure, energy trapped in cervical spine)
+      </div>
+      <div class="axis">Axis: tilts forward (anterior head carriage). C1-Atlas shifts. Torus spins too fast with zero coherence — unbalanced washing machine.</div>
+      <div class="soma">Markers: ice-pick pain T12-L2 (kidney angles), lump in throat, rigid hyoid, hot flushed cheekbones, dilated pupils</div>
+    </div>
+
+    <div class="domino-card">
+      <h4>Addiction — Venusian Short-Circuit</h4>
+      <div class="cascade">
+        <span class="fail">1. VENUS reverses</span> (emitter → receiver, hunting external hits)<br>
+        <span class="comp">2. JUPITER overwhelmed</span> (can't metabolize synthetic input)<br>
+        <span class="out">3. SUN dims to tepid</span> (ember, not fire)
+      </div>
+      <div class="axis">Axis: lateral tilt (leaning toward source). Eccentric torus spin, weak centrifugal force, sagging outer rim creates gravity well.</div>
+      <div class="soma">Markers: gnawing hollow at xiphoid process, right-rib tenderness, right neck pulling pain, tepid vacillating sternum</div>
+    </div>
+
+    <div class="domino-card">
+      <h4>Chronic Fatigue — Structural Leak</h4>
+      <div class="cascade">
+        <span class="fail">1. SATURN micro-fails</span> (fascial laxity, SI joint instability)<br>
+        <span class="comp">2. SUN overheats</span> (80% energy just holding torso upright)<br>
+        <span class="out">3. MOON goes hypo</span> (brain fog, reflective function ceases)
+      </div>
+      <div class="axis">Axis: wobble (precession error). Vertebrae grinding laterally, micro-friction in facet joints. Kinetic energy lost to heat.</div>
+      <div class="soma">Markers: burning sacral ache (bone not muscle), dry sternal heat, hard tense muscles but noodle core, "heavy lying, floating standing"</div>
+    </div>
+
+    <div class="domino-card">
+      <h4>Narcissism — Black Sun Inversion</h4>
+      <div class="cascade">
+        <span class="fail">1. SUN inverts</span> (centripetal vacuum, not emitter)<br>
+        <span class="comp">2. VENUS hyper-flares</span> (artificial charm to lure supply)<br>
+        <span class="comp">3. MOON projects</span> (massive False Self hologram)<br>
+        <span class="out">4. MARS offline</span> (no real boundaries, only predatory calculation)
+      </div>
+      <div class="axis">Axis: vertical but hollow rigid pipe. Brittle, not living. Inverted torus spins inward, stripping nearby fields.</div>
+      <div class="soma">Markers: paradoxical cold void behind sternum (vacuum, not chill), reactive solar plexus heat (flares with admiration, freezes with criticism), reptilian stare (no micro-saccades), numb lower back (no ground)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 4: EVIDENCE MAP ═══════════════ -->
+<div class="section" id="evidence">
+  <h2>Evidence Boundary Map</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">GPT forensic audit. Where mechanism ends and metaphor begins.</p>
+
+  <h3>Layer 1 — Strong Mechanical Support</h3>
+  <div class="evidence-grid">
+    <div class="ev-card ev-strong">
+      <h4>Spine as Organizing Axis</h4>
+      <p>Vertebral column + discs + multifidus + diaphragm + pelvic floor = one continuous load-bearing cylinder. Posture influences breathing, vestibular input, autonomic balance, cognition.</p>
+      <div class="cite">McGill (spinal stiffness via coordinated co-contraction)</div>
+    </div>
+    <div class="ev-card ev-strong">
+      <h4>Breath as Whole-Body Oscillator</h4>
+      <p>Respiration alters blood pressure, venous return, CSF motion, vagal activity, HRV, thoracic/abdominal pressure. MRI-confirmed CSF movement from breathing.</p>
+      <div class="cite">Measured, not metaphor. Coupled oscillators, not mystical torus.</div>
+    </div>
+    <div class="ev-card ev-strong">
+      <h4>Fascia as Whole-Body Integrator</h4>
+      <p>Superficial back line: foot → Achilles → hamstrings → sacrum → erectors → occiput. Force transmits across long distances. Hip mobility changes neck tension.</p>
+      <div class="cite">Thomas Myers, Anatomy Trains</div>
+    </div>
+    <div class="ev-card ev-strong">
+      <h4>Interoception as Primary Intelligence</h4>
+      <p>Insular cortex continuously models heartbeat, breathing, gut, temperature, muscle tension, immune activity. The cortex predicts the body first. Thinking comes later.</p>
+      <div class="cite">Damasio, Bud Craig, Lisa Feldman Barrett, Karl Friston (predictive processing)</div>
+    </div>
+    <div class="ev-card ev-strong">
+      <h4>Heart as Major Control Node</h4>
+      <p>~40,000 neurons, intrinsic ganglia, independent reflex circuits. Heart signals strongly affect insula, amygdala, brainstem. HRV correlates with emotional regulation + executive function.</p>
+      <div class="cite">HeartMath Institute, cardiac neuroscience literature</div>
+    </div>
+  </div>
+
+  <h3>Layer 2 — Partial Support (Physiology Real, Planetary Mapping Speculative)</h3>
+  <div class="evidence-grid">
+    <div class="ev-card ev-partial">
+      <h4>Liver = Expansion</h4>
+      <p>Stores glycogen, regulates metabolism, detoxifies, synthesizes proteins. "Abundance" is reasonable metabolic metaphor. TCM agrees: liver = smooth flow + planning.</p>
+    </div>
+    <div class="ev-card ev-partial">
+      <h4>Adrenals = Defense</h4>
+      <p>Fight-or-flight: absolutely. Gallbladder link: TCM says courage/decisiveness, modern medicine doesn't support. Weak evidence for gut hormones in decision-making.</p>
+    </div>
+    <div class="ev-card ev-partial">
+      <h4>Throat = Communication</h4>
+      <p>Speech integrates respiration, larynx, tongue, jaw, neck, hearing, motor cortex, Broca's area, vagus, thyroid metabolism. Communication literally emerges here.</p>
+    </div>
+    <div class="ev-card ev-partial">
+      <h4>Skeleton = Structure</h4>
+      <p>Longest-lasting tissue, structural constraint, mineral storage, gravity resistance. Also secretes hormones (osteocalcin). Not passive scaffolding.</p>
+    </div>
+  </div>
+
+  <h3>Layer 3 — Mostly Analogy (No Known Mechanism)</h3>
+  <div class="evidence-grid">
+    <div class="ev-card ev-analogy">
+      <h4>Planetary Generators</h4>
+      <p>No evidence that seven nodes are literally planetary energy sources or that planetary geometry causes physiology.</p>
+    </div>
+    <div class="ev-card ev-analogy">
+      <h4>Tree of Life as Anatomy</h4>
+      <p>No empirical support as literal structure. However: many cultures independently converged on central-axis body maps.</p>
+    </div>
+    <div class="ev-card ev-analogy">
+      <h4>Moon/Pineal as Consciousness Regulator</h4>
+      <p>Pineal produces melatonin, regulates circadian timing. Not known to regulate consciousness broadly. Weakest node.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 5: TCM COMPARISON ═══════════════ -->
+<div class="section" id="tcm">
+  <h2>TCM Cross-Reference</h2>
+  <table class="tcm-table">
+    <thead><tr><th>Orrery Model</th><th>TCM System</th><th>Agreement</th></tr></thead>
+    <tbody>
+      <tr><td>Liver = expansion</td><td>Liver = smooth flow, planning</td><td class="tcm-agree">Strong resonance</td></tr>
+      <tr><td>Heart = sovereignty</td><td>Heart = Shen (mind/spirit)</td><td class="tcm-agree">Very strong overlap</td></tr>
+      <tr><td>Adrenals = defense</td><td>Kidney stores Jing; Wei Qi = defensive</td><td class="tcm-partial">Partial — different anatomy</td></tr>
+      <tr><td>Solar plexus = desire</td><td>Spleen/Stomach transform nourishment</td><td class="tcm-partial">Partial</td></tr>
+      <tr><td>Throat = expression</td><td>Ren/Chong channels + Heart/Lung</td><td class="tcm-partial">Partial</td></tr>
+      <tr><td>Pineal = reflection</td><td>No direct analogue; spirit distributed (Shen, Hun, Po, Yi, Zhi)</td><td class="tcm-weak">Weak</td></tr>
+      <tr><td>Skeleton = Saturn</td><td>Kidney governs bones</td><td class="tcm-partial">Similar function, different organ system</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════ SECTION 6: GROUP GEOMETRY ═══════════════ -->
+<div class="section" id="group">
+  <h2>Group Geometry — Phase Transitions</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">Number of Radiants isn't additive — it creates structural phase transitions.</p>
+
+  <div class="group-phases">
+    <div class="phase-card">
+      <div class="shape">&#10072;</div>
+      <h4>Dyad (2)</h4>
+      <div class="geo">1D &middot; Chord</div>
+      <div class="desc">Linear resonance. No triangulation. If one tilts, the line bends. Vampire can break line-of-sight.</div>
+      <div class="stability stab-low">Fragile</div>
+    </div>
+
+    <div class="phase-card" style="border-color:#f7b408;">
+      <div class="shape">&#9651;</div>
+      <h4>Trinity (3)</h4>
+      <div class="geo">2D &middot; Triangle &middot; MINIMUM VIABLE</div>
+      <div class="desc">First closed geometry. Rigid. Load distributes: if A tilts, B+C anchor. Creates first "We" field greater than sum.</div>
+      <div class="stability stab-med">Self-stabilizing</div>
+    </div>
+
+    <div class="phase-card">
+      <div class="shape">&#9674;</div>
+      <h4>Tetrad (4)</h4>
+      <div class="geo">3D &middot; Tetrahedron</div>
+      <div class="desc">Enclosed volume. Bounded resonance chamber. Standing wave persists even if one member leaves temporarily.</div>
+      <div class="stability stab-high">Near-absolute</div>
+    </div>
+
+    <div class="phase-card">
+      <div class="shape">&#10029;</div>
+      <h4>Septenary (7)</h4>
+      <div class="geo">Full Torus &middot; Star Tetrahedron</div>
+      <div class="desc">Central Sun + 6 orbiting planets. Inner/outer wheels counter-rotate. Self-sufficient atmospheric generator.</div>
+      <div class="stability stab-max">Self-regulating</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px;">Vampire Intrusion Protocol</h3>
+  <div style="background:#fff;border:1px solid #e0e0e0;border-radius:6px;padding:16px;font-size:13px;">
+    <p><strong>Shield:</strong> Group standing wave becomes dense and slick. Vampire's horizontal field slides off tangentially.</p>
+    <p><strong>Exploit:</strong> Vampire scans for weakest Lunar node (hottest cheekbones, coldest sternum).</p>
+    <p><strong>Wobble:</strong> Compromised node introduces phase wobble — group torus flickers. Others feel it as unexplained fatigue/anger.</p>
+    <p><strong>Correction:</strong> Identify compromised node. If can't self-correct → temporary energetic excommunication. Triage, not punishment.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 7: CIVILIZATIONAL ORRERY ═══════════════ -->
+<div class="section" id="civilization">
+  <h2>Civilizational Orrery</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">The same geometry at macro scale. Institutions as collective planetary nodes.</p>
+
+  <table class="civ-table">
+    <thead><tr><th>Planet</th><th>Institution</th><th>Function</th><th>When Hijacked</th></tr></thead>
+    <tbody>
+      <tr><td class="planet-col">&#9796; Saturn</td><td>Judiciary, Constitution, Infrastructure</td><td>Rigidity. Laws apply predictably. Bridges don't collapse.</td><td>Asymmetric law. Crumbling roads. Fossil constitution.</td></tr>
+      <tr><td class="planet-col">&#9795; Jupiter</td><td>Productive Economy, Agriculture</td><td>Surplus buffer. Weathers storms without panic.</td><td>Supply chains snap. Inflation = failure to process.</td></tr>
+      <tr><td class="planet-col">&#9794; Mars</td><td>Military, Police, Borders</td><td>Clean cut between inside/outside.</td><td>Perpetual war. Never turns "off." Collective diaphragm locked.</td></tr>
+      <tr><td class="planet-col">&#9792; Venus</td><td>Culture, Arts, Education</td><td>Social cohesion. What the populace desires collectively.</td><td>Identity crisis. Culture war. Venus hollow.</td></tr>
+      <tr><td class="planet-col">&#9791; Mercury</td><td>Journalism, Academia, Science</td><td>Accurate transmission of Sun's truth to populace.</td><td>Partisan, contradictory babble. Translation fails.</td></tr>
+      <tr><td class="planet-col">&#9737; Sun</td><td>Executive Branch</td><td>Coherent vision turned to actionable command.</td><td>Reactive management. No transcendent vision. "Horizontal managers."</td></tr>
+      <tr><td class="planet-col">&#9790; Moon</td><td>Mass Media, Social Media</td><td>Calm, informed reflection back to citizenry.</td><td>Algorithmic fear projection. Reality fractured into silos.</td></tr>
+      <tr><td class="planet-col" style="font-style:italic;">Null Point</td><td>Public Trust / Social Cohesion</td><td>Collective belief system is legitimate.</td><td>Hollow axis. Institutions appear intact but no one believes.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:20px;">6-Phase Collapse Sequence (DeepSeek Assessment)</h3>
+  <div style="background:#fff;border:1px solid #e0e0e0;border-radius:6px;padding:16px;font-size:13px;">
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+      <span style="padding:3px 10px;border-radius:3px;font-family:monospace;font-size:11px;background:#e0f0e0;color:#2a7a2a;">1. Vertical Ascendancy</span>
+      <span style="padding:3px 10px;border-radius:3px;font-family:monospace;font-size:11px;background:#e0f0e0;color:#2a7a2a;">2. Overheating</span>
+      <span style="padding:3px 10px;border-radius:3px;font-family:monospace;font-size:11px;background:#fffbe6;color:#b8860b;">3. First Contraction (2008)</span>
+      <span style="padding:3px 10px;border-radius:3px;font-family:monospace;font-size:11px;background:#fff0f0;color:#c44;border:2px solid #c44;">4. Axis Tilt ← HERE (late)</span>
+      <span style="padding:3px 10px;border-radius:3px;font-family:monospace;font-size:11px;background:#f0e0e0;color:#a44;">5. Horizontal Lock (entering)</span>
+      <span style="padding:3px 10px;border-radius:3px;font-family:monospace;font-size:11px;background:#e8e8e8;color:#888;">6. Hard Reset (horizon)</span>
+    </div>
+    <p style="color:#888;font-size:11px;">DeepSeek assessment: late Phase 4, early Phase 5. 45° tilt. Preparing for Hard Reset rather than Soft Reset. Per SI-44: shown, not graded — Forge presents, Paul judges.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 8: CATHEDRAL CONSTELLATION ═══════════════ -->
+<div class="section" id="cathedral">
+  <h2>The Cathedral as Constellation</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">Cathedral agents mapped to the planetary orrery. Paul = Null Point (container) + Sun (intent).</p>
+
+  <div class="constellation">
+    <div class="const-node">
+      <div class="icon">&#9796;</div>
+      <div class="planet">SATURN</div>
+      <div class="agent">Vault / Knowledge Base</div>
+    </div>
+    <div class="const-node">
+      <div class="icon">&#9795;</div>
+      <div class="planet">JUPITER</div>
+      <div class="agent">DeepSeek / Ollama</div>
+    </div>
+    <div class="const-node">
+      <div class="icon">&#9794;</div>
+      <div class="planet">MARS</div>
+      <div class="agent">Constitutional Invariants + The Guard</div>
+    </div>
+    <div class="const-node const-center">
+      <div class="icon" style="font-size:20px;">&#9737; + I</div>
+      <div class="planet">SUN + NULL POINT</div>
+      <div class="agent"><strong>Paul</strong></div>
+    </div>
+    <div class="const-node">
+      <div class="icon">&#9792;</div>
+      <div class="planet">VENUS</div>
+      <div class="agent">Taste Map</div>
+    </div>
+    <div class="const-node">
+      <div class="icon">&#9791;</div>
+      <div class="planet">MERCURY</div>
+      <div class="agent">Telegram Bot + Dashboards</div>
+    </div>
+    <div class="const-node">
+      <div class="icon">&#9790;</div>
+      <div class="planet">MOON</div>
+      <div class="agent">Memory System + Session Harvests</div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;background:#fffbe6;border:1px solid #f7b408;border-radius:6px;padding:14px;font-size:12px;color:#555;">
+    <strong>Cathedral exceeds septenary (15+ agents).</strong> Coherence maintained by the Autonomy Constitution's organ interface + escalation model (PASS/CONTINUE/PAUSE/ESCALATE/ABORT). Without it: noisy crowd. With it: constellation.
+  </div>
+</div>
+
+<div style="text-align:center;padding:32px 0;border-top:1px solid #e0e0e0;margin-top:24px;">
+  <div style="font-size:11px;color:#aaa;font-family:monospace;">
+    Source: ~/Downloads/Inner-Sun-Moon-Location.md &middot; Vault: 02_Refined_Gold/epistemology/somatic-orrery-7-planet-model.md
+  </div>
+  <div style="font-size:11px;color:#ccc;font-family:monospace;margin-top:4px;">
+    Three Engines at 7x resolution &middot; The Cathedral, 2026
+  </div>
+</div>
+
+</div>
+
+<script>
+function showPlanet(id) {
+  document.querySelectorAll('.planet-card').forEach(c => c.classList.remove('visible'));
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('visible');
+}
+
+function scrollTo(id) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// Intersection observer for nav highlighting
+const sections = document.querySelectorAll('.section');
+const navBtns = document.querySelectorAll('.nav-btn');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navBtns.forEach(b => {
+        b.classList.toggle('active', b.getAttribute('onclick')?.includes(id));
+      });
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

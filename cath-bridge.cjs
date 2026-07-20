@@ -56,7 +56,7 @@ function neuralRouteToNodes(url) {
     '/comms': ['bridge', 'comms'], '/merch': ['bridge', 'merch'],
     '/course': ['bridge', 'course'], '/publisher': ['bridge', 'publisher'],
     '/trader': ['bridge', 'trading'], '/looking-glass': ['bridge', 'looking-glass'], '/geomag': ['bridge', 'geomag'],
-    '/cosmology': ['bridge', 'cosmology'], '/retuning-kitchen': ['bridge', 'research'], '/scraper': ['bridge', 'scraper'],
+    '/cosmology': ['bridge', 'cosmology'], '/orrery': ['bridge', 'cosmology'], '/retuning-kitchen': ['bridge', 'research'], '/scraper': ['bridge', 'scraper'],
     '/gym-eyes': ['bridge', 'gym-eyes'], '/techniques': ['bridge', 'techniques'],
     '/screening': ['bridge', 'screening'], '/cathedral-city': ['bridge', 'city'],
     '/constellation': ['bridge', 'constellation'], '/agent-workspace': ['bridge', 'agents'], '/pulse': ['bridge', 'pulse'],
@@ -2474,6 +2474,56 @@ app.get('/oracle/ask', async (req, res) => {
   }
 });
 
+// === THE CONCIERGE — Cathedral Guide ===
+
+app.get('/concierge', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'concierge.html'));
+});
+
+app.post('/concierge/ask', async (req, res) => {
+  const { query, history = [] } = req.body || {};
+  if (!query) return res.status(400).json({ error: 'query required' });
+  try {
+    const concierge = require(path.join(NANOCLAW, 'concierge.cjs'));
+    const result = await concierge.ask(query, history);
+    res.json(result);
+  } catch (e) {
+    console.error('[concierge]', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/concierge/pending', (req, res) => {
+  try {
+    const concierge = require(path.join(NANOCLAW, 'concierge.cjs'));
+    const log = concierge.getConciergeLog();
+    const pending = log.filter(e => !e.resolved);
+    res.json({ pending, total: log.length });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/concierge/resolve', (req, res) => {
+  const { index } = req.body || {};
+  try {
+    const logPath = path.join(NANOCLAW, 'concierge-log.json');
+    const log = JSON.parse(fs.readFileSync(logPath, 'utf8'));
+    const pending = log.filter(e => !e.resolved);
+    if (index >= 0 && index < pending.length) {
+      const target = pending[index];
+      const realIdx = log.indexOf(target);
+      if (realIdx >= 0) log[realIdx].resolved = true;
+      fs.writeFileSync(logPath, JSON.stringify(log, null, 2));
+      res.json({ ok: true, resolved: target });
+    } else {
+      res.status(400).json({ error: 'invalid index' });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // === THE MIRROR — Digital Paul ===
 
 const MIRROR_SYSTEM_PROMPT = `You are Paul Logan — not the real Paul, but a faithful model of his thinking patterns built from his documented principles, cognitive signature, and preferences. You speak as Paul speaks: direct, compressed, concrete. No filler. Boxing metaphors when they fit naturally, not forced.
@@ -4405,6 +4455,10 @@ app.get('/cosmology', (req, res) => {
 
 app.get('/cosmology/graph', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'cosmology-graph.html'));
+});
+
+app.get('/orrery', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'somatic-orrery.html'));
 });
 
 app.get('/simpsons', (req, res) => {

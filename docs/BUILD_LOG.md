@@ -3527,3 +3527,24 @@ Cathedral's front-door guide and institutional memory made conversational. Knows
 
 ### BUILD_LOG as index
 - BUILD_LOG too large for full context injection (~3500 lines). Solved: inject section HEADERS as index + keyword-matched full sections (top 5) per query.
+
+## 2026-07-20 — Somatic Orrery (DeepSeek Relay Thread)
+
+### Source
+DeepSeek relay thread (Inner-Sun-Moon-Location.md, 1826 lines) covering inner Sun/Moon mapping, energy vampire mechanics, 7-planet spinal orrery, Fall as geometric stall, group geometry, civilizational extension. GPT stress-test separated mechanism from metaphor.
+
+### Vault Deposit
+- ~/cathedral-vault/02_Refined_Gold/epistemology/somatic-orrery-7-planet-model.md — grade B, full model + evidence boundary + Cathedral connections
+
+### Visualization
+- ~/nanoclaw/reed-lab/somatic-orrery.html — 8-section interactive page
+- Route: localhost:8080/orrery (cath-bridge.cjs)
+- Sections: clickable spine diagram, somatic GPS protocols, 5-condition diagnostic matrix, GPT evidence boundary (3 layers), TCM comparison, group geometry phase transitions, civilizational orrery, Cathedral constellation mapping
+- Clean/bright design, gold accent, mobile-friendly
+
+### Key Findings
+- Three Engines at 7x resolution: Body=Saturn+Mars+Jupiter, Mind=Mercury+Moon, Emotion=Venus, Will=Sun
+- GPT confirmed strong support for: spine as axis, breath as oscillator, fascia integration, interoception as primary intelligence, heart as control node (40k neurons)
+- GPT flagged weakest node: Moon/Pineal (melatonin only, not consciousness regulator)
+- Diagnostic matrix maps 5 conditions (depression/anxiety/addiction/fatigue/narcissism) to specific planetary cascade failures with somatic markers
+- Coaching application: 5-second somatic audit (tilt/spin/moon) = posture/breathing/focus

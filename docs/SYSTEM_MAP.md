@@ -193,6 +193,8 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Base-60 Telegram** · `~/nanoclaw/telegram-bot.js` · `/base60 [number|scan|guide]` · Quick convert, text scanner, domain coaching via Telegram · doc: BUILD_LOG 2026-07-06
 - **Base-60 Vault** · `~/cathedral-vault/02_Refined_Gold/mathematics/base-60-cognitive-framework.md` · Research deposit: cross-domain analysis, forensic grades · doc: BUILD_LOG 2026-07-06
 
+- **Somatic Orrery** · `~/nanoclaw/reed-lab/somatic-orrery.html` · route `/orrery` · 7-planet internal cosmology, diagnostic matrix, evidence map, group geometry, Cathedral constellation · doc: BUILD_LOG 2026-07-20
+
 ## Forge maintenance
 - **Forge model pin** · `~/.claude/settings.json` `"model": "claude-opus-4-6"` · trigger: every Claude Code launch · pre-fable model (4.8=fable flinch); terminal Forge build-only per soul file · doc: BUILD_LOG 2026-06-22 + forge-regression-diagnostic.md
 
