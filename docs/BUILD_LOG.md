@@ -1,6 +1,17 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-21 — The Discernment Inversion (DeepSeek Relay)
+
+DeepSeek relay intake (12 rounds, ~/Downloads/Profound-Information-Accessibility-Leap.md).
+Core thesis: raw intelligence commoditized by AI, discernment is new scarce resource.
+"Brush, Lift, Pray" compression emerged (hygiene/strength/alignment).
+Convergence node: maps to 6 existing systems (Elicitation Threshold, IntegrityOS,
+Resonant Audit ζ, Three Engines, Forensic Standard, Held Tension).
+
+Vault: ~/cathedral-vault/02_Refined_Gold/epistemology/the-discernment-inversion.md (B+)
+NotebookLM: ~/basic-reflex/content/discernment-inversion-notebooklm-source.md
+
 ## 2026-07-20b — Goal Wall System + Kids Programme Recognition
 
 ### Goal Wall (build completion from prior session)
