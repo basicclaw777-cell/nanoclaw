@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corpus Diagnostic</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Courier New', monospace; background: #0a0a0f; color: #e0e0e0; padding: 20px; }
+  h1 { color: #f7b408; font-size: 1.4em; margin-bottom: 4px; }
+  .subtitle { color: #888; font-size: 0.85em; margin-bottom: 20px; }
+  .chamber { background: #111118; border: 1px solid #222; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .chamber h2 { color: #f7b408; font-size: 1em; margin-bottom: 6px; border-bottom: 1px solid #222; padding-bottom: 6px; }
+  .chamber .desc { color: #888; font-size: 0.85em; margin-bottom: 12px; font-style: italic; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+  .card { background: #0d0d14; border: 1px solid #1a1a24; border-radius: 6px; padding: 12px; }
+  .card h3 { color: #e0e0e0; font-size: 0.9em; margin-bottom: 6px; }
+  .stat { display: flex; justify-content: space-between; margin: 4px 0; font-size: 0.85em; }
+  .stat .label { color: #888; }
+  .retention-bar { height: 8px; background: #1a1a24; border-radius: 4px; margin: 6px 0; overflow: hidden; }
+  .retention-fill { height: 100%; border-radius: 4px; }
+  .drift-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
+  .drift-badge.STABLE { background: #10b98133; color: #34d399; }
+  .drift-badge.MODERATE_DRIFT { background: #f7b40833; color: #f7b408; }
+  .drift-badge.SIGNIFICANT_DRIFT { background: #ef444433; color: #f87171; }
+  .analysis { white-space: pre-wrap; font-size: 0.85em; line-height: 1.5; color: #ccc; margin-top: 8px; max-height: 300px; overflow-y: auto; }
+  .long-text { white-space: pre-wrap; font-size: 0.85em; line-height: 1.6; color: #ccc; max-height: 500px; overflow-y: auto; }
+  .empty { text-align: center; color: #555; padding: 40px; }
+</style>
+</head>
+<body>
+<h1>CORPUS DIAGNOSTIC</h1>
+<div class="subtitle">Cathedral diagnostic tools turned outward onto ancient knowledge systems</div>
+<div id="content"><div class="empty">Loading...</div></div>
+
+<script>
+async function load() {
+  const data = await fetch('/corpus-diagnostic/data').then(r => r.json()).catch(() => null);
+  if (!data || !data.date) {
+    document.getElementById('content').innerHTML = '<div class="empty">No diagnostic data yet. Run corpus-diagnostic first.</div>';
+    return;
+  }
+
+  let html = '';
+  const ch = data.chambers;
+
+  // Chamber 1: Compression
+  if (ch.compression?.results?.length) {
+    html += `<div class="chamber"><h2>Chamber 1: Compression Test</h2>
+    <div class="desc">${ch.compression.description}</div><div class="grid">`;
+    for (const r of ch.compression.results) {
+      const color = r.retention >= 70 ? '#10b981' : r.retention >= 40 ? '#f7b408' : '#ef4444';
+      html += `<div class="card">
+        <h3>${r.corpus}</h3>
+        <div class="stat"><span class="label">Retention</span><span style="color:${color};font-weight:bold">${r.retention}%</span></div>
+        <div class="retention-bar"><div class="retention-fill" style="width:${r.retention}%;background:${color}"></div></div>
+        <div class="analysis">${r.compressed || ''}</div>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+
+  // Chamber 2: Identity Drift
+  if (ch.identity?.results?.length) {
+    html += `<div class="chamber"><h2>Chamber 2: Identity Persistence</h2>
+    <div class="desc">${ch.identity.description}</div><div class="grid">`;
+    for (const r of ch.identity.results) {
+      html += `<div class="card">
+        <h3>${r.name}</h3>
+        <div class="stat"><span class="label">Similarity</span><span>${r.similarity}</span></div>
+        <div class="stat"><span class="label">Status</span><span class="drift-badge ${r.status}">${r.status.replace(/_/g, ' ')}</span></div>
+        <div style="color:#888;font-size:0.8em;margin:4px 0">${r.note}</div>
+        <div class="analysis">${r.analysis || ''}</div>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+
+  // Chamber 3: Structural Isomorphisms
+  if (ch.isomorphism?.results) {
+    html += `<div class="chamber"><h2>Chamber 3: Structural Isomorphisms</h2>
+    <div class="desc">${ch.isomorphism.description}</div>
+    <div class="long-text">${ch.isomorphism.results.isomorphisms || 'No data'}</div>
+    <h3 style="color:#f7b408;margin-top:16px">Ancient Features We Don't Have</h3>
+    <div class="long-text">${ch.isomorphism.results.gaps || 'No data'}</div>
+    </div>`;
+  }
+
+  // Chamber 4: Tablet Classification
+  if (ch.tabletClassification?.results) {
+    html += `<div class="chamber"><h2>Chamber 4: Tablet Reclassification</h2>
+    <div class="desc">${ch.tabletClassification.description}</div>
+    <div class="long-text">${ch.tabletClassification.results.classification || 'No data'}</div>
+    </div>`;
+  }
+
+  document.getElementById('content').innerHTML = html;
+}
+load();
+</script>
+</body>
+</html>

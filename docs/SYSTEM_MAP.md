@@ -196,6 +196,9 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Base-60 Vault** · `~/cathedral-vault/02_Refined_Gold/mathematics/base-60-cognitive-framework.md` · Research deposit: cross-domain analysis, forensic grades · doc: BUILD_LOG 2026-07-06
 
 - **Somatic Orrery** · `~/nanoclaw/reed-lab/somatic-orrery.html` · route `/orrery` · 7-planet internal cosmology, diagnostic matrix, evidence map, group geometry, Cathedral constellation · doc: BUILD_LOG 2026-07-20
+- **Stress Battery** · `~/nanoclaw/stress-battery.js` · PM2 cron daily 05:00 HKT · route `/stress-battery` · 3-chamber anti-fragile test (compression+contradiction+identity) · doc: BUILD_LOG 2026-07-22
+- **Paul Patterns** · `~/nanoclaw/paul-pattern-tracker.js` · PM2 cron weekly Sunday 06:00 HKT · route `/patterns` · session harvest analysis + cognitive tracking · doc: BUILD_LOG 2026-07-22b
+- **Corpus Diagnostic** · `~/nanoclaw/corpus-diagnostic.js` · PM2 cron weekly Wednesday 04:00 HKT · route `/corpus-diagnostic` · Cathedral diagnostic tools turned outward on ancient corpus · doc: BUILD_LOG 2026-07-22c
 
 ## Forge maintenance
 - **Forge model pin** · `~/.claude/settings.json` `"model": "claude-opus-4-6"` · trigger: every Claude Code launch · pre-fable model (4.8=fable flinch); terminal Forge build-only per soul file · doc: BUILD_LOG 2026-06-22 + forge-regression-diagnostic.md

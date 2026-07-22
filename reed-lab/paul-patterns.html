@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paul Patterns</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Courier New', monospace; background: #0a0a0f; color: #e0e0e0; padding: 20px; }
+  h1 { color: #f7b408; font-size: 1.4em; margin-bottom: 4px; }
+  .subtitle { color: #888; font-size: 0.85em; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .card { background: #111118; border: 1px solid #222; border-radius: 8px; padding: 16px; }
+  .card h2 { color: #f7b408; font-size: 1em; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 6px; }
+  .stat { display: flex; justify-content: space-between; margin: 6px 0; }
+  .stat .label { color: #888; }
+  .stat .value { color: #e0e0e0; font-weight: bold; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .bar-label { width: 80px; color: #888; font-size: 0.85em; }
+  .bar-track { flex: 1; height: 14px; background: #1a1a24; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  .bar-fill.relay { background: #7c3aed; }
+  .bar-fill.build { background: #f7b408; }
+  .bar-fill.mixed { background: #3b82f6; }
+  .bar-fill.conversation { background: #10b981; }
+  .bar-count { width: 30px; text-align: right; font-size: 0.85em; }
+  .topic-list { list-style: none; }
+  .topic-list li { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #1a1a24; }
+  .topic-list .count { color: #f7b408; }
+  .session-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+  .session-table th { text-align: left; color: #f7b408; padding: 6px 8px; border-bottom: 1px solid #333; }
+  .session-table td { padding: 5px 8px; border-bottom: 1px solid #1a1a24; }
+  .session-table .type-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
+  .type-badge.relay { background: #7c3aed33; color: #a78bfa; }
+  .type-badge.build { background: #f7b40833; color: #f7b408; }
+  .type-badge.mixed { background: #3b82f633; color: #60a5fa; }
+  .type-badge.conversation { background: #10b98133; color: #34d399; }
+  .check { color: #10b981; }
+  .cross { color: #ef4444; }
+  .analysis { background: #111118; border: 1px solid #222; border-radius: 8px; padding: 16px; margin-bottom: 20px; white-space: pre-wrap; line-height: 1.6; font-size: 0.9em; }
+  .analysis h2 { color: #f7b408; font-size: 1em; margin-bottom: 10px; }
+  .wide { grid-column: 1 / -1; }
+  .trend-row { display: flex; gap: 16px; margin-bottom: 20px; }
+  .trend-card { flex: 1; background: #111118; border: 1px solid #222; border-radius: 8px; padding: 16px; text-align: center; }
+  .trend-card .big { font-size: 2em; color: #f7b408; }
+  .trend-card .desc { color: #888; font-size: 0.8em; margin-top: 4px; }
+  .empty { text-align: center; color: #555; padding: 40px; }
+</style>
+</head>
+<body>
+<h1>PAUL PATTERNS</h1>
+<div class="subtitle">Session intelligence — cognitive patterns from harvest data</div>
+
+<div id="content"><div class="empty">Loading...</div></div>
+
+<script>
+async function load() {
+  const [dataRes, histRes] = await Promise.all([
+    fetch('/patterns/data').then(r => r.json()).catch(() => null),
+    fetch('/patterns/history').then(r => r.json()).catch(() => null)
+  ]);
+
+  if (!dataRes || !dataRes.date) {
+    document.getElementById('content').innerHTML = '<div class="empty">No pattern data yet. Run the tracker first.</div>';
+    return;
+  }
+
+  const d = dataRes;
+  const tc = d.typeCounts || {};
+  const maxType = Math.max(tc.relay||0, tc.build||0, tc.mixed||0, tc.conversation||0) || 1;
+
+  let html = '';
+
+  // Trend row
+  html += `<div class="trend-row">
+    <div class="trend-card"><div class="big">${d.sessionCount}</div><div class="desc">Sessions (30d)</div></div>
+    <div class="trend-card"><div class="big">${d.vaultRate}%</div><div class="desc">Vault Rate</div></div>
+    <div class="trend-card"><div class="big">${d.cupOfTeaRate}%</div><div class="desc">Cup-of-Tea Rate</div></div>
+    <div class="trend-card"><div class="big">${d.avgBuildsPerSession}</div><div class="desc">Avg Builds/Session</div></div>
+  </div>`;
+
+  html += '<div class="grid">';
+
+  // Session types card
+  html += `<div class="card"><h2>Session Types</h2>`;
+  for (const [type, count] of [['relay', tc.relay||0], ['build', tc.build||0], ['mixed', tc.mixed||0], ['conversation', tc.conversation||0]]) {
+    const pct = Math.round((count / maxType) * 100);
+    html += `<div class="bar-row">
+      <div class="bar-label">${type}</div>
+      <div class="bar-track"><div class="bar-fill ${type}" style="width:${pct}%"></div></div>
+      <div class="bar-count">${count}</div>
+    </div>`;
+  }
+  html += `</div>`;
+
+  // Quality signals
+  html += `<div class="card"><h2>Quality Signals</h2>
+    <div class="stat"><span class="label">Vault deposits</span><span class="value">${d.vaultRate}%</span></div>
+    <div class="stat"><span class="label">Cup-of-tea moments</span><span class="value">${d.cupOfTeaRate}%</span></div>
+    <div class="stat"><span class="label">Avg builds/session</span><span class="value">${d.avgBuildsPerSession}</span></div>
+    <div class="stat"><span class="label">High-load (>3)</span><span class="value">${d.highLoadSessions}</span></div>
+    <div class="stat"><span class="label">Total sessions</span><span class="value">${d.totalSessions}</span></div>
+  </div>`;
+
+  // Top topics
+  html += `<div class="card"><h2>Topic Frequency</h2><ul class="topic-list">`;
+  for (const t of (d.topTopics || []).slice(0, 8)) {
+    html += `<li><span>${t.topic}</span><span class="count">${t.count}x</span></li>`;
+  }
+  if (!d.topTopics?.length) html += '<li style="color:#555">No topics extracted</li>';
+  html += `</ul></div>`;
+
+  // Sharpness by type
+  const sharp = d.avgSharpByType || {};
+  html += `<div class="card"><h2>Avg Sharpness by Type</h2>`;
+  for (const [type, val] of Object.entries(sharp)) {
+    html += `<div class="stat"><span class="label">${type}</span><span class="value">${val}</span></div>`;
+  }
+  html += `</div>`;
+
+  html += '</div>';
+
+  // Analysis
+  if (d.patternAnalysis) {
+    html += `<div class="analysis"><h2>Pattern Analysis (hermes3)</h2>${d.patternAnalysis}</div>`;
+  }
+
+  // Recent sessions table
+  if (d.sessions?.length) {
+    html += `<div class="card wide"><h2>Recent Sessions</h2>
+    <div style="overflow-x:auto"><table class="session-table">
+    <tr><th>Date</th><th>Type</th><th>Builds</th><th>Vault</th><th>Tea</th><th>Topics</th></tr>`;
+    for (const s of d.sessions.slice(-20).reverse()) {
+      html += `<tr>
+        <td>${s.date}</td>
+        <td><span class="type-badge ${s.type}">${s.type}</span></td>
+        <td>${s.builds}</td>
+        <td>${s.vault ? '<span class="check">Y</span>' : '<span class="cross">-</span>'}</td>
+        <td>${s.tea ? '<span class="check">Y</span>' : '<span class="cross">-</span>'}</td>
+        <td>${s.topics || '-'}</td>
+      </tr>`;
+    }
+    html += '</table></div></div>';
+  }
+
+  // History trend
+  const reports = histRes?.reports;
+  if (reports?.length > 1) {
+    html += `<div class="card wide"><h2>Weekly Trend</h2>
+    <canvas id="trendChart" width="800" height="200"></canvas></div>`;
+    document.getElementById('content').innerHTML = html;
+    drawTrend(reports);
+  } else {
+    document.getElementById('content').innerHTML = html;
+  }
+}
+
+function drawTrend(reports) {
+  const c = document.getElementById('trendChart');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+  const pad = 40;
+  const pw = w - pad * 2, ph = h - pad * 2;
+
+  ctx.fillStyle = '#111118';
+  ctx.fillRect(0, 0, w, h);
+
+  const vals = reports.map(r => r.vaultRate);
+  const max = Math.max(...vals, 100);
+
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad + (ph / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w - pad, y); ctx.stroke();
+    ctx.fillStyle = '#555';
+    ctx.font = '10px monospace';
+    ctx.fillText(Math.round(max - (max / 4) * i) + '%', 4, y + 4);
+  }
+
+  ctx.strokeStyle = '#f7b408';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 0; i < vals.length; i++) {
+    const x = pad + (pw / Math.max(vals.length - 1, 1)) * i;
+    const y = pad + ph - (vals[i] / max) * ph;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  for (let i = 0; i < vals.length; i++) {
+    const x = pad + (pw / Math.max(vals.length - 1, 1)) * i;
+    const y = pad + ph - (vals[i] / max) * ph;
+    ctx.fillStyle = '#f7b408';
+    ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+load();
+</script>
+</body>
+</html>

@@ -98,6 +98,8 @@ const MANIFEST = {
   'gym-digest':          { intended: 'cron', cron: '0 12 * * 0',    reason: 'Sun 20:00 HKT — weekly gym summary' },
   'memory-consolidator': { intended: 'cron', cron: '0 4 * * 0',     reason: 'Sun 12:00 HKT — agent memory maintenance' },
   'archaeologist-weekly': { intended: 'cron', cron: '0 19 * * 0',   reason: 'Sun 03:00 HKT — deep archaeologist sweep' },
+  'cathedral-gardener':   { intended: 'cron', cron: '0 20 * * 0',   reason: 'Sun 04:00 HKT — Gardener: genome+health+watcher → structural proposals' },
+  'output-architect':     { intended: 'cron', cron: '0 22 * * *',   reason: 'Daily 06:00 HKT — Output Architect: deliverable specs + quality grades + emergent detection' },
   'mirror-evolution':     { intended: 'cron', cron: '0 10 1 * *',   reason: '1st of month 18:00 HKT — Mirror self-audit: principles vs practice drift' },
 
   // ── DAILY CRONS ──
@@ -113,6 +115,9 @@ const MANIFEST = {
   'appreciation-ritual': { intended: 'cron', cron: '0 23 * * *',    reason: 'Daily 07:00 HKT — 5 loves, 5 gratitudes, 3 improvements' },
   'architect-pulse':     { intended: 'cron', cron: '0 7 * * *',     reason: 'Daily — 11 channel nudge rotation' },
   'trader':              { intended: 'cron', cron: '0 0,12 * * *',  reason: 'Twice daily 08:00+20:00 HKT — trading orchestrator' },
+  'stress-battery':      { intended: 'cron', cron: '0 21 * * *',    reason: 'Daily 05:00 HKT — anti-fragile 3-chamber stress test (compression+contradiction+identity)' },
+  'paul-patterns':       { intended: 'cron', cron: '0 22 * * 0',   reason: 'Weekly Sunday 06:00 HKT — session pattern analysis + cognitive tracking' },
+  'corpus-diagnostic':   { intended: 'cron', cron: '0 20 * * 3',   reason: 'Weekly Wednesday 04:00 HKT — Cathedral diagnostic lens on ancient corpus' },
   'vault-backup':        { intended: 'cron', cron: '0 3 * * *',     reason: 'Daily — Tier 1 local rsync backup' },
   'vault-github-sync':   { intended: 'cron', cron: '15 3 * * *',    reason: 'Daily — Tier 2 GitHub push' },
   'cosmology-researcher':{ intended: 'cron', cron: '0 18 * * *',    reason: 'Daily 02:00 HKT — autonomous DeepSeek research' },

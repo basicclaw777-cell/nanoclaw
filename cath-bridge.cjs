@@ -56,7 +56,7 @@ function neuralRouteToNodes(url) {
     '/comms': ['bridge', 'comms'], '/merch': ['bridge', 'merch'],
     '/course': ['bridge', 'course'], '/publisher': ['bridge', 'publisher'],
     '/trader': ['bridge', 'trading'], '/looking-glass': ['bridge', 'looking-glass'], '/geomag': ['bridge', 'geomag'],
-    '/cosmology': ['bridge', 'cosmology'], '/orrery': ['bridge', 'cosmology'], '/retuning-kitchen': ['bridge', 'research'], '/scraper': ['bridge', 'scraper'],
+    '/cosmology': ['bridge', 'cosmology'], '/orrery': ['bridge', 'cosmology'], '/stress-battery': ['bridge', 'diagnostics'], '/patterns': ['bridge', 'diagnostics'], '/corpus-diagnostic': ['bridge', 'diagnostics'], '/retuning-kitchen': ['bridge', 'research'], '/scraper': ['bridge', 'scraper'],
     '/gym-eyes': ['bridge', 'gym-eyes'], '/techniques': ['bridge', 'techniques'],
     '/screening': ['bridge', 'screening'], '/cathedral-city': ['bridge', 'city'],
     '/constellation': ['bridge', 'constellation'], '/agent-workspace': ['bridge', 'agents'], '/pulse': ['bridge', 'pulse'],
@@ -4459,6 +4459,43 @@ app.get('/cosmology/graph', (req, res) => {
 
 app.get('/orrery', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'reed-lab', 'somatic-orrery.html'));
+});
+
+app.get('/corpus-diagnostic', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'corpus-diagnostic.html'));
+});
+app.get('/corpus-diagnostic/data', (req, res) => {
+  const fp = path.join(NANOCLAW, 'corpus-diagnostic-latest.json');
+  if (fs.existsSync(fp)) res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  else res.json({});
+});
+
+app.get('/patterns', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'paul-patterns.html'));
+});
+app.get('/patterns/data', (req, res) => {
+  const fp = path.join(NANOCLAW, 'paul-patterns-latest.json');
+  if (fs.existsSync(fp)) res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  else res.json({});
+});
+app.get('/patterns/history', (req, res) => {
+  const fp = path.join(NANOCLAW, 'paul-patterns-state.json');
+  if (fs.existsSync(fp)) res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  else res.json({ reports: [] });
+});
+
+app.get('/stress-battery', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'reed-lab', 'stress-battery.html'));
+});
+app.get('/stress-battery/data', (req, res) => {
+  const fp = path.join(NANOCLAW, 'stress-battery-latest.json');
+  if (fs.existsSync(fp)) res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  else res.json({});
+});
+app.get('/stress-battery/history', (req, res) => {
+  const fp = path.join(NANOCLAW, 'stress-battery-state.json');
+  if (fs.existsSync(fp)) res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+  else res.json({ history: [] });
 });
 
 app.get('/simpsons', (req, res) => {
