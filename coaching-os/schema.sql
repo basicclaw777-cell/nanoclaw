@@ -212,6 +212,35 @@ CREATE TABLE IF NOT EXISTS class_observations (
 );
 
 -- ═══════════════════════════════════════════════════════════════════
+-- TASTE LAYER — Paul's approval/rejection feedback (actuation)
+-- ═══════════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS coaching_taste (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  entity_type TEXT NOT NULL,       -- drill, theme, class, format, combo, formula
+  entity_id TEXT NOT NULL,         -- FK to relevant table
+  verdict TEXT NOT NULL,           -- approved, rejected, redirected, improved
+  reason TEXT,                     -- WHY — richest signal (especially on rejection)
+  suggestion TEXT,                 -- for 'improved'/'redirected' — what Paul wants instead
+  context TEXT,                    -- what prompted this (e.g. "suggested for footwork class")
+  timestamp TEXT DEFAULT (datetime('now'))
+);
+
+-- ═══════════════════════════════════════════════════════════════════
+-- FORMAT TEMPLATES — proven drill structures for variation generation
+-- ═══════════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS drill_formats (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,              -- e.g. "Combo Chain", "Constraint Drill"
+  pattern TEXT NOT NULL,           -- template with {parameters}
+  parameters TEXT,                 -- JSON array of parameter names
+  example_drill_ids TEXT,          -- JSON array of drill IDs that use this format
+  generation_template TEXT,        -- sentence template for drill descriptions
+  created TEXT DEFAULT (date('now'))
+);
+
+-- ═══════════════════════════════════════════════════════════════════
 -- INDEXES
 -- ═══════════════════════════════════════════════════════════════════
 
@@ -225,3 +254,6 @@ CREATE INDEX IF NOT EXISTS idx_skill_states_student ON skill_states(student_id);
 CREATE INDEX IF NOT EXISTS idx_class_segments_class ON class_segments(class_id);
 CREATE INDEX IF NOT EXISTS idx_coaching_cues_drill ON coaching_cues(drill_id);
 CREATE INDEX IF NOT EXISTS idx_class_observations_class ON class_observations(class_id);
+CREATE INDEX IF NOT EXISTS idx_taste_entity ON coaching_taste(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_taste_verdict ON coaching_taste(verdict);
+CREATE INDEX IF NOT EXISTS idx_formats_name ON drill_formats(name);

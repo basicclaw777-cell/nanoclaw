@@ -365,7 +365,33 @@ module.exports = function mountCoachingApi(app) {
         drills = drills.filter(d => d.block_min <= blockNum && d.block_max >= blockNum);
       }
 
-      // Score each drill
+      // Taste data for drills
+      const drillTasteRows = db.prepare(`
+        SELECT entity_id,
+          SUM(CASE WHEN verdict = 'approved' THEN 1 ELSE 0 END) as approved,
+          SUM(CASE WHEN verdict = 'rejected' THEN 1 ELSE 0 END) as rejected,
+          SUM(CASE WHEN verdict = 'redirected' THEN 1 ELSE 0 END) as redirected,
+          SUM(CASE WHEN verdict = 'improved' THEN 1 ELSE 0 END) as improved,
+          COUNT(*) as total
+        FROM coaching_taste WHERE entity_type = 'drill'
+        GROUP BY entity_id
+      `).all();
+      const drillTaste = {};
+      for (const r of drillTasteRows) drillTaste[r.entity_id] = r;
+
+      // Format-level taste
+      const formatTasteRows = db.prepare(`
+        SELECT entity_id,
+          SUM(CASE WHEN verdict = 'approved' THEN 1 ELSE 0 END) as approved,
+          SUM(CASE WHEN verdict = 'rejected' THEN 1 ELSE 0 END) as rejected,
+          SUM(CASE WHEN verdict = 'improved' THEN 1 ELSE 0 END) as improved,
+          COUNT(*) as total
+        FROM coaching_taste WHERE entity_type = 'format'
+        GROUP BY entity_id
+      `).all();
+      const formatTaste = {};
+      for (const r of formatTasteRows) formatTaste[r.entity_id] = r;
+
       let theme = null;
       if (theme_id) {
         theme = db.prepare('SELECT * FROM themes WHERE id = ?').get(theme_id);
@@ -396,18 +422,65 @@ module.exports = function mountCoachingApi(app) {
           if (segLower.includes('coordination') && d.domain === 'icebreaker') score += 3;
         }
 
-        // Energy demand matching (future: match to energy curve position)
-        // Variety bonus: less common domains get slight boost
         if (d.domain === 'mindset' || d.domain === 'strategy') score += 1;
 
-        return { ...d, _score: score };
+        // Taste: Paul's approval/rejection history for this drill
+        const dt = drillTaste[d.id];
+        if (dt && dt.total > 0) {
+          const approvalRate = (dt.approved + dt.improved) / dt.total;
+          const rejectionRate = dt.rejected / dt.total;
+          score += (approvalRate - rejectionRate) * 5;
+        }
+
+        // Format taste: format-level approval compounds across all drills in format
+        if (d.format_id) {
+          const ft = formatTaste[d.format_id];
+          if (ft && ft.total > 0) {
+            const fApproval = (ft.approved + ft.improved) / ft.total;
+            const fRejection = ft.rejected / ft.total;
+            score += (fApproval - fRejection) * 3;
+          }
+        }
+
+        return { ...d, _score: score, _taste: dt || null };
       });
 
       scored.sort((a, b) => b._score - a._score);
-      const results = scored.slice(0, max).map(d => { delete d._score; return d; });
+      const results = scored.slice(0, max).map(d => { const s = d._score; delete d._score; return d; });
 
       db.close();
       res.json(results);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ── Drill formats (proven templates for generation) ────────────────
+  app.get('/coaching/formats', (req, res) => {
+    try {
+      const db = getDb();
+      const formats = db.prepare('SELECT * FROM drill_formats ORDER BY name').all();
+      for (const f of formats) {
+        f.parameters = JSON.parse(f.parameters || '[]');
+        f.example_drill_ids = JSON.parse(f.example_drill_ids || '[]');
+        f.drill_count = db.prepare('SELECT COUNT(*) as n FROM drills WHERE format_id = ?').get(f.id).n;
+        const taste = db.prepare(`
+          SELECT SUM(CASE WHEN verdict = 'approved' THEN 1 ELSE 0 END) as approved,
+                 SUM(CASE WHEN verdict = 'rejected' THEN 1 ELSE 0 END) as rejected,
+                 COUNT(*) as total
+          FROM coaching_taste WHERE entity_type = 'format' AND entity_id = ?
+        `).get(f.id);
+        f.taste = taste.total > 0 ? taste : null;
+      }
+      db.close();
+      res.json(formats);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  app.get('/coaching/formats/:id/drills', (req, res) => {
+    try {
+      const db = getDb();
+      const drills = db.prepare('SELECT * FROM drills WHERE format_id = ? ORDER BY name').all(req.params.id);
+      db.close();
+      res.json(drills);
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 
@@ -418,6 +491,71 @@ module.exports = function mountCoachingApi(app) {
       const drills = db.prepare('SELECT * FROM drills ORDER BY domain, name').all();
       db.close();
       res.json(drills);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ── Taste feedback — Paul's verdict on drills/themes/classes ───────
+  app.post('/coaching/taste', express.json(), (req, res) => {
+    try {
+      const db = getDb();
+      const { entity_type, entity_id, verdict, reason, suggestion, context } = req.body;
+      if (!entity_type || !entity_id || !verdict) {
+        return res.status(400).json({ error: 'entity_type, entity_id, verdict required' });
+      }
+      const valid = ['approved', 'rejected', 'redirected', 'improved'];
+      if (!valid.includes(verdict)) {
+        return res.status(400).json({ error: `verdict must be one of: ${valid.join(', ')}` });
+      }
+      db.prepare(`INSERT INTO coaching_taste (entity_type, entity_id, verdict, reason, suggestion, context) VALUES (?, ?, ?, ?, ?, ?)`)
+        .run(entity_type, entity_id, verdict, reason || null, suggestion || null, context || null);
+      db.close();
+      res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  app.get('/coaching/taste/stats', (req, res) => {
+    try {
+      const db = getDb();
+      const { entity_type } = req.query;
+
+      let where = '';
+      const params = [];
+      if (entity_type) { where = 'WHERE entity_type = ?'; params.push(entity_type); }
+
+      const stats = db.prepare(`
+        SELECT entity_type, entity_id,
+          SUM(CASE WHEN verdict = 'approved' THEN 1 ELSE 0 END) as approved,
+          SUM(CASE WHEN verdict = 'rejected' THEN 1 ELSE 0 END) as rejected,
+          SUM(CASE WHEN verdict = 'redirected' THEN 1 ELSE 0 END) as redirected,
+          SUM(CASE WHEN verdict = 'improved' THEN 1 ELSE 0 END) as improved,
+          COUNT(*) as total
+        FROM coaching_taste ${where}
+        GROUP BY entity_type, entity_id
+        ORDER BY total DESC
+      `).all(...params);
+
+      const reasons = db.prepare(`
+        SELECT entity_type, entity_id, verdict, reason, suggestion, timestamp
+        FROM coaching_taste ${where}
+        WHERE reason IS NOT NULL
+        ORDER BY timestamp DESC LIMIT 50
+      `).all(...params);
+
+      db.close();
+      res.json({ stats, recent_reasons: reasons });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  app.get('/coaching/taste/entity/:type/:id', (req, res) => {
+    try {
+      const db = getDb();
+      const entries = db.prepare(`
+        SELECT * FROM coaching_taste
+        WHERE entity_type = ? AND entity_id = ?
+        ORDER BY timestamp DESC
+      `).all(req.params.type, req.params.id);
+      db.close();
+      res.json(entries);
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 

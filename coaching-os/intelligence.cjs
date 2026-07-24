@@ -57,6 +57,21 @@ module.exports = function mountIntelligence(app) {
         layerDeficit[layer] = Math.max(0, idealPct - actual);
       }
 
+      // Taste data: Paul's approval/rejection history
+      const tasteRows = db.prepare(`
+        SELECT entity_id,
+          SUM(CASE WHEN verdict = 'approved' THEN 1 ELSE 0 END) as approved,
+          SUM(CASE WHEN verdict = 'rejected' THEN 1 ELSE 0 END) as rejected,
+          SUM(CASE WHEN verdict = 'redirected' THEN 1 ELSE 0 END) as redirected,
+          SUM(CASE WHEN verdict = 'improved' THEN 1 ELSE 0 END) as improved,
+          COUNT(*) as total
+        FROM coaching_taste
+        WHERE entity_type = 'theme'
+        GROUP BY entity_id
+      `).all();
+      const taste = {};
+      for (const r of tasteRows) taste[r.entity_id] = r;
+
       // Score each theme
       const scored = themes.map(t => {
         let score = 0;
@@ -76,7 +91,24 @@ module.exports = function mountIntelligence(app) {
         if (count === 0) score += 20;
         else if (count < 3) score += 10;
 
-        return { ...t, _score: Math.round(score), _days: days >= 999 ? 'never' : `${days}d ago`, _count: count };
+        // Taste score: Paul's historical approval/rejection
+        const t_taste = taste[t.id];
+        let tasteScore = 0;
+        if (t_taste && t_taste.total > 0) {
+          const approvalRate = (t_taste.approved + t_taste.improved) / t_taste.total;
+          const rejectionRate = t_taste.rejected / t_taste.total;
+          tasteScore = (approvalRate - rejectionRate) * 30;
+        }
+        score += tasteScore;
+
+        return {
+          ...t,
+          _score: Math.round(score),
+          _days: days >= 999 ? 'never' : `${days}d ago`,
+          _count: count,
+          _taste: t_taste ? { approved: t_taste.approved, rejected: t_taste.rejected, redirected: t_taste.redirected, improved: t_taste.improved } : null,
+          _taste_score: Math.round(tasteScore),
+        };
       });
 
       scored.sort((a, b) => b._score - a._score);

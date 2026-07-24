@@ -1,9 +1,8 @@
 # Cathedral System Map
 
 > One line per built system: name · entry point · trigger · doc. Grep this before building (SI-04).
-> STUB — build the full inventory from `node cathedral-manifest.js --json` cross-referenced with docs/BUILD_LOG.md. Until then, BUILD_LOG.md + the manifest are the source of truth.
-
-_(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
+> Populated 2026-07-25 from PM2 state + cath-bridge route audit + BUILD_LOG. 569 routes, 24 online PM2, 99 stopped.
+> Legend: [PM2] = managed process · [ONLINE] = running · [STOPPED] = exists but not running · route = cath-bridge :8080
 
 ## Coaching OS
 - **Coaching Planner** · `~/nanoclaw/coaching-os/coaching-planner.html` · route `/coaching-os` · doc: BUILD_LOG 2026-07-13
@@ -218,3 +217,194 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Fable Use Cases Map** · `~/Cathedral/control-panel/fable-use-cases.html` · static · Interactive SVG mind map of 6 Fable use cases · doc: BUILD_LOG 2026-07-17
 - **Forge Sage** · `~/nanoclaw/sages/forge.json` · `/court` agent picker · Forge conversational proxy for Court · doc: BUILD_LOG 2026-07-17
 - **PT Tracker** · `~/basic-reflex/pt-tracker.html` · route `/pt` · Mobile PT session counter · doc: BUILD_LOG 2026-07-19
+
+## Infrastructure (always-on PM2)
+- **Cath-Bridge** · `~/nanoclaw/cath-bridge.cjs` · [PM2 ONLINE] port 8080 · 569 routes, all web UIs + APIs
+- **Cathedral Bot** · `~/nanoclaw/telegram-bot.js` · [PM2 ONLINE] Telegram commands · primary command interface
+- **Dispatch Bot** · `~/Cathedral/tools/telegram-bot.js` · [PM2 ONLINE] · agent dispatch Telegram relay
+- **Cath-Local** · `~/Cathedral/cath_local_server.py` · [PM2 ONLINE] FastAPI :8000 · Python service layer
+- **Telegram Tunnel** · `~/nanoclaw/telegram-webhook-tunnel.sh` · [PM2 ONLINE] · webhook proxy
+- **TTYD Claude** · `~/nanoclaw/services/ttyd-claude.sh` · [PM2 ONLINE] · web terminal
+- **Intake Watcher** · `~/nanoclaw/intake-watcher.js` · [PM2 ONLINE] · incoming file routing
+- **Morning View** · `~/Cathedral/morning-view/server.js` · [PM2 ONLINE] · daily briefing generator
+
+## Trading System
+- **Trading Orchestrator** · `~/nanoclaw/trader/trading-orchestrator.js` · [PM2 STOPPED] · central signal→trade loop, weight persistence, genome inheritance, corner advice
+- **Orchestrator Seed** · `~/nanoclaw/orchestrator-seed-generator.js` · [PM2 ONLINE] · seed generation for orchestrator
+- **Trader Hub** · route `/trader/hub` · dashboard: portfolio, positions, signals, performance
+- **Signal Dashboard** · route `/trader/signal-dashboard` · live signal feed
+- **Trader Performance** · route `/trader/performance` · P&L and strategy stats
+- **Trader Portfolio** · route `/trader/portfolio` · current holdings
+- **Trader Positions** · route `/trader/positions` · open positions
+- **Trader Signals** · route `/trader/signals` · signal history
+- **Trader Explainer** · route `/trader/explainer` · plain-English trade reasoning
+- **Latest Debate** · route `/trader/latest-debate` · roundtable debate output
+- **Daily Picks** · routes `/trader/picks/*` (today, pick, scoreboard, lessons) · daily trade picks + scoring
+- **Simpsons Trader** · `~/nanoclaw/trader/simpsons-trader.js` · [PM2 STOPPED] route `/simpsons` · event trader
+- **Cyclical Trader** · `~/nanoclaw/trader/cyclical-trader.js` · [PM2 STOPPED] · cycle-based strategy
+- **Allocation Tracker** · `~/nanoclaw/trader/allocation-tracker.js` · [PM2 STOPPED] route `/allocations` · weekly allocation review
+- **Trading Mentor** · `~/nanoclaw/trader/trading-mentor.js` · [PM2 STOPPED] · coaching layer for trading
+- **Position Guardian** · `~/nanoclaw/trader/position-guardian.js` · [PM2 STOPPED] · position size limits
+- **The Corner** · `~/nanoclaw/trader/the-corner.js` · generates corner-advice.json (multipliers) · consumed by orchestrator
+- **Causal Critic** · `~/nanoclaw/trader/causal-critic.js` · process score replaces P&L feedback · doc: BUILD_LOG 2026-07-19c
+- **Strategy Elimination** · `~/nanoclaw/trader/strategy-elimination.js` · genome extraction from dead strategies
+
+## Polymarket
+- **Polymarket Dashboard** · route `/polymarket` · prediction market interface
+- **Polymarket API** · routes `/api/polymarket/*` (scan, research, markets, estimates, kelly, trade, execute, ledger, monitor, report) · 11 endpoints
+- **PM Scanner** · `~/nanoclaw/polymarket/cron.js` · [PM2 STOPPED] · market scanner
+- **Calibration Tracker** · `~/nanoclaw/polymarket/calibration-tracker.js` · Brier score + drift alert · doc: BUILD_LOG 2026-07-19d
+
+## Content Studio / Reed
+- **Reed Studio** · route `/reed-studio` · character-driven content generation
+- **Reed Visual Hub** · route `/reed-visual-hub` · visual content pipeline overview
+- **Reed Lab** · routes `/reed-lab/*` (catalogue, digest, shots, image) · experimental generation lab
+- **Reed Slides** · routes `/reed-slides/*` (catalogue, deck, card-image, card-project, missing-connections) · slide deck generator
+- **Reed Treatments** · route `/reed-treatments` · treatment pipeline
+- **Reed Studio API** · routes `/api/reed-studio/*` (briefing, feed, memory, metrics, status) · 5 endpoints
+- **Reed Curator API** · route `/api/reed-curator` · curation layer
+- **Content Studio API** · routes `/api/content-studio/*` (feed, internal-feed, characters, character-stats, queue, select, fulfill, reject, wishlist, memory, metrics, status) · 12 endpoints
+- **Engineering Studio API** · routes `/api/engineering-studio/*` (briefing, feed, memory, metrics, status) · 5 endpoints
+- **Buzz Monitor** · `~/nanoclaw/content-studio/buzz-monitor.js` · [PM2 ONLINE] · trend/news monitoring
+- **Content Reviews** · `~/nanoclaw/content-studio/review-responder.js` · [PM2 ONLINE] · automated content review
+- **Maya Social** · `~/nanoclaw/content-studio/maya-internal.js` · [PM2 ONLINE] · social intelligence agent
+- **Higgsfield Gallery** · route `/hf-gallery` · AI video gallery
+- **Higgsfield Map** · route `/higgsfield-map` · model/credit status
+- **Video Engine** · routes `/api/video-engine/*` · video gen API
+
+## Social Intelligence / Cathedral City
+- **Cathedral City** · routes `/cathedral-city/*` (feed, health, team-programme, tea-stars, dissent, dms, suggestions, feed-dashboard) · social simulation layer · 9 routes
+- **Agent Interface** · routes `/agents/*` (chat, data, guide, list, steward, ui) · agent interaction layer · 6 routes
+- **Newsfeed** · routes `/newsfeed`, `/api/newsfeed/*` · internal news aggregation
+
+## Vault & Knowledge (always-on)
+- **Vault Brain** · `~/nanoclaw/vault-brain-runner.cjs` · [PM2 ONLINE] · chokidar watcher, cross-domain association → Telegram
+- **Vault Promoter** · `~/nanoclaw/vault-promoter.js` · [PM2 ONLINE] · promotes staging → refined
+- **Vault State Refresh** · `~/nanoclaw/vault-state-generator.js` · [PM2 ONLINE] · regenerates vault-state.json
+- **Vault Watcher** · `~/Cathedral/event-bus/vault_watcher.py` · [PM2 ONLINE] · Python event bus for vault changes
+- **The Archivist** · `~/Cathedral/the-archivist.mjs` · [PM2 ONLINE] · automated archival intelligence
+- **The Cartographer** · `~/Cathedral/the-cartographer.mjs` · [PM2 ONLINE] · vault structure mapping
+- **Vault REST** · routes `/vault/*` (list, read, search, related, write) · vault CRUD API
+- **Vault Health** · routes `/vault-health`, `/api/vault-health` · vault integrity check
+
+## Emergence / Meta-Intelligence
+- **Emergence Ingest** · `~/nanoclaw/emergence-board.js` · [PM2 ONLINE] · emergence signal ingestion
+- **Cognitive Scanner** · `~/nanoclaw/cognitive-scanner.js` · [PM2 ONLINE] · cognitive pattern detection
+- **Lucy Heartbeat** · `~/nanoclaw/lucy-heartbeat.js` · [PM2 ONLINE] route `/api/lucy-heartbeat` · Lucy Protocol verification pulse
+- **Lymphatic** · `~/nanoclaw/lymphatic.mjs` · [PM2 ONLINE] · system waste detection/clearing
+- **Terminal Harvester** · `~/nanoclaw/terminal-harvester.js` · [PM2 ONLINE] · Claude Code session signal extraction
+- **Archaeologist** · `~/nanoclaw/archaeologist.js` · [PM2 ONLINE] route `/archaeologist` · forgotten technique mining
+- **Emergence API** · routes `/api/emergence/*` (captures, scores, advance) · emergence data
+- **Neural Map** · route `/neural-map`, `/api/neural-map` · system connection visualization
+- **Organism** · route `/organism`, `/api/organism` · organic system health view
+- **Extraction Cycle** · routes `/api/extraction-cycle/*` (history, report) · knowledge extraction pipeline
+
+## Comms Engine
+- **Comms Daily** · `~/nanoclaw/comms-engine/run-daily-comms.js` · [PM2 STOPPED] · daily comms automation
+- **Lapsed Campaign** · `~/nanoclaw/comms-engine/run-lapsed-campaign.js` · [PM2 STOPPED] · warm winback (20 sent, result pending)
+- **WhatsApp Integration** · routes `/wa/*` (dashboard, webhook, approve, skip, toggle, test) · WA business API
+
+## Gym Eyes / Boxing Analytics
+- **Gym Eyes Analytics** · routes `/gym-eyes/*` (analytics, boxers, cards, corrections, fighters, film-room, flags, portal, student*, parent, videos, video/:file, virtual-tutor, vision-landscape) · ~20 routes
+- **Boxing Defense** · route `/boxing-defense` · defensive drill system
+- **Boxing Floor** · route `/boxing-floor` · floor plan/movement
+- **Boxing Full Fight** · route `/boxing-fullfight` · fight simulation
+- **Boxing Game** · route `/boxing-game` · gamified training
+- **Opponents Film Room** · route `/opponents-film-room` · fight tape analysis
+- **Screening** · route `/screening` · new member assessment
+- **Kids Class** · route `/kids-class` · kids programme interface
+- **Open Gym** · route `/open-gym` · open gym session tool
+- **Technique Library** · routes `/technique-library`, `/techniques` · technique encyclopedia
+- **Mnemonic Library** · route `/mnemonic-library` · teaching mnemonics
+
+## BR Business Tools
+- **BR Pre-Class Brief** · `~/nanoclaw/br-preclass-brief.js` · [PM2 STOPPED] route `/br-brief` · pre-class briefing
+- **BR Command** · route `/br-command` · command center
+- **BR Taster** · route `/br-taster` · taster class tool
+- **Punchpass Scraper** · `~/nanoclaw/punchpass-scraper.cjs` · [PM2 STOPPED] · membership data sync
+- **Revenue Digest** · `~/nanoclaw/br-revenue-digest-cron.js` · [PM2 STOPPED] · revenue reporting
+
+## Research Instruments (additional)
+- **Looking Glass** · routes `/looking-glass/*` (events, pipelines/:body, scan, signal, sky) · astronomy pipeline · 6 routes
+- **Sumerian Corpus** · route `/sumerian` · tablet viewer
+- **Truth Corpus** · route `/truth-corpus` · verified claims database
+- **Rosetta Bridge** · route `/rosetta-bridge` · cross-corpus translation
+
+## Publication Engine
+- **Publisher** · route `/publisher` · publication management
+- **Publication API** · routes `/api/publication/*` (book, book/generate, newsletters, newsletter/generate, podcasts, podcast/curate) · 6 endpoints
+
+## Predictive Intelligence
+- **Predictive Map** · routes `/predictive/*` (map, predictions, rebuild, seeds, stats) · prediction layer · 5 routes
+- **Claim Ledger** · routes `/api/claim-ledger/*` (register, stats, blocked, lineage, check-lineage) · epistemic claim tracking
+
+## Relay System
+- **Relay Dashboard** · route `/relay`, `/relay-map` · relay thread visualization
+- **Relay API** · routes `/api/relay/*` (latest, status) · relay state
+- **Forensic Relay** · routes `/api/forensic-relay/*` (scan, history) · forensic analysis relay
+
+## Villa (Property Scout)
+- **Property Scout** · route `/property-scout` · real estate research tool
+- **Villa** · routes `/villa/*` (projects, artifacts, artifact-file, snapshot) · project workspace
+- **Scout Room** · routes `/scout-room`, `/api/scout-room/*` · candidate evaluation
+
+## Study Lab
+- **Study Lab** · route `/study-lab` · study material generator
+- **Study Lab API** · routes `/api/study-lab/*` (generate, audio/:name, file/:name) · content generation
+- **Syllabus** · routes `/syllabus`, `/api/syllabus/*` (generate, suggest, start, next, complete) · curriculum progression
+
+## Taste & Attention
+- **Taste Curator** · routes `/api/taste-curator/*` (review, scan) · taste map curation
+- **Taste Practice** · `~/nanoclaw/taste-practice-cron.js` · [PM2 STOPPED] · taste map reinforcement
+- **Attention Layer** · routes `/api/attention/*` (review, unreviewed, learnings, stats) · attention/priority management
+- **Priority Engine** · routes `/api/priority/*` (classify, digest, stats) · priority classification
+
+## Cathedral Meta
+- **Cathedral Deck** · route `/cathedral-deck` · presentation deck
+- **Cathedral Ferrari** · route `/cathedral-ferrari` · system overview viz
+- **Cathedral Infographic** · route `/cathedral-infographic` · architecture infographic
+- **Cathedral Memoir** · route `/cathedral-memoir`, `/memoir` · narrative history
+- **Cathedral Outputs** · route `/cathedral-outputs`, `/outputs` · output tracking
+- **What Built Me** · route `/what-built-me` · origin story
+- **Time Capsule** · route `/time-capsule` · milestone preservation
+- **Capsule** · route `/capsule` · snapshot tool
+- **Pulse** · route `/pulse` · system heartbeat dashboard
+- **Pipeline** · routes `/pipeline`, `/api/pipeline/*` · processing pipeline view
+- **Status** · route `/status` · system status
+- **Services** · route `/services` · service registry
+- **Board** · route `/board` · kanban/task board
+- **Map** · route `/map` · system map visualization
+- **Spend** · route `/api/spend` · cost tracking
+
+## Miscellaneous Tools
+- **Harmonic Dome** · route `/harmonic-dome` · geometric visualization
+- **Retuning Kitchen** · route `/retuning-kitchen` · parameter adjustment tool
+- **Open Questions** · route `/open-questions` · research question tracker
+- **Workshop Results** · route `/workshop-results` · workshop outcome tracking
+- **Influences** · route `/influences` · influence mapping
+- **Brand DNA** · route `/brand-dna` · brand identity tool
+- **Hermes** · routes `/hermes`, `/hermes/status` · local model interface
+- **Icons** · route `/icons` · asset serving
+
+## Stopped Goldmine Miners (all PM2 STOPPED)
+- **Patent Miner** · `~/nanoclaw/goldmine-patent-miner.js` · patent research automation
+- **Clinical Miner** · `~/nanoclaw/goldmine-clinical-miner.js` · clinical trial research
+- **PhD Miner** · `~/nanoclaw/goldmine-phd-miner.js` · academic paper research
+- **Soviet Miner** · `~/nanoclaw/goldmine-soviet-miner.js` · Soviet research archive mining
+
+## Stopped Agents (all PM2 STOPPED — not dead, longer time horizons)
+- **Cathedral Gazette** · `~/Cathedral/cathedral-gazette.js` · newsletter generator
+- **Erickson Parables** · `~/Cathedral/emergence/erickson.js` · therapeutic parable generator
+- **Emergence Harvester** · `~/Cathedral/agents/emergence-harvester.js` · emergence signal harvesting
+- **Agent Triggers** · `~/Cathedral/emergence/agent-triggers.js` · event-driven agent activation
+- **ORC Sequencer** · `~/Cathedral/emergence/orc-sequencer.js` · orchestrator sequencing
+- **Production Engine** · `~/Cathedral/emergence/production-engine.js` · daily agent production cycle
+- **Liveness** · `~/Cathedral/liveness.js` · system liveness monitoring
+- **Cathedral Smoke Test** · `~/Cathedral/smoke-test.js` · integration test suite
+- **Voice Chamber V2** · `~/Cathedral/voice-chamber-v2/server.js` · KITT voice interface
+- **Elicitor** · `~/nanoclaw/elicitor/elicitor.js` · knowledge elicitation agent
+- **Agency Executor** · `~/nanoclaw/agency/executor.js` · autonomous task execution
+- **Synapse Pulse** · `~/nanoclaw/compound/synapse-pulse.js` · cross-system signal firing
+- **DM Followup** · `~/Cathedral/agents/dm-followup.js` · conversation followup agent
+- **Global Scout** · `~/Cathedral/property-scout/global-runner.js` · worldwide property scanning
+- **Scout Bridge** · `~/Cathedral/agents/skills-scout-bridge.js` · scout capability bridge

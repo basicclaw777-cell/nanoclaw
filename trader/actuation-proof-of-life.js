@@ -55,6 +55,39 @@ const CHECKS = [
     pattern: 'isEliminated',
     note: 'Elimination check still in processSignal',
   },
+  {
+    id: 'corner-advice-consumed',
+    name: '#2 Corner → Weight Multipliers',
+    type: 'json-file',
+    path: path.join(__dirname, 'corner-advice.json'),
+    maxAgeHours: 48,
+    validate: (data) => data.multipliers && Object.keys(data.multipliers).length > 0 && data.timestamp,
+  },
+  {
+    id: 'corner-wired',
+    name: '#2 Corner Consumed in Orchestrator',
+    type: 'grep',
+    file: path.join(__dirname, 'trading-orchestrator.js'),
+    pattern: 'corner-advice.json',
+    note: 'Corner advice loaded in injectFeedback',
+  },
+  {
+    id: 'coaching-taste-table',
+    name: '#3 Coaching Taste → Intelligence Scoring',
+    type: 'db-query',
+    dbPath: path.join(__dirname, '..', 'coaching-os', 'coaching.db'),
+    query: `SELECT COUNT(*) as count FROM coaching_taste`,
+    check: (row) => row.count > 0,
+    note: 'Taste feedback rows exist in coaching.db',
+  },
+  {
+    id: 'coaching-taste-wired',
+    name: '#3 Taste Consumed in Intelligence',
+    type: 'grep',
+    file: path.join(__dirname, '..', 'coaching-os', 'intelligence.cjs'),
+    pattern: 'coaching_taste',
+    note: 'Taste query in intelligence scoring',
+  },
 ];
 
 function checkJsonFile(check) {
