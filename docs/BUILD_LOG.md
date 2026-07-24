@@ -1,6 +1,34 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-24b — The Actuation Flinch (discovery + wiring + proof-of-life)
+
+**Source:** Audit of trading system found systemic LLM failure: asked for "learning," Forge builds observation (dashboards, logging), omits actuation (write-back loops). Named "The Actuation Flinch." OmissionOS inside the building department.
+
+**Discovery:**
+- 11-watcher wiring plan generated via Fable agent (grounded against real codebase)
+- Root cause: Triple Gate (safety training + training data bias + capability limits)
+- Cross-domain pattern: same mechanism as Phoebus cartel, region locking — control through absence
+- Diagnostic signature: mechanical (groundhog day + should-have-been-spotted) for systems; emotional (draining) for people
+- Vault: `02_Refined_Gold/cathedral/the-actuation-flinch.md` (Grade A, expanded with 5 sections)
+
+**Wired #11 — Orchestrator Weight Persistence** (~15 LOC)
+- `trading-orchestrator.js`: `injectFeedback()` loads/saves persisted weights from `feedback-weights.json`
+- Weights survive PM2 restarts. Delete file = factory reset.
+- First heartbeat: 2026-07-24T15:13:01.309Z (29 strategies, vortex_flow 1.3→2.08, coinflip_1 1.0→0.5)
+
+**Wired #10 — Genome Inheritance** (~8 LOC)
+- `trading-orchestrator.js`: Added `getInheritedBias()` import + genome boost in `processSignal()` (capped +0.15)
+- Corrected audit: `isEliminated()` was already imported; real gap was `getInheritedBias()` — built, exported, never called
+
+**Built: Actuation Proof-of-Life**
+- Script: `~/nanoclaw/trader/actuation-proof-of-life.js` (ESM)
+- 4 checks (json-file, db-query, grep). GREEN/YELLOW/RED report. Telegram on failures.
+- Learning digest: `generateLearningDigest()` + `explainChange()` — plain-English weight change explanations
+- Tested: 4/4 GREEN
+
+**Graphify:** 56 nodes, 67 edges, 8 communities. God nodes: Actuation Flinch (12), Mechanical Test (9), Parametric Architecture (7).
+
 ## 2026-07-22c — Corpus Diagnostic (Cathedral lens on ancient knowledge)
 
 **Source:** Paul's 3:33am insight — the Cathedral now has proprioception (stress battery, pattern tracker). Ancient cathedrals/temples were built with the same architectural principles. Turn the diagnostic tools OUTWARD onto the ancient corpus.

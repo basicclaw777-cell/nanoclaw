@@ -3776,6 +3776,48 @@ app.get('/trader/hub', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'trader', 'trading-hub.html'));
 });
 
+app.get('/trader/learning-pulse', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'trader', 'learning-pulse.html'));
+});
+
+app.get('/trader/learning-pulse/data', (req, res) => {
+  try {
+    const fsx = require('fs');
+    const weightsPath = path.join(NANOCLAW, 'trader', 'feedback-weights.json');
+    const prevPath = path.join(NANOCLAW, 'trader', 'feedback-weights-previous.json');
+    const configPath = path.join(NANOCLAW, 'trader', 'config.json');
+    const dbPath = path.join(NANOCLAW, 'trader', 'logs', 'trades.db');
+
+    const weights = fsx.existsSync(weightsPath) ? JSON.parse(fsx.readFileSync(weightsPath, 'utf8')) : null;
+    const config = JSON.parse(fsx.readFileSync(configPath, 'utf8'));
+    const factory = config.strategy_weights || {};
+
+    let performance = [], eliminations = [], genomes = [];
+    if (fsx.existsSync(dbPath)) {
+      const Database = require('better-sqlite3');
+      const db = new Database(dbPath, { readonly: true });
+      performance = db.prepare('SELECT strategy, COUNT(*) as trades, SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END) as wins, ROUND(SUM(pnl), 2) as pnl FROM trades GROUP BY strategy ORDER BY pnl DESC').all();
+      eliminations = db.prepare('SELECT strategy, strikes, is_eliminated as eliminated, ROUND(total_pnl, 2) as pnl FROM strategy_elimination WHERE strikes > 0 ORDER BY strikes DESC').all();
+      genomes = db.prepare('SELECT strategy, genome FROM genome_archive ORDER BY id DESC LIMIT 5').all().map(g => {
+        const d = JSON.parse(g.genome);
+        return { strategy: g.strategy, bias: d.directionBias, assets: (d.bestAssets || []).map(a => a.asset), avgHold: d.avgHoldDays };
+      });
+      db.close();
+    }
+
+    res.json({
+      weights: weights ? weights.weights : factory,
+      saved_at: weights ? weights.saved_at : null,
+      factory,
+      performance,
+      eliminations,
+      genomes
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/trader/explainer', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'trader', 'trading-explainer.html'));
 });

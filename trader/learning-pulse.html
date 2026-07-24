@@ -1,0 +1,660 @@
+<title>Learning Pulse — The Anti-Steak Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --bg-card: #FFFFFF;
+    --bg-card-alt: #F5F4F0;
+    --text: #2C3E50;
+    --text-dim: #7F8C8D;
+    --text-label: #95A5A6;
+    --gold: #F7B408;
+    --gold-dim: rgba(247, 180, 8, 0.12);
+    --green: #2ECC71;
+    --green-dim: rgba(46, 204, 113, 0.12);
+    --red: #E74C3C;
+    --red-dim: rgba(231, 76, 60, 0.12);
+    --amber: #F39C12;
+    --amber-dim: rgba(243, 156, 18, 0.12);
+    --purple: #8E6DBF;
+    --purple-dim: rgba(142, 109, 191, 0.12);
+    --border: rgba(0,0,0,0.06);
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1A1B1E;
+      --bg-card: #242529;
+      --bg-card-alt: #2A2B30;
+      --text: #E8E6E3;
+      --text-dim: #8A8A8A;
+      --text-label: #6B6B6B;
+      --border: rgba(255,255,255,0.06);
+      --shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
+      --gold-dim: rgba(247, 180, 8, 0.08);
+      --green-dim: rgba(46, 204, 113, 0.08);
+      --red-dim: rgba(231, 76, 60, 0.08);
+      --amber-dim: rgba(243, 156, 18, 0.08);
+      --purple-dim: rgba(142, 109, 191, 0.08);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1A1B1E;
+    --bg-card: #242529;
+    --bg-card-alt: #2A2B30;
+    --text: #E8E6E3;
+    --text-dim: #8A8A8A;
+    --text-label: #6B6B6B;
+    --border: rgba(255,255,255,0.06);
+    --shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
+    --gold-dim: rgba(247, 180, 8, 0.08);
+    --green-dim: rgba(46, 204, 113, 0.08);
+    --red-dim: rgba(231, 76, 60, 0.08);
+    --amber-dim: rgba(243, 156, 18, 0.08);
+    --purple-dim: rgba(142, 109, 191, 0.08);
+  }
+  :root[data-theme="light"] {
+    --bg: #FAFAF7;
+    --bg-card: #FFFFFF;
+    --bg-card-alt: #F5F4F0;
+    --text: #2C3E50;
+    --text-dim: #7F8C8D;
+    --text-label: #95A5A6;
+    --border: rgba(0,0,0,0.06);
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+    --gold-dim: rgba(247, 180, 8, 0.12);
+    --green-dim: rgba(46, 204, 113, 0.12);
+    --red-dim: rgba(231, 76, 60, 0.12);
+    --amber-dim: rgba(243, 156, 18, 0.12);
+    --purple-dim: rgba(142, 109, 191, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .pulse-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .pulse-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .pulse-title h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .pulse-title .subtitle {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .proof-dots {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: relative;
+  }
+  .dot.green { background: var(--green); }
+  .dot.red { background: var(--red); }
+  .dot.amber { background: var(--amber); }
+  .dot.green::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid var(--green);
+    opacity: 0.3;
+    animation: pulse-ring 2s ease-out infinite;
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.3; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+  .heartbeat {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+  }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 768px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .card-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-label);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  /* Story section */
+  .story-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .story-item:last-child { border-bottom: none; }
+  .story-arrow {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    width: 1.5rem;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .story-content {
+    flex: 1;
+  }
+  .story-strategy {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .story-delta {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: 0.5rem;
+  }
+  .story-english {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-top: 0.15rem;
+    line-height: 1.4;
+  }
+  .story-item.up .story-arrow { color: var(--green); }
+  .story-item.down .story-arrow { color: var(--red); }
+
+  /* Entity state bars */
+  .entity-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .entity-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 50px;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    padding: 0.3rem 0;
+  }
+  .entity-name {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .entity-name.eliminated {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+  .bar-container {
+    height: 18px;
+    background: var(--bg-card-alt);
+    border-radius: 9px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 9px;
+    transition: width 0.6s ease;
+    min-width: 2px;
+  }
+  .bar-fill.boosted { background: linear-gradient(90deg, var(--green), var(--gold)); }
+  .bar-fill.cut { background: linear-gradient(90deg, var(--red), var(--amber)); }
+  .bar-fill.neutral { background: var(--text-label); opacity: 0.4; }
+  .bar-factory {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: var(--text-dim);
+    opacity: 0.5;
+  }
+  .entity-weight {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 0.72rem;
+    text-align: right;
+    font-weight: 600;
+  }
+  .entity-weight.up { color: var(--green); }
+  .entity-weight.down { color: var(--red); }
+
+  /* Genome */
+  .genome-card {
+    background: var(--purple-dim);
+    border: 1px solid var(--purple);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .genome-strategy {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--purple);
+  }
+  .genome-detail {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+  .genome-flow-arrow {
+    text-align: center;
+    color: var(--purple);
+    font-size: 1.2rem;
+    margin: 0.3rem 0;
+  }
+  .genome-beneficiaries {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* Actuation map */
+  .watcher-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.5rem;
+  }
+  .watcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.65rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+  }
+  .watcher.wired {
+    background: var(--green-dim);
+    border-color: var(--green);
+  }
+  .watcher.planned {
+    background: var(--bg-card-alt);
+    opacity: 0.6;
+  }
+  .watcher-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .watcher.wired .watcher-dot { background: var(--green); }
+  .watcher.planned .watcher-dot { background: var(--text-label); }
+  .watcher-name {
+    font-size: 0.72rem;
+    line-height: 1.3;
+  }
+  .watcher-id {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+  }
+
+  /* Parametric view */
+  .param-table-wrap { overflow-x: auto; }
+  .param-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+  }
+  .param-table th {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.6rem;
+    color: var(--text-label);
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .param-table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .param-table tr:hover { background: var(--bg-card-alt); }
+  .badge {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .badge.alive { background: var(--green-dim); color: var(--green); }
+  .badge.eliminated { background: var(--red-dim); color: var(--red); }
+  .badge.struck { background: var(--amber-dim); color: var(--amber); }
+
+  .full-width { grid-column: 1 / -1; }
+
+  .section-gap { margin-top: 1.5rem; }
+
+  .anti-steak {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.7rem;
+    color: var(--text-label);
+    text-align: center;
+    font-style: italic;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot.green::after { animation: none; }
+  }
+</style>
+
+<div class="pulse-header">
+  <div class="pulse-title">
+    <h1>Learning Pulse</h1>
+    <span class="subtitle">the anti-steak dashboard</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:1rem;">
+    <div class="proof-dots" id="proofDots"></div>
+    <span class="heartbeat" id="heartbeat"></span>
+  </div>
+</div>
+
+<div class="main-grid">
+  <!-- LEFT: The Story -->
+  <div class="card">
+    <div class="card-label">What the system changed — and what it means</div>
+    <div id="storyList"></div>
+  </div>
+
+  <!-- RIGHT: Genome Flow -->
+  <div class="card">
+    <div class="card-label">Genome inheritance — dead strategies feeding the living</div>
+    <div id="genomeFlow"></div>
+  </div>
+
+  <!-- LEFT: Entity States -->
+  <div class="card">
+    <div class="card-label">Strategy entity states — factory vs current weight</div>
+    <div class="entity-list" id="entityList"></div>
+  </div>
+
+  <!-- RIGHT: Actuation Map -->
+  <div class="card">
+    <div class="card-label">Actuation map — 11 watchers, wired vs planned</div>
+    <div class="watcher-grid" id="watcherGrid"></div>
+  </div>
+
+  <!-- FULL: Parametric Table -->
+  <div class="card full-width section-gap">
+    <div class="card-label">Parametric view — each strategy as an entity state</div>
+    <div class="param-table-wrap">
+      <table class="param-table" id="paramTable">
+        <thead>
+          <tr>
+            <th>Strategy</th>
+            <th>Status</th>
+            <th>Factory</th>
+            <th>Current</th>
+            <th>Delta</th>
+            <th>Trades</th>
+            <th>Win %</th>
+            <th>P&L</th>
+            <th>Veto</th>
+          </tr>
+        </thead>
+        <tbody id="paramBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="anti-steak">
+  Every element on this page traces where output becomes input. If the dots are green, the loop is real. If the bars moved from the factory line, learning happened.
+</div>
+
+<script>
+// Embedded data snapshot (artifact mode) — cath-bridge version fetches live
+const DATA = {
+  weights: {"relative_strength":1.5,"fibonacci_time":1.2,"historical_cycles":1.4,"vortex_flow":2.08,"momentum":1,"gann_geometry":1.3,"mean_reversion":1,"contrarian":1,"social_momentum":0.8,"dca_baseline":0.8,"polymarket_delta":1,"cymatics_schumann":0.9,"suppression_signal":0.7,"simpsons_temporal":0.8,"range_trader":0.8,"lunar_cycles":0.6,"onchain_whale":1.2,"funding_rate":1.1,"liquidation_magnet":1.4,"deribit_funding":1.3,"exchange_flow":1.3,"stablecoin_flow":1.1,"options_flow":1.4,"options_magnet":0.8,"dev_activity":0.7,"sexagesimal_cycles":1,"coinflip_3":1.2,"coinflip_1":0.5,"coinflip_2":1},
+  saved_at: "2026-07-24T15:13:01.309Z",
+  factory: {"relative_strength":1.5,"fibonacci_time":1.2,"historical_cycles":1.4,"vortex_flow":1.3,"momentum":1.0,"gann_geometry":1.3,"mean_reversion":1.0,"contrarian":1.0,"social_momentum":0.8,"dca_baseline":0.8,"polymarket_delta":1.0,"cymatics_schumann":0.9,"suppression_signal":0.7,"simpsons_temporal":0.8,"range_trader":0.8,"lunar_cycles":0.6,"onchain_whale":1.2,"funding_rate":1.1,"liquidation_magnet":1.4,"deribit_funding":1.3,"exchange_flow":1.3,"stablecoin_flow":1.1,"options_flow":1.4,"options_magnet":0.8,"dev_activity":0.7,"sexagesimal_cycles":1.0},
+  performance: [
+    {strategy:"relative_strength",trades:33,wins:17,pnl:447.01},
+    {strategy:"vortex_flow",trades:7,wins:6,pnl:259.66},
+    {strategy:"coinflip_3",trades:3,wins:2,pnl:124.41},
+    {strategy:"gann_geometry",trades:25,wins:9,pnl:79.07},
+    {strategy:"options_flow",trades:1,wins:1,pnl:50.64},
+    {strategy:"historical_cycles",trades:10,wins:5,pnl:6.47},
+    {strategy:"range_trader",trades:3,wins:1,pnl:-14.66},
+    {strategy:"fibonacci_time",trades:9,wins:4,pnl:-24.66},
+    {strategy:"dca_baseline",trades:1,wins:0,pnl:-24.80},
+    {strategy:"suppression_signal",trades:1,wins:0,pnl:-50.91},
+    {strategy:"mean_reversion",trades:2,wins:0,pnl:-55.20},
+    {strategy:"lunar_cycles",trades:2,wins:0,pnl:-68.98},
+    {strategy:"momentum",trades:1,wins:0,pnl:-115.40},
+    {strategy:"harmonic_432",trades:1,wins:0,pnl:-130.46},
+    {strategy:"coinflip_1",trades:3,wins:0,pnl:-2373.99}
+  ],
+  eliminations: [
+    {strategy:"coinflip_1",strikes:2,eliminated:true,pnl:-2373.99},
+    {strategy:"coinflip_2",strikes:2,eliminated:true,pnl:-181399.56},
+    {strategy:"harmonic_432",strikes:2,eliminated:true,pnl:-130.46},
+    {strategy:"momentum",strikes:2,eliminated:true,pnl:-115.40}
+  ],
+  genomes: [
+    {strategy:"gann_geometry",bias:"short",assets:["ETH"],avgHold:1.9}
+  ],
+  proofOfLife: [
+    {name:"#11 Weight Persistence",status:"GREEN"},
+    {name:"#10 Genome Inheritance",status:"GREEN"},
+    {name:"#10 getInheritedBias()",status:"GREEN"},
+    {name:"#10b isEliminated()",status:"GREEN"}
+  ],
+  watchers: [
+    {id:1,name:"Regime Detector → Config",wired:false},
+    {id:2,name:"Corner → Position Sizing",wired:false},
+    {id:3,name:"Causal Critic → Sizing",wired:false},
+    {id:4,name:"Meta-Watcher → Parameters",wired:false},
+    {id:5,name:"Roundtable → Confluence",wired:false},
+    {id:6,name:"Stale Exit → Hold Time",wired:false},
+    {id:7,name:"Trailing Stop → Thresholds",wired:false},
+    {id:8,name:"Debate → Signal Filter",wired:false},
+    {id:9,name:"Elimination → Weights",wired:false},
+    {id:10,name:"Genome → Bias Boost",wired:true},
+    {id:11,name:"Weights → Persistence",wired:true}
+  ]
+};
+
+function explainChange(base, weight) {
+  const diff = weight - base;
+  if (diff > 0.5) return "Strong winner. Getting bigger positions — system trusts this strategy.";
+  if (diff > 0.1) return "Above average. Getting slightly more trust and larger positions.";
+  if (diff > 0) return "Small improvement. System gently favouring this strategy.";
+  if (diff < -0.4) return "Heavy losses. Position sizes cut in half — limiting damage.";
+  if (diff < -0.1) return "Underperforming. Less trust, smaller positions. On the proving ground.";
+  return "Slight pullback. System being cautious.";
+}
+
+// Proof of Life dots
+const dotsEl = document.getElementById('proofDots');
+DATA.proofOfLife.forEach(p => {
+  const d = document.createElement('div');
+  d.className = 'dot ' + (p.status === 'GREEN' ? 'green' : p.status === 'YELLOW' ? 'amber' : 'red');
+  d.title = p.name + ': ' + p.status;
+  dotsEl.appendChild(d);
+});
+
+// Heartbeat
+const hb = document.getElementById('heartbeat');
+const age = (Date.now() - new Date(DATA.saved_at).getTime()) / 3600000;
+hb.textContent = age < 1 ? `${Math.round(age * 60)}m ago` : `${age.toFixed(1)}h ago`;
+
+// The Story
+const storyEl = document.getElementById('storyList');
+const changes = [];
+for (const [s, w] of Object.entries(DATA.weights)) {
+  const base = DATA.factory[s] || 1.0;
+  const diff = w - base;
+  if (Math.abs(diff) >= 0.05) changes.push({strategy: s, base, weight: w, diff});
+}
+changes.sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+
+if (changes.length === 0) {
+  storyEl.innerHTML = '<div style="color:var(--text-dim);font-size:0.85rem;padding:1rem 0;">No weight changes from factory. System is steady — or hasn\'t run yet.</div>';
+} else {
+  changes.forEach(c => {
+    const dir = c.diff > 0 ? 'up' : 'down';
+    const pct = ((c.diff / c.base) * 100).toFixed(0);
+    const div = document.createElement('div');
+    div.className = 'story-item ' + dir;
+    div.innerHTML = `
+      <div class="story-arrow">${dir === 'up' ? '↑' : '↓'}</div>
+      <div class="story-content">
+        <div>
+          <span class="story-strategy">${c.strategy}</span>
+          <span class="story-delta">${c.base} → ${c.weight} (${pct > 0 ? '+' : ''}${pct}%)</span>
+        </div>
+        <div class="story-english">${explainChange(c.base, c.weight)}</div>
+      </div>`;
+    storyEl.appendChild(div);
+  });
+}
+
+// Genome Flow
+const genomeEl = document.getElementById('genomeFlow');
+if (DATA.genomes.length === 0) {
+  genomeEl.innerHTML = '<div style="color:var(--text-dim);font-size:0.82rem;">No dead strategy genomes yet. When a strategy is eliminated, its DNA is preserved here.</div>';
+} else {
+  DATA.genomes.forEach(g => {
+    genomeEl.innerHTML += `
+      <div class="genome-card">
+        <div class="genome-strategy">${g.strategy} <span style="font-weight:400;font-size:0.7rem;opacity:0.7">ELIMINATED</span></div>
+        <div class="genome-detail">Direction bias: <strong>${g.bias}</strong> · Strong assets: <strong>${g.assets.join(', ')}</strong> · Avg hold: ${g.avgHold}d</div>
+      </div>
+      <div class="genome-flow-arrow">↓ DNA feeds living strategies ↓</div>
+      <div class="genome-beneficiaries">Living strategies trading ${g.assets.join(', ')} get a boost from ${g.strategy}'s ${g.bias} bias</div>`;
+  });
+}
+
+// Entity States (bars)
+const entityEl = document.getElementById('entityList');
+const maxWeight = Math.max(...Object.values(DATA.weights), 2.5);
+const sorted = Object.entries(DATA.weights).sort((a, b) => b[1] - a[1]);
+const eliminatedSet = new Set(DATA.eliminations.map(e => e.strategy));
+
+sorted.forEach(([name, weight]) => {
+  const factory = DATA.factory[name] || 1.0;
+  const diff = weight - factory;
+  const isElim = eliminatedSet.has(name);
+  const pct = (weight / maxWeight) * 100;
+  const factoryPct = (factory / maxWeight) * 100;
+  const cls = diff > 0.05 ? 'boosted' : diff < -0.05 ? 'cut' : 'neutral';
+  const wcls = diff > 0.05 ? 'up' : diff < -0.05 ? 'down' : '';
+
+  const row = document.createElement('div');
+  row.className = 'entity-row';
+  row.innerHTML = `
+    <div class="entity-name ${isElim ? 'eliminated' : ''}" title="${name}">${name}</div>
+    <div class="bar-container">
+      <div class="bar-factory" style="left:${factoryPct}%" title="Factory: ${factory}"></div>
+      <div class="bar-fill ${cls}" style="width:${pct}%"></div>
+    </div>
+    <div class="entity-weight ${wcls}">${weight.toFixed(2)}</div>`;
+  entityEl.appendChild(row);
+});
+
+// Actuation Map
+const watcherEl = document.getElementById('watcherGrid');
+DATA.watchers.forEach(w => {
+  const div = document.createElement('div');
+  div.className = 'watcher ' + (w.wired ? 'wired' : 'planned');
+  div.innerHTML = `
+    <div class="watcher-dot"></div>
+    <div>
+      <div class="watcher-id">#${w.id}</div>
+      <div class="watcher-name">${w.name}</div>
+    </div>`;
+  watcherEl.appendChild(div);
+});
+
+// Parametric Table
+const tbody = document.getElementById('paramBody');
+const perfMap = {};
+DATA.performance.forEach(p => perfMap[p.strategy] = p);
+const elimMap = {};
+DATA.eliminations.forEach(e => elimMap[e.strategy] = e);
+
+sorted.forEach(([name, weight]) => {
+  const factory = DATA.factory[name] || 1.0;
+  const diff = weight - factory;
+  const perf = perfMap[name] || {trades: 0, wins: 0, pnl: 0};
+  const elim = elimMap[name];
+  const winPct = perf.trades > 0 ? ((perf.wins / perf.trades) * 100).toFixed(0) : '—';
+
+  let statusBadge, veto;
+  if (elim && elim.eliminated) {
+    statusBadge = '<span class="badge eliminated">eliminated</span>';
+    veto = `${elim.strikes} strikes`;
+  } else if (elim) {
+    statusBadge = '<span class="badge struck">' + elim.strikes + ' strike' + (elim.strikes > 1 ? 's' : '') + '</span>';
+    veto = `${elim.strikes}/2`;
+  } else {
+    statusBadge = '<span class="badge alive">alive</span>';
+    veto = '0/2';
+  }
+
+  const diffStr = diff > 0 ? `+${diff.toFixed(2)}` : diff.toFixed(2);
+  const diffColor = diff > 0.05 ? 'var(--green)' : diff < -0.05 ? 'var(--red)' : 'var(--text-dim)';
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td style="font-weight:600">${name}</td>
+    <td>${statusBadge}</td>
+    <td style="color:var(--text-dim)">${factory.toFixed(1)}</td>
+    <td style="font-weight:600">${weight.toFixed(2)}</td>
+    <td style="color:${diffColor}">${diffStr}</td>
+    <td>${perf.trades || '—'}</td>
+    <td>${winPct}${winPct !== '—' ? '%' : ''}</td>
+    <td style="color:${perf.pnl > 0 ? 'var(--green)' : perf.pnl < 0 ? 'var(--red)' : 'var(--text-dim)'}">$${perf.pnl.toFixed(0)}</td>
+    <td>${veto}</td>`;
+  tbody.appendChild(tr);
+});
+</script>

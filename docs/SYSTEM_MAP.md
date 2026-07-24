@@ -57,6 +57,8 @@ _(pending full population — see KNOWN_ISSUES / the 2026-06-12 migration)_
 - **Brand Invariant** · `~/nanoclaw/governance/brand-invariant.js` (ESM) · checks/enforces BR palette, blocks burgundy · doc: BUILD_LOG 2026-07-19c
 - **Spend Circuit Breaker** · `~/nanoclaw/governance/spend-circuit-breaker.js` (ESM) · canSpend()/guardedCall() for paid APIs · doc: BUILD_LOG 2026-07-19c
 - **Calibration Tracker** · `~/nanoclaw/polymarket/calibration-tracker.js` (ESM) · Brier score + drift alert on researcher forecasts · doc: BUILD_LOG 2026-07-19d
+- **Actuation Proof-of-Life** · `~/nanoclaw/trader/actuation-proof-of-life.js` (ESM) · manual `node actuation-proof-of-life.js [--force]` · 4 checks on wired learning loops, GREEN/RED report + Telegram, learning digest with plain-English explanations · doc: BUILD_LOG 2026-07-24b
+- **Learning Pulse Dashboard** · `~/nanoclaw/trader/learning-pulse.html` · route `/trader/learning-pulse` + API `/trader/learning-pulse/data` · anti-steak dashboard: proof-of-life dots, weight story, entity states, genome flow, actuation map, parametric table · doc: BUILD_LOG 2026-07-24b
 - **Mausoleum Compressor** · `~/nanoclaw/governance/mausoleum-compressor.js` (ESM) · 528 harvests → 20 anchors, forgetting curve · doc: BUILD_LOG 2026-07-19d
 - **Genome Extraction** · `~/nanoclaw/trader/strategy-elimination.js` (modified) · dead strategy DNA → inherited bias for survivors · doc: BUILD_LOG 2026-07-19d
 

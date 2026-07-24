@@ -19,13 +19,13 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '.env') });
 
-import { logSignal, openTrade, closeTrade, getOpenPositions, logDecision, getPerformance } from './trade-logger.js';
+import { logSignal, openTrade, closeTrade, getOpenPositions, logDecision, getPerformance, getStrategyPerformance } from './trade-logger.js';
 import { validateTrade, calculatePositionSize } from './strategy-validator.js';
 import { debate } from './bull-bear-debate.js';
 import { watchRun, watchClose, synthesizeInsights, getWatcherStats } from './meta-watcher.js';
 import { runRoundtable } from './strategy-roundtable.js';
 import { logDomainRun, detectCrossDomainConvergence } from '../experiment-engine/meta-watcher.js';
-import { isEliminated, runElimination } from './strategy-elimination.js';
+import { isEliminated, runElimination, getInheritedBias } from './strategy-elimination.js';
 import { openPlacebos } from './placebo-arm.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -33,6 +33,130 @@ const CONFIG_PATH = path.join(__dirname, 'config.json');
 const PORTFOLIO_PATH = path.join(__dirname, 'portfolio.json');
 const SIGNALS_PATH = path.join(__dirname, 'signals', 'crypto-signals-latest.json');
 const CATHEDRAL_SIGNALS_PATH = path.join(__dirname, 'signals', 'cathedral-signals-latest.json');
+const GOLD_PATH = path.join(__dirname, 'trading-gold.json');
+const FEEDBACK_WEIGHTS_PATH = path.join(__dirname, 'feedback-weights.json');
+
+// ── Feedback Loop: inject gold miner + trade history into runtime config ─────
+// Reads trading-gold.json + per-strategy performance from trades.db.
+// Adjusts strategy_weights at runtime — never mutates config.json.
+
+function injectFeedback(config) {
+  // Load persisted weights as baseline (fall back to config.json defaults)
+  let baseWeights = { ...config.strategy_weights };
+  try {
+    if (fs.existsSync(FEEDBACK_WEIGHTS_PATH)) {
+      const saved = JSON.parse(fs.readFileSync(FEEDBACK_WEIGHTS_PATH, 'utf8'));
+      baseWeights = { ...baseWeights, ...saved.weights };
+      console.log(`[feedback] Loaded persisted weights from feedback-weights.json (saved ${saved.saved_at})`);
+    }
+  } catch (e) {
+    console.error('[feedback] Failed to load persisted weights, using config defaults:', e.message);
+  }
+
+  const adjusted = { ...config, strategy_weights: { ...baseWeights } };
+  const feedback = [];
+
+  // 1. Per-strategy performance from trades.db
+  let stratPerf = [];
+  try {
+    stratPerf = getStrategyPerformance();
+  } catch (e) {
+    console.error('[feedback] DB query failed:', e.message);
+  }
+
+  const MIN_TRADES_FOR_ADJUSTMENT = 3; // don't adjust on thin data
+
+  for (const sp of stratPerf) {
+    if (sp.trades < MIN_TRADES_FOR_ADJUSTMENT) continue;
+    const baseWeight = config.strategy_weights[sp.strategy] || 1.0;
+    let newWeight = baseWeight;
+
+    if (sp.win_rate >= 60) {
+      // Boost winners: +20% per tier above 60%
+      const boost = 1.0 + 0.2 * Math.min(Math.floor((sp.win_rate - 60) / 10) + 1, 3);
+      newWeight = +(baseWeight * boost).toFixed(2);
+      feedback.push(`  ${sp.strategy}: ${sp.trades} trades, ${sp.win_rate}% WR, $${sp.total_pnl} PnL → weight ${baseWeight} → ${newWeight} (BOOSTED)`);
+    } else if (sp.win_rate < 30) {
+      // Reduce losers: halve the weight
+      newWeight = +(baseWeight * 0.5).toFixed(2);
+      feedback.push(`  ${sp.strategy}: ${sp.trades} trades, ${sp.win_rate}% WR, $${sp.total_pnl} PnL → weight ${baseWeight} → ${newWeight} (REDUCED)`);
+    } else {
+      feedback.push(`  ${sp.strategy}: ${sp.trades} trades, ${sp.win_rate}% WR, $${sp.total_pnl} PnL → weight ${baseWeight} (unchanged)`);
+    }
+
+    adjusted.strategy_weights[sp.strategy] = newWeight;
+  }
+
+  // 2. Gold miner findings — extract actionable direction locks + asset insights
+  let goldFindings = [];
+  try {
+    if (fs.existsSync(GOLD_PATH)) {
+      const gold = JSON.parse(fs.readFileSync(GOLD_PATH, 'utf8'));
+      goldFindings = gold.findings || [];
+      const age = (Date.now() - new Date(gold.mined_at).getTime()) / 3600000;
+
+      // Only use gold if mined within the last 48 hours
+      if (age <= 48) {
+        feedback.push(`  Gold miner: ${goldFindings.length} findings (${age.toFixed(1)}h old)`);
+
+        // Extract direction bias data to reinforce direction_locks
+        const dirBias = goldFindings.find(f => f.id === 'direction-bias');
+        if (dirBias && dirBias.data) {
+          const longWR = dirBias.data.long?.n > 0 ? Math.round(100 * dirBias.data.long.wins / dirBias.data.long.n) : 50;
+          const shortWR = dirBias.data.short?.n > 0 ? Math.round(100 * dirBias.data.short.wins / dirBias.data.short.n) : 50;
+          feedback.push(`  Direction bias — longs: ${longWR}% WR ($${dirBias.data.long?.pnl || 0}), shorts: ${shortWR}% WR ($${dirBias.data.short?.pnl || 0})`);
+        }
+
+        // Extract strategy-direction edge to tighten direction locks
+        const stratEdge = goldFindings.find(f => f.id === 'strategy-direction-edge');
+        if (stratEdge && stratEdge.data?.byStrategy) {
+          if (!adjusted.direction_locks) adjusted.direction_locks = { ...config.direction_locks };
+          for (const [strat, dirs] of Object.entries(stratEdge.data.byStrategy)) {
+            const longData = dirs.long || { n: 0, pnl: 0 };
+            const shortData = dirs.short || { n: 0, pnl: 0 };
+            // If strategy has 3+ long trades losing money and short trades profitable,
+            // lock to short_only (if not already locked)
+            if (longData.n >= 3 && longData.pnl < -20 && shortData.pnl > 0 && !adjusted.direction_locks[strat]) {
+              adjusted.direction_locks[strat] = 'short_only';
+              feedback.push(`  Gold→lock: ${strat} locked to SHORT_ONLY (longs: $${longData.pnl}, shorts: $${shortData.pnl})`);
+            }
+          }
+        }
+
+        // Extract asset performance to adjust position sizing hints
+        const assetPerf = goldFindings.find(f => f.id === 'asset-performance');
+        if (assetPerf && assetPerf.data?.losers) {
+          adjusted._weak_assets = assetPerf.data.losers.map(a => a.asset);
+          if (adjusted._weak_assets.length > 0) {
+            feedback.push(`  Gold→weak assets: ${adjusted._weak_assets.join(', ')} (require extra confluence)`);
+          }
+        }
+      } else {
+        feedback.push(`  Gold miner: stale (${age.toFixed(0)}h old) — skipping`);
+      }
+    } else {
+      feedback.push('  Gold miner: no trading-gold.json found');
+    }
+  } catch (e) {
+    feedback.push(`  Gold miner: error reading — ${e.message}`);
+  }
+
+  // Store summary for later use in the run
+  adjusted._feedback_summary = feedback;
+  adjusted._strategy_perf = stratPerf;
+
+  // Persist adjusted weights so they survive PM2 restarts
+  try {
+    fs.writeFileSync(FEEDBACK_WEIGHTS_PATH, JSON.stringify({
+      weights: adjusted.strategy_weights,
+      saved_at: new Date().toISOString(),
+    }, null, 2));
+  } catch (e) {
+    console.error('[feedback] Failed to persist weights:', e.message);
+  }
+
+  return adjusted;
+}
 
 // Telegram notify (optional — uses cathedral-bot's sendMessage if available)
 const BOT_TOKEN = process.env.TELEGRAM_TOKEN;
@@ -294,10 +418,13 @@ function filterActionableSignals(signals, config) {
   }
 
   // Only pass groups with confluence (2+ distinct strategy types agreeing)
+  // Weak assets (from gold miner) require +1 extra confluence
+  const weakAssets = config._weak_assets || [];
   const actionable = [];
   for (const [key, group] of Object.entries(groups)) {
     const uniqueTypes = new Set(group.signals.map(s => s.type || s.source));
-    if (uniqueTypes.size >= minConfluence) {
+    const required = weakAssets.includes(group.asset) ? minConfluence + 1 : minConfluence;
+    if (uniqueTypes.size >= required) {
       // Pick the strongest signal as representative, carry confluence metadata
       const best = group.signals.sort((a, b) => {
         const wa = weights[a.type] || 1.0;
@@ -343,6 +470,15 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
     }
   } catch(e) {}
 
+  // Apply genome inheritance — boost signal strength from dead strategies' learnings
+  try {
+    const inheritance = getInheritedBias(signal.asset, direction);
+    if (inheritance.boost > 0) {
+      signal.strength = Math.min(signal.strength + inheritance.boost, 1.0);
+      console.log(`  Genome boost +${inheritance.boost.toFixed(2)} → strength ${signal.strength.toFixed(2)} (from: ${inheritance.sources.map(s => s.from).join(', ')})`);
+    }
+  } catch(e) {}
+
   // Skip if already have open position for this asset+strategy
   const existingPositions = getOpenPositions();
   const duplicate = existingPositions.find(p => p.asset === signal.asset && p.strategy === signal.type);
@@ -364,6 +500,12 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
     ? `Confluence: ${signal._confluence} strategies agree [${signal._confluenceTypes.join(', ')}]. Weighted strength: ${signal._weightedStrength.toFixed(2)}.`
     : `Single strategy signal.`;
 
+  // Inject strategy performance history into context
+  const stratPerf = (config._strategy_perf || []).find(sp => sp.strategy === signal.type);
+  const perfInfo = stratPerf
+    ? `Strategy history: ${stratPerf.trades} trades, ${stratPerf.win_rate}% WR, $${stratPerf.total_pnl} PnL, avg return ${(stratPerf.avg_return * 100).toFixed(2)}%.`
+    : `Strategy history: no closed trades yet.`;
+
   const context = [
     `Market bias: ${marketBias > 0.2 ? 'bullish' : marketBias < -0.2 ? 'bearish' : 'neutral'} (${marketBias.toFixed(2)})`,
     `24h change: ${priceData.change_24h?.toFixed(2) || 'N/A'}%`,
@@ -371,6 +513,7 @@ async function processSignal(signal, prices, portfolio, config, marketBias) {
     `Signal type: ${signal.type}`,
     `Signal strength: ${signal.strength}`,
     confluenceInfo,
+    perfInfo,
   ].join('. ');
 
   // Phase 0: NO DEBATE — let all signals trade, P&L is the judge
@@ -483,8 +626,15 @@ async function run() {
   console.log(`[TRADER] Orchestrator run — ${new Date().toISOString()}`);
   console.log(`${'='.repeat(60)}\n`);
 
-  const config = loadConfig();
+  const baseConfig = loadConfig();
+  const config = injectFeedback(baseConfig);
   const portfolio = loadPortfolio();
+
+  // Log feedback adjustments
+  if (config._feedback_summary && config._feedback_summary.length > 0) {
+    console.log('[0/7] Feedback loop — strategy performance injected:');
+    for (const line of config._feedback_summary) console.log(line);
+  }
 
   // Track trade count to detect closes
   portfolio._prevTotalTrades = portfolio.total_trades;
@@ -649,8 +799,10 @@ async function run() {
     }
   }
 
-  // Placebo arm — coinflip strategies through the same judge (tests elimination, not strategies).
-  try { await openPlacebos(); } catch (e) { console.log('[placebo] skip:', e.message); }
+  // Placebo arm — DISABLED 2026-06-18. Coinflip_2 blew up to -$181K via uncapped position sizing
+  // on an inflated balance. The placebo test proved its point: the judge IS fooled by luck.
+  // Keeping the code for the lesson; not running it again.
+  // try { await openPlacebos(); } catch (e) { console.log('[placebo] skip:', e.message); }
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   console.log(`\n[TRADER] Done in ${elapsed}s — ${tradesOpened} trades opened\n`);
