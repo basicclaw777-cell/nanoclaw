@@ -3670,3 +3670,25 @@ DeepSeek relay thread (Alzheimer's-spiritual-psychosomatic.md, 1476 lines) — P
 - Spike protein crosses BBB (Rhea 2020), persists at skull-meninges-brain axis up to 4 years (Rong 2024)
 - Dose-response analysis: no dataset worldwide has published this — biggest gap
 - HK AEFI Fund: confirmed CLOSED Dec 23, 2025
+
+## 2026-07-24 — Parametric Architecture v1 (broadened)
+
+### Source
+4-model relay (DeepSeek + GPT + Gemini + Opus) → 2x Fable specs → Forge synthesis.
+~/Downloads/Parametric-AI-UX-Design.md (DeepSeek origin chat).
+
+### What Was Built
+- **Broadened spec:** 6 entity types (StudentState, PaulState, AgentState, ProjectState, VaultState, QueryState)
+- **4th Law:** DAG with freshness contract. Upstream past-TTL → downstream degrades to conservative defaults
+- **Generalized veto pattern:** every entity has exactly one kill-switch parameter
+- **Artifact:** Interactive DAG + entity cards + coupling table + build roadmap
+  https://claude.ai/code/artifact/f91df240-627b-4d53-816a-d2020938d317
+
+### Vault
+- 02_Refined_Gold/cathedral/parametric-architecture-studentstate-v1.md (broadened, Grade A)
+
+### Decision
+Build approach = WEAVE-IN. No dedicated sprint. Build through parametric pattern when touching relevant areas. Spec is the prep.
+
+### MEMORY.md Compression
+34KB → 12KB. Zero entries lost, all compressed to one-line hooks. Was over 24.4KB read limit — entries past line ~200 silently dropped.
