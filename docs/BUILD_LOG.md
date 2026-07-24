@@ -1,6 +1,26 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-25 — Coaching OS taste wiring + Property Scout fix
+
+**Coaching OS Taste Acquisition — WIRED**
+- coaching_taste table (schema.sql), 3 API endpoints, taste scoring in drill suggest + theme intelligence
+- drill-level + format-level compound scoring: approved/improved boost, rejected penalize
+- 7 seeded entries, 2 proof-of-life checks (8/8 GREEN)
+
+**Drill Format Templates**
+- drill_formats table, 7 proven structures (Combo Chain, Constraint, Progressive Overload, Call-Response, Mirror, Countdown, Situational)
+- Parameterized generation templates, 36/60 drills linked
+
+**SYSTEM_MAP Populated**
+- Expanded from 221-line stub to 410 lines, 20+ sections
+
+**Property Scout Fix**
+- Root cause: `--profile research` is not a valid `deepseek exec` flag — silently failing every week
+- Fixed both runner.js + global-runner.js, added mtime detection + scan_date stamping + scan-summary.md generation
+- Fresh scan: 25 listings (was 15 stale since Jul 12), 5 hot, Telegram sent
+- Committed: nanoclaw de5e335, Cathedral decad57
+
 ## 2026-07-24b — The Actuation Flinch (discovery + wiring + proof-of-life)
 
 **Source:** Audit of trading system found systemic LLM failure: asked for "learning," Forge builds observation (dashboards, logging), omits actuation (write-back loops). Named "The Actuation Flinch." OmissionOS inside the building department.
