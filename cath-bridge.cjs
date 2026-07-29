@@ -16,6 +16,12 @@ const VAULT    = path.join(HOME, 'cathedral-vault');
 
 app.use(express.json());
 
+// Static file serving for coaching tools
+app.use('/coaching-os', express.static(path.join(NANOCLAW, 'coaching-os')));
+app.use('/br-crm', express.static(path.join(HOME, 'basic-reflex', 'crm')));
+app.use('/course-engine', express.static(path.join(NANOCLAW, 'course-engine')));
+app.use('/gym-eyes', express.static(path.join(HOME, 'basic-reflex', 'gym-eyes')));
+
 // Mount Coaching OS write API
 require('./coaching-os/coaching-api.cjs')(app);
 
@@ -89,6 +95,12 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'cathedral-home.html'));
+});
+
+// ── BR Coaching Hub ─────────────────────────────────────────────────────────
+
+app.get('/hub', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'coaching-os', 'hub.html'));
 });
 
 app.get('/emergence-map', (req, res) => {
@@ -4596,6 +4608,28 @@ app.get('/property-scout', (req, res) => {
 app.get('/property-scout/:file', (req, res) => {
   const f = path.basename(req.params.file);
   const p = path.join(HOME, 'nanoclaw', 'property-scout', f);
+  if (!fs.existsSync(p)) return res.status(404).json({ error: 'not found' });
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(p);
+});
+
+app.get('/travel-agent', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'travel-agent.html'));
+});
+app.get('/travel-agent/:file', (req, res) => {
+  const f = path.basename(req.params.file);
+  const p = path.join(HOME, 'Cathedral', 'travel-agent', f);
+  if (!fs.existsSync(p)) return res.status(404).json({ error: 'not found' });
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(p);
+});
+
+app.get('/corporate-engine', (req, res) => {
+  res.sendFile(path.join(HOME, 'Cathedral', 'control-panel', 'corporate-engine.html'));
+});
+app.get('/corporate-engine/:file', (req, res) => {
+  const f = path.basename(req.params.file);
+  const p = path.join(HOME, 'Cathedral', 'corporate-engine', f);
   if (!fs.existsSync(p)) return res.status(404).json({ error: 'not found' });
   res.set('Cache-Control', 'no-store');
   res.sendFile(p);
