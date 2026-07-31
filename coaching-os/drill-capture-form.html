@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BR Drill Capture</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a;
+  color: #e8e4dc;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #222;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  background: #0a0a0a;
+  z-index: 5;
+}
+
+.header h1 {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f7b408;
+  font-weight: 400;
+}
+
+.header a {
+  color: #6b6560;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.url-input {
+  flex: 1;
+  padding: 12px 14px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 8px;
+  color: #e8e4dc;
+  font-size: 14px;
+  font-family: system-ui;
+}
+.url-input:focus { outline: none; border-color: #f7b40866; }
+.url-input::placeholder { color: #3a3835; }
+
+.capture-btn {
+  padding: 12px 20px;
+  background: #f7b408;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 8px;
+  font-family: Impact, sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.capture-btn:hover { background: #daa007; }
+.capture-btn:disabled { background: #333; color: #666; cursor: wait; }
+
+.status {
+  text-align: center;
+  padding: 16px;
+  color: #6b6560;
+  font-size: 12px;
+  display: none;
+}
+.status.visible { display: block; }
+.status.error { color: #ef4444; }
+
+.result {
+  border: 1px solid #222;
+  border-radius: 12px;
+  overflow: hidden;
+  display: none;
+  animation: slideUp 0.3s ease-out;
+}
+.result.visible { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.result-title {
+  font-family: Impact, sans-serif;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #e8e4dc;
+}
+
+.result-desc {
+  font-size: 12px;
+  color: #6b6560;
+  margin-top: 4px;
+}
+
+.tag-grid {
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tag-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tag-label {
+  font-size: 9px;
+  color: #6b6560;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tag-value {
+  padding: 6px 8px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 4px;
+  color: #e8e4dc;
+  font-size: 12px;
+  font-family: system-ui;
+}
+.tag-value:focus { outline: none; border-color: #f7b40866; }
+
+.tag-select {
+  padding: 6px 8px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 4px;
+  color: #e8e4dc;
+  font-size: 12px;
+  font-family: system-ui;
+  appearance: none;
+}
+
+.tag-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 16px 12px;
+}
+
+.tag-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border: 1px solid #333;
+  border-radius: 12px;
+  color: #6b6560;
+}
+
+.result-actions {
+  padding: 12px 16px;
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b6560;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  font-family: system-ui;
+  transition: all 0.15s;
+}
+.action-btn:hover { border-color: #f7b40844; color: #e8e4dc; }
+.action-btn.approve { border-color: #34d39944; color: #34d399; }
+.action-btn.approve:hover { background: #34d39910; }
+
+.history {
+  margin-top: 24px;
+}
+
+.history-label {
+  font-size: 9px;
+  color: #3a3835;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.history-item {
+  padding: 8px 12px;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-name {
+  font-size: 12px;
+  color: #e8e4dc;
+}
+
+.history-domain {
+  font-size: 10px;
+  color: #6b6560;
+}
+
+.history-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border: 1px solid #34d39944;
+  color: #34d399;
+  border-radius: 3px;
+}
+
+.empty-hint {
+  text-align: center;
+  padding: 32px;
+  color: #3a3835;
+  font-size: 12px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Drill Capture</h1>
+    <a href="/hub">Hub</a>
+  </div>
+
+  <div class="input-row">
+    <input class="url-input" id="urlInput" type="url" placeholder="Paste Instagram / YouTube / TikTok URL..." />
+    <button class="capture-btn" id="captureBtn" onclick="capture()">Capture</button>
+  </div>
+
+  <div class="status" id="status"></div>
+  <div class="result" id="result"></div>
+  <div class="history" id="history"></div>
+</div>
+
+<script>
+let currentCapture = null;
+const captured = [];
+
+async function capture() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) return;
+
+  const btn = document.getElementById('captureBtn');
+  const status = document.getElementById('status');
+  const result = document.getElementById('result');
+
+  btn.disabled = true;
+  btn.textContent = '...';
+  status.textContent = 'Downloading video and extracting frames...';
+  status.className = 'status visible';
+  result.className = 'result';
+
+  try {
+    const res = await fetch('/coaching/capture', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Capture failed');
+    }
+
+    const data = await res.json();
+    currentCapture = data;
+
+    status.textContent = 'Analysis complete — review and approve:';
+    status.className = 'status visible';
+
+    renderResult(data);
+
+  } catch (e) {
+    status.textContent = '❌ ' + e.message;
+    status.className = 'status visible error';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Capture';
+}
+
+function renderResult(data) {
+  const m = data.meta;
+  const el = document.getElementById('result');
+
+  el.innerHTML = `
+    <div class="result-header">
+      <input class="tag-value" id="editName" value="${m.name}" style="font-family:Impact,sans-serif;font-size:16px;letter-spacing:1px;text-transform:uppercase;border:none;background:transparent;color:#e8e4dc;width:100%;padding:0"/>
+      <div class="result-desc">${m.description || ''}</div>
+    </div>
+    <div class="tag-grid">
+      <div class="tag-field">
+        <span class="tag-label">Domain</span>
+        <select class="tag-select" id="editDomain">
+          ${['combos','defense','footwork','conditioning','warm_up','strategy','mindset','icebreaker'].map(d =>
+            `<option value="${d}" ${d === m.domain ? 'selected' : ''}>${d.replace('_',' ')}</option>`
+          ).join('')}
+        </select>
+      </div>
+      <div class="tag-field">
+        <span class="tag-label">Mode</span>
+        <select class="tag-select" id="editMode">
+          ${['shadow','partner','pads','bag','solo','group'].map(d =>
+            `<option value="${d}" ${d === m.mode ? 'selected' : ''}>${d}</option>`
+          ).join('')}
+        </select>
+      </div>
+      <div class="tag-field">
+        <span class="tag-label">Energy</span>
+        <select class="tag-select" id="editEnergy">
+          ${['low','medium','high','max'].map(d =>
+            `<option value="${d}" ${d === m.energy_demand ? 'selected' : ''}>${d}</option>`
+          ).join('')}
+        </select>
+      </div>
+      <div class="tag-field">
+        <span class="tag-label">Blocks</span>
+        <input class="tag-value" id="editBlocks" value="${m.block_min}-${m.block_max}" style="width:100%"/>
+      </div>
+      <div class="tag-field">
+        <span class="tag-label">Equipment</span>
+        <input class="tag-value" id="editEquip" value="${(m.equipment||[]).join(', ')}" style="width:100%"/>
+      </div>
+      <div class="tag-field">
+        <span class="tag-label">Engines</span>
+        <input class="tag-value" id="editEngines" value="${(m.engines||[]).join(', ')}" style="width:100%"/>
+      </div>
+    </div>
+    ${m.tags ? `<div class="tag-badges">${m.tags.map(t => `<span class="tag-badge">${t}</span>`).join('')}</div>` : ''}
+    <div class="result-actions">
+      <button class="action-btn approve" onclick="approve()">Add to Library</button>
+      <button class="action-btn" onclick="discard()">Discard</button>
+    </div>
+  `;
+
+  el.className = 'result visible';
+}
+
+async function approve() {
+  if (!currentCapture) return;
+
+  const blocks = document.getElementById('editBlocks').value.split('-').map(Number);
+  const edits = {
+    name: document.getElementById('editName').value,
+    domain: document.getElementById('editDomain').value,
+    mode: document.getElementById('editMode').value,
+    energy_demand: document.getElementById('editEnergy').value,
+    block_min: blocks[0] || 1,
+    block_max: blocks[1] || blocks[0] || 10,
+    equipment: document.getElementById('editEquip').value.split(',').map(s => s.trim()).filter(Boolean),
+    engines: document.getElementById('editEngines').value.split(',').map(s => s.trim()).filter(Boolean)
+  };
+
+  try {
+    const res = await fetch(`/coaching/capture/${currentCapture.id}/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(edits)
+    });
+
+    const data = await res.json();
+
+    if (data.status === 'exists') {
+      document.getElementById('status').textContent = `Already exists as "${data.id}"`;
+      document.getElementById('status').className = 'status visible error';
+    } else {
+      captured.push({ name: edits.name, domain: edits.domain, id: data.id });
+      renderHistory();
+      document.getElementById('result').className = 'result';
+      document.getElementById('status').textContent = `✅ Added "${edits.name}" to library`;
+      document.getElementById('status').className = 'status visible';
+      document.getElementById('urlInput').value = '';
+      currentCapture = null;
+    }
+  } catch (e) {
+    document.getElementById('status').textContent = '❌ ' + e.message;
+    document.getElementById('status').className = 'status visible error';
+  }
+}
+
+async function discard() {
+  if (currentCapture) {
+    fetch(`/coaching/capture/${currentCapture.id}/discard`, { method: 'POST' });
+  }
+  currentCapture = null;
+  document.getElementById('result').className = 'result';
+  document.getElementById('status').className = 'status';
+  document.getElementById('urlInput').value = '';
+}
+
+function renderHistory() {
+  const el = document.getElementById('history');
+  if (!captured.length) {
+    el.innerHTML = '<div class="empty-hint">Paste a drill video URL above to capture it into your library</div>';
+    return;
+  }
+  el.innerHTML = `
+    <div class="history-label">Captured this session</div>
+    ${captured.map(c => `
+      <div class="history-item">
+        <div>
+          <div class="history-name">${c.name}</div>
+          <div class="history-domain">${c.domain}</div>
+        </div>
+        <span class="history-badge">Added</span>
+      </div>
+    `).join('')}
+  `;
+}
+
+renderHistory();
+</script>
+</body>
+</html>

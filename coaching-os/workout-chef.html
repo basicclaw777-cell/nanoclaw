@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BR Workout Chef</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a;
+  color: #e8e4dc;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px 80px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #222;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  background: #0a0a0a;
+  z-index: 5;
+}
+
+.header h1 {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f7b408;
+  font-weight: 400;
+}
+
+.header a {
+  color: #6b6560;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Chef selector */
+.chef-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chef-card {
+  flex-shrink: 0;
+  width: 100px;
+  padding: 10px 8px;
+  border: 1px solid #222;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.chef-card:hover { border-color: #f7b40833; background: #141414; }
+.chef-card.active { border-color: #f7b408; background: #1a1a18; }
+
+.chef-avatar {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.chef-name {
+  font-family: Impact, sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f7b408;
+}
+
+.chef-style {
+  font-size: 9px;
+  color: #6b6560;
+  margin-top: 2px;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.control-group {
+  flex: 1;
+}
+
+.control-label {
+  font-size: 9px;
+  color: #6b6560;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.control-select {
+  width: 100%;
+  padding: 8px 10px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 6px;
+  color: #e8e4dc;
+  font-size: 12px;
+  font-family: system-ui;
+  appearance: none;
+  cursor: pointer;
+}
+.control-select:focus { outline: none; border-color: #f7b40866; }
+
+/* Cook button */
+.cook-btn {
+  width: 100%;
+  padding: 14px;
+  background: #f7b408;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 8px;
+  font-family: Impact, sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-bottom: 24px;
+}
+.cook-btn:hover { background: #daa007; }
+.cook-btn:active { transform: scale(0.98); }
+.cook-btn:disabled { background: #333; color: #666; cursor: wait; }
+
+/* Dish card */
+.dish {
+  border: 1px solid #222;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dish-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid #1a1a1a;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dish-title {
+  font-family: Impact, sans-serif;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #e8e4dc;
+}
+
+.dish-chef {
+  font-size: 10px;
+  color: #6b6560;
+  margin-top: 2px;
+}
+
+.dish-badge {
+  font-size: 9px;
+  padding: 3px 8px;
+  border: 1px solid #f7b40844;
+  color: #f7b408;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.dish-section {
+  padding: 10px 16px;
+  border-bottom: 1px solid #111;
+}
+
+.dish-section:last-child { border-bottom: none; }
+
+.section-label {
+  font-size: 9px;
+  color: #6b6560;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-time {
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 9px;
+  color: #3a3835;
+}
+
+.ingredient {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.ingredient-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ingredient-name {
+  font-size: 13px;
+  color: #e8e4dc;
+  flex: 1;
+}
+
+.ingredient-tag {
+  font-size: 9px;
+  color: #6b6560;
+  padding: 1px 5px;
+  border: 1px solid #222;
+  border-radius: 3px;
+}
+
+.ingredient-note {
+  font-size: 10px;
+  color: #6b6560;
+  font-style: italic;
+  padding-left: 14px;
+}
+
+.dish-footer {
+  padding: 10px 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.dish-action {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b6560;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  font-family: system-ui;
+}
+.dish-action:hover { border-color: #f7b40844; color: #e8e4dc; }
+.dish-action.approve { border-color: #34d39944; color: #34d399; }
+.dish-action.approve:hover { background: #34d39910; }
+
+/* History */
+.history-label {
+  font-size: 9px;
+  color: #3a3835;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  margin-top: 24px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #3a3835;
+}
+.empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+.empty-state .text { font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Workout Chef</h1>
+    <a href="/hub">Hub</a>
+  </div>
+
+  <div class="chef-bar" id="chefBar"></div>
+
+  <div class="controls">
+    <div class="control-group">
+      <div class="control-label">Focus Block</div>
+      <select class="control-select" id="focusBlock">
+        <option value="random">Chef's Choice</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <div class="control-label">Class Size</div>
+      <select class="control-select" id="classSize">
+        <option value="small">Small (2-4)</option>
+        <option value="medium" selected>Medium (5-10)</option>
+        <option value="large">Large (11+)</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <div class="control-label">Duration</div>
+      <select class="control-select" id="duration">
+        <option value="30">30 min</option>
+        <option value="45" selected>45 min</option>
+        <option value="60">60 min</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="cook-btn" id="cookBtn" onclick="cook()">Cook a Workout</button>
+
+  <div id="dishes"></div>
+</div>
+
+<script>
+const CHEFS = [
+  {
+    id: 'fundamentals',
+    name: 'Coach Paul',
+    avatar: '🥊',
+    style: 'Fundamentals first',
+    desc: 'Guard → footwork → punches. Build the base.',
+    warmupBias: ['warm_up', 'footwork'],
+    mainBias: ['combos', 'defense'],
+    finisherBias: ['conditioning'],
+    intensity: 0.5,
+    drillCount: { warm: 2, main: 3, finish: 1 },
+    nameStyle: (focus) => `${focus} Fundamentals`
+  },
+  {
+    id: 'cardio',
+    name: 'Burner',
+    avatar: '🔥',
+    style: 'Max intensity',
+    desc: 'High volume, short rest, soaked shirt.',
+    warmupBias: ['warm_up', 'footwork'],
+    mainBias: ['conditioning', 'combos'],
+    finisherBias: ['conditioning'],
+    intensity: 0.9,
+    drillCount: { warm: 1, main: 4, finish: 2 },
+    nameStyle: (focus) => `${focus} Burnout`
+  },
+  {
+    id: 'technical',
+    name: 'Professor',
+    avatar: '🎯',
+    style: 'Precision & detail',
+    desc: 'Slow reps, perfect form, understanding why.',
+    warmupBias: ['warm_up', 'footwork'],
+    mainBias: ['defense', 'combos', 'strategy'],
+    finisherBias: ['mindset'],
+    intensity: 0.3,
+    drillCount: { warm: 2, main: 4, finish: 1 },
+    nameStyle: (focus) => `The ${focus} Clinic`
+  },
+  {
+    id: 'fun',
+    name: 'Entertainer',
+    avatar: '🎪',
+    style: 'Games & energy',
+    desc: 'Tennis balls, partner games, laughter.',
+    warmupBias: ['icebreaker', 'warm_up'],
+    mainBias: ['combos', 'footwork'],
+    finisherBias: ['icebreaker', 'conditioning'],
+    intensity: 0.5,
+    drillCount: { warm: 2, main: 3, finish: 1 },
+    nameStyle: (focus) => `${focus} Party`
+  },
+  {
+    id: 'sparring',
+    name: 'Matchmaker',
+    avatar: '🤝',
+    style: 'Partner & sparring prep',
+    desc: 'Catch-and-return, controlled exchanges, reading.',
+    warmupBias: ['warm_up', 'footwork'],
+    mainBias: ['defense', 'combos', 'strategy'],
+    finisherBias: ['mindset', 'strategy'],
+    intensity: 0.6,
+    drillCount: { warm: 2, main: 4, finish: 1 },
+    nameStyle: (focus) => `${focus} Sparring Prep`
+  }
+];
+
+const BLOCK_NAMES = [
+  'Foundation', 'Level', 'Angle', 'Inside', 'Rhythm',
+  'Counter', 'Pressure', 'Escape', 'Control', 'Arena'
+];
+
+const DOMAIN_COLORS = {
+  combos: '#f7b408', defense: '#4ecdc4', footwork: '#ff6b6b',
+  conditioning: '#45b7d1', warm_up: '#98d85b', strategy: '#c084fc',
+  mindset: '#f472b6', icebreaker: '#fb923c'
+};
+
+const ROUND_NOTES = {
+  0.3: ['Focus on form, not speed', '3-second pause between reps', 'Mirror drill: watch yourself'],
+  0.5: ['2 rounds of 3 mins', 'Steady pace, clean technique', 'Reset between combos'],
+  0.6: ['Partner rotation every 2 mins', 'Light contact, heavy focus', 'Call your shots'],
+  0.9: ['30 sec on / 10 sec off', 'Non-stop movement', 'Last round = double speed']
+};
+
+let allDrills = [];
+let activeChef = CHEFS[0];
+let dishHistory = [];
+
+function init() {
+  const bar = document.getElementById('chefBar');
+  bar.innerHTML = CHEFS.map((c, i) => `
+    <div class="chef-card ${i === 0 ? 'active' : ''}" data-idx="${i}" onclick="selectChef(${i})">
+      <div class="chef-avatar">${c.avatar}</div>
+      <div class="chef-name">${c.name}</div>
+      <div class="chef-style">${c.style}</div>
+    </div>
+  `).join('');
+
+  const sel = document.getElementById('focusBlock');
+  BLOCK_NAMES.forEach((name, i) => {
+    const opt = document.createElement('option');
+    opt.value = i + 1;
+    opt.textContent = `${i + 1}. ${name}`;
+    sel.appendChild(opt);
+  });
+
+  loadDrills();
+}
+
+async function loadDrills() {
+  try {
+    const res = await fetch('/coaching/drill-usage');
+    const data = await res.json();
+    allDrills = [
+      ...data.used.map(d => ({ id: d.drill_id, name: d.name, domain: d.domain, used: true, times: d.times_used })),
+      ...data.never_used.map(d => ({ id: d.id, name: d.name, domain: d.domain, used: false, times: 0 }))
+    ];
+  } catch (e) {
+    allDrills = [];
+  }
+}
+
+function selectChef(idx) {
+  activeChef = CHEFS[idx];
+  document.querySelectorAll('.chef-card').forEach((c, i) => c.classList.toggle('active', i === idx));
+}
+
+function pickDrills(domains, count, exclude) {
+  const pool = allDrills.filter(d => domains.includes(d.domain) && !exclude.has(d.id));
+  const shuffled = pool.sort(() => Math.random() - 0.5);
+  // Prefer unused drills sometimes
+  shuffled.sort((a, b) => {
+    if (!a.used && b.used) return Math.random() < 0.6 ? -1 : 1;
+    return 0;
+  });
+  return shuffled.slice(0, count);
+}
+
+function cook() {
+  if (allDrills.length === 0) return;
+
+  const btn = document.getElementById('cookBtn');
+  btn.disabled = true;
+  btn.textContent = 'Cooking...';
+
+  setTimeout(() => {
+    const focusVal = document.getElementById('focusBlock').value;
+    const duration = parseInt(document.getElementById('duration').value);
+    const size = document.getElementById('classSize').value;
+
+    const focusBlock = focusVal === 'random'
+      ? BLOCK_NAMES[Math.floor(Math.random() * BLOCK_NAMES.length)]
+      : BLOCK_NAMES[parseInt(focusVal) - 1];
+
+    const chef = activeChef;
+    const used = new Set();
+
+    // Scale drill counts by duration
+    const scale = duration / 45;
+    const warmCount = Math.max(1, Math.round(chef.drillCount.warm * scale));
+    const mainCount = Math.max(2, Math.round(chef.drillCount.main * scale));
+    const finishCount = Math.max(1, Math.round(chef.drillCount.finish * scale));
+
+    const warmup = pickDrills(chef.warmupBias, warmCount, used);
+    warmup.forEach(d => used.add(d.id));
+
+    const main = pickDrills(chef.mainBias, mainCount, used);
+    main.forEach(d => used.add(d.id));
+
+    const finisher = pickDrills(chef.finisherBias, finishCount, used);
+
+    // Time allocation
+    const warmTime = Math.round(duration * 0.2);
+    const mainTime = Math.round(duration * 0.6);
+    const finishTime = duration - warmTime - mainTime;
+
+    const notes = ROUND_NOTES[chef.intensity] || ROUND_NOTES[0.5];
+    const note = notes[Math.floor(Math.random() * notes.length)];
+
+    const dish = {
+      id: Date.now(),
+      name: chef.nameStyle(focusBlock),
+      chef: chef.name,
+      avatar: chef.avatar,
+      focus: focusBlock,
+      duration,
+      size,
+      sections: [
+        { label: 'Warm-Up', time: warmTime, drills: warmup },
+        { label: 'Main Course', time: mainTime, drills: main },
+        { label: 'Finisher', time: finishTime, drills: finisher }
+      ],
+      note,
+      intensity: chef.intensity,
+      approved: false
+    };
+
+    dishHistory.unshift(dish);
+    renderDishes();
+
+    btn.disabled = false;
+    btn.textContent = 'Cook Another';
+  }, 400);
+}
+
+function approveDish(id) {
+  const dish = dishHistory.find(d => d.id === id);
+  if (dish) dish.approved = true;
+  renderDishes();
+}
+
+function removeDish(id) {
+  dishHistory = dishHistory.filter(d => d.id !== id);
+  renderDishes();
+}
+
+function renderDishes() {
+  const el = document.getElementById('dishes');
+
+  if (dishHistory.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">👨‍🍳</div>
+        <div class="text">Pick a chef, set the parameters, hit cook.<br>Drills are ingredients. Workouts are dishes.</div>
+      </div>
+    `;
+    return;
+  }
+
+  el.innerHTML = dishHistory.map(dish => `
+    <div class="dish" style="${dish.approved ? 'border-color: #34d39944;' : ''}">
+      <div class="dish-header">
+        <div>
+          <div class="dish-title">${dish.avatar} ${dish.name}</div>
+          <div class="dish-chef">by ${dish.chef} — ${dish.duration} min — ${dish.size} class</div>
+        </div>
+        <span class="dish-badge">${dish.approved ? '✓ Approved' : 'Taste me'}</span>
+      </div>
+      ${dish.sections.map(s => `
+        <div class="dish-section">
+          <div class="section-label">
+            ${s.label}
+            <span class="section-time">${s.time} min</span>
+          </div>
+          ${s.drills.length > 0 ? s.drills.map(d => `
+            <div class="ingredient">
+              <span class="ingredient-dot" style="background:${DOMAIN_COLORS[d.domain] || '#666'}"></span>
+              <span class="ingredient-name">${d.name}</span>
+              <span class="ingredient-tag">${d.domain.replace('_', ' ')}</span>
+            </div>
+          `).join('') : '<div class="ingredient-note">No drills matched — add manually</div>'}
+        </div>
+      `).join('')}
+      ${dish.note ? `<div class="dish-section"><div class="ingredient-note">${dish.note}</div></div>` : ''}
+      <div class="dish-footer">
+        ${!dish.approved ? `<button class="dish-action approve" onclick="approveDish(${dish.id})">Approve</button>` : ''}
+        <button class="dish-action" onclick="cook()">Recook</button>
+        <button class="dish-action" onclick="removeDish(${dish.id})">Bin</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+init();
+</script>
+</body>
+</html>

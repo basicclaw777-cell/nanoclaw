@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Block Progression</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a;
+  color: #e8e4dc;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  height: 100vh;
+  touch-action: manipulation;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #222;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f7b408;
+  font-weight: 400;
+}
+
+.header a {
+  color: #6b6560;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.header a:hover { color: #f7b408; }
+
+.canvas-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  position: relative;
+}
+
+canvas {
+  max-width: 380px;
+  max-height: 100%;
+  cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  background: #1a1a18;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 10px 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  max-width: 240px;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+}
+.tooltip.visible { opacity: 1; }
+
+.tooltip .tt-num {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 22px;
+  color: #f7b408;
+  float: left;
+  margin-right: 8px;
+  line-height: 1;
+}
+.tooltip .tt-name {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f7b408;
+}
+.tooltip .tt-focus {
+  font-size: 11px;
+  color: #b0a898;
+  margin-top: 2px;
+  clear: both;
+}
+.tooltip .tt-section {
+  font-size: 10px;
+  color: #6b6560;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+}
+.tooltip .tt-list {
+  font-size: 11px;
+  color: #9a9590;
+  margin-top: 2px;
+}
+.tooltip .tt-gate {
+  font-size: 10px;
+  color: #555;
+  margin-top: 6px;
+  font-style: italic;
+  border-top: 1px solid #2a2a28;
+  padding-top: 6px;
+}
+
+.legend {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  font-size: 10px;
+  color: #6b6560;
+  letter-spacing: 0.5px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.legend-line {
+  width: 20px;
+  height: 0;
+  display: inline-block;
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>Block Progression</h1>
+    <a href="/hub">Hub</a>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="graph"></canvas>
+    <div class="tooltip" id="tooltip"></div>
+    <div class="legend">
+      <div class="legend-item">
+        <svg class="legend-line" viewBox="0 0 20 4"><line x1="0" y1="2" x2="20" y2="2" stroke="#f7b408" stroke-width="2.5" stroke-opacity="0.7"/></svg>
+        <span>Strong</span>
+      </div>
+      <div class="legend-item">
+        <svg class="legend-line" viewBox="0 0 20 4"><line x1="0" y1="2" x2="20" y2="2" stroke="#f7b408" stroke-width="1" stroke-opacity="0.25"/></svg>
+        <span>Indirect</span>
+      </div>
+      <div class="legend-item">
+        <svg width="8" height="8"><circle cx="4" cy="4" r="3" fill="none" stroke="#f7b408" stroke-width="1"/></svg>
+        <span>Tap node</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── Dependency graph ──
+const EDGES = [
+  // [from, to] — 1-indexed block numbers
+  [1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],
+  [2,3],[2,5],[2,6],[2,8],
+  [3,4],[3,5],[3,6],
+  [4,5],[4,6],[4,7],
+  [5,6],[5,7],[5,9],
+  [6,7],[6,8],[6,9],
+  [7,8],[7,9],[7,10],
+  [8,9],[8,10],
+  [9,10]
+];
+
+// Strength: adjacent steps are strongest, longer spans weaker
+function edgeStrength(from, to) {
+  const d = to - from;
+  if (d === 1) return 1.0;
+  if (d === 2) return 0.7;
+  if (d === 3) return 0.45;
+  return 0.25;
+}
+
+// ── State ──
+let nodes = [];
+let cardData = null;
+let selectedNode = null;
+let hoveredNode = null;
+const canvas = document.getElementById('graph');
+const ctx = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+// ── Sizing ──
+const DPR = window.devicePixelRatio || 1;
+const W = 380;
+const H = 520;
+canvas.width = W * DPR;
+canvas.height = H * DPR;
+canvas.style.width = W + 'px';
+canvas.style.height = H + 'px';
+ctx.scale(DPR, DPR);
+
+const NODE_R = 18;
+const ARROW_SIZE = 6;
+
+// ── Init nodes in a spiral/arc layout ──
+function initNodes() {
+  nodes = [];
+  for (let i = 0; i < 10; i++) {
+    // Arrange in a gentle vertical cascade with lateral spread
+    const progress = i / 9;
+    // Spiral: top-center → expand → converge at bottom
+    const angle = -Math.PI/2 + progress * Math.PI * 1.8;
+    const radiusX = 100 + 40 * Math.sin(progress * Math.PI);
+    const radiusY = 80 + 50 * Math.sin(progress * Math.PI);
+    nodes.push({
+      id: i + 1,
+      x: W/2 + Math.cos(angle) * radiusX + (Math.random() - 0.5) * 20,
+      y: 60 + progress * (H - 130) + (Math.random() - 0.5) * 15,
+      vx: 0,
+      vy: 0,
+      name: ['Foundation','Level','Angle','Inside','Rhythm','Counter','Pressure','Escape','Control','Arena'][i]
+    });
+  }
+}
+initNodes();
+
+// ── Force simulation ──
+function simulate() {
+  const alpha = 0.3;
+  const repulsion = 4000;
+  const springLen = 85;
+  const springK = 0.012;
+  const centerK = 0.008;
+  const damping = 0.85;
+  const verticalBias = 0.003; // gentle top-to-bottom ordering
+
+  for (let iter = 0; iter < 3; iter++) {
+    // Repulsion
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        let dx = nodes[i].x - nodes[j].x;
+        let dy = nodes[i].y - nodes[j].y;
+        let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        let f = repulsion / (dist * dist);
+        let fx = (dx / dist) * f;
+        let fy = (dy / dist) * f;
+        nodes[i].vx += fx * alpha;
+        nodes[i].vy += fy * alpha;
+        nodes[j].vx -= fx * alpha;
+        nodes[j].vy -= fy * alpha;
+      }
+    }
+
+    // Spring attraction along edges
+    for (const [from, to] of EDGES) {
+      const a = nodes[from - 1];
+      const b = nodes[to - 1];
+      let dx = b.x - a.x;
+      let dy = b.y - a.y;
+      let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+      const strength = edgeStrength(from, to);
+      let f = (dist - springLen * (1 + (1 - strength) * 0.5)) * springK * strength;
+      let fx = (dx / dist) * f;
+      let fy = (dy / dist) * f;
+      a.vx += fx * alpha;
+      a.vy += fy * alpha;
+      b.vx -= fx * alpha;
+      b.vy -= fy * alpha;
+    }
+
+    // Center gravity
+    for (const n of nodes) {
+      n.vx += (W/2 - n.x) * centerK;
+      n.vy += (H/2 - n.y) * centerK;
+    }
+
+    // Vertical ordering bias: earlier blocks should be higher
+    for (const n of nodes) {
+      const targetY = 55 + ((n.id - 1) / 9) * (H - 120);
+      n.vy += (targetY - n.y) * verticalBias;
+    }
+
+    // Apply velocities
+    for (const n of nodes) {
+      n.vx *= damping;
+      n.vy *= damping;
+      n.x += n.vx;
+      n.y += n.vy;
+      // Bounds
+      n.x = Math.max(NODE_R + 5, Math.min(W - NODE_R - 5, n.x));
+      n.y = Math.max(NODE_R + 5, Math.min(H - NODE_R - 5, n.y));
+    }
+  }
+}
+
+// ── Upstream / downstream computation ──
+function getUpstream(id) {
+  const up = new Set();
+  function walk(n) {
+    for (const [from, to] of EDGES) {
+      if (to === n && !up.has(from)) {
+        up.add(from);
+        walk(from);
+      }
+    }
+  }
+  walk(id);
+  return up;
+}
+
+function getDownstream(id) {
+  const down = new Set();
+  function walk(n) {
+    for (const [from, to] of EDGES) {
+      if (from === n && !down.has(to)) {
+        down.add(to);
+        walk(to);
+      }
+    }
+  }
+  walk(id);
+  return down;
+}
+
+// ── Drawing ──
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  const upstream = selectedNode ? getUpstream(selectedNode) : null;
+  const downstream = selectedNode ? getDownstream(selectedNode) : null;
+
+  // Draw edges
+  for (const [from, to] of EDGES) {
+    const a = nodes[from - 1];
+    const b = nodes[to - 1];
+    const strength = edgeStrength(from, to);
+
+    let alpha = 0.12 + strength * 0.5;
+    let lineW = 0.6 + strength * 2.2;
+    let color = '#f7b408';
+
+    // Highlight logic
+    if (selectedNode) {
+      const isRelevant =
+        (from === selectedNode && downstream && downstream.has(to)) ||
+        (to === selectedNode && upstream && upstream.has(from)) ||
+        (upstream && upstream.has(from) && upstream.has(to)) ||
+        (upstream && upstream.has(from) && to === selectedNode) ||
+        (downstream && downstream.has(to) && from === selectedNode) ||
+        (downstream && downstream.has(from) && downstream.has(to));
+
+      if (isRelevant) {
+        alpha = 0.4 + strength * 0.5;
+        lineW = 1 + strength * 2.5;
+      } else {
+        alpha = 0.04;
+        lineW = 0.5;
+        color = '#444';
+      }
+    }
+
+    // Draw line
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const ux = dx / dist;
+    const uy = dy / dist;
+
+    // Shorten to node edges
+    const sx = a.x + ux * (NODE_R + 2);
+    const sy = a.y + uy * (NODE_R + 2);
+    const ex = b.x - ux * (NODE_R + 4);
+    const ey = b.y - uy * (NODE_R + 4);
+
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(ex, ey);
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = lineW;
+    ctx.stroke();
+
+    // Arrowhead
+    const ax1 = ex - ux * ARROW_SIZE + uy * ARROW_SIZE * 0.4;
+    const ay1 = ey - uy * ARROW_SIZE - ux * ARROW_SIZE * 0.4;
+    const ax2 = ex - ux * ARROW_SIZE - uy * ARROW_SIZE * 0.4;
+    const ay2 = ey - uy * ARROW_SIZE + ux * ARROW_SIZE * 0.4;
+
+    ctx.beginPath();
+    ctx.moveTo(ex, ey);
+    ctx.lineTo(ax1, ay1);
+    ctx.lineTo(ax2, ay2);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+  }
+
+  // Draw nodes
+  for (const n of nodes) {
+    let fillAlpha = 0.08;
+    let strokeColor = '#f7b408';
+    let strokeAlpha = 0.6;
+    let textColor = '#f7b408';
+    let glow = false;
+
+    if (selectedNode) {
+      if (n.id === selectedNode) {
+        fillAlpha = 0.35;
+        strokeAlpha = 1;
+        glow = true;
+      } else if ((upstream && upstream.has(n.id)) || (downstream && downstream.has(n.id))) {
+        fillAlpha = 0.15;
+        strokeAlpha = 0.8;
+      } else {
+        fillAlpha = 0.03;
+        strokeAlpha = 0.15;
+        textColor = '#555';
+        strokeColor = '#444';
+      }
+    }
+
+    if (hoveredNode === n.id && !selectedNode) {
+      fillAlpha = 0.2;
+      strokeAlpha = 0.9;
+      glow = true;
+    }
+
+    // Glow
+    if (glow) {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, NODE_R + 6, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(247, 180, 8, 0.08)';
+      ctx.fill();
+    }
+
+    // Fill
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, NODE_R, 0, Math.PI * 2);
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fill();
+    ctx.fillStyle = `rgba(247, 180, 8, ${fillAlpha})`;
+    ctx.fill();
+
+    // Stroke
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, NODE_R, 0, Math.PI * 2);
+    ctx.strokeStyle = strokeColor;
+    ctx.globalAlpha = strokeAlpha;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Number
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 14px Impact, 'Arial Narrow Bold', sans-serif";
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(n.id, n.x, n.y);
+
+    // Label below
+    ctx.font = "9px system-ui, -apple-system, sans-serif";
+    ctx.fillStyle = selectedNode && n.id !== selectedNode && !(upstream && upstream.has(n.id)) && !(downstream && downstream.has(n.id))
+      ? '#333' : '#8a8580';
+    ctx.fillText(n.name.toUpperCase(), n.x, n.y + NODE_R + 10);
+  }
+}
+
+// ── Hit testing ──
+function hitTest(x, y) {
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const n = nodes[i];
+    const dx = x - n.x;
+    const dy = y - n.y;
+    if (dx*dx + dy*dy <= (NODE_R + 6) * (NODE_R + 6)) return n;
+  }
+  return null;
+}
+
+function canvasXY(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY
+  };
+}
+
+// ── Tooltip ──
+function showTooltip(node, e) {
+  const card = cardData ? cardData.find(c => c.num === node.id && c.pillar === 'skill') : null;
+
+  const feedsIn = EDGES.filter(([_,to]) => to === node.id).map(([f]) => f);
+  const feedsOut = EDGES.filter(([f]) => f === node.id).map(([_,to]) => to);
+
+  const feedsInNames = feedsIn.map(id => `${id}. ${nodes[id-1].name}`).join(', ');
+  const feedsOutNames = feedsOut.map(id => `${id}. ${nodes[id-1].name}`).join(', ');
+
+  const focus = card ? card.technical.focus : '';
+  const gate = card ? card.technical.gate : '';
+  const unlock = card ? card.client.unlock : '';
+  const tags = card ? card.client.tags.join(' / ') : '';
+  const engine = card ? (card.technical.engine || '') : '';
+
+  tooltip.innerHTML = `
+    <div class="tt-num">${node.id}</div>
+    <div class="tt-name">${node.name}</div>
+    <div class="tt-focus">${focus}</div>
+    ${tags ? `<div class="tt-focus" style="color:#6b6560;margin-top:4px">${tags}</div>` : ''}
+    ${engine ? `<div class="tt-focus" style="color:#555;margin-top:2px">Engine: ${engine}</div>` : ''}
+    ${feedsIn.length ? `<div class="tt-section">Feeds in</div><div class="tt-list">${feedsInNames}</div>` : ''}
+    ${feedsOut.length ? `<div class="tt-section">Feeds out</div><div class="tt-list">${feedsOutNames}</div>` : '<div class="tt-section" style="color:#f7b408">Endpoint</div>'}
+    ${unlock ? `<div class="tt-gate">"${unlock}"</div>` : ''}
+  `;
+
+  // Position tooltip
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  const wrap = canvas.parentElement.getBoundingClientRect();
+
+  let left = clientX - wrap.left + 12;
+  let top = clientY - wrap.top - 10;
+
+  // Keep in bounds
+  if (left + 240 > wrap.width) left = left - 260;
+  if (top + 200 > wrap.height) top = wrap.height - 210;
+  if (top < 0) top = 10;
+
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+  tooltip.classList.add('visible');
+}
+
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+}
+
+// ── Events ──
+canvas.addEventListener('mousemove', (e) => {
+  const {x, y} = canvasXY(e);
+  const hit = hitTest(x, y);
+  hoveredNode = hit ? hit.id : null;
+  canvas.style.cursor = hit ? 'pointer' : 'default';
+  if (hit) {
+    showTooltip(hit, e);
+  } else {
+    hideTooltip();
+  }
+  draw();
+});
+
+canvas.addEventListener('mouseleave', () => {
+  hoveredNode = null;
+  hideTooltip();
+  draw();
+});
+
+canvas.addEventListener('click', (e) => {
+  const {x, y} = canvasXY(e);
+  const hit = hitTest(x, y);
+  if (hit) {
+    selectedNode = selectedNode === hit.id ? null : hit.id;
+  } else {
+    selectedNode = null;
+  }
+  draw();
+});
+
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  const {x, y} = canvasXY(e);
+  const hit = hitTest(x, y);
+  if (hit) {
+    selectedNode = selectedNode === hit.id ? null : hit.id;
+    showTooltip(hit, e);
+  } else {
+    selectedNode = null;
+    hideTooltip();
+  }
+  draw();
+}, { passive: false });
+
+// ── Fetch card data ──
+fetch('/coaching-os/33-card-system.json')
+  .then(r => r.json())
+  .then(data => {
+    cardData = data.cards;
+    // Enrich node names from card data
+    for (const n of nodes) {
+      const card = cardData.find(c => c.num === n.id && c.pillar === 'skill');
+      if (card) n.name = card.name;
+    }
+    draw();
+  })
+  .catch(() => {
+    // Fallback: use hardcoded names (already set)
+    draw();
+  });
+
+// ── Run simulation then draw ──
+let simFrames = 200;
+function simLoop() {
+  simulate();
+  draw();
+  simFrames--;
+  if (simFrames > 0) requestAnimationFrame(simLoop);
+}
+simLoop();
+</script>
+</body>
+</html>

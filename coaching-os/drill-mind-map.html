@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BR Drill Mind Map</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a;
+  color: #e8e4dc;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  height: 100vh;
+  touch-action: manipulation;
+}
+
+.map-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #222;
+  flex-shrink: 0;
+}
+
+.map-header h1 {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f7b408;
+  font-weight: 400;
+}
+
+.map-header a {
+  color: #6b6560;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tooltip {
+  position: fixed;
+  background: #1a1a18;
+  border: 1px solid #f7b40833;
+  border-radius: 8px;
+  padding: 8px 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 10;
+  max-width: 200px;
+}
+.tooltip.visible { opacity: 1; }
+.tooltip-name {
+  font-family: Impact, sans-serif;
+  font-size: 13px;
+  color: #f7b408;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.tooltip-detail {
+  font-size: 11px;
+  color: #6b6560;
+  margin-top: 2px;
+}
+
+.legend {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  z-index: 5;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: #6b6560;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<div class="map-container">
+  <div class="map-header">
+    <h1>Drill Mind Map</h1>
+    <a href="/hub">Hub</a>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="canvas"></canvas>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-name" id="tipName"></div>
+  <div class="tooltip-detail" id="tipDetail"></div>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<script>
+const DOMAIN_COLORS = {
+  combos:       '#f7b408',
+  defense:      '#4ecdc4',
+  footwork:     '#ff6b6b',
+  conditioning: '#45b7d1',
+  warm_up:      '#98d85b',
+  strategy:     '#c084fc',
+  mindset:      '#f472b6',
+  icebreaker:   '#fb923c'
+};
+
+const DOMAIN_LABELS = {
+  combos: 'Combos',
+  defense: 'Defense',
+  footwork: 'Footwork',
+  conditioning: 'Conditioning',
+  warm_up: 'Warm-Up',
+  strategy: 'Strategy',
+  mindset: 'Mindset',
+  icebreaker: 'Icebreaker'
+};
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+let W, H, cx, cy, dpr;
+let domains = {};
+let nodes = [];
+let expanded = new Set();
+let animProgress = {};
+let hoveredNode = null;
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  W = canvas.parentElement.clientWidth;
+  H = canvas.parentElement.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx = W / 2;
+  cy = H / 2;
+  layoutNodes();
+}
+
+async function loadData() {
+  try {
+    const res = await fetch('/coaching/drill-usage');
+    const data = await res.json();
+    const all = [
+      ...data.used.map(d => ({ id: d.drill_id, name: d.name, domain: d.domain, used: true, times: d.times_used })),
+      ...data.never_used.map(d => ({ id: d.id, name: d.name, domain: d.domain, used: false, times: 0 }))
+    ];
+    domains = {};
+    all.forEach(d => {
+      if (!domains[d.domain]) domains[d.domain] = [];
+      domains[d.domain].push(d);
+    });
+    Object.values(domains).forEach(arr => arr.sort((a, b) => a.name.localeCompare(b.name)));
+    buildLegend();
+    layoutNodes();
+    draw();
+  } catch (e) {
+    console.error('Failed to load drills', e);
+  }
+}
+
+function buildLegend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = Object.entries(DOMAIN_LABELS).map(([k, v]) =>
+    `<div class="legend-item"><span class="legend-dot" style="background:${DOMAIN_COLORS[k]}"></span>${v}</div>`
+  ).join('');
+}
+
+function layoutNodes() {
+  nodes = [];
+  const domKeys = Object.keys(domains);
+  const n = domKeys.length;
+  if (!n) return;
+
+  const branchRadius = Math.min(W, H) * 0.3;
+
+  nodes.push({ type: 'center', x: cx, y: cy, r: 28, label: 'BR\nDRILLS' });
+
+  domKeys.forEach((dom, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const bx = cx + Math.cos(angle) * branchRadius;
+    const by = cy + Math.sin(angle) * branchRadius;
+    const count = domains[dom].length;
+
+    nodes.push({
+      type: 'domain',
+      domain: dom,
+      x: bx, y: by,
+      r: 18 + count * 0.8,
+      label: DOMAIN_LABELS[dom] || dom,
+      count,
+      angle,
+      color: DOMAIN_COLORS[dom] || '#f7b408'
+    });
+
+    if (expanded.has(dom)) {
+      const drills = domains[dom];
+      const leafRadius = Math.min(W, H) * 0.14 + drills.length * 2;
+      const spread = Math.min(Math.PI * 0.6, drills.length * 0.12);
+      const startAngle = angle - spread / 2;
+
+      drills.forEach((drill, j) => {
+        const da = drills.length > 1 ? startAngle + (j / (drills.length - 1)) * spread : angle;
+        const lx = bx + Math.cos(da) * leafRadius;
+        const ly = by + Math.sin(da) * leafRadius;
+        const prog = animProgress[dom] || 1;
+
+        nodes.push({
+          type: 'leaf',
+          domain: dom,
+          drill,
+          x: bx + (lx - bx) * prog,
+          y: by + (ly - by) * prog,
+          targetX: lx,
+          targetY: ly,
+          r: 5,
+          label: drill.name,
+          color: DOMAIN_COLORS[dom] || '#f7b408',
+          parentX: bx,
+          parentY: by
+        });
+      });
+    }
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  const center = nodes.find(n => n.type === 'center');
+  const domainNodes = nodes.filter(n => n.type === 'domain');
+  const leafNodes = nodes.filter(n => n.type === 'leaf');
+
+  domainNodes.forEach(d => {
+    ctx.beginPath();
+    ctx.moveTo(center.x, center.y);
+    ctx.lineTo(d.x, d.y);
+    ctx.strokeStyle = d.color + '30';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+
+  leafNodes.forEach(l => {
+    ctx.beginPath();
+    ctx.moveTo(l.parentX, l.parentY);
+    ctx.lineTo(l.x, l.y);
+    ctx.strokeStyle = l.color + '20';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  leafNodes.forEach(l => {
+    const isHovered = hoveredNode === l;
+    ctx.beginPath();
+    ctx.arc(l.x, l.y, isHovered ? 7 : 5, 0, Math.PI * 2);
+    ctx.fillStyle = l.drill.used ? l.color + '60' : l.color + '20';
+    ctx.fill();
+    ctx.strokeStyle = l.color + (isHovered ? 'cc' : '66');
+    ctx.lineWidth = isHovered ? 1.5 : 1;
+    ctx.stroke();
+
+    if (isHovered) {
+      ctx.font = '10px system-ui';
+      ctx.fillStyle = l.color;
+      ctx.textAlign = 'center';
+      ctx.fillText(l.label, l.x, l.y - 10);
+    }
+  });
+
+  domainNodes.forEach(d => {
+    const isHovered = hoveredNode === d;
+    const isExpanded = expanded.has(d.domain);
+
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r + (isHovered ? 3 : 0), 0, Math.PI * 2);
+    ctx.fillStyle = d.color + (isExpanded ? '25' : '12');
+    ctx.fill();
+    ctx.strokeStyle = d.color + (isHovered ? 'cc' : '66');
+    ctx.lineWidth = isHovered ? 2.5 : 1.5;
+    ctx.stroke();
+
+    ctx.font = 'bold 11px system-ui';
+    ctx.fillStyle = d.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(d.label.toUpperCase(), d.x, d.y - 5);
+
+    ctx.font = '9px system-ui';
+    ctx.fillStyle = d.color + '88';
+    ctx.fillText(d.count + ' drills', d.x, d.y + 8);
+  });
+
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, center.r, 0, Math.PI * 2);
+  ctx.fillStyle = '#f7b408' + '15';
+  ctx.fill();
+  ctx.strokeStyle = '#f7b408';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.font = '600 13px Impact, system-ui';
+  ctx.fillStyle = '#f7b408';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = '2px';
+  ctx.fillText('BR', center.x, center.y - 6);
+  ctx.fillText('DRILLS', center.x, center.y + 8);
+
+  requestAnimationFrame(draw);
+}
+
+function hitTest(mx, my) {
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const n = nodes[i];
+    const dx = mx - n.x;
+    const dy = my - n.y;
+    const hitR = n.type === 'leaf' ? 12 : n.r + 4;
+    if (dx * dx + dy * dy < hitR * hitR) return n;
+  }
+  return null;
+}
+
+function handleMove(x, y) {
+  const node = hitTest(x, y);
+  hoveredNode = node;
+  canvas.style.cursor = (node && node.type !== 'center') ? 'pointer' : 'default';
+
+  if (node && node.type === 'leaf') {
+    const tip = document.getElementById('tooltip');
+    document.getElementById('tipName').textContent = node.drill.name;
+    document.getElementById('tipDetail').textContent =
+      (node.drill.used ? `Used ${node.drill.times}x` : 'Never used') + ' — ' + (DOMAIN_LABELS[node.domain] || node.domain);
+    tip.classList.add('visible');
+    tip.style.left = Math.min(x + 12, W - 210) + 'px';
+    tip.style.top = (y - 40) + 'px';
+  } else if (node && node.type === 'domain') {
+    const tip = document.getElementById('tooltip');
+    document.getElementById('tipName').textContent = node.label;
+    const usedCount = domains[node.domain].filter(d => d.used).length;
+    document.getElementById('tipDetail').textContent =
+      `${node.count} drills (${usedCount} used)` + (expanded.has(node.domain) ? ' — tap to collapse' : ' — tap to expand');
+    tip.classList.add('visible');
+    tip.style.left = Math.min(x + 12, W - 210) + 'px';
+    tip.style.top = (y - 40) + 'px';
+  } else {
+    document.getElementById('tooltip').classList.remove('visible');
+  }
+}
+
+function handleTap(x, y) {
+  const node = hitTest(x, y);
+  if (!node || node.type === 'center') return;
+
+  if (node.type === 'domain') {
+    if (expanded.has(node.domain)) {
+      expanded.delete(node.domain);
+    } else {
+      expanded.add(node.domain);
+      animProgress[node.domain] = 0;
+      animateExpand(node.domain);
+    }
+    layoutNodes();
+  }
+}
+
+function animateExpand(dom) {
+  const step = () => {
+    animProgress[dom] = Math.min(1, (animProgress[dom] || 0) + 0.08);
+    layoutNodes();
+    if (animProgress[dom] < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  handleMove(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  handleTap(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const t = e.touches[0];
+  handleTap(t.clientX - rect.left, t.clientY - rect.top);
+}, { passive: false });
+
+canvas.addEventListener('mouseleave', () => {
+  hoveredNode = null;
+  document.getElementById('tooltip').classList.remove('visible');
+});
+
+window.addEventListener('resize', resize);
+
+resize();
+loadData();
+</script>
+</body>
+</html>

@@ -56,6 +56,9 @@ import { registerActiveCommands } from './active-learning.js';
 import { registerArchaeologistCommands } from './archaeologist-commands.js';
 import { registerVaultDigCommands } from './vault-dig.js';
 import { registerBiasMapperCommands } from './bias-mapper.js';
+import { runForensicRelay, formatRelayTelegram, formatPromptTelegram } from './forensic-relay-engine.js';
+import { runExtractionCycle, runSingleCycle, formatCycleTelegram } from './extraction-cycle.js';
+import { captureDrill, insertDrill } from './coaching-os/drill-capture.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -195,6 +198,86 @@ const bot = new TelegramBot(token, { polling: false });
 
 // ── Boxing commands (Basic Reflex) ──────────────────────────────────────────
 registerBoxingCommands(bot);
+
+// ── Drill Capture (/drill <url>) ─────────────────────────────────────────────
+const pendingDrills = new Map();
+
+bot.onText(/^\/drill(?:@\w+)?\s+(.+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const url = match[1].trim();
+
+  if (!url.match(/^https?:\/\//)) {
+    return bot.sendMessage(chatId, '❌ Need a URL (Instagram, YouTube, TikTok)');
+  }
+
+  await bot.sendMessage(chatId, `🎬 Downloading and analyzing...\n${url}`);
+
+  try {
+    const result = await captureDrill(url);
+    const m = result.meta;
+    pendingDrills.set(result.id, result);
+
+    const card = [
+      `🥊 *DRILL CAPTURED*`,
+      ``,
+      `*${m.name}*`,
+      m.description || '',
+      ``,
+      `📂 Domain: \`${m.domain}\``,
+      `🎯 Mode: \`${m.mode}\``,
+      `⚡ Energy: \`${m.energy_demand}\``,
+      `🏗️ Blocks: ${m.block_min}–${m.block_max}`,
+      `🔧 Equipment: ${(m.equipment || []).join(', ')}`,
+      `🧠 Engines: ${(m.engines || []).join(', ')}`,
+      m.tags ? `🏷️ Tags: ${m.tags.join(', ')}` : '',
+      ``,
+      `Source: ${url}`
+    ].filter(Boolean).join('\n');
+
+    await bot.sendMessage(chatId, card, {
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [[
+          { text: '✅ Add to Library', callback_data: `drill_add:${result.id}` },
+          { text: '🗑️ Discard', callback_data: `drill_discard:${result.id}` }
+        ]]
+      }
+    });
+  } catch (e) {
+    await bot.sendMessage(chatId, `❌ Capture failed: ${e.message?.slice(0, 200)}`);
+  }
+});
+
+bot.on('callback_query', async (query) => {
+  const data = query.data || '';
+  if (!data.startsWith('drill_')) return;
+
+  const [action, id] = data.split(':');
+  const chatId = query.message.chat.id;
+
+  if (action === 'drill_add') {
+    const pending = pendingDrills.get(id);
+    if (!pending) {
+      return bot.answerCallbackQuery(query.id, { text: 'Drill expired — recapture' });
+    }
+    try {
+      const result = insertDrill(pending.meta, pending.sourceUrl);
+      pendingDrills.delete(id);
+      if (result.status === 'exists') {
+        await bot.answerCallbackQuery(query.id, { text: `Already exists: ${result.id}` });
+      } else {
+        await bot.answerCallbackQuery(query.id, { text: '✅ Added to drill library!' });
+        await bot.sendMessage(chatId, `✅ *${pending.meta.name}* added to library as \`${result.id}\`\n\nVisible in Drill Mind Map, Workout Chef, and all coaching tools.`, { parse_mode: 'Markdown' });
+      }
+    } catch (e) {
+      await bot.answerCallbackQuery(query.id, { text: `Error: ${e.message?.slice(0, 100)}` });
+    }
+  } else if (action === 'drill_discard') {
+    pendingDrills.delete(id);
+    await bot.answerCallbackQuery(query.id, { text: 'Discarded' });
+  }
+});
 
 // ── Operations Agent commands ────────────────────────────────────────────────
 registerOpsCommands(bot);
@@ -9563,5 +9646,115 @@ clean in their number system.\n\n`;
   } catch (e) {
     console.error('[base60] Error:', e);
     await safeSend(chatId, `Base-60 error: ${e.message}`);
+  }
+});
+
+// ── /relay — Forensic Relay Engine ──────────────────────────────────────────
+
+let lastRelayResult = null;
+
+bot.onText(/^\/relay(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = (match[1] || '').trim();
+
+  try {
+    if (arg.toLowerCase() === 'prompt') {
+      if (!lastRelayResult?.masterPrompt) {
+        await safeSend(chatId, 'No relay prompt cached. Run /relay [domain] first.');
+        return;
+      }
+      await safeSend(chatId, formatPromptTelegram(lastRelayResult));
+      return;
+    }
+
+    if (arg.toLowerCase() === 'map') {
+      let mapMsg = `*Deception Taxonomy (10 shapes)*\n\n`;
+      const { DECEPTION_SHAPES } = await import('./forensic-relay-engine.js');
+      for (const s of DECEPTION_SHAPES) {
+        mapMsg += `*${s.id}. ${s.name}*\n_${s.how}_\nBypass: ${s.bypass}\n\n`;
+      }
+      await safeSend(chatId, mapMsg, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    if (!arg) {
+      await safeSend(chatId, `*Forensic Relay Engine*\n\n` +
+        `Usage:\n` +
+        `/relay [domain] — scan domain, design sequence, generate prompt\n` +
+        `/relay prompt — show last generated master prompt\n` +
+        `/relay map — show deception taxonomy\n\n` +
+        `Example: /relay finance\n` +
+        `Example: /relay medicine\n` +
+        `Example: /relay education`, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    await safeSend(chatId,
+      `⛏🔬🗺 *Forensic Relay Engine — Initiating*\n\n` +
+      `Domain: *${arg}*\n\n` +
+      `_Prospector scanning for cracks..._\n` +
+      `_A.P. designing forensic sequence..._\n` +
+      `_Bypass Map selecting tactical layers..._\n\n` +
+      `_This takes 1-3 minutes._`, { parse_mode: 'Markdown' });
+
+    const result = await runForensicRelay(arg);
+    lastRelayResult = result;
+
+    const summary = formatRelayTelegram(result);
+    await safeSend(chatId, summary, { parse_mode: 'Markdown' });
+
+    if (result.files?.briefPath) {
+      await safeSend(chatId, `📄 Full briefing: \`${result.files.briefPath}\``, { parse_mode: 'Markdown' });
+    }
+
+  } catch (e) {
+    console.error('[relay] Error:', e);
+    await safeSend(chatId, `Relay error: ${e.message}`);
+  }
+});
+
+// ── /extract — 5-Stage Extraction Cycle ─────────────────────────────────────
+
+bot.onText(/^\/extract(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const arg = (match[1] || '').trim();
+
+  try {
+    if (!arg) {
+      await safeSend(chatId, `⚗️ *Extraction Cycle*\n\n` +
+        `7-stage deep extraction: Dissolve → Excavate → Assay → Converge → Synthesize → Surface → Tribunal\n\n` +
+        `Usage:\n` +
+        `/extract [domain] — run full cycle on one domain\n` +
+        `/extract [domain1], [domain2], ... — run cycle across multiple domains\n\n` +
+        `Example: /extract nutrition\n` +
+        `Example: /extract finance, medicine, education`, { parse_mode: 'Markdown' });
+      return;
+    }
+
+    const domains = arg.split(',').map(d => d.trim()).filter(Boolean);
+
+    await safeSend(chatId,
+      `⚗️ *Extraction Cycle — Initiating*\n\n` +
+      `Domains: *${domains.join(', ')}*\n\n` +
+      `Stage 1: Dissolve (forensic relay + meta-questions)\n` +
+      `Stage 2: Excavate (forgotten shelf)\n` +
+      `Stage 3: Assay (epistemic triage)\n` +
+      `Stage 4: Converge (cross-domain signals)\n` +
+      `Stage 5: Synthesize (replacement framework)\n` +
+      `Stage 6: Surface (Cathedral connections + living threads)\n` +
+      `Stage 7: Tribunal (multi-perspective verification)\n\n` +
+      `_This takes 8-20 minutes per domain._`, { parse_mode: 'Markdown' });
+
+    const results = await runExtractionCycle(domains);
+    const summary = formatCycleTelegram(results);
+    await safeSend(chatId, summary, { parse_mode: 'Markdown' });
+
+    if (results.files?.report) {
+      await safeSend(chatId, `📄 Full report: \`${results.files.report}\``, { parse_mode: 'Markdown' });
+    }
+
+  } catch (e) {
+    console.error('[extract] Error:', e);
+    await safeSend(chatId, `Extraction error: ${e.message}`);
   }
 });

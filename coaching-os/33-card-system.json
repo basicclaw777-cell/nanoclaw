@@ -1,0 +1,665 @@
+{
+  "_source": "The 33-Card Boxing Operating System — Basic Reflex",
+  "_authority": "Paul Logan — Head Coach. Living data model. Paul changes it, all views obey.",
+  "_updated": "2026-06-24",
+  "_schema": "Each card has: identity, client layer, technical layer, live thread layer, coach layer, online course layer (bookworm/driller/flow). Pillar 1 populated from block-config.json + 10-blocks-live-thread.md. Pillars 2-3 skeleton — content fills over time.",
+
+  "frequencies": [
+    {"row": 1,  "theme": "Awareness",     "principle": "Preparation before action"},
+    {"row": 2,  "theme": "Movement",      "principle": "The body in motion"},
+    {"row": 3,  "theme": "First Contact", "principle": "Engaging the opponent"},
+    {"row": 4,  "theme": "Arsenal",       "principle": "Expanding the toolkit"},
+    {"row": 5,  "theme": "Expression",    "principle": "Finding your voice — the emotional pivot"},
+    {"row": 6,  "theme": "Timing",        "principle": "When matters more than what"},
+    {"row": 7,  "theme": "Under Load",    "principle": "Performance under pressure"},
+    {"row": 8,  "theme": "Space",         "principle": "Controlling the environment"},
+    {"row": 9,  "theme": "Intelligence",  "principle": "Reading and deciding"},
+    {"row": 10, "theme": "Mastery",       "principle": "Independence — the coach steps back"}
+  ],
+
+  "mindsets": [
+    {
+      "id": "bookworm",
+      "name": "Bookworm",
+      "icon": "📖",
+      "question": "Why does this work?",
+      "description": "Study the game. Watch. Absorb. Understand the why before the how.",
+      "role_in_course": "The learning mode — video, whiteboard, explanation content per card"
+    },
+    {
+      "id": "driller",
+      "name": "Driller",
+      "icon": "🔨",
+      "question": "Can I do this without thinking?",
+      "description": "Repeat the game. Reps. Muscle memory. Make the technique disappear into reflex.",
+      "role_in_course": "The practice mode — timed drills, follow-along, rep targets per card"
+    },
+    {
+      "id": "flow",
+      "name": "Flow",
+      "icon": "🌊",
+      "question": "What happens if I let go?",
+      "description": "Play the game. Improvise. React. Let everything you've built run on its own.",
+      "role_in_course": "The application mode — challenges, film-yourself assignments, live sparring tasks per card"
+    }
+  ],
+
+  "pillars": {
+    "skill": {
+      "id": "skill",
+      "name": "The 10 Blocks",
+      "subtitle": "How to box",
+      "teaches": "The craft"
+    },
+    "sparring": {
+      "id": "sparring",
+      "name": "The 10 Sparring Blocks",
+      "subtitle": "How to apply boxing",
+      "teaches": "Adaptation"
+    },
+    "conditioning": {
+      "id": "conditioning",
+      "name": "The 10 Conditioning Blocks",
+      "subtitle": "How to sustain boxing",
+      "teaches": "Capacity"
+    }
+  },
+
+  "cards": [
+
+    {
+      "num": 1, "pillar": "skill", "name": "Foundation",
+      "client": {
+        "unlock": "I look like I belong here.",
+        "tags": ["Guard", "Stance", "Mindset"],
+        "sell": "Walk into any gym and your guard says you've trained. Posture changes. Shoulders drop. Chin tucks."
+      },
+      "technical": {
+        "focus": "Guard position, mindset",
+        "stage": "0-1",
+        "sessions_to_advance": 4,
+        "session_types": ["class", "padwork", "technique"],
+        "punches": [],
+        "defenses": [],
+        "footwork": [],
+        "maxComboLength": 0,
+        "engine": "Body+Mind",
+        "gate": "Hold a correct guard for a full round, hands up, calm and ready — stance and mindset set.",
+        "gateCriteria": [
+          {"id": "guard_hold", "behaviour": "Maintain correct guard position for full 3-min round", "detectable": "auto"},
+          {"id": "stance_width", "behaviour": "Feet shoulder-width, weight balanced", "detectable": "auto"},
+          {"id": "calm_ready", "behaviour": "No freezing, no panic posture, breathing controlled", "detectable": "coach"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Have you ever held something so well you forgot you were holding it? That's what a guard should feel like.",
+        "surprise": "No punches. At all. The student expected to hit things on day one. Instead they learn that the guard position — just standing correctly — is hard.",
+        "discovery": "Their body has a default position, and it's wrong. Not bad — just untrained. The guard is the first time they feel what correct feels like.",
+        "threadToNext": "You can hold the position. But can you hold it while moving? That's the real question — because in a fight, nobody stands still.",
+        "studentQuestion": "Why does it feel so different when I move?"
+      },
+      "coach": {
+        "teachingNotes": "Name something specific about each student: natural balance, relaxed hands. They expected to be taught. Instead they were SEEN.",
+        "commonMistakes": ["Rushing to punches too early", "Letting students grip too tight", "Not correcting chin position"],
+        "coachGate": "Can you hold a new student's attention for a full session with zero punches and leave them wanting more?",
+        "demonstrations": ["Guard position from front and side", "Weight distribution check", "Relaxed vs tense hands comparison"]
+      },
+      "online": {
+        "bookworm": {"topic": "Why the guard exists — the resting state every technique starts from and returns to", "videoIdea": "Coach Paul shows what happens when guard is wrong vs right under pressure"},
+        "driller": {"drill": "Guard hold for time — 3 rounds of 3 minutes, checking chin/hands/elbows between rounds", "duration": "12 min"},
+        "flow": {"challenge": "Film yourself holding guard for 3 minutes. Watch it back. What drops first — hands, chin, or elbows?"}
+      }
+    },
+
+    {
+      "num": 2, "pillar": "skill", "name": "Level",
+      "client": {
+        "unlock": "I can move like a fighter.",
+        "tags": ["Footwork", "Balance"],
+        "sell": "Light on your feet, balanced, in control of your space. First time you feel athletic doing this."
+      },
+      "technical": {
+        "focus": "Footwork fundamentals",
+        "stage": "1-2",
+        "sessions_to_advance": 6,
+        "session_types": ["class", "padwork", "technique"],
+        "punches": [],
+        "defenses": [],
+        "footwork": ["step"],
+        "maxComboLength": 0,
+        "engine": "Body",
+        "gate": "Move in every direction in balance with guard intact — no crossing feet, range kept.",
+        "gateCriteria": [
+          {"id": "4dir_movement", "behaviour": "Move forward, back, left, right without crossing feet", "detectable": "auto"},
+          {"id": "guard_during_move", "behaviour": "Guard stays up during all directional movement", "detectable": "auto"},
+          {"id": "balance_on_stop", "behaviour": "Balanced stance on every stop", "detectable": "hybrid"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Your guard was solid when you stood still. Watch what happens when you take a step.",
+        "surprise": "Movement destroys the guard they just built. Weight shifts, hands drop, chin comes up.",
+        "discovery": "Footwork isn't about the feet. It's about where the weight goes. The metatarsus. The smallest possible elevation.",
+        "threadToNext": "You can move and hold your guard. You've been wanting to throw a punch since you got here. Here's why we waited.",
+        "studentQuestion": "What happens when I add a punch to this movement?"
+      },
+      "coach": {
+        "teachingNotes": "Let them feel the guard collapse on first step — don't correct immediately. The problem IS the lesson.",
+        "commonMistakes": ["Crossing feet", "Bouncing too high", "Leaning forward on advance"],
+        "coachGate": "Can you diagnose whether a student's footwork problem is in the feet, the weight, or the guard?",
+        "demonstrations": ["Heavy step vs light step comparison", "Four-direction movement drill", "Metatarsus weight placement"]
+      },
+      "online": {
+        "bookworm": {"topic": "Why footwork isn't about feet — weight transfer and the metatarsus", "videoIdea": "Slow-mo comparison: heavy step vs fighter step"},
+        "driller": {"drill": "4-direction movement drill — 3 rounds, maintain guard, partner calls direction changes", "duration": "10 min"},
+        "flow": {"challenge": "Shadow box using ONLY footwork for 2 rounds. No punches. Film it — can you see weight shifting or stomping?"}
+      }
+    },
+
+    {
+      "num": 3, "pillar": "skill", "name": "Angle",
+      "client": {
+        "unlock": "I can hit things.",
+        "tags": ["Jab", "Cross", "Turns"],
+        "sell": "The thing they came for. Jab and cross on pads — the sound, the impact, the sweat."
+      },
+      "technical": {
+        "focus": "Straight punches + turns",
+        "stage": "2-3",
+        "sessions_to_advance": 8,
+        "session_types": ["class", "padwork", "technique"],
+        "punches": ["jab", "body_jab", "cross", "body_cross"],
+        "defenses": ["parry", "catch"],
+        "footwork": ["step", "snap"],
+        "maxComboLength": 2,
+        "engine": "Body",
+        "gate": "Throw straight punches off a turn/angle and return to guard, on balance.",
+        "gateCriteria": [
+          {"id": "jab_on_angle", "behaviour": "Throw jab after pivot/turn, land clean", "detectable": "auto"},
+          {"id": "cross_on_angle", "behaviour": "Throw cross after pivot/turn, land clean", "detectable": "auto"},
+          {"id": "return_to_guard", "behaviour": "Hands return to guard after every punch", "detectable": "auto"},
+          {"id": "balance_after_punch", "behaviour": "On balance after punch", "detectable": "hybrid"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "You've been holding your fists for two blocks. Put this one out straight — and feel where your weight goes.",
+        "surprise": "The jab barely commits any weight. The cross commits everything. Every action has a consequence that determines what you can do next.",
+        "discovery": "The weight-state relay. Throw a cross, weight commits forward. Can't throw another cross. But you CAN throw a hook. The punch chose the next punch.",
+        "threadToNext": "Straight punches travel in a line. But what about when someone is right in front of you, too close for a straight line?",
+        "studentQuestion": "How do I hit someone who's inside my straight line?"
+      },
+      "coach": {
+        "teachingNotes": "The Cuban surprise: 38% legs, 37% trunk, only 24% arm. They're not punching with their hand — they're punching with their whole body.",
+        "commonMistakes": ["Arm punching (no hip rotation)", "Not returning to guard between punches", "Overreaching on the cross"],
+        "coachGate": "Can you explain the weight-state relay to a beginner without using jargon?",
+        "demonstrations": ["Jab weight vs cross weight comparison", "1-2 on pads with hip rotation emphasis", "What happens after a cross — weight position"]
+      },
+      "online": {
+        "bookworm": {"topic": "The weight-state relay — why each punch creates the next one", "videoIdea": "Coach Paul throws 1-2 in slow motion, narrating the weight shift"},
+        "driller": {"drill": "100 jabs, 100 crosses, then 50 1-2s. Focus: guard return, hip rotation, balance", "duration": "15 min"},
+        "flow": {"challenge": "3 rounds of shadow boxing with jab and cross only. Film round 3 — are you still rotating or just arm punching?"}
+      }
+    },
+
+    {
+      "num": 4, "pillar": "skill", "name": "Inside",
+      "client": {
+        "unlock": "I've got every punch.",
+        "tags": ["Hooks", "Uppercuts", "Body"],
+        "sell": "Full arsenal. Pad rounds feel REAL now. Combinations flow."
+      },
+      "technical": {
+        "focus": "Hooks, crosses, body work",
+        "stage": "2-3",
+        "sessions_to_advance": 8,
+        "session_types": ["class", "padwork", "technique"],
+        "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
+        "defenses": ["parry", "catch", "front_block", "hook_block", "body_block"],
+        "footwork": ["step", "snap", "pop"],
+        "maxComboLength": 3,
+        "engine": "Body",
+        "gate": "Land hooks, crosses and body shots in close while protecting the centerline.",
+        "gateCriteria": [
+          {"id": "hook_land", "behaviour": "Land lead hook with correct form (elbow at 90°)", "detectable": "auto"},
+          {"id": "body_shot_level", "behaviour": "Drop level on body shots (knees bend, not waist bend)", "detectable": "hybrid"},
+          {"id": "centerline_guard", "behaviour": "Non-punching hand protects chin during close-range exchanges", "detectable": "auto"},
+          {"id": "combo_variety", "behaviour": "Throw 3-punch combos mixing head and body targets", "detectable": "auto"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Throw your jab. Now step closer. Throw it again. Doesn't work, does it? You're too close.",
+        "surprise": "The hook exists because geometry demands it. At close range, straight punches are physically impossible. The hook isn't a new technique — it's the ANSWER to a problem.",
+        "discovery": "All punches are now available. They're not separate things — they're solutions to different problems of distance and angle.",
+        "threadToNext": "You've got all the tools. But you're throwing them at the same speed, same timing. Your opponent can read you like a clock.",
+        "studentQuestion": "How do I become unpredictable?"
+      },
+      "coach": {
+        "teachingNotes": "Hit the body and the head drops. The head drops and the uppercut is there. Frame it as problem-solving, not technique collecting.",
+        "commonMistakes": ["Wide hooks (arm too straight)", "Bending at waist instead of knees for body shots", "Dropping guard hand during hooks"],
+        "coachGate": "Can you teach a student all 10 punches as solutions to problems rather than a list of techniques?",
+        "demonstrations": ["Close-range geometry — why straights fail", "Body-head combination flow", "The weight-state relay with all punch types"]
+      },
+      "online": {
+        "bookworm": {"topic": "Geometry of distance — every punch exists because physics demands it", "videoIdea": "Coach Paul at three distances showing which punches are possible at each"},
+        "driller": {"drill": "3-punch combos mixing levels: 1-2-body hook, jab-body jab-uppercut, cross-hook-cross. 5 rounds", "duration": "15 min"},
+        "flow": {"challenge": "Bag work: 3 rounds where every combo must include at least one body shot. Film it — are you bending your knees or your back?"}
+      }
+    },
+
+    {
+      "num": 5, "pillar": "skill", "name": "Rhythm",
+      "client": {
+        "unlock": "I'm actually sparring.",
+        "tags": ["Timing", "Broken Rhythm", "Music"],
+        "sell": "Boxing stops feeling mechanical and starts feeling like PLAY. The drumming connection."
+      },
+      "technical": {
+        "focus": "Timing, broken rhythm",
+        "stage": "3",
+        "sessions_to_advance": 10,
+        "boutMinimum": 3,
+        "session_types": ["class", "padwork", "technique", "sparring"],
+        "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
+        "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "bob_weave_left", "bob_weave_right"],
+        "footwork": ["step", "snap", "pop", "reset", "beat"],
+        "maxComboLength": 5,
+        "rhythmEngineUnlocked": true,
+        "engine": "Emotion",
+        "gate": "Break rhythm to land while staying composed under live exchange — the 4→5 wall: the emotion engine.",
+        "gateCriteria": [
+          {"id": "rhythm_break", "behaviour": "Change tempo mid-combo (pause-then-punch or double-up)", "detectable": "hybrid"},
+          {"id": "composure_under_fire", "behaviour": "Maintain guard and form when opponent pressures", "detectable": "coach"},
+          {"id": "live_exchange_land", "behaviour": "Land clean scoring punch during live sparring exchange", "detectable": "hybrid"},
+          {"id": "recovery_after_hit", "behaviour": "Reset stance and guard within 2 seconds of taking a clean shot", "detectable": "coach"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Tap this rhythm on the bag: one-two-one-one. Again. Faster. Now throw it as jab-cross-jab-jab. Feel that?",
+        "surprise": "Boxing IS drumming. The paradiddle is a combination. Musical subdivision controls punch speed.",
+        "discovery": "Rhythm is a weapon. Three at the same speed then the fourth at double time — the opponent can't adjust. The broken rhythm is the first moment the student feels like they're PLAYING.",
+        "threadToNext": "You can attack with rhythm. But what happens when someone attacks YOU? Right now you block and then think. What if the block itself loaded your counter?",
+        "studentQuestion": "Can defense be the beginning of attack, not the end of it?"
+      },
+      "coach": {
+        "teachingNotes": "The drumming-brain connection: their brain already knows these rhythms from tapping tables. Connect that existing skill to their fists. This is the biggest emotional shift in the curriculum.",
+        "commonMistakes": ["Students rushing through combinations at one speed", "Panic when first sparring — losing all technique", "Not allowing the musical feeling to develop"],
+        "coachGate": "Can you use a musical metaphor to unlock a student's timing in under 60 seconds?",
+        "demonstrations": ["Paradiddle on bag → same rhythm as punches", "Same combo at constant speed vs broken rhythm", "Live pad round with tempo changes"]
+      },
+      "online": {
+        "bookworm": {"topic": "Boxing as music — paradiddles, subdivision, broken rhythm as weapon", "videoIdea": "Split screen: drummer playing paradiddle / Coach Paul throwing same rhythm as punches"},
+        "driller": {"drill": "Metronome drill — set BPM, throw combos on beat for 2 rounds, then deliberately break the beat for 1 round", "duration": "12 min"},
+        "flow": {"challenge": "Spar 3 rounds. In round 2, deliberately change your speed mid-combo at least 5 times. Film it — can a viewer predict when your punches land?"}
+      }
+    },
+
+    {
+      "num": 6, "pillar": "skill", "name": "Counter",
+      "client": {
+        "unlock": "Getting hit doesn't scare me.",
+        "tags": ["Defence=Attack", "Identity Shift"],
+        "sell": "Slip-counter feels like a superpower. Students fall in love with boxing here."
+      },
+      "technical": {
+        "focus": "Defense-to-offense integration",
+        "stage": "3-4",
+        "sessions_to_advance": 10,
+        "boutMinimum": 4,
+        "session_types": ["class", "padwork", "technique", "sparring"],
+        "punches": ["jab", "body_jab", "cross", "body_cross", "lead_hook", "body_hook", "rear_hook", "lead_uppercut", "rear_uppercut", "body_uppercut_lead", "body_uppercut_rear", "shovel_hook", "overhand"],
+        "defenses": ["parry", "catch", "front_block", "hook_block", "body_block", "slip_left", "slip_right", "duck", "pull_back", "bob_weave_left", "bob_weave_right", "shoulder_roll"],
+        "footwork": ["step", "snap", "pop", "reset", "beat"],
+        "maxComboLength": 5,
+        "engine": "Mind+Body",
+        "gate": "Defend and counter in one motion — defense becomes offense.",
+        "gateCriteria": [
+          {"id": "slip_counter", "behaviour": "Slip then counter-punch within 1 second", "detectable": "auto"},
+          {"id": "parry_counter", "behaviour": "Parry incoming and return fire before opponent resets", "detectable": "auto"},
+          {"id": "block_counter", "behaviour": "Block then immediately counter", "detectable": "hybrid"},
+          {"id": "defense_variety", "behaviour": "Use 3+ different defensive responses in one sparring round", "detectable": "coach"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "I'm going to throw a jab at you. Slip right. Now look where your weight is. That cross is already loaded.",
+        "surprise": "Correct defense automatically loads a counter. Defense IS attack — they're the same thing.",
+        "discovery": "The slip-right to cross is one movement, not two decisions. The student who was afraid of getting hit now WANTS to be attacked.",
+        "threadToNext": "Beautiful. Now do that when you're exhausted. Round three, legs burning. Can you still slip-cross when everything says just cover up?",
+        "studentQuestion": "Am I actually this good, or does it only work when I'm fresh?"
+      },
+      "coach": {
+        "teachingNotes": "This is where the identity shift happens. The student stops flinching and starts HUNTING. Biggest psychological transformation in the curriculum.",
+        "commonMistakes": ["Treating defense and counter as separate actions", "Flinching instead of slipping", "Only countering with one response"],
+        "coachGate": "Can you create the environment where a nervous student has their first successful counter and FEELS the shift?",
+        "demonstrations": ["Slip right → cross as single motion", "Four defense outputs: counter loaded, frame disrupted, opponent exposed, positional intelligence", "Live sparring showing hunt-mode"]
+      },
+      "online": {
+        "bookworm": {"topic": "The four outputs of defense — why getting attacked is an opportunity", "videoIdea": "Coach Paul walks through slip-counter in slow motion, narrating the weight loading"},
+        "driller": {"drill": "Partner throws jab, you slip-counter. 20 reps each side. Then parry-counter 20 reps. Then block-counter 20 reps", "duration": "15 min"},
+        "flow": {"challenge": "Spar 3 rounds with ONE rule: you cannot throw first. Everything must be a counter. Film it — which round felt best?"}
+      }
+    },
+
+    {
+      "num": 7, "pillar": "skill", "name": "Pressure",
+      "client": {
+        "unlock": "I perform when it's hard.",
+        "tags": ["Fatigue", "Composure"],
+        "sell": "Real toughness. Not gym-selfie toughness — the kind where your lungs scream and your technique holds."
+      },
+      "technical": {
+        "focus": "Technique under fatigue",
+        "stage": "4",
+        "sessions_to_advance": 12,
+        "boutMinimum": 5,
+        "session_types": ["class", "padwork", "sparring"],
+        "engine": "Emotion+Body",
+        "gate": "Hold technique and composure under fatigue — form doesn't collapse late in the round.",
+        "gateCriteria": [
+          {"id": "late_round_form", "behaviour": "Guard height and punch form maintained in final 30 seconds of round 3+", "detectable": "auto"},
+          {"id": "fatigue_composure", "behaviour": "No wild swinging or panic when tired", "detectable": "coach"},
+          {"id": "technique_under_load", "behaviour": "Execute clean 3-punch combo after 2 minutes of continuous work", "detectable": "hybrid"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Today we're going three hard rounds. I don't care about new technique. I care about whether your technique survives.",
+        "surprise": "No new techniques at all. Fatigue reveals who they really are.",
+        "discovery": "The distinction between 'I know this' and 'I can do this when it counts.' Discipline carried them here. Now composure has to develop.",
+        "threadToNext": "You survived pressure. But you survived it in the middle of the ring where you had room. What happens when they push you to the ropes?",
+        "studentQuestion": "What do I do when I can't back up anymore?"
+      },
+      "coach": {
+        "teachingNotes": "The parallel curriculum becomes visible: discipline → composure → confidence. Watch what collapses first under fatigue — that's the diagnostic.",
+        "commonMistakes": ["Introducing new techniques in this block", "Not pushing hard enough — pressure must be real", "Ignoring the psychological curriculum"],
+        "coachGate": "Can you push a student to genuine fatigue while keeping the environment safe and the learning active?",
+        "demonstrations": ["What good technique under fatigue looks like vs collapse", "The hierarchy of collapse: pivots drop first, then head movement, then guard"]
+      },
+      "online": {
+        "bookworm": {"topic": "Discipline → Composure → Confidence — the psychological progression", "videoIdea": "Side-by-side: fresh technique vs round-3 technique. What stayed? What collapsed?"},
+        "driller": {"drill": "Burnout rounds: 30 seconds all-out on bag, 30 seconds clean combination work. 6 rounds. Quality of the combos is the score, not the burnout", "duration": "12 min"},
+        "flow": {"challenge": "Spar 4 rounds (not 3). Film round 4. Watch it — is your guard up? Are you still rotating? That's your real level."}
+      }
+    },
+
+    {
+      "num": 8, "pillar": "skill", "name": "Escape",
+      "client": {
+        "unlock": "Nothing traps me.",
+        "tags": ["Ring Craft", "Pivots"],
+        "sell": "Ropes, corners, pressure — nothing traps you. The feeling of being cornered and CHOOSING where to go."
+      },
+      "technical": {
+        "focus": "Ring craft, rope/corner escape",
+        "stage": "4-5",
+        "sessions_to_advance": 12,
+        "boutMinimum": 6,
+        "session_types": ["class", "sparring"],
+        "engine": "Emotion",
+        "gate": "Get off the ropes / out of the corner under pressure without panicking.",
+        "gateCriteria": [
+          {"id": "rope_escape", "behaviour": "Escape ropes using footwork (pivot out, not push through)", "detectable": "coach"},
+          {"id": "corner_escape", "behaviour": "Exit corner under pressure using angle/pivot", "detectable": "coach"},
+          {"id": "escape_composure", "behaviour": "No panicked clinching or turning away during escape", "detectable": "coach"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Stand with your back to the ropes. Feel that? You're trapped. Now — which way do you go? Not backward. Never backward.",
+        "surprise": "Ropes aren't walls — they're springboards. Corners aren't traps — they're setups for lateral movement.",
+        "discovery": "The escape is a lie — you were moving to where YOU wanted to be. Balmaseda: all movements must follow a circular, not linear, path.",
+        "threadToNext": "You can escape anything. You can attack, defend, counter, survive fatigue, and control the ring. One thing left: can you read the PERSON?",
+        "studentQuestion": "How do I see what they're going to do before they do it?"
+      },
+      "coach": {
+        "teachingNotes": "The ring is a chessboard and every position means something. Frame escapes as repositioning, not retreating.",
+        "commonMistakes": ["Students trying to push through instead of pivoting", "Panicked clinching", "Straight-line retreat instead of circular movement"],
+        "coachGate": "Can you create controlled pressure situations where the student discovers the escape themselves?",
+        "demonstrations": ["Rope escape: pivot out vs push through", "Corner escape with lateral combination", "The ring as chessboard — position value"]
+      },
+      "online": {
+        "bookworm": {"topic": "The ring as a weapon — spatial intelligence and circular movement", "videoIdea": "Overhead camera showing ring positions and escape paths"},
+        "driller": {"drill": "Partner pins you on ropes, you escape with pivot + combination. 10 reps each side. Then corner escapes 10 reps", "duration": "15 min"},
+        "flow": {"challenge": "Spar with a rule: opponent must try to trap you on ropes/corner. You must escape without clinching. Film 3 rounds."}
+      }
+    },
+
+    {
+      "num": 9, "pillar": "skill", "name": "Control",
+      "client": {
+        "unlock": "I can read people.",
+        "tags": ["Pattern Read", "Strategy"],
+        "sell": "See patterns, exploit habits, dictate pace. This skill walks out of the gym with them."
+      },
+      "technical": {
+        "focus": "Strategy, opponent reading",
+        "stage": "5",
+        "sessions_to_advance": 15,
+        "boutMinimum": 8,
+        "session_types": ["sparring"],
+        "engine": "Mind",
+        "gate": "Read and control a sparring partner — impose pace, dictate the exchanges.",
+        "gateCriteria": [
+          {"id": "pace_control", "behaviour": "Dictate the tempo of a round", "detectable": "coach"},
+          {"id": "pattern_read", "behaviour": "Identify and exploit opponent habit mid-round", "detectable": "coach"},
+          {"id": "range_control", "behaviour": "Maintain preferred fighting distance for majority of round", "detectable": "hybrid"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Watch your partner spar for 30 seconds. Don't throw anything. Just watch. What do they do when they're nervous?",
+        "surprise": "The best fighters don't hit harder — they see more. Boxing is reading. Diagnostic empathy applied to an opponent.",
+        "discovery": "The student stops reacting and starts AUTHORING — choosing what the opponent does by presenting stimuli that trigger predictable responses.",
+        "threadToNext": "You can read one opponent. But every opponent is different. Can you walk into a ring with someone you've never seen and solve the puzzle in real time?",
+        "studentQuestion": "Can I do this with anyone?"
+      },
+      "coach": {
+        "teachingNotes": "Connect to the Belonging Gate: 'You're doing what I did on your first day — reading someone. Same skill, different application.' The guardia camuflada lives here.",
+        "commonMistakes": ["Students who only look for one pattern", "Confusing aggression with control", "Not allowing observation time before action"],
+        "coachGate": "Can you set up a sparring session where the student discovers opponent reading without being told to look for it?",
+        "demonstrations": ["30-second observation exercise", "The guardia camuflada — showing openings that aren't there", "Pattern exploitation in live sparring"]
+      },
+      "online": {
+        "bookworm": {"topic": "Diagnostic empathy as a fighting tool — reading patterns, dictating pace, the disguised guard", "videoIdea": "Coach Paul annotates a sparring clip, pausing to show every habit and how to exploit it"},
+        "driller": {"drill": "Watch 3 rounds of sparring footage. Write down every habit you see. Compare notes with a partner. Who spotted more?", "duration": "20 min"},
+        "flow": {"challenge": "Spar 3 rounds. Round 1: only observe, minimal output. Round 2: exploit ONE habit you found. Round 3: full flow. Film all three."}
+      }
+    },
+
+    {
+      "num": 10, "pillar": "skill", "name": "Arena",
+      "client": {
+        "unlock": "I don't need the coach.",
+        "tags": ["Independence"],
+        "sell": "The coach steps back. You solve problems in real time. You ARE a boxer."
+      },
+      "technical": {
+        "focus": "Full integration, independence",
+        "stage": "5-6",
+        "sessions_to_advance": 0,
+        "boutMinimum": 10,
+        "session_types": ["sparring"],
+        "engine": "All three",
+        "gate": "Spar independently, integrating all three engines — the coach steps back.",
+        "gateCriteria": [
+          {"id": "independent_spar", "behaviour": "Complete 3 rounds without coach intervention", "detectable": "coach"},
+          {"id": "self_adjust", "behaviour": "Make tactical adjustment mid-fight without being told", "detectable": "coach"},
+          {"id": "three_engine_integration", "behaviour": "Demonstrate body technique + mental strategy + emotional composure in same round", "detectable": "coach"}
+        ]
+      },
+      "liveThread": {
+        "openingQuestion": "Today I'm not coaching you. I'm watching. Show me what you've got.",
+        "surprise": "There's nothing left to teach. The student expected the final level. What they got was independence.",
+        "discovery": "They're a boxer. The three mindsets (Bookworm/Driller/Flow) are available on demand. They can coach others.",
+        "threadToNext": "Mastery isn't the end. It's where the thread branches. Every pass reveals something the last one missed.",
+        "studentQuestion": "What's next? — The thread becomes a spiral."
+      },
+      "coach": {
+        "teachingNotes": "The Walls of Uruk moment: Day One photo on the wall with gold border. They see how far they've come because they lived every step.",
+        "commonMistakes": ["Intervening when you should stay quiet", "Not creating the ceremony of stepping back", "Rushing students to this block"],
+        "coachGate": "Can you watch a student spar three rounds and say nothing — because they don't need you?",
+        "demonstrations": ["The coach stepping back — the visual of independence", "Student-led warm-up and sparring session"]
+      },
+      "online": {
+        "bookworm": {"topic": "The three engines in concert — body + mind + emotion as one system", "videoIdea": "Coach Paul narrates a full sparring round, showing all three engines firing"},
+        "driller": {"drill": "Self-directed 5-round session: you pick the focus for each round, warm yourself up, cool yourself down. No external direction", "duration": "25 min"},
+        "flow": {"challenge": "Spar with someone new — someone you've never trained with. Film all rounds. Watch it back: did you solve the puzzle without help?"}
+      }
+    },
+
+    {"num": 1, "pillar": "sparring", "name": "Seeing",
+      "client": {"unlock": "I can see what's coming.", "tags": ["Eyes", "Distance"], "sell": "Your eyes learn where to look. Punches stop being invisible."},
+      "technical": {"focus": "Visual awareness, reading incoming", "sessions_to_advance": 4, "gate": "Track incoming punches without flinching — eyes stay open, head stays calm."},
+      "liveThread": {"openingQuestion": "Where are you looking right now? Most people look at the gloves. Wrong place.", "surprise": "You watch the chest/shoulders, not the hands. The punch starts before the fist moves."},
+      "coach": {"teachingNotes": "Chest-watching drill. Students are shocked how much earlier they see punches.", "coachGate": "Can you show a student the difference between hand-watching and chest-watching in under 2 minutes?"},
+      "online": {"bookworm": {"topic": "Where to look — chest vs hands, why peripheral vision matters"}, "driller": {"drill": "Partner throws random singles. Call out the punch BEFORE it lands. 3 rounds"}, "flow": {"challenge": "Spar 2 rounds. Round 1: watch hands. Round 2: watch chest. Which felt calmer?"}}
+    },
+
+    {"num": 2, "pillar": "sparring", "name": "Catching",
+      "client": {"unlock": "I can catch punches.", "tags": ["Hands", "Timing"], "sell": "Punches land in your gloves, not on your face. First defensive confidence."},
+      "technical": {"focus": "Glove catching, basic parry timing", "sessions_to_advance": 6, "gate": "Catch 3 out of 5 single punches cleanly without retreating."},
+      "liveThread": {"openingQuestion": "I'm going to throw at you. Don't move your feet. Just catch it in your glove.", "surprise": "It doesn't hurt. The glove does the work. The fear was worse than the reality."},
+      "coach": {"teachingNotes": "The fear barrier. Most students' first time receiving a punch. Keep it light, build trust.", "coachGate": "Can you throw light enough that a nervous beginner's first catch is a success, not a scare?"},
+      "online": {"bookworm": {"topic": "The catch — why it's the first defense you learn and the last one you lose"}, "driller": {"drill": "Partner throws 50 jabs, you catch. Then 50 crosses. Count your clean catches"}, "flow": {"challenge": "Spar 1 round using ONLY catches for defense. No movement, no slips. How many did you get?"}}
+    },
+
+    {"num": 3, "pillar": "sparring", "name": "Blocking",
+      "client": {"unlock": "I can protect myself.", "tags": ["Front Block", "Body Block"], "sell": "Hooks, body shots — you've got an answer for everything. The shell feels safe."},
+      "technical": {"focus": "Full blocking system — front, hook, body", "sessions_to_advance": 8, "gate": "Block hooks and body shots without losing guard structure."},
+      "liveThread": {"openingQuestion": "Straight punches you can catch. Hooks come from the side. Different problem — different solution.", "surprise": "Each angle of attack has its own block. The body has a solution for every incoming line."},
+      "coach": {"teachingNotes": "Build the full blocking map systematically. Front block, hook block, body block — each one for a specific angle.", "coachGate": "Can you throw combinations at a student and have them use the correct block for each angle without thinking?"},
+      "online": {"bookworm": {"topic": "The blocking map — which defense answers which angle"}, "driller": {"drill": "Partner throws random hooks and body shots. You block. 5 rounds. No countering yet"}, "flow": {"challenge": "Spar 3 rounds. Defense only — no punches back. Count how many clean shots get through. That's your score to beat."}}
+    },
+
+    {"num": 4, "pillar": "sparring", "name": "Slipping",
+      "client": {"unlock": "I can make punches miss.", "tags": ["Slip", "Duck", "Weave"], "sell": "The moment a punch goes past your head and misses. Nothing feels better."},
+      "technical": {"focus": "Head movement — slips, ducks, bobs and weaves", "sessions_to_advance": 8, "gate": "Slip or duck 3 out of 5 punches while maintaining balance and guard."},
+      "liveThread": {"openingQuestion": "Blocking works. But what if you didn't have to absorb it at all? What if it just... missed?", "surprise": "Head movement is inches, not feet. A 2-inch slip makes a punch miss completely."},
+      "coach": {"teachingNotes": "Small movements. The biggest mistake is over-slipping. Two inches is enough.", "coachGate": "Can you get a student slipping punches with minimal movement — not ducking to the floor or leaning out of range?"},
+      "online": {"bookworm": {"topic": "Why small head movement beats big head movement — inches not feet"}, "driller": {"drill": "Rope drill: slip rope side to side, 3 rounds. Then partner throws jabs, you slip. 3 rounds"}, "flow": {"challenge": "Spar 2 rounds using only head movement for defense. No blocking, no catching. Film it."}}
+    },
+
+    {"num": 5, "pillar": "sparring", "name": "Countering",
+      "client": {"unlock": "I can punish mistakes.", "tags": ["Slip-Counter", "Parry-Counter"], "sell": "They throw, they miss, they pay. The chess starts here."},
+      "technical": {"focus": "Counter-punching — defense into immediate offense", "sessions_to_advance": 10, "gate": "Counter off slip, parry, and block in live exchanges."},
+      "liveThread": {"openingQuestion": "Every defense you've learned loads a counter. You just didn't know it yet.", "surprise": "Defense and attack are the same movement. One flow, not two decisions."},
+      "coach": {"teachingNotes": "The identity shift from Block 6 Skill carries here. Reinforce: every attack against you is an opportunity.", "coachGate": "Can you create drills where the counter is discovered, not instructed?"},
+      "online": {"bookworm": {"topic": "The four counter families: slip-counter, parry-counter, block-counter, pull-counter"}, "driller": {"drill": "4 stations, 3 minutes each: slip-cross, parry-cross, block-hook, pull-cross. Rotate"}, "flow": {"challenge": "Spar 3 rounds. Score yourself: how many successful counters per round? Aim for 3+."}}
+    },
+
+    {"num": 6, "pillar": "sparring", "name": "Range",
+      "client": {"unlock": "I control the distance.", "tags": ["Long", "Mid", "Close"], "sell": "You decide whether it's a boxing match, a phone booth fight, or a chess match."},
+      "technical": {"focus": "Range management — long, mid, close", "sessions_to_advance": 10, "gate": "Maintain preferred range against an opponent trying to change it."},
+      "liveThread": {"openingQuestion": "There are three fights happening at three distances. Which one do you want?", "surprise": "Range isn't fixed — you CHOOSE it. Controlling distance is controlling the fight."},
+      "coach": {"teachingNotes": "Show how the same opponent becomes easy or hard depending on range. Tall fighters want long. Short fighters want close. What does THIS student want?", "coachGate": "Can you diagnose which range suits a student's body type and style, then drill them to hold it?"},
+      "online": {"bookworm": {"topic": "The three distances — what works at each and how to force the one you want"}, "driller": {"drill": "Partner advances, you maintain range with footwork. 3 rounds. Then switch: you advance, partner maintains"}, "flow": {"challenge": "Spar 3 rounds. Each round, choose a different range. Film it — can you see the difference?"}}
+    },
+
+    {"num": 7, "pillar": "sparring", "name": "Combinations",
+      "client": {"unlock": "I can chain attacks.", "tags": ["Flow", "Sequences"], "sell": "Single punches become sentences. Combinations become stories. You're writing the fight."},
+      "technical": {"focus": "Multi-punch sequences in live exchanges", "sessions_to_advance": 12, "gate": "Land 3+ punch combinations in sparring without losing balance or guard."},
+      "liveThread": {"openingQuestion": "One punch is a word. Two is a sentence. What's a paragraph?", "surprise": "Combinations aren't memorized sequences — they're conversations. Each punch asks a question the next one answers."},
+      "coach": {"teachingNotes": "The weight-state relay in full flow. Each punch creates the next. Let students discover combinations rather than prescribing them.", "coachGate": "Can you watch a student's natural combination tendency and extend it rather than replacing it?"},
+      "online": {"bookworm": {"topic": "Combinations as conversations — the weight-state relay in full flow"}, "driller": {"drill": "Build your own: throw a jab, feel what's loaded, throw it. 3-punch minimum. Discover 5 combos in 3 rounds"}, "flow": {"challenge": "Spar 3 rounds. No pre-planned combos. Let the weight-state relay choose. Film and count your longest clean chain."}}
+    },
+
+    {"num": 8, "pillar": "sparring", "name": "Pressure",
+      "client": {"unlock": "I can fight forward.", "tags": ["Aggression", "Control"], "sell": "Walking someone down while staying technical. Controlled aggression — the most intimidating thing in boxing."},
+      "technical": {"focus": "Forward pressure with technique", "sessions_to_advance": 12, "gate": "Apply forward pressure for a full round without losing technique or composure."},
+      "liveThread": {"openingQuestion": "So far you've been responding. What happens when YOU set the pace?", "surprise": "Pressure isn't aggression — it's controlled advancement. The best pressure fighters look calm."},
+      "coach": {"teachingNotes": "Distinguish pressure from brawling. Pressure is footwork + jab + composure. Brawling is swinging and hoping.", "coachGate": "Can you teach the difference between pressure and aggression in one drill?"},
+      "online": {"bookworm": {"topic": "Controlled pressure — why the calm fighter walking forward is the scariest opponent"}, "driller": {"drill": "3 rounds: walk opponent to ropes using only jab and footwork. No power shots. The jab is the steering wheel"}, "flow": {"challenge": "Spar 3 rounds as the pressure fighter. Film it — are you walking or rushing? Calm or wild?"}}
+    },
+
+    {"num": 9, "pillar": "sparring", "name": "Ring IQ",
+      "client": {"unlock": "I know what they'll do next.", "tags": ["Prediction", "Traps"], "sell": "You're three moves ahead. Set traps. Bait reactions. The opponent feels like you're reading their mind."},
+      "technical": {"focus": "Tactical intelligence — setting traps, baiting reactions", "sessions_to_advance": 15, "gate": "Set and execute a tactical trap in live sparring — bait a reaction and exploit it."},
+      "liveThread": {"openingQuestion": "What if you could choose what they throw? Show them an opening. They'll take it. And you'll be ready.", "surprise": "The guardia camuflada — deliberate openings that aren't really open. You're designing the fight."},
+      "coach": {"teachingNotes": "The chess layer. Connect to Block 9 Skill (Control). Same diagnostic empathy, now weaponized as prediction.", "coachGate": "Can you set up sparring where the student experiences being baited AND learns to bait?"},
+      "online": {"bookworm": {"topic": "The trap game — baiting reactions, false openings, and the guardia camuflada"}, "driller": {"drill": "Pick one trap: drop your jab hand slightly, wait for their cross, slip-counter. Run it 20 times with a partner"}, "flow": {"challenge": "Spar 3 rounds. Set at least one deliberate trap per round. Film it — did they take the bait?"}}
+    },
+
+    {"num": 10, "pillar": "sparring", "name": "Own The Round",
+      "client": {"unlock": "The round is mine.", "tags": ["Authority"], "sell": "You dictate everything — pace, range, when to engage, when to rest. You own it."},
+      "technical": {"focus": "Full round management and tactical authority", "sessions_to_advance": 0, "gate": "Dictate every aspect of a 3-minute round against a competent opponent."},
+      "liveThread": {"openingQuestion": "Every skill, every tool, every read — now run the whole thing. The round is yours.", "surprise": "There's nothing left to add. It's all integration. The student IS the system."},
+      "coach": {"teachingNotes": "Mirror of Block 10 Skill (Arena). The coach watches. Independence confirmed across both skill and application.", "coachGate": "Can you watch and say nothing for 3 full rounds?"},
+      "online": {"bookworm": {"topic": "Round ownership — the integration of every sparring skill into one continuous stream"}, "driller": {"drill": "Self-directed 5 rounds. Choose your own focus each round. Write down your plan before AND your assessment after"}, "flow": {"challenge": "Spar someone you've never faced. No prep. Solve the puzzle live. Film it — that's your graduation tape."}}
+    },
+
+    {"num": 1, "pillar": "conditioning", "name": "Skip",
+      "client": {"unlock": "My timing is sharp.", "tags": ["Rhythm", "Coordination"], "sell": "The skip rope is a boxer's metronome. It teaches timing before you even throw a punch."},
+      "technical": {"focus": "Skip rope — timing, rhythm, coordination", "sessions_to_advance": 4, "gate": "3 rounds of continuous skipping with rhythm changes."},
+      "liveThread": {"openingQuestion": "Before you can fight, you have to find your rhythm. This rope will teach you.", "surprise": "Skipping is not cardio. It's timing training disguised as cardio."},
+      "coach": {"teachingNotes": "Start with basic bounce, progress to alternating, then double-unders. The rope is the first teacher of broken rhythm.", "coachGate": "Can you use the skip rope to diagnose a student's natural rhythm and coordination?"},
+      "online": {"bookworm": {"topic": "The skip rope as timing teacher — why every boxer starts here"}, "driller": {"drill": "3 rounds: round 1 basic bounce, round 2 alternating feet, round 3 mix speeds. 30 sec fast / 30 sec slow"}, "flow": {"challenge": "Skip for 3 rounds with music. Try to change your rhythm when the beat changes. Film your feet."}}
+    },
+
+    {"num": 2, "pillar": "conditioning", "name": "Shadow Box",
+      "client": {"unlock": "I move like a fighter alone.", "tags": ["Form", "Flow"], "sell": "No bag, no partner, no pads. Just you and your reflection. The purest form of practice."},
+      "technical": {"focus": "Shadow boxing — form without feedback", "sessions_to_advance": 6, "gate": "3 rounds of shadow boxing with correct form, combination variety, and footwork."},
+      "liveThread": {"openingQuestion": "Can you box without anything to hit? This is where you meet yourself.", "surprise": "Shadow boxing is harder than hitting a bag. There's nothing to hide behind."},
+      "coach": {"teachingNotes": "Shadow boxing reveals everything — balance, habits, comfort zones. Watch what they default to when nobody is holding pads.", "coachGate": "Can you diagnose a student's weaknesses from 30 seconds of shadow boxing?"},
+      "online": {"bookworm": {"topic": "Shadow boxing — the mirror that shows your real level"}, "driller": {"drill": "3 rounds: round 1 jab-cross only, round 2 add hooks, round 3 full arsenal with footwork and defense"}, "flow": {"challenge": "Film 3 rounds of shadow boxing. Watch with the sound off. Does it look like fighting or flailing?"}}
+    },
+
+    {"num": 3, "pillar": "conditioning", "name": "Bag Work",
+      "client": {"unlock": "I can work the bag for rounds.", "tags": ["Impact", "Endurance"], "sell": "The heavy bag gives feedback. You hear it, feel it, see it swing. Real contact, real rounds."},
+      "technical": {"focus": "Heavy bag — sustained round work with technique", "sessions_to_advance": 8, "gate": "6 rounds on the heavy bag with technique maintained throughout."},
+      "liveThread": {"openingQuestion": "The bag doesn't lie. If your technique is off, you'll feel it in your wrists before your coach sees it.", "surprise": "Good bag work is quiet. Bad bag work is loud. The slap means the punch is wrong."},
+      "coach": {"teachingNotes": "Listen to the bag. Thud = good. Slap = turning the punch. Watch for wrist alignment and follow-through.", "coachGate": "Can you correct a student's punch by sound alone — without watching?"},
+      "online": {"bookworm": {"topic": "The bag as teacher — what the sound and feel tell you about your technique"}, "driller": {"drill": "6 rounds: each round has a combination theme. Round 1 straight, round 2 hooks, round 3 body, etc"}, "flow": {"challenge": "6 rounds free work. Film the last round. Is your technique the same as round 1 or has it collapsed?"}}
+    },
+
+    {"num": 4, "pillar": "conditioning", "name": "Strength",
+      "client": {"unlock": "I'm physically strong.", "tags": ["Power", "Core"], "sell": "Not bodybuilder strong. Fighter strong. Power that starts in your legs and travels through your core."},
+      "technical": {"focus": "Functional strength — ground-up power chain", "sessions_to_advance": 8, "gate": "Demonstrate power increase on bag without sacrificing technique."},
+      "liveThread": {"openingQuestion": "Where does punching power come from? Not your arms. Not even your shoulders. Show me your legs.", "surprise": "The strongest punchers have the strongest legs and core. Arms are just the delivery system."},
+      "coach": {"teachingNotes": "Squats, deadlifts, medicine ball work — all ground-up. Never isolate arms for punching power. Core is the transfer station.", "coachGate": "Can you design a strength session where every exercise directly maps to a boxing movement?"},
+      "online": {"bookworm": {"topic": "The kinetic chain — why legs and core create punching power, not arms"}, "driller": {"drill": "Circuit: squats, med ball rotations, plank, push-ups. 4 rounds, 45 sec each. Boxing-specific"}, "flow": {"challenge": "Film a power shot on the bag before and after 4 weeks of this strength work. Compare."}}
+    },
+
+    {"num": 5, "pillar": "conditioning", "name": "Punch Outs",
+      "client": {"unlock": "My hands are fast.", "tags": ["Speed", "Volume"], "sell": "Your hands become a blur. Volume punching — overwhelming output that doesn't gas you out."},
+      "technical": {"focus": "High-volume punching — speed and endurance", "sessions_to_advance": 10, "gate": "Sustain 30-second punch-out with technique intact. No arm punching."},
+      "liveThread": {"openingQuestion": "How many punches can you throw in 30 seconds? Now — how many can you throw CORRECTLY in 30 seconds?", "surprise": "Speed is not rushing. Speed is efficiency. The fastest punchers are the most relaxed."},
+      "coach": {"teachingNotes": "Quality over quantity first. Then build volume without losing quality. The fastest hands are the most relaxed hands.", "coachGate": "Can you push a student's volume up while keeping their shoulders relaxed?"},
+      "online": {"bookworm": {"topic": "Speed through relaxation — why tension kills hand speed"}, "driller": {"drill": "30-second punch-outs on bag: 5 sets. Count clean punches only. Rest 30 sec between sets"}, "flow": {"challenge": "Spar 1 round where you try to throw 50+ punches. Film it — did quality survive quantity?"}}
+    },
+
+    {"num": 6, "pillar": "conditioning", "name": "Intervals",
+      "client": {"unlock": "I recover between rounds.", "tags": ["Work:Rest", "Recovery"], "sell": "The bell rings, you sit down, and by the time it rings again you're ready. That's fight fitness."},
+      "technical": {"focus": "Work-rest intervals — fight-specific energy systems", "sessions_to_advance": 10, "gate": "Maintain output quality across 6 intervals with 1-minute rest periods."},
+      "liveThread": {"openingQuestion": "A fight isn't 36 minutes of work. It's twelve 3-minute sprints with 1-minute recoveries. Can you recover?", "surprise": "Recovery is a skill, not a gift. You can train your body to recover faster between rounds."},
+      "coach": {"teachingNotes": "Match training intervals to fight intervals: 3 min work, 1 min rest. The rest period is where you win or lose.", "coachGate": "Can you design an interval session that mimics the specific energy demands of a 4-round fight?"},
+      "online": {"bookworm": {"topic": "Fight energy systems — why interval training beats steady-state cardio for boxing"}, "driller": {"drill": "6 x 3-minute rounds with 1-minute rest. Alternate: bag work / shadow boxing. Monitor how round 6 compares to round 1"}, "flow": {"challenge": "Do the 6-round interval. Rate each round 1-10 for quality. Where does the drop happen? That's your training target."}}
+    },
+
+    {"num": 7, "pillar": "conditioning", "name": "Footwork Drills",
+      "client": {"unlock": "My feet never stop.", "tags": ["Agility", "Patterns"], "sell": "Your feet become automatic. Movement stops being something you think about and starts being something you ARE."},
+      "technical": {"focus": "Footwork patterns — agility and automaticity", "sessions_to_advance": 12, "gate": "Execute complex footwork patterns under fatigue without losing balance."},
+      "liveThread": {"openingQuestion": "Your hands are only as good as your feet. If your feet stop, everything stops.", "surprise": "Advanced footwork is not faster footwork — it's footwork that never needs to think."},
+      "coach": {"teachingNotes": "Ladder drills, cone patterns, directional changes. Make it game-like. Footwork improves fastest when it's playful.", "coachGate": "Can you design footwork drills that are challenging AND enjoyable — not just punishment?"},
+      "online": {"bookworm": {"topic": "Footwork automaticity — why drilling patterns makes movement unconscious"}, "driller": {"drill": "Ladder drill: 3 patterns x 3 rounds each. Then cone drill: 4 directions, random calls, 3 rounds"}, "flow": {"challenge": "Shadow box 3 rounds focusing ONLY on footwork. Hands stay in guard. Film your feet — are they talking or silent?"}}
+    },
+
+    {"num": 8, "pillar": "conditioning", "name": "Power Circuits",
+      "client": {"unlock": "I'm explosive.", "tags": ["Explosive", "Compound"], "sell": "Short bursts of maximum output. The difference between pushing someone and snapping them."},
+      "technical": {"focus": "Explosive power — plyometrics and compound movements", "sessions_to_advance": 12, "gate": "Maintain explosive output across a full circuit without form collapse."},
+      "liveThread": {"openingQuestion": "Strength is how hard you CAN hit. Power is how hard you hit in the moment. Speed × strength.", "surprise": "Power isn't about size. It's about how fast you can recruit muscle. The snappiest punchers are often the leanest."},
+      "coach": {"teachingNotes": "Box jumps, med ball slams, explosive push-ups, clap pull-ups. Everything fast. Form first, speed second.", "coachGate": "Can you build a power circuit that a 60kg fighter and a 90kg fighter both benefit from?"},
+      "online": {"bookworm": {"topic": "Power = force × velocity — why explosive training beats heavy lifting for boxing"}, "driller": {"drill": "5-station circuit: box jumps, med ball slams, explosive push-ups, jump squats, bag power shots. 30 sec each, 4 rounds"}, "flow": {"challenge": "Film a 3-punch combo on the bag. Then do the power circuit. Film the same combo after. Compare the snap."}}
+    },
+
+    {"num": 9, "pillar": "conditioning", "name": "High Intensity",
+      "client": {"unlock": "I can push through anything.", "tags": ["Threshold", "Mental"], "sell": "When your body says stop and your mind says go. The mental fitness that separates fighters from exercisers."},
+      "technical": {"focus": "Mental toughness under maximum physical demand", "sessions_to_advance": 15, "gate": "Complete a prescribed high-intensity session without quitting or reducing quality."},
+      "liveThread": {"openingQuestion": "Today is about the conversation between your body and your brain. Your body will say stop. What does your brain say?", "surprise": "The body quits at about 40% of its actual capacity. The remaining 60% is mental. This block trains the 60%."},
+      "coach": {"teachingNotes": "The 40% rule. Push beyond comfort but within safety. This is where composure under pressure (Block 7 Skill) meets physical capacity.", "coachGate": "Can you push a student past their perceived limit while keeping them safe and trusting you?"},
+      "online": {"bookworm": {"topic": "The 40% rule — why your body quits long before it has to and how to override it"}, "driller": {"drill": "Tabata: 8 rounds of 20 sec max effort / 10 sec rest. Exercise: bag work. Log total punch count"}, "flow": {"challenge": "Complete a session that you want to quit. Write down the moment your brain said stop. Then write what happened when you kept going."}}
+    },
+
+    {"num": 10, "pillar": "conditioning", "name": "Endurance",
+      "client": {"unlock": "I last the distance.", "tags": ["Capacity"], "sell": "12 rounds. The full distance. You're not just fit — you're fight fit. Your engine never stops."},
+      "technical": {"focus": "Full-distance conditioning — sustained output over extended rounds", "sessions_to_advance": 0, "gate": "Maintain technique and output across 10+ rounds of varied work."},
+      "liveThread": {"openingQuestion": "Anyone can be good for one round. Can you be good for twelve?", "surprise": "Endurance isn't about being tired less. It's about performing the same when you're tired as when you're fresh."},
+      "coach": {"teachingNotes": "Mirror of Block 10 Skill/Sparring. The engine matches the skill matches the application. All three pillars converge here.", "coachGate": "Can you design a 10-round session that tests everything — and the student finishes standing?"},
+      "online": {"bookworm": {"topic": "Fight fitness vs gym fitness — why 12 rounds is a different sport from a 5K run"}, "driller": {"drill": "10 rounds: alternating bag/shadow/skip/footwork/bag/shadow/strength/intervals/bag/free. Full distance"}, "flow": {"challenge": "The graduation session: 10 rounds, self-directed, self-paced. Film round 1 and round 10. Compare. That's your fitness level."}}
+    }
+  ]
+}

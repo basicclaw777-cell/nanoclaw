@@ -17,6 +17,14 @@
 - **Visual Bible** · `~/basic-reflex/visuals/visual-bible.html` · route `/visual-bible` · 10 Combat HUD cards · doc: BUILD_LOG 2026-07-18
 - **Goal Wall** · `~/basic-reflex/visuals/goal-wall.html` · route `/goal-wall` · 6 API endpoints · doc: BUILD_LOG 2026-07-20b
 - **Goal Cards** · `~/basic-reflex/visuals/goal-cards.html` · route `/goal-cards` · printable (4 types) · doc: BUILD_LOG 2026-07-20b
+- **Coaching Hub** · `~/nanoclaw/coaching-os/hub.html` · route `/hub` · 23 cards, 5 sections · doc: BUILD_LOG 2026-07-29, 2026-07-31
+- **Gym Floor Map** · `~/nanoclaw/coaching-os/gym-map.html` · route `/coaching-os/gym-map.html` · SVG floor plan + drill sheet · doc: BUILD_LOG 2026-07-31
+- **Drill Mind Map** · `~/nanoclaw/coaching-os/drill-mind-map.html` · route `/coaching-os/drill-mind-map.html` · radial 60-drill visualization · doc: BUILD_LOG 2026-07-31
+- **10 Blocks Map** · `~/nanoclaw/coaching-os/blocks-mind-map.html` · route `/coaching-os/blocks-mind-map.html` · 3 pillars × 10 blocks × drills · doc: BUILD_LOG 2026-07-31
+- **Block Progression** · `~/nanoclaw/coaching-os/block-progression.html` · route `/coaching-os/block-progression.html` · force-directed dependency graph · doc: BUILD_LOG 2026-07-31
+- **Energy Flow** · `~/nanoclaw/coaching-os/energy-flow.html` · route `/coaching-os/energy-flow.html` · Three Engines visualization · doc: BUILD_LOG 2026-07-31
+- **Workout Chef** · `~/nanoclaw/coaching-os/workout-chef.html` · route `/coaching-os/workout-chef.html` · 5 chef personas, workout generator · doc: BUILD_LOG 2026-07-31
+- **Drill Capture** · `~/nanoclaw/coaching-os/drill-capture-form.html` + `capture-api.cjs` + `/drill` Telegram cmd · URL→vision→tags→library · doc: BUILD_LOG 2026-07-31
 
 ## BR CRM + Drill Toolbox
 - **CRM Server** · `~/basic-reflex/crm/server.js` · port 8085 · Express + SQLite (br-crm.db) · doc: BUILD_LOG 2026-07-19b

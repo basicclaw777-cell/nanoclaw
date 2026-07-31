@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BR 10 Blocks Mind Map</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a;
+  color: #e8e4dc;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  height: 100vh;
+  touch-action: manipulation;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #222;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f7b408;
+  font-weight: 400;
+}
+
+.header-links {
+  display: flex;
+  gap: 16px;
+}
+
+.header-links a {
+  color: #6b6560;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pillar-tabs {
+  display: flex;
+  border-bottom: 1px solid #222;
+  flex-shrink: 0;
+}
+
+.pillar-tab {
+  flex: 1;
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #6b6560;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.pillar-tab.active {
+  color: #f7b408;
+  border-bottom-color: #f7b408;
+}
+.pillar-tab .tab-sub {
+  font-size: 9px;
+  opacity: 0.5;
+  display: block;
+  margin-top: 2px;
+}
+
+.canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tooltip {
+  position: fixed;
+  background: #1a1a18;
+  border: 1px solid #f7b40833;
+  border-radius: 8px;
+  padding: 10px 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 10;
+  max-width: 240px;
+}
+.tooltip.visible { opacity: 1; }
+.tooltip-name {
+  font-family: Impact, sans-serif;
+  font-size: 14px;
+  color: #f7b408;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.tooltip-row {
+  font-size: 10px;
+  color: #6b6560;
+  margin-top: 1px;
+}
+.tooltip-focus {
+  font-size: 11px;
+  color: #e8e4dc;
+  margin-top: 4px;
+}
+.tooltip-unlock {
+  font-size: 11px;
+  color: #f7b408;
+  opacity: 0.7;
+  margin-top: 4px;
+  font-style: italic;
+}
+.tooltip-drills {
+  font-size: 10px;
+  color: #6b6560;
+  margin-top: 4px;
+}
+
+.legend {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  gap: 12px;
+  z-index: 5;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: #6b6560;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>10 Blocks</h1>
+    <div class="header-links">
+      <a href="/coaching-os/drill-mind-map.html">Drills</a>
+      <a href="/hub">Hub</a>
+    </div>
+  </div>
+
+  <div class="pillar-tabs">
+    <div class="pillar-tab active" data-pillar="skill">The 10 Blocks<span class="tab-sub">How to box</span></div>
+    <div class="pillar-tab" data-pillar="sparring">Sparring<span class="tab-sub">How to apply</span></div>
+    <div class="pillar-tab" data-pillar="conditioning">Conditioning<span class="tab-sub">How to sustain</span></div>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="canvas"></canvas>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-name" id="tipName"></div>
+  <div class="tooltip-row" id="tipRow"></div>
+  <div class="tooltip-focus" id="tipFocus"></div>
+  <div class="tooltip-unlock" id="tipUnlock"></div>
+  <div class="tooltip-drills" id="tipDrills"></div>
+</div>
+
+<div class="legend" id="legend">
+  <div class="legend-item"><span class="legend-dot" style="background:#f7b408"></span>Block</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#34d399"></span>Matched drill</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#6b6560"></span>Frequency row</div>
+</div>
+
+<script>
+const FREQ_COLORS = [
+  '#ef4444', '#f97316', '#f59e0b', '#eab308',
+  '#84cc16', '#22c55e', '#14b8a6', '#06b6d4',
+  '#3b82f6', '#8b5cf6'
+];
+
+let cardData = null;
+let drillData = [];
+let activePillar = 'skill';
+let W, H, cx, cy, dpr;
+let nodes = [];
+let expanded = new Set();
+let animProgress = {};
+let hoveredNode = null;
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const DRILL_KEYWORDS = {
+  1: ['guard', 'stance', 'ready', 'foundation', 'warm', 'tennis'],
+  2: ['footwork', 'step', 'move', 'pivot', 'shuffle', 'level', 'cone', 'ladder', 'agility', 'line drill'],
+  3: ['jab', 'cross', '1-2', 'straight', 'angle'],
+  4: ['hook', 'uppercut', 'body', 'inside', 'shovel', 'overhand', '1-2-3'],
+  5: ['rhythm', 'timing', 'broken', 'feint', 'double-end'],
+  6: ['counter', 'catch', 'return', 'slip', 'parry', 'defense'],
+  7: ['pressure', 'fatigue', 'circuit', 'round', 'conditioning', 'interval', 'power'],
+  8: ['escape', 'ring', 'rope', 'corner', 'space', 'cut off', 'range'],
+  9: ['strategy', 'control', 'read', 'intelligence', 'pattern', 'set up'],
+  10: ['sparring', 'free', 'open', 'round', 'arena', 'full']
+};
+
+function matchDrillsToBlock(blockNum, pillar) {
+  const keywords = DRILL_KEYWORDS[blockNum] || [];
+  return drillData.filter(d => {
+    const name = (d.name || d.id || '').toLowerCase();
+    const domain = (d.domain || '').toLowerCase();
+    return keywords.some(kw => name.includes(kw) || domain.includes(kw));
+  });
+}
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  W = canvas.parentElement.clientWidth;
+  H = canvas.parentElement.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx = W / 2;
+  cy = H / 2;
+  layoutNodes();
+}
+
+async function loadData() {
+  const [cardRes, drillRes] = await Promise.all([
+    fetch('/coaching-os/33-card-system.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('/coaching/drill-usage').then(r => r.json()).catch(() => ({ used: [], never_used: [] }))
+  ]);
+
+  if (!cardRes) {
+    const fallbackRes = await fetch('http://localhost:8080/coaching-os/33-card-system.json').catch(() => null);
+    cardData = fallbackRes ? await fallbackRes.json() : null;
+  } else {
+    cardData = cardRes;
+  }
+
+  drillData = [
+    ...drillRes.used.map(d => ({ id: d.drill_id, name: d.name, domain: d.domain, used: true, times: d.times_used })),
+    ...drillRes.never_used.map(d => ({ id: d.id, name: d.name, domain: d.domain, used: false, times: 0 }))
+  ];
+
+  layoutNodes();
+  draw();
+}
+
+function getCards(pillar) {
+  if (!cardData) return [];
+  return cardData.cards.filter(c => c.pillar === pillar).sort((a, b) => a.num - b.num);
+}
+
+function getFrequency(row) {
+  if (!cardData) return null;
+  return cardData.frequencies.find(f => f.row === row);
+}
+
+function layoutNodes() {
+  nodes = [];
+  const cards = getCards(activePillar);
+  if (!cards.length) return;
+
+  const ringRadius = Math.min(W, H) * 0.28;
+
+  nodes.push({ type: 'center', x: cx, y: cy, r: 30, label: 'BR\nMETHOD' });
+
+  cards.forEach((card, i) => {
+    const angle = (i / cards.length) * Math.PI * 2 - Math.PI / 2;
+    const bx = cx + Math.cos(angle) * ringRadius;
+    const by = cy + Math.sin(angle) * ringRadius;
+    const freq = getFrequency(card.num);
+    const matched = matchDrillsToBlock(card.num, activePillar);
+    const color = FREQ_COLORS[i] || '#f7b408';
+
+    nodes.push({
+      type: 'block',
+      card,
+      freq,
+      x: bx, y: by,
+      r: 22,
+      num: card.num,
+      label: card.name,
+      color,
+      angle,
+      matchedDrills: matched,
+      unlock: card.client?.unlock || '',
+      focus: card.technical?.focus || ''
+    });
+
+    if (expanded.has(card.num)) {
+      const drills = matched;
+      if (drills.length === 0) return;
+      const leafRadius = Math.min(W, H) * 0.15 + drills.length * 3;
+      const spread = Math.min(Math.PI * 0.5, drills.length * 0.15);
+      const startAngle = angle - spread / 2;
+      const prog = animProgress[card.num] || 1;
+
+      drills.forEach((drill, j) => {
+        const da = drills.length > 1 ? startAngle + (j / (drills.length - 1)) * spread : angle;
+        const lx = bx + Math.cos(da) * leafRadius;
+        const ly = by + Math.sin(da) * leafRadius;
+
+        nodes.push({
+          type: 'drill',
+          drill,
+          x: bx + (lx - bx) * prog,
+          y: by + (ly - by) * prog,
+          r: 5,
+          color,
+          parentX: bx,
+          parentY: by
+        });
+      });
+    }
+  });
+
+  // Connection lines between adjacent blocks
+  const blockNodes = nodes.filter(n => n.type === 'block');
+  blockNodes.forEach((b, i) => {
+    if (i < blockNodes.length - 1) {
+      b.nextBlock = blockNodes[i + 1];
+    }
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  const center = nodes.find(n => n.type === 'center');
+  const blockNodes = nodes.filter(n => n.type === 'block');
+  const drillNodes = nodes.filter(n => n.type === 'drill');
+
+  // Progression arc between blocks
+  blockNodes.forEach(b => {
+    if (b.nextBlock) {
+      ctx.beginPath();
+      ctx.moveTo(b.x, b.y);
+      const cpx = cx + (b.x - cx + b.nextBlock.x - cx) * 0.3;
+      const cpy = cy + (b.y - cy + b.nextBlock.y - cy) * 0.3;
+      ctx.quadraticCurveTo(cpx, cpy, b.nextBlock.x, b.nextBlock.y);
+      ctx.strokeStyle = '#f7b40815';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Arrow
+      const dx = b.nextBlock.x - cpx;
+      const dy = b.nextBlock.y - cpy;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      if (len > 0) {
+        const nx = dx / len;
+        const ny = dy / len;
+        const ax = b.nextBlock.x - nx * (b.nextBlock.r + 4);
+        const ay = b.nextBlock.y - ny * (b.nextBlock.r + 4);
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(ax - nx * 6 + ny * 3, ay - ny * 6 - nx * 3);
+        ctx.lineTo(ax - nx * 6 - ny * 3, ay - ny * 6 + nx * 3);
+        ctx.closePath();
+        ctx.fillStyle = '#f7b40820';
+        ctx.fill();
+      }
+    }
+  });
+
+  // Radial lines from center to blocks
+  blockNodes.forEach(b => {
+    ctx.beginPath();
+    ctx.moveTo(center.x, center.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.strokeStyle = b.color + '25';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  });
+
+  // Lines from blocks to drills
+  drillNodes.forEach(d => {
+    ctx.beginPath();
+    ctx.moveTo(d.parentX, d.parentY);
+    ctx.lineTo(d.x, d.y);
+    ctx.strokeStyle = d.color + '20';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Drill leaf nodes
+  drillNodes.forEach(d => {
+    const isHovered = hoveredNode === d;
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, isHovered ? 7 : 5, 0, Math.PI * 2);
+    ctx.fillStyle = d.drill.used ? '#34d39960' : d.color + '20';
+    ctx.fill();
+    ctx.strokeStyle = d.drill.used ? '#34d399' + (isHovered ? 'cc' : '66') : d.color + (isHovered ? 'cc' : '44');
+    ctx.lineWidth = isHovered ? 1.5 : 1;
+    ctx.stroke();
+
+    if (isHovered) {
+      ctx.font = '10px system-ui';
+      ctx.fillStyle = '#e8e4dc';
+      ctx.textAlign = 'center';
+      ctx.fillText(d.drill.name, d.x, d.y - 10);
+    }
+  });
+
+  // Block nodes
+  blockNodes.forEach(b => {
+    const isHovered = hoveredNode === b;
+    const isExpanded = expanded.has(b.num);
+
+    // Outer glow
+    if (isHovered) {
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r + 6, 0, Math.PI * 2);
+      ctx.fillStyle = b.color + '10';
+      ctx.fill();
+    }
+
+    // Circle
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r + (isHovered ? 2 : 0), 0, Math.PI * 2);
+    ctx.fillStyle = b.color + (isExpanded ? '20' : '0c');
+    ctx.fill();
+    ctx.strokeStyle = b.color + (isHovered ? 'cc' : '66');
+    ctx.lineWidth = isHovered ? 2.5 : 1.5;
+    ctx.stroke();
+
+    // Number
+    ctx.font = '600 16px Impact, system-ui';
+    ctx.fillStyle = b.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(b.num, b.x, b.y - 4);
+
+    // Name
+    ctx.font = '8px system-ui';
+    ctx.fillStyle = b.color + 'aa';
+    ctx.fillText(b.label.toUpperCase(), b.x, b.y + 9);
+
+    // Drill count badge
+    if (b.matchedDrills.length > 0) {
+      const bx = b.x + b.r * 0.7;
+      const by = b.y - b.r * 0.7;
+      ctx.beginPath();
+      ctx.arc(bx, by, 7, 0, Math.PI * 2);
+      ctx.fillStyle = '#34d39940';
+      ctx.fill();
+      ctx.font = '8px system-ui';
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(b.matchedDrills.length, bx, by + 1);
+    }
+  });
+
+  // Center node
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, center.r, 0, Math.PI * 2);
+  ctx.fillStyle = '#f7b408' + '12';
+  ctx.fill();
+  ctx.strokeStyle = '#f7b408';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.font = '600 14px Impact, system-ui';
+  ctx.fillStyle = '#f7b408';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('BR', center.x, center.y - 7);
+  ctx.fillText('METHOD', center.x, center.y + 8);
+
+  // Frequency theme labels (outer ring)
+  blockNodes.forEach(b => {
+    if (!b.freq) return;
+    const labelR = Math.min(W, H) * 0.28 + b.r + 14;
+    const lx = cx + Math.cos(b.angle) * labelR;
+    const ly = cy + Math.sin(b.angle) * labelR;
+
+    ctx.save();
+    ctx.translate(lx, ly);
+    let rotation = b.angle;
+    if (rotation > Math.PI / 2 || rotation < -Math.PI / 2) {
+      rotation += Math.PI;
+    }
+    ctx.rotate(rotation);
+    ctx.font = '7px system-ui';
+    ctx.fillStyle = '#6b6560';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(b.freq.theme.toUpperCase(), 0, 0);
+    ctx.restore();
+  });
+
+  requestAnimationFrame(draw);
+}
+
+function hitTest(mx, my) {
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const n = nodes[i];
+    if (n.type === 'center') continue;
+    const dx = mx - n.x;
+    const dy = my - n.y;
+    const hitR = n.type === 'drill' ? 12 : n.r + 4;
+    if (dx * dx + dy * dy < hitR * hitR) return n;
+  }
+  return null;
+}
+
+function handleMove(x, y) {
+  const node = hitTest(x, y);
+  hoveredNode = node;
+  canvas.style.cursor = node ? 'pointer' : 'default';
+
+  const tip = document.getElementById('tooltip');
+
+  if (node && node.type === 'block') {
+    document.getElementById('tipName').textContent = `${node.num}. ${node.label}`;
+    document.getElementById('tipRow').textContent = node.freq ? `${node.freq.theme} — ${node.freq.principle}` : '';
+    document.getElementById('tipFocus').textContent = node.focus;
+    document.getElementById('tipUnlock').textContent = node.unlock ? `"${node.unlock}"` : '';
+    document.getElementById('tipDrills').textContent = node.matchedDrills.length
+      ? `${node.matchedDrills.length} drill${node.matchedDrills.length > 1 ? 's' : ''} matched — tap to ${expanded.has(node.num) ? 'collapse' : 'expand'}`
+      : 'No drills matched yet';
+    tip.classList.add('visible');
+    tip.style.left = Math.min(x + 12, W - 250) + 'px';
+    tip.style.top = Math.max(10, y - 60) + 'px';
+  } else if (node && node.type === 'drill') {
+    document.getElementById('tipName').textContent = node.drill.name;
+    document.getElementById('tipRow').textContent = node.drill.domain;
+    document.getElementById('tipFocus').textContent = node.drill.used ? `Used ${node.drill.times}x` : 'Never used';
+    document.getElementById('tipUnlock').textContent = '';
+    document.getElementById('tipDrills').textContent = '';
+    tip.classList.add('visible');
+    tip.style.left = Math.min(x + 12, W - 250) + 'px';
+    tip.style.top = Math.max(10, y - 40) + 'px';
+  } else {
+    tip.classList.remove('visible');
+  }
+}
+
+function handleTap(x, y) {
+  const node = hitTest(x, y);
+  if (!node) return;
+
+  if (node.type === 'block') {
+    if (expanded.has(node.num)) {
+      expanded.delete(node.num);
+    } else {
+      expanded.add(node.num);
+      animProgress[node.num] = 0;
+      animateExpand(node.num);
+    }
+    layoutNodes();
+  }
+}
+
+function animateExpand(num) {
+  const step = () => {
+    animProgress[num] = Math.min(1, (animProgress[num] || 0) + 0.08);
+    layoutNodes();
+    if (animProgress[num] < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+// Pillar tabs
+document.querySelectorAll('.pillar-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    activePillar = tab.dataset.pillar;
+    document.querySelectorAll('.pillar-tab').forEach(t => t.classList.toggle('active', t === tab));
+    expanded.clear();
+    animProgress = {};
+    layoutNodes();
+  });
+});
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  handleMove(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  handleTap(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const t = e.touches[0];
+  handleTap(t.clientX - rect.left, t.clientY - rect.top);
+}, { passive: false });
+
+canvas.addEventListener('mouseleave', () => {
+  hoveredNode = null;
+  document.getElementById('tooltip').classList.remove('visible');
+});
+
+window.addEventListener('resize', resize);
+
+resize();
+loadData();
+</script>
+</body>
+</html>

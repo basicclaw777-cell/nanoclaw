@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BR Energy Flow Map</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a;
+  color: #e8e4dc;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  height: 100vh;
+  touch-action: manipulation;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #222;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f7b408;
+  font-weight: 400;
+}
+
+.header-links {
+  display: flex;
+  gap: 16px;
+}
+
+.header-links a {
+  color: #6b6560;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  display: block;
+  max-width: 380px;
+}
+
+.tooltip {
+  position: fixed;
+  background: #1a1a18;
+  border: 1px solid #f7b40833;
+  border-radius: 8px;
+  padding: 10px 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 10;
+  max-width: 260px;
+}
+.tooltip.visible { opacity: 1; }
+.tooltip-name {
+  font-family: Impact, sans-serif;
+  font-size: 14px;
+  color: #f7b408;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.tooltip-engines {
+  font-size: 10px;
+  color: #6b6560;
+  margin-top: 2px;
+}
+.tooltip-focus {
+  font-size: 11px;
+  color: #e8e4dc;
+  margin-top: 4px;
+}
+.tooltip-unlock {
+  font-size: 11px;
+  color: #f7b408;
+  opacity: 0.7;
+  margin-top: 4px;
+  font-style: italic;
+}
+.tooltip-drills {
+  font-size: 10px;
+  color: #6b6560;
+  margin-top: 4px;
+}
+
+.legend {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  gap: 12px;
+  z-index: 5;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: #6b6560;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.legend-item.dimmed { opacity: 0.3; }
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.info-panel {
+  position: fixed;
+  bottom: 36px;
+  left: 12px;
+  right: 12px;
+  max-width: 380px;
+  background: #1a1a18;
+  border: 1px solid #f7b40822;
+  border-radius: 8px;
+  padding: 10px 14px;
+  z-index: 5;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+.info-panel.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.info-panel-title {
+  font-family: Impact, sans-serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.info-panel-body {
+  font-size: 10px;
+  color: #6b6560;
+  line-height: 1.5;
+}
+.info-panel-drills {
+  font-size: 10px;
+  color: #e8e4dc;
+  margin-top: 6px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+.info-panel-drills span {
+  display: inline-block;
+  background: #ffffff08;
+  border: 1px solid #ffffff12;
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin: 2px 2px;
+  font-size: 9px;
+}
+.info-panel-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 14px;
+  color: #6b6560;
+  cursor: pointer;
+  line-height: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Energy Flow</h1>
+    <div class="header-links">
+      <a href="/coaching-os/blocks-mind-map.html">Blocks</a>
+      <a href="/hub">Hub</a>
+    </div>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="canvas"></canvas>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-name" id="tipName"></div>
+  <div class="tooltip-engines" id="tipEngines"></div>
+  <div class="tooltip-focus" id="tipFocus"></div>
+  <div class="tooltip-unlock" id="tipUnlock"></div>
+  <div class="tooltip-drills" id="tipDrills"></div>
+</div>
+
+<div class="legend" id="legend">
+  <div class="legend-item" data-engine="body"><span class="legend-dot" style="background:#ef4444"></span>Body</div>
+  <div class="legend-item" data-engine="mind"><span class="legend-dot" style="background:#3b82f6"></span>Mind</div>
+  <div class="legend-item" data-engine="emotion"><span class="legend-dot" style="background:#f7b408"></span>Emotion</div>
+</div>
+
+<div class="info-panel" id="infoPanel">
+  <div class="info-panel-close" id="infoClose">x</div>
+  <div class="info-panel-title" id="infoTitle"></div>
+  <div class="info-panel-body" id="infoBody"></div>
+  <div class="info-panel-drills" id="infoDrills"></div>
+</div>
+
+<script>
+// --- Engine and block definitions ---
+const ENGINE_COLORS = {
+  body: '#ef4444',
+  mind: '#3b82f6',
+  emotion: '#f7b408'
+};
+
+const BLOCKS = [
+  { num: 1, name: 'Foundation', primary: 'body',    engines: ['body'],             focus: 'Guard, stance, mindset' },
+  { num: 2, name: 'Level',      primary: 'body',    engines: ['body'],             focus: 'Footwork fundamentals' },
+  { num: 3, name: 'Angle',      primary: 'mind',    engines: ['mind'],             focus: 'Jab, cross, technique' },
+  { num: 4, name: 'Inside',     primary: 'body',    engines: ['body'],             focus: 'Hooks, body work' },
+  { num: 5, name: 'Rhythm',     primary: 'emotion', engines: ['emotion', 'body'],  focus: 'Timing, expression' },
+  { num: 6, name: 'Counter',    primary: 'mind',    engines: ['mind', 'body'],     focus: 'Defense-to-offense' },
+  { num: 7, name: 'Pressure',   primary: 'body',    engines: ['body', 'emotion'],  focus: 'Under fatigue' },
+  { num: 8, name: 'Escape',     primary: 'mind',    engines: ['mind'],             focus: 'Ring craft, space' },
+  { num: 9, name: 'Control',    primary: 'mind',    engines: ['mind', 'emotion'],  focus: 'Strategy, reading' },
+  { num: 10, name: 'Arena',     primary: 'emotion', engines: ['emotion'],          focus: 'Full integration' }
+];
+
+const DRILL_KEYWORDS = {
+  1: ['guard', 'stance', 'ready', 'foundation', 'warm', 'tennis'],
+  2: ['footwork', 'step', 'move', 'pivot', 'shuffle', 'level', 'cone', 'ladder', 'agility', 'line drill'],
+  3: ['jab', 'cross', '1-2', 'straight', 'angle'],
+  4: ['hook', 'uppercut', 'body', 'inside', 'shovel', 'overhand', '1-2-3'],
+  5: ['rhythm', 'timing', 'broken', 'feint', 'double-end'],
+  6: ['counter', 'catch', 'return', 'slip', 'parry', 'defense'],
+  7: ['pressure', 'fatigue', 'circuit', 'round', 'conditioning', 'interval', 'power'],
+  8: ['escape', 'ring', 'rope', 'corner', 'space', 'cut off', 'range'],
+  9: ['strategy', 'control', 'read', 'intelligence', 'pattern', 'set up'],
+  10: ['sparring', 'free', 'open', 'round', 'arena', 'full']
+};
+
+// Energy flow arrows between engines
+const ENGINE_FLOWS = [
+  { from: 'body', to: 'mind',    label: 'Technique feeds thinking' },
+  { from: 'mind', to: 'emotion', label: 'Understanding unlocks expression' },
+  { from: 'emotion', to: 'body', label: 'Expression refines the body' }
+];
+
+// --- State ---
+let cardData = null;
+let drillData = [];
+let W, H, dpr;
+let hoveredNode = null;
+let selectedEngine = null;
+let selectedBlock = null;
+let animFrame = 0;
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// --- Engine zone geometry ---
+// Triangle layout: Body top-left, Mind top-right, Emotion bottom-center
+function getEnginePositions() {
+  const padX = W * 0.14;
+  const padTop = H * 0.12;
+  const padBot = H * 0.16;
+  return {
+    body:    { x: padX + W * 0.08,       y: padTop + H * 0.05,          label: 'BODY' },
+    mind:    { x: W - padX - W * 0.08,   y: padTop + H * 0.05,          label: 'MIND' },
+    emotion: { x: W / 2,                  y: H - padBot - H * 0.02,     label: 'EMOTION' }
+  };
+}
+
+function getEngineZoneRadius() {
+  return Math.min(W, H) * 0.22;
+}
+
+// --- Block positions within engine zones ---
+function getBlockPositions() {
+  const engines = getEnginePositions();
+  const zr = getEngineZoneRadius();
+  const positions = {};
+
+  // Body engine blocks: 1, 2, 4, 7
+  const bodyBlocks = [1, 2, 4, 7];
+  bodyBlocks.forEach((num, i) => {
+    const angle = (-Math.PI * 0.6) + (i / (bodyBlocks.length - 1)) * Math.PI * 0.7;
+    const r = zr * 0.55;
+    positions[num] = {
+      x: engines.body.x + Math.cos(angle) * r,
+      y: engines.body.y + Math.sin(angle) * r
+    };
+  });
+
+  // Mind engine blocks: 3, 6, 8, 9
+  const mindBlocks = [3, 6, 8, 9];
+  mindBlocks.forEach((num, i) => {
+    const angle = (-Math.PI * 0.4) + (i / (mindBlocks.length - 1)) * Math.PI * 0.7;
+    const r = zr * 0.55;
+    positions[num] = {
+      x: engines.mind.x + Math.cos(angle) * r,
+      y: engines.mind.y + Math.sin(angle) * r
+    };
+  });
+
+  // Emotion engine blocks: 5, 10
+  const emotionBlocks = [5, 10];
+  emotionBlocks.forEach((num, i) => {
+    const angle = Math.PI * 0.8 + (i / Math.max(1, emotionBlocks.length - 1)) * Math.PI * 0.4;
+    const r = zr * 0.5;
+    positions[num] = {
+      x: engines.emotion.x + Math.cos(angle) * r,
+      y: engines.emotion.y + Math.sin(angle) * r
+    };
+  });
+
+  return positions;
+}
+
+// --- Data loading ---
+async function loadData() {
+  const [cardRes, drillRes] = await Promise.all([
+    fetch('/coaching-os/33-card-system.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('/coaching/drill-usage').then(r => r.json()).catch(() => ({ used: [], never_used: [] }))
+  ]);
+
+  if (!cardRes) {
+    const fallbackRes = await fetch('http://localhost:8080/coaching-os/33-card-system.json').catch(() => null);
+    cardData = fallbackRes ? await fallbackRes.json() : null;
+  } else {
+    cardData = cardRes;
+  }
+
+  if (drillRes) {
+    drillData = [
+      ...(drillRes.used || []).map(d => ({ id: d.drill_id, name: d.name, domain: d.domain, used: true, times: d.times_used })),
+      ...(drillRes.never_used || []).map(d => ({ id: d.id, name: d.name, domain: d.domain, used: false, times: 0 }))
+    ];
+  }
+
+  // Enrich block data from card data
+  if (cardData) {
+    BLOCKS.forEach(b => {
+      const card = cardData.cards.find(c => c.num === b.num && c.pillar === 'skill');
+      if (card) {
+        b.focus = card.technical?.focus || b.focus;
+        b.unlock = card.client?.unlock || '';
+        b.tags = card.client?.tags || [];
+      }
+    });
+  }
+
+  draw();
+}
+
+function matchDrillsToBlock(blockNum) {
+  const keywords = DRILL_KEYWORDS[blockNum] || [];
+  return drillData.filter(d => {
+    const name = (d.name || d.id || '').toLowerCase();
+    const domain = (d.domain || '').toLowerCase();
+    return keywords.some(kw => name.includes(kw) || domain.includes(kw));
+  });
+}
+
+// --- Resize ---
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  const wrap = canvas.parentElement;
+  const availW = Math.min(380, wrap.clientWidth);
+  const availH = wrap.clientHeight;
+  W = availW;
+  H = availH;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+// --- Drawing ---
+function drawZoneBackground(engine, pos, zr, isActive, isDimmed) {
+  const color = ENGINE_COLORS[engine];
+  const alpha = isDimmed ? '04' : (isActive ? '12' : '08');
+  const strokeAlpha = isDimmed ? '08' : (isActive ? '40' : '18');
+
+  // Zone circle
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, zr, 0, Math.PI * 2);
+  ctx.fillStyle = color + alpha;
+  ctx.fill();
+  ctx.strokeStyle = color + strokeAlpha;
+  ctx.lineWidth = isActive ? 2 : 1;
+  ctx.setLineDash(isActive ? [] : [4, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Engine label
+  ctx.font = '600 11px Impact, system-ui';
+  ctx.fillStyle = color + (isDimmed ? '30' : (isActive ? 'dd' : '80'));
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(pos.label, pos.x, pos.y - zr + 14);
+}
+
+function drawFlowArrow(fromPos, toPos, progress, isDimmed) {
+  const mx = (fromPos.x + toPos.x) / 2;
+  const my = (fromPos.y + toPos.y) / 2;
+
+  // Perpendicular offset for curve
+  const dx = toPos.x - fromPos.x;
+  const dy = toPos.y - fromPos.y;
+  const len = Math.sqrt(dx * dx + dy * dy);
+  const nx = -dy / len;
+  const ny = dx / len;
+  const curveOffset = len * 0.15;
+
+  const cpx = mx + nx * curveOffset;
+  const cpy = my + ny * curveOffset;
+
+  const alpha = isDimmed ? '08' : '25';
+
+  ctx.beginPath();
+  ctx.moveTo(fromPos.x, fromPos.y);
+  ctx.quadraticCurveTo(cpx, cpy, toPos.x, toPos.y);
+  ctx.strokeStyle = '#f7b408' + alpha;
+  ctx.lineWidth = isDimmed ? 1 : 1.5;
+  ctx.stroke();
+
+  if (!isDimmed) {
+    // Animated dot along the path
+    const t = (progress % 100) / 100;
+    const px = (1-t)*(1-t)*fromPos.x + 2*(1-t)*t*cpx + t*t*toPos.x;
+    const py = (1-t)*(1-t)*fromPos.y + 2*(1-t)*t*cpy + t*t*toPos.y;
+
+    ctx.beginPath();
+    ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#f7b40880';
+    ctx.fill();
+  }
+
+  // Arrow head at midpoint
+  if (!isDimmed) {
+    const at = 0.55;
+    const ax = (1-at)*(1-at)*fromPos.x + 2*(1-at)*at*cpx + at*at*toPos.x;
+    const ay = (1-at)*(1-at)*fromPos.y + 2*(1-at)*at*cpy + at*at*toPos.y;
+    const at2 = 0.56;
+    const ax2 = (1-at2)*(1-at2)*fromPos.x + 2*(1-at2)*at2*cpx + at2*at2*toPos.x;
+    const ay2 = (1-at2)*(1-at2)*fromPos.y + 2*(1-at2)*at2*cpy + at2*at2*toPos.y;
+    const adx = ax2 - ax;
+    const ady = ay2 - ay;
+    const alen = Math.sqrt(adx*adx + ady*ady);
+    if (alen > 0) {
+      const anx = adx / alen;
+      const any = ady / alen;
+      ctx.beginPath();
+      ctx.moveTo(ax + anx * 5, ay + any * 5);
+      ctx.lineTo(ax - anx * 3 + any * 3, ay - any * 3 - anx * 3);
+      ctx.lineTo(ax - anx * 3 - any * 3, ay - any * 3 + anx * 3);
+      ctx.closePath();
+      ctx.fillStyle = '#f7b40840';
+      ctx.fill();
+    }
+  }
+}
+
+function drawBridgeLine(blockPos, targetEnginePos, color, isDimmed) {
+  const alpha = isDimmed ? '08' : '30';
+
+  ctx.beginPath();
+  ctx.setLineDash([3, 3]);
+  ctx.moveTo(blockPos.x, blockPos.y);
+  ctx.lineTo(targetEnginePos.x, targetEnginePos.y);
+  ctx.strokeStyle = color + alpha;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawBlock(block, pos, isHovered, isSelected, isDimmed) {
+  const color = ENGINE_COLORS[block.primary];
+  const r = 18;
+  const drillCount = matchDrillsToBlock(block.num).length;
+
+  // Outer glow on hover or selected
+  if ((isHovered || isSelected) && !isDimmed) {
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, r + 8, 0, Math.PI * 2);
+    ctx.fillStyle = color + '15';
+    ctx.fill();
+  }
+
+  // Circle
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+  ctx.fillStyle = color + (isDimmed ? '08' : (isSelected ? '30' : '15'));
+  ctx.fill();
+  ctx.strokeStyle = color + (isDimmed ? '20' : (isHovered ? 'cc' : '66'));
+  ctx.lineWidth = isHovered || isSelected ? 2.5 : 1.5;
+  ctx.stroke();
+
+  // Multi-engine indicator: secondary ring segments
+  if (block.engines.length > 1 && !isDimmed) {
+    block.engines.forEach((eng, i) => {
+      if (eng === block.primary) return;
+      const secColor = ENGINE_COLORS[eng];
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, r + 3, -Math.PI * 0.3, Math.PI * 0.3);
+      ctx.strokeStyle = secColor + '60';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+  }
+
+  // Number
+  ctx.font = '600 15px Impact, system-ui';
+  ctx.fillStyle = color + (isDimmed ? '30' : 'dd');
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(block.num, pos.x, pos.y - 3);
+
+  // Name
+  ctx.font = '7px system-ui';
+  ctx.fillStyle = color + (isDimmed ? '25' : '90');
+  ctx.fillText(block.name.toUpperCase(), pos.x, pos.y + 10);
+
+  // Drill count badge
+  if (drillCount > 0 && !isDimmed) {
+    const bx = pos.x + r * 0.7;
+    const by = pos.y - r * 0.7;
+    ctx.beginPath();
+    ctx.arc(bx, by, 7, 0, Math.PI * 2);
+    ctx.fillStyle = '#34d39940';
+    ctx.fill();
+    ctx.font = '8px system-ui';
+    ctx.fillStyle = '#34d399';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(drillCount, bx, by + 1);
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  animFrame++;
+
+  const engines = getEnginePositions();
+  const zr = getEngineZoneRadius();
+  const blockPositions = getBlockPositions();
+
+  // Determine dimming state
+  const activeEngine = selectedEngine;
+  const activeBlock = selectedBlock;
+
+  // Draw energy flow arrows between engine zones
+  ENGINE_FLOWS.forEach((flow, i) => {
+    const fromPos = engines[flow.from];
+    const toPos = engines[flow.to];
+    const isDimmed = activeEngine && flow.from !== activeEngine && flow.to !== activeEngine;
+    drawFlowArrow(fromPos, toPos, animFrame * 0.7 + i * 33, isDimmed);
+  });
+
+  // Draw engine zones
+  ['body', 'mind', 'emotion'].forEach(eng => {
+    const isActive = activeEngine === eng || (!activeEngine && !activeBlock);
+    const isDimmed = activeEngine && activeEngine !== eng;
+    drawZoneBackground(eng, engines[eng], zr, activeEngine === eng, isDimmed);
+  });
+
+  // Draw bridge connections for multi-engine blocks
+  BLOCKS.forEach(block => {
+    if (block.engines.length <= 1) return;
+    const pos = blockPositions[block.num];
+    block.engines.forEach(eng => {
+      if (eng === block.primary) return;
+      const isDimmed = activeEngine && activeEngine !== block.primary && activeEngine !== eng;
+      const bridgeBlockDimmed = activeBlock && activeBlock !== block.num;
+      drawBridgeLine(pos, engines[eng], ENGINE_COLORS[eng], isDimmed || bridgeBlockDimmed);
+    });
+  });
+
+  // Draw blocks
+  BLOCKS.forEach(block => {
+    const pos = blockPositions[block.num];
+    const isHovered = hoveredNode && hoveredNode.type === 'block' && hoveredNode.num === block.num;
+    const isSelected = activeBlock === block.num;
+    let isDimmed = false;
+    if (activeEngine && !block.engines.includes(activeEngine)) isDimmed = true;
+    if (activeBlock && activeBlock !== block.num) isDimmed = true;
+    drawBlock(block, pos, isHovered, isSelected, isDimmed);
+  });
+
+  // Draw center energy label
+  const centerX = W / 2;
+  const centerY = H * 0.42;
+  if (!activeEngine && !activeBlock) {
+    ctx.font = '600 9px Impact, system-ui';
+    ctx.fillStyle = '#f7b40850';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('ENERGY', centerX, centerY - 5);
+    ctx.font = '7px system-ui';
+    ctx.fillStyle = '#6b656040';
+    ctx.fillText('is the currency', centerX, centerY + 6);
+  }
+
+  requestAnimationFrame(draw);
+}
+
+// --- Hit testing ---
+function hitTest(mx, my) {
+  const blockPositions = getBlockPositions();
+  const engines = getEnginePositions();
+  const zr = getEngineZoneRadius();
+
+  // Check blocks first
+  for (const block of BLOCKS) {
+    const pos = blockPositions[block.num];
+    const dx = mx - pos.x;
+    const dy = my - pos.y;
+    if (dx * dx + dy * dy < 22 * 22) {
+      return { type: 'block', num: block.num, block };
+    }
+  }
+
+  // Check engine zones
+  for (const eng of ['body', 'mind', 'emotion']) {
+    const pos = engines[eng];
+    const dx = mx - pos.x;
+    const dy = my - pos.y;
+    if (dx * dx + dy * dy < zr * zr) {
+      return { type: 'engine', engine: eng };
+    }
+  }
+
+  return null;
+}
+
+// --- Tooltip ---
+function showTooltip(node, x, y) {
+  const tip = document.getElementById('tooltip');
+
+  if (node.type === 'block') {
+    const block = node.block;
+    const drills = matchDrillsToBlock(block.num);
+    document.getElementById('tipName').textContent = block.num + '. ' + block.name;
+    document.getElementById('tipEngines').textContent = block.engines.map(e => e.charAt(0).toUpperCase() + e.slice(1)).join(' + ') + ' engine' + (block.engines.length > 1 ? 's' : '');
+    document.getElementById('tipFocus').textContent = block.focus;
+    document.getElementById('tipUnlock').textContent = block.unlock ? '"' + block.unlock + '"' : '';
+    document.getElementById('tipDrills').textContent = drills.length
+      ? drills.length + ' drill' + (drills.length > 1 ? 's' : '') + ' matched'
+      : 'No drills matched yet';
+    tip.classList.add('visible');
+    tip.style.left = Math.min(x + 12, W - 270) + 'px';
+    tip.style.top = Math.max(10, y - 70) + 'px';
+  } else if (node.type === 'engine') {
+    const eng = node.engine;
+    const blocks = BLOCKS.filter(b => b.engines.includes(eng));
+    document.getElementById('tipName').textContent = eng.toUpperCase() + ' ENGINE';
+    document.getElementById('tipEngines').textContent = blocks.length + ' blocks';
+    document.getElementById('tipFocus').textContent = blocks.map(b => b.num + ' ' + b.name).join(', ');
+    document.getElementById('tipUnlock').textContent = '';
+    document.getElementById('tipDrills').textContent = 'Tap to highlight';
+    tip.classList.add('visible');
+    tip.style.left = Math.min(x + 12, W - 270) + 'px';
+    tip.style.top = Math.max(10, y - 60) + 'px';
+  }
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('visible');
+}
+
+// --- Info panel (on block tap) ---
+function showBlockPanel(block) {
+  const panel = document.getElementById('infoPanel');
+  const color = ENGINE_COLORS[block.primary];
+  document.getElementById('infoTitle').style.color = color;
+  document.getElementById('infoTitle').textContent = block.num + '. ' + block.name;
+
+  const engineNames = block.engines.map(e => e.charAt(0).toUpperCase() + e.slice(1));
+  let bodyText = 'Engine: ' + engineNames.join(' + ');
+  if (block.engines.length > 1) {
+    bodyText += ' (bridges ' + engineNames.join(' and ') + ')';
+  }
+  bodyText += '\nFocus: ' + block.focus;
+  document.getElementById('infoBody').textContent = bodyText;
+
+  const drills = matchDrillsToBlock(block.num);
+  const drillsEl = document.getElementById('infoDrills');
+  if (drills.length > 0) {
+    drillsEl.innerHTML = drills.map(d => '<span>' + (d.name || d.id) + '</span>').join('');
+  } else {
+    drillsEl.innerHTML = '<span style="color:#6b6560">No drills matched</span>';
+  }
+
+  panel.classList.add('visible');
+}
+
+function hideBlockPanel() {
+  document.getElementById('infoPanel').classList.remove('visible');
+}
+
+// --- Interaction handlers ---
+function handleMove(x, y) {
+  const node = hitTest(x, y);
+  hoveredNode = node;
+  canvas.style.cursor = node ? 'pointer' : 'default';
+
+  if (node) {
+    showTooltip(node, x, y);
+  } else {
+    hideTooltip();
+  }
+}
+
+function handleTap(x, y) {
+  const node = hitTest(x, y);
+
+  if (!node) {
+    // Tap empty space: clear all selections
+    selectedEngine = null;
+    selectedBlock = null;
+    hideBlockPanel();
+    updateLegendState();
+    return;
+  }
+
+  if (node.type === 'engine') {
+    if (selectedEngine === node.engine) {
+      selectedEngine = null;
+    } else {
+      selectedEngine = node.engine;
+      selectedBlock = null;
+      hideBlockPanel();
+    }
+    updateLegendState();
+  } else if (node.type === 'block') {
+    if (selectedBlock === node.num) {
+      selectedBlock = null;
+      hideBlockPanel();
+    } else {
+      selectedBlock = node.num;
+      selectedEngine = null;
+      showBlockPanel(node.block);
+    }
+    updateLegendState();
+  }
+}
+
+function updateLegendState() {
+  document.querySelectorAll('.legend-item').forEach(item => {
+    const eng = item.dataset.engine;
+    if (selectedEngine && eng !== selectedEngine) {
+      item.classList.add('dimmed');
+    } else {
+      item.classList.remove('dimmed');
+    }
+  });
+}
+
+// --- Event listeners ---
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  handleMove(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+canvas.addEventListener('mouseleave', () => {
+  hoveredNode = null;
+  hideTooltip();
+});
+
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  handleTap(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  handleMove(touch.clientX - rect.left, touch.clientY - rect.top);
+  handleTap(touch.clientX - rect.left, touch.clientY - rect.top);
+}, { passive: false });
+
+// Legend engine taps
+document.querySelectorAll('.legend-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const eng = item.dataset.engine;
+    if (selectedEngine === eng) {
+      selectedEngine = null;
+    } else {
+      selectedEngine = eng;
+      selectedBlock = null;
+      hideBlockPanel();
+    }
+    updateLegendState();
+  });
+});
+
+// Info panel close
+document.getElementById('infoClose').addEventListener('click', () => {
+  selectedBlock = null;
+  hideBlockPanel();
+});
+
+// Resize
+window.addEventListener('resize', () => {
+  resize();
+});
+
+// Init
+resize();
+loadData();
+</script>
+</body>
+</html>

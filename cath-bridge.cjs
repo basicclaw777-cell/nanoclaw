@@ -24,6 +24,7 @@ app.use('/gym-eyes', express.static(path.join(HOME, 'basic-reflex', 'gym-eyes'))
 
 // Mount Coaching OS write API
 require('./coaching-os/coaching-api.cjs')(app);
+require('./coaching-os/capture-api.cjs')(app);
 
 // ── Neural Bus event emitter ─────────────────────────────────────────────────
 // Fire-and-forget POST to neural-bus on every request (non-blocking)

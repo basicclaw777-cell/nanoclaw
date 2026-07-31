@@ -1,6 +1,25 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-07-31 — Coaching OS Visual Suite + Drill Capture Pipeline
+
+**7 new coaching tools built:**
+1. **Gym Floor Map** (`coaching-os/gym-map.html`) — SVG overhead floor plan, tap equipment → filtered drills from coaching API. All BR equipment mapped: B1-B8, DEB, monkey bars, rower, footwork floor, warm-up zone, ring/sparring area, rack, wooden box
+2. **Drill Mind Map** (`coaching-os/drill-mind-map.html`) — Canvas radial: center → 8 domain branches → 60 drill leaves. API-driven, auto-updates
+3. **10 Blocks Map** (`coaching-os/blocks-mind-map.html`) — 3 pillar tabs × 10 blocks × matched drills. Frequency theme labels, progression arrows
+4. **Block Progression** (`coaching-os/block-progression.html`) — Force-directed network graph, 30 dependency connections, tap to highlight upstream/downstream
+5. **Energy Flow** (`coaching-os/energy-flow.html`) — Three Engines (Body/Mind/Emotion) triangle layout, 10 blocks by primary engine, bridge connections
+6. **Workout Chef** (`coaching-os/workout-chef.html`) — 5 chef personas (Coach Paul, Burner, Professor, Entertainer, Matchmaker), compose workouts from drill bank. Approve/recook/bin
+7. **Drill Capture** — Pipeline: URL → yt-dlp → ffmpeg frames → Claude Sonnet vision → auto-tags → approve → coaching.db
+   - ESM module: `coaching-os/drill-capture.js`
+   - CJS API: `coaching-os/capture-api.cjs` (3 endpoints on cath-bridge)
+   - Web form: `coaching-os/drill-capture-form.html`
+   - Telegram: `/drill <url>` command in telegram-bot.js
+
+**Coaching Hub** (`coaching-os/hub.html`) — added cards for all 7 tools. Hub now at 23 cards total across 5 sections
+
+**Infrastructure:** `cath-bridge.cjs` mounted capture-api.cjs. `33-card-system.json` copied to coaching-os/ for serving
+
 ## 2026-07-25 — Coaching OS taste wiring + Property Scout fix
 
 **Coaching OS Taste Acquisition — WIRED**
@@ -3740,3 +3759,15 @@ Build approach = WEAVE-IN. No dedicated sprint. Build through parametric pattern
 
 ### MEMORY.md Compression
 34KB → 12KB. Zero entries lost, all compressed to one-line hooks. Was over 24.4KB read limit — entries past line ~200 silently dropped.
+
+## 2026-07-29 — Travel Agent Loyalty + Lobby Sweep
+
+### Travel Agent Loyalty Layer
+- Dashboard: loyalty program cards, per-leg miles breakdown, progress-to-free-flight bars
+- Bug fix: airline name→IATA code resolution (AIRLINE_CODES lookup replaces .slice(0,2))
+- Files: travel-agent/agent.js, control-panel/travel-agent.html
+
+### Lobby Button Sweep
+- 53/61 control panel pages were missing ← Lobby button
+- 4 parallel agents added buttons matching each page's existing style
+- All 61 pages now link to /env/lobby.html
