@@ -3771,3 +3771,25 @@ Build approach = WEAVE-IN. No dedicated sprint. Build through parametric pattern
 - 53/61 control panel pages were missing ← Lobby button
 - 4 parallel agents added buttons matching each page's existing style
 - All 61 pages now link to /env/lobby.html
+
+## 2026-08-17 — Relay Harvest + Five Pillars Breakthrough + Container Dashboard
+
+### Relay Harvest
+- 4 DeepSeek relay files + 1 pasted conversation processed
+- 10 gold nuggets vaulted, 4 raw transcripts filed
+- Meta-relay loop demonstrated: Forge feedback → DeepSeek → Paul → vault
+- 5th pillar (Transmission) emerged from relay process itself
+
+### Five Pillars x Boxing Mapping
+- Breakthrough: personal development framework = boxing coaching method (same architecture, two views)
+- Guard = Standing Wave, Ring = Container, Gym = Well, Exchange = Vortex
+- BR tools mapped to all 5 pillars
+
+### Container Dashboard
+- Artifact: Five Pillars visual + personal wells + student Kanban board
+- https://claude.ai/code/artifact/c3ff45b9-6293-42d8-80ec-3359238d9288
+- Design: warm stone/teal/gold, responsive, light+dark theme
+
+### CRM Pillar Tracking
+- Added `pillar` + `pillar_updated` fields to all 565 members in members.json
+- Values: awakening/sovereignty/mastery/presence/transmission/null
