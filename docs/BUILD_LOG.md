@@ -1,6 +1,14 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-08-21 — BR Technique Library: Floating Model Fix
+
+**retarget-batch.py** — fixed Logan floating 0.94m off ground in retargeted GLBs.
+- Root cause: `visual_keying=True` bakes world-space positions into `pose.location`. Stripping fcurves removes animation curves but NOT in-memory pose bone values. GLTF exporter samples stale pose state → bones jump to world positions.
+- Fix: after stripping 246 location/scale fcurves, reset all pose bones: `pb.location = (0,0,0)`, `pb.scale = (1,1,1)`, then `view_layer.update()`.
+- All 5 GLBs re-exported. Binary verified: hips translation diff=0.000000 from rest position across all frames.
+- Visual verification pending.
+
 ## 2026-07-31 — Coaching OS Visual Suite + Drill Capture Pipeline
 
 **7 new coaching tools built:**
