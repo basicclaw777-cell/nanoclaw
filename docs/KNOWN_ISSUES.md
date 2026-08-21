@@ -3,6 +3,17 @@
 Debugging lessons and operational constraints. Update whenever an issue is discovered or resolved.
 Mark resolved issues with **[FIXED yyyy-mm-dd]**.
 
+## Blender glTF importer adds phantom objects (2026-08-01)
+- Blender's `import_scene.gltf()` can add phantom mesh objects (e.g., Icosphere) not present in the actual GLB file.
+- Affects verification: re-importing to inspect shows objects that aren't in the binary.
+- Fix: parse raw GLB JSON (struct+json in Python) to verify contents. Don't trust Blender re-import for verification.
+- Lesson: verification tool artifacts are not ground truth. Use a different layer to verify.
+
+## Blender 5.2: bone-level keyframe_insert silently fails (2026-08-21)
+- `pose_bone.keyframe_insert(data_path='location')` silently no-ops in Blender 5.2 (works in 4.x).
+- Fix: use armature object-level `tgt_rig.keyframe_insert('location')` for root motion.
+- Also: Blender 5.2 uses `action.layers[].strips[].channelbags[].fcurves` instead of `action.fcurves`.
+
 ## DeepSeek TUI exec flag validation (2026-07-25)
 - `deepseek exec` only accepts: --auto, --json, --resume, --session-id, --continue, --output-format
 - `--profile research` was silently failing for weeks — runner's try/catch swallowed the error

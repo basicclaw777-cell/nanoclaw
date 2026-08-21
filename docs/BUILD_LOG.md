@@ -1,6 +1,23 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-08-01 — Logan Retarget Pipeline Fix
+
+**retarget-batch.py diagnosis + fix:**
+- Root cause: PP character (1.694m) root motion applied raw to Logan (0.019m) = 89x scale mismatch. Three.js 92x viewer normalization compounded it to ~8000x. "Bee buzzing."
+- Fix: height-ratio scaling (LOGAN_HEIGHT / PP_HEIGHT = 0.01123) on root motion deltas
+- Orphan PP source actions removed from GLB exports
+- Pre-export stray object scrub added
+- All 5 GLBs rebuilt: Stance/Punches/Defenses/Locomotion/Steps (14-15MB each)
+- File: ~/basic-reflex/gym-eyes/mocap/retarget-batch.py
+
+**Post-session refinements (by 2026-08-21):**
+- Blender 5.2 API: bone-level keyframe_insert silently fails; moved root motion to armature object-level translation
+- FBX double-conversion fix: armature scale 1.0 + transform_apply before constraining
+- Dynamic height measurement via get_mesh_height()/get_skeleton_height() helpers
+- Stripped baked location/scale fcurves (visual_keying writes unwanted absolute bone positions)
+- Pose bone locations/scales reset to rest after bake
+
 ## 2026-08-21 — BR Technique Library: Floating Model Fix
 
 **retarget-batch.py** — fixed Logan floating 0.94m off ground in retargeted GLBs.
@@ -3815,3 +3832,31 @@ Build approach = WEAVE-IN. No dedicated sprint. Build through parametric pattern
 ### CRM Pillar Tracking
 - Added `pillar` + `pillar_updated` fields to all 565 members in members.json
 - Values: awakening/sovereignty/mastery/presence/transmission/null
+
+## 2026-08-21 session 2 — Logan Tool Suite (ANIM_CATALOG + Class Sheet + Overlay)
+
+### ANIM_CATALOG Shared Module
+- Extracted from technique-library.html (~210 inline lines) → `~/basic-reflex/gym-eyes/mocap/anim-catalog.js`
+- Exports: MOCAP_DIR, ANIM_CATALOG (5 categories, 134 techniques, frame ranges)
+- Aug 30 model swap = change MOCAP_DIR from 'mocap/retargeted/' to 'mocap/logan-pp/'
+- technique-library.html now imports from shared module
+
+### Class Sheet
+- `~/basic-reflex/gym-eyes/class-sheet.html` — standalone class planning tool
+- Three views: DECK (5-axis composer) > SHEET (glanceable timeline) > RUN (distance-readable cards)
+- 5-axis model: Content, Method, Experience, Constraint, Intensity
+- Pre-loaded "Angle Hunt" example. localStorage persistence
+- Phase system: MOVE/BUILD/SOLVE/PLAY/PRESSURE/TEST/RESET
+
+### Overlay Mode Scaffold
+- `~/basic-reflex/gym-eyes/overlay.html` — Logan semi-transparent over webcam
+- Three-layer canvas: <video> webcam → <canvas> MediaPipe skeleton → <canvas> Three.js Logan
+- MediaPipe JS Vision SDK from CDN (first browser MediaPipe in Gym Eyes — Python only before)
+- All 134 techniques via shared anim-catalog.js
+- Diagnostic layers: Skeleton, Angles, Guard, Timing
+- 6 deviation bars, auto-align via hip landmarks, webcam + video upload
+- Logan opacity/speed/loop/mirror controls
+
+### GPT Relay Filed
+- `~/basic-reflex/gym-eyes/vision/` — REPORT.md, CLAUDE_HANDOFF.md, 3 concept images
+- 16-tool vision triaged: 4 existing, 3 priority (built), 9 future (idea bank)
