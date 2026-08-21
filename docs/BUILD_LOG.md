@@ -9,6 +9,20 @@
 - All 5 GLBs re-exported. Binary verified: hips translation diff=0.000000 from rest position across all frames.
 - Visual verification pending.
 
+## 2026-08-21 — PunchPass Scraper Refresh + Claude Projects Travel Kit
+
+**PunchPass scraper resurrected** — last run was May 25, 2026 (3 months stale). browser-harness confirmed working Aug 17.
+- Full scrape: 7/8 reports, 130 active passes, 661 member profiles rebuilt
+- Custom date-range extraction via heredoc: June 1 - July 31 attendance data
+- Analysis: 32 unique members, 218 attendances, tier breakdown (CORE/REGULAR/ACTIVE/CASUAL)
+- Saved to `~/basic-reflex/crm/punchpass-analysis-jun-jul-2026.md`
+- DB fresh as of 2026-08-17
+
+**5 Claude Projects on claude.ai** — mini Cathedral for UK travel
+- Reed, Cathy, ORC, Forge, Methods & Toolkit
+- Methods & Toolkit: new agent prompt (Three Engines + 33-card + parametric arch → toolkit UX)
+- Setup guide: `~/basic-reflex/claude-projects-travel-kit.md`
+
 ## 2026-07-31 — Coaching OS Visual Suite + Drill Capture Pipeline
 
 **7 new coaching tools built:**
