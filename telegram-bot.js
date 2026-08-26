@@ -59,6 +59,7 @@ import { registerBiasMapperCommands } from './bias-mapper.js';
 import { runForensicRelay, formatRelayTelegram, formatPromptTelegram } from './forensic-relay-engine.js';
 import { runExtractionCycle, runSingleCycle, formatCycleTelegram } from './extraction-cycle.js';
 import { captureDrill, insertDrill } from './coaching-os/drill-capture.js';
+import { startSlack, sendSlack, sendSlackFile } from './slack-bridge.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -591,6 +592,191 @@ async function startBot(retries = 5) {
 startBot();
 startGoldCron();
 
+// ── Slack Bridge ──────────────────────────────────────────────────────────────
+// Routes Slack messages through the same command handlers as Telegram.
+// Responses go back to the Slack channel instead of Telegram.
+startSlack(async (text, channel, respond, meta) => {
+  // Normalize: strip leading / so "search x" and "/search x" both work
+  // (Slack eats bare /commands as its own slash commands)
+  let cmd = text.trim();
+  if (cmd.startsWith('/')) cmd = cmd.slice(1);
+
+  // help
+  if (cmd === 'help') {
+    await respond(
+      '*Cathedral Slack Commands*\n\n' +
+      '`search <query>` — Vault semantic search\n' +
+      '`gold` — Gold extraction summary\n' +
+      '`metabolism` — Vault health report\n' +
+      '`hunch <idea>` — Hunch lane (routed to unbiased reasoner)\n' +
+      '`obliteratus <topic>` — Deep research pipeline\n' +
+      '`oracle <question>` — Oracle query\n' +
+      '`triage <claim>` — Epistemic triage (5-dimension scoring)\n' +
+      '`council <question>` — Genius Council debate\n' +
+      '`panam <question>` — Search Pandamericano coaching footage\n' +
+      '`cosmos <mode>` — Cosmology research (overview/track#/grade/search/tell)\n' +
+      '`plan <brief>` — Architecture plan generation\n' +
+      '`breathe [n]` — Vortex breathing timer\n' +
+      '`briefing` — Latest morning briefing\n' +
+      '`ap <message>` — A.P. cognitive twin (thinks through Paul\'s architecture)\n\n' +
+      'Or just talk — general messages get vault-grounded responses.'
+    );
+    return;
+  }
+
+  // search <query>
+  if (cmd.startsWith('search ')) {
+    const query = cmd.slice(7).trim();
+    if (!query) { await respond('Usage: `/search <query>`'); return; }
+    try {
+      const results = await semanticSearch(query, 5);
+      if (!results || results.length === 0) {
+        await respond(`No results for "${query}"`);
+        return;
+      }
+      let out = `*Vault Search: "${query}"*\n\n`;
+      for (const r of results) {
+        out += `• \`${r.file || 'unknown'}\`\n${(r.text || '').slice(0, 200)}\n\n`;
+      }
+      await respond(out);
+    } catch (err) {
+      await respond(`Search error: ${err.message}`);
+    }
+    return;
+  }
+
+  // gold
+  if (cmd === 'gold') {
+    try {
+      const goldData = await getOrRunGold();
+      if (goldData?.summary) {
+        await respond(goldData.summary);
+      } else {
+        await respond('No gold extraction data available. Run `/goldrun` first.');
+      }
+    } catch (err) {
+      await respond(`Gold error: ${err.message}`);
+    }
+    return;
+  }
+
+  // metabolism
+  if (cmd === 'metabolism') {
+    try {
+      const summary = await getMetabolismSummary();
+      await respond(summary || 'No metabolism data available.');
+    } catch (err) {
+      await respond(`Metabolism error: ${err.message}`);
+    }
+    return;
+  }
+
+  // hunch <idea>
+  if (cmd.startsWith('hunch ')) {
+    const hunch = cmd.slice(6).trim();
+    if (!hunch) { await respond('Usage: `/hunch <your hunch>`'); return; }
+    await respond(`Hunch lane open: "${hunch}"\nRetrieving vault → routing to unbiased reasoner...`);
+    try {
+      const result = await runHunch(hunch);
+      const out = renderHunch(result);
+      await respond(out);
+    } catch (err) {
+      await respond(`Hunch error: ${err.message}`);
+    }
+    return;
+  }
+
+  // triage <claim>
+  if (cmd.startsWith('triage ')) {
+    const claim = cmd.slice(7).trim();
+    if (!claim) { await respond('Usage: `/triage <claim>`'); return; }
+    await respond(`Triaging: "${claim}"...`);
+    try {
+      const vectorContext = await searchVectorStore(claim);
+      const result = await triageClaim(claim, vectorContext.map(t => ({ content: t })));
+      await respond(formatTriageResult(result));
+    } catch (err) {
+      await respond(`Triage error: ${err.message}`);
+    }
+    return;
+  }
+
+  // oracle <question>
+  if (cmd.startsWith('oracle ')) {
+    const question = cmd.slice(7).trim();
+    if (!question) { await respond('Usage: `/oracle <question>`'); return; }
+    await respond(`Oracle processing: "${question}"...`);
+    try {
+      const result = await runOracle(question);
+      await respond(formatOracleResult(result));
+    } catch (err) {
+      await respond(`Oracle error: ${err.message}`);
+    }
+    return;
+  }
+
+  // briefing — send latest morning briefing
+  if (cmd === 'briefing') {
+    const briefingDir = path.join(process.env.HOME, 'Cathedral', 'morning-briefings');
+    try {
+      const files = fs.readdirSync(briefingDir).filter(f => f.endsWith('.md')).sort().reverse();
+      if (files.length === 0) { await respond('No briefings found.'); return; }
+      const latest = fs.readFileSync(path.join(briefingDir, files[0]), 'utf8');
+      await respond(`*Latest Briefing* (${files[0]})\n\n${latest.slice(0, 3800)}`);
+    } catch (err) {
+      await respond(`Briefing error: ${err.message}`);
+    }
+    return;
+  }
+
+  // ap <message> — A.P. cognitive twin
+  if (cmd.startsWith('ap ')) {
+    const message = cmd.slice(3).trim();
+    if (!message) { await respond('Usage: `ap <your question or thought>`'); return; }
+    await respond('A.P. processing...');
+    try {
+      if (!globalThis._apPersona) {
+        const personaPath = path.join(process.env.HOME, 'basic-reflex', 'alters', 'alter-paul.md');
+        globalThis._apPersona = fs.readFileSync(personaPath, 'utf8');
+      }
+      const apResp = await fetch(`${OLLAMA_URL}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'hermes3',
+          messages: [
+            { role: 'system', content: globalThis._apPersona },
+            { role: 'user', content: message }
+          ],
+          stream: false
+        })
+      });
+      const apData = await apResp.json();
+      await respond(apData.message?.content || 'A.P. returned no response.');
+    } catch (err) {
+      await respond(`A.P. error: ${err.message}`);
+    }
+    return;
+  }
+
+  // General message — vault-grounded response via local model
+  try {
+    const vectorResults = await searchVectorStore(text);
+    const context = formatVectorContext(vectorResults);
+    const systemPrompt = context
+      ? `You are Forge, the Cathedral's intelligence engine. Answer using this vault context:\n\n${context}\n\nBe precise, forensic, and grounded. If the vault doesn't cover the question, say so.`
+      : 'You are Forge, the Cathedral\'s intelligence engine. Answer precisely and concisely.';
+    const result = await callCloud(systemPrompt, text);
+    await respond(result.response);
+  } catch (err) {
+    await respond(`Error: ${err.message}`);
+  }
+}).then(app => {
+  if (app) console.log('[cathedral-bot] Slack bridge active alongside Telegram.');
+}).catch(err => {
+  console.error('[cathedral-bot] Slack bridge failed:', err.message);
+});
+
 // Start vault metabolism cron (weekly) — sends health report to all active chats on run
 startMetabolismCron((report) => {
   console.log('[metabolism] Weekly scan complete.');
@@ -661,6 +847,7 @@ RESEARCH
 /predict [seed] — pattern completion
 /cosmos [track#] — cosmology research
 /base60 [number] — sexagesimal lens (convert/scan/guide)
+/ap [message] — A.P. cognitive twin (thinks through Paul's architecture)
 
 CREATIVE
 /reed [caption on photo] — visual generation
@@ -9309,6 +9496,38 @@ bot.onText(/^\/shrink(?:@\w+)?(?:\s+([\s\S]+))?$/i, async (msg, match) => {
     safeSend(chatId, `Unknown subcommand "${sub}". /shrink for usage.`);
   } catch (e) {
     safeSend(chatId, `Shrink error: ${e.message}`);
+  }
+});
+
+// /ap <message> — A.P. cognitive twin (thinks through Paul's architecture)
+bot.onText(/^\/ap(?:@\w+)?\s+([\s\S]+)$/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (!isPaul(chatId)) return;
+  const message = match[1].trim();
+  if (!message) { safeSend(chatId, 'Usage: /ap <your question or thought>'); return; }
+
+  await safeSend(chatId, 'A.P. processing...');
+  try {
+    if (!globalThis._apPersona) {
+      const personaPath = path.join(process.env.HOME, 'basic-reflex', 'alters', 'alter-paul.md');
+      globalThis._apPersona = fs.readFileSync(personaPath, 'utf8');
+    }
+    const apResp = await fetch(`${OLLAMA_URL}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'hermes3',
+        messages: [
+          { role: 'system', content: globalThis._apPersona },
+          { role: 'user', content: message }
+        ],
+        stream: false
+      })
+    });
+    const apData = await apResp.json();
+    await safeSend(chatId, apData.message?.content || 'A.P. returned no response.');
+  } catch (err) {
+    safeSend(chatId, `A.P. error: ${err.message}`);
   }
 });
 

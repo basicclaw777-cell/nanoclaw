@@ -1,6 +1,30 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-08-25 — Slack Bridge + NocoDB + Design Skills
+
+### Slack Bridge
+- `~/nanoclaw/slack-bridge.js` — Bolt Socket Mode bridge wired into telegram-bot.js
+- Bot: cathedral_bot (U0BSLBRHQDS), channel: cathedral-channel
+- Commands work WITHOUT `/` prefix (Slack eats bare /commands)
+- Supports: help, search, gold, metabolism, hunch, triage, oracle, briefing + general vault-grounded messages
+- Tokens in .env (SLACK_BOT_TOKEN + SLACK_APP_TOKEN)
+
+### NocoDB
+- Docker container "nocodb" on port 8085 (⚠ CRM Server also mapped to 8085 in docs — NocoDB has it now)
+- Data: ~/Cathedral/nocodb-data/ (persistent Docker volume)
+- Workspace: w13qa6ln, Base: Cathedral (pbg7q27facojq4b)
+- 4 tables seeded:
+  - Projects (12 records) — Grid + Board + Kanban + Gallery views
+  - Agents (15 records) — Grid view
+  - Drills (31 records) — Grid + Drill Cards (gallery) view
+  - Content Pipeline (12 records) — Grid + Pipeline Board (kanban) view
+- API token: nc_pat_... (in .env)
+
+### Design Skills Installed (~/.claude/skills/)
+- 4 external: frontend-design, ckw-design (5 sub-skills), design-skill (12 refs), 18 richhemsley3 skills
+- 3 custom: cathedral-ui, basic-reflex-brand, storyboard-director, training-materials
+
 ## 2026-08-01 — Logan Retarget Pipeline Fix
 
 **retarget-batch.py diagnosis + fix:**

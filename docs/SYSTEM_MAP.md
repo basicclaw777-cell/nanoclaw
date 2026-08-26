@@ -226,9 +226,14 @@
 - **Forge Sage** · `~/nanoclaw/sages/forge.json` · `/court` agent picker · Forge conversational proxy for Court · doc: BUILD_LOG 2026-07-17
 - **PT Tracker** · `~/basic-reflex/pt-tracker.html` · route `/pt` · Mobile PT session counter · doc: BUILD_LOG 2026-07-19
 
+## Communication Channels
+- **Telegram Bot** · `~/nanoclaw/telegram-bot.js` · [PM2 ONLINE] · primary command interface
+- **Slack Bridge** · `~/nanoclaw/slack-bridge.js` · loaded by telegram-bot.js · Socket Mode via @slack/bolt · cathedral_bot in cathedral-channel · commands work without `/` prefix
+- **NocoDB** · Docker container "nocodb" · port 8085 · `~/Cathedral/nocodb-data/` · 4 tables (Projects 12, Agents 15, Drills 31, Content Pipeline 12) · Kanban + Gallery views · API token in .env
+
 ## Infrastructure (always-on PM2)
 - **Cath-Bridge** · `~/nanoclaw/cath-bridge.cjs` · [PM2 ONLINE] port 8080 · 569 routes, all web UIs + APIs
-- **Cathedral Bot** · `~/nanoclaw/telegram-bot.js` · [PM2 ONLINE] Telegram commands · primary command interface
+- **Cathedral Bot** · `~/nanoclaw/telegram-bot.js` · [PM2 ONLINE] Telegram + Slack commands · primary command interface
 - **Dispatch Bot** · `~/Cathedral/tools/telegram-bot.js` · [PM2 ONLINE] · agent dispatch Telegram relay
 - **Cath-Local** · `~/Cathedral/cath_local_server.py` · [PM2 ONLINE] FastAPI :8000 · Python service layer
 - **Telegram Tunnel** · `~/nanoclaw/telegram-webhook-tunnel.sh` · [PM2 ONLINE] · webhook proxy
