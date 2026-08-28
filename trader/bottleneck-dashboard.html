@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bottleneck Arbitrage</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --card: #12121a;
+    --border: #1e1e2e;
+    --text: #e0e0e8;
+    --dim: #6b6b80;
+    --gold: #f7b408;
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --violet: #8b5cf6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  h1 { color: var(--gold); font-size: 1.4rem; margin-bottom: 4px; }
+  .subtitle { color: var(--dim); font-size: 0.8rem; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .stat-label { color: var(--dim); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-value { font-size: 1.6rem; font-weight: bold; margin-top: 4px; }
+  .stat-sub { font-size: 0.75rem; color: var(--dim); margin-top: 2px; }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+
+  .section { margin-bottom: 24px; }
+  .section-title { color: var(--gold); font-size: 0.9rem; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+
+  .layer-bar {
+    display: flex;
+    height: 32px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .layer-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #000;
+    transition: width 0.5s ease;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  th {
+    text-align: left;
+    color: var(--dim);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:hover { background: rgba(247, 180, 8, 0.03); }
+
+  .layer-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: bold;
+  }
+  .layer-MEMORY { background: #3b82f6; color: #fff; }
+  .layer-POWER_GRID { background: #f59e0b; color: #000; }
+  .layer-FAB_CAPACITY { background: #8b5cf6; color: #fff; }
+  .layer-DATA_CENTER_INFRA { background: #10b981; color: #000; }
+  .layer-MINING_POWER_PROXY { background: #ef4444; color: #fff; }
+  .layer-OTHER { background: #6b7280; color: #fff; }
+
+  .thesis-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .thesis-box h3 { color: var(--gold); font-size: 0.8rem; margin-bottom: 4px; }
+  .thesis-box p { color: var(--dim); font-size: 0.75rem; line-height: 1.5; }
+
+  .verdict-box {
+    background: linear-gradient(135deg, rgba(247,180,8,0.1), rgba(247,180,8,0.02));
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .verdict-label { color: var(--dim); font-size: 0.7rem; text-transform: uppercase; }
+  .verdict-value { color: var(--gold); font-size: 1.8rem; font-weight: bold; margin: 4px 0; }
+  .verdict-detail { color: var(--text); font-size: 0.8rem; }
+
+  .loading { color: var(--dim); text-align: center; padding: 40px; }
+  .error { color: var(--red); text-align: center; padding: 40px; }
+
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    body { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<h1>BOTTLENECK ARBITRAGE</h1>
+<div class="subtitle">13F Clone → Bottleneck Analysis → Paper Trading | Source: Situational Awareness LP (Aschenbrenner)</div>
+
+<div id="app" class="loading">Loading portfolio data...</div>
+
+<script>
+const LAYER_COLORS = {
+  MEMORY: '#3b82f6',
+  POWER_GRID: '#f59e0b',
+  FAB_CAPACITY: '#8b5cf6',
+  DATA_CENTER_INFRA: '#10b981',
+  MINING_POWER_PROXY: '#ef4444',
+  OTHER: '#6b7280',
+};
+
+const LAYER_LABELS = {
+  MEMORY: 'Memory',
+  POWER_GRID: 'Power/Grid',
+  FAB_CAPACITY: 'Fab',
+  DATA_CENTER_INFRA: 'Data Center',
+  MINING_POWER_PROXY: 'Mining→AI',
+  OTHER: 'Other',
+};
+
+async function load() {
+  const app = document.getElementById('app');
+  try {
+    const [portfolioRes, positionsRes] = await Promise.all([
+      fetch('/trader/bottleneck/portfolio'),
+      fetch('/trader/bottleneck/positions'),
+    ]);
+
+    if (!portfolioRes.ok) throw new Error('No portfolio data');
+
+    const portfolio = await portfolioRes.json();
+    const posData = await positionsRes.json();
+
+    const positions = Object.entries(portfolio.positions || {}).map(([ticker, pos]) => ({
+      ticker,
+      ...pos,
+    }));
+
+    const totalUnrealized = positions.reduce((s, p) => s + (p.unrealized_pnl || 0), 0);
+    const totalValue = positions.reduce((s, p) => s + (p.current_value || p.dollar_amount || 0), 0);
+    const returnPct = ((totalUnrealized + portfolio.total_pnl) / portfolio.initial_balance * 100).toFixed(2);
+
+    // Layer exposure bar
+    const layers = portfolio.layer_exposure || {};
+    const layerBar = Object.entries(layers)
+      .filter(([, v]) => v > 0)
+      .map(([k, v]) => `<div class="layer-segment" style="width:${v}%;background:${LAYER_COLORS[k] || '#666'}" title="${LAYER_LABELS[k] || k}: ${v}%">${v > 3 ? (LAYER_LABELS[k] || k) + ' ' + v + '%' : ''}</div>`)
+      .join('');
+
+    // Positions table
+    const posRows = positions
+      .sort((a, b) => (b.dollar_amount || 0) - (a.dollar_amount || 0))
+      .map(p => {
+        const pnlClass = (p.unrealized_pnl || 0) >= 0 ? 'positive' : 'negative';
+        const pnlPct = p.entry_price ? ((p.current_price - p.entry_price) / p.entry_price * 100).toFixed(1) : '0.0';
+        return `<tr>
+          <td><strong>${p.ticker}</strong></td>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name || ''}</td>
+          <td><span class="layer-badge layer-${p.layer}">${LAYER_LABELS[p.layer] || p.layer}</span></td>
+          <td>$${(p.entry_price || 0).toFixed(2)}</td>
+          <td>$${(p.current_price || 0).toFixed(2)}</td>
+          <td>${(p.pct || 0).toFixed(1)}%</td>
+          <td>$${(p.dollar_amount || 0).toFixed(0)}</td>
+          <td class="${pnlClass}">$${(p.unrealized_pnl || 0).toFixed(2)} (${pnlPct}%)</td>
+        </tr>`;
+      }).join('');
+
+    // History
+    const historyRows = (posData.snapshots || []).slice(0, 10).map(s => {
+      const layers = JSON.parse(s.layer_breakdown || '{}');
+      const layerStr = Object.entries(layers).map(([k,v]) => `${LAYER_LABELS[k] || k}: ${v}%`).join(', ');
+      return `<tr>
+        <td>${s.timestamp?.split('T')[0] || s.timestamp}</td>
+        <td>$${(s.portfolio_value || 0).toFixed(0)}</td>
+        <td>${s.bottleneck_verdict}</td>
+        <td style="font-size:0.7rem">${layerStr}</td>
+      </tr>`;
+    }).join('');
+
+    app.innerHTML = `
+      <div class="grid">
+        <div class="stat-card">
+          <div class="stat-label">Balance</div>
+          <div class="stat-value">$${portfolio.balance.toLocaleString(undefined, {maximumFractionDigits: 0})}</div>
+          <div class="stat-sub">Initial: $${portfolio.initial_balance.toLocaleString()}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Unrealized P&L</div>
+          <div class="stat-value ${totalUnrealized >= 0 ? 'positive' : 'negative'}">$${totalUnrealized.toFixed(2)}</div>
+          <div class="stat-sub ${returnPct >= 0 ? 'positive' : 'negative'}">${returnPct >= 0 ? '+' : ''}${returnPct}% total return</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Positions</div>
+          <div class="stat-value">${positions.length}</div>
+          <div class="stat-sub">Filing: ${portfolio.filing_period || 'N/A'}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Closed Trades</div>
+          <div class="stat-value">${portfolio.total_trades}</div>
+          <div class="stat-sub">${portfolio.wins}W / ${portfolio.losses}L | Realized: $${portfolio.total_pnl.toFixed(2)}</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">LAYER EXPOSURE</div>
+        <div class="layer-bar">${layerBar}</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">THESIS</div>
+        <div class="thesis-box">
+          <h3>Why This Portfolio Exists</h3>
+          <p>Everyone buys NVIDIA. Aschenbrenner buys everything AROUND it — memory chips, power plants, grid access, fab capacity. The thesis: AI infrastructure has physical bottlenecks that cannot scale faster than physics allows. Own the bottleneck, not the product.</p>
+        </div>
+        <div class="thesis-box">
+          <h3>Key Insight: BTC Miners = Power Proxies</h3>
+          <p>Bitcoin miners own secured grid connections + land + cooling infrastructure that takes 4+ years to build from scratch. As AI companies need power NOW, they'll lease from miners at premium prices rather than wait in the grid queue.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">POSITIONS (${positions.length})</div>
+        <div style="overflow-x:auto">
+        <table>
+          <tr>
+            <th>Ticker</th>
+            <th>Name</th>
+            <th>Layer</th>
+            <th>Entry</th>
+            <th>Current</th>
+            <th>Weight</th>
+            <th>Allocated</th>
+            <th>P&L</th>
+          </tr>
+          ${posRows}
+        </table>
+        </div>
+      </div>
+
+      ${historyRows ? `
+      <div class="section">
+        <div class="section-title">SNAPSHOTS</div>
+        <table>
+          <tr><th>Date</th><th>Value</th><th>Verdict</th><th>Layers</th></tr>
+          ${historyRows}
+        </table>
+      </div>` : ''}
+
+      <div style="color:var(--dim);font-size:0.7rem;text-align:center;margin-top:30px">
+        Source: SEC EDGAR 13F-HR | CIK 0002045724 | Rebalance: weekly Monday | Paper trading only
+      </div>
+    `;
+  } catch (e) {
+    app.innerHTML = '<div class="error">Failed to load: ' + e.message + '</div>';
+  }
+}
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>

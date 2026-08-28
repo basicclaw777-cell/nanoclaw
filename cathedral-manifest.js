@@ -93,6 +93,14 @@ const MANIFEST = {
   'ensemble-feeder':     { intended: 'cron', cron: '0 20 * * *',    reason: 'Daily 04:00 HKT — auto-feed ensemble gate' },
   'trader':              { intended: 'cron', cron: '0 0,12 * * *',  reason: '2x daily 08:00+20:00 HKT — trading orchestrator' },
 
+  // ── EMERGENCE PIPELINE (daily sequence: harvest → ingest → triage → reignite → produce → integrate) ──
+  'emergence-harvester':     { intended: 'cron', cron: '30 20 * * *',  reason: 'Daily 04:30 HKT — scan agent DMs for emergence signals' },
+  'emergence-ingest':        { intended: 'cron', cron: '0 21 * * *',   reason: 'Daily 05:00 HKT — ingest captures+surprises → board incidents' },
+  'emergence-signal-router': { intended: 'cron', cron: '25 21 * * *',  reason: 'Daily 05:25 HKT — route signals between agents' },
+  'emergence-triage':        { intended: 'cron', cron: '35 21 * * *',  reason: 'Daily 05:35 HKT — DETECTED → WATCHING or DISMISSED' },
+  'emergence-reigniter':     { intended: 'cron', cron: '45 21 * * *',  reason: 'Daily 05:45 HKT — WATCHING cross-agent asks → concrete tasks' },
+  'production-engine':       { intended: 'cron', cron: '0 22 * * *',   reason: 'Daily 06:00 HKT — execute tasks, ship deliverables, WATCHING → CONFIRMED' },
+
   // ── WEEKLY CRONS ──
   'feed-steward':        { intended: 'cron', cron: '0 16 * * 6',    reason: 'Sun midnight HKT — agent feed digest + grading' },
   'gym-digest':          { intended: 'cron', cron: '0 12 * * 0',    reason: 'Sun 20:00 HKT — weekly gym summary' },
@@ -142,6 +150,7 @@ const MANIFEST = {
   'memory-consolidator': { intended: 'cron', cron: '0 4 * * 0',     reason: 'Sunday — memory decay, graduation, self-assessment' },
   'gym-digest':          { intended: 'cron', cron: '0 12 * * 0',    reason: 'Sunday 20:00 HKT — weekly gym report' },
   'long-term-portfolio': { intended: 'cron', cron: '0 0 * * 1',     reason: 'Monday 08:00 HKT — weekly portfolio review' },
+  'bottleneck-arbitrage': { intended: 'cron', cron: '0 0 * * 1',   reason: 'Monday 08:00 HKT — 13F bottleneck arbitrage (equities paper)' },
   'property-scout':      { intended: 'cron', cron: '0 2 * * 0',     reason: 'Sunday — weekly property scan' },
   'golden-zone-units':   { intended: 'cron', cron: '0 2 * * 3',     reason: 'Wednesday — unit search' },
   'due-diligence':       { intended: 'cron', cron: '0 2 * * 4',     reason: 'Thursday — property due diligence' },

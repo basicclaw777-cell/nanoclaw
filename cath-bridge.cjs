@@ -3995,6 +3995,144 @@ app.post('/trader/picks/pick', (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+// ── Bottleneck Arbitrage ─────────────────────────────────────────────────────
+
+app.get('/trader/bottleneck', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'trader', 'bottleneck-dashboard.html'));
+});
+
+app.get('/trader/bottleneck/portfolio', (req, res) => {
+  const fp = path.join(NANOCLAW, 'trader', 'bottleneck-portfolio.json');
+  if (!require('fs').existsSync(fp)) return res.status(404).json({ error: 'No bottleneck portfolio' });
+  res.json(JSON.parse(require('fs').readFileSync(fp, 'utf8')));
+});
+
+app.get('/trader/bottleneck/positions', (req, res) => {
+  try {
+    const Database = require('better-sqlite3');
+    const db = new Database(path.join(NANOCLAW, 'trader', 'logs', 'trades.db'));
+    const open = db.prepare('SELECT * FROM bottleneck_positions WHERE status = ?').all('open');
+    const closed = db.prepare('SELECT * FROM bottleneck_positions WHERE status = ? ORDER BY closed_at DESC LIMIT 20').all('closed');
+    const snapshots = db.prepare('SELECT * FROM bottleneck_snapshots ORDER BY id DESC LIMIT 10').all();
+    db.close();
+    res.json({ open, closed, snapshots });
+  } catch(e) {
+    res.json({ open: [], closed: [], snapshots: [] });
+  }
+});
+
+// ── Cathedral OS ────────────────────────────────────────────────────────────
+
+let _cathedralOS;
+async function getCathedralOS() {
+  if (!_cathedralOS) _cathedralOS = await import(path.join(__dirname, 'cathedral-os.js'));
+  return _cathedralOS;
+}
+
+app.get('/cathedral/api/stats', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    res.json(cos.getStats());
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/cathedral/api/state/:room', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const room = req.params.room.toUpperCase();
+    const state = cos.getRoomState(room);
+    res.json(state || { room, snapshot: null, message: 'No state recorded yet' });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/cathedral/api/states', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    res.json(cos.getAllRoomStates());
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/cathedral/api/signals', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const { room, lifecycle, limit } = req.query;
+    res.json(cos.getSignals({ room, lifecycle, limit: limit ? parseInt(limit) : 50 }));
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/cathedral/api/attention', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const { bucket, limit } = req.query;
+    res.json(cos.getAttentionItems({ bucket, limit: limit ? parseInt(limit) : 10 }));
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/cathedral/api/breakthroughs', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const { room, limit } = req.query;
+    res.json(cos.getBreakthroughs({ room, limit: limit ? parseInt(limit) : 20 }));
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/cathedral/api/events', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const { room, limit, since } = req.query;
+    res.json(cos.getRecentEvents({ room, limit: limit ? parseInt(limit) : 50, since }));
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/cathedral/api/events', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const { source, room, type, subject, payload } = req.body;
+    if (!source || !room || !type || !subject) {
+      return res.status(400).json({ error: 'Missing required fields: source, room, type, subject' });
+    }
+    const id = cos.emitEvent({ source, room, type, subject, payload });
+    res.json({ id, status: 'recorded' });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/cathedral/api/feedback', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const { attentionId, response, notes } = req.body;
+    if (!attentionId || !response) {
+      return res.status(400).json({ error: 'Missing attentionId or response' });
+    }
+    const id = cos.recordResponse({ attentionId, response, notes });
+    res.json({ id, status: 'recorded' });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/cathedral/api/breakthroughs', async (req, res) => {
+  try {
+    const cos = await getCathedralOS();
+    const id = cos.createBreakthrough(req.body);
+    res.json({ id, status: 'created' });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/cathedral', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'cathedral-os-atrium.html'));
+});
+
+app.get('/cathedral/observatory', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'cathedral-os-room.html'));
+});
+
+app.get('/cathedral/:room', (req, res) => {
+  const valid = ['make','think','coach','run','trade','reflect','build'];
+  if (valid.includes(req.params.room.toLowerCase())) {
+    res.sendFile(path.join(NANOCLAW, 'cathedral-os-room.html'));
+  } else {
+    res.status(404).json({ error: 'Unknown room' });
+  }
+});
+
 // ── Intelligence Hub: Scraper endpoints ──────────────────────────────────────
 
 const SCRAPER_OUTPUTS = path.join(NANOCLAW, 'scraper', 'outputs');

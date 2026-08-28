@@ -3884,3 +3884,54 @@ Build approach = WEAVE-IN. No dedicated sprint. Build through parametric pattern
 ### GPT Relay Filed
 - `~/basic-reflex/gym-eyes/vision/` — REPORT.md, CLAUDE_HANDOFF.md, 3 concept images
 - 16-tool vision triaged: 4 existing, 3 priority (built), 9 future (idea bank)
+
+## 2026-08-26 — Bottleneck Arbitrage Strategy
+
+### Strategy Lane: 13F Bottleneck Arbitrage
+- `~/nanoclaw/trader/bottleneck-arbitrage.js` — ESM, own portfolio, own DB table, own P&L
+- Thesis: AI infrastructure bottleneck owners outperform obvious plays (no NVIDIA, buy the constraints)
+- Source: Situational Awareness LP (CIK 0002045724) SEC 13F-HR filings
+- Method: Pull 13F → categorize into 5 bottleneck layers → weight by bottleneck score → paper trade
+- Layers: MEMORY (SanDisk/Micron), POWER_GRID (Bloom Energy), FAB (TSMC), DATA_CENTER (CoreWeave/Nebius), MINING_PROXY (Riot/IREN)
+- Portfolio: $100K paper, 18 positions opened, weekly rebalance
+- PM2 cron: Monday 08:00 HKT (weekly, `0 0 * * 1`)
+- DB: bottleneck_positions + bottleneck_snapshots + bottleneck_prices tables in trades.db
+- Config: `bottleneck_arbitrage: 1.5` added to strategy_weights in config.json
+- First run: 2026-08-26, filing period Q2 2026 (filed 2026-08-14)
+
+### Cathedral OS — Boring Prototype (2026-08-26)
+
+**What:** Visual front door for the Cathedral system. State-based attention pipeline, not another dashboard.
+**Origin:** 2 GPT relay rounds + Paul/Forge planning session. Architecture locked before building.
+
+Planning docs:
+- `~/cathedral-vault/00_Staging/cathedral/cathedral-os-planning.md` — full vision document
+- `~/cathedral-vault/00_Staging/cathedral/the_architecture.md` — LOCKED systems architecture (6-layer model)
+- `~/cathedral-vault/00_Staging/cathedral/cathedral-os-gpt-relay.md` — GPT relay prompt v1
+- `~/cathedral-vault/00_Staging/cathedral/cathedral-os-gpt-relay-v2.md` — GPT relay prompt v2
+
+Built:
+- `~/nanoclaw/cathedral-os.js` — ESM core module: event collector, state engine, signal scoring, attention arbitration, breakthrough objects, guide's ledger schema, suppression memory
+- `~/nanoclaw/cathedral-os.db` — SQLite: events, room_state, signals, attention_items, attention_responses, suppressed, breakthroughs, guide_ledger, opinion_levels, expectation_rules
+- `~/nanoclaw/cathedral-os-atrium.html` — Atrium: NOW/RETURNING/UNFINISHED sections, 7 room cards, interaction buttons (Act/Watch/Dismiss), stats bar, Observatory link
+- `~/nanoclaw/cathedral-os-room.html` — Room page: arrival ritual, state snapshot grid, signals list, event history table
+- cath-bridge routes: `/cathedral`, `/cathedral/:room`, `/cathedral/api/*` (stats, state, signals, attention, events, feedback, breakthroughs)
+
+Architecture (from the_architecture.md):
+- L1 Event Collector → L2 State + Significance Engine → L3 Attention Arbitration → L4 Maitre D' → L5 Presentation → L6 Interaction (feedback loop)
+- Provenance contract: every object answers "why do you believe this?"
+- Opinion ladder: 6 levels (Service → Intervention), per-capability, asymmetric promotion
+- Guide's Ledger: prediction → confidence → outcome → utility tracking
+- Expectation gaps: detecting absences, not just events
+- Suppression memory: dismissed signals auto-suppress after 5x
+- 7 rooms: MAKE, THINK, COACH, RUN, TRADE, REFLECT, BUILD. No more.
+- Observatory as mode, not room
+- Design laws: state transitions over activity, change creates meaning, memory gravity
+
+Seeded data:
+- All 7 room states from real system data (124 PM2 processes, 565 CRM members, 27 strategies, etc.)
+- 6 signals (bottleneck strategy, architecture locked, kids programme gap, PM2 health, identity threshold overdue, initial boot)
+- 1 breakthrough (Cathedral OS prototype built)
+- Interaction buttons (Act/Watch/Dismiss) wired to feedback API
+
+Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into existing strategies/agents, build significance scoring engine (L2 rules), test memory gravity hypothesis over 1 week

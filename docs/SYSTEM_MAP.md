@@ -241,7 +241,14 @@
 - **Intake Watcher** · `~/nanoclaw/intake-watcher.js` · [PM2 ONLINE] · incoming file routing
 - **Morning View** · `~/Cathedral/morning-view/server.js` · [PM2 ONLINE] · daily briefing generator
 
+## Cathedral OS
+- **Cathedral OS Atrium** · `~/nanoclaw/cathedral-os-atrium.html` · route `/cathedral` · Front door: NOW/RETURNING/UNFINISHED signals, 7 room cards, Observatory link
+- **Cathedral OS Room** · `~/nanoclaw/cathedral-os-room.html` · route `/cathedral/:room` · Per-room: arrival ritual, state snapshot, signals, event history
+- **Cathedral OS Core** · `~/nanoclaw/cathedral-os.js` · ESM module · L1-L3 event/state/signal/attention pipeline, SQLite `cathedral-os.db`
+- **Architecture Spec** · `~/cathedral-vault/00_Staging/cathedral/the_architecture.md` · [LOCKED 2026-08-26] · 6-layer model, state-based attention, trust architecture
+
 ## Trading System
+- **Bottleneck Arbitrage** · `~/nanoclaw/trader/bottleneck-arbitrage.js` · [PM2 CRON Mon 08:00 HKT] · 13F clone → bottleneck layer analysis → equities paper trading · $100K paper, 18 positions · doc: BUILD_LOG 2026-08-26
 - **Trading Orchestrator** · `~/nanoclaw/trader/trading-orchestrator.js` · [PM2 STOPPED] · central signal→trade loop, weight persistence, genome inheritance, corner advice
 - **Orchestrator Seed** · `~/nanoclaw/orchestrator-seed-generator.js` · [PM2 ONLINE] · seed generation for orchestrator
 - **Trader Hub** · route `/trader/hub` · dashboard: portfolio, positions, signals, performance

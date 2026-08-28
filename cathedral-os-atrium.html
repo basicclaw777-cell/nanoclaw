@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral OS</title>
+<style>
+  :root {
+    --bg: #09090f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --text: #d4d4dc;
+    --dim: #6b6b80;
+    --accent: #7c3aed;
+    --gold: #f7b408;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  .header { margin-bottom: 32px; }
+  .header h1 {
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .header .spec {
+    color: var(--dim);
+    font-size: 0.7rem;
+    margin-top: 6px;
+    line-height: 1.5;
+    max-width: 600px;
+  }
+  .header .stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 0.7rem;
+    color: var(--dim);
+  }
+  .header .stats span { color: var(--text); }
+
+  .section {
+    margin-bottom: 24px;
+  }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .signal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .signal-card:hover { border-color: var(--accent); }
+  .signal-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .signal-icon {
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  .signal-body { flex: 1; min-width: 0; }
+  .signal-title {
+    font-size: 0.8rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .signal-why {
+    font-size: 0.65rem;
+    color: var(--dim);
+    margin-top: 3px;
+  }
+  .signal-meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+    align-items: center;
+  }
+  .room-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .room-MAKE { background: #7c3aed22; color: #a78bfa; border: 1px solid #7c3aed44; }
+  .room-THINK { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f644; }
+  .room-COACH { background: #10b98122; color: #34d399; border: 1px solid #10b98144; }
+  .room-RUN { background: #f59e0b22; color: #fbbf24; border: 1px solid #f59e0b44; }
+  .room-TRADE { background: #f7b40822; color: #f7b408; border: 1px solid #f7b40844; }
+  .room-REFLECT { background: #ec489922; color: #f472b6; border: 1px solid #ec489944; }
+  .room-BUILD { background: #6b728022; color: #9ca3af; border: 1px solid #6b728044; }
+
+  .actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+  .actions button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--dim);
+    font-family: inherit;
+    font-size: 0.55rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+  }
+  .actions button:hover { border-color: var(--accent); color: var(--text); }
+  .actions button.acted { border-color: var(--green); color: var(--green); }
+  .actions button.dismissed { border-color: var(--red); color: var(--red); opacity: 0.5; }
+
+  .rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+  }
+  .room-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    text-decoration: none;
+  }
+  .room-card:hover { border-color: var(--accent); }
+  .room-card .room-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .room-card .room-state {
+    font-size: 0.6rem;
+    color: var(--dim);
+    margin-top: 4px;
+  }
+  .room-card .room-signals {
+    font-size: 0.6rem;
+    margin-top: 6px;
+  }
+
+  .observatory-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    padding: 10px;
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    color: var(--dim);
+    font-size: 0.7rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.15s;
+  }
+  .observatory-link:hover { border-color: var(--accent); color: var(--text); }
+
+  .empty-state {
+    color: var(--dim);
+    font-size: 0.75rem;
+    padding: 16px;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .timestamp {
+    font-size: 0.55rem;
+    color: var(--dim);
+  }
+
+  .confidence-bar {
+    display: inline-block;
+    width: 30px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    vertical-align: middle;
+  }
+  .confidence-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  .footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.6rem;
+    color: var(--dim);
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 14px; }
+    .rooms-grid { grid-template-columns: repeat(3, 1fr); }
+    .header h1 { font-size: 0.95rem; }
+    .actions { gap: 2px; }
+    .actions button { font-size: 0.5rem; padding: 2px 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Cathedral OS</h1>
+  <div class="spec">A place where your AI system remembers what matters, shows you what changed, and helps you decide where to go next.</div>
+  <div class="stats" id="stats">loading...</div>
+</div>
+
+<div class="section" id="now-section">
+  <div class="section-label">Now</div>
+  <div id="now-items" class="empty-state">No active signals</div>
+</div>
+
+<div class="section" id="returning-section">
+  <div class="section-label">Returning</div>
+  <div id="returning-items" class="empty-state">Nothing resurfacing</div>
+</div>
+
+<div class="section" id="unfinished-section">
+  <div class="section-label">Unfinished</div>
+  <div id="unfinished-items" class="empty-state">No open threads</div>
+</div>
+
+<div class="section">
+  <div class="section-label">Rooms</div>
+  <div class="rooms-grid" id="rooms-grid"></div>
+  <a href="/cathedral/observatory" class="observatory-link">Observatory — peripheral vision</a>
+</div>
+
+<div class="footer" id="footer">Cathedral OS v0.1 — boring prototype</div>
+
+<script>
+const ROOMS = [
+  { id: 'MAKE', name: 'Make', color: '#a78bfa' },
+  { id: 'THINK', name: 'Think', color: '#60a5fa' },
+  { id: 'COACH', name: 'Coach', color: '#34d399' },
+  { id: 'RUN', name: 'Run', color: '#fbbf24' },
+  { id: 'TRADE', name: 'Trade', color: '#f7b408' },
+  { id: 'REFLECT', name: 'Reflect', color: '#f472b6' },
+  { id: 'BUILD', name: 'Build', color: '#9ca3af' },
+];
+
+const ICONS = {
+  signal: '◆',
+  gap: '○',
+  connection: '↔',
+  breakthrough: '✦',
+  returning: '↻',
+  alert: '!',
+  new: '⊕',
+  failure: '×',
+  progress: '↑',
+};
+
+function confidenceBar(v) {
+  const pct = Math.round((v || 0) * 100);
+  const color = pct > 70 ? '#10b981' : pct > 40 ? '#f59e0b' : '#ef4444';
+  return `<span class="confidence-bar"><span class="confidence-fill" style="width:${pct}%;background:${color}"></span></span>`;
+}
+
+function renderSignalCard(item, bucket) {
+  const icon = ICONS[item.signal_type] || ICONS.signal;
+  const room = item.room || 'BUILD';
+  const why = item.provenance?.sources?.length
+    ? `Why: ${item.provenance.sources.slice(0,2).join(', ')}`
+    : (item.description || '');
+  const ts = item.timestamp ? new Date(item.timestamp).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : '';
+
+  return `<div class="signal-card" data-id="${item.id}">
+    <div class="signal-row">
+      <div class="signal-icon">${icon}</div>
+      <div class="signal-body">
+        <div class="signal-title">${item.title || 'Untitled signal'}</div>
+        ${why ? `<div class="signal-why">${why}</div>` : ''}
+        <div class="signal-meta">
+          <span class="room-badge room-${room}">${room}</span>
+          ${confidenceBar(item.confidence)}
+          <span class="timestamp">${ts}</span>
+          <div class="actions">
+            <button onclick="respond('${item.id}','acted',this)" title="I'll look at this">Act</button>
+            <button onclick="respond('${item.id}','watched',this)" title="Keep tracking">Watch</button>
+            <button onclick="respond('${item.id}','dismissed',this)" title="Don't care">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function respond(attentionId, response, btn) {
+  try {
+    await fetch('/cathedral/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ attentionId, response })
+    });
+    btn.classList.add(response === 'acted' ? 'acted' : response === 'dismissed' ? 'dismissed' : 'acted');
+    btn.textContent = response === 'acted' ? 'Acted' : response === 'dismissed' ? 'Gone' : 'Watching';
+  } catch(e) { console.error(e); }
+}
+
+async function load() {
+  try {
+    const [statsRes, nowRes, returningRes, unfinishedRes, statesRes] = await Promise.all([
+      fetch('/cathedral/api/stats'),
+      fetch('/cathedral/api/attention?bucket=NOW&limit=3'),
+      fetch('/cathedral/api/attention?bucket=RETURNING&limit=2'),
+      fetch('/cathedral/api/attention?bucket=UNFINISHED&limit=3'),
+      fetch('/cathedral/api/states'),
+    ]);
+
+    const stats = await statsRes.json();
+    const now = await nowRes.json();
+    const returning = await returningRes.json();
+    const unfinished = await unfinishedRes.json();
+    const states = await statesRes.json();
+
+    document.getElementById('stats').innerHTML = `
+      Events: <span>${stats.eventCount || 0}</span> |
+      Signals: <span>${stats.activeSignals || 0}</span> active |
+      Breakthroughs: <span>${stats.breakthroughCount || 0}</span> |
+      Pending: <span>${stats.attentionCount || 0}</span>
+    `;
+
+    const nowEl = document.getElementById('now-items');
+    nowEl.innerHTML = now.length
+      ? now.map(i => renderSignalCard(i, 'NOW')).join('')
+      : '<div class="empty-state">No active signals. The Cathedral is quiet.</div>';
+
+    const retEl = document.getElementById('returning-items');
+    retEl.innerHTML = returning.length
+      ? returning.map(i => renderSignalCard(i, 'RETURNING')).join('')
+      : '<div class="empty-state">Nothing resurfacing</div>';
+
+    const unfEl = document.getElementById('unfinished-items');
+    unfEl.innerHTML = unfinished.length
+      ? unfinished.map(i => renderSignalCard(i, 'UNFINISHED')).join('')
+      : '<div class="empty-state">No open threads</div>';
+
+    const grid = document.getElementById('rooms-grid');
+    grid.innerHTML = ROOMS.map(r => {
+      const state = states[r.id];
+      const snap = state?.snapshot;
+      let stateText = 'no state yet';
+      let signalCount = '';
+      if (snap) {
+        const keys = Object.keys(snap);
+        stateText = keys.slice(0, 2).map(k => {
+          const v = snap[k];
+          return typeof v === 'number' ? `${k}: ${v}` : `${k}: ${String(v).slice(0,12)}`;
+        }).join(', ') || 'active';
+      }
+      return `<a href="/cathedral/${r.id.toLowerCase()}" class="room-card">
+        <div class="room-name" style="color:${r.color}">${r.name}</div>
+        <div class="room-state">${stateText}</div>
+      </a>`;
+    }).join('');
+
+  } catch(e) {
+    console.error('Load failed:', e);
+    document.getElementById('stats').textContent = 'Failed to load: ' + e.message;
+  }
+}
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>

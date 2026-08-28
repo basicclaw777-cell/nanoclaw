@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral OS — Room</title>
+<style>
+  :root {
+    --bg: #09090f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --text: #d4d4dc;
+    --dim: #6b6b80;
+    --accent: #7c3aed;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  .back {
+    display: inline-block;
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 0.7rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.15s;
+  }
+  .back:hover { color: var(--text); }
+
+  .room-header {
+    margin-bottom: 24px;
+  }
+  .room-header h1 {
+    font-size: 1.2rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .room-header .room-state-line {
+    color: var(--dim);
+    font-size: 0.7rem;
+    margin-top: 6px;
+  }
+
+  .arrival {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .arrival-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    margin-bottom: 10px;
+  }
+  .arrival-item {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    padding: 2px 0;
+  }
+  .arrival-icon {
+    display: inline-block;
+    width: 16px;
+    text-align: center;
+    margin-right: 6px;
+  }
+  .arrival-item.changed { color: var(--text); }
+  .arrival-item.look { color: var(--amber); }
+  .arrival-item.unfinished { color: var(--dim); }
+  .arrival-item.gap { color: var(--red); }
+  .arrival-item.question { color: var(--accent); }
+
+  .section {
+    margin-bottom: 24px;
+  }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .signal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+  }
+  .signal-title { font-size: 0.8rem; }
+  .signal-why { font-size: 0.65rem; color: var(--dim); margin-top: 2px; }
+  .signal-meta { display: flex; gap: 8px; margin-top: 4px; font-size: 0.6rem; color: var(--dim); }
+
+  .state-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+  }
+  .state-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+  }
+  .state-key {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--dim);
+  }
+  .state-val {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .events-table {
+    width: 100%;
+    font-size: 0.7rem;
+    border-collapse: collapse;
+  }
+  .events-table th {
+    text-align: left;
+    color: var(--dim);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .events-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .events-table tr:hover { background: rgba(124, 58, 237, 0.03); }
+
+  .empty-state {
+    color: var(--dim);
+    font-size: 0.75rem;
+    padding: 16px;
+    text-align: center;
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 14px; }
+    .state-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<a href="/cathedral" class="back">← Atrium</a>
+
+<div class="room-header">
+  <h1 id="room-name">Loading...</h1>
+  <div class="room-state-line" id="room-state-line"></div>
+</div>
+
+<div class="arrival" id="arrival">
+  <div class="arrival-label">Arrival Ritual</div>
+  <div id="arrival-content" class="empty-state">No arrival data yet</div>
+</div>
+
+<div class="section" id="state-section">
+  <div class="section-label">Current State</div>
+  <div class="state-grid" id="state-grid">
+    <div class="empty-state">No state recorded</div>
+  </div>
+</div>
+
+<div class="section" id="signals-section">
+  <div class="section-label">Active Signals</div>
+  <div id="signals-list" class="empty-state">No signals for this room</div>
+</div>
+
+<div class="section" id="events-section">
+  <div class="section-label">Recent Events</div>
+  <div id="events-list" class="empty-state">No events recorded</div>
+</div>
+
+<script>
+const ROOM_COLORS = {
+  MAKE: '#a78bfa', THINK: '#60a5fa', COACH: '#34d399',
+  RUN: '#fbbf24', TRADE: '#f7b408', REFLECT: '#f472b6', BUILD: '#9ca3af',
+};
+
+const ROOM_ID = window.location.pathname.split('/').pop().toUpperCase();
+
+function renderArrival(state, signals) {
+  const items = [];
+  if (signals.length) {
+    const changed = signals.filter(s => s.change_score > 0.5);
+    const looks = signals.filter(s => s.significance > 0.6);
+    const unf = signals.filter(s => s.bucket === 'UNFINISHED');
+
+    changed.slice(0, 3).forEach(s => {
+      items.push(`<div class="arrival-item changed"><span class="arrival-icon">✦</span>Changed: ${s.title}</div>`);
+    });
+    looks.slice(0, 1).forEach(s => {
+      items.push(`<div class="arrival-item look"><span class="arrival-icon">⚠</span>Look at: ${s.title}</div>`);
+    });
+    unf.slice(0, 1).forEach(s => {
+      items.push(`<div class="arrival-item unfinished"><span class="arrival-icon">○</span>Unfinished: ${s.title}</div>`);
+    });
+  }
+
+  if (!items.length && state?.snapshot) {
+    items.push(`<div class="arrival-item changed"><span class="arrival-icon">◆</span>Room is active. ${Object.keys(state.snapshot).length} state properties tracked.</div>`);
+  }
+
+  return items.length ? items.join('') : '<div class="empty-state">No arrival data yet. Events will populate this.</div>';
+}
+
+async function load() {
+  document.getElementById('room-name').textContent = ROOM_ID;
+  document.getElementById('room-name').style.color = ROOM_COLORS[ROOM_ID] || '#d4d4dc';
+  document.title = `Cathedral OS — ${ROOM_ID}`;
+
+  try {
+    const [stateRes, signalsRes, eventsRes] = await Promise.all([
+      fetch(`/cathedral/api/state/${ROOM_ID}`),
+      fetch(`/cathedral/api/signals?room=${ROOM_ID}&limit=10`),
+      fetch(`/cathedral/api/events?room=${ROOM_ID}&limit=20`),
+    ]);
+
+    const state = await stateRes.json();
+    const signals = await signalsRes.json();
+    const events = await eventsRes.json();
+
+    if (state?.snapshot) {
+      document.getElementById('room-state-line').textContent =
+        `Last updated: ${state.timestamp ? new Date(state.timestamp).toLocaleString() : 'unknown'}`;
+
+      const grid = document.getElementById('state-grid');
+      grid.innerHTML = Object.entries(state.snapshot).map(([k, v]) => `
+        <div class="state-card">
+          <div class="state-key">${k.replace(/_/g, ' ')}</div>
+          <div class="state-val">${typeof v === 'number' ? v.toLocaleString() : String(v).slice(0, 20)}</div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('arrival-content').innerHTML = renderArrival(state, signals);
+
+    const sigEl = document.getElementById('signals-list');
+    if (signals.length) {
+      sigEl.innerHTML = signals.map(s => `
+        <div class="signal-card">
+          <div class="signal-title">${s.title}</div>
+          ${s.description ? `<div class="signal-why">${s.description}</div>` : ''}
+          <div class="signal-meta">
+            <span>confidence: ${(s.confidence || 0).toFixed(1)}</span>
+            <span>significance: ${(s.significance || 0).toFixed(1)}</span>
+            <span>${s.lifecycle || 'born'}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const evEl = document.getElementById('events-list');
+    if (events.length) {
+      evEl.innerHTML = `<table class="events-table">
+        <tr><th>Time</th><th>Type</th><th>Subject</th></tr>
+        ${events.map(e => `<tr>
+          <td>${e.timestamp ? new Date(e.timestamp).toLocaleString() : ''}</td>
+          <td>${e.type}</td>
+          <td>${e.subject}</td>
+        </tr>`).join('')}
+      </table>`;
+    }
+
+  } catch(e) {
+    console.error('Load failed:', e);
+  }
+}
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>
