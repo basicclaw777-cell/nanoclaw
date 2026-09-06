@@ -1,0 +1,81 @@
+{
+  "hardware": "mini-16gb",
+  "ollama_url": "http://localhost:11434",
+  "deepseek_url": "https://api.deepseek.com/chat/completions",
+
+  "profiles": {
+    "mini-16gb": {
+      "note": "Mac Mini 16GB — hermes3 ceiling, qwen3:14b broken",
+      "local_models": {
+        "default": "hermes3",
+        "light": "gemma3:4b",
+        "embed": "nomic-embed-text"
+      },
+      "tiers": {
+        "LIGHT":  { "strategy": "local-only",  "local_model": "gemma3:4b",  "timeout_ms": 30000 },
+        "MEDIUM": { "strategy": "local-first",  "local_model": "hermes3",   "timeout_ms": 60000 },
+        "HEAVY":  { "strategy": "api-first",    "local_model": "hermes3",   "timeout_ms": 90000, "api_model": "deepseek-chat" },
+        "FRONTIER": { "strategy": "api-only",   "api_model": "deepseek-chat", "timeout_ms": 90000 }
+      }
+    },
+    "studio-128gb": {
+      "note": "M5 Max Studio 128GB — all tiers local, API for frontier only",
+      "local_models": {
+        "default": "qwen3:32b",
+        "light": "gemma3:4b",
+        "medium": "hermes3",
+        "heavy": "qwen3:32b",
+        "reasoning": "deepseek-r1:70b",
+        "embed": "nomic-embed-text"
+      },
+      "tiers": {
+        "LIGHT":    { "strategy": "local-only",  "local_model": "gemma3:4b",       "timeout_ms": 15000 },
+        "MEDIUM":   { "strategy": "local-only",  "local_model": "hermes3",         "timeout_ms": 30000 },
+        "HEAVY":    { "strategy": "local-first",  "local_model": "qwen3:32b",      "timeout_ms": 60000 },
+        "FRONTIER": { "strategy": "local-first",  "local_model": "deepseek-r1:70b","timeout_ms": 120000, "api_model": "deepseek-chat" }
+      }
+    }
+  },
+
+  "task_tiers": {
+    "classify":      "LIGHT",
+    "extract":       "LIGHT",
+    "tag":           "LIGHT",
+    "filter":        "LIGHT",
+    "summarize":     "MEDIUM",
+    "rewrite":       "MEDIUM",
+    "embed_text":    "MEDIUM",
+    "analyze":       "MEDIUM",
+    "harvest":       "MEDIUM",
+    "reason":        "HEAVY",
+    "synthesize":    "HEAVY",
+    "debate":        "HEAVY",
+    "council":       "HEAVY",
+    "research":      "FRONTIER",
+    "code":          "FRONTIER"
+  },
+
+  "migration_plan": {
+    "phase": "pre-m5",
+    "target_date": "2026-09-22",
+    "processes_to_migrate": [
+      { "name": "ensemble-feeder",     "current": "ollama",    "task": "classify",   "tier": "LIGHT",   "action": "already local" },
+      { "name": "buzz-monitor",        "current": "deepseek",  "task": "summarize",  "tier": "MEDIUM",  "action": "wire llm-router, local-first" },
+      { "name": "content-reviews",     "current": "deepseek",  "task": "analyze",    "tier": "MEDIUM",  "action": "wire llm-router, local-first" },
+      { "name": "archaeologist-weekly", "current": "both",     "task": "extract",    "tier": "LIGHT",   "action": "wire llm-router, local-only" },
+      { "name": "the-cartographer",    "current": "both",      "task": "classify",   "tier": "LIGHT",   "action": "wire llm-router, local-only" },
+      { "name": "cath-bridge",         "current": "both",      "task": "reason",     "tier": "HEAVY",   "action": "keep API for now, local on M5" },
+      { "name": "memory-system",       "current": "openrouter","task": "summarize",  "tier": "MEDIUM",  "action": "wire llm-router, local-first" },
+      { "name": "seed-generator",      "current": "openrouter","task": "synthesize", "tier": "HEAVY",   "action": "keep API for now, local on M5" },
+      { "name": "universal-memory",    "current": "openrouter","task": "summarize",  "tier": "MEDIUM",  "action": "wire llm-router, local-first" },
+      { "name": "vortex-analyst",      "current": "openrouter","task": "analyze",    "tier": "MEDIUM",  "action": "wire llm-router, local-first" }
+    ],
+    "m5_day_one": [
+      "Switch hardware profile: mini-16gb → studio-128gb",
+      "Pull models: qwen3:32b, deepseek-r1:70b",
+      "Re-test all MEDIUM/HEAVY processes on bigger local models",
+      "Migrate HEAVY tier to local-first",
+      "Run spend comparison: week before vs week after"
+    ]
+  }
+}
