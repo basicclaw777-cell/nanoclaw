@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Chat — Cathedral</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #09090f;
+    --surface: #111118;
+    --border: #1e1e2a;
+    --text: #d4d4d8;
+    --muted: #71717a;
+    --accent: #7c3aed;
+    --accent-dim: #5b21b6;
+    --amber: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --user-bg: #15151f;
+    --ai-bg: #0d0d14;
+  }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Header ─────────────────────────────────────────────────────── */
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  .persona-switch {
+    display: flex;
+    gap: 4px;
+  }
+
+  .persona-btn {
+    font-family: inherit;
+    font-size: 12px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .persona-btn:hover { border-color: var(--accent-dim); color: var(--text); }
+  .persona-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(124, 58, 237, 0.08); }
+  .persona-btn.active[data-persona="ap"] { border-color: var(--amber); color: var(--amber); background: rgba(245, 158, 11, 0.08); }
+
+  .status {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .status-dot.offline { background: var(--red); }
+  .status-dot.thinking { background: var(--amber); animation: pulse 1s ease-in-out infinite; }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* ── Messages ───────────────────────────────────────────────────── */
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .msg {
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 85%;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .msg.user {
+    align-self: flex-end;
+    background: var(--user-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .msg.ai {
+    align-self: flex-start;
+    background: var(--ai-bg);
+    border: 1px solid transparent;
+    color: var(--text);
+  }
+
+  .msg.ai.cathy { border-left: 2px solid var(--accent); }
+  .msg.ai.ap { border-left: 2px solid var(--amber); }
+
+  .msg.system {
+    align-self: center;
+    color: var(--muted);
+    font-size: 11px;
+    padding: 4px 0;
+    background: none;
+  }
+
+  .msg .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    opacity: 0.5;
+  }
+
+  .msg.ai.cathy .label { color: var(--accent); }
+  .msg.ai.ap .label { color: var(--amber); }
+
+  /* ── Input ──────────────────────────────────────────────────────── */
+
+  .input-area {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .input-area textarea {
+    flex: 1;
+    font-family: inherit;
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    padding: 10px 12px;
+    resize: none;
+    outline: none;
+    min-height: 42px;
+    max-height: 160px;
+    line-height: 1.5;
+  }
+
+  .input-area textarea:focus { border-color: var(--accent-dim); }
+  .input-area textarea::placeholder { color: var(--muted); }
+
+  .send-btn {
+    font-family: inherit;
+    font-size: 12px;
+    padding: 0 16px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    background: rgba(124, 58, 237, 0.15);
+    color: var(--accent);
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    align-self: flex-end;
+    height: 42px;
+  }
+
+  .send-btn:hover { background: rgba(124, 58, 237, 0.25); }
+  .send-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .clear-btn {
+    font-family: inherit;
+    font-size: 11px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    align-self: flex-end;
+    height: 42px;
+    transition: all 0.15s;
+  }
+
+  .clear-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── Scrollbar ──────────────────────────────────────────────────── */
+
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Live Chat</h1>
+  <div class="persona-switch">
+    <button class="persona-btn active" data-persona="cathy" onclick="switchPersona('cathy')">Cathy</button>
+    <button class="persona-btn" data-persona="ap" onclick="switchPersona('ap')">A.P.</button>
+  </div>
+  <div class="status">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">ready</span>
+  </div>
+</div>
+
+<div class="messages" id="messages"></div>
+
+<div class="input-area">
+  <textarea id="input" placeholder="Type a message..." rows="1"
+    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}"
+    oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,160)+'px'"></textarea>
+  <button class="send-btn" id="sendBtn" onclick="send()">Send</button>
+  <button class="clear-btn" onclick="clearChat()">Clear</button>
+</div>
+
+<script>
+const OLLAMA = 'http://localhost:11434';
+const BRIDGE = 'http://' + location.hostname + ':8080';
+const MODEL = 'hermes3';
+
+let activePersona = 'cathy';
+let history = { cathy: [], ap: [] };
+let streaming = false;
+let abortCtrl = null;
+
+function init() {
+  setStatus('ready', 'online');
+  addSystem('Cathy: vault-grounded (retrieval per query). A.P.: full cognitive twin persona. Switch above.');
+  document.getElementById('input').focus();
+}
+
+function switchPersona(name) {
+  if (streaming) return;
+  activePersona = name;
+  document.querySelectorAll('.persona-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.persona === name);
+  });
+  renderMessages();
+}
+
+function setStatus(text, state) {
+  document.getElementById('statusText').textContent = text;
+  const dot = document.getElementById('statusDot');
+  dot.className = 'status-dot';
+  if (state === 'offline') dot.classList.add('offline');
+  if (state === 'thinking') dot.classList.add('thinking');
+}
+
+function addSystem(text) {
+  const el = document.createElement('div');
+  el.className = 'msg system';
+  el.textContent = text;
+  document.getElementById('messages').appendChild(el);
+  scrollBottom();
+}
+
+function renderMessages() {
+  const container = document.getElementById('messages');
+  container.innerHTML = '';
+  const msgs = history[activePersona] || [];
+  for (const m of msgs) {
+    const el = document.createElement('div');
+    if (m.role === 'user') {
+      el.className = 'msg user';
+      el.textContent = m.content;
+    } else if (m.role === 'assistant') {
+      el.className = `msg ai ${activePersona}`;
+      el.innerHTML = `<div class="label">${activePersona === 'cathy' ? 'CATH' : 'A.P.'}</div>${escapeHtml(m.content)}`;
+    }
+    container.appendChild(el);
+  }
+  scrollBottom();
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function scrollBottom() {
+  const c = document.getElementById('messages');
+  c.scrollTop = c.scrollHeight;
+}
+
+async function send() {
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text || streaming) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  const h = history[activePersona];
+  h.push({ role: 'user', content: text });
+
+  renderMessages();
+
+  const aiEl = document.createElement('div');
+  aiEl.className = `msg ai ${activePersona}`;
+  aiEl.innerHTML = `<div class="label">${activePersona === 'cathy' ? 'CATH' : 'A.P.'}</div>`;
+  document.getElementById('messages').appendChild(aiEl);
+
+  streaming = true;
+  setStatus('retrieving...', 'thinking');
+  document.getElementById('sendBtn').disabled = true;
+
+  let fullResponse = '';
+  abortCtrl = new AbortController();
+
+  // Send last 20 turns as history (excluding the one we just pushed)
+  const recent = h.slice(-21, -1);
+
+  try {
+    const res = await fetch(`${BRIDGE}/chat/stream`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: text, history: recent, persona: activePersona }),
+      signal: abortCtrl.signal,
+    });
+    setStatus('streaming...', 'thinking');
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const j = JSON.parse(line);
+          if (j.message && j.message.content) {
+            fullResponse += j.message.content;
+            aiEl.innerHTML = `<div class="label">${activePersona === 'cathy' ? 'CATH' : 'A.P.'}</div>${escapeHtml(fullResponse)}`;
+            scrollBottom();
+          }
+        } catch (e) {}
+      }
+    }
+
+    h.push({ role: 'assistant', content: fullResponse });
+    setStatus('ready', 'online');
+
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      setStatus('stopped', 'online');
+    } else {
+      setStatus('error: ' + e.message, 'offline');
+      aiEl.innerHTML += `<span style="color:var(--red)">[error: ${escapeHtml(e.message)}]</span>`;
+    }
+  }
+
+  streaming = false;
+  abortCtrl = null;
+  document.getElementById('sendBtn').disabled = false;
+  input.focus();
+}
+
+async function saveSessionMemory(persona) {
+  const h = history[persona];
+  if (!h || h.length < 2) return;
+  const topics = h.filter(m => m.role === 'user').map(m => m.content).slice(-5);
+  const summary = `Topics: ${topics.join(' | ')}`.slice(0, 500);
+  try {
+    await fetch(`${BRIDGE}/chat/memory/save`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ persona, summary, turnCount: h.length })
+    });
+  } catch (_) {}
+}
+
+async function loadSessionMemory() {
+  try {
+    const res = await fetch(`${BRIDGE}/chat/memory/cathy`);
+    const sessions = await res.json();
+    if (sessions.length) {
+      addSystem(`Memory: ${sessions.length} previous sessions loaded.`);
+    }
+  } catch (_) {}
+}
+
+async function clearChat() {
+  if (streaming && abortCtrl) abortCtrl.abort();
+  await saveSessionMemory(activePersona);
+  history[activePersona] = [];
+  renderMessages();
+  addSystem(`${activePersona === 'cathy' ? 'Cathy' : 'A.P.'} conversation saved & cleared.`);
+}
+
+window.addEventListener('beforeunload', () => {
+  for (const p of ['cathy', 'ap']) {
+    if (history[p] && history[p].length >= 2) {
+      const h = history[p];
+      const topics = h.filter(m => m.role === 'user').map(m => m.content).slice(-5);
+      const summary = `Topics: ${topics.join(' | ')}`.slice(0, 500);
+      navigator.sendBeacon(`${BRIDGE}/chat/memory/save`,
+        new Blob([JSON.stringify({ persona: p, summary, turnCount: h.length })],
+          { type: 'application/json' }));
+    }
+  }
+});
+
+init();
+loadSessionMemory();
+</script>
+</body>
+</html>

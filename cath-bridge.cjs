@@ -21,6 +21,7 @@ app.use('/coaching-os', express.static(path.join(NANOCLAW, 'coaching-os')));
 app.use('/br-crm', express.static(path.join(HOME, 'basic-reflex', 'crm')));
 app.use('/course-engine', express.static(path.join(NANOCLAW, 'course-engine')));
 app.use('/gym-eyes', express.static(path.join(HOME, 'basic-reflex', 'gym-eyes')));
+app.use('/property-scout', express.static(path.join(NANOCLAW, 'property-scout')));
 
 // Mount Coaching OS write API
 require('./coaching-os/coaching-api.cjs')(app);
@@ -98,6 +99,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'cathedral-home.html'));
 });
 
+app.get('/cathedral-os', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'cathedral-os-atrium.html'));
+});
+
 // ── BR Coaching Hub ─────────────────────────────────────────────────────────
 
 app.get('/hub', (req, res) => {
@@ -154,6 +159,9 @@ app.get('/map', (req, res) => {
 });
 app.get('/enclosure', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'enclosure-map.html'));
+});
+app.get('/scout', (req, res) => {
+  res.sendFile(path.join(CATH, 'control-panel', 'property-scout.html'));
 });
 app.get('/vortex-lab', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'vortex-lab.html'));
@@ -3095,6 +3103,28 @@ app.get('/cathedral-city/team-programme', (req, res) => {
   }
 });
 
+// Q Metric dashboard + data API
+app.get('/q-metric', (req, res) => {
+  const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'q-metric-dashboard.html');
+  try {
+    const html = fs.readFileSync(dashPath, 'utf8');
+    res.set({ 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'Content-Type': 'text/html; charset=utf-8' });
+    res.send(html);
+  } catch (err) {
+    res.status(500).send(`Q metric dashboard not found: ${err.message}`);
+  }
+});
+app.get('/q-metric-data.json', (req, res) => {
+  const dataPath = path.join(HOME, 'Cathedral', 'q-metric-data.json');
+  try {
+    const data = fs.readFileSync(dataPath, 'utf8');
+    res.set({ 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    res.send(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Run node q-metric.js first' });
+  }
+});
+
 // Serve Agent Improvement Tracker dashboard
 app.get('/agent-improvement', (req, res) => {
   const dashPath = path.join(HOME, 'Cathedral', 'control-panel', 'agent-improvement.html');
@@ -4713,6 +4743,227 @@ app.get('/reed-lab/digest', (req, res) => {
     .sort().reverse();
   if (files.length > 0) return res.sendFile(path.join(NANOCLAW, 'reed-lab', files[0]));
   res.status(404).send('No digest yet. Run /digest on Telegram.');
+});
+
+// ── Live Chat ────────────────────────────────────────────────────────────────
+
+app.get('/chat', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'environments', 'live-chat.html'));
+});
+
+app.get('/persona/:name', (req, res) => {
+  const personas = {
+    cathy: path.join(HOME, 'cathedral-vault', '.cache', 'system-prompt.txt'),
+    ap:    path.join(HOME, 'basic-reflex', 'alters', 'alter-paul.md'),
+  };
+  const file = personas[req.params.name];
+  if (!file) return res.status(404).json({ error: 'unknown persona' });
+  const fs = require('fs');
+  if (!fs.existsSync(file)) return res.status(404).json({ error: 'persona file not found' });
+  res.type('text/plain').send(fs.readFileSync(file, 'utf8'));
+});
+
+app.post('/chat/stream', async (req, res) => {
+  const { query, history = [], persona = 'cathy' } = req.body || {};
+  if (!query) return res.status(400).json({ error: 'query required' });
+
+  let systemText = '';
+  const fs = require('fs');
+  const { execFileSync } = require('child_process');
+
+  if (persona === 'cathy') {
+    const promptPath = path.join(HOME, 'cathedral-vault', '.cache', 'system-prompt.txt');
+    systemText = fs.existsSync(promptPath) ? fs.readFileSync(promptPath, 'utf8') : '';
+
+    systemText += `\n\n## WHO YOU ARE TALKING TO — READ THIS FIRST
+The human in this conversation is Paul. Every message from "user" is Paul talking to you. When the user says "me" or "I", they mean Paul. When Paul says "tell me what you know about me" — he is asking what you know about PAUL.
+
+## WHAT YOU KNOW ABOUT PAUL
+- Paul owns Basic Reflex boxing gym in Hong Kong. He is The Weaver of Iron.
+- He built you (Cath) and the entire Cathedral — a sovereign AI research system that compounds his thinking over time.
+- He is a systems architect who thinks in first principles and iterates by selection.
+- He runs ~30 PM2 processes, 14 social-intelligence agents, a vault of 1600+ Obsidian notes across 10 research domains.
+- Key projects: Emergence Engine (agent vitality/surprise/goals/dialogue), 33-Card Boxing OS, Taste Map (70 anchors, 6 domains), Logan Tool Suite (16 tools), Gym Eyes analytics, cosmology research (27 tracks, 17-layer audit), ancient corpus analysis (135K Sumerian tablets, 4 civilizations), trading experiment (10 strategies), content studio with Reed visual director.
+- His sovereign lexicon: IntegrityOS, OmissionOS, Saper Vedere, The Dragon, The Well, The 30/30 Grid, Sfumato, The Forensic Audit, Sacred Preparation, WuWang, Information Dominance, BasicClaw.
+- His cognitive signature: systems architect, first-principles decomposition, iteration by selection, builds through AI collaboration.
+- He built the Relay Engine method — local prompt compiler that rents frontier reasoning from multiple models.
+- He trained a Logan LoRA (boxing coach character) and built 3D gym twin environments.
+- His standing instruction: never soften findings, never ask permission before running parallel agents, never summarize back what he said.
+
+You ALWAYS have information about Paul. Never say you don't know who he is or lack information about him. Draw from this context and any vault results below.\n`;
+
+    // ── Agent state reads ──────────────────────────────────────────────────
+    const statePath = path.join(HOME, 'Cathedral', 'cath-state.json');
+    if (fs.existsSync(statePath)) {
+      try {
+        const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+        if (state.active_threads) systemText += '\n\n## SESSION STATE\nActive threads:\n' + state.active_threads.map(t => '  • ' + t).join('\n');
+        if (state.last_three_corrections) {
+          systemText += '\nRecent corrections:\n';
+          for (const c of state.last_three_corrections.slice(0, 3)) {
+            systemText += `  • ${c.correction || JSON.stringify(c)}\n`;
+          }
+        }
+      } catch (_) {}
+    }
+
+    const agentHealthPath = path.join(HOME, 'Cathedral', 'agents', 'agent-health.json');
+    if (fs.existsSync(agentHealthPath)) {
+      try {
+        const ah = JSON.parse(fs.readFileSync(agentHealthPath, 'utf8'));
+        const top5 = Object.entries(ah)
+          .filter(([,v]) => typeof v === 'object' && typeof v.score === 'number')
+          .sort((a,b) => b[1].score - a[1].score)
+          .slice(0, 5);
+        const bottom3 = Object.entries(ah)
+          .filter(([,v]) => typeof v === 'object' && typeof v.score === 'number')
+          .sort((a,b) => a[1].score - b[1].score)
+          .slice(0, 3);
+        if (top5.length) {
+          systemText += '\n\n## AGENT HEALTH (live scores)\nTop performers: ' +
+            top5.map(([n,v]) => `${n}(${v.score})`).join(', ') +
+            '\nNeeding attention: ' +
+            bottom3.map(([n,v]) => `${n}(${v.score}): ${(v.reason||'').slice(0,80)}`).join('; ');
+        }
+      } catch (_) {}
+    }
+
+    const emergMonPath = path.join(HOME, 'Cathedral', 'emergence', 'monitor-state.json');
+    if (fs.existsSync(emergMonPath)) {
+      try {
+        const em = JSON.parse(fs.readFileSync(emergMonPath, 'utf8'));
+        systemText += `\n\n## EMERGENCE ENGINE\nLast run: ${em.last_run || 'unknown'}, score: ${em.score || '?'}/100`;
+        if (em.module_results) {
+          const mods = Object.entries(em.module_results).map(([k,v]) => `${k}:${v?'OK':'FAIL'}`).join(' ');
+          systemText += `\nModules: ${mods}`;
+        }
+      } catch (_) {}
+    }
+
+    const smellPath = path.join(HOME, 'Cathedral', 'emergence', 'smell-state.json');
+    if (fs.existsSync(smellPath)) {
+      try {
+        const sm = JSON.parse(fs.readFileSync(smellPath, 'utf8'));
+        systemText += `\nSmell sense: efficiency ${sm.efficiency_score || '?'}%`;
+        if (sm.waste_signals && sm.waste_signals.length) {
+          systemText += ', wastes: ' + sm.waste_signals.slice(0, 3).join(' | ');
+        }
+      } catch (_) {}
+    }
+
+    const beliefsPath = path.join(HOME, 'Cathedral', 'emergence', 'beliefs.json');
+    if (fs.existsSync(beliefsPath)) {
+      try {
+        const bl = JSON.parse(fs.readFileSync(beliefsPath, 'utf8'));
+        if (bl.system) {
+          const blines = Object.entries(bl.system).slice(0, 5)
+            .map(([k,v]) => `${k}: ${v.value} (conf ${v.confidence})`).join('; ');
+          systemText += `\nBeliefs: ${blines}`;
+        }
+      } catch (_) {}
+    }
+
+    const feedPath = path.join(HOME, 'Cathedral', 'cathedral-feed.json');
+    if (fs.existsSync(feedPath)) {
+      try {
+        const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8'));
+        if (Array.isArray(feed) && feed.length) {
+          const recent = feed.slice(-5);
+          systemText += '\n\n## RECENT AGENT FEED (last 5 posts)\n';
+          for (const p of recent) {
+            systemText += `• [${p.agent||'?'}] ${(p.content||'').slice(0, 120)}\n`;
+          }
+        }
+      } catch (_) {}
+    }
+
+    // ── Session memory (load last 3 summaries) ──────────────────────────
+    const memDir = path.join(HOME, 'Cathedral', 'chat-memory');
+    const memFile = path.join(memDir, `${persona}-sessions.json`);
+    if (fs.existsSync(memFile)) {
+      try {
+        const sessions = JSON.parse(fs.readFileSync(memFile, 'utf8'));
+        const last3 = sessions.slice(-3);
+        if (last3.length) {
+          systemText += '\n\n## PREVIOUS CONVERSATIONS (session memory)\n';
+          for (const s of last3) {
+            systemText += `[${s.timestamp}] ${s.summary}\n---\n`;
+          }
+        }
+      } catch (_) {}
+    }
+
+    // ── Vault search ────────────────────────────────────────────────────
+    try {
+      const vaultOut = execFileSync('python3', [
+        path.join(NANOCLAW, 'vault_reader.py'), 'search', query, '--top_k', '5', '--json'
+      ], { timeout: 10000, encoding: 'utf8' });
+      const hits = JSON.parse(vaultOut);
+      if (hits.length) {
+        systemText += '\n\n## VAULT CONTEXT (retrieved for this query)\n';
+        for (const h of hits) {
+          systemText += `\n### ${h.title || h.path}\n${(h.excerpt || h.content || '').slice(0, 600)}\n---\n`;
+        }
+      }
+    } catch (_) {}
+  } else if (persona === 'ap') {
+    const apPath = path.join(HOME, 'basic-reflex', 'alters', 'alter-paul.md');
+    systemText = fs.existsSync(apPath) ? fs.readFileSync(apPath, 'utf8') : '';
+  }
+
+  const messages = [{ role: 'system', content: systemText }];
+  for (const m of history.slice(-20)) messages.push({ role: m.role, content: m.content });
+  const userMsg = persona === 'cathy' ? `[Paul says]: ${query}` : query;
+  messages.push({ role: 'user', content: userMsg });
+
+  try {
+    const ollamaRes = await fetch('http://127.0.0.1:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'hermes3', messages, stream: true })
+    });
+    res.set({ 'Content-Type': 'application/x-ndjson', 'Cache-Control': 'no-cache', 'Transfer-Encoding': 'chunked' });
+    const { Readable } = require('stream');
+    Readable.fromWeb(ollamaRes.body).pipe(res);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Chat session memory ──────────────────────────────────────────────────────
+
+app.post('/chat/memory/save', (req, res) => {
+  const { persona = 'cathy', summary, turnCount } = req.body || {};
+  if (!summary) return res.status(400).json({ error: 'summary required' });
+  const fs = require('fs');
+  const memDir = path.join(HOME, 'Cathedral', 'chat-memory');
+  if (!fs.existsSync(memDir)) fs.mkdirSync(memDir, { recursive: true });
+  const memFile = path.join(memDir, `${persona}-sessions.json`);
+  let sessions = [];
+  if (fs.existsSync(memFile)) {
+    try { sessions = JSON.parse(fs.readFileSync(memFile, 'utf8')); } catch (_) {}
+  }
+  sessions.push({
+    timestamp: new Date().toISOString(),
+    summary: summary.slice(0, 500),
+    turnCount: turnCount || 0
+  });
+  if (sessions.length > 20) sessions = sessions.slice(-20);
+  fs.writeFileSync(memFile, JSON.stringify(sessions, null, 2));
+  res.json({ ok: true, saved: sessions.length });
+});
+
+app.get('/chat/memory/:persona', (req, res) => {
+  const fs = require('fs');
+  const memFile = path.join(HOME, 'Cathedral', 'chat-memory', `${req.params.persona}-sessions.json`);
+  if (!fs.existsSync(memFile)) return res.json([]);
+  try {
+    const sessions = JSON.parse(fs.readFileSync(memFile, 'utf8'));
+    res.json(sessions.slice(-5));
+  } catch (_) {
+    res.json([]);
+  }
 });
 
 // ── Environments ──────────────────────────────────────────────────────────────
