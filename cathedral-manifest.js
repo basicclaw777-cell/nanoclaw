@@ -107,6 +107,7 @@ const MANIFEST = {
   'memory-consolidator': { intended: 'cron', cron: '0 4 * * 0',     reason: 'Sun 12:00 HKT — agent memory maintenance' },
   'archaeologist-weekly': { intended: 'cron', cron: '0 19 * * 0',   reason: 'Sun 03:00 HKT — deep archaeologist sweep' },
   'cathedral-gardener':   { intended: 'cron', cron: '0 20 * * 0',   reason: 'Sun 04:00 HKT — Gardener: genome+health+watcher → structural proposals' },
+  'vault-densifier':      { intended: 'cron', cron: '30 20 * * 0',  reason: 'Sun 04:30 HKT — propose wikilinks for under-connected vault entries' },
   'output-architect':     { intended: 'cron', cron: '0 22 * * *',   reason: 'Daily 06:00 HKT — Output Architect: deliverable specs + quality grades + emergent detection' },
   'mirror-evolution':     { intended: 'cron', cron: '0 10 1 * *',   reason: '1st of month 18:00 HKT — Mirror self-audit: principles vs practice drift' },
 
@@ -136,6 +137,10 @@ const MANIFEST = {
   'moon-daily':          { intended: 'cron', cron: '45 22 * * *',   reason: 'Daily 06:45 HKT — lunar data for Looking Glass' },
   'cross-project-pulse': { intended: 'cron', cron: '45 22 * * *',   reason: 'Daily 06:45 HKT — cross-project pattern detection' },
 
+  // ── BR OPERATIONS ──
+  'punchpass-scraper':   { intended: 'stopped', cron: '0 22 * * *',   reason: 'Daily 06:00 HKT — PunchPass data pull (needs Chrome remote debug)' },
+  'br-harness':          { intended: 'cron', cron: '30 22 * * *',     reason: 'Daily 06:30 HKT — BR cockpit brief (deterministic data + Laya judgment → Telegram)' },
+
   // ── PERIODIC CRONS (every N hours / minutes) ──
   'the-timekeeper':      { intended: 'cron', cron: '*/15 * * * *',  reason: 'Every 15m — critical alert monitor, daily report 07:15 HKT' },
   'cathedral-heartbeat': { intended: 'cron', cron: '*/15 * * * *',  reason: 'Every 15m — system heartbeat + cascade classification' },
@@ -152,8 +157,10 @@ const MANIFEST = {
   'long-term-portfolio': { intended: 'cron', cron: '0 0 * * 1',     reason: 'Monday 08:00 HKT — weekly portfolio review' },
   'bottleneck-arbitrage': { intended: 'cron', cron: '0 0 * * 1',   reason: 'Monday 08:00 HKT — 13F bottleneck arbitrage (equities paper)' },
   'property-scout':      { intended: 'cron', cron: '0 2 * * 0',     reason: 'Sunday — weekly property scan' },
+  'global-pulse':        { intended: 'cron', cron: '30 2 * * 0',    reason: 'Sunday 10:30 HKT — macro market pulse (after property-scout)' },
   'golden-zone-units':   { intended: 'cron', cron: '0 2 * * 3',     reason: 'Wednesday — unit search' },
-  'due-diligence':       { intended: 'cron', cron: '0 2 * * 4',     reason: 'Thursday — property due diligence' },
+  'flow-scout':          { intended: 'cron', cron: '0 2 * * 4',     reason: 'Thursday — flow analysis layer on scout data' },
+  'due-diligence':       { intended: 'cron', cron: '0 4 * * 4',     reason: 'Thursday — property due diligence (after flow-scout)' },
   'causal-net':          { intended: 'cron', cron: '0 4 * * *',     reason: 'Daily — causal relationship mapping' },
   'active-learning':     { intended: 'cron', cron: '30 4 * * *',    reason: 'Daily — priority queue across engines' },
 

@@ -264,25 +264,49 @@ async function pull13F() {
   return result;
 }
 
+// ── Web Fetcher (browser UA for non-SEC endpoints) ────────────────────────
+
+function webFetch(url) {
+  return new Promise((resolve, reject) => {
+    const options = new URL(url);
+    const req = https.request({
+      hostname: options.hostname,
+      path: options.pathname + options.search,
+      method: 'GET',
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+    }, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        if (res.statusCode === 200) resolve(data);
+        else reject(new Error(`HTTP ${res.statusCode}`));
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(15000, () => { req.destroy(); reject(new Error('timeout')); });
+    req.end();
+  });
+}
+
 // ── Price Fetcher (Yahoo Finance via query) ─────────────────────────────────
 
 async function fetchPrice(ticker) {
   try {
-    const raw = await secFetch(
+    const raw = await webFetch(
       `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=5d`
     );
     const data = JSON.parse(raw);
-    const closes = data.chart?.result?.[0]?.indicators?.quote?.[0]?.close;
-    if (closes && closes.length > 0) {
-      const price = closes[closes.length - 1];
-      if (price) return price;
-    }
+    const result = data.chart?.result?.[0];
+    const metaPrice = result?.meta?.regularMarketPrice;
+    if (metaPrice) return metaPrice;
+    const closes = result?.indicators?.quote?.[0]?.close?.filter(c => c != null);
+    if (closes && closes.length > 0) return closes[closes.length - 1];
   } catch (e) {
     console.log(`  [price] ${ticker}: Yahoo failed (${e.message}), trying backup...`);
   }
 
   try {
-    const raw = await secFetch(
+    const raw = await webFetch(
       `https://www.google.com/finance/quote/${ticker}:NASDAQ`
     );
     const match = raw.match(/data-last-price="([0-9.]+)"/);

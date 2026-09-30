@@ -163,6 +163,9 @@ app.get('/enclosure', (req, res) => {
 app.get('/scout', (req, res) => {
   res.sendFile(path.join(CATH, 'control-panel', 'property-scout.html'));
 });
+app.get('/global-pulse', (req, res) => {
+  res.sendFile(path.join(CATH, 'control-panel', 'global-pulse.html'));
+});
 app.get('/vortex-lab', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'vortex-lab.html'));
 });
