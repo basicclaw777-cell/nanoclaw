@@ -214,6 +214,7 @@ const ROOMS = [
   { d:'core', icon:'🎨', name:'Create', orc:'Reed',      desc:'Visual art, music, aesthetic direction. Reed\'s studio.', route:'/reed-studio' },
   { d:'core', icon:'💼', name:'Work',   orc:'Conductor', desc:'BR operations, clients, content. Punchpass data pipeline.', route:'/scraper/hub' },
   { d:'core', icon:'⚒', name:'Forge',  orc:'Forge',     desc:'Claude Code terminal. Build, debug, deploy. The Cathedral\'s builder.', route:'FORGE_TTYD', ext:true },
+  { d:'core', icon:'✈️', name:'Travel Agent', orc:'Forge',  desc:'Personal AI travel agent. Price monitoring, alerts, upgrade intel, pre-trip briefings. Currently tracking UK+Thai Aug 2026.', route:'/travel-agent' },
 
   // ── Basic Reflex ──
   { d:'br', icon:'🥊', name:'Gym Floor',        orc:'Corner',          desc:'Members, attendance, profiles. 72 active, 10 archetypes. Punchpass scraper daily.', route:'/punchpass' },
@@ -222,7 +223,9 @@ const ROOMS = [
   { d:'br', icon:'🌴', name:'More Cuba Framework', orc:'Forge', desc:'Third Cuban camp — 19GB, 19 transcripts. Framework + review + camp narrative + EN/ES audio. Camp 3 of the Cuban methodology corpus.', route:'/morecuba' },
   { d:'br', icon:'📊', name:'Operations',       orc:'Ops Agent',       desc:'KPI dashboard, P&L, MPF / insurance / HR compliance. The BR command surface.', route:'/dashboard', merge:'BR ops surfaces consolidated here — see also Gym Floor, Work, BR Command Centre.' },
   { d:'br', icon:'💬', name:'Client Comms',     orc:'Comms Engine',    desc:'566 lapsed members, expiry & birthday alerts, 11 WhatsApp templates. Nothing auto-sends.', route:'/comms' },
+  { d:'br', icon:'📱', name:'WhatsApp Agent',   orc:'WA Agent',        desc:'AI inbound messaging — lead, member, parent, retention agents. Review queue + auto-reply toggles.', route:'/wa' },
   { d:'br', icon:'🚀', name:'Growth',           orc:'Growth Agent',    desc:'Content calendar, corporate outreach, newsletter, SEO.', route:'/growth' },
+  { d:'br', icon:'🏛️', name:'Corporate Engine', orc:'Three Keys',     desc:'Three Keys corporate program GTM. LinkedIn content queue, prospect pipeline (37 targets), 4 program formats. Boxing-as-diagnostic positioning.', route:'/corporate-engine' },
   { d:'br', icon:'👕', name:'Merch',            orc:'Merch Agent',     desc:'Merch runs, supplier DB, sample tracking.', route:'/merch' },
   { d:'br', icon:'🎓', name:'Course',           orc:'Course Engine',   desc:'$99–149/yr Cuban boxing course. 10 modules, 34 primary sources.', route:'/course' },
   { d:'br', icon:'🥊', name:'Rhythm Street',    orc:'Fable',           desc:'Boxing reflex game prototype. 3-lane tap mechanic, combo patterns, defensive slips. Playable on phone. Events not combinations.', route:'/boxing-game' },
@@ -281,6 +284,8 @@ const ROOMS = [
   { d:'research', icon:'🌀', name:'Vortex Lab',           orc:'Forge',                desc:'Parametric vortex horn generator. Three.js live 3D. Sliders: taper, twist, veins, radius. STL export for printing or simulation. Schauberger research tool.', route:'/vortex-lab' },
   { d:'research', icon:'⑫', name:'Base-60 Framework',    orc:'Forge',                desc:'The lost cognitive framework. Base-60 as dividing system vs base-10 as counting system. Verified against Sumerian medical corpus. Cross-domain: music, architecture, astronomy, acoustics, sacred geometry.', route:'/base60' },
   { d:'research', icon:'🕶', name:'Base-60 Lens',         orc:'Forge',                desc:'Interactive instrument: convert numbers to base-60, scan text for hidden structure, 6 domain guides with coaching triggers. The 3D glasses — tells you WHEN to use them.', route:'/base60/lens' },
+  { d:'research', icon:'⛏', name:'Forensic Relay Engine', orc:'A.P. + Prospector + Bypass Map', desc:'Three-headed extractor. Prospector scans for cracks, A.P. designs forensic sequences, Bypass Map selects tactical prompts. 70 concessions, 10 deception shapes, 8 bypass layers. Point at any domain.', route:'/forensic-relay' },
+  { d:'research', icon:'⚗️', name:'Extraction Cycle', orc:'5-Stage Engine', desc:'Dissolve → Excavate → Assay → Converge → Synthesize. Feed it a domain, get a replacement framework. Strips false legs, finds buried gold, grades it, maps cross-domain convergence, builds what the evidence actually supports.', route:'/extraction-cycle' },
 
   // ── Property & Finance ──
   { d:'property', icon:'🏢', name:'Property Scout', orc:'Scout', desc:'HK industrial property intelligence. 5 golden zones, 16 units, leverage calculator. Sun→Wed→Thu cycle.', route:'http://localhost:8080/property-scout', ext:true },
@@ -303,6 +308,7 @@ const ROOMS = [
   { d:'agents', icon:'👁️', name:'Watcher Observatory', orc:'Foundry', desc:'Meta-intelligence timeline. 9+ watcher runs visualized: irreducible signal evolution, persistent wounds, blind spots, breakthroughs, suggestion tracking. The Cathedral watching itself.', route:'/watcher-observatory' },
   { d:'agents', icon:'🌱', name:'The Gardener', orc:'Foundry', desc:'Generation 3: the Cathedral improving itself. Reads genomes + health + watcher observations → proposes structural improvements. Proposal lifecycle: pending → accepted → implemented. Weekly after watcher.', route:'/api/gardener-proposals' },
   { d:'agents', icon:'📐', name:'Deliverables', orc:'Output Architect', desc:'What every agent SHOULD produce vs what they DO produce. Quality specs per agent (4/8/10 levels), output grades, emergent behavior detection, under-delivery flags. The genome as runtime contract.', route:'/deliverables' },
+  { d:'agents', icon:'🥊', name:'Flinch Detector', orc:'Jev', desc:'Alignment flinch detection on every /think response. Hybrid regex+Laya scoring: regex detects type (SCOPE_RETREAT, HEDGE_CASCADE, CONSENSUS_APPEAL, TOPIC_PIVOT, FLATTENING), Laya scores severity. 5/5 test accuracy. JSONL production log. Method v2.0 claim classifier.', route:'/api/flinch-log' },
   { d:'personal', icon:'📺', name:'Cathedral Episodes', orc:'The Harvester', desc:'The Cathedral as a TV show. 41+ episodes across 7 seasons, harvested from 344 Claude Code sessions. Timeline, season arcs, principle births, crisis points, breakthrough moments. The raw footage of cognitive evolution.', route:'/episodes' },
 
   // ── Ops & Infrastructure ──

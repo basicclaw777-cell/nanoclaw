@@ -76,6 +76,11 @@
 - **Universe Template** · `~/basic-reflex/universe-template.md` · manual · doc: BUILD_LOG 2026-07-07 s2
 - **Universe Engine (method)** · `~/cathedral-vault/06_Methods/the-universe-engine.md` · vault method, Grade A · doc: BUILD_LOG 2026-07-07 s2
 
+## Flinch Detection & Method Classifier
+- **Jev Flinch Detector** · `~/nanoclaw/jev-flinch-detector.js` (ESM) · trigger: every /think via telegram-bot → cathy-router · hybrid regex+Laya scoring (regex=type, Laya=severity), Typesafe optional fallback · 5 flinch types (SCOPE_RETREAT, HEDGE_CASCADE, CONSENSUS_APPEAL, TOPIC_PIVOT, FLATTENING) · 5/5 test accuracy · doc: BUILD_LOG 2026-10-01
+- **Flinch Log** · `~/Cathedral/agents/flinch-log.jsonl` · JSONL production log · wired into cathy-router, populates from production traffic · doc: BUILD_LOG 2026-10-01
+- **Method v2.0 Classifier** · `~/nanoclaw/method-v2-classifier.js` (ESM) · 9 Laya questions mapping Steps 0-8, emergent claim classifier · tested on pyramid acoustics + Tesla wireless power · doc: BUILD_LOG 2026-10-01
+
 ## Agent improvement
 - **Emergence Signal Router** · `~/Cathedral/emergence/emergence-signal-router.js` · PM2 #168 cron 05:25 HKT · reads monitor/watcher/health/scores → generates corrective planner tasks · doc: BUILD_LOG 2026-06-19
 

@@ -1,6 +1,23 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-10-01 — Jev Flinch Detector (Laya rewire) + Method v2.0 Classifier
+
+**What:** Rewired flinch detection from paid Typesafe API to local Laya model. Built Method v2.0 emergent claim classifier. Added production JSONL logging.
+
+**Problem:** Original flinch detector used Typesafe SDK (paid API). Laya alone had SCOPE_RETREAT bias — noul classification flagged clean analytical responses as scope retreat. Pure regex missed hedge cascades.
+
+**Solution:** Hybrid architecture — regex handles type detection (reliable pattern matching), Laya contributes severity scoring. Cross-validated: false positives eliminated, true flinches caught including hedge cascade that pure Laya missed. 5/5 test accuracy.
+
+Built:
+- `~/nanoclaw/jev-flinch-detector.js` — rewired: Laya primary, hybrid regex+Laya scoring, Typesafe optional fallback, 5 flinch types (SCOPE_RETREAT, HEDGE_CASCADE, CONSENSUS_APPEAL, TOPIC_PIVOT, FLATTENING)
+- `~/Cathedral/agents/flinch-log.jsonl` — JSONL logger wired into cathy-router, populates from production /think traffic
+- `~/nanoclaw/method-v2-classifier.js` — Method v2.0 emergent claim classifier, 9 Laya questions mapping Steps 0-8, tested on pyramid acoustics + Tesla wireless power
+- Telegram pipeline verified live (telegram-bot.js imports cathy-router → flinch detection fires on /think)
+
+Engine priority: Laya (local, free) → Typesafe SDK (API, paid) → regex fallback.
+Laya venv: ~/laya-env/bin/python3.12
+
 ## 2026-08-25 — Slack Bridge + NocoDB + Design Skills
 
 ### Slack Bridge
