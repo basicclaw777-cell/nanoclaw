@@ -18,4 +18,14 @@ for (const r of rows) {
   });
 }
 for (const id of Object.keys(agents)) agents[id].sort((a, b) => b.weight - a.weight);
-console.log(JSON.stringify(agents));
+
+try {
+  const db2 = new Database(dbPath, { readonly: true });
+  const pRows = db2.prepare('SELECT * FROM perturbation_counters').all();
+  db2.close();
+  const perturb = {};
+  for (const r of pRows) perturb[r.agent_id] = { calls: r.call_count, forced: r.total_forced, lastForced: r.last_forced_at };
+  console.log(JSON.stringify({ agents, perturbation: perturb }));
+} catch {
+  console.log(JSON.stringify({ agents, perturbation: {} }));
+}

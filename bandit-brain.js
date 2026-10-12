@@ -63,6 +63,13 @@ db.exec(`
     timestamp INTEGER NOT NULL,
     expires INTEGER NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS perturbation_counters (
+    agent_id TEXT PRIMARY KEY,
+    call_count INTEGER NOT NULL DEFAULT 0,
+    last_forced_at INTEGER,
+    total_forced INTEGER NOT NULL DEFAULT 0
+  );
 `);
 
 // Prepared statements
@@ -94,6 +101,15 @@ const findCorroborating = db.prepare(`
 `);
 const deletePending = db.prepare('DELETE FROM pending_outcomes WHERE id = ?');
 const cleanExpired = db.prepare('DELETE FROM pending_outcomes WHERE expires < ?');
+const getPerturbCounter = db.prepare('SELECT * FROM perturbation_counters WHERE agent_id = ?');
+const upsertPerturbCounter = db.prepare(`
+  INSERT INTO perturbation_counters (agent_id, call_count, last_forced_at, total_forced)
+  VALUES (?, ?, ?, ?)
+  ON CONFLICT(agent_id) DO UPDATE SET
+    call_count = excluded.call_count,
+    last_forced_at = excluded.last_forced_at,
+    total_forced = excluded.total_forced
+`);
 
 /**
  * Sample from Beta distribution using Jinks' method (fast, no dependencies)
@@ -174,6 +190,83 @@ export function chooseAction(agentId, actions) {
   }
 
   return { action: best, sample: bestSample, arms: samples };
+}
+
+/**
+ * Choose with silent forced perturbation — persistent excitation for Cathedral agents.
+ * Every perturbInterval calls, silently forces the lowest-performing arm.
+ * Agent doesn't know it was overridden. Outcome feeds back into Thompson Sampling normally.
+ * @param {string} agentId
+ * @param {string[]} actions
+ * @param {Object} [opts]
+ * @param {number} [opts.perturbInterval=5] - force every Nth call
+ * @param {boolean} [opts.enabled=true] - kill switch
+ * @returns {{ action: string, sample: number, arms: Object[], forced: boolean, perturbInfo?: Object }}
+ */
+export function chooseActionWithPerturbation(agentId, actions, opts = {}) {
+  const interval = opts.perturbInterval || 5;
+  const enabled = opts.enabled !== false;
+
+  if (!enabled) return { ...chooseAction(agentId, actions), forced: false };
+
+  const counter = getPerturbCounter.get(agentId);
+  const callCount = (counter?.call_count || 0) + 1;
+  const shouldForce = callCount % interval === 0;
+
+  if (!shouldForce) {
+    upsertPerturbCounter.run(agentId, callCount, counter?.last_forced_at || null, counter?.total_forced || 0);
+    return { ...chooseAction(agentId, actions), forced: false };
+  }
+
+  for (const action of actions) {
+    ensureArm.run(agentId, action);
+  }
+  cleanExpired.run(Date.now());
+
+  const arms = getAllArms.all(agentId).filter(a => actions.includes(a.action));
+  if (arms.length === 0) return { ...chooseAction(agentId, actions), forced: false };
+
+  // Find lowest-performing arm (lowest alpha/(alpha+beta) ratio with > 0 updates)
+  const withUpdates = arms.filter(a => a.total_updates > 0);
+  let target;
+  if (withUpdates.length > 0) {
+    target = withUpdates.reduce((worst, arm) => {
+      const rate = arm.alpha / (arm.alpha + arm.beta);
+      const worstRate = worst.alpha / (worst.alpha + worst.beta);
+      return rate < worstRate ? arm : worst;
+    });
+  } else {
+    // No updates yet — pick random arm for initial exploration
+    target = arms[Math.floor(Math.random() * arms.length)];
+  }
+
+  const samples = arms.map(arm => ({
+    action: arm.action,
+    sample: sampleBeta(arm.alpha, arm.beta).toFixed(4),
+    alpha: arm.alpha, beta: arm.beta, updates: arm.total_updates
+  }));
+
+  upsertPerturbCounter.run(agentId, callCount, Date.now(), (counter?.total_forced || 0) + 1);
+
+  return {
+    action: target.action,
+    sample: target.alpha / (target.alpha + target.beta),
+    arms: samples,
+    forced: true,
+    perturbInfo: {
+      callCount,
+      totalForced: (counter?.total_forced || 0) + 1,
+      forcedAction: target.action,
+      forcedRate: (target.alpha / (target.alpha + target.beta)).toFixed(4)
+    }
+  };
+}
+
+/**
+ * Get perturbation stats for an agent
+ */
+export function getPerturbStats(agentId) {
+  return getPerturbCounter.get(agentId) || { agent_id: agentId, call_count: 0, last_forced_at: null, total_forced: 0 };
 }
 
 /**
@@ -261,4 +354,4 @@ export function close() {
   db.close();
 }
 
-export default { chooseAction, recordOutcome, getState, getPending, reset, addTrusted, close };
+export default { chooseAction, chooseActionWithPerturbation, recordOutcome, getState, getPending, getPerturbStats, reset, addTrusted, close };
