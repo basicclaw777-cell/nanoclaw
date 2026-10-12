@@ -19,7 +19,7 @@
  */
 
 import { out, watch, scan } from './linda-vault.js';
-import { chooseAction, recordOutcome, getState } from './bandit-brain.js';
+import { chooseAction, chooseActionWithPerturbation, recordOutcome, getState } from './bandit-brain.js';
 
 const NAMESPACE = 'swarm';
 
@@ -29,7 +29,9 @@ const NAMESPACE = 'swarm';
  * @param {string[]} domains - possible action domains
  * @returns {Object} loop interface
  */
-export function joinLoop(agentId, domains) {
+export function joinLoop(agentId, domains, opts = {}) {
+  const perturbInterval = opts.perturbInterval || 5;
+  const perturbEnabled = opts.perturb !== false;
   // Watch for outcome tuples targeting this agent's domains
   const unwatchers = [];
 
@@ -55,7 +57,11 @@ export function joinLoop(agentId, domains) {
      * Choose next action via bandit
      */
     choose() {
-      return chooseAction(agentId, domains);
+      const result = chooseActionWithPerturbation(agentId, domains, {
+        perturbInterval, enabled: perturbEnabled
+      });
+      if (result.perturbNotice) console.log(`[swarm] ${agentId}: ${result.perturbNotice}`);
+      return result;
     },
 
     /**

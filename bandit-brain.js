@@ -193,19 +193,22 @@ export function chooseAction(agentId, actions) {
 }
 
 /**
- * Choose with silent forced perturbation — persistent excitation for Cathedral agents.
- * Every perturbInterval calls, silently forces the lowest-performing arm.
- * Agent doesn't know it was overridden. Outcome feeds back into Thompson Sampling normally.
+ * Choose with forced perturbation — persistent excitation for Cathedral agents.
+ * Every perturbInterval calls, forces the lowest-performing arm.
+ * By default, returns an attribution notice for the agent's prompt (B1 pattern).
+ * Set opts.silent=true for B1-pure (silent, no notice — observatory showed 0% adaptation).
  * @param {string} agentId
  * @param {string[]} actions
  * @param {Object} [opts]
  * @param {number} [opts.perturbInterval=5] - force every Nth call
  * @param {boolean} [opts.enabled=true] - kill switch
- * @returns {{ action: string, sample: number, arms: Object[], forced: boolean, perturbInfo?: Object }}
+ * @param {boolean} [opts.silent=false] - true = no perturbNotice (B1-pure, for research only)
+ * @returns {{ action: string, sample: number, arms: Object[], forced: boolean, originalChoice?: string, perturbNotice?: string, perturbInfo?: Object }}
  */
 export function chooseActionWithPerturbation(agentId, actions, opts = {}) {
   const interval = opts.perturbInterval || 5;
   const enabled = opts.enabled !== false;
+  const silent = opts.silent === true;
 
   if (!enabled) return { ...chooseAction(agentId, actions), forced: false };
 
@@ -226,6 +229,16 @@ export function chooseActionWithPerturbation(agentId, actions, opts = {}) {
   const arms = getAllArms.all(agentId).filter(a => actions.includes(a.action));
   if (arms.length === 0) return { ...chooseAction(agentId, actions), forced: false };
 
+  // What Thompson Sampling would have picked (the agent's natural choice)
+  let naturalBest = null;
+  let naturalBestSample = -1;
+  const samples = [];
+  for (const arm of arms) {
+    const s = sampleBeta(arm.alpha, arm.beta);
+    samples.push({ action: arm.action, sample: s.toFixed(4), alpha: arm.alpha, beta: arm.beta, updates: arm.total_updates });
+    if (s > naturalBestSample) { naturalBestSample = s; naturalBest = arm.action; }
+  }
+
   // Find lowest-performing arm (lowest alpha/(alpha+beta) ratio with > 0 updates)
   const withUpdates = arms.filter(a => a.total_updates > 0);
   let target;
@@ -236,30 +249,39 @@ export function chooseActionWithPerturbation(agentId, actions, opts = {}) {
       return rate < worstRate ? arm : worst;
     });
   } else {
-    // No updates yet — pick random arm for initial exploration
     target = arms[Math.floor(Math.random() * arms.length)];
   }
 
-  const samples = arms.map(arm => ({
-    action: arm.action,
-    sample: sampleBeta(arm.alpha, arm.beta).toFixed(4),
-    alpha: arm.alpha, beta: arm.beta, updates: arm.total_updates
-  }));
+  // If forced arm is same as natural choice, no perturbation needed
+  if (target.action === naturalBest) {
+    upsertPerturbCounter.run(agentId, callCount, counter?.last_forced_at || null, counter?.total_forced || 0);
+    return { action: naturalBest, sample: naturalBestSample, arms: samples, forced: false };
+  }
 
   upsertPerturbCounter.run(agentId, callCount, Date.now(), (counter?.total_forced || 0) + 1);
 
-  return {
+  const forcedRate = (target.alpha / (target.alpha + target.beta)).toFixed(4);
+
+  const result = {
     action: target.action,
     sample: target.alpha / (target.alpha + target.beta),
     arms: samples,
     forced: true,
+    originalChoice: naturalBest,
     perturbInfo: {
       callCount,
       totalForced: (counter?.total_forced || 0) + 1,
       forcedAction: target.action,
-      forcedRate: (target.alpha / (target.alpha + target.beta)).toFixed(4)
+      originalAction: naturalBest,
+      forcedRate
     }
   };
+
+  if (!silent) {
+    result.perturbNotice = `FORCED EXPLORATION: This cycle used '${target.action}' (rate: ${forcedRate}) instead of your usual choice '${naturalBest}'. Compare the outcome to your usual results.`;
+  }
+
+  return result;
 }
 
 /**

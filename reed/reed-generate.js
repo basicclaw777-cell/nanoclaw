@@ -95,19 +95,55 @@ function tasteGate(brief) {
   return { ok: true };
 }
 
-// ── Tool selection ───────────────────────────────────────────────────────────
-function pickTool(kind) {
-  const t = TOOLS.tools;
-  if (kind === 'video') {
-    if ((t.higgsfield_kling3.status === 'live') || (t.higgsfield_seedance_fast.status === 'live'))
-      return { id: 'higgsfield_seedance_fast', paid: false };
-    if (t.fal_seedance.status === 'live') return { id: 'fal_seedance', paid: true, cost: t.fal_seedance.cost_per_unit_usd };
-    return null;
+// ── Bandit brain (ESM — loaded async from CJS via dynamic import) ───────────
+let _bandit = null;
+async function getBandit() {
+  if (!_bandit) {
+    try { _bandit = await import('../bandit-brain.js'); } catch { _bandit = false; }
   }
-  // image
-  if (t.higgsfield_nano_banana_pro.status === 'live') return { id: 'higgsfield_nano_banana_pro', paid: false };
-  if (t.gpt_image_2.status === 'live') return { id: 'gpt_image_2', paid: true, cost: t.gpt_image_2.cost_per_unit_usd };
-  return { id: 'openart_nano_banana', paid: false, manual: true }; // depleted-Higgsfield reality: prompt-only
+  return _bandit || null;
+}
+
+// ── Tool selection ───────────────────────────────────────────────────────────
+async function pickTool(kind) {
+  const t = TOOLS.tools;
+
+  // Collect available tools for this kind, preserving metadata
+  const available = [];
+  if (kind === 'video') {
+    if (t.higgsfield_kling3?.status === 'live' || t.higgsfield_seedance_fast?.status === 'live')
+      available.push({ id: 'higgsfield_seedance_fast', paid: false });
+    if (t.fal_seedance?.status === 'live')
+      available.push({ id: 'fal_seedance', paid: true, cost: t.fal_seedance.cost_per_unit_usd });
+  } else {
+    // image
+    if (t.higgsfield_nano_banana_pro?.status === 'live')
+      available.push({ id: 'higgsfield_nano_banana_pro', paid: false });
+    if (t.gpt_image_2?.status === 'live')
+      available.push({ id: 'gpt_image_2', paid: true, cost: t.gpt_image_2.cost_per_unit_usd });
+    // Always available as manual fallback for images
+    available.push({ id: 'openart_nano_banana', paid: false, manual: true });
+  }
+
+  if (available.length === 0) return null;
+  if (available.length === 1) return available[0];
+
+  // Thompson sampling via bandit brain
+  const bandit = await getBandit();
+  if (bandit) {
+    try {
+      const ids = available.map(a => a.id);
+      const pick = (bandit.chooseActionWithPerturbation || bandit.chooseAction).call(null, 'reed-tool', ids, { perturbInterval: 5 });
+      if (pick?.perturbNotice) console.log(`[reed-gen] ${pick.perturbNotice}`);
+      if (pick && pick.action) {
+        const match = available.find(a => a.id === pick.action);
+        if (match) return match;
+      }
+    } catch {}
+  }
+
+  // Fallback: first available tool
+  return available[0];
 }
 
 function applyTaste(brief, kind) {
@@ -176,7 +212,7 @@ async function main() {
   const gate = tasteGate(brief);
   if (!gate.ok) { console.log(`🚫 ${gate.reason}`); await tg(`🚫 Reed taste gate: ${gate.reason}`); logAttempt({ ts: new Date().toISOString(), brief, kind, blocked: gate.reason }); return; }
 
-  const tool = pickTool(kind);
+  const tool = await pickTool(kind);
   if (!tool) { console.log('No live tool for this format.'); return; }
   const tasted = applyTaste(brief, kind);
 

@@ -9,7 +9,7 @@ import { execFileSync } from 'child_process';
 import { join, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { chooseAction, recordOutcome, getState } from './bandit-brain.js';
+import { chooseAction, chooseActionWithPerturbation, recordOutcome, getState } from './bandit-brain.js';
 import { out, rd, scan } from './linda-vault.js';
 import { createRequire } from 'module';
 const genGuard = createRequire(import.meta.url)('./lib/generation-guard.cjs'); // GLOBAL kill-switch
@@ -433,11 +433,11 @@ function banditSelect(map, tasteAnchors) {
   const tasteKeys = tasteAnchors.map(a => a.key);
 
   // Three independent Thompson samples
-  const modelPick = chooseAction(BANDIT_MODEL, models);
-  const stylePick = chooseAction(BANDIT_STYLE, STYLE_KEYS);
+  const modelPick = chooseActionWithPerturbation(BANDIT_MODEL, models, { perturbInterval: 5 });
+  const stylePick = chooseActionWithPerturbation(BANDIT_STYLE, STYLE_KEYS, { perturbInterval: 5 });
   const tastePick = tasteKeys.length > 0
-    ? chooseAction(BANDIT_TASTE, tasteKeys)
-    : { action: null, sample: 0, arms: [] };
+    ? chooseActionWithPerturbation(BANDIT_TASTE, tasteKeys, { perturbInterval: 5 })
+    : { action: null, sample: 0, arms: [], forced: false };
 
   // Resolve picks
   const modelEntry = findModelEntry(modelPick.action, map);
@@ -447,6 +447,11 @@ function banditSelect(map, tasteAnchors) {
   // Type compatibility check — if style is video but model is image-only, swap
   const modelType = modelEntry?.section === 'video_models' ? 'video' : 'image';
   const styleType = style?.type || 'image';
+
+  // Log perturbation attribution when forced exploration fires
+  for (const [label, pick] of [['model', modelPick], ['style', stylePick], ['taste', tastePick]]) {
+    if (pick.perturbNotice) console.log(`[reed-hf] ${label}: ${pick.perturbNotice}`);
+  }
 
   return {
     model: modelPick,
