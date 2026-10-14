@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "description": "Market intelligence node registry. Dormant = registered, no code. Active = scout running. Template pattern from property-scout.",
+    "updated": "2026-10-14",
+    "ground_truth_test": "Is Paul actively checking this market? If no, it stays dormant. No agents producing output for nobody."
+  },
+  "nodes": {
+    "hk-property": {
+      "status": "active",
+      "category": "real-estate",
+      "label": "HK Property (Industrial/Commercial for BR)",
+      "data_sources": ["28Hse", "Centaline", "golden-zone-units"],
+      "commands": ["/property", "/hkmarket", "/opportunities", "/propertyreport", "/like", "/pass", "/note", "/taste"],
+      "cron": "0 2 * * 0",
+      "entry_point": "property-scout/"
+    },
+    "thai-property": {
+      "status": "active",
+      "category": "real-estate",
+      "label": "Thailand Property (Samui/Phuket)",
+      "data_sources": ["FazWaz", "Thailand forums"],
+      "commands": ["/property"],
+      "cron": "0 2 * * 0",
+      "entry_point": "property-scout/"
+    },
+    "crypto-dca": {
+      "status": "active",
+      "category": "financial",
+      "label": "BTC + ETH DCA Portfolio",
+      "data_sources": ["CoinGecko API"],
+      "commands": ["/trader", "/invest", "/strategies"],
+      "cron": "various",
+      "entry_point": "trader/"
+    },
+
+    "global-property": { "status": "dormant", "category": "real-estate", "label": "Global Property Markets (UK, Portugal, Japan, Dubai)", "data_sources_potential": ["Rightmove API", "Idealista", "Suumo", "PropertyFinder"], "notes": "Pulse data exists in global-pulse.json. No active scraping per-market yet." },
+
+    "gold": { "status": "dormant", "category": "precious-metals", "label": "Gold (spot, coins, bars)", "data_sources_potential": ["Kitco", "BullionVault API", "local HK dealers"], "notes": "Store of value. Paul's DCA strategy could extend here." },
+    "silver": { "status": "dormant", "category": "precious-metals", "label": "Silver", "data_sources_potential": ["Kitco", "SD Bullion"], "notes": "Higher volatility, industrial demand + monetary." },
+
+    "watches": { "status": "dormant", "category": "collectibles", "label": "Luxury Watches (Rolex, Patek, AP)", "data_sources_potential": ["Chrono24 API", "WatchCharts", "Subdial"], "notes": "Standardised models, tracked indices. Knight Frank category." },
+    "wine": { "status": "dormant", "category": "collectibles", "label": "Fine Wine", "data_sources_potential": ["Liv-ex 1000 index", "Wine-Searcher"], "notes": "Institutional-grade index exists (Liv-ex). Storage = cost." },
+    "sneakers": { "status": "dormant", "category": "collectibles", "label": "Sneakers", "data_sources_potential": ["StockX API", "GOAT"], "notes": "Real-time pricing. Volatile. Youth-culture driven." },
+    "trading-cards": { "status": "dormant", "category": "collectibles", "label": "Trading Cards (Pokemon, Sports)", "data_sources_potential": ["PSA pop reports", "eBay sold", "Alt platform", "TCGPlayer"], "notes": "Most mature collectible market — grading standard exists." },
+    "art": { "status": "dormant", "category": "collectibles", "label": "Art Market", "data_sources_potential": ["Artnet indices", "Artsy", "Masterworks"], "notes": "Illiquid. Long hold periods. Authentication risk." },
+    "handbags": { "status": "dormant", "category": "collectibles", "label": "Luxury Handbags (Hermès Birkin, Chanel)", "data_sources_potential": ["Rebag Clair", "Vestiaire", "1stDibs"], "notes": "Birkin = best-performing luxury asset. Waitlist = artificial scarcity." },
+    "vintage-cars": { "status": "dormant", "category": "collectibles", "label": "Classic/Vintage Cars", "data_sources_potential": ["Hagerty valuation", "Bring a Trailer", "RM Sotheby's"], "notes": "Knight Frank category. High storage/maintenance cost." },
+    "coins-stamps": { "status": "dormant", "category": "collectibles", "label": "Coins & Stamps", "data_sources_potential": ["PCGS CoinFacts", "NGC", "Stanley Gibbons index"], "notes": "Mature grading. Declining collector base for stamps." },
+    "memorabilia": { "status": "dormant", "category": "collectibles", "label": "Sports & Music Memorabilia", "data_sources_potential": ["Heritage Auctions", "Julien's", "PSA"], "notes": "Event-driven pricing (player milestones, deaths)." },
+
+    "gpu-hardware": { "status": "dormant", "category": "tech-hardware", "label": "GPUs (NVIDIA, AMD)", "data_sources_potential": ["eBay sold listings", "PCPartPicker", "r/hardwareswap"], "notes": "Wildly cyclical — crypto/AI demand spikes. Resale value tracks compute demand." },
+    "ram-memory": { "status": "dormant", "category": "tech-hardware", "label": "RAM / Memory Modules", "data_sources_potential": ["PCPartPicker", "DRAMeXchange", "Crucial"], "notes": "Commodity with known supply cycles. Samsung/SK Hynix/Micron oligopoly." },
+    "apple-devices": { "status": "dormant", "category": "tech-hardware", "label": "Apple Devices (resale)", "data_sources_potential": ["Swappa", "Back Market", "Mac2Sell"], "notes": "Predictable depreciation curves. High resale vs Android." },
+    "server-hardware": { "status": "dormant", "category": "tech-hardware", "label": "Server / Enterprise Hardware", "data_sources_potential": ["eBay enterprise", "ServerMonkey", "r/homelabsales"], "notes": "AI boom = GPU server premium. Off-lease cycles." },
+
+    "domains": { "status": "dormant", "category": "digital-assets", "label": "Domain Names", "data_sources_potential": ["GoDaddy auctions", "Sedo", "NameBio sales history", "Afternic"], "notes": "Mature market. .com premium. AI domains trending." },
+    "saas-businesses": { "status": "dormant", "category": "digital-assets", "label": "SaaS Businesses & Websites", "data_sources_potential": ["Acquire.com", "Flippa", "Empire Flippers", "MicroAcquire"], "notes": "Revenue multiples. Recurring income. Due diligence heavy." },
+    "ip-licensing": { "status": "dormant", "category": "digital-assets", "label": "IP / Content Licensing", "data_sources_potential": ["Shutterstock contributor", "Getty", "Epidemic Sound"], "notes": "Passive income from created assets. Stick Logan potential." },
+
+    "energy-oil": { "status": "dormant", "category": "commodities-energy", "label": "Crude Oil (WTI/Brent)", "data_sources_potential": ["EIA data", "TradingView", "OPEC reports"], "notes": "Macro indicator. Not directly tradeable for Paul but context for everything else." },
+    "copper": { "status": "dormant", "category": "commodities-industrial", "label": "Copper", "data_sources_potential": ["LME", "Kitco", "TradingView"], "notes": "Dr. Copper — economic health indicator. AI/electrification demand." },
+    "lithium": { "status": "dormant", "category": "commodities-industrial", "label": "Lithium", "data_sources_potential": ["Benchmark Minerals", "Fastmarkets"], "notes": "EV battery demand. Boom-bust cycle 2021-2025." },
+    "uranium": { "status": "dormant", "category": "commodities-energy", "label": "Uranium", "data_sources_potential": ["UxC", "Numerco spot", "Cameco reports"], "notes": "Nuclear renaissance thesis. Limited supply. Long-cycle." },
+
+    "coffee": { "status": "dormant", "category": "commodities-agriculture", "label": "Coffee", "data_sources_potential": ["ICO data", "TradingView futures", "Daily Coffee News"], "notes": "Climate-sensitive. Record highs 2025-2026." },
+    "cocoa": { "status": "dormant", "category": "commodities-agriculture", "label": "Cocoa", "data_sources_potential": ["ICCO", "TradingView"], "notes": "Supply crisis 2024-2026. West Africa concentration risk." },
+
+    "whisky": { "status": "dormant", "category": "collectibles", "label": "Whisky (Scotch, Japanese)", "data_sources_potential": ["Rare Whisky 101 index", "Whisky Auctioneer", "Sotheby's spirits"], "notes": "Japanese whisky = fastest appreciating spirit. Knight Frank tracks." },
+    "lego": { "status": "dormant", "category": "collectibles", "label": "LEGO Sets (retired)", "data_sources_potential": ["BrickEconomy", "BrickLink", "eBay sold"], "notes": "12-15% avg annual return on retired sets (BrickEconomy data). Predictable retirement = predictable supply cut." },
+
+    "index-funds": { "status": "dormant", "category": "financial", "label": "Index Funds / ETFs (S&P 500, Hang Seng, etc.)", "data_sources_potential": ["Yahoo Finance", "TradingView", "HKEX"], "notes": "Paul's DCA findings suggest this as core strategy." },
+    "stablecoin-yield": { "status": "dormant", "category": "financial", "label": "Stablecoin Yield (USDC, USDT lending)", "data_sources_potential": ["DeFiLlama", "Aave", "various CEX rates"], "notes": "4-8% on dollar-pegged. Mentioned in Paul's financial strategy." },
+    "hk-reits": { "status": "dormant", "category": "financial", "label": "HK REITs", "data_sources_potential": ["HKEX", "Link REIT reports"], "notes": "Property exposure without property. Paul's HK context." },
+
+    "franchises": { "status": "dormant", "category": "business", "label": "Franchise Opportunities", "data_sources_potential": ["Franchise Direct", "BizBuySell"], "notes": "Structured business ownership. Capital intensive." },
+    "vending-atm": { "status": "dormant", "category": "business", "label": "Vending / ATM / Laundry Routes", "data_sources_potential": ["BizBuySell", "Route Brokers"], "notes": "Semi-passive income. Location-dependent." }
+  },
+
+  "categories": {
+    "real-estate": { "icon": "🏠", "description": "Physical property — residential, commercial, industrial, land" },
+    "precious-metals": { "icon": "🥇", "description": "Store-of-value metals — gold, silver, platinum, palladium" },
+    "collectibles": { "icon": "🎯", "description": "Passion assets — watches, wine, cards, art, sneakers, whisky, LEGO" },
+    "tech-hardware": { "icon": "💻", "description": "Computing hardware with resale cycles — GPUs, RAM, Apple, servers" },
+    "digital-assets": { "icon": "🌐", "description": "Domains, SaaS businesses, IP licensing, digital products" },
+    "commodities-energy": { "icon": "⛽", "description": "Oil, gas, uranium — macro context indicators" },
+    "commodities-industrial": { "icon": "🔧", "description": "Copper, lithium, nickel — industrial demand proxies" },
+    "commodities-agriculture": { "icon": "🌾", "description": "Coffee, cocoa, grains — climate and supply chain driven" },
+    "financial": { "icon": "📈", "description": "Stocks, bonds, crypto, index funds, stablecoin yield, REITs" },
+    "business": { "icon": "🏪", "description": "Franchises, routes, small business acquisitions" }
+  }
+}

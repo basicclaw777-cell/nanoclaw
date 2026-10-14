@@ -28,6 +28,8 @@ import tasteMap from './taste-elicitation.js';
 import { getTasteProfile, getVoiceReferences, getVoicePattern, addAnchor, checkRejection } from './taste-map-api.js';
 import tasteCurator from './taste-curator.js';
 import { generatePlan, generateHTML, generateMermaid, depositToVault, formatPlanTelegram, listPlans } from './architect.js';
+import { registerFrictionCommands, handleFrictionCallback } from '../Cathedral/kit/friction-commands.mjs';
+import { formatTaskBlocks, formatSummaryBlocks, handleSlackFrictionAction } from '../Cathedral/kit/friction-slack.mjs';
 import djCurator from './dj-curator.js';
 import soundStudio from './sound-studio/engine.js';
 import gymEyes from './gym-eyes.js';
@@ -56,10 +58,14 @@ import { registerActiveCommands } from './active-learning.js';
 import { registerArchaeologistCommands } from './archaeologist-commands.js';
 import { registerVaultDigCommands } from './vault-dig.js';
 import { registerBiasMapperCommands } from './bias-mapper.js';
+import { registerDotCommands } from './dot-observe.js';
+import { registerTraderCommands } from './trader/trader-commands.js';
+import { registerPropertyCommands } from './property-scout/property-commands.js';
+import { registerWorldPulseCommands } from './market-nodes/world-pulse-commands.js';
 import { runForensicRelay, formatRelayTelegram, formatPromptTelegram } from './forensic-relay-engine.js';
 import { runExtractionCycle, runSingleCycle, formatCycleTelegram } from './extraction-cycle.js';
 import { captureDrill, insertDrill } from './coaching-os/drill-capture.js';
-import { startSlack, sendSlack, sendSlackFile } from './slack-bridge.js';
+import { startSlack, sendSlack, sendSlackFile, sendSlackBlocks, registerSlackAction } from './slack-bridge.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -252,6 +258,12 @@ bot.onText(/^\/drill(?:@\w+)?\s+(.+)$/i, async (msg, match) => {
 
 bot.on('callback_query', async (query) => {
   const data = query.data || '';
+
+  if (data.startsWith('friction_')) {
+    handleFrictionCallback(bot, query, PAUL_CHAT_ID);
+    return;
+  }
+
   if (!data.startsWith('drill_')) return;
 
   const [action, id] = data.split(':');
@@ -294,6 +306,12 @@ registerActiveCommands(bot);
 registerArchaeologistCommands(bot);
 registerVaultDigCommands(bot);
 registerBiasMapperCommands(bot);
+registerDotCommands(bot, isPaul);
+registerTraderCommands(bot);
+registerPropertyCommands(bot);
+registerWorldPulseCommands(bot);
+registerFrictionCommands(bot, PAUL_CHAT_ID);
+registerSlackAction('friction', handleSlackFrictionAction);
 
 // ── Telegram health state (written to cath-state.json) ──────────────────────
 const telegramHealth = {
@@ -443,13 +461,25 @@ bot.on('polling_error', (err) => {
   }
 });
 
-// Log when polling recovers after errors
-bot.on('message', () => {
+// Log when polling recovers after errors + Jasper shadow resolver
+bot.on('message', (msg) => {
   if (telegramHealth.pollErrorCount > 0) {
     console.log(`[telegram] Connection recovered after ${telegramHealth.pollErrorCount} consecutive errors`);
   }
   telegramHealth.pollErrorCount = 0;
   updateTelegramHealth('lastUpdateAt', new Date().toISOString());
+
+  // Jasper shadow logger — fire-and-forget, never blocks command handling
+  if (msg.text && isPaul(msg.chat.id)) {
+    fetch(`http://localhost:8079/resolve?q=${encodeURIComponent(msg.text)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (!res.miss && res.top_score >= 0.3) {
+          console.log(`[jasper-shadow] "${msg.text.slice(0, 60)}" → ${res.candidates[0].id} (${res.top_score.toFixed(3)})`);
+        }
+      })
+      .catch(() => {}); // resolver down = silent skip
+  }
 });
 
 // ── Heartbeat: getMe every 60s, detect dead connections ─────────────────────
@@ -618,6 +648,9 @@ startSlack(async (text, channel, respond, meta) => {
       '`plan <brief>` — Architecture plan generation\n' +
       '`breathe [n]` — Vortex breathing timer\n' +
       '`briefing` — Latest morning briefing\n' +
+      '`friction` — Friction queue summary ($187K invoices + tasks)\n' +
+      '`friction next` — Next task with action buttons\n' +
+      '`friction all` — All tasks with WhatsApp links + scripts\n' +
       '`ap <message>` — A.P. cognitive twin (thinks through Paul\'s architecture)\n\n' +
       'Or just talk — general messages get vault-grounded responses.'
     );
@@ -755,6 +788,27 @@ startSlack(async (text, channel, respond, meta) => {
       await respond(apData.message?.content || 'A.P. returned no response.');
     } catch (err) {
       await respond(`A.P. error: ${err.message}`);
+    }
+    return;
+  }
+
+  // friction
+  if (cmd === 'friction' || cmd === 'friction next' || cmd === 'friction all') {
+    const { getReadyTasks } = await import('../Cathedral/kit/friction-concierge.mjs');
+    const tasks = getReadyTasks();
+    if (tasks.length === 0) { await respond('✅ Queue empty.'); return; }
+
+    if (cmd === 'friction') {
+      const blocks = formatSummaryBlocks();
+      await sendSlackBlocks(channel, blocks, `Friction Queue: ${tasks.length} open`);
+    } else if (cmd === 'friction all') {
+      for (const task of tasks) {
+        await sendSlackBlocks(channel, formatTaskBlocks(task), task.title);
+      }
+    } else {
+      const snoozed = tasks.filter(t => !t.snoozedUntil || new Date(t.snoozedUntil) <= new Date());
+      const next = snoozed[0] || tasks[0];
+      await sendSlackBlocks(channel, formatTaskBlocks(next), next.title);
     }
     return;
   }

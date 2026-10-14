@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Trader</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --green: #16a34a;
+    --red: #dc2626;
+    --gold: #f7b408;
+    --gold-light: #fef3c7;
+    --blue: #2563eb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    padding: 16px;
+    line-height: 1.5;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 20px;
+  }
+  h1 { font-size: 20px; font-weight: 700; color: var(--text); }
+  .subtitle { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  .mission {
+    background: var(--gold-light);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #92400e;
+    line-height: 1.6;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .big-number {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .big-number.positive { color: var(--green); }
+  .big-number.negative { color: var(--red); }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--muted); }
+  .stat-value { font-weight: 600; }
+
+  .position {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .position:last-child { border-bottom: none; }
+  .position-asset { font-weight: 700; font-size: 16px; }
+  .position-detail { color: var(--muted); font-size: 12px; }
+  .position-pnl { text-align: right; font-weight: 600; }
+
+  .strategy {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .strategy:last-child { border-bottom: none; }
+  .strategy-name { font-weight: 500; }
+  .strategy-record { color: var(--muted); }
+  .strategy-pnl { font-weight: 600; min-width: 60px; text-align: right; }
+  .benched { opacity: 0.4; text-decoration: line-through; }
+
+  .bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .insight {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #166534;
+  }
+  .insight strong { display: block; margin-bottom: 4px; }
+
+  .idea-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .idea-form input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .idea-form button {
+    padding: 8px 16px;
+    background: var(--gold);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .ideas-list { margin-top: 12px; }
+  .idea-item {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .idea-date { color: var(--muted); font-size: 11px; }
+
+  .advice {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .advice h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .advice ul { padding-left: 20px; }
+  .advice li { margin-bottom: 6px; font-size: 13px; line-height: 1.5; }
+
+  .research-notes { margin-bottom: 16px; }
+  .research-notes h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .note-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .note-card summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .note-card summary::after { content: '▸'; color: var(--muted); font-size: 12px; }
+  .note-card[open] summary::after { content: '▾'; }
+  .note-card .note-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .note-card .note-body { margin-top: 10px; font-size: 13px; line-height: 1.6; }
+  .note-card .note-body p { margin-bottom: 8px; }
+  .note-card .verdict {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .verdict-pass { background: #fef3c7; color: #92400e; }
+  .verdict-fail { background: #fee2e2; color: #991b1b; }
+  .verdict-signal { background: #dbeafe; color: #1e40af; }
+
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .loading { text-align: center; color: var(--muted); padding: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The Trader</h1>
+  <div class="subtitle">Cathedral Financial Intelligence</div>
+</header>
+
+<div class="mission">
+  DYA taught one lesson: unstructured hope isn't investing. This system exists to prove that informed, systematic decision-making works — and to build the muscle that was blocked for 20 years. The seed was Rich Dad Poor Dad. The wound was one bad trade. The cure is a system worthy of the ideas.
+</div>
+
+<div id="content"><div class="loading">Loading data...</div></div>
+
+<div class="advice">
+  <h2>Long-Term Strategy</h2>
+  <ul>
+    <li><strong>DCA wins.</strong> Simple weekly buys into BTC + ETH have outperformed 28 AI strategies. That IS the finding — act on it with small real money.</li>
+    <li><strong>You own real assets.</strong> Property in HK (no mortgage = pure equity) + gym (brand + IP). These are Kiyosaki executed. Next: make them generate.</li>
+    <li><strong>Index funds</strong> (S&P 500 / global) for the portion you want zero-touch growth. Interactive Brokers or Mox from HK.</li>
+    <li><strong>Stablecoin yield</strong> for parking cash that earns while waiting. USDC/USDT on established platforms.</li>
+    <li><strong>Position sizing always.</strong> Never more than you'd calmly watch go to zero. DYA was 100% of one month's salary on one tip — the system prevents that structurally.</li>
+    <li><strong>The boring strategy is the strategy.</strong> Complexity is entertainment, not edge. One winning approach, compounded, beats ten clever ones that cancel out.</li>
+  </ul>
+</div>
+
+<div class="research-notes">
+  <h2>Research Notes</h2>
+
+  <details class="note-card">
+    <summary>
+      Statistical Arbitrage / Pairs Trading (HK)
+      <span class="verdict verdict-signal">Signal Only</span>
+    </summary>
+    <div class="note-meta">2026-10-14 — Source: DeepSeek forensic audit</div>
+    <div class="note-body">
+      <p><strong>Strategy:</strong> Trade the spread between two correlated stocks (e.g. HSBC/Hang Seng Bank, A-H dual-listed shares) when they diverge, betting on mean reversion.</p>
+      <p><strong>Mechanical test result: FAIL for trading.</strong> HK market averages 0.17% return on pairs — below DCA, below transaction costs (stamp duty + fees). Short-selling restricted to designated securities list with tick-rule constraints. LTCM lost $4B when pairs broke. Solo operator can't absorb tail risk.</p>
+      <p><strong>What IS useful:</strong> A-H spread as a <em>sentiment signal</em>. When same company trades at big premium/discount between Shanghai and HK, that's mainland vs international sentiment diverging. Worth watching in World Pulse, not worth trading directly.</p>
+      <p><strong>Key refs:</strong> Gatev et al (2006) — seminal pairs trading paper. Zhang & Urquhart — HK/China pairs unprofitable. Li, Chui & Li (2014) — A-H cointegration exists but narrows post-Stock Connect 2014.</p>
+      <p><strong>Verdict:</strong> Don't trade pairs in HK. Use A-H spread as context signal for World Pulse. DCA remains the proven strategy.</p>
+    </div>
+  </details>
+</div>
+
+<div class="footer">
+  <em>Not financial advice. Cathedral research instrument. Consult a professional for personal investment decisions.</em><br>
+  <span id="last-updated"></span>
+</div>
+
+<script>
+async function load() {
+  try {
+    const res = await fetch('/api/trader');
+    const data = await res.json();
+    render(data);
+  } catch (e) {
+    document.getElementById('content').innerHTML = `<div class="loading">Could not load data. Is cath-bridge running?</div>`;
+  }
+}
+
+function fmtPnl(n) {
+  if (n == null) return '$0.00';
+  const sign = n >= 0 ? '+' : '';
+  return `${sign}$${n.toFixed(2)}`;
+}
+
+function fmtPct(n) {
+  if (n == null) return '0%';
+  const sign = n >= 0 ? '+' : '';
+  return `${sign}${n.toFixed(1)}%`;
+}
+
+function render(data) {
+  const { portfolio, longTerm, corner, config, ideas } = data;
+  let html = '';
+
+  // DCA Portfolio
+  if (longTerm) {
+    const weeks = Math.ceil((Date.now() - new Date(longTerm.started).getTime()) / 604800000);
+    const pnlPct = longTerm.total_invested ? ((longTerm.unrealised_pnl / longTerm.total_invested) * 100) : 0;
+    const pnlClass = longTerm.unrealised_pnl >= 0 ? 'positive' : 'negative';
+
+    html += `<div class="card">
+      <h2>Long-Term DCA — Week ${weeks}</h2>
+      <div class="big-number ${pnlClass}">${fmtPnl(longTerm.unrealised_pnl)}</div>
+      <div style="color:var(--muted);margin-top:4px">${fmtPct(pnlPct)} on $${longTerm.total_invested.toLocaleString()} invested</div>
+      <div style="margin-top:12px">`;
+
+    for (const [asset, pos] of Object.entries(longTerm.positions || {})) {
+      const pClass = pos.unrealised_pnl >= 0 ? 'positive' : 'negative';
+      html += `<div class="position">
+        <div>
+          <div class="position-asset">${asset}</div>
+          <div class="position-detail">${pos.qty.toFixed(4)} @ $${pos.avg_price.toFixed(0)}</div>
+        </div>
+        <div class="position-pnl" style="color:var(--${pos.unrealised_pnl >= 0 ? 'green' : 'red'})">
+          ${fmtPnl(pos.unrealised_pnl)}<br>
+          <span style="font-size:12px">${fmtPct(pos.unrealised_pct)}</span>
+        </div>
+      </div>`;
+    }
+
+    html += `</div>
+      <div class="stat-row"><span class="stat-label">Weekly DCA</span><span class="stat-value">$${longTerm.dca_schedule.btc_weekly} BTC + $${longTerm.dca_schedule.eth_weekly} ETH</span></div>
+      <div class="stat-row"><span class="stat-label">Cash Reserve</span><span class="stat-value">$${longTerm.balance_cash.toLocaleString()}</span></div>
+      <div class="stat-row"><span class="stat-label">Total Value</span><span class="stat-value">$${longTerm.total_value.toLocaleString()}</span></div>
+    </div>`;
+
+    // What-if
+    const realWeekly = 300;
+    const hypotheticalInvested = weeks * realWeekly;
+    const hypotheticalGain = hypotheticalInvested * (pnlPct / 100);
+    html += `<div class="insight">
+      <strong>What if this were real?</strong>
+      If you'd DCA'd $${realWeekly}/week in real money since May, you'd have invested $${hypotheticalInvested.toLocaleString()} and gained ~${fmtPnl(hypotheticalGain)} (${fmtPct(pnlPct)}).
+    </div>`;
+  }
+
+  // Active Strategies
+  if (portfolio && corner) {
+    const wr = portfolio.total_trades ? ((portfolio.wins / portfolio.total_trades) * 100) : 0;
+    const pnlClass = portfolio.total_pnl >= 0 ? 'positive' : 'negative';
+
+    html += `<div class="card">
+      <h2>Active Strategies — Paper Trial ${portfolio.trial || '?'}</h2>
+      <div class="stat-row"><span class="stat-label">Balance</span><span class="stat-value">$${portfolio.balance?.toFixed(2)}</span></div>
+      <div class="stat-row"><span class="stat-label">P&L</span><span class="stat-value" style="color:var(--${portfolio.total_pnl >= 0 ? 'green' : 'red'})">${fmtPnl(portfolio.total_pnl)}</span></div>
+      <div class="stat-row"><span class="stat-label">Record</span><span class="stat-value">${portfolio.wins}W / ${portfolio.losses}L (${wr.toFixed(1)}%)</span></div>
+      <div class="stat-row"><span class="stat-label">Promotion needs</span><span class="stat-value">55% WR, 1.5 PF</span></div>
+      <div class="bar"><div class="bar-fill" style="width:${Math.min(wr / 55 * 100, 100)}%;background:${wr >= 55 ? 'var(--green)' : 'var(--red)'}"></div></div>
+      <div style="margin-top:12px">`;
+
+    if (corner.strategy_rankings) {
+      const sorted = [...corner.strategy_rankings].sort((a, b) => (b.pnl || 0) - (a.pnl || 0));
+      for (const s of sorted) {
+        const mult = corner.multipliers?.[s.strategy];
+        const isBenched = mult !== undefined && mult < 0.2;
+        const pClass = s.pnl >= 0 ? 'green' : 'red';
+        html += `<div class="strategy ${isBenched ? 'benched' : ''}">
+          <div>
+            <span class="strategy-name">${s.strategy.replace(/_/g, ' ')}</span>
+            <span class="strategy-record">${s.wins}W/${s.losses}L</span>
+          </div>
+          <span class="strategy-pnl" style="color:var(--${pClass})">${fmtPnl(s.pnl)}</span>
+        </div>`;
+      }
+    }
+    html += `</div></div>`;
+
+    // DCA vs Strategies comparison
+    if (longTerm) {
+      html += `<div class="insight">
+        <strong>DCA vs 28 AI Strategies</strong>
+        DCA: ${fmtPnl(longTerm.unrealised_pnl)} | Strategies: ${fmtPnl(portfolio.total_pnl)}<br>
+        Simple wins. The finding is the strategy.
+      </div>`;
+    }
+  }
+
+  // Test an Idea
+  html += `<div class="card">
+    <h2>Test an Idea</h2>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Read something online? Log it here. Next Forge session evaluates and paper-tests it.</div>
+    <div class="idea-form">
+      <input type="text" id="idea-input" placeholder="e.g. BTC dips every Sunday morning...">
+      <button onclick="submitIdea()">Log</button>
+    </div>
+    <div id="ideas-list" class="ideas-list">`;
+
+  if (ideas && ideas.length) {
+    for (const idea of ideas.slice(-5).reverse()) {
+      html += `<div class="idea-item">
+        <div>${idea.idea}</div>
+        <div class="idea-date">${new Date(idea.timestamp).toLocaleDateString()} — ${idea.status}</div>
+      </div>`;
+    }
+  }
+  html += `</div></div>`;
+
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('last-updated').textContent = `Updated: ${new Date().toLocaleString()}`;
+}
+
+async function submitIdea() {
+  const input = document.getElementById('idea-input');
+  const idea = input.value.trim();
+  if (!idea) return;
+
+  try {
+    await fetch('/api/trader/idea', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idea })
+    });
+    input.value = '';
+    load();
+  } catch (e) {
+    alert('Could not save idea. Try /testidea in Telegram instead.');
+  }
+}
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+{
+  "scan_date": "2026-10-14 11:00",
+  "categories": {
+    "indices": [
+      {
+        "name": "S&P 500",
+        "icon": "\ud83c\uddfa\ud83c\uddf8",
+        "symbol": "^GSPC",
+        "price": 7805.45,
+        "unit": "$",
+        "change_1m_pct": 2.43,
+        "change_3m_pct": 3.47,
+        "high_1m": 7818.93,
+        "low_1m": 7551.81
+      },
+      {
+        "name": "NASDAQ",
+        "icon": "\ud83c\uddfa\ud83c\uddf8",
+        "symbol": "^IXIC",
+        "price": 27204.38,
+        "unit": "$",
+        "change_1m_pct": 3.89,
+        "change_3m_pct": 4.2,
+        "high_1m": 27599.79,
+        "low_1m": 25978.43
+      },
+      {
+        "name": "Hang Seng",
+        "icon": "\ud83c\udded\ud83c\uddf0",
+        "symbol": "^HSI",
+        "price": 24408.04,
+        "unit": "$",
+        "change_1m_pct": -2.04,
+        "change_3m_pct": 0.28,
+        "high_1m": 25087.75,
+        "low_1m": 23785.79
+      },
+      {
+        "name": "FTSE 100",
+        "icon": "\ud83c\uddec\ud83c\udde7",
+        "symbol": "^FTSE",
+        "price": 10650.3,
+        "unit": "$",
+        "change_1m_pct": -0.44,
+        "change_3m_pct": 1.45,
+        "high_1m": 10816.1,
+        "low_1m": 10428.3
+      },
+      {
+        "name": "Nikkei 225",
+        "icon": "\ud83c\uddef\ud83c\uddf5",
+        "symbol": "^N225",
+        "price": 68193.13,
+        "unit": "$",
+        "change_1m_pct": 7.4,
+        "change_3m_pct": 0.66,
+        "high_1m": 70683.98,
+        "low_1m": 63484.1
+      },
+      {
+        "name": "DAX",
+        "icon": "\ud83c\udde9\ud83c\uddea",
+        "symbol": "^GDAXI",
+        "price": 25259.9,
+        "unit": "$",
+        "change_1m_pct": -0.71,
+        "change_3m_pct": 0.58,
+        "high_1m": 25716.71,
+        "low_1m": 24806.97
+      },
+      {
+        "name": "ASX 200",
+        "icon": "\ud83c\udde6\ud83c\uddfa",
+        "symbol": "^AXJO",
+        "price": 8708.1,
+        "unit": "$",
+        "change_1m_pct": -0.48,
+        "change_3m_pct": -1.14,
+        "high_1m": 8789.3,
+        "low_1m": 8614.4
+      }
+    ],
+    "precious_metals": [
+      {
+        "name": "Gold",
+        "icon": "\ud83e\udd47",
+        "symbol": "GC=F",
+        "price": 4184.9,
+        "unit": "$/oz",
+        "change_1m_pct": -3.84,
+        "change_3m_pct": 4.47,
+        "high_1m": 4424.9,
+        "low_1m": 4140.7
+      },
+      {
+        "name": "Silver",
+        "icon": "\ud83e\udd48",
+        "symbol": "SI=F",
+        "price": 59.4,
+        "unit": "$/oz",
+        "change_1m_pct": -6.48,
+        "change_3m_pct": 3.06,
+        "high_1m": 66.56,
+        "low_1m": 59.06
+      },
+      {
+        "name": "Platinum",
+        "icon": "\u26aa",
+        "symbol": "PL=F",
+        "price": 1670.8,
+        "unit": "$/oz",
+        "change_1m_pct": -5.92,
+        "change_3m_pct": 4.28,
+        "high_1m": 1822.6,
+        "low_1m": 1625.7
+      },
+      {
+        "name": "Palladium",
+        "icon": "\u2b1c",
+        "symbol": "PA=F",
+        "price": 1132.0,
+        "unit": "$/oz",
+        "change_1m_pct": -12.56,
+        "change_3m_pct": -8.91,
+        "high_1m": 1306.2,
+        "low_1m": 1114.9
+      }
+    ],
+    "energy": [
+      {
+        "name": "Crude Oil (WTI)",
+        "icon": "\ud83d\udee2\ufe0f",
+        "symbol": "CL=F",
+        "price": 95.28,
+        "unit": "$/bbl",
+        "change_1m_pct": -6.03,
+        "change_3m_pct": 21.93,
+        "high_1m": 105.83,
+        "low_1m": 88.28
+      },
+      {
+        "name": "Natural Gas",
+        "icon": "\ud83d\udd25",
+        "symbol": "NG=F",
+        "price": 3.33,
+        "unit": "$/mmBtu",
+        "change_1m_pct": 14.99,
+        "change_3m_pct": 14.95,
+        "high_1m": 3.33,
+        "low_1m": 2.84
+      },
+      {
+        "name": "Uranium (URA ETF)",
+        "icon": "\u2622\ufe0f",
+        "symbol": "URA",
+        "price": 37.38,
+        "unit": "$",
+        "change_1m_pct": -11.4,
+        "change_3m_pct": -10.04,
+        "high_1m": 43.74,
+        "low_1m": 37.38
+      }
+    ],
+    "industrial_metals": [
+      {
+        "name": "Copper",
+        "icon": "\ud83d\udd27",
+        "symbol": "HG=F",
+        "price": 6.76,
+        "unit": "$/lb",
+        "change_1m_pct": 6.77,
+        "change_3m_pct": 8.43,
+        "high_1m": 6.76,
+        "low_1m": 6.33
+      }
+    ],
+    "agriculture": [
+      {
+        "name": "Coffee",
+        "icon": "\u2615",
+        "symbol": "KC=F",
+        "price": 293.2,
+        "unit": "c/lb",
+        "change_1m_pct": -4.6,
+        "change_3m_pct": -14.12,
+        "high_1m": 307.35,
+        "low_1m": 272.3
+      },
+      {
+        "name": "Cocoa",
+        "icon": "\ud83c\udf6b",
+        "symbol": "CC=F",
+        "price": 5802.0,
+        "unit": "$/ton",
+        "change_1m_pct": -3.22,
+        "change_3m_pct": 1.86,
+        "high_1m": 5995.0,
+        "low_1m": 5327.0
+      },
+      {
+        "name": "Wheat",
+        "icon": "\ud83c\udf3e",
+        "symbol": "ZW=F",
+        "price": 667.75,
+        "unit": "c/bu",
+        "change_1m_pct": -5.55,
+        "change_3m_pct": 6.5,
+        "high_1m": 730.75,
+        "low_1m": 667.75
+      },
+      {
+        "name": "Corn",
+        "icon": "\ud83c\udf3d",
+        "symbol": "ZC=F",
+        "price": 482.75,
+        "unit": "c/bu",
+        "change_1m_pct": -5.71,
+        "change_3m_pct": 10.28,
+        "high_1m": 543.0,
+        "low_1m": 479.75
+      },
+      {
+        "name": "Sugar",
+        "icon": "\ud83c\udf6c",
+        "symbol": "SB=F",
+        "price": 21.1,
+        "unit": "c/lb",
+        "change_1m_pct": 16.19,
+        "change_3m_pct": 43.05,
+        "high_1m": 21.1,
+        "low_1m": 17.36
+      },
+      {
+        "name": "Cotton",
+        "icon": "\ud83e\uddf6",
+        "symbol": "CT=F",
+        "price": 80.4,
+        "unit": "c/lb",
+        "change_1m_pct": -0.3,
+        "change_3m_pct": 0.71,
+        "high_1m": 81.1,
+        "low_1m": 74.03
+      }
+    ],
+    "crypto": [
+      {
+        "name": "Bitcoin",
+        "icon": "\u20bf",
+        "symbol": "BTC-USD",
+        "price": 83584.33,
+        "unit": "$",
+        "change_1m_pct": 6.94,
+        "change_3m_pct": 28.68,
+        "high_1m": 86602.91,
+        "low_1m": 75612.51
+      },
+      {
+        "name": "Ethereum",
+        "icon": "\u039e",
+        "symbol": "ETH-USD",
+        "price": 2510.27,
+        "unit": "$",
+        "change_1m_pct": -0.16,
+        "change_3m_pct": 32.86,
+        "high_1m": 2776.47,
+        "low_1m": 2399.09
+      },
+      {
+        "name": "Solana",
+        "icon": "\u25ce",
+        "symbol": "SOL-USD",
+        "price": 107.62,
+        "unit": "$",
+        "change_1m_pct": 5.0,
+        "change_3m_pct": 38.4,
+        "high_1m": 122.06,
+        "low_1m": 96.89
+      }
+    ],
+    "forex": [
+      {
+        "name": "USD/HKD",
+        "icon": "\ud83c\udded\ud83c\uddf0",
+        "symbol": "HKD=X",
+        "price": 7.85,
+        "unit": "$",
+        "change_1m_pct": 0.07,
+        "change_3m_pct": 0.13,
+        "high_1m": 7.85,
+        "low_1m": 7.84
+      },
+      {
+        "name": "EUR/USD",
+        "icon": "\ud83c\uddea\ud83c\uddfa",
+        "symbol": "EURUSD=X",
+        "price": 1.12,
+        "unit": "$",
+        "change_1m_pct": -3.28,
+        "change_3m_pct": -1.5,
+        "high_1m": 1.16,
+        "low_1m": 1.12
+      },
+      {
+        "name": "GBP/USD",
+        "icon": "\ud83c\uddec\ud83c\udde7",
+        "symbol": "GBPUSD=X",
+        "price": 1.33,
+        "unit": "$",
+        "change_1m_pct": -1.88,
+        "change_3m_pct": -0.57,
+        "high_1m": 1.35,
+        "low_1m": 1.32
+      },
+      {
+        "name": "USD/JPY",
+        "icon": "\ud83c\uddef\ud83c\uddf5",
+        "symbol": "JPY=X",
+        "price": 158.29,
+        "unit": "$",
+        "change_1m_pct": 3.17,
+        "change_3m_pct": -2.55,
+        "high_1m": 158.81,
+        "low_1m": 153.42
+      },
+      {
+        "name": "USD/THB",
+        "icon": "\ud83c\uddf9\ud83c\udded",
+        "symbol": "THB=X",
+        "price": 33.54,
+        "unit": "$",
+        "change_1m_pct": 1.36,
+        "change_3m_pct": 0.09,
+        "high_1m": 33.69,
+        "low_1m": 33.09
+      }
+    ],
+    "reits_property": [
+      {
+        "name": "Link REIT (HK)",
+        "icon": "\ud83c\udfe2",
+        "symbol": "0823.HK",
+        "price": 37.76,
+        "unit": "$",
+        "change_1m_pct": 1.56,
+        "change_3m_pct": -0.58,
+        "high_1m": 37.76,
+        "low_1m": 36.4
+      },
+      {
+        "name": "VNQ (US REIT ETF)",
+        "icon": "\ud83c\udfe0",
+        "symbol": "VNQ",
+        "price": 91.14,
+        "unit": "$",
+        "change_1m_pct": -2.54,
+        "change_3m_pct": -5.78,
+        "high_1m": 93.52,
+        "low_1m": 88.69
+      }
+    ],
+    "alternatives": [
+      {
+        "name": "BITW (Crypto Index)",
+        "icon": "\ud83d\udcca",
+        "symbol": "BITW",
+        "price": 53.88,
+        "unit": "$",
+        "change_1m_pct": 3.82,
+        "change_3m_pct": 29.32,
+        "high_1m": 56.77,
+        "low_1m": 49.62
+      }
+    ]
+  },
+  "biggest_movers_up": [
+    {
+      "name": "Sugar",
+      "icon": "\ud83c\udf6c",
+      "change": 16.19,
+      "category": "agriculture"
+    },
+    {
+      "name": "Natural Gas",
+      "icon": "\ud83d\udd25",
+      "change": 14.99,
+      "category": "energy"
+    },
+    {
+      "name": "Nikkei 225",
+      "icon": "\ud83c\uddef\ud83c\uddf5",
+      "change": 7.4,
+      "category": "indices"
+    },
+    {
+      "name": "Bitcoin",
+      "icon": "\u20bf",
+      "change": 6.94,
+      "category": "crypto"
+    },
+    {
+      "name": "Copper",
+      "icon": "\ud83d\udd27",
+      "change": 6.77,
+      "category": "industrial_metals"
+    }
+  ],
+  "biggest_movers_down": [
+    {
+      "name": "Palladium",
+      "icon": "\u2b1c",
+      "change": -12.56,
+      "category": "precious_metals"
+    },
+    {
+      "name": "Uranium (URA ETF)",
+      "icon": "\u2622\ufe0f",
+      "change": -11.4,
+      "category": "energy"
+    },
+    {
+      "name": "Silver",
+      "icon": "\ud83e\udd48",
+      "change": -6.48,
+      "category": "precious_metals"
+    },
+    {
+      "name": "Crude Oil (WTI)",
+      "icon": "\ud83d\udee2\ufe0f",
+      "change": -6.03,
+      "category": "energy"
+    },
+    {
+      "name": "Platinum",
+      "icon": "\u26aa",
+      "change": -5.92,
+      "category": "precious_metals"
+    }
+  ],
+  "total_symbols": 32
+}

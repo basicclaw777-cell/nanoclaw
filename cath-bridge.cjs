@@ -126,6 +126,80 @@ app.get('/api/subscriptions', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'subscriptions.json'));
 });
 
+// ── Trader Dashboard ──────────────────────────────────────────────────────────
+
+app.get('/property-dashboard', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'property-scout', 'property-dashboard.html'));
+});
+
+app.get('/api/property', (req, res) => {
+  try {
+    const read = (f) => {
+      try { return JSON.parse(fs.readFileSync(path.join(NANOCLAW, 'property-scout', f), 'utf8')); }
+      catch { return null; }
+    };
+    res.json({
+      pulse: read('global-pulse.json'),
+      listings: read('listings.json'),
+      golden: read('golden-zone-units.json'),
+      flowAnalysis: read('flow-analysis.json'),
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/world-pulse', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'market-nodes', 'world-pulse-dashboard.html'));
+});
+
+app.get('/api/world-pulse', (req, res) => {
+  try {
+    const f = path.join(NANOCLAW, 'market-nodes', 'world-pulse.json');
+    if (fs.existsSync(f)) return res.sendFile(f);
+    res.status(404).json({ error: 'No pulse data. Run scan first.' });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/trader-dashboard', (req, res) => {
+  res.sendFile(path.join(NANOCLAW, 'trader', 'trader-dashboard.html'));
+});
+
+app.get('/api/trader', (req, res) => {
+  try {
+    const read = (f) => {
+      try { return JSON.parse(fs.readFileSync(path.join(NANOCLAW, 'trader', f), 'utf8')); }
+      catch { return null; }
+    };
+    res.json({
+      portfolio: read('portfolio.json'),
+      longTerm: read('long-term-portfolio.json'),
+      corner: read('corner-advice.json'),
+      config: read('config.json'),
+      ideas: read('ideas-inbox.json'),
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/trader/idea', (req, res) => {
+  try {
+    const { idea } = req.body;
+    if (!idea) return res.status(400).json({ error: 'No idea provided' });
+    const ideasPath = path.join(NANOCLAW, 'trader', 'ideas-inbox.json');
+    let ideas = [];
+    try { ideas = JSON.parse(fs.readFileSync(ideasPath, 'utf8')); } catch {}
+    ideas.push({ timestamp: new Date().toISOString(), idea, status: 'pending', source: 'dashboard' });
+    fs.writeFileSync(ideasPath, JSON.stringify(ideas, null, 2));
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ── Cathedral Status Board (Module B) ───────────────────────────────────────
 // Tabbed board: Services | In Progress | Delivered | Spend.
 // The *-index.js scripts (ESM) regenerate their JSON on load so the board is

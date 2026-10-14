@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Intelligence</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --green: #16a34a;
+    --red: #dc2626;
+    --gold: #f7b408;
+    --gold-light: #fef3c7;
+    --blue: #2563eb;
+    --orange: #ea580c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    padding: 16px;
+    line-height: 1.5;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  header { text-align: center; padding-bottom: 16px; border-bottom: 2px solid var(--gold); margin-bottom: 20px; }
+  h1 { font-size: 20px; font-weight: 700; }
+  .subtitle { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .market-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .market-row:last-child { border-bottom: none; }
+  .market-name { font-weight: 600; }
+  .market-stats { display: flex; gap: 12px; font-size: 12px; color: var(--muted); }
+  .market-stats span { white-space: nowrap; }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+  .alert {
+    background: #fef3c7;
+    border-left: 3px solid var(--gold);
+    padding: 8px 12px;
+    margin: 4px 0;
+    font-size: 12px;
+    color: #92400e;
+  }
+  .alert.opportunity {
+    background: #f0fdf4;
+    border-left-color: var(--green);
+    color: #166534;
+  }
+  .listing {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .listing:last-child { border-bottom: none; }
+  .listing-title { font-weight: 600; font-size: 14px; }
+  .listing-meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .listing-price { font-weight: 700; color: var(--gold); }
+  .tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .tag-hot { background: #fef2f2; color: var(--red); }
+  .tag-watch { background: #fef3c7; color: #92400e; }
+  .tag-new { background: #f0fdf4; color: var(--green); }
+  .yield-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+  .yield-bar-label { font-size: 12px; min-width: 80px; }
+  .yield-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .yield-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--gold);
+  }
+  .yield-bar-value { font-size: 12px; font-weight: 600; min-width: 40px; text-align: right; }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  .tab {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .tab.active { background: var(--gold-light); color: #92400e; border-color: var(--gold); }
+  .section { display: none; }
+  .section.active { display: block; }
+  .footer { text-align: center; color: var(--muted); font-size: 11px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .loading { text-align: center; color: var(--muted); padding: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Property Intelligence</h1>
+  <div class="subtitle">Cathedral Scout Network</div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('markets')">Markets</div>
+  <div class="tab" onclick="showTab('hk')">HK Deep</div>
+  <div class="tab" onclick="showTab('listings')">Listings</div>
+  <div class="tab" onclick="showTab('yields')">Yields</div>
+</div>
+
+<div id="content"><div class="loading">Loading data...</div></div>
+
+<div class="footer">
+  <span id="scan-date"></span><br>
+  <em>Telegram: /property /hkmarket /opportunities</em>
+</div>
+
+<script>
+let DATA = null;
+
+async function load() {
+  try {
+    const res = await fetch('/api/property');
+    DATA = await res.json();
+    showTab('markets');
+  } catch (e) {
+    document.getElementById('content').innerHTML = '<div class="loading">Could not load data.</div>';
+  }
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', t.textContent.toLowerCase().includes(tab.slice(0, 3)));
+  });
+  if (!DATA) return;
+  const el = document.getElementById('content');
+  switch(tab) {
+    case 'markets': el.innerHTML = renderMarkets(); break;
+    case 'hk': el.innerHTML = renderHK(); break;
+    case 'listings': el.innerHTML = renderListings(); break;
+    case 'yields': el.innerHTML = renderYields(); break;
+  }
+  if (DATA.pulse?.scan_date) {
+    document.getElementById('scan-date').textContent = `Last scan: ${DATA.pulse.scan_date}`;
+  }
+}
+
+function renderMarkets() {
+  if (!DATA.pulse?.markets) return '<div class="loading">No market data.</div>';
+  let html = '<div class="card"><h2>Global Market Pulse</h2>';
+  const order = ['hk','thailand','uk','portugal','japan','dubai','us','australia','singapore'];
+  for (const key of order) {
+    const m = DATA.pulse.markets[key];
+    if (!m) continue;
+    const yoyClass = m.price_yoy_pct >= 0 ? 'positive' : 'negative';
+    const yoyIcon = m.price_yoy_pct >= 0 ? '▲' : '▼';
+    html += `<div class="market-row">
+      <div>
+        <div class="market-name">${m.flag || ''} ${m.name}</div>
+      </div>
+      <div class="market-stats">
+        <span class="${yoyClass}">${yoyIcon} ${Math.abs(m.price_yoy_pct)}%</span>
+        <span>Yield ${m.rental_yield_pct}%</span>
+        ${m.mortgage_rate_pct ? `<span>Rate ${m.mortgage_rate_pct}%</span>` : ''}
+      </div>
+    </div>`;
+    if (m.contrarian_alerts?.length) {
+      for (const a of m.contrarian_alerts) {
+        const cls = a.startsWith('OPPORTUNITY') ? 'opportunity' : '';
+        html += `<div class="alert ${cls}">${a}</div>`;
+      }
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderHK() {
+  let html = '';
+  const hk = DATA.pulse?.markets?.hk;
+  if (hk) {
+    const spread = (hk.rental_yield_pct - hk.mortgage_rate_pct).toFixed(1);
+    const spreadClass = parseFloat(spread) >= 0 ? 'positive' : 'negative';
+    html += `<div class="card"><h2>HK Market State</h2>
+      <div class="market-row"><span>Price Index</span><span style="font-weight:600">${hk.price_index}</span></div>
+      <div class="market-row"><span>YoY Change</span><span class="${hk.price_yoy_pct >= 0 ? 'positive' : 'negative'}">${hk.price_yoy_pct >= 0 ? '+' : ''}${hk.price_yoy_pct}%</span></div>
+      <div class="market-row"><span>Rental Yield</span><span>${hk.rental_yield_pct}%</span></div>
+      <div class="market-row"><span>Mortgage Rate</span><span>${hk.mortgage_rate_pct}%</span></div>
+      <div class="market-row"><span>Yield-Rate Spread</span><span class="${spreadClass}">${spread}pp</span></div>
+      <div class="market-row"><span>Transactions MoM</span><span class="${hk.transactions_mom_pct >= 0 ? 'positive' : 'negative'}">${hk.transactions_mom_pct >= 0 ? '+' : ''}${hk.transactions_mom_pct}%</span></div>
+      <div class="market-row"><span>Sentiment</span><span>${hk.sentiment > 0 ? 'Positive' : hk.sentiment < -0.3 ? 'Negative' : 'Neutral'}</span></div>
+    </div>`;
+  }
+
+  if (DATA.golden?.length) {
+    html += `<div class="card"><h2>Golden Zone Units (${DATA.golden.length})</h2>`;
+    for (const u of DATA.golden.slice(0, 8)) {
+      html += `<div class="listing">
+        <div class="listing-title">${u.address || u.building}</div>
+        <div class="listing-meta">${u.sqft}sqft · ${u.golden_zone} · ${u.source}</div>
+        <div class="listing-price">$${(u.price/1e6).toFixed(2)}M ($${u.price_per_sqft}/sqft)</div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  return html || '<div class="loading">No HK data.</div>';
+}
+
+function renderListings() {
+  if (!DATA.listings?.length) return '<div class="loading">No listings.</div>';
+  const lanes = {};
+  for (const l of DATA.listings) {
+    const lane = l.lane || 'other';
+    if (!lanes[lane]) lanes[lane] = [];
+    lanes[lane].push(l);
+  }
+  let html = '';
+  for (const [lane, items] of Object.entries(lanes)) {
+    html += `<div class="card"><h2>${lane.replace(/_/g, ' ')} (${items.length})</h2>`;
+    for (const l of items.slice(0, 6)) {
+      const tagClass = l.status === 'hot' ? 'tag-hot' : l.status === 'new' ? 'tag-new' : 'tag-watch';
+      html += `<div class="listing">
+        <div class="listing-title">${l.address || l.building || 'Unknown'} <span class="tag ${tagClass}">${l.status || '?'}</span></div>
+        <div class="listing-meta">${l.sqft || '?'}sqft · ${l.district || ''} · ${l.source || ''}</div>
+        <div class="listing-price">$${l.price_per_sqft ? l.price_per_sqft+'/sqft' : '?'}</div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+function renderYields() {
+  if (!DATA.pulse?.markets) return '<div class="loading">No yield data.</div>';
+  const yields = Object.entries(DATA.pulse.markets)
+    .filter(([,m]) => m.rental_yield_pct)
+    .map(([k,m]) => ({ name: m.name, flag: m.flag, yield: m.rental_yield_pct, rate: m.mortgage_rate_pct, yoy: m.price_yoy_pct }))
+    .sort((a,b) => b.yield - a.yield);
+
+  const maxYield = Math.max(...yields.map(y => y.yield), 1);
+  let html = '<div class="card"><h2>Global Yield Comparison</h2>';
+  for (const y of yields) {
+    const spread = y.rate ? (y.yield - y.rate).toFixed(1) : null;
+    html += `<div class="yield-bar">
+      <div class="yield-bar-label">${y.flag || ''} ${y.name}</div>
+      <div class="yield-bar-track"><div class="yield-bar-fill" style="width:${(y.yield/maxYield*100)}%"></div></div>
+      <div class="yield-bar-value">${y.yield}%</div>
+    </div>`;
+  }
+  html += '</div>';
+
+  html += '<div class="card"><h2>Price vs Yield Matrix</h2>';
+  html += '<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Best quadrant: prices falling + yield rising (top-left)</div>';
+  for (const y of yields) {
+    const quadrant = y.yoy < 0 && y.yield > 4 ? '🟢 BUY ZONE' :
+                     y.yoy < 0 && y.yield <= 4 ? '🟡 Watch' :
+                     y.yoy >= 0 && y.yield > 4 ? '🟡 Yield OK' : '🔴 Expensive';
+    html += `<div class="market-row">
+      <span>${y.flag} ${y.name}</span>
+      <span style="font-size:12px">${y.yoy >= 0 ? '+' : ''}${y.yoy}% price · ${y.yield}% yield · ${quadrant}</span>
+    </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+load();
+</script>
+</body>
+</html>

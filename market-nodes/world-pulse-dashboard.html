@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Pulse</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root {
+    /* Layout: movers hero → heatmap grid → category breakdown */
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface-alt: #f5f4f0;
+    --border: #e8e6e1;
+    --text: #1a1917;
+    --text-muted: #7a7770;
+    --text-dim: #a8a49c;
+    --up: #0d9b4a;
+    --up-bg: #e8f8ef;
+    --up-intense: #07803b;
+    --down: #d63031;
+    --down-bg: #fef0f0;
+    --down-intense: #b91c1c;
+    --neutral: #9ca3af;
+    --gold: #d4a012;
+    --gold-light: #fdf6e3;
+    --accent: #2563eb;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111110;
+      --surface: #1c1c1a;
+      --surface-alt: #252523;
+      --border: #333330;
+      --text: #ededeb;
+      --text-muted: #9a9890;
+      --text-dim: #666560;
+      --up: #34d27b;
+      --up-bg: #0d2618;
+      --up-intense: #4ade80;
+      --down: #f87171;
+      --down-bg: #2d1212;
+      --down-intense: #fca5a5;
+      --neutral: #6b7280;
+      --gold: #eab308;
+      --gold-light: #1a1800;
+      --accent: #60a5fa;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111110;
+    --surface: #1c1c1a;
+    --surface-alt: #252523;
+    --border: #333330;
+    --text: #ededeb;
+    --text-muted: #9a9890;
+    --text-dim: #666560;
+    --up: #34d27b;
+    --up-bg: #0d2618;
+    --up-intense: #4ade80;
+    --down: #f87171;
+    --down-bg: #2d1212;
+    --down-intense: #fca5a5;
+    --neutral: #6b7280;
+    --gold: #eab308;
+    --gold-light: #1a1800;
+    --accent: #60a5fa;
+    color-scheme: dark;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 16px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .mono { font-family: 'Space Mono', monospace; }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 24px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .header .meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+  .header .count {
+    font-family: 'Space Mono', monospace;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* Movers section */
+  .movers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .movers-col h2 {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+  }
+  .movers-col.up h2 { color: var(--up); }
+  .movers-col.down h2 { color: var(--down); }
+  .mover {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .mover.up { background: var(--up-bg); }
+  .mover.down { background: var(--down-bg); }
+  .mover-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mover-pct {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+  .mover.up .mover-pct { color: var(--up-intense); }
+  .mover.down .mover-pct { color: var(--down-intense); }
+
+  /* Heatmap */
+  .heatmap-section { margin-bottom: 24px; }
+  .heatmap-section h2 {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .heatmap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .heat-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 6px;
+    border-radius: 6px;
+    min-width: 72px;
+    flex: 1 1 72px;
+    text-align: center;
+    cursor: default;
+    transition: transform 0.15s;
+  }
+  .heat-cell:hover { transform: scale(1.04); }
+  .heat-cell .icon { font-size: 16px; margin-bottom: 2px; }
+  .heat-cell .name {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    color: inherit;
+    opacity: 0.85;
+  }
+  .heat-cell .pct {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* Category sections */
+  .category {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .cat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--surface-alt);
+    cursor: pointer;
+    user-select: none;
+  }
+  .cat-header h3 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+  }
+  .cat-header .arrow {
+    font-size: 10px;
+    color: var(--text-dim);
+    transition: transform 0.2s;
+  }
+  .cat-header.open .arrow { transform: rotate(180deg); }
+  .cat-body { display: none; }
+  .cat-body.open { display: block; }
+
+  .asset-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .asset-row:last-child { border-bottom: none; }
+  .asset-name {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+  .asset-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .asset-price {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .asset-change {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: right;
+    min-width: 56px;
+    white-space: nowrap;
+  }
+  .asset-change.up { color: var(--up); }
+  .asset-change.down { color: var(--down); }
+  .asset-change.flat { color: var(--neutral); }
+
+  /* Range bar */
+  .range-bar {
+    width: 48px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    position: relative;
+    overflow: visible;
+  }
+  .range-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: absolute;
+    top: -1px;
+    border: 1.5px solid var(--surface);
+  }
+  .range-dot.up { background: var(--up); }
+  .range-dot.down { background: var(--down); }
+  .range-dot.flat { background: var(--neutral); }
+
+  /* Tabs */
+  .view-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  .view-tab {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .view-tab.active {
+    background: var(--gold-light);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .footer {
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .narrative {
+    background: var(--gold-light);
+    border-left: 3px solid var(--gold);
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+    border-radius: 0 6px 6px 0;
+  }
+  .narrative strong { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>World Pulse</h1>
+  <div class="meta">
+    <div id="scan-date"></div>
+    <div><span class="count" id="sym-count"></span> markets</div>
+  </div>
+</div>
+
+<div id="narrative" class="narrative"></div>
+
+<div class="view-tabs">
+  <div class="view-tab active" onclick="showView('overview')">Overview</div>
+  <div class="view-tab" onclick="showView('heatmap')">Heatmap</div>
+  <div class="view-tab" onclick="showView('detail')">All Markets</div>
+</div>
+
+<div id="view-overview" class="view active"></div>
+<div id="view-heatmap" class="view"></div>
+<div id="view-detail" class="view"></div>
+
+<div class="footer">
+  Telegram: /worldpulse · /movers<br>
+  Data: Yahoo Finance via yfinance
+</div>
+
+<script>
+let DATA = null;
+
+const CAT_LABELS = {
+  indices: 'Stock Indices',
+  precious_metals: 'Precious Metals',
+  energy: 'Energy',
+  industrial_metals: 'Industrial Metals',
+  agriculture: 'Agriculture',
+  crypto: 'Crypto',
+  forex: 'Forex',
+  reits_property: 'REITs & Property',
+  alternatives: 'Alternatives'
+};
+
+const CAT_ICONS = {
+  indices: '📊', precious_metals: '🥇', energy: '⛽',
+  industrial_metals: '🔧', agriculture: '🌾', crypto: '₿',
+  forex: '💱', reits_property: '🏠', alternatives: '📈'
+};
+
+async function load() {
+  try {
+    const res = await fetch('/api/world-pulse');
+    DATA = await res.json();
+  } catch {
+    document.getElementById('narrative').textContent = 'Could not load data.';
+    return;
+  }
+  document.getElementById('scan-date').textContent = DATA.scan_date;
+  document.getElementById('sym-count').textContent = DATA.total_symbols;
+  buildNarrative();
+  buildOverview();
+  buildHeatmap();
+  buildDetail();
+}
+
+function chgClass(v) { return v > 0.5 ? 'up' : v < -0.5 ? 'down' : 'flat'; }
+function fmtChg(v) { return (v >= 0 ? '+' : '') + v.toFixed(1) + '%'; }
+function fmtPrice(p, unit) {
+  if (p >= 10000) return p.toLocaleString('en', {maximumFractionDigits: 0});
+  if (p >= 100) return p.toFixed(1);
+  if (p >= 1) return p.toFixed(2);
+  return p.toFixed(4);
+}
+
+function heatColor(pct) {
+  const abs = Math.min(Math.abs(pct), 20);
+  const intensity = Math.round(40 + (abs / 20) * 60);
+  if (pct > 0.5) return `color: var(--up-intense); background: color-mix(in srgb, var(--up-bg) ${intensity}%, var(--surface))`;
+  if (pct < -0.5) return `color: var(--down-intense); background: color-mix(in srgb, var(--down-bg) ${intensity}%, var(--surface))`;
+  return `color: var(--text-muted); background: var(--surface-alt)`;
+}
+
+function buildNarrative() {
+  const up = DATA.biggest_movers_up || [];
+  const down = DATA.biggest_movers_down || [];
+  let parts = [];
+  if (up.length) parts.push(`<strong>Surging:</strong> ${up.map(m => `${m.name} +${m.change}%`).join(', ')}`);
+  if (down.length) parts.push(`<strong>Falling:</strong> ${down.map(m => `${m.name} ${m.change}%`).join(', ')}`);
+
+  const allItems = Object.values(DATA.categories).flat();
+  const avgChg = allItems.reduce((s, i) => s + i.change_1m_pct, 0) / allItems.length;
+  parts.push(`<strong>Average 1m change:</strong> ${fmtChg(avgChg)} across ${DATA.total_symbols} markets`);
+
+  document.getElementById('narrative').innerHTML = parts.join('. ') + '.';
+}
+
+function buildOverview() {
+  const el = document.getElementById('view-overview');
+  let html = '<div class="movers">';
+
+  html += '<div class="movers-col up"><h2>Biggest Gains (1m)</h2>';
+  for (const m of (DATA.biggest_movers_up || [])) {
+    html += `<div class="mover up"><span class="mover-name">${m.icon || ''} ${m.name}</span><span class="mover-pct">+${m.change}%</span></div>`;
+  }
+  html += '</div>';
+
+  html += '<div class="movers-col down"><h2>Biggest Drops (1m)</h2>';
+  for (const m of (DATA.biggest_movers_down || [])) {
+    html += `<div class="mover down"><span class="mover-name">${m.icon || ''} ${m.name}</span><span class="mover-pct">${m.change}%</span></div>`;
+  }
+  html += '</div></div>';
+
+  for (const [cat, items] of Object.entries(DATA.categories)) {
+    const label = CAT_LABELS[cat] || cat;
+    const catAvg = items.reduce((s, i) => s + i.change_1m_pct, 0) / items.length;
+    const catClass = chgClass(catAvg);
+    html += `<div class="category">`;
+    html += `<div class="cat-header open" onclick="toggleCat(this)"><h3>${CAT_ICONS[cat] || ''} ${label}</h3><span class="asset-change ${catClass}" style="font-size:12px">${fmtChg(catAvg)}</span></div>`;
+    html += `<div class="cat-body open">`;
+    for (const item of items) {
+      const cls = chgClass(item.change_1m_pct);
+      const rangeSpan = item.high_1m - item.low_1m;
+      const pos = rangeSpan > 0 ? Math.max(0, Math.min(100, ((item.price - item.low_1m) / rangeSpan) * 100)) : 50;
+      html += `<div class="asset-row">
+        <div class="asset-name"><span>${item.icon || ''} ${item.name}</span></div>
+        <div class="asset-price">${fmtPrice(item.price, item.unit)}</div>
+        <div class="range-bar"><div class="range-dot ${cls}" style="left:${Math.max(0, Math.min(40, pos * 0.4))}px"></div></div>
+        <div class="asset-change ${cls}">${fmtChg(item.change_1m_pct)}</div>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function buildHeatmap() {
+  const el = document.getElementById('view-heatmap');
+  let html = '';
+
+  for (const [cat, items] of Object.entries(DATA.categories)) {
+    html += `<div class="heatmap-section"><h2>${CAT_ICONS[cat] || ''} ${CAT_LABELS[cat] || cat}</h2><div class="heatmap">`;
+    for (const item of items) {
+      html += `<div class="heat-cell" style="${heatColor(item.change_1m_pct)}">
+        <div class="icon">${item.icon || ''}</div>
+        <div class="name">${item.name}</div>
+        <div class="pct">${fmtChg(item.change_1m_pct)}</div>
+      </div>`;
+    }
+    html += '</div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function buildDetail() {
+  const el = document.getElementById('view-detail');
+  const allItems = Object.entries(DATA.categories).flatMap(([cat, items]) =>
+    items.map(i => ({...i, category: cat}))
+  );
+
+  let html = '<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">';
+  html += '<button class="view-tab active" onclick="sortDetail(this,\'name\')" style="flex:none;padding:4px 10px;font-size:11px">Name</button>';
+  html += '<button class="view-tab" onclick="sortDetail(this,\'change\')" style="flex:none;padding:4px 10px;font-size:11px">1m Change</button>';
+  html += '<button class="view-tab" onclick="sortDetail(this,\'change3m\')" style="flex:none;padding:4px 10px;font-size:11px">3m Change</button>';
+  html += '</div>';
+  html += '<div id="detail-list"></div>';
+  el.innerHTML = html;
+  renderDetailSorted('name');
+}
+
+function renderDetailSorted(by) {
+  const allItems = Object.entries(DATA.categories).flatMap(([cat, items]) =>
+    items.map(i => ({...i, category: cat}))
+  );
+  if (by === 'change') allItems.sort((a, b) => b.change_1m_pct - a.change_1m_pct);
+  else if (by === 'change3m') allItems.sort((a, b) => b.change_3m_pct - a.change_3m_pct);
+  else allItems.sort((a, b) => a.name.localeCompare(b.name));
+
+  let html = '';
+  for (const item of allItems) {
+    const cls1 = chgClass(item.change_1m_pct);
+    const cls3 = chgClass(item.change_3m_pct);
+    html += `<div class="asset-row">
+      <div class="asset-name"><span>${item.icon || ''} ${item.name}</span></div>
+      <div class="asset-price">${fmtPrice(item.price, item.unit)}<br><span style="font-size:10px;color:var(--text-dim)">${CAT_LABELS[item.category] || item.category}</span></div>
+      <div class="asset-change ${cls1}" title="1 month">${fmtChg(item.change_1m_pct)}<br><span style="font-size:10px;opacity:0.7">1m</span></div>
+      <div class="asset-change ${cls3}" title="3 months">${fmtChg(item.change_3m_pct)}<br><span style="font-size:10px;opacity:0.7">3m</span></div>
+    </div>`;
+  }
+  document.getElementById('detail-list').innerHTML = `<div class="category"><div class="cat-body open" style="display:block">${html}</div></div>`;
+}
+
+function sortDetail(btn, by) {
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDetailSorted(by);
+}
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  const tabs = document.querySelectorAll('.view-tabs .view-tab');
+  const idx = name === 'overview' ? 0 : name === 'heatmap' ? 1 : 2;
+  tabs[idx].classList.add('active');
+}
+
+function toggleCat(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+load();
+</script>
+</body>
+</html>
