@@ -1,0 +1,52 @@
+# REVIEW PROMPT: Cathedral Integration Audit (System Pre-Mortem)
+
+These five specifications are about to become production infrastructure.
+
+Treat them as if you are reviewing a distributed operating system before deployment.
+
+Assume each module is individually well designed. Your job is to find problems that only emerge when the modules interact.
+
+Do not redesign the architecture unless absolutely necessary.
+
+Assume this system has been running for two years and has become difficult to evolve. Explain why.
+
+Prioritize: hidden coupling, failure propagation, authority boundaries, schema drift, operational bottlenecks, long-term maintainability
+
+## 1. System Data Flow
+Map every major data flow across all five modules. For each flow identify: origin, transformations, consumers, persistence layer, termination. Highlight: circular dependencies, duplicated storage, hidden write paths, modules acting as implicit databases.
+
+## 2. Dependency Graph
+Build the dependency graph. Identify: hard/soft/optional/runtime/startup dependencies. For every module answer: "If this module disappears today, what continues to function?"
+
+## 3. Failure Propagation
+Perform failure injection. Assume each module fails independently. Examples: Coach Paul unavailable, Agent Protocol unavailable, Vault unavailable, Local model unavailable, SQLite locked, Network partition. Describe: immediate failures, degraded behavior, recovery path, permanent data loss risk.
+
+## 4. Authority & Trust Boundaries
+Map every place authority changes. Examples: human->agent, parent->coach, agent->agent, local model->remote model. For every boundary identify: who grants authority, how verified, how revoked, how audited. Look for privilege escalation opportunities.
+
+## 5. Schema Stability
+Identify every shared object. Examples: Decision Record, Student State, Proposal, Authorization Token, Capability Token. For every shared object determine: canonical owner, readers, writers, versioning strategy, downstream breakage risk. Highlight schema drift risks.
+
+## 6. Hidden Modules
+Identify infrastructure these five modules implicitly assume exists. Examples: event bus, scheduler, evidence layer, proposal registry, identity service, ledger, observability, audit log. Do not invent modules unless the existing specs clearly depend on them.
+
+## 7. Scaling
+Evaluate: 50 students, 500 rules, 2 years, 10 local agents, continuous PM2. Identify: first bottleneck, database bottleneck, memory bottleneck, synchronization bottleneck, operational bottleneck. Estimate where architectural changes become necessary.
+
+## 8. Evolution
+Assume these modules continue evolving independently for three years. Where will version drift first appear? Which contracts must remain frozen? Which contracts can safely evolve?
+
+## 9. Governance
+Identify every place where the system makes a decision. For each decision answer: who proposed it, who approved it, who executed it, who records it, who can audit it later. If any answer is ambiguous, identify it as a governance gap.
+
+## 10. Highest Risk
+Provide only five findings. Rank them by: 1. likelihood, 2. impact, 3. difficulty of fixing later. Ignore cosmetic improvements. Focus only on architectural risks.
+
+## 11. Proposal Protocol Audit
+Assume every subsystem in the Cathedral eventually communicates by emitting Proposals into the Evidence Layer. For each module answer: What proposals does it emit? What evidence does it consume? Does it mutate proposals or only observe them? Does it preserve provenance? Does it generate auditable outcomes? If every module emitted Proposal events tomorrow, what information is missing from the current specs?
+
+---
+
+
+---
+I will paste the source document/code in my next message. Wait for it before reviewing.

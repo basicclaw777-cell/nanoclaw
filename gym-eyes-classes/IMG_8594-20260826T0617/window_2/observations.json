@@ -1,0 +1,79 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Lateral shuffle steps moving right across the ring, maintaining a consistent boxing stance.",
+        "stance_width": "normal",
+        "guard": "Hands held high near the chin in a standard boxing guard.",
+        "upper_body": "Slight forward lean, upright posture, stable torso.",
+        "distance": "Close, within striking distance, both training partners in range.",
+        "notable": "Both fighters move in unison to the right, footwork is synchronized."
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.7s-2.7s",
+      "observations": {
+        "footwork": "Reverse direction, lateral shuffle steps moving left across the ring.",
+        "stance_width": "normal",
+        "guard": "Guard maintained, hands up.",
+        "upper_body": "Upright, eyes forward.",
+        "distance": "Close, still in range, pad holder stays opposite the fighter.",
+        "notable": "Direction change executed smoothly without breaking stance."
+      }
+    },
+    {
+      "frames": "F10-F12",
+      "time": "3.0s-3.7s",
+      "observations": {
+        "footwork": "Lateral movement to the right, stepping in the opposite direction again.",
+        "stance_width": "normal",
+        "guard": "Hands remain up.",
+        "upper_body": "Upright, maintaining alignment.",
+        "distance": "Close, striking range maintained.",
+        "notable": "Movement pattern continues, the training pair is fluid in their footwork."
+      }
+    },
+    {
+      "frames": "F13-F15",
+      "time": "4.0s-4.7s",
+      "observations": {
+        "footwork": "Initial steps to the left, continuing the lateral movement pattern.",
+        "stance_width": "normal",
+        "guard": "Guard maintained.",
+        "upper_body": "Upright, stable.",
+        "distance": "Close, in range.",
+        "notable": "Continuous shuffling moving across the ring, maintaining position relative to each other."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "step",
+      "detail": "Lateral movement to the right, maintaining boxing stance."
+    },
+    {
+      "frames": "F6-F9",
+      "type": "step",
+      "detail": "Lateral movement to the left, reversing the direction of travel."
+    },
+    {
+      "frames": "F10-F12",
+      "type": "step",
+      "detail": "Movement to the right again, continuing the drill."
+    },
+    {
+      "frames": "F13-F15",
+      "type": "step",
+      "detail": "Movement to the left, showing repeated lateral footwork."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

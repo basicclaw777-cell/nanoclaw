@@ -1,12 +1,12 @@
 {
-  "generated": "2026-05-17T08:10:17.231Z",
+  "generated": "2026-06-02T17:46:47.857Z",
   "projects": {
     "gym_eyes": {
       "status": "production",
       "detection_accuracy": "unknown — needs ground truth",
       "false_positive_rate": "unknown",
-      "sessions_processed_total": 8,
-      "sessions_processed_week": 8,
+      "sessions_processed_total": 21,
+      "sessions_processed_week": 5,
       "students_tracked": 2,
       "last_model_update": null,
       "uptime_percent": null
@@ -38,7 +38,7 @@
     }
   },
   "lab_health": {
-    "experiments_this_week": 0,
+    "experiments_this_week": 1,
     "post_mortems_this_month": 0,
     "papers_reviewed": 0,
     "models_benchmarked": 0,

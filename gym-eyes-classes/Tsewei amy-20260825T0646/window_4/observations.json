@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F6",
+      "time": "0.0s-1.7s",
+      "observations": {
+        "footwork": "Fighter shuffles forward, closing distance to pad holder",
+        "stance_width": "normal",
+        "guard": "Both hands held high, protecting face",
+        "upper_body": "Slight forward lean, preparing to attack",
+        "distance": "Closing range, moving from out of range to punching range",
+        "notable": "Fighter is moving into position to throw a punch"
+      }
+    },
+    {
+      "frames": "F7-F10",
+      "time": "2.0s-3.0s",
+      "observations": {
+        "footwork": "Weight transfers to lead foot, slight forward step",
+        "stance_width": "changing",
+        "guard": "Rear hand extends forward, lead hand stays high",
+        "upper_body": "Torso rotates, rear hand throws straight punch",
+        "distance": "Close range, contact with pad",
+        "notable": "Straight right cross thrown at full extension"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Fighter settles back into stance, no major movement",
+        "stance_width": "normal",
+        "guard": "Hands return to high guard position",
+        "upper_body": "Torso rotates back to neutral position",
+        "distance": "Standard padwork range maintained",
+        "notable": "Recovery from punch and reset for next action"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F6",
+      "type": "distance_close",
+      "detail": "Fighter shuffles forward to close the gap toward pad holder"
+    },
+    {
+      "frames": "F7-F9",
+      "type": "punch_extension",
+      "detail": "Rear hand throws a straight cross, extended toward the focus mitt"
+    },
+    {
+      "frames": "F10",
+      "type": "punch_recovery",
+      "detail": "Punch retracted, hand pulled back toward guard"
+    },
+    {
+      "frames": "F11-F15",
+      "type": "reset",
+      "detail": "Fighter returns to stance, regains high guard, prepares for next exchange"
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Dead Data Feed Diagnosed",
+  "subtitle": "API data feed dead since May 26 due to Node.js migration bypassing cath_api.py; fix requires broader investigation.",
+  "key_concept": "A critical data pipeline failure was identified, revealing a systemic integration gap.",
+  "visual_metaphor": "A cracked stone conduit with amber liquid leaking out, surrounded by dark cathedral arches.",
+  "highlights": [
+    "api_calls.jsonl feed dead for 55 days",
+    "Root cause: Node.js migration bypassed cath_api.py"
+  ],
+  "why_it_matters": "Exposes a vulnerability in the data infrastructure that must be resolved to restore sense capabilities.",
+  "zone_change": "Border crossing: Data pipeline territory now marked as unstable, requiring repair before expansion.",
+  "date": "2026-07-05",
+  "source": "session-harvest-2026-07-05-pass1.md",
+  "pipeline": "cartographer-auto",
+  "generated_at": "2026-07-05T08:34:29.382Z"
+}

@@ -78,6 +78,21 @@ Money and love aren't the only blocked channels. Same architecture shows up ever
 
 **What's different now**: Paul is seeing himself clearly — not to punish, but to nurture and grow. The Cathedral exists to replace avoidance with systems. Trading system proves it works for money. Cathedral Staff proves it works for business. The home, the other channels — same medicine available when ready.
 
-## Current State
+## Current State (Updated 2026-10-14)
 
-Paper trading. 10 wins, 3 losses. $229 profit on $10,000 paper balance. System working. Earning trust through evidence, not faith.
+Paper trading, Trial 2. $10K paper → $9,960 (-$40). 121 trades, 49W/72L.
+Long-term DCA portfolio: $50K paper, $6,600 invested in BTC+ETH, +$1,119 unrealised.
+
+**The finding:** Simple DCA beat 28 AI strategies. That is the result. The boring strategy is the strategy.
+
+## Financial Strategy — Mission Statement
+
+1. **DCA is proven.** Weekly buys into BTC + ETH outperformed every complex strategy this system ran. Transition from paper to small real money. Start with $50-100/week.
+2. **You already own real assets.** HK property (no mortgage = pure equity) + gym (brand + IP + curriculum). These are Kiyosaki executed. Next step: make them generate income.
+3. **Index funds for zero-touch growth.** S&P 500 / global index for the portion that should grow without attention. Interactive Brokers or Mox accessible from HK.
+4. **Stablecoin yield for parking cash.** USDC/USDT on established platforms for money that's waiting to be deployed.
+5. **Position sizing is non-negotiable.** Never invest more than you'd calmly watch go to zero. DYA was 100% of one month on one tip — the system prevents that structurally.
+6. **Complexity is entertainment, not edge.** One winning approach compounded beats ten clever ones that cancel out. If something works, scale it. If it doesn't, cut it.
+7. **The test-before-real pipeline still applies.** Paper → micro ($50-100/wk) → small ($200/wk) → working ($500/wk). Each phase earns promotion by results, not excitement.
+
+**This is not financial advice.** This is a research instrument. Consult a professional for personal investment decisions. The system exists to build the muscle — the specifics of where to deploy real capital deserve professional guidance.

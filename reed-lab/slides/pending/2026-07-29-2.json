@@ -1,0 +1,16 @@
+{
+  "title": "Airline Code Resolution Fix",
+  "subtitle": "Replaced naive slicing with lookup map for correct IATA codes",
+  "key_concept": "Accurate airline identification via curated code map",
+  "visual_metaphor": "A compass rose with 28 directional markers, each labeled with correct IATA code, replacing broken arrows",
+  "highlights": [
+    "Fixed 'Cathay Pacific' → 'CX' (was 'CA') and 'Bangkok Airways' → 'PG' (was 'BA')",
+    "Added AIRLINE_CODES map and resolveAirlineCode() to agent.js and dashboard JS"
+  ],
+  "why_it_matters": "Eliminated misattributed miles (e.g., BKK→USM now shows FlyerBonus, not Asia Miles)",
+  "zone_change": "Bug fix crossed from broken to correct territory across travel-agent and dashboard JS",
+  "date": "2026-07-29",
+  "source": "session-harvest-2026-07-29-pass1.md",
+  "pipeline": "cartographer-auto",
+  "generated_at": "2026-07-29T14:16:41.655Z"
+}

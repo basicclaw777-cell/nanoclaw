@@ -1,0 +1,41 @@
+{
+  "domain": "medicine",
+  "shelf_items": [
+    {
+      "name": "Moseley's sham surgery study for knee osteoarthritis",
+      "what_it_found": "Arthroscopic debridement and lavage were no better than sham surgery (incision only) for pain relief; placebo effect accounted for all improvement.",
+      "evidence_strength": "Randomized controlled trial (2002, New England Journal of Medicine), replicated by other sham surgery studies (e.g., vertebroplasty, subacromial decompression).",
+      "why_buried": "Threatened the surgical-pharmaceutical model; funding for sham surgery trials is scarce; results often ignored in clinical guidelines.",
+      "current_status": "Still cited but underutilized; sham surgery trials remain rare due to ethical and funding barriers."
+    },
+    {
+      "name": "Fabrizio Benedetti's placebo research program",
+      "what_it_found": "Placebo effects are real neurobiological phenomena (e.g., endogenous opioid release, dopamine activation) that can mimic drug effects; open-label placebos work even when patients know they are placebos.",
+      "evidence_strength": "Multiple controlled experiments, neuroimaging studies, and clinical trials (e.g., open-label placebo for irritable bowel syndrome, chronic pain).",
+      "why_buried": "Placebo effects undermine the drug-specific efficacy narrative; pharmaceutical industry has little incentive to study non-drug interventions.",
+      "current_status": "Growing recognition in academic circles, but still marginalized in mainstream clinical practice and drug approval processes."
+    },
+    {
+      "name": "Irving Kirsch's analysis of antidepressant efficacy",
+      "what_it_found": "Antidepressants (SSRIs) show clinically insignificant benefits over placebo for mild to moderate depression; the drug-placebo difference is largely due to side effects breaking blinding.",
+      "evidence_strength": "Meta-analyses of FDA trial data (2002, 2008, 2014), reanalyses of published and unpublished trials.",
+      "why_buried": "Directly challenged the blockbuster antidepressant market; Kirsch faced ad hominem attacks and funding cuts.",
+      "current_status": "Controversial but increasingly supported by subsequent meta-analyses; still dismissed by many psychiatrists."
+    },
+    {
+      "name": "John Ioannidis's work on research integrity and drug trials",
+      "what_it_found": "Most published research findings are false; drug trials are systematically biased by industry funding, selective reporting, and small sample sizes.",
+      "evidence_strength": "Landmark 2005 paper 'Why Most Published Research Findings Are False'; empirical reanalyses of thousands of trials.",
+      "why_buried": "Threatens the entire evidence hierarchy; Ioannidis faced resistance from journal editors and industry-funded researchers.",
+      "current_status": "Highly cited but slow to change practice; replication crisis acknowledged but not resolved."
+    },
+    {
+      "name": "Ted Kaptchuk's open-label placebo studies",
+      "what_it_found": "Placebos work even when patients are told they are receiving a placebo (open-label placebo); effects are not just 'expectation' but involve conditioning and ritual.",
+      "evidence_strength": "Randomized trials for IBS, chronic pain, migraine, and allergic rhinitis; replicated by multiple independent groups.",
+      "why_buried": "Challenges the need for deception in placebo controls; pharmaceutical industry cannot patent open-label placebos.",
+      "current_status": "Growing acceptance in academic medicine; still not integrated into standard care."
+    }
+  ],
+  "timestamp": "2026-07-13T00:43:22.401Z"
+}

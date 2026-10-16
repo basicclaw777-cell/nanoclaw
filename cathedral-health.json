@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-05-10T13:14:30.950Z",
-  "score": 88,
+  "timestamp": "2026-10-11T04:15:17.428Z",
+  "score": 80,
   "max": 100,
-  "percentage": "88%",
+  "percentage": "80%",
   "dimensions": {
     "revenue_flow": {
-      "score": 18,
+      "score": 16,
       "max": 25,
       "streams": [
         {
@@ -16,14 +16,14 @@
         },
         {
           "name": "Active trading (paper)",
-          "status": "profitable",
-          "pnl": 200.00000000000023,
-          "score": 5
+          "status": "running",
+          "pnl": -40.394684966144,
+          "score": 2
         },
         {
           "name": "Long-term portfolio (paper)",
           "status": "accumulating",
-          "invested": 300,
+          "invested": 6300,
           "score": 5
         },
         {
@@ -37,22 +37,22 @@
           "score": 2
         }
       ],
-      "raw": 35
+      "raw": 32
     },
     "project_liveness": {
-      "score": 21,
+      "score": 16,
       "max": 25,
       "projects": [
         {
           "name": "PM2 processes",
-          "online": 17,
-          "stopped": 20,
-          "total": 37
+          "online": 27,
+          "stopped": 101,
+          "total": 128
         },
         {
           "name": "Trading cron",
-          "status": "active",
-          "hours_since": "0.3"
+          "status": "stale",
+          "hours_since": "12.2"
         },
         {
           "name": "Cathedral Deck",
@@ -64,16 +64,16 @@
           "live": false
         }
       ],
-      "live": 23,
+      "live": 18,
       "total": 28
     },
     "compound_rate": {
-      "score": 24,
+      "score": 23,
       "max": 25,
       "indicators": [
         {
           "name": "Vault nuggets",
-          "count": 1859
+          "count": 13685
         },
         {
           "name": "Deck cards",
@@ -85,11 +85,11 @@
         },
         {
           "name": "Sages/agents",
-          "count": 16
+          "count": 21
         },
         {
           "name": "Known gaps",
-          "count": 9,
+          "count": 10,
           "note": "fewer = more connected"
         }
       ]
@@ -169,6 +169,202 @@
     {
       "date": "2026-05-10",
       "score": 88
+    },
+    {
+      "date": "2026-05-16",
+      "score": 82
+    },
+    {
+      "date": "2026-05-16",
+      "score": 87
+    },
+    {
+      "date": "2026-05-17",
+      "score": 82
+    },
+    {
+      "date": "2026-05-23",
+      "score": 82
+    },
+    {
+      "date": "2026-05-23",
+      "score": 82
+    },
+    {
+      "date": "2026-05-23",
+      "score": 87
+    },
+    {
+      "date": "2026-05-24",
+      "score": 87
+    },
+    {
+      "date": "2026-05-24",
+      "score": 87
+    },
+    {
+      "date": "2026-05-24",
+      "score": 87
+    },
+    {
+      "date": "2026-05-30",
+      "score": 80
+    },
+    {
+      "date": "2026-05-31",
+      "score": 80
+    },
+    {
+      "date": "2026-05-31",
+      "score": 80
+    },
+    {
+      "date": "2026-05-31",
+      "score": 85
+    },
+    {
+      "date": "2026-06-06",
+      "score": 82
+    },
+    {
+      "date": "2026-06-07",
+      "score": 82
+    },
+    {
+      "date": "2026-06-13",
+      "score": 82
+    },
+    {
+      "date": "2026-06-14",
+      "score": 82
+    },
+    {
+      "date": "2026-06-20",
+      "score": 82
+    },
+    {
+      "date": "2026-06-21",
+      "score": 82
+    },
+    {
+      "date": "2026-06-27",
+      "score": 82
+    },
+    {
+      "date": "2026-06-28",
+      "score": 82
+    },
+    {
+      "date": "2026-07-04",
+      "score": 82
+    },
+    {
+      "date": "2026-07-05",
+      "score": 82
+    },
+    {
+      "date": "2026-07-11",
+      "score": 82
+    },
+    {
+      "date": "2026-07-12",
+      "score": 82
+    },
+    {
+      "date": "2026-07-18",
+      "score": 82
+    },
+    {
+      "date": "2026-07-19",
+      "score": 82
+    },
+    {
+      "date": "2026-07-25",
+      "score": 82
+    },
+    {
+      "date": "2026-07-26",
+      "score": 82
+    },
+    {
+      "date": "2026-07-26",
+      "score": 82
+    },
+    {
+      "date": "2026-08-01",
+      "score": 82
+    },
+    {
+      "date": "2026-08-02",
+      "score": 82
+    },
+    {
+      "date": "2026-08-08",
+      "score": 82
+    },
+    {
+      "date": "2026-08-09",
+      "score": 82
+    },
+    {
+      "date": "2026-08-15",
+      "score": 82
+    },
+    {
+      "date": "2026-08-16",
+      "score": 82
+    },
+    {
+      "date": "2026-08-22",
+      "score": 82
+    },
+    {
+      "date": "2026-08-23",
+      "score": 82
+    },
+    {
+      "date": "2026-08-29",
+      "score": 82
+    },
+    {
+      "date": "2026-09-05",
+      "score": 82
+    },
+    {
+      "date": "2026-09-06",
+      "score": 82
+    },
+    {
+      "date": "2026-09-12",
+      "score": 82
+    },
+    {
+      "date": "2026-09-13",
+      "score": 82
+    },
+    {
+      "date": "2026-09-20",
+      "score": 82
+    },
+    {
+      "date": "2026-09-26",
+      "score": 82
+    },
+    {
+      "date": "2026-09-27",
+      "score": 82
+    },
+    {
+      "date": "2026-10-04",
+      "score": 82
+    },
+    {
+      "date": "2026-10-10",
+      "score": 80
+    },
+    {
+      "date": "2026-10-11",
+      "score": 80
     }
   ]
 }

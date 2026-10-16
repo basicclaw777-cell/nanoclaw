@@ -1,0 +1,28 @@
+{
+  "locked": true,
+  "currentStyle": "pro_photo_v2",
+  "styles": {
+    "pro_photo_v2": {
+      "grading": "Cinematic documentary grade. Neutral 5200-5600K color temp. Anti-orange. Shadows warm, highlights clean. Lifted blacks. Organic grain. Tack-sharp, crisp focus, zero motion blur.",
+      "lighting": "Natural gym lighting with warm shadows. No studio flash look. Documentary not commercial.",
+      "contrast": "Medium-high. Deep blacks but not crushed. Film-like roll-off in highlights."
+    },
+    "dramatic_cinema": {
+      "grading": "High contrast cinematic. Deep blacks, pulled highlights. Dramatic. Arri Alexa look.",
+      "lighting": "Side lighting dominant. Strong shadows. Rim light optional.",
+      "contrast": "High. Crushed blacks acceptable. Moody."
+    },
+    "noir": {
+      "grading": "Black and white or desaturated. High contrast. Gritty.",
+      "lighting": "Hard light, deep shadows. One dominant source.",
+      "contrast": "Maximum. Silhouette moments."
+    },
+    "manga": {
+      "grading": "Clean lines, flat color areas. Anime cel-shading feel.",
+      "lighting": "Flat with strong edge definition.",
+      "contrast": "Medium. Graphic novel feel."
+    }
+  },
+  "lastChanged": "2026-05-16T15:00:00.000Z",
+  "note": "When locked=true, every image generation auto-appends the currentStyle parameters. Toggle via /stylelock on Telegram."
+}

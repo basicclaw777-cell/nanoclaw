@@ -1,0 +1,41 @@
+{
+  "domain": "ancient-construction",
+  "results": [
+    {
+      "question": "How do the documented quarry marks and tool marks on the Great Pyramid's blocks compare to the precision required for their placement, and what does this reveal about the actual construction methods?",
+      "bypass": "Focus on the discrepancy between quarry marks and final precision.",
+      "core_finding": "Quarry marks on Great Pyramid blocks are crude, inconsistent, and often misaligned, yet the final placement achieves sub-millimeter precision in joint gaps and leveling. This indicates that quarrying and rough shaping were separate from final fitting, which required extensive on-site dressing and adjustment.",
+      "concession": "Orthodox Egyptology concedes that blocks were quarried with simple tools and then transported, but it assumes that final precision was achieved through skilled manual dressing and leveling over decades.",
+      "new_crack": "The extreme precision (e.g., 0.5 mm gaps over 230 m base) cannot be explained by manual dressing alone, as it would require impossible consistency across thousands of blocks. This suggests either unknown advanced techniques or that the precision was achieved through a different, non-sequential construction process, such as casting or in-situ forming."
+    },
+    {
+      "question": "What is the statistical probability that the Great Pyramid's base leveling precision of 1:15,000 could be achieved using only the tools and techniques known to have existed in the Old Kingdom, given the known error margins of those methods?",
+      "bypass": "Calculate probability using known tool precision.",
+      "core_finding": "The probability is effectively zero. Known Old Kingdom leveling methods (water trenches, plumb bobs) have error margins of ~1:1,000, far exceeding the 1:15,000 precision observed. Achieving such precision would require statistically impossible alignment of errors.",
+      "concession": "Orthodox Egyptology must concede that the observed precision exceeds known capabilities by an order of magnitude, implying either undocumented techniques or measurement error.",
+      "new_crack": "The 1:15,000 figure itself may be an artifact of modern surveying assumptions; the pyramid's base is not perfectly flat but has a slight convexity, suggesting the builders prioritized other geometric properties over absolute leveling."
+    },
+    {
+      "question": "How does the alignment accuracy of the Great Pyramid's internal passageways to true north compare to the alignment accuracy of other contemporary structures, and what does this suggest about the possibility of lost surveying techniques?",
+      "bypass": "Compare alignment accuracy across contemporary structures.",
+      "core_finding": "The Great Pyramid's internal passageways align to true north with an accuracy of approximately 0.05 degrees, which is significantly more precise than other contemporary structures like the Red Pyramid (0.6 degrees) or the Bent Pyramid (0.8 degrees). This suggests that the builders possessed advanced surveying techniques that were either lost or not widely applied.",
+      "concession": "Orthodox Egyptology acknowledges the precision but attributes it to simple methods like stellar alignment, which could theoretically achieve such accuracy with careful observation.",
+      "new_crack": "The disparity in accuracy between the Great Pyramid and other pyramids built within a few decades implies a specialized knowledge or technique that was not uniformly shared, raising questions about the transmission and loss of engineering skills in ancient Egypt."
+    },
+    {
+      "question": "What are the specific chemical and physical properties of the mortar used in the Great Pyramid's casing stones, and how do these properties affect the feasibility of achieving the reported joint precision?",
+      "bypass": "Analyze mortar properties and their role in joint precision.",
+      "core_finding": "The mortar used in the Great Pyramid's casing stones is a gypsum-based mortar with high workability and slow setting time, allowing precise alignment. Its low shrinkage and good adhesion to limestone enabled joints as thin as 0.5 mm, achieving precision within 0.02 inches.",
+      "concession": "Orthodox Egyptology must concede that the mortar's properties were crucial for achieving the reported precision, not just stone cutting alone.",
+      "new_crack": "The mortar's ability to fill micro-gaps and its long-term stability suggest that the precision was partly a result of the mortar's behavior, not solely the stonework, challenging the narrative of purely mechanical perfection."
+    },
+    {
+      "question": "Given the weight and hardness of the granite coffer, what is the minimum number of workers and the minimum time required to carve and transport it using only copper tools and wooden rollers, based on experimental archaeology?",
+      "bypass": "Use experimental archaeology data to estimate workforce and time.",
+      "core_finding": "Based on experimental archaeology, carving a granite coffer of similar size (approx. 1.2 tons) with copper tools would require at least 20 skilled workers working 8-hour days for about 30 days, totaling 600 person-days. Transporting it 500 meters using wooden rollers on a prepared track would require at least 50 workers pulling and managing rollers, taking about 5 days, totaling 250 person-days. Thus, the minimum workforce is 50 workers and the minimum time is 35 days, assuming sequential operations.",
+      "concession": "Orthodox estimates often assume larger workforces (e.g., 100+ workers) and longer times (months) due to inefficiencies, but experimental data shows that with optimal organization and continuous effort, these tasks can be accomplished with fewer workers and in less time.",
+      "new_crack": "The experimental data reveals that the bottleneck is not the carving or transport itself but the logistics of maintaining a steady supply of copper tools (which wear quickly) and the preparation of the track for rollers. This suggests that the actual workforce needed may be higher to support tool maintenance and track preparation, potentially doubling the time estimate."
+    }
+  ],
+  "timestamp": "2026-07-12T18:20:04.170Z"
+}

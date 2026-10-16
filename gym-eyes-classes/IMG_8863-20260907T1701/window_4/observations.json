@@ -1,0 +1,72 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "The fighter steps forward to close the distance towards the pad holder.",
+        "stance_width": "normal",
+        "guard": "Hands are held up in a standard boxing guard.",
+        "upper_body": "The fighter throws a straight right hand (cross) into the pad holder's mitts.",
+        "distance": "Closes from long range to striking range, connecting with the mitts.",
+        "notable": "The pad holder actively presents the target mitts. The punch lands successfully."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "The fighter steps back, creating significant separation from the pad holder.",
+        "stance_width": "wide",
+        "guard": "Hands remain partially raised but gradually begin to lower.",
+        "upper_body": "The fighter is retreating and turning slightly to the side.",
+        "distance": "Distance opens up considerably.",
+        "notable": "There is a clear break in the action; the pad holder lowers the mitts."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "The fighter walks back towards the center of the frame and re-establishes a stance.",
+        "stance_width": "normal",
+        "guard": "Hands return to a high, guarded position by the final frame.",
+        "upper_body": "The fighter is upright and resetting their position.",
+        "distance": "Re-establishes a medium to long range between the two.",
+        "notable": "The pad holder remains stationary, waiting for the fighter to reset."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F2-F3",
+      "type": "step",
+      "detail": "The fighter steps forward to close the distance to the pad holder."
+    },
+    {
+      "frames": "F3-F4",
+      "type": "punch_extenstion",
+      "detail": "The fighter extends their right arm to throw a cross into the mitts."
+    },
+    {
+      "frames": "F4-F5",
+      "type": "punch_recovery",
+      "detail": "The fighter retracts the right hand back to the guard."
+    },
+    {
+      "frames": "F6-F8",
+      "type": "distance_open",
+      "detail": "The fighter steps back, creating space between themselves and the pad holder."
+    },
+    {
+      "frames": "F11-F15",
+      "type": "reset",
+      "detail": "The fighter walks back to the starting position and re-establishes their stance."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

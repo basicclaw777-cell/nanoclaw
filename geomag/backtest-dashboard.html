@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geomag Backtest — Strategy Leaderboard</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --text: #e0e0e8;
+    --muted: #6b6b80;
+    --blue: #378ADD;
+    --green: #1D9E75;
+    --red: #ef4444;
+    --amber: #EF9F27;
+    --purple: #534AB7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Share Tech Mono', 'SF Mono', monospace; background: var(--bg); color: var(--text); padding: 20px; }
+  h1 { font-size: 1.1rem; color: var(--blue); margin-bottom: 4px; letter-spacing: 2px; }
+  .subtitle { color: var(--muted); font-size: 0.75rem; margin-bottom: 20px; }
+  h2 { font-size: 0.9rem; color: var(--muted); margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+  .card-title { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .rank { font-size: 2rem; font-weight: bold; display: inline-block; width: 40px; }
+  .rank-1 { color: var(--green); }
+  .rank-2 { color: var(--blue); }
+  .rank-3 { color: var(--amber); }
+  .rank-4 { color: var(--red); }
+  .strategy-name { font-size: 1.1rem; display: inline-block; vertical-align: top; margin-top: 8px; }
+  .metric-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.8rem; }
+  .metric-label { color: var(--muted); }
+  .metric-value { font-weight: bold; }
+  .bar { height: 6px; background: var(--border); border-radius: 3px; margin: 4px 0 8px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  th { text-align: left; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--border); font-weight: normal; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; }
+  td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .good { color: var(--green); }
+  .bad { color: var(--red); }
+  .neutral { color: var(--amber); }
+  .caveat { background: var(--surface); border: 1px solid var(--amber); border-radius: 6px; padding: 12px; margin: 16px 0; font-size: 0.8rem; color: var(--amber); }
+  .timestamp { color: var(--muted); font-size: 0.7rem; margin-top: 16px; }
+  .tab-bar { display: flex; gap: 4px; margin-bottom: 16px; }
+  .tab { padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; color: var(--muted); font-family: inherit; font-size: 0.8rem; }
+  .tab.active { border-color: var(--blue); color: var(--blue); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .storm-chart { display: flex; align-items: flex-end; gap: 2px; height: 120px; padding: 10px 0; }
+  .storm-bar { flex: 1; min-width: 4px; background: var(--blue); border-radius: 2px 2px 0 0; position: relative; cursor: pointer; }
+  .storm-bar:hover { opacity: 0.8; }
+  .storm-bar .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; white-space: nowrap; z-index: 10; }
+  .storm-bar:hover .tooltip { display: block; }
+</style>
+</head>
+<body>
+<h1>GEOMAG BACKTEST — STRATEGY LEADERBOARD</h1>
+<div class="subtitle" id="subtitle">Loading...</div>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="showTab('leaderboard')">Leaderboard</button>
+  <button class="tab" onclick="showTab('storms')">Storm Detail</button>
+  <button class="tab" onclick="showTab('direction')">Direction Accuracy</button>
+</div>
+
+<div class="tab-content active" id="tab-leaderboard">
+  <div class="grid" id="leaderboard"></div>
+  <div class="caveat" id="caveat"></div>
+</div>
+
+<div class="tab-content" id="tab-storms">
+  <h2>Storm-by-Storm Performance</h2>
+  <div id="storm-chart-container"></div>
+  <table id="storm-table">
+    <thead><tr><th>Storm</th><th>Min Dst</th><th>At Pred</th><th>Tidal</th><th>EU</th><th>WSA</th><th>Cavity</th><th>Actual@6h</th></tr></thead>
+    <tbody id="storm-body"></tbody>
+  </table>
+</div>
+
+<div class="tab-content" id="tab-direction">
+  <h2>Direction Accuracy by Horizon</h2>
+  <div class="grid" id="direction-grid"></div>
+</div>
+
+<div class="timestamp" id="generated">—</div>
+
+<script>
+let data = null;
+
+async function loadData() {
+  try {
+    const res = await fetch('/geomag/backtest');
+    data = await res.json();
+    render();
+  } catch (e) {
+    document.getElementById('subtitle').textContent = 'Error loading backtest data: ' + e.message;
+  }
+}
+
+function render() {
+  if (!data) return;
+
+  document.getElementById('subtitle').textContent =
+    `${data.year} | ${data.totalStorms} storms (Dst < ${data.threshold}nT) | Solar wind: ${data.hasSolarWind ? 'OMNI2 measured' : 'Reconstructed from Dst'}`;
+
+  // Leaderboard cards
+  const lb = document.getElementById('leaderboard');
+  const colors = ['var(--green)', 'var(--blue)', 'var(--amber)', 'var(--red)'];
+  const maxMAE = Math.max(...data.leaderboard.map(e => e.metrics.h6?.meanAbsError || 0));
+
+  lb.innerHTML = data.leaderboard.map((entry, i) => {
+    const m6 = entry.metrics.h6 || {};
+    const m12 = entry.metrics.h12 || {};
+    const m24 = entry.metrics.h24 || {};
+    const pct = m6.meanAbsError ? (1 - m6.meanAbsError / maxMAE) * 100 : 0;
+
+    return `<div class="card">
+      <span class="rank rank-${i+1}">#${i+1}</span>
+      <span class="strategy-name">${entry.name}</span>
+      <div class="bar"><div class="bar-fill" style="width:${Math.max(pct,5)}%; background:${colors[i]}"></div></div>
+      <div class="metric-row"><span class="metric-label">MAE @6h</span><span class="metric-value">${m6.meanAbsError?.toFixed(1) || '—'}nT</span></div>
+      <div class="metric-row"><span class="metric-label">MAE @12h</span><span class="metric-value">${m12.meanAbsError?.toFixed(1) || '—'}nT</span></div>
+      <div class="metric-row"><span class="metric-label">MAE @24h</span><span class="metric-value">${m24.meanAbsError?.toFixed(1) || '—'}nT</span></div>
+      <div class="metric-row"><span class="metric-label">Bias @6h</span><span class="metric-value ${m6.meanError > 0 ? 'neutral' : 'bad'}">${m6.meanError > 0 ? '+' : ''}${m6.meanError?.toFixed(1) || '—'}nT</span></div>
+      <div class="metric-row"><span class="metric-label">Direction @6h</span><span class="metric-value ${parseFloat(m6.directionAccuracy) > 55 ? 'good' : parseFloat(m6.directionAccuracy) > 45 ? 'neutral' : 'bad'}">${m6.directionAccuracy || '—'}%</span></div>
+      <div class="metric-row"><span class="metric-label">Storms</span><span class="metric-value">${entry.stormsScored}</span></div>
+    </div>`;
+  }).join('');
+
+  // Caveat
+  document.getElementById('caveat').innerHTML = data.hasSolarWind
+    ? 'Using measured OMNI2 solar wind data. All strategy scores are against real conditions.'
+    : 'Solar wind reconstructed from Dst using empirical relationships. Planetary-Tidal score is real (no solar wind dependency). WSA-Enlil, Electric Universe, and Resonant Cavity scores are approximate — will change with measured OMNI2 data.';
+
+  // Storm table
+  const details = data.details;
+  const tidalPreds = details.planetary_tidal?.predictions || [];
+  const stormRows = tidalPreds.sort((a, b) => a.stormMinDst - b.stormMinDst);
+
+  const tbody = document.getElementById('storm-body');
+  tbody.innerHTML = stormRows.map(s => {
+    const date = new Date(s.stormStart).toISOString().slice(0, 10);
+    const findPred = (id) => {
+      const d = details[id]?.predictions?.find(p => p.stormStart === s.stormStart);
+      return d?.scores?.h6?.predicted ?? '—';
+    };
+    const actual = s.actual.h6 ?? '—';
+    const colorErr = (pred) => {
+      if (pred === '—' || actual === '—') return '';
+      const err = Math.abs(pred - actual);
+      return err < 15 ? 'good' : err < 40 ? 'neutral' : 'bad';
+    };
+    const tidal = s.prediction.h6 ?? '—';
+    const eu = findPred('electric_universe');
+    const wsa = findPred('wsa_enlil');
+    const rc = findPred('resonant_cavity');
+
+    return `<tr>
+      <td>${date}</td>
+      <td class="bad">${s.stormMinDst}nT</td>
+      <td>${s.currentDst}nT</td>
+      <td class="${colorErr(tidal)}">${tidal}nT</td>
+      <td class="${colorErr(eu)}">${eu === '—' ? '—' : eu + 'nT'}</td>
+      <td class="${colorErr(wsa)}">${wsa === '—' ? '—' : wsa + 'nT'}</td>
+      <td class="${colorErr(rc)}">${rc === '—' ? '—' : rc + 'nT'}</td>
+      <td>${actual}nT</td>
+    </tr>`;
+  }).join('');
+
+  // Direction accuracy grid
+  const dg = document.getElementById('direction-grid');
+  const horizons = ['h6', 'h12', 'h24'];
+  dg.innerHTML = horizons.map(h => {
+    const label = h === 'h6' ? '+6 Hours' : h === 'h12' ? '+12 Hours' : '+24 Hours';
+    const rows = data.leaderboard.map((entry, i) => {
+      const m = entry.metrics[h];
+      if (!m) return '';
+      const pct = parseFloat(m.directionAccuracy);
+      const color = pct > 60 ? 'var(--green)' : pct > 50 ? 'var(--amber)' : 'var(--red)';
+      return `<div class="metric-row">
+        <span class="metric-label">${entry.name}</span>
+        <div style="flex:1; margin: 0 8px;">
+          <div class="bar"><div class="bar-fill" style="width:${pct}%; background:${color}"></div></div>
+        </div>
+        <span class="metric-value" style="color:${color}">${m.directionAccuracy}%</span>
+      </div>`;
+    }).join('');
+    return `<div class="card"><div class="card-title">${label}</div>${rows}</div>`;
+  }).join('');
+
+  document.getElementById('generated').textContent = `Generated: ${new Date(data.generatedAt).toLocaleString()}`;
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+loadData();
+</script>
+</body>
+</html>

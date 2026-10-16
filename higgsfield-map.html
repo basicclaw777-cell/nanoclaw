@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Higgsfield Feature Map — Basic Reflex</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #e0e0e0; font-family: 'SF Mono', 'Fira Code', monospace; padding: 20px; }
+  h1 { color: #C4392D; font-size: 1.4em; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 0.85em; margin-bottom: 20px; }
+  .stats { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 12px 16px; min-width: 120px; }
+  .stat-val { font-size: 1.6em; font-weight: bold; }
+  .stat-label { font-size: 0.75em; color: #888; margin-top: 2px; }
+  .stat-val.grade-a { color: #4CAF50; }
+  .stat-val.grade-b { color: #FFC107; }
+  .stat-val.grade-u { color: #666; }
+  .stat-val.grade-d { color: #C4392D; }
+
+  .section { margin-bottom: 28px; }
+  .section-title { color: #B87333; font-size: 1.1em; margin-bottom: 12px; border-bottom: 1px solid #222; padding-bottom: 6px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .card { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 14px; transition: border-color 0.2s; }
+  .card:hover { border-color: #444; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .card-name { font-weight: bold; font-size: 0.95em; }
+  .card-jst { font-size: 0.7em; color: #555; }
+
+  .grade { display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 6px; font-weight: bold; font-size: 0.85em; }
+  .grade-A { background: #1b3a1b; color: #4CAF50; border: 1px solid #4CAF50; }
+  .grade-B { background: #3a3520; color: #FFC107; border: 1px solid #FFC107; }
+  .grade-C { background: #2a2a20; color: #FF9800; border: 1px solid #FF9800; }
+  .grade-D { background: #3a1b1b; color: #C4392D; border: 1px solid #C4392D; }
+  .grade-untested { background: #1a1a1a; color: #555; border: 1px solid #333; font-size: 0.6em; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .tag { font-size: 0.7em; padding: 2px 8px; border-radius: 4px; background: #1a1a2a; color: #7788aa; }
+  .tag.strength { background: #1a2a1a; color: #88aa77; }
+  .tag.weakness { background: #2a1a1a; color: #aa7777; }
+
+  .notes { font-size: 0.75em; color: #777; margin-top: 8px; font-style: italic; }
+  .test-count { font-size: 0.7em; color: #555; }
+
+  .menu-section { margin-top: 24px; }
+  .menu-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #141414; border: 1px solid #222; border-radius: 6px; margin-bottom: 6px; }
+  .menu-item .use { flex: 1; font-size: 0.85em; color: #aaa; }
+  .menu-item .name { font-weight: bold; font-size: 0.9em; min-width: 180px; }
+  .menu-item.rejected { opacity: 0.5; text-decoration: line-through; }
+  .menu-item.rejected .use { color: #aa5555; text-decoration: none; font-style: italic; }
+
+  .queue-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #141414; border: 1px solid #222; border-radius: 6px; margin-bottom: 6px; }
+  .queue-num { color: #B87333; font-weight: bold; min-width: 24px; }
+  .queue-test { flex: 1; font-size: 0.85em; }
+  .queue-needs { font-size: 0.75em; color: #888; }
+  .queue-model { font-size: 0.7em; color: #555; }
+
+  .type-badge { font-size: 0.65em; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .type-image { background: #1a2a1a; color: #88aa77; }
+  .type-video { background: #1a1a2a; color: #7788cc; }
+  .type-pipeline { background: #2a1a2a; color: #aa77aa; }
+
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-btn { background: #1a1a1a; border: 1px solid #333; color: #888; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8em; font-family: inherit; }
+  .filter-btn.active { border-color: #B87333; color: #B87333; }
+  .filter-btn:hover { border-color: #555; }
+</style>
+</head>
+<body>
+
+<h1>HIGGSFIELD FEATURE MAP</h1>
+<div class="subtitle">Basic Reflex — Systematic Feature Sweep + BR Menu</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="filter-bar" id="filters">
+  <button class="filter-btn active" onclick="filter('all')">All</button>
+  <button class="filter-btn" onclick="filter('image')">Image</button>
+  <button class="filter-btn" onclick="filter('video')">Video</button>
+  <button class="filter-btn" onclick="filter('pipeline')">Pipelines</button>
+  <button class="filter-btn" onclick="filter('tested')">Tested</button>
+  <button class="filter-btn" onclick="filter('untested')">Untested</button>
+</div>
+
+<div class="section">
+  <div class="section-title">BR MENU — Proven Outputs</div>
+  <div id="menu-proven"></div>
+  <div style="margin-top:12px"><div class="section-title" style="color:#FFC107">Promising</div></div>
+  <div id="menu-promising"></div>
+  <div style="margin-top:12px"><div class="section-title" style="color:#C4392D">Rejected (documented)</div></div>
+  <div id="menu-rejected"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">IMAGE MODELS (20)</div>
+  <div class="grid" id="image-grid"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">VIDEO MODELS (16)</div>
+  <div class="grid" id="video-grid"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">PIPELINES</div>
+  <div class="grid" id="pipeline-grid"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">TEST QUEUE</div>
+  <div id="test-queue"></div>
+</div>
+
+<script>
+let DATA = null;
+
+async function load() {
+  const res = await fetch('/higgsfield-map-data');
+  DATA = await res.json();
+  render();
+}
+
+function render() {
+  renderStats();
+  renderMenu();
+  renderModels('image_models', 'image-grid', 'image');
+  renderModels('video_models', 'video-grid', 'video');
+  renderModels('pipelines', 'pipeline-grid', 'pipeline');
+  renderQueue();
+}
+
+function renderStats() {
+  const all = [...Object.values(DATA.image_models), ...Object.values(DATA.video_models), ...Object.values(DATA.pipelines)];
+  const gradeA = all.filter(m => m.grade === 'A').length;
+  const gradeB = all.filter(m => m.grade === 'B').length;
+  const untested = all.filter(m => m.grade === 'untested').length;
+  const rejected = all.filter(m => m.grade === 'D').length;
+  const totalTests = all.reduce((sum, m) => sum + (m.tests?.length || 0), 0);
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-val">${all.length}</div><div class="stat-label">Total Features</div></div>
+    <div class="stat"><div class="stat-val grade-a">${gradeA}</div><div class="stat-label">Grade A (Proven)</div></div>
+    <div class="stat"><div class="stat-val grade-b">${gradeB}</div><div class="stat-label">Grade B (Promising)</div></div>
+    <div class="stat"><div class="stat-val grade-u">${untested}</div><div class="stat-label">Untested</div></div>
+    <div class="stat"><div class="stat-val grade-d">${rejected}</div><div class="stat-label">Grade D (Rejected)</div></div>
+    <div class="stat"><div class="stat-val" style="color:#B87333">${totalTests}</div><div class="stat-label">Tests Run</div></div>
+    <div class="stat"><div class="stat-val" style="color:#C4392D">${DATA.test_queue.length}</div><div class="stat-label">In Queue</div></div>
+  `;
+}
+
+function renderMenu() {
+  const menu = DATA.br_menu;
+  document.getElementById('menu-proven').innerHTML = menu.proven.map(m => `
+    <div class="menu-item"><span class="grade grade-${m.grade}">${m.grade}</span><span class="name">${m.name}</span><span class="use">${m.use}</span></div>
+  `).join('');
+  document.getElementById('menu-promising').innerHTML = menu.promising.map(m => `
+    <div class="menu-item"><span class="grade grade-${m.grade}">${m.grade}</span><span class="name">${m.name}</span><span class="use">${m.use}</span></div>
+  `).join('');
+  document.getElementById('menu-rejected').innerHTML = menu.rejected.map(m => `
+    <div class="menu-item rejected"><span class="grade grade-D">X</span><span class="name">${m.name}</span><span class="use">${m.reason}</span></div>
+  `).join('');
+}
+
+function renderModels(key, containerId, type) {
+  const models = DATA[key];
+  const container = document.getElementById(containerId);
+  container.innerHTML = Object.entries(models).map(([id, m]) => {
+    const gradeClass = m.grade === 'untested' ? 'untested' : m.grade;
+    const gradeLabel = m.grade === 'untested' ? '?' : m.grade;
+    const strengths = (m.strengths || []).map(s => `<span class="tag strength">${s}</span>`).join('');
+    const weaknesses = (m.weaknesses || []).map(w => `<span class="tag weakness">${w}</span>`).join('');
+    const uses = (m.br_uses || []).map(u => `<span class="tag">${u}</span>`).join('');
+    const testCount = m.tests?.length || 0;
+    const typeBadge = `<span class="type-badge type-${type}">${type}</span>`;
+    return `
+      <div class="card" data-type="${type}" data-tested="${testCount > 0}">
+        <div class="card-header">
+          <span><span class="card-name">${m.name}</span> ${typeBadge}</span>
+          <span class="grade grade-${gradeClass}">${gradeLabel}</span>
+        </div>
+        <div class="card-jst">${m.jst || id}</div>
+        <div class="tags">${uses}</div>
+        <div class="tags">${strengths}${weaknesses}</div>
+        ${m.notes ? `<div class="notes">${m.notes}</div>` : ''}
+        ${testCount > 0 ? `<div class="test-count">${testCount} test${testCount > 1 ? 's' : ''} run</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderQueue() {
+  document.getElementById('test-queue').innerHTML = DATA.test_queue.map(t => `
+    <div class="queue-item">
+      <span class="queue-num">#${t.priority}</span>
+      <span class="queue-test">${t.test}</span>
+      <span class="queue-needs">${t.needs}</span>
+      <span class="queue-model">${t.model}</span>
+    </div>
+  `).join('');
+}
+
+function filter(type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    if (type === 'all') card.style.display = '';
+    else if (type === 'tested') card.style.display = card.dataset.tested === 'true' ? '' : 'none';
+    else if (type === 'untested') card.style.display = card.dataset.tested === 'false' ? '' : 'none';
+    else card.style.display = card.dataset.type === type ? '' : 'none';
+  });
+}
+
+// Try loading from cath-bridge, fallback to inline
+load().catch(() => {
+  fetch('higgsfield-map.json').then(r => r.json()).then(d => { DATA = d; render(); });
+});
+</script>
+</body>
+</html>

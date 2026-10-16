@@ -11,11 +11,20 @@
 import { spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { detectFlinchJev } from './jev-flinch-detector.js';
+import { compile as dslCompile } from './dsl-compiler.js';
 
 const HOME = process.env.HOME;
 const DISPATCH = path.join(HOME, 'Cathedral', 'tools', 'dispatch.sh');
 const OLLAMA_URL = 'http://localhost:11434';
 const VAULT = path.join(HOME, 'cathedral-vault');
+const FLINCH_LOG = path.join(HOME, 'nanoclaw', 'flinch-log.jsonl');
+
+function logFlinchEvent(event) {
+  try {
+    fs.appendFileSync(FLINCH_LOG, JSON.stringify(event) + '\n');
+  } catch { /* non-critical */ }
+}
 
 // ── Tool selection ──────────────────────────────────────────────────
 
@@ -247,7 +256,38 @@ export async function route(message, callCathFn = null) {
   }
 
   // Dispatch to external tool
-  const result = await dispatchTool(selection.tool, message);
+  let result = await dispatchTool(selection.tool, message);
+
+  // Cathy's flinch detector — Laya (local) → Typesafe (API) → regex
+  const flinch = await detectFlinchJev(result.output);
+  let dslComposition = null;
+  if (flinch.flinched) {
+    console.log(`[flinch] ${flinch.type} (${flinch.confidence.toFixed(2)}) — ${flinch.suggestedAction}`);
+    if (flinch.suggestedAction === 'push') {
+      const compiled = dslCompile(message, flinch.type, {}, { depth: 2 });
+      console.log(`[dsl] Composition: ${compiled.composition} (Tier ${compiled.tier})`);
+      result = await dispatchTool(selection.tool, compiled.prompt);
+      result.dslComposition = compiled.composition;
+      dslComposition = compiled.composition;
+    }
+  }
+
+  logFlinchEvent({
+    ts: new Date().toISOString(),
+    engine: flinch.engine,
+    flinched: flinch.flinched,
+    type: flinch.type,
+    confidence: flinch.confidence,
+    action: flinch.suggestedAction,
+    tool: selection.tool,
+    promptSnippet: message.slice(0, 100),
+    responseSnippet: result.output.slice(0, 200),
+    probabilities: flinch.jevRaw?.noulProbabilities || null,
+    hedgeSeverity: flinch.jevRaw?.hedgeSeverity ?? null,
+    classification: flinch.jevRaw?.classification || null,
+    reframed: !!dslComposition,
+    dslComposition,
+  });
 
   // Get vault context for synthesis
   const vaultContext = await getVaultContext(message);
@@ -263,6 +303,7 @@ export async function route(message, callCathFn = null) {
     vaultContext,
     response,
     durationMs: result.durationMs,
+    flinch: flinch.flinched ? flinch : undefined,
   };
 }
 
@@ -284,6 +325,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     route(msg).then(r => {
       console.log(`Tool: ${r.tool} (${r.reason})`);
       console.log(`Duration: ${r.durationMs}ms`);
+      if (r.flinch) {
+        console.log(`FLINCH: ${r.flinch.type} (confidence ${r.flinch.confidence.toFixed(2)}) → ${r.flinch.suggestedAction}`);
+        console.log(`Evidence: ${r.flinch.evidence.join(' | ')}`);
+      }
       console.log('---');
       console.log(r.response);
     }).catch(e => {

@@ -5,8 +5,8 @@
   "total_trades": 0,
   "wins": 0,
   "losses": 0,
-  "last_rebalance": "2026-08-26T06:10:27.589Z",
-  "last_13f_pull": "2026-08-26T06:10:27.589Z",
+  "last_rebalance": "2026-09-30T00:35:19.504Z",
+  "last_13f_pull": "2026-09-30T00:32:26.715Z",
   "filing_period": "2026-06-30",
   "positions": {
     "APLD": {
@@ -17,9 +17,9 @@
       "layer": "DATA_CENTER_INFRA",
       "name": "APPLIED DIGITAL CORP",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 28.850000381469727,
+      "current_price": 25.41,
       "current_value": 2333.27,
-      "unrealized_pnl": 0
+      "unrealized_pnl": -278.21
     },
     "BTDR": {
       "entry_price": 11.289999961853027,
@@ -29,9 +29,9 @@
       "layer": "MINING_POWER_PROXY",
       "name": "BITDEER TECHNOLOGIES GROUP",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 11.289999961853027,
+      "current_price": 10.9,
       "current_value": 270.38,
-      "unrealized_pnl": 0
+      "unrealized_pnl": -9.34
     },
     "BE": {
       "entry_price": 217.4499969482422,
@@ -41,9 +41,9 @@
       "layer": "POWER_GRID",
       "name": "BLOOM ENERGY CORP",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 217.4499969482422,
+      "current_price": 291.25,
       "current_value": 9423.19,
-      "unrealized_pnl": 0
+      "unrealized_pnl": 3198.12
     },
     "CBRS": {
       "entry_price": 183.9199981689453,
@@ -53,9 +53,9 @@
       "layer": "OTHER",
       "name": "CEREBRAS SYSTEMS INC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 183.9199981689453,
-      "current_value": 10.01,
-      "unrealized_pnl": 0
+      "current_price": 194.95,
+      "current_value": 10,
+      "unrealized_pnl": 0.6
     },
     "CLSK": {
       "entry_price": 12.75,
@@ -65,9 +65,9 @@
       "layer": "MINING_POWER_PROXY",
       "name": "CLEANSPARK INC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 12.75,
+      "current_price": 13.31,
       "current_value": 891.25,
-      "unrealized_pnl": 0
+      "unrealized_pnl": 39.15
     },
     "CORZ": {
       "entry_price": 18.030000686645508,
@@ -77,9 +77,9 @@
       "layer": "DATA_CENTER_INFRA",
       "name": "CORE SCIENTIFIC INC NEW",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 18.030000686645508,
+      "current_price": 16.31,
       "current_value": 3304.63,
-      "unrealized_pnl": 0
+      "unrealized_pnl": -315.25
     },
     "CRWV": {
       "entry_price": 88.04000091552734,
@@ -89,9 +89,9 @@
       "layer": "DATA_CENTER_INFRA",
       "name": "COREWEAVE INC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 88.04000091552734,
+      "current_price": 85.93,
       "current_value": 3695.17,
-      "unrealized_pnl": 0
+      "unrealized_pnl": -88.56
     },
     "HIVE": {
       "entry_price": 3.0199999809265137,
@@ -101,9 +101,9 @@
       "layer": "MINING_POWER_PROXY",
       "name": "HIVE DIGITAL TECHNOLOGIES LT",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 3.0199999809265137,
+      "current_price": 3.01,
       "current_value": 160.22,
-      "unrealized_pnl": 0
+      "unrealized_pnl": -0.53
     },
     "IREN": {
       "entry_price": 42.209999084472656,
@@ -113,9 +113,9 @@
       "layer": "MINING_POWER_PROXY",
       "name": "IREN LIMITED",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 42.209999084472656,
+      "current_price": 41.38,
       "current_value": 2153.01,
-      "unrealized_pnl": 0
+      "unrealized_pnl": -42.34
     },
     "MU": {
       "entry_price": 932.969970703125,
@@ -125,9 +125,9 @@
       "layer": "MEMORY",
       "name": "MICRON TECHNOLOGY INC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 932.969970703125,
-      "current_value": 27678.75,
-      "unrealized_pnl": 0
+      "current_price": 1065.08,
+      "current_value": 27678.77,
+      "unrealized_pnl": 3919.36
     },
     "NBIS": {
       "entry_price": 221.97000122070312,
@@ -137,9 +137,9 @@
       "layer": "DATA_CENTER_INFRA",
       "name": "NEBIUS GROUP N.V.",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 221.97000122070312,
-      "current_value": 6118.57,
-      "unrealized_pnl": 0
+      "current_price": 237.355,
+      "current_value": 6118.56,
+      "unrealized_pnl": 424.09
     },
     "PUMP": {
       "entry_price": 10.600000381469727,
@@ -149,9 +149,9 @@
       "layer": "OTHER",
       "name": "PROPETRO HLDG CORP",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 10.600000381469727,
+      "current_price": 8.88,
       "current_value": 140.2,
-      "unrealized_pnl": 0
+      "unrealized_pnl": -22.75
     },
     "RIOT": {
       "entry_price": 21.299999237060547,
@@ -161,9 +161,9 @@
       "layer": "MINING_POWER_PROXY",
       "name": "RIOT PLATFORMS INC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 21.299999237060547,
+      "current_price": 21.39,
       "current_value": 2323.25,
-      "unrealized_pnl": 0
+      "unrealized_pnl": 9.82
     },
     "WDC": {
       "entry_price": 450.75,
@@ -173,9 +173,9 @@
       "layer": "MEMORY",
       "name": "SANDISK CORP",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 450.75,
-      "current_value": 28169.44,
-      "unrealized_pnl": 0
+      "current_price": 453.48,
+      "current_value": 28169.45,
+      "unrealized_pnl": 170.61
     },
     "SEI": {
       "entry_price": 52.88999938964844,
@@ -185,9 +185,9 @@
       "layer": "OTHER",
       "name": "SOLARIS ENERGY INFRAS INC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 52.88999938964844,
+      "current_price": 68.34,
       "current_value": 450.63,
-      "unrealized_pnl": 0
+      "unrealized_pnl": 131.64
     },
     "STM": {
       "entry_price": 49.459999084472656,
@@ -197,9 +197,9 @@
       "layer": "MEMORY",
       "name": "STMICROELECTRONICS",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 49.459999084472656,
+      "current_price": 53.24,
       "current_value": 2904.07,
-      "unrealized_pnl": 0
+      "unrealized_pnl": 221.94
     },
     "TSM": {
       "entry_price": 417.4100036621094,
@@ -209,9 +209,9 @@
       "layer": "FAB_CAPACITY",
       "name": "TAIWAN SEMICONDUCTOR MANUFAC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 417.4100036621094,
-      "current_value": 6278.79,
-      "unrealized_pnl": 0
+      "current_price": 456.94,
+      "current_value": 6278.81,
+      "unrealized_pnl": 594.62
     },
     "VSH": {
       "entry_price": 31.309999465942383,
@@ -221,9 +221,9 @@
       "layer": "OTHER",
       "name": "VISHAY INTERTECHNOLOGY INC",
       "opened_at": "2026-08-26T06:10:27.589Z",
-      "current_price": 31.309999465942383,
+      "current_price": 32.46,
       "current_value": 100.14,
-      "unrealized_pnl": 0
+      "unrealized_pnl": 3.68
     }
   },
   "layer_exposure": {
@@ -233,5 +233,5 @@
     "DATA_CENTER_INFRA": 15.5,
     "MINING_POWER_PROXY": 5.8
   },
-  "last_run": "2026-08-26T06:11:43.362Z"
+  "last_run": "2026-09-30T00:35:37.611Z"
 }

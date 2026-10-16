@@ -1,0 +1,420 @@
+{
+  "id": "class-20260826T0612",
+  "date": "2026-08-26",
+  "video": "IMG_8592.MOV",
+  "duration": 409.005,
+  "theme": null,
+  "students": null,
+  "type": "padwork",
+  "windowCount": 6,
+  "windows": [
+    {
+      "time": "0:31",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Fighter on the right is moving slightly, stepping in and out of range.",
+              "stance_width": "normal",
+              "guard": "High guard, hands up near face.",
+              "upper_body": "Throwing punches at the pad holder's targets.",
+              "distance": "Close, within striking range.",
+              "notable": "Two people present: pad holder on the left, fighter on the right."
+            }
+          },
+          {
+            "frames": "F6-F15",
+            "time": "1.7s-4.7s",
+            "observations": {
+              "footwork": "Fighter is moving around the ring, taking small steps and pivoting occasionally.",
+              "stance_width": "normal",
+              "guard": "Guard is up, though hands drop slightly between punches.",
+              "upper_body": "Shadowboxing, throwing jabs and crosses.",
+              "distance": "No opponent, moving in open space.",
+              "notable": "The pad holder has left the frame; fighter is training alone."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F5-F6",
+            "type": "distance_open",
+            "detail": "The pad holder moves out of the frame, leaving the fighter alone."
+          },
+          {
+            "frames": "F9-F10",
+            "type": "punch_extension",
+            "detail": "Fighter throws a shadowboxing combination, extending lead hand then rear hand."
+          },
+          {
+            "frames": "F12",
+            "type": "step",
+            "detail": "Fighter steps to the left, changing position."
+          },
+          {
+            "frames": "F13-F14",
+            "type": "punch_extension",
+            "detail": "Fighter continues with more punches."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "1:39",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "padwork",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "The fighter on the right steps forward to close the distance while the fighter on the left adjusts slightly, keeping their base stable.",
+              "stance_width": "normal",
+              "guard": "The pad-holder on the left maintains hands up with pads raised. The striker on the right keeps a high guard as he moves in.",
+              "upper_body": "The right fighter throws a left jab (F4-F5) as he steps in towards the pads.",
+              "distance": "Closing from mid-range to close range.",
+              "notable": "The striker initiates the exchange with a long step and a sharp lead-hand jab."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "The right fighter presses forward with small adjustment steps; the left fighter backs up slightly to maintain space.",
+              "stance_width": "normal",
+              "guard": "The striker's rear hand drops momentarily to throw a punch, then returns to a defensive position. The pad-holder keeps pads up.",
+              "upper_body": "The right fighter throws a right cross (F6-F7), then retracts to a compact, slightly crouched stance (F8-F9).",
+              "distance": "Close range throughout, with a brief pause in activity.",
+              "notable": "A powerful right cross is landed, followed by a momentary reset where the striker regains a lower, ready posture."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "The right fighter steps in once more to throw another punch, then both fighters settle into a stable stance at the end.",
+              "stance_width": "normal",
+              "guard": "Both keep hands up between strikes; the striker raises his guard again as the sequence ends.",
+              "upper_body": "The right fighter throws a left hook (F11-F13), then both fighters relax into their stances (F14-F15).",
+              "distance": "Close range during the strike, then opening slightly as they reset.",
+              "notable": "A continuous combination pattern is visible, ending with both fighters in a neutral standoff."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F3",
+            "type": "step",
+            "detail": "The striker on the right steps forward to close the distance."
+          },
+          {
+            "frames": "F4-F5",
+            "type": "punch_extension",
+            "detail": "Striker throws a lead-hand jab."
+          },
+          {
+            "frames": "F6-F7",
+            "type": "punch_extension",
+            "detail": "Striker throws a rear-hand cross."
+          },
+          {
+            "frames": "F8-F10",
+            "type": "punch_recovery",
+            "detail": "Striker retracts the punch and resets to a defensive/ready position."
+          },
+          {
+            "frames": "F11-F13",
+            "type": "punch_extension",
+            "detail": "Striker throws a left hook, continuing the combination."
+          },
+          {
+            "frames": "F14-F15",
+            "type": "reset",
+            "detail": "Both fighters return to a neutral stance, ending the exchange."
+          }
+        ],
+        "overall_rhythm": "burst_then_rest"
+      }
+    },
+    {
+      "time": "2:47",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F6",
+            "time": "0.0s-1.7s",
+            "observations": {
+              "footwork": "Both fighters moving laterally across the gym floor, with forward and backward shuffling steps",
+              "stance_width": "changing",
+              "guard": "Hands held up in a boxing guard throughout",
+              "upper_body": "Slight bobbing and weaving, torso rotating with movement",
+              "distance": "Medium range, maintaining distance with light footwork",
+              "notable": "Moving as a pair, one stepping in as the other steps back"
+            }
+          },
+          {
+            "frames": "F7-F10",
+            "time": "2.0s-3.0s",
+            "observations": {
+              "footwork": "Lead foot steps forward to generate power for the punch",
+              "stance_width": "normal",
+              "guard": "Lead hand extends while rear hand remains up in guard",
+              "upper_body": "Torso rotation visible, punching arm fully extended towards the target",
+              "distance": "Medium range, punch is thrown as the other fighter shifts back",
+              "notable": "A left hand punch is extended and then recovered"
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Backpedaling and resetting, taking smaller steps",
+              "stance_width": "normal",
+              "guard": "Both hands return to a high guard position",
+              "upper_body": "Recovery and slight reset, less upper body movement",
+              "distance": "Distance opens slightly as they reset",
+              "notable": "A brief pause or slow-down in the action"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F6",
+            "type": "step",
+            "detail": "Lateral shuffling and footwork as the pair moves around the area"
+          },
+          {
+            "frames": "F7-F9",
+            "type": "punch_extension",
+            "detail": "Left hand punch is extended towards the target"
+          },
+          {
+            "frames": "F10",
+            "type": "punch_recovery",
+            "detail": "Punch is retracted back to the guard position"
+          },
+          {
+            "frames": "F11-F15",
+            "type": "reset",
+            "detail": "Fighters reset their position and backpedal"
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "3:56",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "padwork",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F2",
+            "time": "0.0s-0.3s",
+            "observations": {
+              "footwork": "Wide stance, feet planted, slight forward pressure.",
+              "stance_width": "wide",
+              "guard": "Left hand up, right hand extended after a punch.",
+              "upper_body": "Right arm fully extended forward at shoulder height.",
+              "distance": "Close, at pad-touching distance.",
+              "notable": "Punch extended at start of sequence."
+            }
+          },
+          {
+            "frames": "F3-F5",
+            "time": "0.7s-1.3s",
+            "observations": {
+              "footwork": "Stepping forward, closing distance on the pad holder.",
+              "stance_width": "changing",
+              "guard": "Right hand retracting to guard, left hand stays high.",
+              "upper_body": "Torso rotating slightly right to load the next punch.",
+              "distance": "Closing, getting closer to the pad holder.",
+              "notable": "Clear forward step and re-loading of the rear hand."
+            }
+          },
+          {
+            "frames": "F6-F9",
+            "time": "1.7s-2.7s",
+            "observations": {
+              "footwork": "Stepping back, re-establishing a wider base.",
+              "stance_width": "wide",
+              "guard": "Hands return to a high, active guard position.",
+              "upper_body": "Slight rotation as the punch retracts, then settling.",
+              "distance": "Opening, returning to starting distance.",
+              "notable": "Punch extension followed by a deliberate step back."
+            }
+          },
+          {
+            "frames": "F10-F13",
+            "time": "3.0s-4.0s",
+            "observations": {
+              "footwork": "Stepping forward slightly to initiate the next combination.",
+              "stance_width": "changing",
+              "guard": "Right hand begins to extend for another punch.",
+              "upper_body": "Full extension of the right arm again.",
+              "distance": "Closing back in to pad range.",
+              "notable": "Repeated pattern of forward step and rear-hand strike."
+            }
+          },
+          {
+            "frames": "F14-F15",
+            "time": "4.3s-4.7s",
+            "observations": {
+              "footwork": "Stabilizing into a neutral fighting stance.",
+              "stance_width": "normal",
+              "guard": "Both hands up in a ready position.",
+              "upper_body": "Facing the pad holder, ready for the next instruction.",
+              "distance": "Maintaining contact range.",
+              "notable": "Brief reset in the stance."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F2",
+            "type": "punch_recovery",
+            "detail": "Rear hand retracting from full extension back toward guard."
+          },
+          {
+            "frames": "F3-F4",
+            "type": "step",
+            "detail": "Fighter steps forward with rear foot, closing the distance."
+          },
+          {
+            "frames": "F5-F6",
+            "type": "punch_extension",
+            "detail": "Right hand extends fully forward to strike the pads."
+          },
+          {
+            "frames": "F7-F9",
+            "type": "distance_open",
+            "detail": "Fighter steps back to original range after the strike."
+          },
+          {
+            "frames": "F10-F11",
+            "type": "punch_extension",
+            "detail": "Another rear-hand punch is thrown and extended."
+          },
+          {
+            "frames": "F12-F13",
+            "type": "punch_recovery",
+            "detail": "Punch retracts and fighter begins another step."
+          },
+          {
+            "frames": "F14-F15",
+            "type": "reset",
+            "detail": "Fighter settles into a stable, ready stance."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "5:04",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "movement",
+        "intensity": "low",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Two individuals visible; the closer subject moves laterally out of frame as the camera pans.",
+              "stance_width": "narrow",
+              "guard": "Not clearly visible.",
+              "upper_body": "Torsos shown in early frames; transitioning between positions.",
+              "distance": "Approximately 2-3 meters.",
+              "notable": "Camera panning left across gym; one subject exits the frame."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "A single fighter walks steadily across the gym floor.",
+              "stance_width": "changing",
+              "guard": "Hands are down and relaxed; no guard established.",
+              "upper_body": "Torso and arms visible while walking.",
+              "distance": "N/A - continuous movement.",
+              "notable": "Camera follows a single fighter in motion."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Fighter slows down, steps and turns away from the camera.",
+              "stance_width": "narrow",
+              "guard": "Hands remain down.",
+              "upper_body": "Back and lower body visible as fighter turns.",
+              "distance": "N/A - scene changes focus.",
+              "notable": "A black training glove/pad falls into the foreground at F14-F15."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F3",
+            "type": "distance_open",
+            "detail": "First subject moves away and exits the camera view, opening the distance between individuals."
+          },
+          {
+            "frames": "F7-F13",
+            "type": "step",
+            "detail": "Fighter walks from left to right across the gym."
+          },
+          {
+            "frames": "F14-F15",
+            "type": "reset",
+            "detail": "Fighter stops and turns; a black glove or pad falls to the floor."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "6:12",
+      "observations": {
+        "people_detected": 0,
+        "activity_type": "unclear",
+        "intensity": "low",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F15",
+            "time": "0.0s-4.7s",
+            "observations": {
+              "footwork": "no visible footwork",
+              "stance_width": "unchanging",
+              "guard": "no guard visible",
+              "upper_body": "no upper body visible; empty gym scene",
+              "distance": "n/a",
+              "notable": "Scene remains static throughout. A small black object rests on the wooden floor, and a large dark equipment piece sits at the bottom edge of every frame. Background shows mirrors, punching bags, and an empty boxing gym."
+            }
+          }
+        ],
+        "movement_events": [],
+        "overall_rhythm": "inactive"
+      }
+    }
+  ],
+  "recordPath": "/Users/basicclaw777/nanoclaw/gym-eyes-classes/IMG_8592-20260826T0612/class-record.md"
+}

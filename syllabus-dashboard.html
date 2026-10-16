@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fundamentals Syllabus — Cathedral</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;600;700&display=swap');
+  :root { --bg:#0A0A0A; --fg:#FAFAFA; --gold:#f7b408; --dim:#666; --card:#141414; --green:#22c55e; --red:#ef4444; --blue:#3b82f6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:'Epilogue',system-ui,sans-serif; overflow-x:hidden; }
+
+  /* Header */
+  .header { padding:1.5rem 2rem; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+  .header h1 { font-family:'Anton',sans-serif; font-size:2rem; color:var(--gold); text-transform:uppercase; letter-spacing:2px; }
+  .progress-wrap { display:flex; align-items:center; gap:1rem; }
+  .progress-bar { width:300px; height:12px; background:#222; border-radius:6px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--gold); border-radius:6px; transition:width 0.5s; }
+  .progress-text { font-family:'Anton',sans-serif; font-size:1.4rem; color:var(--gold); }
+
+  /* Thread indicator */
+  .thread-bar { padding:0.8rem 2rem; background:#111; border-bottom:1px solid #1a1a1a; display:flex; align-items:center; gap:1rem; }
+  .thread-bar label { color:var(--dim); font-size:0.85rem; }
+  .thread-bar input { flex:1; max-width:400px; background:#1a1a1a; border:1px solid #333; color:var(--fg); padding:0.5rem 0.8rem; border-radius:4px; font-size:0.9rem; font-family:inherit; }
+  .thread-bar input:focus { outline:none; border-color:var(--gold); }
+  .thread-bar .suggestion { color:var(--gold); font-size:0.9rem; cursor:pointer; }
+  .thread-bar .suggestion:hover { text-decoration:underline; }
+
+  /* Layout */
+  .main { display:flex; height:calc(100vh - 130px); }
+  .graph-panel { flex:1; position:relative; }
+  .detail-panel { width:380px; background:var(--card); border-left:1px solid #222; overflow-y:auto; padding:0; display:none; }
+  .detail-panel.open { display:block; }
+
+  /* Graph */
+  svg { width:100%; height:100%; }
+  .node-circle { cursor:pointer; stroke-width:2; transition:r 0.2s; }
+  .node-circle:hover { filter:brightness(1.3); }
+  .node-label { fill:var(--fg); font-size:10px; pointer-events:none; text-anchor:middle; font-weight:600; }
+  .edge-line { stroke:#333; stroke-width:1.5; }
+  .edge-arrow { fill:#333; }
+
+  /* Detail panel */
+  .detail-header { padding:1.5rem; border-bottom:1px solid #222; }
+  .detail-header h2 { font-family:'Anton',sans-serif; font-size:1.5rem; color:var(--gold); margin-bottom:0.3rem; }
+  .detail-header .status-badge { display:inline-block; padding:0.15rem 0.6rem; border-radius:3px; font-size:0.75rem; font-weight:700; text-transform:uppercase; }
+  .status-completed { background:var(--green); color:#000; }
+  .status-in_progress { background:var(--gold); color:#000; }
+  .status-available { background:#333; color:var(--fg); border:1px solid var(--gold); }
+  .status-locked { background:#222; color:var(--dim); }
+  .detail-body { padding:1.5rem; }
+  .detail-body p { color:var(--dim); line-height:1.6; margin-bottom:1rem; font-size:0.95rem; }
+  .detail-body h3 { font-size:0.85rem; color:var(--gold); text-transform:uppercase; margin:1rem 0 0.5rem; letter-spacing:1px; }
+  .detail-body .tag-list { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1rem; }
+  .detail-body .tag { padding:0.2rem 0.5rem; background:#1a1a1a; border:1px solid #333; border-radius:3px; font-size:0.8rem; color:var(--dim); }
+  .detail-body .prereq-list { list-style:none; }
+  .detail-body .prereq-list li { padding:0.3rem 0; font-size:0.9rem; }
+  .detail-body .prereq-list li::before { content:''; display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:0.5rem; }
+  .detail-body .prereq-list li.done::before { background:var(--green); }
+  .detail-body .prereq-list li.pending::before { background:var(--dim); }
+  .detail-actions { padding:1.5rem; border-top:1px solid #222; display:flex; gap:0.8rem; flex-wrap:wrap; }
+  .btn { padding:0.6rem 1.2rem; border:none; border-radius:4px; font-weight:700; font-size:0.9rem; cursor:pointer; font-family:inherit; }
+  .btn-gold { background:var(--gold); color:#000; }
+  .btn-gold:hover { background:#d99a06; }
+  .btn-outline { background:none; border:1px solid #333; color:var(--fg); }
+  .btn-outline:hover { border-color:var(--gold); }
+  .btn:disabled { opacity:0.3; cursor:not-allowed; }
+
+  /* Legend */
+  .legend { position:fixed; bottom:1rem; left:1rem; background:rgba(20,20,20,0.95); padding:0.8rem 1rem; border-radius:4px; border:1px solid #333; display:flex; gap:1.5rem; font-size:0.8rem; color:var(--dim); z-index:10; }
+  .legend-item { display:flex; align-items:center; gap:0.4rem; }
+  .legend-dot { width:12px; height:12px; border-radius:50%; }
+
+  /* Toast */
+  .toast { position:fixed; top:1rem; right:1rem; background:var(--card); border:1px solid var(--gold); color:var(--fg); padding:1rem 1.5rem; border-radius:4px; z-index:100; display:none; font-size:0.9rem; max-width:400px; }
+  .toast.show { display:block; animation:slideIn 0.3s; }
+  @keyframes slideIn { from{transform:translateX(20px);opacity:0} to{transform:none;opacity:1} }
+</style>
+</head><body>
+
+<div class="header">
+  <h1>Fundamentals Syllabus</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0/20</div>
+  </div>
+</div>
+
+<div class="thread-bar">
+  <label>Current thread:</label>
+  <input type="text" id="threadInput" placeholder="What are you exploring? (e.g. standing waves, pyramid acoustics...)" />
+  <span class="suggestion" id="threadSuggestion"></span>
+</div>
+
+<div class="main">
+  <div class="graph-panel">
+    <svg id="graph"></svg>
+  </div>
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header" id="detailHeader"></div>
+    <div class="detail-body" id="detailBody"></div>
+    <div class="detail-actions" id="detailActions"></div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Completed</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div> In Progress</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FAFAFA;border:1px solid #666"></div> Available</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#333"></div> Locked</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let DATA = null;
+let GRAPH = null;
+let selectedId = null;
+
+// ── Fetch ──────────────────────────────────────────────────────────────────
+
+async function fetchData() {
+  const res = await fetch('/api/syllabus');
+  DATA = await res.json();
+  updateProgress();
+  buildGraph();
+}
+
+function updateProgress() {
+  if (!DATA) return;
+  const topics = DATA.topics || [];
+  const completed = topics.filter(t => t.status === 'completed').length;
+  const total = topics.length;
+  document.getElementById('progressFill').style.width = (completed / total * 100) + '%';
+  document.getElementById('progressText').textContent = completed + '/' + total;
+}
+
+// ── Graph ──────────────────────────────────────────────────────────────────
+
+function nodeColor(t) {
+  if (t.status === 'completed') return '#22c55e';
+  if (t.status === 'in_progress') return '#f7b408';
+  if (t.available) return '#FAFAFA';
+  return '#333';
+}
+
+function nodeRadius(t) {
+  const base = 14 + t.difficulty * 3;
+  if (t.status === 'in_progress') return base + 4;
+  return base;
+}
+
+function nodeStroke(t) {
+  if (t.status === 'completed') return '#1a8a3e';
+  if (t.status === 'in_progress') return '#b87c06';
+  if (t.available) return '#666';
+  return '#222';
+}
+
+function buildGraph() {
+  const svg = d3.select('#graph');
+  svg.selectAll('*').remove();
+
+  const rect = svg.node().getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+
+  const topics = DATA.topics || [];
+  const nodes = topics.map(t => ({
+    ...t,
+    available: t.status === 'not_started' && (t.prerequisites || []).every(pid =>
+      topics.find(p => p.id === pid)?.status === 'completed'
+    )
+  }));
+  const edges = [];
+  for (const t of topics) {
+    for (const pid of (t.prerequisites || [])) {
+      edges.push({ source: pid, target: t.id });
+    }
+  }
+
+  const g = svg.append('g');
+
+  // Zoom
+  svg.call(d3.zoom().scaleExtent([0.3, 3]).on('zoom', e => g.attr('transform', e.transform)));
+
+  // Arrow marker
+  svg.append('defs').append('marker')
+    .attr('id', 'arrowhead').attr('viewBox', '0 0 10 6')
+    .attr('refX', 28).attr('refY', 3)
+    .attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('orient', 'auto')
+    .append('path').attr('d', 'M0,0 L10,3 L0,6 Z').attr('class', 'edge-arrow');
+
+  const sim = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(edges).id(d => d.id).distance(140))
+    .force('charge', d3.forceManyBody().strength(-500))
+    .force('center', d3.forceCenter(W / 2, H / 2))
+    .force('collision', d3.forceCollide(40))
+    .force('y', d3.forceY().y(d => 80 + d.difficulty * (H - 160) / 4).strength(0.15));
+
+  const link = g.selectAll('.edge-line').data(edges).join('line')
+    .attr('class', 'edge-line')
+    .attr('marker-end', 'url(#arrowhead)');
+
+  const node = g.selectAll('.node-circle').data(nodes).join('circle')
+    .attr('class', 'node-circle')
+    .attr('r', nodeRadius)
+    .attr('fill', nodeColor)
+    .attr('stroke', nodeStroke)
+    .on('click', (e, d) => selectNode(d))
+    .call(d3.drag()
+      .on('start', (e, d) => { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+      .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
+      .on('end', (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
+    );
+
+  const label = g.selectAll('.node-label').data(nodes).join('text')
+    .attr('class', 'node-label')
+    .attr('dy', d => nodeRadius(d) + 14)
+    .text(d => d.title.length > 20 ? d.title.slice(0, 18) + '...' : d.title);
+
+  sim.on('tick', () => {
+    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    node.attr('cx', d => d.x).attr('cy', d => d.y);
+    label.attr('x', d => d.x).attr('y', d => d.y);
+  });
+
+  GRAPH = { nodes, edges, sim, node, link, label };
+}
+
+// ── Detail Panel ───────────────────────────────────────────────────────────
+
+function selectNode(d) {
+  selectedId = d.id;
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('open');
+
+  const topics = DATA.topics || [];
+  const statusClass = d.status === 'completed' ? 'status-completed'
+    : d.status === 'in_progress' ? 'status-in_progress'
+    : d.available ? 'status-available' : 'status-locked';
+  const statusLabel = d.status === 'completed' ? 'Completed'
+    : d.status === 'in_progress' ? 'In Progress'
+    : d.available ? 'Available' : 'Locked';
+
+  document.getElementById('detailHeader').innerHTML = `
+    <h2>${d.title}</h2>
+    <span class="status-badge ${statusClass}">${statusLabel}</span>
+    <span style="color:var(--dim);margin-left:0.5rem;font-size:0.8rem;">Difficulty ${d.difficulty}</span>
+    ${d.completedAt ? '<div style="color:var(--dim);font-size:0.8rem;margin-top:0.3rem;">Completed: ' + d.completedAt.split('T')[0] + '</div>' : ''}
+  `;
+
+  const prereqs = (d.prerequisites || []).map(pid => {
+    const pt = topics.find(t => t.id === pid);
+    const done = pt?.status === 'completed';
+    return `<li class="${done ? 'done' : 'pending'}">${pt?.title || pid}</li>`;
+  }).join('');
+
+  document.getElementById('detailBody').innerHTML = `
+    <p>${d.description}</p>
+    <h3>Domains</h3>
+    <div class="tag-list">${(d.domains || []).map(d => `<span class="tag">${d.replace(/_/g, ' ')}</span>`).join('')}</div>
+    <h3>Vault Keywords</h3>
+    <div class="tag-list">${(d.vaultKeywords || []).map(k => `<span class="tag">${k}</span>`).join('')}</div>
+    ${prereqs ? '<h3>Prerequisites</h3><ul class="prereq-list">' + prereqs + '</ul>' : '<h3>Prerequisites</h3><p style="color:var(--dim)">None - entry point</p>'}
+  `;
+
+  const canStart = d.status === 'not_started' && d.available;
+  const canComplete = d.status === 'in_progress';
+  const canGenerate = d.status !== 'locked' || d.available;
+
+  document.getElementById('detailActions').innerHTML = `
+    ${canStart ? `<button class="btn btn-gold" onclick="startTopic('${d.id}')">Start Study</button>` : ''}
+    ${canComplete ? `<button class="btn btn-gold" onclick="completeTopic('${d.id}')">Mark Completed</button>` : ''}
+    <button class="btn btn-outline" onclick="generatePack('${d.id}')" ${canGenerate ? '' : 'disabled'}>Generate Pack</button>
+    <button class="btn btn-outline" onclick="closeDetail()">Close</button>
+  `;
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  selectedId = null;
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+
+async function startTopic(id) {
+  const res = await fetch('/api/syllabus/start', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topicId: id })
+  });
+  const data = await res.json();
+  showToast(data.ok ? `Started: ${data.started}` : `Error: ${data.error}`);
+  await fetchData();
+  const topic = DATA.topics.find(t => t.id === id);
+  if (topic) selectNode({ ...topic, available: true });
+}
+
+async function completeTopic(id) {
+  const res = await fetch('/api/syllabus/complete', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topicId: id })
+  });
+  const data = await res.json();
+  let msg = data.ok ? `Completed: ${data.completed}` : `Error: ${data.error}`;
+  if (data.newlyUnlocked?.length) msg += `\nUnlocked: ${data.newlyUnlocked.map(t => t.title).join(', ')}`;
+  showToast(msg);
+  await fetchData();
+  const topic = DATA.topics.find(t => t.id === id);
+  if (topic) selectNode({ ...topic, available: false });
+}
+
+async function generatePack(id) {
+  showToast('Generating study pack (slides + mind map + quiz)... This takes 1-3 minutes.');
+  const res = await fetch('/api/syllabus/generate', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topicId: id })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    let msg = `Study pack for "${data.topic}" ready!\n`;
+    const r = data.results || {};
+    if (r.slides) msg += `Slides: /study-lab/file/${r.slides.path?.split('/').pop()}\n`;
+    if (r.mindmap) msg += `Mind Map: /study-lab/file/${r.mindmap.path?.split('/').pop()}\n`;
+    if (r.quiz) msg += `Quiz: /study-lab/file/${r.quiz.path?.split('/').pop()}\n`;
+    showToast(msg);
+  } else {
+    showToast(`Error: ${data.error}`);
+  }
+}
+
+// ── Thread suggestion ──────────────────────────────────────────────────────
+
+let threadTimeout = null;
+document.getElementById('threadInput').addEventListener('input', e => {
+  clearTimeout(threadTimeout);
+  const val = e.target.value.trim();
+  if (!val) { document.getElementById('threadSuggestion').textContent = ''; return; }
+  threadTimeout = setTimeout(async () => {
+    const res = await fetch(`/api/syllabus/suggest?thread=${encodeURIComponent(val)}`);
+    const data = await res.json();
+    const el = document.getElementById('threadSuggestion');
+    if (data.topic) {
+      el.textContent = `Suggested: ${data.topic.title}`;
+      el.onclick = () => {
+        const n = GRAPH?.nodes?.find(n => n.id === data.topic.id);
+        if (n) selectNode(n);
+      };
+    } else {
+      el.textContent = data.reason || '';
+      el.onclick = null;
+    }
+  }, 400);
+});
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+
+fetchData();
+</script>
+</body></html>

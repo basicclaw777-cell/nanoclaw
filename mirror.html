@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mirror — Cathedral</title>
+<style>
+  :root{
+    --bg:#0a0b0e; --panel:#14161c; --panel2:#1b1e26; --line:#2a2f3a;
+    --gold:#c9a24b; --gold-bright:#e3bd63; --ember:#c8542f;
+    --ink:#e9e7e1; --muted:#888d99; --link:#7fb0d6;
+    --mirror:#4a6fa5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+       height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+  header{text-align:center;padding:20px 16px 12px;border-bottom:1px solid var(--line);flex-shrink:0}
+  h1{font-size:24px;letter-spacing:1px;margin:0}
+  h1 .m{color:var(--mirror)}
+  .tag{color:var(--muted);font-size:12px;margin-top:4px}
+
+  .modes{display:flex;justify-content:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);flex-shrink:0}
+  .mode{background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;
+        padding:6px 16px;border-radius:20px;cursor:pointer;transition:all .2s}
+  .mode:hover{border-color:var(--mirror);color:var(--ink)}
+  .mode.active{background:var(--mirror);color:#fff;border-color:var(--mirror)}
+
+  .chat{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:14px}
+  .msg{max-width:80%;padding:12px 16px;border-radius:14px;font-size:14px;line-height:1.55;word-wrap:break-word}
+  .msg.user{align-self:flex-end;background:var(--panel2);border:1px solid var(--line);border-bottom-right-radius:4px}
+  .msg.mirror{align-self:flex-start;background:#1a2233;border:1px solid #2a3a55;border-bottom-left-radius:4px}
+  .msg .who{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .msg.user .who{color:var(--gold)}
+  .msg.mirror .who{color:var(--mirror)}
+  .msg p{margin:0 0 8px} .msg p:last-child{margin:0}
+  .msg ul{margin:6px 0;padding-left:20px} .msg li{margin:2px 0}
+  .msg b{color:var(--gold-bright)}
+  .msg .engine{font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:.3px}
+
+  .typing{align-self:flex-start;color:var(--muted);font-size:13px;padding:8px 16px;display:none}
+  .typing.show{display:block}
+  .typing span{animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+  .welcome{text-align:center;color:var(--muted);padding:40px 20px;font-size:14px;line-height:1.8}
+  .welcome h2{color:var(--mirror);font-size:16px;margin-bottom:8px}
+  .starters{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px}
+  .starter{background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;
+           padding:6px 14px;border-radius:16px;cursor:pointer}
+  .starter:hover{border-color:var(--mirror);color:var(--ink)}
+
+  .inputbar{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--line);flex-shrink:0;
+            background:var(--panel)}
+  #msg{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--ink);
+       padding:12px 16px;border-radius:10px;font-size:15px;font-family:inherit;resize:none;
+       min-height:44px;max-height:120px}
+  #msg:focus{outline:none;border-color:var(--mirror)}
+  #send{background:var(--mirror);color:#fff;border:none;padding:0 20px;border-radius:10px;
+        font-weight:700;cursor:pointer;font-size:14px}
+  #send:disabled{opacity:.4;cursor:wait}
+
+  @media(max-width:600px){
+    .msg{max-width:90%}
+    .modes{gap:6px} .mode{padding:5px 12px;font-size:11px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The <span class="m">Mirror</span></h1>
+  <div class="tag">Talk to yourself. Your patterns, your principles, your weight.</div>
+</header>
+
+<div class="modes">
+  <div class="mode active" data-mode="warmup">Warm-up</div>
+  <div class="mode" data-mode="recall">Recall</div>
+  <div class="mode" data-mode="challenge">Challenge</div>
+  <div class="mode" data-mode="disagree">Disagree</div>
+  <div class="mode" data-mode="architect" style="border-color:var(--ember);color:var(--ember)">Architect</div>
+</div>
+
+<div class="chat" id="chat">
+  <div class="welcome" id="welcome">
+    <h2>The loaded sparring bag.</h2>
+    Comes back with your own weight.<br>
+    Pick a mode. Ask a question. Argue with yourself.
+    <div class="starters" id="starters">
+      <span class="starter">What would I do about a coach who's not pulling their weight?</span>
+      <span class="starter">Where am I contradicting myself right now?</span>
+      <span class="starter">When have I faced something like this before?</span>
+      <span class="starter">Sharpen this: I think the kids program is the real growth lever</span>
+      <span class="starter" style="border-color:#c8542f44;color:var(--ember)">Architect: BR revenue is stuck — what am I not seeing?</span>
+      <span class="starter" style="border-color:#c8542f44;color:var(--ember)">Architect: 78 agents running but not compounding — what's the shape?</span>
+    </div>
+  </div>
+  <div class="typing" id="typing"><span>Thinking as you would think…</span></div>
+</div>
+
+<div class="inputbar">
+  <textarea id="msg" rows="1" placeholder="Talk to yourself…"></textarea>
+  <button id="send">Send</button>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+let mode='warmup', history=[];
+
+document.querySelectorAll('.mode').forEach(m=>{
+  m.onclick=()=>{
+    document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));
+    m.classList.add('active');
+    mode=m.dataset.mode;
+  };
+});
+
+document.querySelectorAll('.starter').forEach(s=>{
+  s.onclick=()=>{$('#msg').value=s.textContent;send()};
+});
+
+$('#send').onclick=send;
+$('#msg').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}
+});
+$('#msg').addEventListener('input',()=>{
+  const el=$('#msg');el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';
+});
+
+function esc(s){return(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+function render(t){
+  const lines=t.split('\n');let h='',ul=false;
+  for(let ln of lines){
+    if(/^\s*[-*]\s/.test(ln)){
+      if(!ul){h+='<ul>';ul=true}
+      h+='<li>'+inline(ln.replace(/^\s*[-*]\s/,''))+'</li>';continue;
+    }
+    if(ul){h+='</ul>';ul=false}
+    if(ln.trim())h+='<p>'+inline(ln)+'</p>';
+  }
+  if(ul)h+='</ul>';return h;
+}
+
+function inline(s){
+  return esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+}
+
+function addMsg(role,text,engine){
+  const w=$('#welcome');if(w)w.remove();
+  const d=document.createElement('div');
+  d.className='msg '+role;
+  d.innerHTML=`<div class="who">${role==='user'?'You':'Mirror Paul'}</div>`+render(text)
+    +(engine?`<div class="engine">${esc(engine)}</div>`:'');
+  const chat=$('#chat');
+  chat.insertBefore(d,$('#typing'));
+  chat.scrollTop=chat.scrollHeight;
+}
+
+async function send(){
+  const text=$('#msg').value.trim();if(!text)return;
+  $('#msg').value='';$('#msg').style.height='auto';
+  addMsg('user',text);
+  history.push({role:'user',content:text});
+
+  $('#send').disabled=true;
+  $('#typing').classList.add('show');
+  $('#chat').scrollTop=$('#chat').scrollHeight;
+
+  try{
+    const r=await fetch('/mirror/talk',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:text,history:history.slice(-10),mode})
+    });
+    const d=await r.json();
+    if(d.error){addMsg('mirror','Error: '+d.error);return}
+    const resp=d.response||'No response';
+    addMsg('mirror',resp,d.engine?'via '+d.engine:'');
+    history.push({role:'assistant',content:resp});
+  }catch(e){addMsg('mirror','Connection failed: '+e.message)}
+  finally{$('#send').disabled=false;$('#typing').classList.remove('show')}
+}
+</script>
+</body>
+</html>

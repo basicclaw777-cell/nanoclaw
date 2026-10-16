@@ -245,6 +245,75 @@ export function recommendStyle(subject = '') {
   return { style: leastGen.style, reason: 'Round-robin: insufficient data', explore: true };
 }
 
+// ── Brief-Match Process Score (Causal Decoupling for Creative) ──────────────
+// Scores whether style was APPROPRIATE for the subject/context,
+// not just whether Paul happened to select it.
+
+export function getCreativeProcessScore(style) {
+  const d = getDb();
+  const strat = STRATEGIES[style];
+  if (!strat) return { score: null, sufficient: false };
+
+  const selections = d.prepare(`
+    SELECT s.action, s.context, g.subject, g.prompt_used
+    FROM selections s
+    JOIN generations g ON g.id = s.generation_id
+    WHERE s.style = ?
+    ORDER BY s.id DESC LIMIT 20
+  `).all(style);
+
+  if (selections.length < 5) return { score: null, sufficient: false, count: selections.length };
+
+  let processTotal = 0;
+  for (const sel of selections) {
+    const context = (sel.context || '').toLowerCase() + ' ' + (sel.subject || '').toLowerCase();
+    const prediction = (strat.predicts || '').toLowerCase();
+
+    // Extract context keywords from strategy prediction
+    const predKeywords = prediction.match(/\b\w{4,}\b/g) || [];
+    const contextWords = context.match(/\b\w{4,}\b/g) || [];
+    const overlap = predKeywords.filter(k => contextWords.some(c => c.includes(k) || k.includes(c))).length;
+    const briefMatch = predKeywords.length > 0 ? overlap / predKeywords.length : 0;
+
+    // Was the selection appropriate given the brief match?
+    if (sel.action === 'selected' || sel.action === 'used' || sel.action === 'shared') {
+      processTotal += briefMatch > 0.2 ? 1.0 : 0.3; // selected AND context-appropriate = full credit
+    } else if (sel.action === 'rejected') {
+      processTotal += briefMatch > 0.5 ? -1.0 : -0.3; // rejected despite good context match = hard penalty
+    } else {
+      processTotal += 0;
+    }
+  }
+
+  const score = processTotal / selections.length;
+  return {
+    score: Math.round(score * 1000) / 1000,
+    sufficient: true,
+    count: selections.length,
+  };
+}
+
+export function creativeProcessLeaderboard() {
+  const styles = Object.keys(STRATEGIES);
+  const board = styles.map(style => {
+    const ps = getCreativeProcessScore(style);
+    const d = getDb();
+    const stats = d.prepare(`
+      SELECT total_generated, selected, rejected, selection_rate
+      FROM style_leaderboard WHERE style = ?
+    `).get(style);
+    return {
+      style,
+      process_score: ps.score,
+      sufficient: ps.sufficient,
+      count: ps.count || 0,
+      selection_rate: stats?.selection_rate || 0,
+      total_generated: stats?.total_generated || 0,
+    };
+  });
+  return board.sort((a, b) => (b.process_score || -2) - (a.process_score || -2));
+}
+
 // ── Get signals for meta-watcher ─────────────────────────────────────────────
 
 export function getRecentSignals(hours = 24) {

@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Stationary with slight rhythmic bounce.",
+        "stance_width": "normal",
+        "guard": "Both hands held high near the chin.",
+        "upper_body": "Right hand extends in a straight punch.",
+        "distance": "Close, padwork range.",
+        "notable": "Right hand straight punch thrown and retracted."
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.7s-2.7s",
+      "observations": {
+        "footwork": "Maintains reactive stance.",
+        "stance_width": "normal",
+        "guard": "Hands are up, elbows in.",
+        "upper_body": "Left hand extends in a lead punch.",
+        "distance": "Close, consistent range.",
+        "notable": "Left hand straight punch thrown and retracted."
+      }
+    },
+    {
+      "frames": "F10-F15",
+      "time": "3.0s-4.7s",
+      "observations": {
+        "footwork": "Fighter steps forward to close distance.",
+        "stance_width": "changing",
+        "guard": "Guard maintained before and after punch.",
+        "upper_body": "Right hand extends in a straight punch.",
+        "distance": "Distance closed slightly, then back to normal.",
+        "notable": "Step-in right hand punch."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F3-F4",
+      "type": "punch_extension",
+      "detail": "Right hand extends toward the pads."
+    },
+    {
+      "frames": "F7-F8",
+      "type": "punch_extension",
+      "detail": "Left hand extends toward the pads."
+    },
+    {
+      "frames": "F11-F12",
+      "type": "step",
+      "detail": "Fighter steps forward."
+    },
+    {
+      "frames": "F13-F14",
+      "type": "punch_extension",
+      "detail": "Right hand extends toward the pads after stepping."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

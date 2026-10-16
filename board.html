@@ -30,9 +30,9 @@ a { color:inherit; text-decoration:none; }
 .masthead { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
 .masthead h1 { font-size:26px; font-weight:800; letter-spacing:-.6px; }
 .masthead .sub { font-size:13.5px; color:var(--ink-faint); font-weight:500; margin-top:3px; }
-.back { margin-left:auto; font-size:12.5px; font-weight:600; color:var(--ink-soft);
-  background:var(--surface); border:1.5px solid var(--border); border-radius:999px; padding:7px 14px; transition:all .15s; }
-.back:hover { border-color:var(--border-hover); transform:translateY(-1px); }
+.back { margin-left:auto; font-size:14px; font-weight:700; color:var(--blue);
+  background:var(--blue-t); border:1.5px solid var(--blue); border-radius:999px; padding:8px 18px; transition:all .15s; }
+.back:hover { background:var(--blue); color:#fff; transform:translateY(-1px); }
 
 /* TABS */
 .tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:22px;
@@ -162,7 +162,7 @@ a { color:inherit; text-decoration:none; }
       <h1>Status Board</h1>
       <div class="sub" id="sub">Amazon for your work — basket, shipped, delivered, account.</div>
     </div>
-    <a class="back" href="/">← Lobby</a>
+    <a class="back" href="/env">← Lobby</a>
   </div>
 
   <div class="tabs" id="tabs"></div>
@@ -180,8 +180,9 @@ const TABS = [
   { id:'gold',        label:'Gold',        icon:'🪙', c:'#b8860b'        },
   { id:'organism',    label:'Organism',    icon:'🧬', c:'#0ea5a4'        },
   { id:'agency',      label:'Agency',      icon:'🤖', c:'#9333ea'        },
+  { id:'emergence',   label:'Emergence',   icon:'🌱', c:'#0d9488'        },
 ];
-const STATE = { services:null, inprogress:null, delivered:null, spend:null, gold:null, organism:null, agency:null };
+const STATE = { services:null, inprogress:null, delivered:null, spend:null, gold:null, organism:null, agency:null, emergence:null };
 let ACTIVE = location.hash.replace('#','') || 'delivered';
 if (!TABS.find(t=>t.id===ACTIVE)) ACTIVE = 'delivered';
 
@@ -205,6 +206,7 @@ function renderTabs(){
     gold: STATE.gold ? STATE.gold.counts.total : '',
     organism: STATE.organism ? STATE.organism.counts.latest_count : '',
     agency: STATE.agency ? STATE.agency.status.pending_approvals : '',
+    emergence: STATE.emergence ? (STATE.emergence.counts.DETECTED + STATE.emergence.counts.WATCHING) : '',
   };
   document.getElementById('tabs').innerHTML = TABS.map(t=>{
     const active = t.id===ACTIVE ? 'active':'';
@@ -227,8 +229,9 @@ async function route(){
     if (ACTIVE==='gold'       && !STATE.gold)       STATE.gold       = await getJSON('/api/gold');
     if (ACTIVE==='organism'   && !STATE.organism)   STATE.organism   = await getJSON('/api/organism');
     if (ACTIVE==='agency'     && !STATE.agency)     STATE.agency     = await getJSON('/api/agency');
+    if (ACTIVE==='emergence'  && !STATE.emergence) STATE.emergence  = await getJSON('/api/emergence');
     renderTabs();
-    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend, gold:renderGold, organism:renderOrganism, agency:renderAgency }[ACTIVE])();
+    ({ services:renderServices, inprogress:renderInProgress, delivered:renderDelivered, spend:renderSpend, gold:renderGold, organism:renderOrganism, agency:renderAgency, emergence:renderEmergence }[ACTIVE])();
   } catch(e){
     panel.innerHTML = `<div class="empty">Could not load <b>${esc(ACTIVE)}</b> — ${esc(e.message)}.<br>Is cath-bridge running on :8080?</div>`;
   }
@@ -677,6 +680,125 @@ function agencyLedgerCard(e){
     <div class="detail" style="color:var(--ink-faint)">${esc(e.result||'')}</div>
     ${e.reversible_via?`<div class="chips"><span class="v faint" style="font-size:12px">↩ reversible via: <code>${esc(e.reversible_via)}</code></span></div>`:''}
   </div>`;
+}
+
+// ── EMERGENCE (Kanban board for tracking emergent behavior) ──────────────────
+const EM_STATUS_META = {
+  DETECTED:{c:'var(--blue)',t:'var(--blue-t)',l:'🔵 Detected'},
+  WATCHING:{c:'var(--amber)',t:'var(--amber-t)',l:'👁 Watching'},
+  CONFIRMED:{c:'var(--green)',t:'var(--green-t)',l:'✅ Confirmed'},
+  INTEGRATED:{c:'#0d9488',t:'#e2f5f2',l:'🏗 Integrated'},
+  DISMISSED:{c:'var(--grey)',t:'var(--grey-t)',l:'⏭ Dismissed'},
+};
+function renderEmergence(){
+  const d = STATE.emergence;
+  const c = d.counts || {};
+  const a = d.analytics || {};
+  const active = (d.incidents||[]).filter(i=>i.status!=='INTEGRATED'&&i.status!=='DISMISSED');
+  const resolved = (d.incidents||[]).filter(i=>i.status==='INTEGRATED'||i.status==='DISMISSED');
+
+  let html = `<div class="summary">
+    <div class="stat" style="--stat-c:var(--blue)"><div class="label">Detected</div>
+      <div class="value">${c.DETECTED||0}</div><div class="note">new, not yet tracked</div></div>
+    <div class="stat" style="--stat-c:var(--amber)"><div class="label">Watching</div>
+      <div class="value">${c.WATCHING||0}</div><div class="note">${c.stale||0} stale (3d+)</div></div>
+    <div class="stat" style="--stat-c:var(--green)"><div class="label">Confirmed</div>
+      <div class="value">${c.CONFIRMED||0}</div><div class="note">survived gate, pending integration</div></div>
+    <div class="stat" style="--stat-c:#0d9488"><div class="label">Integrated</div>
+      <div class="value">${c.INTEGRATED||0}</div><div class="note">pattern metabolized</div></div>
+    <div class="stat" style="--stat-c:var(--red)"><div class="label">Demoted</div>
+      <div class="value">${a.demoted||0}</div><div class="note">signal keeps coming back</div></div>
+  </div>`;
+
+  // Intelligence summary
+  if (a.topInitiators?.length) {
+    const sigTypes = a.signalTypes||{};
+    const proact = sigTypes.proactivity||0;
+    const cross = sigTypes['cross-domain-finding']||0;
+    const top3init = (a.topInitiators||[]).slice(0,3).map(x=>`<b>${esc(x.agent)}</b> (${x.count})`).join(', ');
+    const top3targ = (a.topTargets||[]).slice(0,3).map(x=>`<b>${esc(x.agent)}</b> (${x.count})`).join(', ');
+    const reEm = (a.reEmerged||[]).filter(x=>x.count>=2);
+
+    html += `<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:16px 20px;margin:16px 0;line-height:1.7">
+      <div style="font-weight:700;font-size:15px;margin-bottom:8px;color:#166534">🧠 Intelligence Summary</div>
+      <div style="font-size:13.5px;color:#1e293b">
+        <b>${c.total||0}</b> emergence signals tracked. <b>${proact}</b> proactive actions, <b>${cross}</b> cross-domain findings.<br>
+        <b>Most active initiators:</b> ${top3init}<br>
+        <b>Most targeted:</b> ${top3targ}<br>
+        <b>Confirmed (survived triage + recurrence gate):</b> ${a.confirmed||0} — these are real.<br>
+        ${reEm.length ? `<div style="margin-top:6px;padding:8px 12px;background:#fef2f2;border-left:3px solid #ef4444;border-radius:4px">
+          <b style="color:#991b1b">⚠ Structural patterns (keep re-emerging):</b><br>
+          ${reEm.map(r=>`${esc(r.agent)}→${esc(r.target||'?')} (${r.signal}) — ${r.count}x re-emerged`).join('<br>')}
+        </div>` : ''}
+        ${(a.confirmed||0)>0 && (c.INTEGRATED||0)===0 ? `<div style="margin-top:6px;padding:8px 12px;background:#fefce8;border-left:3px solid var(--amber);border-radius:4px">
+          <b>INTEGRATED: 0</b> — by design. Nothing earned it yet. Requires: deliverable written to agent memory + signal doesn't re-fire across 2 clean Lucy pulses.
+        </div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  if (!active.length && !resolved.length){
+    html += `<div class="empty">No emergence incidents tracked yet.<br><br>Run <code>node ~/nanoclaw/emergence-board.js ingest</code> to pull from emergence-captures.json + surprises.json.<br>Or use <code>/emergence ingest</code> on Telegram.</div>`;
+    document.getElementById('panel').innerHTML = html;
+    return;
+  }
+
+  // Confirmed first — the real stuff
+  const confirmed = active.filter(i=>i.status==='CONFIRMED');
+  if (confirmed.length){
+    html += section('Confirmed — Real Emergence ('+confirmed.length+')', '#16a34a', '#f0fdf4',
+      `<div class="grid">${confirmed.map(i=>emergenceCard(i)).join('')}</div>`);
+  }
+
+  // Then watching
+  const watching = active.filter(i=>i.status==='WATCHING');
+  if (watching.length){
+    // Group by agent for readability — show first 30
+    html += section('Watching ('+watching.length+', showing latest 30)', '#d97706', '#fffbeb',
+      `<div class="grid">${watching.slice(-30).reverse().map(i=>emergenceCard(i)).join('')}</div>`);
+  }
+
+  // Detected
+  const detected = active.filter(i=>i.status==='DETECTED');
+  if (detected.length){
+    html += section('Detected — New ('+detected.length+')', '#2563eb', '#eff6ff',
+      `<div class="grid">${detected.map(i=>emergenceCard(i)).join('')}</div>`);
+  }
+
+  // Resolved (last 10)
+  if (resolved.length){
+    html += section('Resolved (last 10 of '+resolved.length+')','#9aa0a6','#f3f3f3',
+      `<div class="grid">${resolved.slice(-10).reverse().map(i=>emergenceCard(i)).join('')}</div>`);
+  }
+
+  document.getElementById('panel').innerHTML = html;
+}
+function emergenceCard(i){
+  const m = EM_STATUS_META[i.status]||EM_STATUS_META.DETECTED;
+  const followCount = (i.followUps||[]).length;
+  const stale = i.status==='WATCHING' && i.lastCheckedAt && (Date.now()-new Date(i.lastCheckedAt).getTime())>3*86400000;
+  return `<div class="card" style="--st-c:${m.c}">
+    <div class="card-top"><div><div class="card-name">${esc(i.agent||'?')}${i.target?' → '+esc(i.target):''}</div>
+      <div class="card-plan">${esc(i.signal||'')} · ${ago(i.detectedAt)}${stale?' · <b style="color:var(--red)">STALE</b>':''}</div></div>
+      <span class="badge" style="--st-t:${m.t};color:${m.c}">${m.l.split(' ')[0]}</span></div>
+    <div class="detail" style="line-height:1.5">${esc(i.summary||'').slice(0,300)}</div>
+    <div class="detail" style="color:var(--amber);border-left:3px solid var(--amber);padding-left:8px;font-size:12.5px">
+      <b>Watch for:</b> ${esc(i.watchFor||'—')}</div>
+    ${followCount?`<div class="detail" style="font-size:12px;color:var(--ink-faint)">${followCount} follow-up${followCount>1?'s':''} · last: ${ago((i.followUps[followCount-1]||{}).ts)}</div>`:''}
+    <div class="chips" style="margin-top:6px">
+      ${i.status==='DETECTED'?`<button class="chip" onclick="emAdvance('${esc(i.id)}','WATCHING')" style="cursor:pointer;border:1px solid var(--amber);color:var(--amber)">👁 Watch</button>`:''}
+      ${i.status==='WATCHING'?`<button class="chip" onclick="emAdvance('${esc(i.id)}','CONFIRMED')" style="cursor:pointer;border:1px solid var(--green);color:var(--green)">✅ Confirm</button>`:''}
+      ${i.status==='CONFIRMED'?`<button class="chip" onclick="emAdvance('${esc(i.id)}','INTEGRATED')" style="cursor:pointer;border:1px solid #0d9488;color:#0d9488">🏗 Integrate</button>`:''}
+      ${['DETECTED','WATCHING','CONFIRMED'].includes(i.status)?`<button class="chip" onclick="emAdvance('${esc(i.id)}','DISMISSED')" style="cursor:pointer;border:1px solid var(--grey);color:var(--grey)">⏭ Dismiss</button>`:''}
+    </div>
+  </div>`;
+}
+async function emAdvance(id,status){
+  const note = status==='DISMISSED' ? prompt('Reason for dismissing (optional):') : (status==='CONFIRMED'?prompt('Confirmation note (optional):'):'');
+  try {
+    await fetch('/api/emergence/advance',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status,note:note||undefined})});
+    STATE.emergence=null; await route();
+  } catch(e){ alert('Failed: '+e.message); }
 }
 
 // ── boot ─────────────────────────────────────────────────────────────────────

@@ -81,6 +81,7 @@ Analyze this Claude Code terminal session transcript and extract:
 3. DISCOVERIES: What was learned or figured out? (debugging insights, failed approaches, working solutions)
 4. CONVERSATIONS: Any valuable ideas, methods, or philosophical insights discussed?
 5. STATUS: What's the current state at end of session?
+6. METHODOLOGY: Did Paul name a new method, pattern, or reusable technique? Did he articulate how he thinks, diagnoses, or builds? Look for: named patterns (e.g. "Mandate Without Mechanism"), cognitive moves (e.g. "the 4-to-8 question"), design principles (e.g. "event-driven over scheduled"), coaching techniques, or any moment where Paul described what he already does in a way that makes it portable. These are the highest-value extractions — they compound across the entire system. If none found, write "None detected."
 
 Be specific — include file paths, command names, what worked and what didn't.
 Skip routine file reads and searches — focus on outcomes.

@@ -1,0 +1,83 @@
+# REVIEW PROMPT: Coaching Engine Architecture Review
+
+Review this coaching engine's architecture. It's an INVERTED learning system:
+Paul coaches -> interventions logged -> patterns extracted -> rules proposed with evidence + confidence -> Paul approves -> rules version-controlled -> confidence determines autonomy (90%+ auto, 70-89% recommend, 50-69% ask, <50% silent).
+
+This is NOT a decision tree. It's "Git for coaching philosophy."
+
+Ignore code style, syntax, naming, formatting, performance micro-optimizations and JavaScript idioms unless they reveal an architectural flaw. Treat this as a system review, not a code review.
+
+Stress test these specific areas:
+
+1. CONFIDENCE MODEL
+   - Under what assumptions is +0.03 / -0.05 mathematically valid, and under what conditions does it become unstable?
+   - How many successes to climb from 0.60 (hypothesis) to 0.90 (auto)?
+   - What happens with 500+ rules? Does matching degrade?
+   - Can a rule oscillate between bands forever?
+
+2. PATTERN EXTRACTION
+   - The clustering is tag-based. Is that sufficient or does it miss cross-tag patterns?
+   - What happens when two tags overlap heavily but produce different rules?
+   - At what scale does the hermes3 synthesis prompt break down?
+
+3. GAMING VECTORS
+   - How could a bad actor (or a well-meaning but wrong system) game the confidence scores?
+   - What prevents rules from being promoted through volume without quality?
+   - Can an override cascade accidentally kill a good rule?
+
+4. VERSION CONTROL
+   - Is the changelog-snapshot approach sufficient for full version reconstruction?
+   - What happens when a rule is modified 20 times?
+
+5. VAULT SEEDS
+   - 27 hypotheses loaded at 0.60. Is that the right starting confidence?
+   - Do they compete with evidence-born rules or complement them?
+   - What if a vault seed gets approved but the underlying vault file changes?
+
+6. DECISION RECORDS
+   - Is the audit trail complete enough for franchise transfer?
+   - What's missing that a second coach at a second location would need?
+
+7. EVIDENCE QUALITY
+   - Should all successful interventions contribute equally?
+   - A beginner and an elite competitor — same intervention — should they carry equal weight?
+   - How should evidence quality be weighted? Consider: student level, coach certainty, repeatability, novelty, context similarity.
+   - Otherwise confidence becomes quantity rather than evidence.
+
+8. PHILOSOPHY DRIFT
+   - Assume the engine runs for three years. How could Paul's philosophy unintentionally drift because of: survivorship bias, confirmation bias, student population changes, changing demographics, local maxima, feedback loops?
+   - Can the engine slowly optimize away principles Paul never intended to lose?
+   - How would you detect philosophical drift separately from coaching improvement?
+
+9. RULE ECOLOGY
+   - Assume 500 active rules. How do rules compete? Reinforce? Suppress?
+   - Can two individually good rules create bad behaviour when both fire?
+   - Should the engine detect: redundant rules, contradictory rules, shadowed rules, dead rules, dominant rules?
+
+10. PROPOSAL LIFECYCLE
+    - Treat every proposed coaching rule as a Proposal. Does it preserve: provenance, supporting evidence, confidence history, approvals, overrides, retirement?
+    - Can every rule be reconstructed from its proposal history alone?
+    - If not, what is missing?
+
+11. UNKNOWN UNKNOWNS
+    - Assume this system has been running successfully for five years.
+    - What is the most likely architectural assumption that turns out to be false?
+    - Not implementation bugs. Foundational assumptions.
+
+12. COACH TRANSFER TEST
+    - Assume Paul retires. Coach Sarah takes over.
+    - She inherits every rule, every confidence score, every intervention, every audit trail.
+    - Can she determine: why each rule exists? Whether she still agrees? Which rules are culturally specific? Which are universally valid? Which should continue learning? Which should be frozen?
+    - If not, what information is missing?
+
+13. THE MISSING PIECE
+    - What's the single biggest architectural flaw you see?
+    - What breaks first at scale (50 students, 500 rules, 2 years of data)?
+
+Give me a structural assessment, not praise. This engine will run a real boxing gym's coaching intelligence.
+
+---
+
+
+---
+I will paste the source document/code in my next message. Wait for it before reviewing.

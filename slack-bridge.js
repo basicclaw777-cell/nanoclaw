@@ -161,6 +161,7 @@ export async function startSlack(commandRouter) {
       }
     });
 
+    setupActions();
     await slackApp.start();
     console.log('[slack-bridge] Slack connected (Socket Mode)');
     return slackApp;
@@ -172,3 +173,57 @@ export async function startSlack(commandRouter) {
 
 export function getSlackApp() { return slackApp; }
 export function getSlackBotUserId() { return botUserId; }
+
+export async function sendSlackBlocks(channel, blocks, text = '', opts = {}) {
+  if (!slackApp) return null;
+  try {
+    const result = await slackApp.client.chat.postMessage({
+      channel,
+      text: text || ' ',
+      blocks,
+      ...(opts.thread_ts ? { thread_ts: opts.thread_ts } : {}),
+    });
+    return result;
+  } catch (err) {
+    console.error(`[slack-bridge] Block send failed: ${err.message}`);
+    return null;
+  }
+}
+
+export async function updateSlackMessage(channel, ts, blocks, text = '') {
+  if (!slackApp) return;
+  try {
+    await slackApp.client.chat.update({
+      channel,
+      ts,
+      text: text || ' ',
+      blocks,
+    });
+  } catch (err) {
+    console.error(`[slack-bridge] Message update failed: ${err.message}`);
+  }
+}
+
+const actionHandlers = new Map();
+
+export function registerSlackAction(actionId, handler) {
+  actionHandlers.set(actionId, handler);
+}
+
+function setupActions() {
+  if (!slackApp) return;
+  slackApp.action(/^friction_/, async ({ action, body, ack, respond }) => {
+    await ack();
+    const handler = actionHandlers.get('friction');
+    if (handler) {
+      await handler(action, body, respond);
+    }
+  });
+  slackApp.action(/^dot_/, async ({ action, body, ack }) => {
+    await ack();
+    const handler = actionHandlers.get('dot');
+    if (handler) {
+      await handler(action, body);
+    }
+  });
+}

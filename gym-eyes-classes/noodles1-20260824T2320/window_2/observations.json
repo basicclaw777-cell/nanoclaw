@@ -1,0 +1,52 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Minimal movement, maintaining a static stance with small adjustments.",
+        "stance_width": "normal",
+        "guard": "Hands are held up in a high guard.",
+        "upper_body": "Body is angled facing the right side of the frame, mostly stationary.",
+        "distance": "Away from the partially visible figure on the left edge.",
+        "notable": "Standing in position, appears to be waiting or observing."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Continues to hold position with minor weight shifts and slight bouncing.",
+        "stance_width": "normal",
+        "guard": "Guard remains up.",
+        "upper_body": "Maintains a consistent stance and orientation.",
+        "distance": "Stays away from the left edge.",
+        "notable": "Sustained guard and stance."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Steps to the left, moving across the floor.",
+        "stance_width": "changing",
+        "guard": "Hands remain up while moving.",
+        "upper_body": "Turns slightly as they move towards the left side of the frame.",
+        "distance": "Closing the distance towards the figure on the left.",
+        "notable": "Begins to move and close distance."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F11-F15",
+      "type": "distance_close",
+      "detail": "Steps to the left, moving across the floor towards the partially visible partner on the left edge."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

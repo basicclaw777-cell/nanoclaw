@@ -1,112 +1,130 @@
 {
-  "timestamp": "2026-05-13T15:51:08.519937",
+  "timestamp": "2026-10-17T00:00:35.828148",
   "prices": {
     "BTC": {
-      "price": 80933,
-      "change_24h": 0.03887093248558193,
-      "volume_24h": 40587566488.44669,
-      "market_cap": 1620986616342.6973
+      "price": 81355,
+      "change_24h": -1.2586241657746076,
+      "volume_24h": 26977676733.354427,
+      "market_cap": 1635255811303.5374
     },
     "ETH": {
-      "price": 2299.52,
-      "change_24h": 0.07739942129416436,
-      "volume_24h": 14511765243.956078,
-      "market_cap": 277567192667.5795
+      "price": 2431.78,
+      "change_24h": -0.3037661187499729,
+      "volume_24h": 12083327949.034443,
+      "market_cap": 296992230176.95294
     },
     "SOL": {
-      "price": 95.14,
-      "change_24h": -1.023675920238695,
-      "volume_24h": 3119672131.178897,
-      "market_cap": 54989623001.708244
+      "price": 103.87,
+      "change_24h": -1.9610217451175467,
+      "volume_24h": 2662976099.530488,
+      "market_cap": 61214958775.83677
     },
     "AVAX": {
-      "price": 9.98,
-      "change_24h": -0.25561094063908346,
-      "volume_24h": 215332467.56272054,
-      "market_cap": 4310732651.704464
+      "price": 10.09,
+      "change_24h": 0.9454014196462304,
+      "volume_24h": 337848151.1414101,
+      "market_cap": 4473240446.550993
     },
     "LINK": {
-      "price": 10.57,
-      "change_24h": 1.3796956522742005,
-      "volume_24h": 391961657.4307366,
-      "market_cap": 7682974734.016778
+      "price": 12.33,
+      "change_24h": -1.775831829288037,
+      "volume_24h": 252327421.90437698,
+      "market_cap": 9456792406.919245
     },
     "DOT": {
-      "price": 1.39,
-      "change_24h": 2.4810399881541256,
-      "volume_24h": 157462555.66739753,
-      "market_cap": 2335445583.8647346
-    },
-    "MATIC": {
-      "price": null,
-      "change_24h": null,
-      "volume_24h": null,
-      "market_cap": null
+      "price": 1.17,
+      "change_24h": 5.0953511116569254,
+      "volume_24h": 206630527.59813583,
+      "market_cap": 1997804505.607497
     },
     "ARB": {
-      "price": 0.140006,
-      "change_24h": 0.9622042851148572,
-      "volume_24h": 69499045.45113055,
-      "market_cap": 861220781.8315966
+      "price": 0.195131,
+      "change_24h": 2.864190877887055,
+      "volume_24h": 210039502.80745867,
+      "market_cap": 1324030187.512083
+    },
+    "DOGE": {
+      "price": 0.08044,
+      "change_24h": -1.2400589968683502,
+      "volume_24h": 595714640.1343576,
+      "market_cap": 12575888910.937485
+    },
+    "ADA": {
+      "price": 0.224674,
+      "change_24h": -2.574073403895602,
+      "volume_24h": 290899988.91905856,
+      "market_cap": 8437093461.627768
+    },
+    "ATOM": {
+      "price": 1.74,
+      "change_24h": 0.9088690426368797,
+      "volume_24h": 49585718.53623654,
+      "market_cap": 934407177.3640476
+    },
+    "UNI": {
+      "price": 7.24,
+      "change_24h": -3.967252479983501,
+      "volume_24h": 455352752.2897374,
+      "market_cap": 4524828317.892639
     }
   },
   "fear_greed": {
-    "value": 42,
-    "label": "Fear",
-    "week_avg": 44.1,
+    "value": 63,
+    "label": "Greed",
+    "week_avg": 61.3,
     "trend": "falling"
   },
   "reddit_sentiment": null,
   "news": [
     {
-      "source": "coindesk",
-      "title": "CoinW Amplifies Global Leadership and Community Engagement with Strong Presence at Consensus Miami",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "Cointelegraph Bitcoin &amp; Ethereum Blockchain News",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "CoinW Expands Global Presence at Blockchain Forum 2026, Strengthening User Engagement",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "One platform for every move in finance: Bybit CEO Ben Zhou to deliver global keynote on October 13",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "Reppo Foundation Secures $20M Capital Commitment to Solve Training Data Bottleneck Using Prediction Markets",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "Stablecoin industry comes of age: XREX Group hosts Stablecoin Summit 2026 in Singapore with Curve and Bridge",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "Bitcoin back above $81,000 after hot CPI print, BNB, DOGE lead majors gains",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "Binance Wallet users can now trade crypto perpetuals on EVEDEX at up to 200x leverage",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "Bitcoin back above $81,000 after hot CPI print, BNB, DOGE lead majors gains",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "XDC now listed on Robinhood, expanding access to millions of U.S. users",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "Nevada regulators push back after prediction market conference blames them for move",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "State of TRON Q3 2026 report highlights $2.21 trillion in stablecoin settlement amid network activity growth",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "XRP tops bitcoin, ether volumes on major South Korean exchanges",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "Gate &amp; Visa partner to launch crypto card across 40+ regions",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "The Ethereum Foundation unveils new &#x27;Clear Signing&#x27; standard to stop users from approving malicious crypto transactions",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "RAFA to launch agentic fund management on Base for transparent on-chain funds",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "More Featured Stories",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "Polygon Open Money Stack expands to TRON, extending network access to regulated U.S. payment rails",
+      "url": "https://cointelegraph.com/"
     },
     {
-      "source": "coindesk",
-      "title": "TP ICAP Fuels the Emergence of a Wholesale Crypto Market",
-      "url": "https://www.coindesk.com/"
+      "source": "cointelegraph",
+      "title": "Daily byte-sized crypto news for those on the move",
+      "url": "https://cointelegraph.com/"
     }
   ],
   "signals": [
@@ -114,9 +132,227 @@
       "source": "technical",
       "asset": "DOT",
       "direction": "long",
-      "strength": 0.4962079976308251,
-      "reasoning": "DOT is top performer (+2.5%) \u2014 relative strength leader",
+      "strength": 0.6369188889571157,
+      "reasoning": "DOT up 5.1% in 24h \u2014 momentum continuation",
+      "type": "momentum"
+    },
+    {
+      "source": "technical",
+      "asset": "UNI",
+      "direction": "long",
+      "strength": 0.39672524799835013,
+      "reasoning": "UNI down -4.0% in 24h \u2014 potential oversold bounce",
+      "type": "mean_reversion"
+    },
+    {
+      "source": "technical",
+      "asset": "DOT",
+      "direction": "long",
+      "strength": 0.9,
+      "reasoning": "DOT is top performer (+5.1%) \u2014 relative strength leader",
       "type": "relative_strength"
+    },
+    {
+      "source": "deep_data",
+      "asset": "BTC",
+      "direction": "short",
+      "strength": 0.404,
+      "reasoning": "BTC put/call ratio 0.60 \u2014 extreme call dominance, complacency. Contrarian bearish (no one hedging = top signal)",
+      "type": "options_flow"
+    },
+    {
+      "source": "deep_data",
+      "asset": "BTC",
+      "direction": "neutral",
+      "strength": 0.4,
+      "reasoning": "BTC max options OI at BTC-30OCT26-95000-C (25571 contracts) \u2014 price gravitates here at expiry",
+      "type": "options_magnet"
+    },
+    {
+      "source": "deep_data",
+      "asset": "ETH",
+      "direction": "short",
+      "strength": 0.484,
+      "reasoning": "ETH put/call ratio 0.52 \u2014 extreme call dominance, complacency. Contrarian bearish (no one hedging = top signal)",
+      "type": "options_flow"
+    },
+    {
+      "source": "deep_data",
+      "asset": "BTC",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "BTC active development \u2014 commit today on bitcoin/bitcoin",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "ETH",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "ETH active development \u2014 commit today on ethereum/go-ethereum",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "SOL",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "SOL active development \u2014 commit today on anza-xyz/agave",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "DOT",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "DOT active development \u2014 commit today on paritytech/polkadot-sdk",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "ATOM",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "ATOM active development \u2014 commit today on cosmos/cosmos-sdk",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "AVAX",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "AVAX active development \u2014 commit today on ava-labs/avalanchego",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "ADA",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "ADA active development \u2014 commit today on IntersectMBO/cardano-node",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "ARB",
+      "direction": "short",
+      "strength": 0.5333333333333333,
+      "reasoning": "ARB last GitHub commit 48d ago (OffchainLabs/nitro) \u2014 development stalling, fundamental weakness",
+      "type": "dev_activity"
+    },
+    {
+      "source": "deep_data",
+      "asset": "LINK",
+      "direction": "long",
+      "strength": 0.3,
+      "reasoning": "LINK active development \u2014 commit today on smartcontractkit/chainlink",
+      "type": "dev_activity"
     }
-  ]
+  ],
+  "deep_data": {
+    "liquidation_levels": {
+      "BTC": {
+        "perp_open_interest": 837767450,
+        "perp_mark_price": 81283.46,
+        "perp_funding": 3.963e-05
+      }
+    },
+    "exchange_reserves": {
+      "BTC": {
+        "total_supply": 20098843.0
+      }
+    },
+    "stablecoin_flows": {
+      "USDT": {
+        "circulating": 183473410414.59225,
+        "name": "Tether",
+        "chain_total": 183473410414.59216
+      },
+      "USDC": {
+        "circulating": 72647745002.12549,
+        "name": "USD Coin",
+        "chain_total": 72647745002.12543
+      },
+      "DAI": {
+        "circulating": 4725699518.800088,
+        "name": "Dai",
+        "chain_total": 4725699518.80009
+      },
+      "BUSD": {
+        "circulating": 7653000.58846709,
+        "name": "Bera USD",
+        "chain_total": 7653000.58846709
+      }
+    },
+    "options_flow": {
+      "BTC": {
+        "put_call_ratio": 0.596,
+        "calls_oi": 244146.70000000004,
+        "puts_oi": 145528.50000000006,
+        "calls_volume": 9968.6,
+        "puts_volume": 12767.80000000001,
+        "total_oi": 389675.20000000007,
+        "max_oi_strike": "BTC-30OCT26-95000-C",
+        "max_oi": 25570.8
+      },
+      "ETH": {
+        "put_call_ratio": 0.516,
+        "calls_oi": 988196.0,
+        "puts_oi": 510366.0,
+        "total_oi": 1498562.0
+      }
+    },
+    "github_activity": {
+      "BTC": {
+        "repo": "bitcoin/bitcoin",
+        "last_commit": "2026-10-16T14:12:11Z",
+        "days_since_commit": 0
+      },
+      "ETH": {
+        "repo": "ethereum/go-ethereum",
+        "last_commit": "2026-10-16T13:21:01Z",
+        "days_since_commit": 0
+      },
+      "SOL": {
+        "repo": "anza-xyz/agave",
+        "last_commit": "2026-10-16T14:19:15Z",
+        "days_since_commit": 0
+      },
+      "DOT": {
+        "repo": "paritytech/polkadot-sdk",
+        "last_commit": "2026-10-15T21:22:28Z",
+        "days_since_commit": 0
+      },
+      "ATOM": {
+        "repo": "cosmos/cosmos-sdk",
+        "last_commit": "2026-10-15T14:30:41Z",
+        "days_since_commit": 1
+      },
+      "AVAX": {
+        "repo": "ava-labs/avalanchego",
+        "last_commit": "2026-10-15T21:04:35Z",
+        "days_since_commit": 0
+      },
+      "ADA": {
+        "repo": "IntersectMBO/cardano-node",
+        "last_commit": "2026-10-16T09:21:43Z",
+        "days_since_commit": 0
+      },
+      "ARB": {
+        "repo": "OffchainLabs/nitro",
+        "last_commit": "2026-08-28T19:36:32Z",
+        "days_since_commit": 48
+      },
+      "UNI": {
+        "repo": "Uniswap/v3-core",
+        "last_commit": "2026-10-14T13:56:17Z",
+        "days_since_commit": 2
+      },
+      "LINK": {
+        "repo": "smartcontractkit/chainlink",
+        "last_commit": "2026-10-15T21:14:55Z",
+        "days_since_commit": 0
+      }
+    }
+  }
 }

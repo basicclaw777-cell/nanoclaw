@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vortex Lab — Parametric Horn Generator</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #09090f;
+    color: #e0e0e0;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  #header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid #1a1a2e;
+    background: #0d0d15;
+    z-index: 10;
+    position: relative;
+  }
+  #header h1 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7c3aed;
+  }
+  #header .subtitle {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 1px;
+  }
+
+  #main {
+    display: flex;
+    height: calc(100vh - 48px);
+  }
+
+  #controls {
+    width: 280px;
+    min-width: 280px;
+    padding: 16px;
+    border-right: 1px solid #1a1a2e;
+    overflow-y: auto;
+    background: #0b0b13;
+  }
+
+  .control-group {
+    margin-bottom: 16px;
+  }
+  .control-group label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 6px;
+  }
+  .control-group label .val {
+    color: #7c3aed;
+    font-weight: 500;
+  }
+  .control-group input[type="range"] {
+    width: 100%;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #1a1a2e;
+    border-radius: 2px;
+    outline: none;
+  }
+  .control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #7c3aed;
+    cursor: pointer;
+    border: 2px solid #09090f;
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #444;
+    margin: 20px 0 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #1a1a2e;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #7c3aed;
+    background: transparent;
+    color: #7c3aed;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 8px;
+    transition: background 0.15s ease-out, color 0.15s ease-out;
+  }
+  .btn:hover {
+    background: #7c3aed;
+    color: #fff;
+  }
+  .btn-primary {
+    background: #7c3aed;
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #6d28d9;
+  }
+
+  #viewport {
+    flex: 1;
+    position: relative;
+  }
+  #viewport canvas {
+    display: block;
+  }
+
+  #stats {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 1px;
+  }
+
+  .preset-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .preset-btn {
+    padding: 4px 8px;
+    border: 1px solid #1a1a2e;
+    background: transparent;
+    color: #777;
+    font-family: inherit;
+    font-size: 9px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-out, color 0.15s ease-out;
+  }
+  .preset-btn:hover {
+    border-color: #7c3aed;
+    color: #7c3aed;
+  }
+
+  #controls::-webkit-scrollbar { width: 4px; }
+  #controls::-webkit-scrollbar-track { background: transparent; }
+  #controls::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 2px; }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .toggle-row span {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+  }
+  .toggle {
+    width: 32px;
+    height: 18px;
+    background: #1a1a2e;
+    border-radius: 9px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s ease-out;
+  }
+  .toggle.on { background: #7c3aed; }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    transition: transform 0.15s ease-out;
+  }
+  .toggle.on::after { transform: translateX(14px); }
+</style>
+</head>
+<body>
+<div id="header">
+  <div>
+    <h1>Vortex Lab</h1>
+    <div class="subtitle">Parametric Horn Generator — Schauberger Research</div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="controls">
+    <div class="section-label">Geometry</div>
+
+    <div class="control-group">
+      <label>Height <span class="val" id="v-height">120</span></label>
+      <input type="range" id="height" min="40" max="300" value="120" step="1">
+    </div>
+    <div class="control-group">
+      <label>Top Radius <span class="val" id="v-topRadius">40</span></label>
+      <input type="range" id="topRadius" min="5" max="100" value="40" step="1">
+    </div>
+    <div class="control-group">
+      <label>Bottom Radius <span class="val" id="v-bottomRadius">3</span></label>
+      <input type="range" id="bottomRadius" min="1" max="40" value="3" step="0.5">
+    </div>
+    <div class="control-group">
+      <label>Taper Curve <span class="val" id="v-taperCurve">1.8</span></label>
+      <input type="range" id="taperCurve" min="0.3" max="5" value="1.8" step="0.1">
+    </div>
+
+    <div class="section-label">Spiral</div>
+
+    <div class="control-group">
+      <label>Twist (turns) <span class="val" id="v-twist">5.0</span></label>
+      <input type="range" id="twist" min="0.5" max="20" value="5" step="0.5">
+    </div>
+    <div class="control-group">
+      <label>Vein Count <span class="val" id="v-veinCount">7</span></label>
+      <input type="range" id="veinCount" min="1" max="24" value="7" step="1">
+    </div>
+    <div class="control-group">
+      <label>Vein Depth <span class="val" id="v-veinDepth">0.30</span></label>
+      <input type="range" id="veinDepth" min="0" max="1" value="0.30" step="0.01">
+    </div>
+
+    <div class="section-label">Resolution</div>
+
+    <div class="control-group">
+      <label>Radial Segments <span class="val" id="v-radialSeg">64</span></label>
+      <input type="range" id="radialSeg" min="16" max="128" value="64" step="4">
+    </div>
+    <div class="control-group">
+      <label>Height Segments <span class="val" id="v-heightSeg">128</span></label>
+      <input type="range" id="heightSeg" min="32" max="256" value="128" step="4">
+    </div>
+
+    <div class="section-label">Display</div>
+
+    <div class="toggle-row">
+      <span>Wireframe</span>
+      <div class="toggle" id="toggleWireframe" onclick="toggleWire()"></div>
+    </div>
+    <div class="toggle-row">
+      <span>Auto-Rotate</span>
+      <div class="toggle on" id="toggleRotate" onclick="toggleAutoRotate()"></div>
+    </div>
+    <div class="toggle-row">
+      <span>Skeleton (veins only)</span>
+      <div class="toggle" id="toggleSkeleton" onclick="toggleSkeletonMode()"></div>
+    </div>
+
+    <div class="section-label">Presets</div>
+    <div class="preset-row">
+      <button class="preset-btn" onclick="loadPreset('henderson')">Henderson</button>
+      <button class="preset-btn" onclick="loadPreset('schauberger')">Schauberger</button>
+      <button class="preset-btn" onclick="loadPreset('nautilus')">Nautilus</button>
+      <button class="preset-btn" onclick="loadPreset('horn')">Horn</button>
+      <button class="preset-btn" onclick="loadPreset('tornado')">Tornado</button>
+    </div>
+
+    <div class="section-label">Export</div>
+    <button class="btn btn-primary" onclick="exportSTL()">Export STL</button>
+    <button class="btn" onclick="exportJSON()">Export Parameters</button>
+  </div>
+
+  <div id="viewport">
+    <div id="stats"></div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const viewport = document.getElementById('viewport');
+const statsEl = document.getElementById('stats');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x09090f);
+
+const camera = new THREE.PerspectiveCamera(45, viewport.clientWidth / viewport.clientHeight, 0.1, 2000);
+camera.position.set(0, 80, 200);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+viewport.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 1.0;
+controls.target.set(0, 50, 0);
+
+const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
+scene.add(ambientLight);
+
+const keyLight = new THREE.DirectionalLight(0xcccfff, 1.2);
+keyLight.position.set(50, 120, 80);
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0x7c3aed, 0.4);
+fillLight.position.set(-60, 40, -40);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0xf59e0b, 0.3);
+rimLight.position.set(0, -20, -80);
+scene.add(rimLight);
+
+const gridHelper = new THREE.GridHelper(200, 20, 0x1a1a2e, 0x111122);
+scene.add(gridHelper);
+
+let mesh = null;
+let wireMesh = null;
+let skeletonMode = false;
+
+const params = {
+  height: 120, topRadius: 40, bottomRadius: 3, taperCurve: 1.8,
+  twist: 5, veinCount: 7, veinDepth: 0.30,
+  radialSeg: 64, heightSeg: 128
+};
+
+function getParams() {
+  const ids = ['height','topRadius','bottomRadius','taperCurve','twist','veinCount','veinDepth','radialSeg','heightSeg'];
+  ids.forEach(id => {
+    params[id] = parseFloat(document.getElementById(id).value);
+    document.getElementById('v-' + id).textContent = params[id];
+  });
+  return params;
+}
+
+function buildVortexGeometry(p) {
+  const radSeg = Math.round(p.radialSeg);
+  const htSeg = Math.round(p.heightSeg);
+  const verts = [];
+  const indices = [];
+  const normals = [];
+
+  for (let j = 0; j <= htSeg; j++) {
+    const t = j / htSeg;
+    const y = t * p.height;
+    const taperT = Math.pow(1 - t, p.taperCurve);
+    const baseRadius = p.bottomRadius + (p.topRadius - p.bottomRadius) * taperT;
+    const twistAngle = t * p.twist * Math.PI * 2;
+
+    for (let i = 0; i <= radSeg; i++) {
+      const theta = (i / radSeg) * Math.PI * 2;
+      const veinAngle = theta * p.veinCount + twistAngle;
+      const veinMod = 1 - p.veinDepth * 0.5 * (1 + Math.cos(veinAngle));
+      const r = baseRadius * veinMod;
+
+      const x = r * Math.cos(theta);
+      const z = r * Math.sin(theta);
+      verts.push(x, y, z);
+
+      const dx = -Math.sin(theta);
+      const dz = Math.cos(theta);
+      const ny = baseRadius * p.taperCurve * Math.pow(1 - t, p.taperCurve - 1) * (p.topRadius - p.bottomRadius) / p.height;
+      const nx = Math.cos(theta);
+      const nz = Math.sin(theta);
+      const len = Math.sqrt(nx*nx + ny*ny + nz*nz) || 1;
+      normals.push(nx/len, ny/len, nz/len);
+    }
+  }
+
+  for (let j = 0; j < htSeg; j++) {
+    for (let i = 0; i < radSeg; i++) {
+      const a = j * (radSeg + 1) + i;
+      const b = a + radSeg + 1;
+      const c = a + 1;
+      const d = b + 1;
+      indices.push(a, b, c);
+      indices.push(c, b, d);
+    }
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  geo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+  geo.setIndex(indices);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function buildSkeletonGeometry(p) {
+  const htSeg = Math.round(p.heightSeg);
+  const veinLines = [];
+
+  for (let v = 0; v < p.veinCount; v++) {
+    const baseTheta = (v / p.veinCount) * Math.PI * 2;
+    const points = [];
+    for (let j = 0; j <= htSeg; j++) {
+      const t = j / htSeg;
+      const y = t * p.height;
+      const taperT = Math.pow(1 - t, p.taperCurve);
+      const baseRadius = p.bottomRadius + (p.topRadius - p.bottomRadius) * taperT;
+      const twistAngle = t * p.twist * Math.PI * 2;
+      const theta = baseTheta + twistAngle;
+      const x = baseRadius * Math.cos(theta);
+      const z = baseRadius * Math.sin(theta);
+      points.push(new THREE.Vector3(x, y, z));
+    }
+    veinLines.push(points);
+  }
+
+  const geo = new THREE.BufferGeometry();
+  const positions = [];
+  for (const line of veinLines) {
+    for (let i = 0; i < line.length - 1; i++) {
+      positions.push(line[i].x, line[i].y, line[i].z);
+      positions.push(line[i+1].x, line[i+1].y, line[i+1].z);
+    }
+  }
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  return geo;
+}
+
+const material = new THREE.MeshPhysicalMaterial({
+  color: 0x4488cc,
+  metalness: 0.1,
+  roughness: 0.3,
+  transmission: 0.6,
+  thickness: 2.0,
+  ior: 1.33,
+  side: THREE.DoubleSide,
+  transparent: true,
+  opacity: 0.85,
+});
+
+const wireMaterial = new THREE.MeshBasicMaterial({
+  color: 0x7c3aed,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.3,
+});
+
+const skeletonMaterial = new THREE.LineBasicMaterial({
+  color: 0x7c3aed,
+  linewidth: 1,
+});
+
+function rebuildMesh() {
+  const p = getParams();
+
+  if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); }
+  if (wireMesh) { scene.remove(wireMesh); if (wireMesh.geometry) wireMesh.geometry.dispose(); }
+
+  if (skeletonMode) {
+    const geo = buildSkeletonGeometry(p);
+    mesh = new THREE.LineSegments(geo, skeletonMaterial);
+    scene.add(mesh);
+    wireMesh = null;
+  } else {
+    const geo = buildVortexGeometry(p);
+    mesh = new THREE.Mesh(geo, material);
+    scene.add(mesh);
+
+    const wireGeo = buildVortexGeometry(p);
+    wireMesh = new THREE.Mesh(wireGeo, wireMaterial);
+    wireMesh.visible = document.getElementById('toggleWireframe').classList.contains('on');
+    scene.add(wireMesh);
+  }
+
+  const triCount = skeletonMode ? 0 : Math.round(p.radialSeg) * Math.round(p.heightSeg) * 2;
+  const vertCount = skeletonMode
+    ? p.veinCount * (Math.round(p.heightSeg) + 1)
+    : (Math.round(p.radialSeg) + 1) * (Math.round(p.heightSeg) + 1);
+  statsEl.textContent = `${vertCount.toLocaleString()} vertices · ${triCount.toLocaleString()} triangles`;
+}
+
+window.toggleWire = function() {
+  const el = document.getElementById('toggleWireframe');
+  el.classList.toggle('on');
+  if (wireMesh) wireMesh.visible = el.classList.contains('on');
+};
+
+window.toggleAutoRotate = function() {
+  const el = document.getElementById('toggleRotate');
+  el.classList.toggle('on');
+  controls.autoRotate = el.classList.contains('on');
+};
+
+window.toggleSkeletonMode = function() {
+  const el = document.getElementById('toggleSkeleton');
+  el.classList.toggle('on');
+  skeletonMode = el.classList.contains('on');
+  rebuildMesh();
+};
+
+const PRESETS = {
+  henderson: { height: 160, topRadius: 50, bottomRadius: 2, taperCurve: 2.2, twist: 7, veinCount: 9, veinDepth: 0.25, radialSeg: 64, heightSeg: 128 },
+  schauberger: { height: 200, topRadius: 35, bottomRadius: 5, taperCurve: 1.5, twist: 12, veinCount: 5, veinDepth: 0.40, radialSeg: 64, heightSeg: 128 },
+  nautilus: { height: 100, topRadius: 60, bottomRadius: 8, taperCurve: 3.0, twist: 3, veinCount: 1, veinDepth: 0.15, radialSeg: 64, heightSeg: 128 },
+  horn: { height: 250, topRadius: 30, bottomRadius: 1, taperCurve: 1.2, twist: 4, veinCount: 12, veinDepth: 0.35, radialSeg: 64, heightSeg: 128 },
+  tornado: { height: 180, topRadius: 70, bottomRadius: 4, taperCurve: 2.8, twist: 15, veinCount: 3, veinDepth: 0.10, radialSeg: 64, heightSeg: 128 },
+};
+
+window.loadPreset = function(name) {
+  const p = PRESETS[name];
+  if (!p) return;
+  Object.keys(p).forEach(k => {
+    const el = document.getElementById(k);
+    if (el) el.value = p[k];
+  });
+  rebuildMesh();
+};
+
+function geometryToSTLBinary(geometry) {
+  const pos = geometry.getAttribute('position');
+  const idx = geometry.getIndex();
+  const triCount = idx ? idx.count / 3 : pos.count / 3;
+  const bufLen = 80 + 4 + triCount * 50;
+  const buf = new ArrayBuffer(bufLen);
+  const view = new DataView(buf);
+  const header = 'Vortex Lab — STL Export';
+  for (let i = 0; i < 80; i++) view.setUint8(i, i < header.length ? header.charCodeAt(i) : 0);
+  view.setUint32(80, triCount, true);
+
+  let offset = 84;
+  const vA = new THREE.Vector3(), vB = new THREE.Vector3(), vC = new THREE.Vector3();
+  const cb = new THREE.Vector3(), ab = new THREE.Vector3();
+
+  for (let i = 0; i < triCount; i++) {
+    let a, b, c;
+    if (idx) {
+      a = idx.getX(i * 3);
+      b = idx.getX(i * 3 + 1);
+      c = idx.getX(i * 3 + 2);
+    } else {
+      a = i * 3; b = i * 3 + 1; c = i * 3 + 2;
+    }
+    vA.fromBufferAttribute(pos, a);
+    vB.fromBufferAttribute(pos, b);
+    vC.fromBufferAttribute(pos, c);
+    cb.subVectors(vC, vB);
+    ab.subVectors(vA, vB);
+    cb.cross(ab).normalize();
+
+    view.setFloat32(offset, cb.x, true); offset += 4;
+    view.setFloat32(offset, cb.y, true); offset += 4;
+    view.setFloat32(offset, cb.z, true); offset += 4;
+    view.setFloat32(offset, vA.x, true); offset += 4;
+    view.setFloat32(offset, vA.y, true); offset += 4;
+    view.setFloat32(offset, vA.z, true); offset += 4;
+    view.setFloat32(offset, vB.x, true); offset += 4;
+    view.setFloat32(offset, vB.y, true); offset += 4;
+    view.setFloat32(offset, vB.z, true); offset += 4;
+    view.setFloat32(offset, vC.x, true); offset += 4;
+    view.setFloat32(offset, vC.y, true); offset += 4;
+    view.setFloat32(offset, vC.z, true); offset += 4;
+    view.setUint16(offset, 0, true); offset += 2;
+  }
+  return buf;
+}
+
+window.exportSTL = function() {
+  if (!mesh || !mesh.geometry || skeletonMode) {
+    alert('Switch off skeleton mode to export solid STL.');
+    return;
+  }
+  const buf = geometryToSTLBinary(mesh.geometry);
+  const blob = new Blob([buf], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'vortex-horn.stl';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+window.exportJSON = function() {
+  const p = getParams();
+  const blob = new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'vortex-params.json';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+document.querySelectorAll('#controls input[type="range"]').forEach(input => {
+  input.addEventListener('input', rebuildMesh);
+});
+
+rebuildMesh();
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = viewport.clientWidth / viewport.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+});
+</script>
+</body>
+</html>

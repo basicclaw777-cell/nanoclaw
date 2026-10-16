@@ -1,0 +1,55 @@
+{
+  "domain": "alzheimers",
+  "shelf_items": [
+    {
+      "name": "Suzanne de la Monte / Type 3 diabetes hypothesis",
+      "what_it_found": "Alzheimer's involves brain insulin resistance and impaired insulin signaling, not amyloid accumulation. De la Monte showed that intranasal insulin improves cognition in early AD.",
+      "evidence_strength": "Multiple small RCTs (e.g., Craft et al., 2012) showing cognitive improvement with intranasal insulin; replicated in animal models.",
+      "why_buried": "Amyloid hypothesis dominated funding and research; insulin resistance was seen as a separate diabetes issue, not central to AD.",
+      "current_status": "Being rediscovered; intranasal insulin trials ongoing, but still underfunded relative to amyloid."
+    },
+    {
+      "name": "Ruth Itzhaki / Herpes simplex virus (HSV-1) hypothesis",
+      "what_it_found": "HSV-1 DNA found in AD brains; antiviral treatment (e.g., acyclovir) reduces AD risk in infected individuals. Itzhaki showed HSV-1 triggers amyloid deposition as a protective response.",
+      "evidence_strength": "Epidemiological studies (e.g., Tzeng et al., 2018) show antiviral use reduces AD risk by 90%; replicated in cell and animal models.",
+      "why_buried": "Infectious cause was dismissed as fringe; amyloid hypothesis focused on proteinopathy, not pathogens.",
+      "current_status": "Gaining traction; clinical trials of antivirals (e.g., valacyclovir) underway, but still marginalized."
+    },
+    {
+      "name": "Jack de la Torre / Vascular hypothesis",
+      "what_it_found": "AD is primarily a vascular disorder: reduced cerebral blood flow precedes cognitive decline. De la Torre proposed that restoring blood flow (e.g., via exercise, vasodilators) could prevent or reverse AD.",
+      "evidence_strength": "Observational studies show low cerebral blood flow predicts AD; exercise interventions improve cognition in mild cognitive impairment (MCI).",
+      "why_buried": "Amyloid hypothesis ignored vascular contributions; funding went to amyloid-clearing drugs.",
+      "current_status": "Still buried; vascular risk factor management is recommended but not central to AD research."
+    },
+    {
+      "name": "George Perry / Oxidative stress and mitochondrial dysfunction",
+      "what_it_found": "AD brains show massive oxidative damage and mitochondrial dysfunction early in disease, before amyloid plaques appear. Perry argued amyloid is a compensatory response to oxidative stress.",
+      "evidence_strength": "Extensive biochemical evidence; antioxidants (e.g., vitamin E) show modest benefit in some trials (e.g., Sano et al., 1997).",
+      "why_buried": "Amyloid hypothesis overshadowed oxidative stress; antioxidant trials failed due to poor design or dosing.",
+      "current_status": "Still buried; mitochondrial therapies (e.g., MitoQ) being tested but not mainstream."
+    },
+    {
+      "name": "Dale Bredesen / Multi-factorial approach (ReCODE protocol)",
+      "what_it_found": "AD is driven by multiple factors (insulin resistance, inflammation, toxins, infections, nutrient deficiencies). Bredesen's protocol targeting these factors reversed cognitive decline in some patients.",
+      "evidence_strength": "Case series and small trials (e.g., Bredesen et al., 2016) show cognitive improvement; not yet replicated in large RCTs.",
+      "why_buried": "Amyloid hypothesis demanded a single-target drug; multi-factorial approach was seen as unscientific and hard to patent.",
+      "current_status": "Being rediscovered; functional medicine practitioners use it, but mainstream remains skeptical."
+    },
+    {
+      "name": "William H. Frey II / Intranasal insulin and other peptides",
+      "what_it_found": "Intranasal delivery of insulin and other peptides (e.g., GLP-1) improves memory in AD and MCI by bypassing the blood-brain barrier and targeting insulin receptors.",
+      "evidence_strength": "Multiple small RCTs (e.g., Craft et al., 2012; Claxton et al., 2015) show cognitive improvement; replicated in animal models.",
+      "why_buried": "Amyloid hypothesis dominated; intranasal insulin was seen as a diabetes drug, not an AD treatment.",
+      "current_status": "Ongoing trials (e.g., SNIFF trial); still underfunded."
+    },
+    {
+      "name": "Mark Smith / Amyloid as a protective response",
+      "what_it_found": "Amyloid beta is an antimicrobial peptide and antioxidant; it accumulates as a protective response to infection or oxidative stress, not as a primary cause.",
+      "evidence_strength": "Biochemical and cell culture evidence; amyloid beta kills microbes in vitro.",
+      "why_buried": "Directly contradicted the amyloid cascade hypothesis; Smith was marginalized and funding dried up.",
+      "current_status": "Still buried; some researchers now acknowledge amyloid's protective role, but no major shift."
+    }
+  ],
+  "timestamp": "2026-07-13T00:42:31.142Z"
+}

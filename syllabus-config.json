@@ -1,0 +1,213 @@
+{
+  "_source": "Cathedral Fundamentals Syllabus — 20 foundational concepts across Cathedral research domains",
+  "_authority": "Paul decides sequence and content. This is a living config. Paul changes it, code obeys.",
+  "_updated": "2026-06-09",
+  "topics": [
+    {
+      "id": "standing-waves",
+      "title": "Standing Waves",
+      "description": "How stationary wave patterns form and why they appear at every scale from atoms to architecture",
+      "prerequisites": [],
+      "domains": ["frequency", "sacred_geometry", "cosmology"],
+      "vaultKeywords": ["standing wave", "resonant", "node", "antinode", "harmonic"],
+      "difficulty": 1,
+      "status": "not_started"
+    },
+    {
+      "id": "resonance",
+      "title": "Resonance",
+      "description": "Frequency matching, energy transfer, and sympathetic vibration as a universal mechanism",
+      "prerequisites": ["standing-waves"],
+      "domains": ["frequency", "consciousness", "ancient_knowledge"],
+      "vaultKeywords": ["resonance", "sympathetic", "entrainment", "frequency matching", "energy transfer"],
+      "difficulty": 1,
+      "status": "not_started"
+    },
+    {
+      "id": "harmonics",
+      "title": "Harmonics",
+      "description": "Overtone series, frequency ratios, and musical intervals as physical law",
+      "prerequisites": ["standing-waves", "resonance"],
+      "domains": ["frequency", "mathematics", "sacred_geometry"],
+      "vaultKeywords": ["harmonic", "overtone", "octave", "frequency ratio", "interval", "pythagorean"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "golden-ratio",
+      "title": "The Golden Ratio (Phi)",
+      "description": "1.618 and the Fibonacci sequence — appearance across nature, art, architecture, and physics",
+      "prerequisites": [],
+      "domains": ["sacred_geometry", "mathematics", "ancient_knowledge"],
+      "vaultKeywords": ["golden ratio", "phi", "1.618", "fibonacci", "golden mean", "divine proportion"],
+      "difficulty": 1,
+      "status": "not_started"
+    },
+    {
+      "id": "sacred-geometry",
+      "title": "Sacred Geometry Foundations",
+      "description": "Platonic solids, Flower of Life, Vesica Piscis — geometry as the language of structure",
+      "prerequisites": ["golden-ratio"],
+      "domains": ["sacred_geometry", "ancient_knowledge", "mathematics"],
+      "vaultKeywords": ["platonic solid", "flower of life", "vesica piscis", "metatron", "icosahedron", "dodecahedron", "tetrahedron"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "vortex-math",
+      "title": "Vortex Mathematics",
+      "description": "Rodin coil patterns, digital root mathematics, and the significance of 3-6-9",
+      "prerequisites": ["golden-ratio", "sacred-geometry"],
+      "domains": ["vortex_math", "mathematics", "frequency"],
+      "vaultKeywords": ["vortex math", "rodin", "digital root", "3-6-9", "torus", "doubling circuit"],
+      "difficulty": 3,
+      "status": "not_started"
+    },
+    {
+      "id": "cymatics",
+      "title": "Cymatics",
+      "description": "Frequency made visible through Chladni plates, water experiments, and pattern formation",
+      "prerequisites": ["standing-waves"],
+      "domains": ["frequency", "sacred_geometry", "experimental"],
+      "vaultKeywords": ["cymatics", "chladni", "frequency pattern", "sound shape", "jenny", "vibration visible"],
+      "difficulty": 1,
+      "status": "not_started"
+    },
+    {
+      "id": "substrates",
+      "title": "Substrates",
+      "description": "Aetheric field theories and the question of what medium carries wave propagation",
+      "prerequisites": ["standing-waves"],
+      "domains": ["aetheric_field", "cosmology", "suppressed_tech"],
+      "vaultKeywords": ["aether", "ether", "medium", "substrate", "zero point", "field", "michelson-morley"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "toroidal-dynamics",
+      "title": "Toroidal Dynamics",
+      "description": "The torus as universal form — energy flow patterns from atoms to galaxies",
+      "prerequisites": ["standing-waves", "golden-ratio"],
+      "domains": ["vortex_math", "sacred_geometry", "cosmology"],
+      "vaultKeywords": ["torus", "toroidal", "vortex", "donut", "magnetic field", "flow pattern"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "frequency-matter",
+      "title": "Frequency-Matter Interaction",
+      "description": "How frequency affects physical matter — from cymatics to structured water to cellular response",
+      "prerequisites": ["standing-waves", "cymatics"],
+      "domains": ["frequency", "water", "experimental"],
+      "vaultKeywords": ["frequency matter", "vibration effect", "sonoluminescence", "rife", "resonant destruction"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "resonant-cavities",
+      "title": "Resonant Cavities",
+      "description": "Pyramids, cathedrals, and chambers as acoustic and electromagnetic amplifiers",
+      "prerequisites": ["standing-waves", "resonance"],
+      "domains": ["ancient_knowledge", "frequency", "sacred_geometry"],
+      "vaultKeywords": ["resonant cavity", "pyramid", "cathedral acoustic", "chamber", "amplifier", "helmholtz"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "em-spectrum",
+      "title": "Electromagnetic Spectrum",
+      "description": "Beyond visible light — Tesla's contributions and the full range of electromagnetic phenomena",
+      "prerequisites": ["standing-waves"],
+      "domains": ["frequency", "suppressed_tech", "experimental"],
+      "vaultKeywords": ["electromagnetic", "spectrum", "tesla", "hertz", "radio", "microwave", "infrared"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "suppression-pattern",
+      "title": "The Suppression Pattern",
+      "description": "The 5-stage institutional playbook: marginalise, seize, discredit, erase, replace",
+      "prerequisites": [],
+      "domains": ["suppression", "epistemology"],
+      "vaultKeywords": ["suppression", "marginalise", "seize", "discredit", "erase", "playbook", "institutional"],
+      "difficulty": 1,
+      "status": "not_started"
+    },
+    {
+      "id": "convergence-detection",
+      "title": "Convergence Detection",
+      "description": "Cathedral method for finding cross-domain agreement — when independent lines meet",
+      "prerequisites": [],
+      "domains": ["epistemology", "methodology"],
+      "vaultKeywords": ["convergence", "cross-domain", "independent", "corroboration", "rosetta"],
+      "difficulty": 1,
+      "status": "not_started"
+    },
+    {
+      "id": "schumann-resonance",
+      "title": "Schumann Resonance",
+      "description": "Earth's fundamental frequency at 7.83 Hz and its relationship to biological systems",
+      "prerequisites": ["resonance"],
+      "domains": ["frequency", "consciousness", "cosmology"],
+      "vaultKeywords": ["schumann", "7.83", "earth frequency", "brainwave", "alpha", "entrainment"],
+      "difficulty": 2,
+      "status": "not_started"
+    },
+    {
+      "id": "water-information",
+      "title": "Water as Information Carrier",
+      "description": "Pollack's fourth phase, structured water, memory effects, and Schauberger's living water",
+      "prerequisites": ["resonance", "frequency-matter"],
+      "domains": ["water", "frequency", "experimental"],
+      "vaultKeywords": ["pollack", "structured water", "fourth phase", "EZ water", "water memory", "emoto", "schauberger"],
+      "difficulty": 3,
+      "status": "not_started"
+    },
+    {
+      "id": "implosion-explosion",
+      "title": "Implosion vs Explosion",
+      "description": "Schauberger's observation that nature uses implosion — centripetal motion as the preferred path",
+      "prerequisites": ["substrates", "toroidal-dynamics"],
+      "domains": ["vortex_math", "suppressed_tech", "water"],
+      "vaultKeywords": ["implosion", "explosion", "schauberger", "centripetal", "centrifugal", "living water", "vortex"],
+      "difficulty": 3,
+      "status": "not_started"
+    },
+    {
+      "id": "scalar-waves",
+      "title": "Scalar / Longitudinal Waves",
+      "description": "Tesla's claim of non-Hertzian wave propagation — beyond the transverse electromagnetic model",
+      "prerequisites": ["standing-waves", "substrates"],
+      "domains": ["suppressed_tech", "frequency", "aetheric_field"],
+      "vaultKeywords": ["scalar", "longitudinal", "tesla", "non-hertzian", "standing wave", "compression wave"],
+      "difficulty": 3,
+      "status": "not_started"
+    },
+    {
+      "id": "consciousness-frequency",
+      "title": "Consciousness-Frequency Bridge",
+      "description": "Hard evidence for mind-matter interaction — from Princeton PEAR lab to Global Consciousness Project",
+      "prerequisites": ["resonance", "schumann-resonance"],
+      "domains": ["consciousness", "frequency", "experimental"],
+      "vaultKeywords": ["consciousness", "intention", "PEAR", "random number", "global consciousness", "meditation", "coherence"],
+      "difficulty": 3,
+      "status": "not_started"
+    },
+    {
+      "id": "unified-field",
+      "title": "The Unified Field",
+      "description": "Convergence of all substrates — where frequency, geometry, consciousness, and matter meet",
+      "prerequisites": [
+        "standing-waves", "resonance", "harmonics", "golden-ratio", "sacred-geometry",
+        "vortex-math", "cymatics", "substrates", "toroidal-dynamics", "frequency-matter",
+        "resonant-cavities", "em-spectrum", "suppression-pattern", "convergence-detection",
+        "schumann-resonance", "water-information", "implosion-explosion", "scalar-waves",
+        "consciousness-frequency"
+      ],
+      "domains": ["cosmology", "frequency", "consciousness", "sacred_geometry"],
+      "vaultKeywords": ["unified field", "grand unified", "convergence", "all connect", "synthesis", "master theory"],
+      "difficulty": 4,
+      "status": "not_started"
+    }
+  ]
+}

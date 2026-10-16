@@ -1,0 +1,72 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "No distinct footwork. Frame shows empty gym.",
+        "stance_width": "n/a",
+        "guard": "No fighter in center view. Blurry figure exiting right.",
+        "upper_body": "Empty gym with heavy bags. Blurry figure on far right in F4-F5.",
+        "distance": "No fighters in foreground. Figure at far right edge.",
+        "notable": "Heavy bags visible. Class is in progress but camera is on empty area at start."
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.7s-2.7s",
+      "observations": {
+        "footwork": "Fighter enters from left, walking across and towards the camera.",
+        "stance_width": "n/a",
+        "guard": "Arms are down, relaxed walking posture.",
+        "upper_body": "Torso upright while walking in.",
+        "distance": "Fighter moves from left edge to center of frame.",
+        "notable": "Fighter enters the scene from the left, headgear and gloves on."
+      }
+    },
+    {
+      "frames": "F10-F15",
+      "time": "3.0s-4.7s",
+      "observations": {
+        "footwork": "Plants feet in a boxing stance, steps in to throw a punch, then small resets.",
+        "stance_width": "normal",
+        "guard": "Hands are raised to the chin in a boxing guard.",
+        "upper_body": "Throws a straight left hand (jab) in F12-F13, returns to guard.",
+        "distance": "Fighter is in foreground, centered in frame.",
+        "notable": "Fighter demonstrates a jab and returns to guard, bouncing slightly at the end."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F4-F5",
+      "type": "distance_open",
+      "detail": "Blurry figure exits the frame on the right."
+    },
+    {
+      "frames": "F6-F8",
+      "type": "step",
+      "detail": "Fighter walks into the frame from the left."
+    },
+    {
+      "frames": "F12-F13",
+      "type": "punch_extension",
+      "detail": "Fighter throws a left jab, extending the arm."
+    },
+    {
+      "frames": "F14",
+      "type": "punch_recovery",
+      "detail": "Fighter retracts the jab and returns to guard."
+    },
+    {
+      "frames": "F15",
+      "type": "reset",
+      "detail": "Fighter bounces slightly, resetting the stance."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

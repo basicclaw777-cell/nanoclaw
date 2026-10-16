@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Fighter is making small adjustments and shifting weight laterally.",
+        "stance_width": "normal",
+        "guard": "Hands are up in a boxing guard position.",
+        "upper_body": "Fighter is in an athletic posture, slightly crouched, moving in small increments.",
+        "distance": "Medium distance between fighter and coach, both facing each other.",
+        "notable": "Fighter's back is to the camera; coach in black is holding focus pads."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Fighter steps forward to close distance, then steps back to reset.",
+        "stance_width": "changing",
+        "guard": "Guard maintained, with arms moving during punch extension.",
+        "upper_body": "Fighter extends arms toward the coach, upper body rotates; then returns to guard.",
+        "distance": "Distance closes as fighter steps in, then opens as he steps back.",
+        "notable": "Active padwork exchange, likely a straight punch combination."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Fighter pauses, then steps forward to re-engage.",
+        "stance_width": "normal",
+        "guard": "Guard is up and maintained.",
+        "upper_body": "Fighter returns to ready position after a reset.",
+        "distance": "Distance remains relatively constant after the initial reset.",
+        "notable": "Fighter takes a brief rest before resuming work."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F8",
+      "type": "punch_extension",
+      "detail": "Fighter steps in and extends arms toward the coach's pads."
+    },
+    {
+      "frames": "F9-F10",
+      "type": "distance_open",
+      "detail": "Fighter steps back, creating separation after the exchange."
+    },
+    {
+      "frames": "F11-F12",
+      "type": "reset",
+      "detail": "Fighter resets posture and catches breath."
+    },
+    {
+      "frames": "F13-F14",
+      "type": "step",
+      "detail": "Fighter steps forward to re-engage with the coach."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

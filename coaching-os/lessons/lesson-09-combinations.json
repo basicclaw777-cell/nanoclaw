@@ -1,0 +1,177 @@
+{
+  "id": "lesson-09",
+  "position": 9,
+  "title": "Basic Combinations",
+  "subtitle": "When singles become conversations",
+  "slug": "basic-combinations",
+
+  "curriculum": {
+    "blocks": [3, 4, 5],
+    "pillars": ["skill", "sparring"],
+    "domains": ["combos", "strategy"],
+    "engines": {
+      "body": "Linking punches with rhythm, weight transfer between punches, maintaining stance through sequences",
+      "mind": "Thinking in sequences — punch A creates the opening for punch B",
+      "emotion": "Flow state — the first taste of boxing as a conversation, not a checklist"
+    }
+  },
+
+  "audience": {
+    "level": "beginner",
+    "hook": "A jab is a word. A combination is a sentence. Boxing is learning to speak.",
+    "question": "How do single punches become boxing?"
+  },
+
+  "core": {
+    "thesis": "Combinations are boxing's grammar — individual punches become meaningful when they connect in sequence. Each punch sets up the next, and the combination as a whole asks a question the opponent has to answer.",
+    "keyPoints": [
+      "A combination is not 'throw several punches fast' — it's a sequence where each punch creates the opening for the next",
+      "The jab-cross (1-2): the fundamental combination. Range-finding into power. Learned in lessons 5 and 7.",
+      "The 1-2-3 (jab-cross-hook): straight-straight-curve. Changes the angle. Forces the opponent to deal with two planes.",
+      "Weight transfer between punches: the cross loads the lead side for the hook. The hook loads the rear side for the cross. Natural rhythm.",
+      "Rhythm and timing: combinations have a beat. Fast-slow-fast. Level changes. Pauses. The rhythm IS the weapon.",
+      "Return to guard between combinations — the combination ends when you return home, not when the last punch lands",
+      "Combinations test everything: stance, guard, footwork, power, timing. If any one is weak, it shows.",
+      "Keep it short: 2-3 punch combinations at first. Quality over quantity. A clean 1-2 beats a sloppy 1-2-3-4-5."
+    ],
+    "commonMisconceptions": [
+      "Longer combinations are better — short, sharp, purposeful combinations are more effective",
+      "Throw all punches at the same speed — variation in timing is what makes combinations land",
+      "Combinations are rehearsed sequences — eventually they become vocabulary, not scripts",
+      "Power in every punch — the setup punches don't need power. The finishing punch does."
+    ],
+    "coachEye": {
+      "observe": "Watch the stance between the second and third punch — does it hold or collapse?",
+      "compare": "Student throwing singles vs the same student throwing 1-2 — does the cross improve when the jab goes first?",
+      "predict": "A student who pauses between punches is thinking. A student who flows is feeling. Flow comes with practice.",
+      "diagnose": "If the combination falls apart after 2 punches, the student is running out of balance. Go back to stance."
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["combos", "strategy"],
+    "motions": ["pulse", "snap", "sweep"],
+    "lines": ["solid", "dashed"],
+    "diagnostics": ["gold-pulse"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "Words Into Sentences",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "You know the jab. You know the cross. You know the hook. Those are words. Now we learn to speak.",
+      "components": ["CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Bridge from individual punches to combinations"
+    },
+    {
+      "id": "scene_02",
+      "title": "The 1-2",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "Jab-cross. The most fundamental combination in boxing. The jab finds the range. The cross uses it. One-two. Simple. And when it's clean, devastating.",
+      "components": ["PunchTrajectory", "DistanceBands", "TimingPulse", "WeightTransfer"],
+      "assets": [],
+      "learningObjective": "The 1-2 — range into power"
+    },
+    {
+      "id": "scene_03",
+      "title": "The 1-2-3",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "Jab-cross-hook. Straight. Straight. Curve. The hook changes the plane. Your opponent was blocking straight punches — now something comes from the side. Two dimensions. Two problems.",
+      "components": ["PunchTrajectory", "FootworkGrid", "RhythmVisualizer"],
+      "assets": [],
+      "learningObjective": "The 1-2-3 — adding the angle change"
+    },
+    {
+      "id": "scene_04",
+      "title": "Natural Rhythm",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "The cross shifts weight forward. That loads the lead side — perfect for the hook. The hook rotates back. That loads the rear side — perfect for the cross. The combination has a natural rhythm. You're not fighting your body — you're flowing with it.",
+      "components": ["WeightTransfer", "HipRotation", "RhythmVisualizer", "TimingPulse"],
+      "assets": [],
+      "learningObjective": "Weight transfer creates natural combination rhythm"
+    },
+    {
+      "id": "scene_05",
+      "title": "Timing is the Weapon",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "Not every punch at the same speed. Fast jab. Hard cross. Quick hook. Or: fast-fast-pause-BANG. The variation is what makes combinations land. Predictable rhythm gets timed. Broken rhythm lands.",
+      "components": ["TimingPulse", "RhythmVisualizer", "PunchTrajectory"],
+      "assets": [],
+      "learningObjective": "Rhythm variation — broken timing as a weapon"
+    },
+    {
+      "id": "scene_06",
+      "title": "Come Home",
+      "duration": "15s",
+      "visualMode": "noir",
+      "narration": "A combination ends when your hands return to guard. Not when the last punch lands. Throw. Return. Assess. Then go again. That's the discipline. That's the method.",
+      "components": ["GuardWindow", "CalloutLabel"],
+      "assets": ["combo-drill-footage"],
+      "learningObjective": "Guard return — the combination's full stop"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_02", "scene_05"],
+      "hook": "A jab is a word. A combination is a sentence. Boxing is learning to speak.",
+      "cta": "Learn the language of boxing."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "Words Into Sentences"},
+        {"time": "1:30", "title": "The 1-2"},
+        {"time": "3:00", "title": "The 1-2-3"},
+        {"time": "5:00", "title": "Natural Rhythm"},
+        {"time": "6:30", "title": "Timing is the Weapon"},
+        {"time": "8:00", "title": "Come Home"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "15s",
+      "sceneIds": ["scene_02", "scene_04"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "From Singles to Combinations",
+        "The 1-2: Jab-Cross",
+        "The 1-2-3: Jab-Cross-Hook",
+        "Understanding Rhythm and Timing",
+        "Guard Return — The Full Stop"
+      ],
+      "diagrams": ["1-2-path", "1-2-3-path", "weight-transfer-sequence", "rhythm-patterns"],
+      "checkpoints": [
+        "Does your stance hold through a 3-punch combination?",
+        "Can you vary the timing of your 1-2?",
+        "Do your hands return to guard after every combination?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Don't rush to 4+ punch combinations — a clean 1-2 is worth more than a sloppy 1-2-3-4",
+        "Use counts with rhythm: 'ONE-two' (fast jab, hard cross) vs 'one-TWO' (probing jab, power cross)",
+        "Pad work is where combinations come alive — the feel of landing a clean sequence teaches more than shadow boxing"
+      ],
+      "regressions": [
+        "If the combination falls apart, isolate: drill the 1-2 until it's automatic, THEN add the hook",
+        "If all punches are the same speed, give them a rhythm: 'da-DA-da' — they'll start varying naturally"
+      ],
+      "observations": [
+        "The moment a student starts throwing combinations without counting is the moment they're boxing, not drilling"
+      ],
+      "progressionTo": "lesson-10-defence-as-offence"
+    }
+  }
+}

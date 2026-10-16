@@ -1,0 +1,177 @@
+{
+  "id": "lesson-04",
+  "position": 4,
+  "title": "The Guard",
+  "subtitle": "Defence before offence",
+  "slug": "the-guard",
+
+  "curriculum": {
+    "blocks": [1, 2],
+    "pillars": ["skill"],
+    "domains": ["defense"],
+    "engines": {
+      "body": "Hand position, elbow tuck, chin protection, shoulder alignment",
+      "mind": "Understanding coverage zones — what's protected, what's exposed",
+      "emotion": "Feeling safe enough to think — guard creates the calm that enables tactics"
+    }
+  },
+
+  "audience": {
+    "level": "beginner",
+    "hook": "Most gyms teach you to punch first. We teach you to not get hit first. There's a reason.",
+    "question": "Why does defence come before offence?"
+  },
+
+  "core": {
+    "thesis": "The guard is not passive — it's the structure that lets you think under pressure. You can't be tactical if you're scared of getting hit.",
+    "keyPoints": [
+      "Defence before offence: the Cuban order. You learn to be safe first, then you learn to attack FROM safety",
+      "The guard is a structure, not a pose — it has to hold under pressure, not just look right in the mirror",
+      "Hands high, elbows in, chin down — but each has a mechanical reason, not just a rule",
+      "The guard creates coverage zones: what's protected, what's vulnerable, and what you choose to leave open",
+      "High guard vs low guard: Cuban style favours high guard — maximum coverage, minimum adjustment to block",
+      "The guard is where composure lives — when your guard is solid, fear drops, and thinking begins",
+      "Guard maintenance: it's not about getting your hands up once, it's about keeping them up through fatigue",
+      "The guard returns you to safety between every action — punch-guard-punch, not punch-punch-hope"
+    ],
+    "commonMisconceptions": [
+      "The guard is defensive and therefore passive — a good guard enables offensive opportunities",
+      "Hands up is enough — hand position without elbow tuck leaves the body exposed",
+      "The guard is the same for everyone — body proportions change the exact positions",
+      "You drop the guard to punch — the guard adapts, it doesn't disappear"
+    ],
+    "coachEye": {
+      "observe": "Watch what happens to the guard after the second punch in a combination — that's when it drops",
+      "compare": "Guard at the start of the round vs guard at the end — fatigue reveals the truth",
+      "predict": "A student who drops their rear hand after a jab will get hit by a counter cross. Every time.",
+      "diagnose": "If a student gets hit and doesn't know why, check their guard coverage — there's always a gap they don't see"
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["defense"],
+    "motions": ["pulse", "snap"],
+    "lines": ["solid", "double-line", "glow"],
+    "diagnostics": ["orange-warning", "gold-pulse"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "Defence First",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "Most gyms start with the jab. We start with the guard. Because if you don't feel safe, you can't think. And boxing is thinking.",
+      "components": ["CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Why defence comes first in the Cuban method"
+    },
+    {
+      "id": "scene_02",
+      "title": "The Structure",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "Hands high. Elbows in. Chin behind the lead shoulder. This isn't a pose — it's architecture. Every position has a reason. Hands high catches punches to the head. Elbows in protects the body. The lead shoulder covers the chin.",
+      "components": ["GuardWindow", "CenterLine", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Guard mechanics — the what and the why"
+    },
+    {
+      "id": "scene_03",
+      "title": "Coverage Zones",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "Your guard creates zones. Protected. Vulnerable. And open by choice. A good fighter knows exactly what's covered and what isn't — and uses the gaps as traps.",
+      "components": ["GuardWindow", "DistanceBands", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Coverage zone awareness — protected vs vulnerable vs intentionally open"
+    },
+    {
+      "id": "scene_04",
+      "title": "The Calm",
+      "duration": "20s",
+      "visualMode": "noir",
+      "narration": "When your guard is solid, something changes. Fear drops. You stop flinching. You start seeing. The guard isn't just physical protection — it's the foundation of composure.",
+      "components": ["CalloutLabel"],
+      "assets": ["calm-sparring-footage"],
+      "learningObjective": "Guard enables composure — emotional engine"
+    },
+    {
+      "id": "scene_05",
+      "title": "Guard Under Fatigue",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "The guard you hold in round one is not the guard you hold in round six. Fatigue is the test. Can you maintain the structure when your arms are heavy? That's what separates drilled guard from posed guard.",
+      "components": ["GuardWindow", "TimingPulse", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Guard maintenance through fatigue"
+    },
+    {
+      "id": "scene_06",
+      "title": "Return to Safety",
+      "duration": "15s",
+      "visualMode": "blueprint",
+      "narration": "Punch. Guard. Punch. Guard. Every action begins from the guard and returns to it. There is no move in boxing that doesn't start or end with your hands in place.",
+      "components": ["PunchTrajectory", "GuardWindow", "RhythmVisualizer"],
+      "assets": [],
+      "learningObjective": "Guard as home base — the return principle"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_02", "scene_04"],
+      "hook": "Most gyms teach you to punch first. We teach you to not get hit first.",
+      "cta": "Defence is the foundation. Start here."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "Why Defence First?"},
+        {"time": "1:30", "title": "The Structure"},
+        {"time": "3:00", "title": "Coverage Zones"},
+        {"time": "4:30", "title": "The Calm — How Guard Enables Thinking"},
+        {"time": "6:00", "title": "Guard Under Fatigue"},
+        {"time": "7:30", "title": "Return to Safety"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "15s",
+      "sceneIds": ["scene_02", "scene_03"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "Why Defence Comes First",
+        "Guard Mechanics: Hands, Elbows, Chin",
+        "Understanding Coverage Zones",
+        "The Guard Under Fatigue",
+        "Punch-Guard-Punch: The Return Principle"
+      ],
+      "diagrams": ["guard-coverage-zones", "guard-vs-exposed", "punch-return-cycle"],
+      "checkpoints": [
+        "What three things does the guard protect?",
+        "Why do elbows stay in?",
+        "What happens to your guard when you're tired?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Don't start punching until guard is automatic — at least 2 sessions of guard-only drills",
+        "The 'tap test': lightly tap the student's guard to check structure. If it gives, the elbows aren't locked in.",
+        "Use the phrase 'hands are home, always come home' — it sticks"
+      ],
+      "regressions": [
+        "Students from other gyms often have low-guard habits — don't criticise their old gym, just explain the Cuban reasoning",
+        "If guard drops after every punch, they're arm-punching. Go back to stance (lesson 3)."
+      ],
+      "observations": [
+        "The moment a student's guard becomes automatic (they stop thinking about it), they're ready for jab (lesson 5)"
+      ],
+      "progressionTo": "lesson-05-the-jab"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Emergence Signal Router Born",
+  "subtitle": "The missing actuator linking all sensors to production engine",
+  "key_concept": "A new bridge between sensing and acting in the Cathedral",
+  "visual_metaphor": "A dark cathedral interior with a new amber-lit archway connecting sensor alcoves to the central engine, geometric signal lines flowing through",
+  "highlights": [
+    "Reads from 4 state files: monitor, watcher, agent health, score history",
+    "Writes corrective tasks to planner-tasks.json daily at 05:25 HKT"
+  ],
+  "why_it_matters": "Closes the sensor-actuator loop, enabling automated corrective actions from emergent patterns",
+  "zone_change": "New 'Emergence' zone added between Sensors and Production Engine on the map",
+  "date": "2026-06-19",
+  "source": "session-harvest-2026-06-19-pass1.md",
+  "pipeline": "cartographer-auto",
+  "generated_at": "2026-06-18T17:46:05.073Z"
+}

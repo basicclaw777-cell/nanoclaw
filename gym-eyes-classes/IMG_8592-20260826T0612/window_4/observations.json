@@ -1,0 +1,106 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F2",
+      "time": "0.0s-0.3s",
+      "observations": {
+        "footwork": "Wide stance, feet planted, slight forward pressure.",
+        "stance_width": "wide",
+        "guard": "Left hand up, right hand extended after a punch.",
+        "upper_body": "Right arm fully extended forward at shoulder height.",
+        "distance": "Close, at pad-touching distance.",
+        "notable": "Punch extended at start of sequence."
+      }
+    },
+    {
+      "frames": "F3-F5",
+      "time": "0.7s-1.3s",
+      "observations": {
+        "footwork": "Stepping forward, closing distance on the pad holder.",
+        "stance_width": "changing",
+        "guard": "Right hand retracting to guard, left hand stays high.",
+        "upper_body": "Torso rotating slightly right to load the next punch.",
+        "distance": "Closing, getting closer to the pad holder.",
+        "notable": "Clear forward step and re-loading of the rear hand."
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.7s-2.7s",
+      "observations": {
+        "footwork": "Stepping back, re-establishing a wider base.",
+        "stance_width": "wide",
+        "guard": "Hands return to a high, active guard position.",
+        "upper_body": "Slight rotation as the punch retracts, then settling.",
+        "distance": "Opening, returning to starting distance.",
+        "notable": "Punch extension followed by a deliberate step back."
+      }
+    },
+    {
+      "frames": "F10-F13",
+      "time": "3.0s-4.0s",
+      "observations": {
+        "footwork": "Stepping forward slightly to initiate the next combination.",
+        "stance_width": "changing",
+        "guard": "Right hand begins to extend for another punch.",
+        "upper_body": "Full extension of the right arm again.",
+        "distance": "Closing back in to pad range.",
+        "notable": "Repeated pattern of forward step and rear-hand strike."
+      }
+    },
+    {
+      "frames": "F14-F15",
+      "time": "4.3s-4.7s",
+      "observations": {
+        "footwork": "Stabilizing into a neutral fighting stance.",
+        "stance_width": "normal",
+        "guard": "Both hands up in a ready position.",
+        "upper_body": "Facing the pad holder, ready for the next instruction.",
+        "distance": "Maintaining contact range.",
+        "notable": "Brief reset in the stance."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F2",
+      "type": "punch_recovery",
+      "detail": "Rear hand retracting from full extension back toward guard."
+    },
+    {
+      "frames": "F3-F4",
+      "type": "step",
+      "detail": "Fighter steps forward with rear foot, closing the distance."
+    },
+    {
+      "frames": "F5-F6",
+      "type": "punch_extension",
+      "detail": "Right hand extends fully forward to strike the pads."
+    },
+    {
+      "frames": "F7-F9",
+      "type": "distance_open",
+      "detail": "Fighter steps back to original range after the strike."
+    },
+    {
+      "frames": "F10-F11",
+      "type": "punch_extension",
+      "detail": "Another rear-hand punch is thrown and extended."
+    },
+    {
+      "frames": "F12-F13",
+      "type": "punch_recovery",
+      "detail": "Punch retracts and fighter begins another step."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "reset",
+      "detail": "Fighter settles into a stable, ready stance."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

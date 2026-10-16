@@ -1,0 +1,180 @@
+{
+  "id": "lesson-10",
+  "position": 10,
+  "title": "Defence as Offence",
+  "subtitle": "The counter — where Basic Reflex separates",
+  "slug": "defence-as-offence",
+
+  "curriculum": {
+    "blocks": [4, 5, 6, 7],
+    "pillars": ["skill", "sparring"],
+    "domains": ["defense", "combos", "strategy"],
+    "engines": {
+      "body": "Slipping, rolling, blocking — defensive movements that CREATE offensive positions",
+      "mind": "Reading the opponent, anticipating, choosing the right defensive response to create the right counter",
+      "emotion": "The calm in the storm — composure under fire IS the weapon. The counter-puncher's identity."
+    }
+  },
+
+  "audience": {
+    "level": "intermediate",
+    "hook": "The most dangerous boxer in the room is the one who isn't attacking.",
+    "question": "Why is defence the highest form of offence in Cuban boxing?"
+  },
+
+  "core": {
+    "thesis": "In Cuban boxing, defence isn't what you do when you're losing — it's what you do to win. Every defensive movement creates an offensive position. The counter is the highest expression of the method.",
+    "keyPoints": [
+      "Defence creates offence: a slip moves your head AND loads your body for a counter. Two actions, one movement.",
+      "The slip: move the head offline. The punch misses. You're now at an angle with a loaded counter.",
+      "The roll: dip under a hook. Your weight shifts low and comes back up — perfect for an uppercut or body shot.",
+      "The block: absorb the punch on the guard. You're still in position. The opponent just committed — now they're open.",
+      "Reading the opponent: you can't counter what you don't see coming. Defence starts with EYES, not hands.",
+      "Timing: the counter lands hardest because the opponent is moving INTO it. Their momentum adds to yours.",
+      "The trap: leaving an opening on purpose. The opponent takes the bait. You were waiting for exactly that punch.",
+      "Counter-punching is the Cuban signature — it rewards intelligence over aggression, patience over power",
+      "This is where lesson 1 comes full circle: the method that was built for people who couldn't rely on power."
+    ],
+    "commonMisconceptions": [
+      "Defence is passive / defensive — it's the most aggressive thing in boxing, it just doesn't look like it",
+      "Counter-punching is for talented fighters — it's a skill that's taught, not a gift",
+      "You have to be fast to counter — you have to be READY, not fast. Preparation beats speed.",
+      "Defence and offence are separate phases — in Cuban boxing, they are the same movement"
+    ],
+    "coachEye": {
+      "observe": "Watch the student's eyes during defence drills — are they watching the punch or watching the opponent?",
+      "compare": "Defence-only drill vs counter drill — does the student's defensive movement change when they know they get to punch back?",
+      "predict": "A student who flinches will never counter well. The flinch must be replaced with a defensive MOVEMENT.",
+      "diagnose": "If the counter is always late, the student is reacting to the punch. They need to read the SETUP — shoulder, hip, weight shift — not the fist."
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["defense", "combos", "strategy"],
+    "motions": ["sweep", "snap", "rotate"],
+    "lines": ["solid", "dashed", "ghost"],
+    "diagnostics": ["gold-pulse", "orange-warning"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "The Quiet Fighter",
+      "duration": "15s",
+      "visualMode": "noir",
+      "narration": "The most dangerous boxer in the room is the one who isn't attacking. They're waiting. Reading. Choosing. And when they move, it's already over.",
+      "components": ["CalloutLabel"],
+      "assets": ["counter-puncher-footage"],
+      "learningObjective": "Establish counter-punching as the highest skill"
+    },
+    {
+      "id": "scene_02",
+      "title": "One Movement, Two Actions",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "A slip isn't just dodging. It moves your head AND loads your body. A roll isn't just ducking. It shifts your weight AND positions your counter. In Cuban boxing, every defensive movement is an offensive setup. One movement. Two actions.",
+      "components": ["PunchTrajectory", "HipRotation", "CenterLine", "WeightTransfer"],
+      "assets": [],
+      "learningObjective": "Defence and offence as simultaneous actions"
+    },
+    {
+      "id": "scene_03",
+      "title": "The Slip",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "The punch comes straight. You move your head offline — just enough. It misses. Now you're at an angle. Your weight is loaded. The counter is already there. You didn't dodge — you repositioned.",
+      "components": ["PunchTrajectory", "FootworkGrid", "CenterLine", "DistanceBands"],
+      "assets": [],
+      "learningObjective": "Slip mechanics — head movement into counter position"
+    },
+    {
+      "id": "scene_04",
+      "title": "Reading, Not Reacting",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "You can't counter what you don't see coming. Don't watch the fist — watch the shoulder, the hip, the weight shift. The punch starts before the arm moves. Read the setup. Be there before the punch arrives.",
+      "components": ["CalloutLabel", "TimingPulse", "ForceVector"],
+      "assets": [],
+      "learningObjective": "Reading the opponent — anticipation over reaction"
+    },
+    {
+      "id": "scene_05",
+      "title": "The Trap",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "Leave an opening. On purpose. The opponent sees it. They commit. And you were waiting for exactly that. The trap is boxing chess. It looks like a mistake — until the counter lands.",
+      "components": ["GuardWindow", "PunchTrajectory", "DistanceBands"],
+      "assets": [],
+      "learningObjective": "Intentional openings as traps — boxing chess"
+    },
+    {
+      "id": "scene_06",
+      "title": "Full Circle",
+      "duration": "20s",
+      "visualMode": "brutalist",
+      "narration": "This is the Cuban method. Built for fighters who couldn't rely on power. They had to be smarter. They had to read. They had to wait. And when they countered, it was precise. This is what we teach at Basic Reflex. Mastery over might.",
+      "components": ["CalloutLabel"],
+      "assets": ["br-logo"],
+      "learningObjective": "Full circle — back to lesson 1's thesis"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_03", "scene_06"],
+      "hook": "The most dangerous boxer in the room is the one who isn't attacking.",
+      "cta": "Mastery over might. This is Cuban boxing."
+    },
+    "youtube": {
+      "duration": "10-12min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "The Quiet Fighter"},
+        {"time": "1:30", "title": "One Movement, Two Actions"},
+        {"time": "3:30", "title": "The Slip"},
+        {"time": "5:30", "title": "Reading, Not Reacting"},
+        {"time": "7:30", "title": "The Trap"},
+        {"time": "9:30", "title": "Full Circle — Mastery Over Might"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "20s",
+      "sceneIds": ["scene_02", "scene_03"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "Why Defence IS Offence",
+        "The Slip: Head Movement Into Counter",
+        "The Roll: Under the Hook, Into the Uppercut",
+        "Reading the Opponent",
+        "The Trap: Intentional Openings",
+        "The Cuban Method: Mastery Over Might"
+      ],
+      "diagrams": ["slip-counter-sequence", "roll-counter-sequence", "reading-cues", "trap-setup"],
+      "checkpoints": [
+        "Can you slip and counter in one movement?",
+        "Are you watching the fist or the shoulder?",
+        "Can you name what opening you're leaving and why?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "This lesson is where BR's identity lives — spend time on it",
+        "Use slow-motion partner drills: one attacks in slow-mo, one slips and counters. Speed comes later.",
+        "The flinch replacement is the key gate: until flinch becomes slip, counter-punching can't develop"
+      ],
+      "regressions": [
+        "If student freezes under pressure, go back to guard (lesson 4) — rebuild the feeling of safety",
+        "If student can slip but can't counter, drill the positions: slip to the right, what's loaded? That's your counter."
+      ],
+      "observations": [
+        "This is where some students fall in love with boxing. The counter is addictive — it feels like a cheat code.",
+        "Students who were hesitant about sparring often become willing after learning counters — they have a strategy, not just reflexes"
+      ],
+      "progressionTo": "lesson-11-the-10-block-system"
+    }
+  }
+}

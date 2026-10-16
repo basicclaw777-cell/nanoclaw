@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Site Visit Checklist</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --bg: #0D0F12; --surface: #12141A; --surface-2: #1A1D23; --border: #1E2128; --text: #E0E0E0; --muted: #8A8F98; --green: #00E5A0; --blue: #00B4D8; --orange: #FFB347; --red: #FF6B6B; --purple: #C77DFF; --mono: 'SF Mono', 'Menlo', monospace; --font: -apple-system, sans-serif; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); padding: 16px; max-width: 600px; margin: 0 auto; }
+h1 { font-size: 13px; font-family: var(--mono); color: var(--green); letter-spacing: 2px; margin-bottom: 4px; }
+.subtitle { font-size: 10px; color: var(--muted); margin-bottom: 20px; }
+.zone-block { margin-bottom: 24px; }
+.zone-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.zone-meta { font-size: 10px; font-family: var(--mono); color: var(--muted); margin-bottom: 12px; }
+.unit-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+.unit-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.unit-info { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
+
+/* Walk route */
+.route { background: var(--surface-2); border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+.route-title { font-size: 9px; font-family: var(--mono); color: var(--blue); letter-spacing: 1px; margin-bottom: 6px; }
+.route-step { font-size: 11px; margin-bottom: 4px; padding-left: 16px; position: relative; }
+.route-step::before { content: ''; position: absolute; left: 4px; top: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+
+/* Checklist */
+.section-title { font-size: 9px; font-family: var(--mono); letter-spacing: 1.5px; margin: 10px 0 6px; }
+.section-title.green { color: var(--green); }
+.section-title.orange { color: var(--orange); }
+.section-title.red { color: var(--red); }
+.section-title.purple { color: var(--purple); }
+.check-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+.check-box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.check-box.checked { background: var(--green); border-color: var(--green); }
+.check-box.checked::after { content: '\2713'; color: var(--bg); font-size: 12px; font-weight: 700; }
+.check-text { font-size: 11px; line-height: 1.4; }
+.check-note { font-size: 9px; font-family: var(--mono); color: var(--muted); margin-top: 1px; }
+
+/* DD findings (pre-researched) */
+.dd-block { background: rgba(0,229,160,0.04); border: 1px solid rgba(0,229,160,0.12); border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+.dd-title { font-size: 9px; font-family: var(--mono); color: var(--green); letter-spacing: 1px; margin-bottom: 6px; }
+.dd-item { font-size: 11px; margin-bottom: 3px; }
+.dd-item .label { color: var(--muted); font-family: var(--mono); font-size: 9px; }
+
+/* Questions to ask */
+.question { background: rgba(255,179,71,0.06); border-left: 3px solid var(--orange); padding: 6px 10px; margin-bottom: 4px; font-size: 11px; border-radius: 0 6px 6px 0; }
+
+/* Photo list */
+.photo-item { font-size: 10px; color: var(--blue); margin-bottom: 3px; padding-left: 12px; }
+.photo-item::before { content: '\1F4F7 '; }
+
+/* Timestamp */
+.footer { margin-top: 24px; padding: 12px 0; border-top: 1px solid var(--border); font-size: 9px; font-family: var(--mono); color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<h1>SITE VISIT CHECKLIST</h1>
+<div class="subtitle">Golden Zone Due Diligence · Generated 2026-10-14</div>
+<div class="zone-block">
+  <div class="zone-name">Yau Tong / Lam Tin</div>
+  <div class="zone-meta">Score: 92/100 · 7 schools · 35,000 households</div>
+<div class="unit-block">
+  <div class="unit-name">油塘工業城</div>
+  <div class="unit-info">1268sqft · HK$2.7M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Yau Tong Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 油塘工業城 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: St. Paul's School, SKH Tak Tin, Lam Tin Methodist</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Strata-titled flatted factory (per-unit DMC check mandatory). Fitness/education use likely requires Lands Department waiver + management consent.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent (fee ~HK$1.09/sf)</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial (flatted factory). Internal toilet/water supply noted (showers possible). Verify ceiling height and floor loading for heavy bags before commitment.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Yau Tong MTR is a commuter-heavy interchange; busiest 7-9am and 6-8pm, with a school rush 3-4pm. Weekend footfall is lower than Kwun Tong town centre.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Most Yau Tong / Lam Tin primary schools dismiss 3:15-3:45pm; secondary 3:30-4:00pm. Standard HK academic year Sep-Jul.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$9,902 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">油塘工業城</div>
+  <div class="unit-info">1405sqft · HK$5.8M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Yau Tong Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 油塘工業城 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: St. Paul's School, SKH Tak Tin, Lam Tin Methodist</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Strata-titled flatted factory (per-unit DMC check mandatory). Fitness/education use likely requires Lands Department waiver + management consent.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent (fee ~HK$1.09/sf)</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial (flatted factory). Internal toilet/water supply noted (showers possible). Verify ceiling height and floor loading for heavy bags before commitment.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Yau Tong MTR is a commuter-heavy interchange; busiest 7-9am and 6-8pm, with a school rush 3-4pm. Weekend footfall is lower than Kwun Tong town centre.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Most Yau Tong / Lam Tin primary schools dismiss 3:15-3:45pm; secondary 3:30-4:00pm. Standard HK academic year Sep-Jul.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$21,430 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">生利工業中心</div>
+  <div class="unit-info">1979sqft · HK$6.0M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Yau Tong Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 生利工業中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: St. Paul's School, SKH Tak Tin, Lam Tin Methodist</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Yau Tong flatted factory. Building maintenance recently completed (已做完大廈維修).</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. Large 1979sf unit — best size for full gym (ring + bags + reception). Verify ceiling + floor loading.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Yau Tong MTR is a commuter-heavy interchange; busiest 7-9am and 6-8pm, with a school rush 3-4pm. Weekend footfall is lower than Kwun Tong town centre.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Most Yau Tong / Lam Tin primary schools dismiss 3:15-3:45pm; secondary 3:30-4:00pm. Standard HK academic year Sep-Jul.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$22,169 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div></div><div class="zone-block">
+  <div class="zone-name">Kwun Tong Town Centre</div>
+  <div class="zone-meta">Score: 88/100 · 6 schools · 40,000 households</div>
+<div class="unit-block">
+  <div class="unit-name">敬運工業大廈</div>
+  <div class="unit-info">846sqft · HK$3.1M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Kwun Tong Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 敬運工業大廈 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Kwun Tong Government, Kwun Tong Kung, CCC Kei Faat</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Kwun Tong flatted factory.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. Small 846sf unit with 寫裝 (office-style fit-out). Tight for a full gym but workable for a small studio.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Kwun Tong MTR is one of the busiest on the line. Peaks 8-9am (office workers) and 5-7pm (commuters); APM mall drives steady weekend footfall.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary schools dismiss ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$11,454 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">Kwun Tong</div>
+  <div class="unit-info">1021sqft · HK$3.7M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Kwun Tong Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to Kwun Tong (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Kwun Tong Government, Kwun Tong Kung, CCC Kei Faat</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$13,597 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">京貿中心</div>
+  <div class="unit-info">1003sqft · HK$4.0M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Kwun Tong Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 京貿中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Kwun Tong Government, Kwun Tong Kung, CCC Kei Faat</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Kwun Tong industrial.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. 1003sf 連租約 (tenanted) — income while you plan. Verify permitted use + ceiling.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Kwun Tong MTR is one of the busiest on the line. Peaks 8-9am (office workers) and 5-7pm (commuters); APM mall drives steady weekend footfall.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary schools dismiss ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$14,706 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div></div><div class="zone-block">
+  <div class="zone-name">Tuen Mun Town Centre</div>
+  <div class="zone-meta">Score: 85/100 · 5 schools · 45,000 households</div>
+<div class="unit-block">
+  <div class="unit-name">德雅工業中心</div>
+  <div class="unit-info">852sqft · HK$1.9M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Tuen Mun Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 德雅工業中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Tuen Mun Government, CCC Hoh Fuk, Yan Oi Tong</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Tuen Mun flatted factory; fitness/education use likely requires waiver.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — limited public data</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. Listing markets "high yield" (買少見少，高厘回報) — tenanted income property; may be restricted to industrial/warehouse use.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Tuen Mun MTR is moderate; peaks commute hours. The industrial belt (建發街 / 山景) is quieter than town centre with lower passer-by traffic.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object],[object Object],[object Object],[object Object],[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:30pm; secondary ~3:30-4:00pm. Dense school cluster around 山景邨 / 大興邨.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$6,835 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">南豐工業城</div>
+  <div class="unit-info">1209sqft · HK$2.3M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Tuen Mun Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 南豐工業城 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Tuen Mun Government, CCC Hoh Fuk, Yan Oi Tong</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Likely restricted to industrial use; not confirmed under Revitalisation Scheme. Nan Fung as single developer/manager may actively restrict non-industrial tenants.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>南豐物業管理 (Nan Fung Property Management) — professional single-owner management</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial (flatted factory, 5 blocks + central services building). 1989 Nan Fung Group development. Fitness/education use higher-risk here vs Kowloon (stricter enforcement).</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Tuen Mun MTR is moderate; peaks commute hours. The industrial belt (建發街 / 山景) is quieter than town centre with lower passer-by traffic.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object],[object Object],[object Object],[object Object],[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:30pm; secondary ~3:30-4:00pm. Dense school cluster around 山景邨 / 大興邨.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$8,498 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">鳴發工業中心</div>
+  <div class="unit-info">926sqft · HK$2.3M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Tuen Mun Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 鳴發工業中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Tuen Mun Government, CCC Hoh Fuk, Yan Oi Tong</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Tuen Mun flatted factory.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. 交吉放售 (vacant possession) — clean fit-out start. Verify fitness/education use.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Tuen Mun MTR is moderate; peaks commute hours. The industrial belt (建發街 / 山景) is quieter than town centre with lower passer-by traffic.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object],[object Object],[object Object],[object Object],[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:30pm; secondary ~3:30-4:00pm. Dense school cluster around 山景邨 / 大興邨.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$8,498 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div></div><div class="zone-block">
+  <div class="zone-name">San Po Kong / Wong Tai Sin</div>
+  <div class="zone-meta">Score: 83/100 · 6 schools · 30,000 households</div>
+<div class="unit-block">
+  <div class="unit-name">佳力工業大廈</div>
+  <div class="unit-info">1103sqft · HK$4.3M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Diamond Hill Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 佳力工業大廈 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Buddhist Hung Sean, CCC Kei Tsz, Choi Hung Estate</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard San Po Kong flatted factory (Sun Hung Kai-developed 新鴻基靚樓).</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. High ceiling (高樓底) + 內廁 + 來去水 (water/drainage) + 即買即用 — most gym-ready San Po Kong option. Verify ceiling height figure.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Diamond Hill MTR is a busy interchange. San Po Kong industrial streets are quieter than Kwun Tong; footfall is office/workshop-driven 8am-6pm.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$15,999 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">新寶中心</div>
+  <div class="unit-info">1267sqft · HK$5.0M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Diamond Hill Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 新寶中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Buddhist Hung Sean, CCC Kei Tsz, Choi Hung Estate</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard San Po Kong flatted factory.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. 1267sf units, 3 identical listings (market liquidity signal). 2-3 min MTR is the key draw.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Diamond Hill MTR is a busy interchange. San Po Kong industrial streets are quieter than Kwun Tong; footfall is office/workshop-driven 8am-6pm.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$18,474 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">新寶中心</div>
+  <div class="unit-info">1267sqft · HK$5.0M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Diamond Hill Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 新寶中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Buddhist Hung Sean, CCC Kei Tsz, Choi Hung Estate</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard San Po Kong flatted factory.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. 1267sf units, 3 identical listings (market liquidity signal). 2-3 min MTR is the key draw.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Diamond Hill MTR is a busy interchange. San Po Kong industrial streets are quieter than Kwun Tong; footfall is office/workshop-driven 8am-6pm.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$18,474 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div></div><div class="zone-block">
+  <div class="zone-name">Tsuen Wan</div>
+  <div class="zone-meta">Score: 82/100 · 5 schools · 25,000 households</div>
+<div class="unit-block">
+  <div class="unit-name">德豐工業中心</div>
+  <div class="unit-info">1080sqft · HK$2.3M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Tsuen Wan Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 德豐工業中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Tsuen Wan Government, Tsuen Wan Public, Hoi Pa Street</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Tsuen Wan flatted factory.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. 1080sf 連租約 (5%+ yield tenanted). Verify permitted use + ceiling.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Tsuen Wan is a dense commuter and shopping area; heavy footfall 7-9am and 5-8pm plus weekend shoppers.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$8,424 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">豪力中心</div>
+  <div class="unit-info">885sqft · HK$2.3M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Tsuen Wan Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 豪力中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Tsuen Wan Government, Tsuen Wan Public, Hoi Pa Street</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Tsuen Wan flatted factory.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent (fee ~HK$1.76/sf)</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. 885sf units with 內廁 + 落地玻璃 (floor-to-ceiling windows). Good natural light for a studio. Verify ceiling.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Tsuen Wan is a dense commuter and shopping area; heavy footfall 7-9am and 5-8pm plus weekend shoppers.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$8,572 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div><div class="unit-block">
+  <div class="unit-name">豪力中心</div>
+  <div class="unit-info">885sqft · HK$2.4M · ? · TBC — verify on viewing</div>
+
+  <div class="route">
+    <div class="route-title">WALK ROUTE</div>
+    <div class="route-step">Exit Tsuen Wan Station (check exit letter on arrival)</div>
+    <div class="route-step">Walk to 豪力中心 (~500m)</div>
+    <div class="route-step">Note: slopes, stairs, busy roads on route (kid safety)</div>
+    <div class="route-step">Pass schools: Tsuen Wan Government, Tsuen Wan Public, Hoi Pa Street</div>
+    <div class="route-step">Check 3:30-4pm school dismissal foot traffic if visiting afternoon</div>
+  </div>
+<div class="dd-block">
+    <div class="dd-title">PRE-RESEARCHED (AI AGENT)</div>
+    <div class="dd-item"><span class="label">DMC: </span>Unknown — DMC not found online. Standard Tsuen Wan flatted factory.</div>
+    <div class="dd-item"><span class="label">MGMT: </span>Unknown — enquire via listing agent (fee ~HK$1.76/sf)</div>
+    <div class="dd-item"><span class="label">USE: </span>Industrial. 885sf units with 內廁 + 落地玻璃 (floor-to-ceiling windows). Good natural light for a studio. Verify ceiling.</div>
+    <div class="dd-item"><span class="label">TRAFFIC: </span>Tsuen Wan is a dense commuter and shopping area; heavy footfall 7-9am and 5-8pm plus weekend shoppers.</div>
+    <div class="dd-item"><span class="label">COMPETITION: </span>[object Object]</div>
+    <div class="dd-item"><span class="label">SCHOOL TIMES: </span>Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.</div>
+  </div>
+  <div class="section-title green">BUILDING INSPECTION</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Measure ceiling height (need 3m+ for heavy bags)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Test cargo lift — will boxing ring components fit?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Check floor condition — concrete slab? Can it take impact?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Water supply — toilet + shower feasibility</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ventilation — windows? AC ducting? Fresh air for training</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Power supply — 3-phase? Enough for AC + lighting + music</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Structural columns — where are they? Can you fit a ring around them?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Natural light — any windows? Important for kids' parents perception</div></div></div>
+
+  <div class="section-title orange">BUILDING MANAGEMENT</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Find management office — ask about fitness/education use</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Get DMC copy or confirm permitted uses</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ask about noise restrictions (punching bags, music, kids)</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Operating hours — can you run classes until 9pm?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Management fee — how much per sqft?</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Any renovation restrictions or approval needed?</div></div></div>
+
+  <div class="section-title red">DEAL BREAKERS (CHECK FIRST)</div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Is fitness/gym use explicitly prohibited in DMC?</div><div class="check-note">If yes → walk away. No negotiation possible.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Ceiling below 2.8m?</div><div class="check-note">If yes → no heavy bags, no ring. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">No cargo lift and above 3/F?</div><div class="check-note">Ring + equipment can't get up. Walk away.</div></div></div>
+  <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div><div class="check-text">Route from MTR unsafe for kids? (major road crossings, dark alleys)</div><div class="check-note">Parents won't send kids. Location fails.</div></div></div>
+
+  <div class="section-title purple">QUESTIONS TO ASK</div>
+  <div class="question">What's the building's stance on fitness studios? Any existing ones?</div>
+  <div class="question">What renovation has been done recently? Any major works planned?</div>
+  <div class="question">How many units are vacant? (signals building health)</div>
+  <div class="question">Is this a revitalized building under government scheme?</div>
+  <div class="question">What's the typical tenant profile? Any complaints about noise?</div>
+  <div class="question">Why is the owner selling? How long has it been listed?</div>
+  <div class="question">Any outstanding management fees or building levies?</div>
+  <div class="question">Monthly mortgage ~HK$8,794 — does the unit condition justify this?</div>
+
+  <div class="section-title purple">PHOTOS TO TAKE</div>
+  <div class="photo-item">Walk route from MTR to building entrance</div>
+  <div class="photo-item">Building lobby + lift area</div>
+  <div class="photo-item">Unit interior — all 4 walls</div>
+  <div class="photo-item">Ceiling (height reference: hold phone vertically)</div>
+  <div class="photo-item">Floor condition closeup</div>
+  <div class="photo-item">View from unit windows (if any)</div>
+  <div class="photo-item">Toilet/water facilities</div>
+  <div class="photo-item">Cargo lift doors (measure width)</div>
+  <div class="photo-item">Management notice board (fees, rules, contacts)</div>
+  <div class="photo-item">Nearest school(s) from building entrance</div>
+  <div class="photo-item">Street view — what parents/kids see arriving</div>
+
+</div></div><div class="footer">GOLDEN ZONE SITE VISIT CHECKLIST · CATHEDRAL · 2026-10-14</div>
+<script>
+// Persist checkbox state in localStorage
+document.querySelectorAll('.check-box').forEach((box, i) => {
+  const key = 'sv_' + i;
+  if (localStorage.getItem(key) === '1') box.classList.add('checked');
+  box.addEventListener('click', () => {
+    localStorage.setItem(key, box.classList.contains('checked') ? '1' : '0');
+  });
+});
+</script>
+</body></html>

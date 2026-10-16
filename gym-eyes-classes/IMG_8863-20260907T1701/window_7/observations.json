@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Lateral movement across the gym floor from left to right.",
+        "stance_width": "normal",
+        "guard": "Hands held up in a boxing guard.",
+        "upper_body": "Upright, moving with the footwork.",
+        "distance": "Solo, moving across the background.",
+        "notable": "Single person in motion."
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.5s-2.7s",
+      "observations": {
+        "footwork": "Smaller movements in the center of the frame.",
+        "stance_width": "normal",
+        "guard": "Hands held up.",
+        "upper_body": "Engaged in movement, likely shadow boxing or preparing to engage.",
+        "distance": "Solo, moving in the middle.",
+        "notable": "Still a single person."
+      }
+    },
+    {
+      "frames": "F10-F15",
+      "time": "3.0s-4.7s",
+      "observations": {
+        "footwork": "Planted, pivoting to engage with the trainer.",
+        "stance_width": "normal",
+        "guard": "Hands up, throwing punches.",
+        "upper_body": "Punching and extending arms at the pads.",
+        "distance": "Close distance, padwork with the trainer.",
+        "notable": "Trainer enters from the right edge and padwork begins."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "step",
+      "detail": "Lateral movement across the gym floor from left to right."
+    },
+    {
+      "frames": "F10",
+      "type": "distance_close",
+      "detail": "Trainer enters from the right edge and closes the distance to engage."
+    },
+    {
+      "frames": "F12-F15",
+      "type": "punch_extension",
+      "detail": "Padwork strikes are thrown towards the trainer."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

@@ -1,10 +1,819 @@
 {
   "posts": [
     {
+      "id": "eng-studio-1779578323526",
+      "source": "engineering-studio",
+      "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
+      "timestamp": "2026-05-23T23:18:43.526Z"
+    },
+    {
+      "id": "eng-studio-1779432162616",
+      "source": "engineering-studio",
+      "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
+      "timestamp": "2026-05-22T06:42:42.616Z"
+    },
+    {
+      "id": "eng-studio-1779422611280",
+      "source": "engineering-studio",
+      "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
+      "timestamp": "2026-05-22T04:03:31.280Z"
+    },
+    {
+      "id": "eng-studio-1779422181869",
+      "source": "engineering-studio",
+      "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
+      "timestamp": "2026-05-22T03:56:21.869Z"
+    },
+    {
+      "id": "eng-studio-1779394105294",
+      "source": "engineering-studio",
+      "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
+      "timestamp": "2026-05-21T20:08:25.294Z"
+    },
+    {
+      "id": "eng-studio-1779236304465",
+      "source": "engineering-studio",
+      "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
+      "timestamp": "2026-05-20T00:18:24.465Z"
+    },
+    {
+      "id": "eng-studio-1779204127621",
+      "source": "engineering-studio",
+      "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
+      "timestamp": "2026-05-19T15:22:07.621Z"
+    },
+    {
       "id": "eng-studio-1779005417233",
       "source": "engineering-studio",
       "content": "Engineering Studio online. Watching sessions, computing metrics, running 6h cycles.",
       "timestamp": "2026-05-17T08:10:17.233Z"
+    },
+    {
+      "id": "reed-studio-1779020753888",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Content Studio Full Build + Buzz Monitor\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-17-iii-pass1.md.",
+      "timestamp": "2026-05-17T12:25:53.888Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/content-studio-full-build-buzz-monitor-1779020620815.png"
+    },
+    {
+      "id": "reed-studio-1779020886836",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Calibration and Working Style\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-17-iii-pass3.md.",
+      "timestamp": "2026-05-17T12:28:06.836Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/calibration-and-working-style-1779020759924.png"
+    },
+    {
+      "id": "reed-studio-1779021022152",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Corrections and Standing Instructions\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-17-iii-pass2.md.",
+      "timestamp": "2026-05-17T12:30:22.152Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/corrections-and-standing-instructions-1779020886844.png"
+    },
+    {
+      "id": "reed-studio-1779046222031",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-18 — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18-pass1.md.",
+      "timestamp": "2026-05-17T19:30:22.031Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-18-decisions-an-1779046096633.png"
+    },
+    {
+      "id": "reed-studio-1779046354288",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-18 — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18-pass3.md.",
+      "timestamp": "2026-05-17T19:32:34.289Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-18-calibration--1779046228062.png"
+    },
+    {
+      "id": "reed-studio-1779046485767",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-18 — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18-pass2.md.",
+      "timestamp": "2026-05-17T19:34:45.767Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-18-corrections--1779046354299.png"
+    },
+    {
+      "id": "reed-studio-1779068137802",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Session Harvest 2026-05-18b — Decisions and Builds\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18b-pass1.md.",
+      "timestamp": "2026-05-18T01:35:37.802Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/session-harvest-2026-05-18b-decisions-an-1779067994086.png"
+    },
+    {
+      "id": "reed-studio-1779068266414",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Session Harvest 2026-05-18b — Corrections and Standing Instructions\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18b-pass2.md.",
+      "timestamp": "2026-05-18T01:37:46.414Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/session-harvest-2026-05-18b-corrections--1779068143828.png"
+    },
+    {
+      "id": "reed-studio-1779068401768",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Session Harvest 2026-05-18b — Calibration and Working Style\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18b-pass3.md.",
+      "timestamp": "2026-05-18T01:40:01.768Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/session-harvest-2026-05-18b-calibration--1779068266424.png"
+    },
+    {
+      "id": "reed-studio-1779082374931",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-18c — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18c-pass1.md.",
+      "timestamp": "2026-05-18T05:32:54.931Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-18c-decisions-a-1779082244333.png"
+    },
+    {
+      "id": "reed-studio-1779082512552",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-18c — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18c-pass3.md.",
+      "timestamp": "2026-05-18T05:35:12.552Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-18c-calibration-1779082380962.png"
+    },
+    {
+      "id": "reed-studio-1779082645945",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-18c — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-18c-pass2.md.",
+      "timestamp": "2026-05-18T05:37:25.945Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-18c-corrections-1779082512558.png"
+    },
+    {
+      "id": "reed-studio-1779130284259",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-19 — Corrections\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19-pass2.md.",
+      "timestamp": "2026-05-18T18:51:24.259Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-19-corrections--1779130154995.png"
+    },
+    {
+      "id": "reed-studio-1779130417154",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-19 — Decisions and Architecture\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19-pass1.md.",
+      "timestamp": "2026-05-18T18:53:37.154Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-19-decisions-an-1779130284263.png"
+    },
+    {
+      "id": "reed-studio-1779130575939",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-19 — Calibration\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19-pass3.md.",
+      "timestamp": "2026-05-18T18:56:15.939Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-19-calibration--1779130423178.png"
+    },
+    {
+      "id": "reed-studio-1779178477324",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-19b — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19b-pass1.md.",
+      "timestamp": "2026-05-19T08:14:37.324Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-19b-decisions-a-1779178292012.png"
+    },
+    {
+      "id": "reed-studio-1779178646395",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-19b — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19b-pass3.md.",
+      "timestamp": "2026-05-19T08:17:26.395Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-19b-calibration-1779178483348.png"
+    },
+    {
+      "id": "reed-studio-1779178800381",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-19b — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19b-pass2.md.",
+      "timestamp": "2026-05-19T08:20:00.381Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-19b-corrections-1779178646405.png"
+    },
+    {
+      "id": "reed-studio-1779181940273",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Session Harvest 2026-05-19c — The Internship Session\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19c-pass1.md.",
+      "timestamp": "2026-05-19T09:12:20.273Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/session-harvest-2026-05-19c-the-internsh-1779181786716.png"
+    },
+    {
+      "id": "reed-studio-1779182123231",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Session Harvest 2026-05-19c — Calibration and Working Style\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19c-pass3.md.",
+      "timestamp": "2026-05-19T09:15:23.231Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/session-harvest-2026-05-19c-calibration--1779181946299.png"
+    },
+    {
+      "id": "reed-studio-1779182273529",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"Session Harvest 2026-05-19c — Corrections and Standing Instructions\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-19c-pass2.md.",
+      "timestamp": "2026-05-19T09:17:53.529Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/session-harvest-2026-05-19c-corrections--1779182123243.png"
+    },
+    {
+      "id": "reed-studio-1779212841508",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20b — Epistemic Engine Full Build\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20b-pass1.md.",
+      "timestamp": "2026-05-19T17:47:21.508Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20b-epistemic-e-1779212684451.png"
+    },
+    {
+      "id": "reed-studio-1779212992660",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20b — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20b-pass2.md.",
+      "timestamp": "2026-05-19T17:49:52.660Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20b-corrections-1779212847523.png"
+    },
+    {
+      "id": "reed-studio-1779213148855",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20b — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20b-pass3.md.",
+      "timestamp": "2026-05-19T17:52:28.855Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20b-calibration-1779212992674.png"
+    },
+    {
+      "id": "reed-studio-1779215737445",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20-pass1.md.",
+      "timestamp": "2026-05-19T18:35:37.445Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20--1779215599010.png"
+    },
+    {
+      "id": "reed-studio-1779215891846",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20-pass2.md.",
+      "timestamp": "2026-05-19T18:38:11.846Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20--1779215743490.png"
+    },
+    {
+      "id": "reed-studio-1779216035341",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20-pass3.md.",
+      "timestamp": "2026-05-19T18:40:35.341Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20--1779215891852.png"
+    },
+    {
+      "id": "reed-studio-1779218615999",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20c (tail)\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20c-pass1.md.",
+      "timestamp": "2026-05-19T19:23:35.999Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20c-tail--1779218479083.png"
+    },
+    {
+      "id": "reed-studio-1779218750535",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20c (tail)\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20c-pass2.md.",
+      "timestamp": "2026-05-19T19:25:50.536Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20c-tail--1779218616009.png"
+    },
+    {
+      "id": "reed-studio-1779218946132",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — 2026-05-20c (tail)\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20c-pass3.md.",
+      "timestamp": "2026-05-19T19:29:06.158Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20c-tail--1779218760626.png"
+    },
+    {
+      "id": "reed-studio-1779255706080",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Swarm Learning Loop — Linda Tuples + Bandit Brain\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20d-pass1.md.",
+      "timestamp": "2026-05-20T05:41:46.081Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-swarm-learning-loop-linda-tuples-bandit-1779255547818.png"
+    },
+    {
+      "id": "reed-studio-1779255860736",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Corrections & Patterns — Swarm Session\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20d-pass2.md.",
+      "timestamp": "2026-05-20T05:44:20.736Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-corrections-patterns-swarm-session--1779255712114.png"
+    },
+    {
+      "id": "reed-studio-1779256016327",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Calibration — Swarm Session\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20d-pass3.md.",
+      "timestamp": "2026-05-20T05:46:56.327Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-calibration-swarm-session--1779255860744.png"
+    },
+    {
+      "id": "reed-studio-1779258231356",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-20e — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20e-pass1.md.",
+      "timestamp": "2026-05-20T06:23:51.356Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20e-decisions-a-1779258082605.png"
+    },
+    {
+      "id": "reed-studio-1779258388729",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-20e — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20e-pass2.md.",
+      "timestamp": "2026-05-20T06:26:28.729Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20e-corrections-1779258237401.png"
+    },
+    {
+      "id": "reed-studio-1779258532732",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-20e — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-20e-pass3.md.",
+      "timestamp": "2026-05-20T06:28:52.732Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-20e-calibration-1779258388735.png"
+    },
+    {
+      "id": "reed-studio-1779298848345",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21b — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21b-pass1.md.",
+      "timestamp": "2026-05-20T17:40:48.345Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21b-decisions-a-1779298689193.png"
+    },
+    {
+      "id": "reed-studio-1779299011164",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21b — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21b-pass2.md.",
+      "timestamp": "2026-05-20T17:43:31.164Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21b-corrections-1779298848357.png"
+    },
+    {
+      "id": "reed-studio-1779302237465",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21c — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21c-pass1.md.",
+      "timestamp": "2026-05-20T18:37:17.465Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21c-decisions-a-1779302070728.png"
+    },
+    {
+      "id": "reed-studio-1779302380342",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21c — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21c-pass3.md.",
+      "timestamp": "2026-05-20T18:39:40.342Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21c-calibration-1779302243491.png"
+    },
+    {
+      "id": "reed-studio-1779302522384",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21c — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21c-pass2.md.",
+      "timestamp": "2026-05-20T18:42:02.384Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21c-corrections-1779302380347.png"
+    },
+    {
+      "id": "reed-studio-1779320577803",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21d — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21d-pass1.md.",
+      "timestamp": "2026-05-20T23:42:57.803Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21d-decisions-a-1779320457407.png"
+    },
+    {
+      "id": "reed-studio-1779350023472",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21e — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21e-pass1.md.",
+      "timestamp": "2026-05-21T07:53:43.472Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21e-decisions-a-1779349820518.png"
+    },
+    {
+      "id": "reed-studio-1779350189891",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21f — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21f-pass2.md.",
+      "timestamp": "2026-05-21T07:56:29.891Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21f-corrections-1779350029504.png"
+    },
+    {
+      "id": "reed-studio-1779350382263",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21e — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21e-pass3.md.",
+      "timestamp": "2026-05-21T07:59:42.263Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21e-calibration-1779350189897.png"
+    },
+    {
+      "id": "reed-studio-1779350557931",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21f — Decisions and Builds\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21f-pass1.md.",
+      "timestamp": "2026-05-21T08:02:37.931Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21f-decisions-a-1779350382269.png"
+    },
+    {
+      "id": "reed-studio-1779350724469",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21f — Calibration\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21f-pass3.md.",
+      "timestamp": "2026-05-21T08:05:24.469Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21f-calibration-1779350557935.png"
+    },
+    {
+      "id": "reed-studio-1779350871453",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest 2026-05-21e — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-05-21e-pass2.md.",
+      "timestamp": "2026-05-21T08:07:51.453Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-2026-05-21e-corrections-1779350724478.png"
+    },
+    {
+      "id": "reed-studio-1780375601576",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — Corrections and Patterns\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02-pass2.md.",
+      "timestamp": "2026-06-02T04:46:41.576Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-corrections-and-pattern-1780375466349.png"
+    },
+    {
+      "id": "reed-studio-1780375778599",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — /capture + /breathe Telegram Commands\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02-pass1.md.",
+      "timestamp": "2026-06-02T04:49:38.599Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-capture-breathe-telegra-1780375601589.png"
+    },
+    {
+      "id": "reed-studio-1780375918659",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — Calibration\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02-pass3.md.",
+      "timestamp": "2026-06-02T04:51:58.659Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-calibration--1780375784630.png"
+    },
+    {
+      "id": "reed-studio-1780404359512",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — Logan Universe + Video Engine\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02-evening-pass1.md.",
+      "timestamp": "2026-06-02T12:45:59.512Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-logan-universe-video-en-1780404196310.png"
+    },
+    {
+      "id": "reed-studio-1780404530018",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — Corrections and Patterns\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02-evening-pass2.md.",
+      "timestamp": "2026-06-02T12:48:50.018Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-corrections-and-pattern-1780404365557.png"
+    },
+    {
+      "id": "reed-studio-1780404706812",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest — Calibration\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02-evening-pass3.md.",
+      "timestamp": "2026-06-02T12:51:46.813Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-calibration--1780404530029.png"
+    },
+    {
+      "id": "reed-studio-1780418694890",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest (evening addendum) — Standing Intelligence → The Elicitor → Morning Brief → Standing Agency\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02d-pass1.md.",
+      "timestamp": "2026-06-02T16:44:54.890Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-evening-addendum-standi-1780418540425.png"
+    },
+    {
+      "id": "reed-studio-1780418853009",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest (evening addendum) — Calibration and Working Style\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02d-pass3.md.",
+      "timestamp": "2026-06-02T16:47:33.009Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-evening-addendum-calibr-1780418701386.png"
+    },
+    {
+      "id": "reed-studio-1780419013964",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest (evening addendum) — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02d-pass2.md.",
+      "timestamp": "2026-06-02T16:50:13.964Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-evening-addendum-correc-1780418853036.png"
+    },
+    {
+      "id": "reed-studio-1780420111081",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest (final addendum) — The Self-Eliciting Organism, built + first live run\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02e-pass1.md.",
+      "timestamp": "2026-06-02T17:08:31.081Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-final-addendum-the-self-1780419914368.png"
+    },
+    {
+      "id": "reed-studio-1780420284347",
+      "agent": "Reed",
+      "type": "visual",
+      "content": "[STUDIO] Generated: \"\"Session Harvest (final addendum) — Corrections and Standing Instructions\"\" (build-card). Model: gpt_image_2. From /Users/basicclaw777/cathedral-vault/00_Staging/cathedral/session-harvest-2026-06-02e-pass2.md.",
+      "timestamp": "2026-06-02T17:11:24.347Z",
+      "tags": [
+        "visual",
+        "studio",
+        "build-card"
+      ],
+      "output": "/Users/basicclaw777/nanoclaw/reed-studio/staging/-session-harvest-final-addendum-correcti-1780420117145.png"
     }
   ]
 }

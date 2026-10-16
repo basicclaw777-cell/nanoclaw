@@ -1,0 +1,100 @@
+{
+  "people_detected": 2,
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "The fighter in yellow steps forward from the right side, progressively closing the distance to the pad holder in red over frames F2 to F4. The fighter reaches the closest point at F5.",
+        "stance_width": "normal",
+        "guard": "Both hands are held up in a boxing guard, remaining high throughout the forward movement.",
+        "upper_body": "The fighter stays relatively upright with a slight forward lean as they step in; at F5 the torso leans into the pad holder.",
+        "distance": "Starts wide (roughly half a frame apart), then closes to striking range by F5.",
+        "notable": "At F5 the fighter and pad holder are in contact, suggesting a punch or combination was thrown."
+      }
+    },
+    {
+      "frames": "F7-F10",
+      "time": "2.0s-3.0s",
+      "observations": {
+        "footwork": "The fighter again moves forward from F7 to F9, closing the gap. At F10, the footwork appears to shift as the body angles change.",
+        "stance_width": "normal",
+        "guard": "Guard is up as the fighter moves in; it shifts or drops slightly at F10 as the body rotates.",
+        "upper_body": "The fighter leans in, then at F10 the torso turns sharply and the head lowers, indicating a pivot, slip, or an angled body shot.",
+        "distance": "Closes from wide to close at F9, then appears to open slightly as the fighter's body rotates away at F10.",
+        "notable": "F10 shows a distinct change in body orientation compared to the previous frames."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "The fighter steps in from F11 through F14, then steps back to the right by F15.",
+        "stance_width": "normal",
+        "guard": "Guard remains high, then the arms extend outward during the punch at F14 before returning to a guarding position at F15.",
+        "upper_body": "The fighter leans forward at F13, extends both arms toward the pad holder at F14, then straightens back up at F15.",
+        "distance": "Closes from wide to close at F14, then reopens as the fighter steps back at F15.",
+        "notable": "F14 clearly shows an extension of the arms, indicating a punch was thrown."
+      }
+    }
+  ],
+  "transitions": [
+    {
+      "between": "F5-F6",
+      "what_changed": "The fighter in yellow pulls back from the pad holder, stepping rapidly to the right and reopening the distance between the two."
+    },
+    {
+      "between": "F10-F11",
+      "what_changed": "The fighter recovers from the body rotation at F10, stepping back into a front-facing guard stance on the right side."
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F4",
+      "type": "distance_close",
+      "detail": "The fighter moves forward from the right, closing the distance toward the pad holder."
+    },
+    {
+      "frames": "F4-F5",
+      "type": "punch_extension",
+      "detail": "The fighter reaches the pad holder and engages, extending the arms into the pads."
+    },
+    {
+      "frames": "F5-F6",
+      "type": "distance_open",
+      "detail": "The fighter steps back to the right, reestablishing the starting distance."
+    },
+    {
+      "frames": "F7-F9",
+      "type": "distance_close",
+      "detail": "The fighter moves in again from the right side toward the pad holder."
+    },
+    {
+      "frames": "F9-F10",
+      "type": "slip",
+      "detail": "The fighter turns and lowers the head, pivoting the body away from a direct engagement."
+    },
+    {
+      "frames": "F10-F11",
+      "type": "distance_open",
+      "detail": "The fighter moves back to the right and realigns into a front-facing stance."
+    },
+    {
+      "frames": "F12-F13",
+      "type": "distance_close",
+      "detail": "The fighter closes the distance for a third time, stepping in from the right."
+    },
+    {
+      "frames": "F13-F14",
+      "type": "punch_extension",
+      "detail": "The fighter lands punches on the pads, extending both arms fully."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "distance_open",
+      "detail": "The fighter retracts the arms and steps back to the right, returning to the starting guard position."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

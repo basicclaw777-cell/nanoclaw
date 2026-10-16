@@ -1,0 +1,30 @@
+{
+  "reviews": [
+    {
+      "tool": "Gemma 4 26B",
+      "verdict": "yellow",
+      "summary": "Excellent Chinese quality but needs 32GB+ RAM. On 16GB Mac Mini, constant swapping. Quantised version loses the Chinese advantage.",
+      "date": "2026-05-13"
+    }
+  ],
+  "positions": [
+    {
+      "topic": "local-first",
+      "stance": "Strong preference for local models. Cloud APIs are a dependency you don't control.",
+      "date": "2026-05-13"
+    },
+    {
+      "topic": "16GB-reality",
+      "stance": "Most HK SMEs run 16GB Macs. Any tool that needs 32GB is not \"free\" — it costs HK$12,000+ in hardware.",
+      "date": "2026-05-13"
+    },
+    {
+      "topic": "Chinese-AI-quality",
+      "stance": "Multilingual quality is the key differentiator for HK market. English-only tools miss half the use case.",
+      "date": "2026-05-13"
+    }
+  ],
+  "predictions": [],
+  "github_drops": [],
+  "conversations": 2
+}

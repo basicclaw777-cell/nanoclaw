@@ -1,0 +1,67 @@
+{
+  "people_detected": 6,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F7",
+      "time": "0.0s-2.0s",
+      "observations": {
+        "footwork": "Shuffling laterally across the gym floor from left to right, maintaining an athletic base.",
+        "stance_width": "wide",
+        "guard": "Hands held high in a boxing guard, elbows tucked in.",
+        "upper_body": "Torso slightly rotated right, moving smoothly with the feet.",
+        "distance": "Maintaining distance from background people and heavy bags.",
+        "notable": "Continuous rhythmic movement covering ground."
+      }
+    },
+    {
+      "frames": "F8-F10",
+      "time": "2.3s-3.0s",
+      "observations": {
+        "footwork": "Feet plant firmly on the ground, weight shifts to support the punch.",
+        "stance_width": "normal",
+        "guard": "Right hand extends for the punch, left hand remains up guarding the chin.",
+        "upper_body": "Right arm extends fully straight, torso rotates into the strike.",
+        "distance": "Fighter in a striking posture within the middle of the gym.",
+        "notable": "Punch thrown while moving, maintaining balance and rhythm."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Resuming lateral movement to the right, shuffling across the gym.",
+        "stance_width": "wide",
+        "guard": "Hands return to a high guard position.",
+        "upper_body": "Torso faces the direction of travel, relaxed but alert.",
+        "distance": "Continuing to move across the open gym floor.",
+        "notable": "Smooth transition back to footwork after the punch."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F7",
+      "type": "step",
+      "detail": "Lateral shuffle movement across the gym from left to right."
+    },
+    {
+      "frames": "F8-F8",
+      "type": "punch_extension",
+      "detail": "Right straight punch fully extended, thrown while moving."
+    },
+    {
+      "frames": "F9-F10",
+      "type": "punch_recovery",
+      "detail": "Punch retracted back to the guard, returning to a neutral stance."
+    },
+    {
+      "frames": "F11-F15",
+      "type": "step",
+      "detail": "Continuing lateral movement across the gym."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

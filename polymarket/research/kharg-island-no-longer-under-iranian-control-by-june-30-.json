@@ -1,0 +1,88 @@
+{
+  "marketId": "1708086",
+  "question": "Kharg Island no longer under Iranian control by June 30?",
+  "eventTitle": "Kharg Island no longer under Iranian control by...?",
+  "marketYes": 0.0365,
+  "marketNo": 0.9635,
+  "volume24hr": 464923.38157700136,
+  "daysToResolution": 23,
+  "analysis": {
+    "question": "Kharg Island no longer under Iranian control by June 30?",
+    "factors": [
+      {
+        "factor": "Current geopolitical tensions with Iran",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "As of June 2026, no major military conflict or invasion of Iran is underway. Kharg Island is Iran's primary oil export terminal, heavily defended by IRGC naval and air defense forces. No credible reports of imminent invasion or loss of control exist."
+      },
+      {
+        "factor": "Historical base rate of regime change or loss of strategic territory",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Since 1979, Iran has not lost control of any of its sovereign territory to foreign forces. The only exception is the Iran-Iraq War (1980-88) where Iraq briefly held parts of Khuzestan but never Kharg Island. Even during maximum pressure campaigns, Iran retained full control."
+      },
+      {
+        "factor": "Time remaining (23 days)",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "To lose control by June 30, a full-scale invasion or successful coup would need to occur within 23 days. Military planning for such an operation typically takes months to years. No visible preparations (troop buildup, naval deployment, diplomatic ultimatums) are reported."
+      },
+      {
+        "factor": "Nature of the resolution criteria",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "The resolution requires actual, sustained control by another state or authority. Temporary raids, bombardment, or contested status do not count. This high bar makes a YES outcome extremely unlikely in a short timeframe."
+      },
+      {
+        "factor": "Potential for internal collapse or negotiated transfer",
+        "direction": "supports_no",
+        "weight": "low",
+        "evidence": "No credible reports of imminent regime collapse, mass defections, or negotiations to cede Kharg Island. Iran's government remains stable, and the IRGC maintains tight control over strategic assets."
+      }
+    ],
+    "baseRate": {
+      "value": 0.001,
+      "reasoning": "The base rate for a sovereign state losing control of a strategic island to foreign forces in a 23-day window is extremely low. Since 1945, such events are rare (e.g., Falklands 1982 took months of preparation; Crimea 2014 was a slow-burn operation). For Iran specifically, no precedent exists since 1979. A reasonable base rate is <0.1%."
+    },
+    "adjustments": [
+      {
+        "reason": "No evidence of escalation to invasion level",
+        "delta": -0.0005
+      },
+      {
+        "reason": "Extremely short timeline relative to military requirements",
+        "delta": -0.0003
+      },
+      {
+        "reason": "High resolution bar (sustained control, not temporary disruption)",
+        "delta": -0.0002
+      }
+    ],
+    "finalEstimate": 0.001,
+    "confidence": "high",
+    "confidenceInterval": [
+      0.0001,
+      0.005
+    ],
+    "keyUncertainties": [
+      "A sudden, unexpected military strike by a major power (US or Israel) that rapidly seizes the island",
+      "A complete internal collapse of the Iranian government leading to a power vacuum",
+      "A negotiated deal where Iran voluntarily cedes control (extremely unlikely)"
+    ],
+    "researchNeeded": [
+      "Current US and Israeli military posture in the Persian Gulf",
+      "Any recent intelligence leaks about planned operations against Kharg Island",
+      "Internal stability indicators within Iran (protests, military loyalty)"
+    ],
+    "reasoning": "This market asks whether Kharg Island will fall out of Iranian control by June 30, 2026—just 23 days from now. The evidence overwhelmingly supports a NO resolution. First, no major military conflict or invasion of Iran is underway or publicly anticipated. Kharg Island is Iran's most critical economic asset, heavily defended by the IRGC Navy and air defense systems. Second, historical precedent is stark: Iran has not lost control of any sovereign territory to foreign forces since the 1979 revolution, and even during the Iran-Iraq War, Kharg Island remained under Iranian control despite Iraqi attacks. Third, the timeline is impossibly short for a full-scale invasion or coup that would result in sustained foreign control. Military operations of this scale require months of planning, troop buildup, and diplomatic preparation—none of which are visible. Finally, the resolution criteria are stringent: temporary raids, bombardment, or contested status do not count. Only actual, sustained control by another state or authority qualifies. Given these factors, the true probability is near zero, conservatively estimated at 0.1% (1 in 1,000). The market price of 3.6% YES already seems too high, likely reflecting speculative noise rather than genuine probability. My estimate is 0.1% with high confidence, though a fat-tail scenario of a sudden, unexpected military strike cannot be entirely ruled out, hence the wide confidence interval up to 0.5%."
+  },
+  "edge": {
+    "side": "NO",
+    "edge": 0.0355,
+    "edgePct": "3.5%",
+    "ourEstimate": "0.1%",
+    "marketPrice": "3.6%",
+    "tradeable": false
+  },
+  "researchedAt": "2026-06-08T06:17:23.279Z"
+}

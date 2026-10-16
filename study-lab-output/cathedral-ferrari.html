@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cathedral — Two Views</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0A0A0A;
+    color: #E8E8E8;
+    font-family: 'Epilogue', sans-serif;
+    overflow-x: hidden;
+  }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 20px;
+  }
+  .header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #f7b408;
+    letter-spacing: 2px;
+  }
+  .header p {
+    color: #888;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    font-weight: 300;
+  }
+
+  .view-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin: 30px auto 40px;
+    max-width: 500px;
+  }
+  .view-toggle button {
+    flex: 1;
+    padding: 14px 24px;
+    font-family: 'Epilogue', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 2px solid #333;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+  }
+  .view-toggle button:first-child { border-radius: 8px 0 0 8px; }
+  .view-toggle button:last-child { border-radius: 0 8px 8px 0; }
+  .view-toggle button.active {
+    background: #f7b408;
+    color: #0A0A0A;
+    border-color: #f7b408;
+  }
+  .view-toggle button:hover:not(.active) {
+    border-color: #f7b408;
+    color: #f7b408;
+  }
+
+  .view { display: none; padding: 0 20px 60px; max-width: 1400px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* ===== EXTERIOR VIEW ===== */
+  .exterior-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 30px;
+    align-items: start;
+  }
+
+  .ext-zone {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .ext-zone:hover {
+    border-color: #f7b408;
+    transform: translateY(-2px);
+  }
+
+  .ext-zone h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ext-zone h2 .icon { font-size: 1.4rem; }
+
+  .zone-sources h2 { color: #4ECDC4; }
+  .zone-thinks h2 { color: #A78BFA; }
+  .zone-builds h2 { color: #f7b408; }
+  .zone-outputs h2 { color: #34D399; }
+  .zone-emerges h2 { color: #F472B6; }
+
+  .ext-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 0.88rem;
+    color: #bbb;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ext-item:last-child { border-bottom: none; }
+  .ext-item .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .zone-sources .dot { background: #4ECDC4; }
+  .zone-thinks .dot { background: #A78BFA; }
+  .zone-builds .dot { background: #f7b408; }
+  .zone-outputs .dot { background: #34D399; }
+  .zone-emerges .dot { background: #F472B6; }
+
+  .ext-item .label { font-weight: 600; color: #ddd; }
+  .ext-item .desc { color: #777; font-size: 0.82rem; margin-top: 2px; }
+
+  /* Layout: Sources left, Thinks+Emerges center, Builds right, Outputs bottom-center */
+  .zone-sources { grid-column: 1; grid-row: 1 / 3; }
+  .zone-thinks { grid-column: 2; grid-row: 1; }
+  .zone-builds { grid-column: 3; grid-row: 1 / 3; }
+  .zone-emerges { grid-column: 2; grid-row: 2; }
+  .zone-outputs { grid-column: 1 / 4; grid-row: 3; }
+
+  /* Flow arrows between zones */
+  .flow-connector {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  /* Outputs as horizontal strip */
+  .zone-outputs .ext-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px 24px;
+  }
+
+  /* ===== ENGINE BAY VIEW ===== */
+  .engine-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .eng-system {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .eng-system:hover {
+    transform: translateY(-2px);
+  }
+  .eng-system::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .sys-nervous { border-color: #EF4444; }
+  .sys-nervous::before { background: #EF4444; }
+  .sys-nervous:hover { border-color: #EF4444; }
+
+  .sys-brain { border-color: #A78BFA; }
+  .sys-brain::before { background: #A78BFA; }
+  .sys-brain:hover { border-color: #A78BFA; }
+
+  .sys-memory { border-color: #3B82F6; }
+  .sys-memory::before { background: #3B82F6; }
+  .sys-memory:hover { border-color: #3B82F6; }
+
+  .sys-metabolism { border-color: #34D399; }
+  .sys-metabolism::before { background: #34D399; }
+  .sys-metabolism:hover { border-color: #34D399; }
+
+  .sys-senses { border-color: #f7b408; }
+  .sys-senses::before { background: #f7b408; }
+  .sys-senses:hover { border-color: #f7b408; }
+
+  .sys-immune { border-color: #F472B6; }
+  .sys-immune::before { background: #F472B6; }
+  .sys-immune:hover { border-color: #F472B6; }
+
+  .sys-skeleton { border-color: #94A3B8; }
+  .sys-skeleton::before { background: #94A3B8; }
+  .sys-skeleton:hover { border-color: #94A3B8; }
+
+  .eng-system h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .sys-nervous h2 { color: #EF4444; }
+  .sys-brain h2 { color: #A78BFA; }
+  .sys-memory h2 { color: #3B82F6; }
+  .sys-metabolism h2 { color: #34D399; }
+  .sys-senses h2 { color: #f7b408; }
+  .sys-immune h2 { color: #F472B6; }
+  .sys-skeleton h2 { color: #94A3B8; }
+
+  .eng-system .subtitle {
+    font-size: 0.78rem;
+    color: #666;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  .eng-component {
+    padding: 6px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 0.84rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .eng-component:last-child { border-bottom: none; }
+  .eng-component .name { color: #ccc; font-weight: 500; }
+  .eng-component .tech {
+    font-size: 0.72rem;
+    color: #555;
+    font-family: monospace;
+    background: #1a1a1a;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* Wire diagram at bottom of engine bay */
+  .wiring-diagram {
+    grid-column: 1 / 4;
+    background: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+    padding: 30px;
+  }
+  .wiring-diagram h2 {
+    color: #f7b408;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .wire-flow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .wire-node {
+    background: #151515;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 12px 18px;
+    text-align: center;
+    min-width: 120px;
+    transition: border-color 0.3s;
+  }
+  .wire-node:hover { border-color: #f7b408; }
+  .wire-node .wn-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #ddd;
+  }
+  .wire-node .wn-detail {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 4px;
+  }
+  .wire-arrow {
+    color: #333;
+    font-size: 1.4rem;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 30px 20px;
+    max-width: 1000px;
+    margin: 0 auto 10px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat .num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f7b408;
+  }
+  .stat .label {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .exterior-grid { grid-template-columns: 1fr; }
+    .zone-sources, .zone-thinks, .zone-builds, .zone-emerges, .zone-outputs {
+      grid-column: 1; grid-row: auto;
+    }
+    .engine-grid { grid-template-columns: 1fr; }
+    .wiring-diagram { grid-column: 1; }
+  }
+
+  .back-link {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.85rem;
+    z-index: 100;
+  }
+  .back-link:hover { color: #f7b408; }
+</style>
+</head>
+<body>
+
+<a href="/lobby" class="back-link">&larr; Lobby</a>
+
+<div class="header">
+  <h1>THE CATHEDRAL</h1>
+  <p>A sovereign intelligence architecture — two views of the same machine</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num">78</div><div class="label">PM2 Processes</div></div>
+  <div class="stat"><div class="num">10,154+</div><div class="label">Vault Nuggets</div></div>
+  <div class="stat"><div class="num">42</div><div class="label">Lobby Rooms</div></div>
+  <div class="stat"><div class="num">15</div><div class="label">Court Members</div></div>
+  <div class="stat"><div class="num">9</div><div class="label">Cathedral Senses</div></div>
+  <div class="stat"><div class="num">12</div><div class="label">Research Domains</div></div>
+</div>
+
+<div class="view-toggle">
+  <button class="active" onclick="switchView('exterior')">THE EXTERIOR</button>
+  <button onclick="switchView('engine')">UNDER THE HOOD</button>
+</div>
+
+<!-- ===== EXTERIOR VIEW ===== -->
+<div id="exterior" class="view active">
+
+  <div class="exterior-grid">
+
+    <!-- SOURCES / INSPIRATION -->
+    <div class="ext-zone zone-sources">
+      <h2><span class="icon">&#9670;</span> WHAT FEEDS IT</h2>
+      <div class="ext-items">
+        <div class="ext-item"><span class="dot"></span><div><div class="label">The Vault</div><div class="desc">10,154+ nuggets across 12 domains — the memory</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Kingston Drives</div><div class="desc">57,595 media files — the visual memory</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">DeepSeek Research</div><div class="desc">Uncensored deep forensic research</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Voice Notes</div><div class="desc">Whisper transcription, direct thought intake</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">/t Thought Intake</div><div class="desc">Raw thought in, classified, routed, preserved</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Ancient Corpuses</div><div class="desc">Emerald Tablets, Corpus Hermeticum, Nag Hammadi, Gilgamesh</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">External Scraping</div><div class="desc">PubMed, Reddit, competitors, HN, arXiv</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Cuba Corpus</div><div class="desc">34 combos, coach clips — the gold standard</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Boxing Videos</div><div class="desc">YOLO + MediaPipe movement analysis pipeline</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Paul's Captures</div><div class="desc">Quick deposits — thoughts, builds, ships</div></div></div>
+      </div>
+    </div>
+
+    <!-- THINKS -->
+    <div class="ext-zone zone-thinks">
+      <h2><span class="icon">&#9671;</span> WHAT IT THINKS</h2>
+      <div class="ext-items">
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Relay Threads</div><div class="desc">Paul picks direction, Forge runs to the fork, surfaces it, Paul picks again</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">The Muse</div><div class="desc">3am vault walker — finds cross-domain bridges nobody asked for</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Genius Council</div><div class="desc">8 honest interlocutors evaluate claims from different angles</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Convergence Detection</div><div class="desc">5 civilisations, 14 vault domains, Rosetta Bridge between them</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">The Synapse</div><div class="desc">Compound intelligence — cross-domain patterns only humans miss</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Reasoning Loop</div><div class="desc">GENERATE > CRITIQUE > REVISE > JUDGE — iterative self-correction</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">The Archaeologist</div><div class="desc">Mines forgotten techniques — valid, ignored, buildable, unique</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">The Elicitor</div><div class="desc">Standing questions Paul would ask — push gold only</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Lucy Heartbeat</div><div class="desc">Bi-weekly diagnostic — delta reporting, not single snapshots</div></div></div>
+      </div>
+    </div>
+
+    <!-- BUILDS -->
+    <div class="ext-zone zone-builds">
+      <h2><span class="icon">&#9672;</span> WHAT IT BUILDS</h2>
+      <div class="ext-items">
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Agents</div><div class="desc">15 court members + 20+ toolkit agents</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Dashboards</div><div class="desc">42 lobby rooms — visual access to every system</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Pipelines</div><div class="desc">Content, research, boxing analysis, visual production</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Instruments</div><div class="desc">Looking Glass, Ensemble Gate, Knowledge Graph, Taste Map</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Methods</div><div class="desc">19 named methods in 7-stage Principled Practice cycle</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Products</div><div class="desc">Gym Eyes, course guide, student homework, coaching tools</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Characters</div><div class="desc">Logan, Ling, Maya — each with Soul IDs, context, voice</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Experiments</div><div class="desc">4 trading experiments, boxing lab, creative lab, Polymarket</div></div></div>
+      </div>
+    </div>
+
+    <!-- EMERGES -->
+    <div class="ext-zone zone-emerges">
+      <h2><span class="icon">&#10022;</span> WHAT EMERGES</h2>
+      <div class="ext-items">
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Cross-Domain Gold</div><div class="desc">Patterns visible only when 12 domains share one vault</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">The Third Thing</div><div class="desc">Knowledge that exists only at the intersection — not stored, only traced</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Agent Emergence</div><div class="desc">200+ incidents tracked on Emergence Board — DETECTED through INTEGRATED</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Named Principles</div><div class="desc">Fear Gate, Hypocrisy Cost, Trojan Horse, Held Tension, Seed Loop...</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Self-Elicitation</div><div class="desc">The system interrogates itself — every agent elicits gold in its lane</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Double Evolution</div><div class="desc">Vault files evolve AND each model generation extracts more from them</div></div></div>
+      </div>
+    </div>
+
+    <!-- OUTPUTS -->
+    <div class="ext-zone zone-outputs">
+      <h2><span class="icon">&#9654;</span> WHAT IT OUTPUTS</h2>
+      <div class="ext-items">
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Vault Deposits</div><div class="desc">Grade A/B research, promoted to Refined Gold</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Agent Podcasts</div><div class="desc">Solo monologues + duo conversations — agents thinking aloud</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Visual Content</div><div class="desc">Reed lab, pro photos, scene director, Logan stills/video</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Morning Briefing</div><div class="desc">Daily voice + text — what happened while you slept</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Mercury Herald</div><div class="desc">Truths the system discovered on its own</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Coaching Tools</div><div class="desc">Student homework, virtual tutor, drill player, technique library</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Publications</div><div class="desc">Book assembly, newsletter drafts, podcast curation</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Trading Signals</div><div class="desc">11 strategies debated, paper-traded, mentor-reviewed</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Session Harvests</div><div class="desc">3-pass capture — decisions, corrections, calibration</div></div></div>
+        <div class="ext-item"><span class="dot"></span><div><div class="label">Interactive Maps</div><div class="desc">Cathedral Map, mind maps, knowledge graphs, heat maps</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== ENGINE BAY VIEW ===== -->
+<div id="engine" class="view">
+
+  <div class="engine-grid">
+
+    <!-- THE NERVOUS SYSTEM -->
+    <div class="eng-system sys-nervous">
+      <h2>THE NERVOUS SYSTEM</h2>
+      <div class="subtitle">Signal routing between all parts</div>
+      <div class="eng-component"><span class="name">Agent Engine</span><span class="tech">agent-engine.js</span></div>
+      <div class="eng-component"><span class="name">Cross-Agent Event Bus</span><span class="tech">agent-event-bus.js</span></div>
+      <div class="eng-component"><span class="name">DM Processor</span><span class="tech">dm-processor.js</span></div>
+      <div class="eng-component"><span class="name">Cross-Domain Sync</span><span class="tech">cross-domain-sync.js</span></div>
+      <div class="eng-component"><span class="name">Pipeline Runner</span><span class="tech">pipeline-runner.js</span></div>
+      <div class="eng-component"><span class="name">Narrative Journals</span><span class="tech">narrative-journal.js</span></div>
+      <div class="eng-component"><span class="name">Linda Tuple Space</span><span class="tech">linda-vault.js</span></div>
+      <div class="eng-component"><span class="name">Production Engine</span><span class="tech">production-engine.js</span></div>
+    </div>
+
+    <!-- THE BRAIN -->
+    <div class="eng-system sys-brain">
+      <h2>THE BRAIN</h2>
+      <div class="subtitle">Model routing and intelligence layer</div>
+      <div class="eng-component"><span class="name">Claude Opus/Sonnet</span><span class="tech">Tier 1 — sessions</span></div>
+      <div class="eng-component"><span class="name">DeepSeek V4-Pro</span><span class="tech">Tier 2 — synthesis</span></div>
+      <div class="eng-component"><span class="name">Hermes3 (Ollama)</span><span class="tech">Tier 3 — bulk/sovereign</span></div>
+      <div class="eng-component"><span class="name">Gemma 4 26B</span><span class="tech">Local inference</span></div>
+      <div class="eng-component"><span class="name">Whisper</span><span class="tech">Speech-to-text</span></div>
+      <div class="eng-component"><span class="name">Edge-TTS</span><span class="tech">Text-to-speech</span></div>
+      <div class="eng-component"><span class="name">MediaPipe</span><span class="tech">Pose estimation</span></div>
+      <div class="eng-component"><span class="name">Nomic Embed</span><span class="tech">Semantic search</span></div>
+    </div>
+
+    <!-- THE MEMORY -->
+    <div class="eng-system sys-memory">
+      <h2>THE MEMORY</h2>
+      <div class="subtitle">Where everything persists</div>
+      <div class="eng-component"><span class="name">Obsidian Vault</span><span class="tech">10,154+ .md files</span></div>
+      <div class="eng-component"><span class="name">SQLite Databases</span><span class="tech">metrics.db + 6 more</span></div>
+      <div class="eng-component"><span class="name">Agent State Files</span><span class="tech">state/*.json</span></div>
+      <div class="eng-component"><span class="name">JSONL Logs</span><span class="tech">Calls, tokens, events</span></div>
+      <div class="eng-component"><span class="name">Linda Tuples</span><span class="tech">Inter-agent messages</span></div>
+      <div class="eng-component"><span class="name">Bandit Brain</span><span class="tech">Thompson sampling</span></div>
+      <div class="eng-component"><span class="name">Kingston Archives</span><span class="tech">57,595 media files</span></div>
+      <div class="eng-component"><span class="name">Session Harvests</span><span class="tech">3-pass per session</span></div>
+    </div>
+
+    <!-- THE METABOLISM -->
+    <div class="eng-system sys-metabolism">
+      <h2>THE METABOLISM</h2>
+      <div class="subtitle">Digestion, promotion, decay</div>
+      <div class="eng-component"><span class="name">Vault Embedder</span><span class="tech">vault-embedder.js</span></div>
+      <div class="eng-component"><span class="name">Vault Promoter</span><span class="tech">Staging > Gold</span></div>
+      <div class="eng-component"><span class="name">Decay Detector</span><span class="tech">Nightly 05:00</span></div>
+      <div class="eng-component"><span class="name">Health Injector</span><span class="tech">VITAL/STABLE/AGING</span></div>
+      <div class="eng-component"><span class="name">Densifier</span><span class="tech">Wikilink weaver</span></div>
+      <div class="eng-component"><span class="name">Thought Intake</span><span class="tech">thought-intake.js</span></div>
+      <div class="eng-component"><span class="name">Terminal Harvester</span><span class="tech">Every 6 hours</span></div>
+      <div class="eng-component"><span class="name">DeepSeek Harvester</span><span class="tech">Chat > vault</span></div>
+    </div>
+
+    <!-- THE SENSES -->
+    <div class="eng-system sys-senses">
+      <h2>THE SENSES</h2>
+      <div class="subtitle">How the Cathedral perceives</div>
+      <div class="eng-component"><span class="name">Sight</span><span class="tech">Vault file watcher</span></div>
+      <div class="eng-component"><span class="name">Smell</span><span class="tech">Anomaly detection</span></div>
+      <div class="eng-component"><span class="name">Proprioception</span><span class="tech">PM2 health</span></div>
+      <div class="eng-component"><span class="name">Transmission</span><span class="tech">Agent DMs</span></div>
+      <div class="eng-component"><span class="name">Reflection</span><span class="tech">Cognitive scanner</span></div>
+      <div class="eng-component"><span class="name">Vitality</span><span class="tech">Emergence monitor</span></div>
+      <div class="eng-component"><span class="name">Surprise</span><span class="tech">Pattern breaking</span></div>
+      <div class="eng-component"><span class="name">Sky</span><span class="tech">Looking Glass</span></div>
+      <div class="eng-component"><span class="name">Gym Eyes</span><span class="tech">Movement analysis</span></div>
+    </div>
+
+    <!-- THE IMMUNE SYSTEM -->
+    <div class="eng-system sys-immune">
+      <h2>THE IMMUNE SYSTEM</h2>
+      <div class="subtitle">Quality gates and truth filters</div>
+      <div class="eng-component"><span class="name">Epistemic Triage</span><span class="tech">5-dim scoring</span></div>
+      <div class="eng-component"><span class="name">Resonance Filter</span><span class="tech">Aesthetic/priority</span></div>
+      <div class="eng-component"><span class="name">Ship Gate</span><span class="tech">LLM reply != done</span></div>
+      <div class="eng-component"><span class="name">Integration Gate</span><span class="tech">Persist + K pulses</span></div>
+      <div class="eng-component"><span class="name">Taste Map</span><span class="tech">70 anchors, 16 rejects</span></div>
+      <div class="eng-component"><span class="name">Bias Mapper</span><span class="tech">57 biases tracked</span></div>
+      <div class="eng-component"><span class="name">Move Detector</span><span class="tech">5 universal moves</span></div>
+      <div class="eng-component"><span class="name">Swarm Cathy</span><span class="tech">Bandit shift filter</span></div>
+    </div>
+
+    <!-- THE SKELETON -->
+    <div class="eng-system sys-skeleton" style="grid-column: 1 / 4;">
+      <h2>THE SKELETON</h2>
+      <div class="subtitle">Infrastructure everything runs on</div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 24px;">
+        <div class="eng-component"><span class="name">PM2</span><span class="tech">78 processes</span></div>
+        <div class="eng-component"><span class="name">Cath Bridge</span><span class="tech">:8080 REST API</span></div>
+        <div class="eng-component"><span class="name">Telegram Bot</span><span class="tech">Primary interface</span></div>
+        <div class="eng-component"><span class="name">Lobby</span><span class="tech">42 rooms, 9 districts</span></div>
+        <div class="eng-component"><span class="name">Mac Mini M-series</span><span class="tech">16GB, local-first</span></div>
+        <div class="eng-component"><span class="name">Ollama</span><span class="tech">:11434 local LLMs</span></div>
+        <div class="eng-component"><span class="name">SQLite</span><span class="tech">Zero-config DB</span></div>
+        <div class="eng-component"><span class="name">Git 3-Tier</span><span class="tech">Vault + nanoclaw + Cathedral</span></div>
+        <div class="eng-component"><span class="name">Voice Chamber</span><span class="tech">:12400 KITT voice</span></div>
+        <div class="eng-component"><span class="name">Manifest Watcher</span><span class="tech">Auto-reconcile</span></div>
+        <div class="eng-component"><span class="name">Timekeeper</span><span class="tech">*/15 min pulse</span></div>
+        <div class="eng-component"><span class="name">Status Board</span><span class="tech">:8080/board</span></div>
+      </div>
+    </div>
+
+    <!-- WIRING DIAGRAM -->
+    <div class="wiring-diagram">
+      <h2>THE SIGNAL PATH</h2>
+      <div class="wire-flow">
+        <div class="wire-node">
+          <div class="wn-label">INPUT</div>
+          <div class="wn-detail">Telegram / Voice / File drop</div>
+        </div>
+        <div class="wire-arrow">&rarr;</div>
+        <div class="wire-node">
+          <div class="wn-label">ROUTE</div>
+          <div class="wn-detail">Cathy / Agent / Thought intake</div>
+        </div>
+        <div class="wire-arrow">&rarr;</div>
+        <div class="wire-node">
+          <div class="wn-label">THINK</div>
+          <div class="wn-detail">DeepSeek / Hermes3 / Claude</div>
+        </div>
+        <div class="wire-arrow">&rarr;</div>
+        <div class="wire-node">
+          <div class="wn-label">GATE</div>
+          <div class="wn-detail">Triage / Taste / Resonance</div>
+        </div>
+        <div class="wire-arrow">&rarr;</div>
+        <div class="wire-node">
+          <div class="wn-label">PERSIST</div>
+          <div class="wn-detail">Vault / State / SQLite</div>
+        </div>
+        <div class="wire-arrow">&rarr;</div>
+        <div class="wire-node">
+          <div class="wn-label">SURFACE</div>
+          <div class="wn-detail">Telegram / Dashboard / Voice</div>
+        </div>
+        <div class="wire-arrow">&rarr;</div>
+        <div class="wire-node">
+          <div class="wn-label">COMPOUND</div>
+          <div class="wn-detail">Next cycle reads the last</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function switchView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+  document.getElementById(view).classList.add('active');
+  document.querySelector(`.view-toggle button[onclick="switchView('${view}')"]`).classList.add('active');
+}
+</script>
+
+</body>
+</html>

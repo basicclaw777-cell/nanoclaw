@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral Output Map</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1e1e1e;
+    --gold: #f7b408;
+    --gold-dim: #f7b40840;
+    --white: #fafafa;
+    --muted: #888;
+    --blue: #378ADD;
+    --green: #1D9E75;
+    --purple: #534AB7;
+    --red: #ef4444;
+    --amber: #EF9F27;
+    --cyan: #06b6d4;
+    --radius: 10px;
+    --font: 'Share Tech Mono', 'SF Mono', 'Fira Code', monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--white); font-family:var(--font); font-size:13px; min-height:100vh; }
+
+  header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 28px 16px; border-bottom:1px solid #222;
+  }
+  header h1 { font-size:18px; letter-spacing:2px; color:var(--gold); font-weight:400; }
+  header .back { color:var(--muted); text-decoration:none; font-size:12px; }
+  header .back:hover { color:var(--white); }
+
+  .stats-bar {
+    display:flex; gap:24px; padding:12px 28px; border-bottom:1px solid #181818;
+    font-size:11px; color:var(--muted);
+  }
+  .stats-bar .val { color:var(--gold); font-size:14px; margin-right:4px; }
+
+  .layers { padding:20px 28px 40px; max-width:1200px; margin:0 auto; }
+
+  .layer {
+    margin-bottom:28px; border:1px solid #222; border-radius:var(--radius);
+    overflow:hidden; background:var(--surface);
+  }
+  .layer-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; cursor:pointer; user-select:none;
+    background:var(--surface2); border-bottom:1px solid #222;
+  }
+  .layer-header:hover { background:#252525; }
+  .layer-header h2 { font-size:14px; font-weight:400; letter-spacing:1px; }
+  .layer-header .badge {
+    font-size:10px; padding:3px 10px; border-radius:12px;
+    text-transform:uppercase; letter-spacing:1px;
+  }
+  .layer-header .chevron { transition:transform 0.2s; color:var(--muted); }
+  .layer.collapsed .layer-body { display:none; }
+  .layer.collapsed .chevron { transform:rotate(-90deg); }
+
+  .l1 .layer-header { border-left:3px solid var(--green); }
+  .l1 .badge { background:var(--green); color:#000; }
+  .l2 .layer-header { border-left:3px solid var(--purple); }
+  .l2 .badge { background:var(--purple); color:#fff; }
+  .l3 .layer-header { border-left:3px solid var(--gold); }
+  .l3 .badge { background:var(--gold); color:#000; }
+
+  .layer-body { padding:16px 20px; }
+  .layer-desc { color:var(--muted); font-size:12px; margin-bottom:16px; line-height:1.6; }
+
+  .output-grid {
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:12px;
+  }
+  .output-card {
+    background:var(--surface2); border:1px solid #2a2a2a; border-radius:8px;
+    padding:14px 16px; transition:border-color 0.2s, background 0.2s;
+    cursor:default; position:relative;
+  }
+  .output-card:hover { border-color:#444; background:#222; }
+  .output-card h3 { font-size:13px; font-weight:400; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .output-card h3 .icon { font-size:16px; }
+  .output-card .desc { color:var(--muted); font-size:11px; line-height:1.5; margin-bottom:8px; }
+  .output-card .meta { display:flex; gap:8px; flex-wrap:wrap; }
+  .output-card .tag {
+    font-size:9px; padding:2px 8px; border-radius:4px;
+    text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .tag.live { background:#1D9E7530; color:var(--green); }
+  .tag.partial { background:#EF9F2730; color:var(--amber); }
+  .tag.future { background:#88888830; color:var(--muted); }
+  .tag.new { background:#534AB730; color:#a78bfa; }
+
+  .output-card .links { margin-top:8px; display:flex; gap:6px; flex-wrap:wrap; }
+  .output-card .links a {
+    font-size:10px; color:var(--blue); text-decoration:none;
+    padding:2px 6px; border:1px solid #378ADD40; border-radius:4px;
+  }
+  .output-card .links a:hover { background:#378ADD20; color:var(--white); }
+
+  .legend {
+    display:flex; gap:16px; padding:8px 28px 20px; font-size:10px; color:var(--muted);
+  }
+  .legend span { display:flex; align-items:center; gap:4px; }
+  .legend .dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .legend .dot.g { background:var(--green); }
+  .legend .dot.a { background:var(--amber); }
+  .legend .dot.m { background:var(--muted); }
+  .legend .dot.p { background:var(--purple); }
+
+  @media (max-width:700px) {
+    .output-grid { grid-template-columns:1fr; }
+    header { padding:16px; }
+    .layers { padding:12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>CATHEDRAL OUTPUT MAP</h1>
+  <a class="back" href="/environments/lobby.html">LOBBY</a>
+</header>
+
+<div class="stats-bar" id="statsBar">
+  <span><span class="val" id="statTotal">--</span> total outputs</span>
+  <span><span class="val" id="statLive">--</span> live</span>
+  <span><span class="val" id="statPartial">--</span> partial</span>
+  <span><span class="val" id="statFuture">--</span> future</span>
+  <span><span class="val" id="statClaims">--</span> tracked claims</span>
+</div>
+
+<div class="legend">
+  <span><span class="dot g"></span> Live</span>
+  <span><span class="dot a"></span> Partial</span>
+  <span><span class="dot m"></span> Future</span>
+  <span><span class="dot p"></span> New (this session)</span>
+</div>
+
+<div class="layers">
+
+  <!-- LAYER 1: DIRECT OUTPUTS -->
+  <div class="layer l1" id="layer1">
+    <div class="layer-header" onclick="toggleLayer('layer1')">
+      <h2>LAYER 1 — DIRECT OUTPUTS</h2>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="badge">What the Cathedral produces</span>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+    <div class="layer-body">
+      <div class="layer-desc">Raw capability. Every tool, dashboard, agent response, and generated artifact. The hands of the system.</div>
+      <div class="output-grid">
+
+        <div class="output-card">
+          <h3><span class="icon">🔍</span> Research Reports</h3>
+          <div class="desc">Forensic analysis via Obliteratus pipeline, epistemic triage (5-dimension scoring), graded claims A-F. Vault deposits.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/cosmology">Cosmology Series</a>
+            <a href="/archaeologist">Forgotten Shelf</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🎨</span> Visual Content</h3>
+          <div class="desc">Reed lab daily generation, pro-photo pipeline, scene director, Logan stills/video, cinema grade.</div>
+          <div class="meta"><span class="tag partial">paused — credits</span></div>
+          <div class="links">
+            <a href="/reed-studio">Reed Studio</a>
+            <a href="/techniques">Technique Library</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🥊</span> Boxing Intelligence</h3>
+          <div class="desc">Gym Eyes punch detection, Cuba combo library, student homework loop, virtual tutor DTW alignment, forgotten techniques.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/gym-eyes">Gym Eyes Hub</a>
+            <a href="/cuba-combos">Cuba Combos</a>
+            <a href="/gym-eyes/homework">Student Homework</a>
+            <a href="/gym-eyes/drill-player">Drill Player</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">💬</span> Agent Conversations</h3>
+          <div class="desc">15+ agents via Telegram. Multi-turn sessions, context memory, cross-domain sync. DM processor as nervous system.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/agents">Agent Hub</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">📊</span> Dashboards</h3>
+          <div class="desc">42+ lobby rooms. Trading hub, cosmology graph, predictive map, Polymarket, punchpass, pulse, board.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/environments/lobby.html">Lobby</a>
+            <a href="/board">Status Board</a>
+            <a href="/trader/hub">Trading</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🗣</span> Voice & Audio</h3>
+          <div class="desc">Morning briefing (TTS), evening reflection, cosmology podcast, Cathy narrations, voice chamber (KITT).</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="http://localhost:12400" target="_blank">Voice Chamber</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">📈</span> Trading Signals</h3>
+          <div class="desc">11 strategy roundtable, cyclical trader, Simpsons signal, allocation tracker, Polymarket research + Kelly sizing.</div>
+          <div class="meta"><span class="tag live">live — paper</span></div>
+          <div class="links">
+            <a href="/trader/hub">Trading Hub</a>
+            <a href="/polymarket">Polymarket</a>
+            <a href="/allocations">Allocations</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">📋</span> Content Plans</h3>
+          <div class="desc">Content studio idea engine, Maya social plans, beat templates, video engine, capture wishlist.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/video-engine">Video Engine</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🏛</span> Vault Deposits</h3>
+          <div class="desc">10,154+ nuggets across 12 domains. Auto-harvested from terminals, DeepSeek, voice, Telegram. Promoter pipeline staging→gold.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/vault/search?q=">Vault Search</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 2: EXECUTIVE OUTPUTS -->
+  <div class="layer l2" id="layer2">
+    <div class="layer-header" onclick="toggleLayer('layer2')">
+      <h2>LAYER 2 — EXECUTIVE OUTPUTS</h2>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="badge">How the Cathedral governs itself</span>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+    <div class="layer-body">
+      <div class="layer-desc">The prefrontal cortex. Claim identity, attention budget, provenance enforcement, priority triage. Built this session.</div>
+      <div class="output-grid">
+
+        <div class="output-card">
+          <h3><span class="icon">📜</span> Claim Ledger</h3>
+          <div class="desc">Every belief tracked with permanent ID. Agent findings auto-registered as DERIVED claims at confidence 0.5. Lineage chains. Blocked-event detection.</div>
+          <div class="meta"><span class="tag new">new</span><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="#" onclick="loadClaimStats();return false;">Stats</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🎯</span> Priority Engine</h3>
+          <div class="desc">4-tier classification: CRITICAL / IMPORTANT / ROUTINE / BACKGROUND. Every event bus publish() classified. Critical → Telegram notification.</div>
+          <div class="meta"><span class="tag new">new</span><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="#" onclick="loadPriorityStats();return false;">Stats</a>
+            <a href="#" onclick="loadPriorityDigest();return false;">Digest</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">⚓</span> Admiralty Rating</h3>
+          <div class="desc">NATO standard: Source Reliability (A-F) x Information Credibility (1-6). Independent axes — reliable source can relay false info. 25+ sources rated.</div>
+          <div class="meta"><span class="tag new">new</span><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="#" onclick="showAdmiraltyGuide();return false;">Rating Guide</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🌱</span> Emergence Board</h3>
+          <div class="desc">Kanban lifecycle: DETECTED → WATCHING → CONFIRMED → INTEGRATED | DISMISSED. 200+ incidents tracked. Ship-gate + integration gate.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/emergence">Emergence Garden</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🧠</span> Standing Agency</h3>
+          <div class="desc">Safe autonomous executor. Reads A-grade gold → auto-executes reversible whitelist → proposes risky actions for approval. Kill switch enforced.</div>
+          <div class="meta"><span class="tag live">live — gated</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 3: COMPOUND OUTPUTS -->
+  <div class="layer l3" id="layer3">
+    <div class="layer-header" onclick="toggleLayer('layer3')">
+      <h2>LAYER 3 — COMPOUND OUTPUTS</h2>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="badge">What emerges when layers compound</span>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+    <div class="layer-body">
+      <div class="layer-desc">Intelligence that no single agent produces. Cross-domain convergence, self-elicitation, principled methodology. The Cathedral thinking about thinking.</div>
+      <div class="output-grid">
+
+        <div class="output-card">
+          <h3><span class="icon">⚡</span> The Synapse</h3>
+          <div class="desc">Compound voice. 4hr pulse aggregates all DBs, finds cross-domain patterns no single agent sees. DeepSeek synthesis.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/organism">Neural Map</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🔮</span> Self-Eliciting Organism</h3>
+          <div class="desc">Every agent elicits gold in its master-game lane. Meta-ranker pools + cross-dedups. Gold-of-gold → one governed executor.</div>
+          <div class="meta"><span class="tag live">live — gated</span></div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🌉</span> Rosetta Bridge</h3>
+          <div class="desc">Ancient convergences (5 civilisations, 39 findings) x Cathedral convergences (14 domains, 59 findings). 30 bridges, 5 universal moves.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/cathedral-rosetta">Cathedral Rosetta</a>
+            <a href="/rosetta-bridge">Rosetta Bridge</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">📐</span> Principled Practice</h3>
+          <div class="desc">7-stage methodology: ORIGIN → SEEING → FINDING → BUILDING → TESTING → HEALING → INTEGRATING. 19 named methods. The cycle IS the architecture.</div>
+          <div class="meta"><span class="tag live">live</span></div>
+          <div class="links">
+            <a href="/map">Cathedral Map</a>
+            <a href="/course-guide">10-Block Course Guide</a>
+          </div>
+        </div>
+
+        <div class="output-card">
+          <h3><span class="icon">🏗</span> Transferable IP</h3>
+          <div class="desc">Fear Framework (8 docs), Three Engines, Diagnostic Empathy, Trojan Horse, Forgotten Shelf method. Real methodology from the gym floor.</div>
+          <div class="meta"><span class="tag live">live — accumulating</span></div>
+          <div class="links">
+            <a href="/brand-dna">Brand DNA</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DETAIL MODAL -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:#000c;z-index:100;display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid #333;border-radius:var(--radius);max-width:600px;width:90%;max-height:80vh;overflow:auto;padding:24px;position:relative;">
+    <button onclick="closeModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+function toggleLayer(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function showModal(html) {
+  const m = document.getElementById('modal');
+  document.getElementById('modalContent').innerHTML = html;
+  m.style.display = 'flex';
+}
+
+async function loadClaimStats() {
+  try {
+    const r = await fetch('/api/claim-ledger/stats');
+    const d = await r.json();
+    const html = `<h3 style="color:var(--gold);margin-bottom:16px;">CLAIM LEDGER</h3>
+      <pre style="color:var(--white);font-size:12px;line-height:1.8;white-space:pre-wrap;">${JSON.stringify(d, null, 2)}</pre>`;
+    showModal(html);
+  } catch(e) { showModal(`<p style="color:var(--red)">Failed to load claim stats: ${e.message}</p>`); }
+}
+
+async function loadPriorityStats() {
+  try {
+    const r = await fetch('/api/priority/stats');
+    const d = await r.json();
+    const html = `<h3 style="color:var(--purple);margin-bottom:16px;">PRIORITY ENGINE</h3>
+      <pre style="color:var(--white);font-size:12px;line-height:1.8;white-space:pre-wrap;">${JSON.stringify(d, null, 2)}</pre>`;
+    showModal(html);
+  } catch(e) { showModal(`<p style="color:var(--red)">Failed to load priority stats: ${e.message}</p>`); }
+}
+
+async function loadPriorityDigest() {
+  try {
+    const r = await fetch('/api/priority/digest');
+    const d = await r.json();
+    const html = `<h3 style="color:var(--purple);margin-bottom:16px;">PRIORITY DIGEST</h3>
+      <pre style="color:var(--white);font-size:12px;line-height:1.8;white-space:pre-wrap;">${JSON.stringify(d, null, 2)}</pre>`;
+    showModal(html);
+  } catch(e) { showModal(`<p style="color:var(--red)">Failed to load digest: ${e.message}</p>`); }
+}
+
+function showAdmiraltyGuide() {
+  const html = `<h3 style="color:var(--gold);margin-bottom:16px;">ADMIRALTY CODE</h3>
+    <div style="font-size:12px;line-height:1.8;color:var(--white);">
+    <p style="color:var(--muted);margin-bottom:12px;">NATO standard. Two independent axes — a reliable source can relay false info, an unreliable source can stumble onto truth.</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+      <tr style="border-bottom:1px solid #333;"><th style="text-align:left;padding:6px;color:var(--gold);">Source Reliability</th><th style="text-align:left;padding:6px;color:var(--muted);">Meaning</th></tr>
+      <tr><td style="padding:4px 6px;">A</td><td style="padding:4px 6px;color:var(--muted);">Completely reliable</td></tr>
+      <tr><td style="padding:4px 6px;">B</td><td style="padding:4px 6px;color:var(--muted);">Usually reliable</td></tr>
+      <tr><td style="padding:4px 6px;">C</td><td style="padding:4px 6px;color:var(--muted);">Fairly reliable</td></tr>
+      <tr><td style="padding:4px 6px;">D</td><td style="padding:4px 6px;color:var(--muted);">Not usually reliable</td></tr>
+      <tr><td style="padding:4px 6px;">E</td><td style="padding:4px 6px;color:var(--muted);">Unreliable</td></tr>
+      <tr><td style="padding:4px 6px;">F</td><td style="padding:4px 6px;color:var(--muted);">Cannot be judged</td></tr>
+    </table>
+    <table style="width:100%;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #333;"><th style="text-align:left;padding:6px;color:var(--gold);">Info Credibility</th><th style="text-align:left;padding:6px;color:var(--muted);">Meaning</th></tr>
+      <tr><td style="padding:4px 6px;">1</td><td style="padding:4px 6px;color:var(--muted);">Confirmed</td></tr>
+      <tr><td style="padding:4px 6px;">2</td><td style="padding:4px 6px;color:var(--muted);">Probably true</td></tr>
+      <tr><td style="padding:4px 6px;">3</td><td style="padding:4px 6px;color:var(--muted);">Possibly true</td></tr>
+      <tr><td style="padding:4px 6px;">4</td><td style="padding:4px 6px;color:var(--muted);">Doubtfully true</td></tr>
+      <tr><td style="padding:4px 6px;">5</td><td style="padding:4px 6px;color:var(--muted);">Improbable</td></tr>
+      <tr><td style="padding:4px 6px;">6</td><td style="padding:4px 6px;color:var(--muted);">Cannot be judged</td></tr>
+    </table>
+    <p style="margin-top:12px;color:var(--muted);">Example: <span style="color:var(--white);">C3</span> = Fairly reliable source, possibly true information.</p>
+    </div>`;
+  showModal(html);
+}
+
+// Count stats from DOM
+function countStats() {
+  const tags = document.querySelectorAll('.tag');
+  let live = 0, partial = 0, future = 0, total = 0;
+  const seen = new Set();
+  document.querySelectorAll('.output-card').forEach(c => {
+    total++;
+    const t = c.querySelector('.tag');
+    if (!t) return;
+    const cls = t.className;
+    if (cls.includes('live') || cls.includes('new')) live++;
+    else if (cls.includes('partial')) partial++;
+    else if (cls.includes('future')) future++;
+  });
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statLive').textContent = live;
+  document.getElementById('statPartial').textContent = partial;
+  document.getElementById('statFuture').textContent = future;
+}
+
+// Load claim count
+async function loadClaimCount() {
+  try {
+    const r = await fetch('/api/claim-ledger/stats');
+    const d = await r.json();
+    document.getElementById('statClaims').textContent = d.total || d.count || '?';
+  } catch { document.getElementById('statClaims').textContent = '?'; }
+}
+
+countStats();
+loadClaimCount();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "daily": {
+    "2026-05-27": 0.1
+  },
+  "total": 0.1,
+  "calls": [
+    {
+      "ts": "2026-05-27T08:45:37.536Z",
+      "model": "fal-ai/flux/dev/image-to-image",
+      "cost": 0.025
+    },
+    {
+      "ts": "2026-05-27T08:48:24.175Z",
+      "model": "fal-ai/flux/dev/image-to-image",
+      "cost": 0.025
+    },
+    {
+      "ts": "2026-05-27T08:52:11.352Z",
+      "model": "fal-ai/flux/dev/image-to-image",
+      "cost": 0.025
+    },
+    {
+      "ts": "2026-05-27T08:54:56.400Z",
+      "model": "fal-ai/flux/dev/image-to-image",
+      "cost": 0.025
+    }
+  ]
+}

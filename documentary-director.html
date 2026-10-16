@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Documentary Director</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0d1117;
+  --gold: #f7b408;
+  --text-primary: #e6edf3;
+  --text-secondary: #c9d1d9;
+  --text-muted: #8b949e;
+  --card-bg: #161b22;
+  --card-border: #30363d;
+  --red: #f85149;
+  --green: #3fb950;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+  --orange: #f0883e;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header {
+  padding: 24px 16px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.header h1 {
+  color: var(--gold);
+  font-size: 1.4rem;
+  letter-spacing: 4px;
+  font-weight: 700;
+}
+
+.header .subtitle {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin-top: 4px;
+  text-transform: lowercase;
+}
+
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--card-border);
+  background: var(--card-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 14px 8px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  min-height: 44px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-btn.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-content {
+  display: none;
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Mode selector buttons */
+.mode-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 12px 8px;
+  background: transparent;
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+  font-family: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 4px;
+  min-height: 44px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mode-btn.active {
+  background: var(--gold);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.mode-btn:hover:not(.active) {
+  background: rgba(247, 180, 8, 0.1);
+}
+
+/* Input fields */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  min-height: 44px;
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* Generate button */
+.generate-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--gold);
+  border: none;
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 4px;
+  min-height: 44px;
+  margin-bottom: 20px;
+  transition: opacity 0.2s;
+}
+
+.generate-btn:hover {
+  opacity: 0.9;
+}
+
+.generate-btn:active {
+  opacity: 0.7;
+}
+
+.generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Question cards */
+.question-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.question-card.edge {
+  border-color: var(--red);
+  border-width: 2px;
+}
+
+.question-card.edge::before {
+  content: '⚡';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.2rem;
+}
+
+.question-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  padding-right: 32px;
+}
+
+.follow-up-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.source-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+.source-badge.handbook-gap { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
+.source-badge.curriculum { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+.source-badge.coaching-rule { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+.source-badge.edge { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+.source-badge.content-gap { background: rgba(240, 136, 62, 0.15); color: var(--orange); }
+
+.camera-suggestion {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.content-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.content-tag {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  background: rgba(139, 148, 158, 0.1);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.duration-estimate {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.fullscreen-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 3px;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.fullscreen-btn:hover {
+  background: rgba(247, 180, 8, 0.1);
+}
+
+/* Scene cards */
+.scene-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.scene-instruction {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.scene-why {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.scene-cameras {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.scene-timing {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.scene-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.filmed-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.filmed-toggle input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--green);
+}
+
+.filmed-toggle label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Handbook gap tracker */
+.progress-bar-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.progress-bar-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #21262d;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--gold));
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+.progress-percentage {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-align: right;
+}
+
+.chapter-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.chapter-title {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.gap-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid #21262d;
+}
+
+.gap-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gap-dot.unfilled { background: var(--red); }
+.gap-dot.ai-draft { background: var(--gold); }
+.gap-dot.approved { background: var(--green); }
+
+.gap-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.gap-linked-q {
+  font-size: 0.65rem;
+  color: var(--blue);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Loading state */
+.loading {
+  text-align: center;
+  padding: 32px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--gold);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Fullscreen question mode */
+.fullscreen-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg);
+  z-index: 9999;
+  padding: 24px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.fullscreen-overlay.active {
+  display: flex;
+}
+
+.recording-dot {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.fullscreen-question-container {
+  max-width: 90vw;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.fullscreen-question-text {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  color: var(--gold);
+  line-height: 1.4;
+  font-weight: 700;
+  min-height: 3em;
+}
+
+.fullscreen-question-text .word {
+  opacity: 0;
+  transition: opacity 0.15s ease-in;
+  display: inline;
+}
+
+.fullscreen-question-text .word.visible {
+  opacity: 1;
+}
+
+.fullscreen-followup {
+  font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+  color: var(--text-secondary);
+  margin-top: 32px;
+  opacity: 0;
+  transition: opacity 1s ease-in;
+  font-style: italic;
+}
+
+.fullscreen-followup.visible {
+  opacity: 1;
+}
+
+.fullscreen-next-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 28px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  min-height: 44px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+  pointer-events: none;
+}
+
+.fullscreen-next-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fullscreen-next-btn:hover {
+  background: rgba(247, 180, 8, 0.1);
+}
+
+.fullscreen-counter {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.fullscreen-exit-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (min-width: 600px) {
+  .tab-content {
+    padding: 24px;
+  }
+
+  .header {
+    padding: 32px 24px 20px;
+  }
+
+  .header h1 {
+    font-size: 1.8rem;
+    letter-spacing: 6px;
+  }
+
+  .mode-selector {
+    gap: 12px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>DOCUMENTARY DIRECTOR</h1>
+  <div class="subtitle">fly on the wall</div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="interview">INTERVIEW</button>
+  <button class="tab-btn" data-tab="scenes">SCENES</button>
+  <button class="tab-btn" data-tab="handbook">HANDBOOK</button>
+</div>
+
+<div id="tab-interview" class="tab-content active">
+  <div class="mode-selector">
+    <button class="mode-btn active" data-mode="deep">DEEP</button>
+    <button class="mode-btn" data-mode="quick">QUICK</button>
+    <button class="mode-btn" data-mode="edge">EDGE</button>
+  </div>
+  <input type="text" class="input-field" id="topic-filter" placeholder="topic filter...">
+  <button class="generate-btn" id="generate-session">GENERATE SESSION</button>
+  <div id="questions-container">
+    <div class="empty-state">Select a mode and generate a session</div>
+  </div>
+</div>
+
+<div id="tab-scenes" class="tab-content">
+  <div class="mode-selector">
+    <button class="mode-btn active" data-class-type="group">GROUP</button>
+    <button class="mode-btn" data-class-type="pt">PT</button>
+    <button class="mode-btn" data-class-type="sparring">SPARRING</button>
+  </div>
+  <input type="text" class="input-field" id="student-names" placeholder="student names (comma separated)...">
+  <button class="generate-btn" id="generate-scenes">GENERATE SCENES</button>
+  <div id="scenes-container">
+    <div class="empty-state">Select class type and generate scenes</div>
+  </div>
+</div>
+
+<div id="tab-handbook" class="tab-content">
+  <div id="handbook-container">
+    <div class="loading">Loading gaps</div>
+  </div>
+</div>
+
+<!-- Fullscreen overlay -->
+<div class="fullscreen-overlay" id="fullscreen-overlay">
+  <div class="recording-dot"></div>
+  <div class="fullscreen-counter" id="fullscreen-counter"></div>
+  <div class="fullscreen-question-container">
+    <div class="fullscreen-question-text" id="fullscreen-question-text"></div>
+    <div class="fullscreen-followup" id="fullscreen-followup"></div>
+  </div>
+  <button class="fullscreen-next-btn" id="fullscreen-next-btn">NEXT QUESTION</button>
+</div>
+
+<script type="module">
+  // State
+  let currentMode = 'deep';
+  let currentClassType = 'group';
+  let sessionQuestions = [];
+  let fullscreenIndex = 0;
+  let wordInterval = null;
+  let touchStartX = 0;
+
+  // DOM refs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const modeBtns = document.querySelectorAll('#tab-interview .mode-btn');
+  const classTypeBtns = document.querySelectorAll('#tab-scenes .mode-btn');
+  const generateSessionBtn = document.getElementById('generate-session');
+  const generateScenesBtn = document.getElementById('generate-scenes');
+  const questionsContainer = document.getElementById('questions-container');
+  const scenesContainer = document.getElementById('scenes-container');
+  const handbookContainer = document.getElementById('handbook-container');
+  const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+  const fullscreenQuestionText = document.getElementById('fullscreen-question-text');
+  const fullscreenFollowup = document.getElementById('fullscreen-followup');
+  const fullscreenNextBtn = document.getElementById('fullscreen-next-btn');
+  const fullscreenCounter = document.getElementById('fullscreen-counter');
+
+  // Tab switching
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+
+      if (btn.dataset.tab === 'handbook') {
+        loadGaps();
+      }
+    });
+  });
+
+  // Mode selector (interview)
+  modeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMode = btn.dataset.mode;
+    });
+  });
+
+  // Class type selector (scenes)
+  classTypeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      classTypeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentClassType = btn.dataset.classType;
+    });
+  });
+
+  // Generate interview session
+  generateSessionBtn.addEventListener('click', async () => {
+    const topic = document.getElementById('topic-filter').value.trim();
+    generateSessionBtn.disabled = true;
+    questionsContainer.innerHTML = '<div class="loading">Generating session</div>';
+
+    try {
+      let url = `/api/documentary/interview?mode=${currentMode}`;
+      if (topic) url += `&topic=${encodeURIComponent(topic)}`;
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${res.status}`);
+      const data = await res.json();
+      sessionQuestions = data.questions || data;
+      renderQuestions(sessionQuestions);
+    } catch (err) {
+      questionsContainer.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`;
+    } finally {
+      generateSessionBtn.disabled = false;
+    }
+  });
+
+  // Generate scenes
+  generateScenesBtn.addEventListener('click', async () => {
+    const students = document.getElementById('student-names').value.trim();
+    generateScenesBtn.disabled = true;
+    scenesContainer.innerHTML = '<div class="loading">Generating scenes</div>';
+
+    try {
+      let url = `/api/documentary/scenes?classType=${currentClassType}`;
+      if (students) url += `&students=${encodeURIComponent(students)}`;
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${res.status}`);
+      const data = await res.json();
+      renderScenes(data.scenes || data);
+    } catch (err) {
+      scenesContainer.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`;
+    } finally {
+      generateScenesBtn.disabled = false;
+    }
+  });
+
+  // Load handbook gaps
+  async function loadGaps() {
+    handbookContainer.innerHTML = '<div class="loading">Loading gaps</div>';
+    try {
+      const res = await fetch('/api/documentary/gaps');
+      if (!res.ok) throw new Error(`${res.status}`);
+      const data = await res.json();
+      renderGaps(data);
+    } catch (err) {
+      handbookContainer.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`;
+    }
+  }
+
+  // Render questions
+  function renderQuestions(questions) {
+    if (!questions.length) {
+      questionsContainer.innerHTML = '<div class="empty-state">No questions generated</div>';
+      return;
+    }
+
+    questionsContainer.innerHTML = questions.map((q, i) => {
+      const isEdge = q.source === 'edge' || q.isEdge;
+      const sourceClass = (q.source || 'curriculum').replace(/[^a-z-]/g, '');
+      return `
+        <div class="question-card${isEdge ? ' edge' : ''}">
+          <div class="question-text">${escapeHtml(q.question || q.text)}</div>
+          ${q.followUp ? `<div class="follow-up-text">${escapeHtml(q.followUp)}</div>` : ''}
+          <span class="source-badge ${sourceClass}">${(q.source || 'curriculum').toUpperCase()}</span>
+          ${(q.suggestedCamera || q.camera) ? `<div class="camera-suggestion">🎥 ${escapeHtml(q.suggestedCamera || q.camera)}</div>` : ''}
+          ${q.contentPotential ? `
+            <div class="content-tags">
+              ${(Array.isArray(q.contentPotential) ? q.contentPotential : [q.contentPotential]).map(t => `<span class="content-tag">${escapeHtml(t)}</span>`).join('')}
+            </div>
+          ` : ''}
+          ${(q.estimatedDuration || q.duration) ? `<div class="duration-estimate">⏱ ${q.estimatedDuration || q.duration}</div>` : ''}
+          <button class="fullscreen-btn" data-index="${i}">FULLSCREEN</button>
+        </div>
+      `;
+    }).join('');
+
+    // Bind fullscreen buttons
+    questionsContainer.querySelectorAll('.fullscreen-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        enterFullscreen(parseInt(btn.dataset.index));
+      });
+    });
+  }
+
+  // Render scenes
+  function renderScenes(scenes) {
+    if (!scenes.length) {
+      scenesContainer.innerHTML = '<div class="empty-state">No scenes generated</div>';
+      return;
+    }
+
+    scenesContainer.innerHTML = scenes.map((s, i) => `
+      <div class="scene-card">
+        <div class="scene-instruction">${escapeHtml(s.instruction || s.title)}</div>
+        ${s.why ? `<div class="scene-why">${escapeHtml(s.why)}</div>` : ''}
+        ${(s.suggestedCameras || s.cameras) ? `<div class="scene-cameras">🎥 ${escapeHtml(Array.isArray(s.suggestedCameras || s.cameras) ? (s.suggestedCameras || s.cameras).join(', ') : (s.suggestedCameras || s.cameras))}</div>` : ''}
+        ${s.timing ? `<div class="scene-timing">⏱ ${escapeHtml(s.timing)}</div>` : ''}
+        ${s.tags ? `
+          <div class="scene-tags">
+            ${(Array.isArray(s.tags) ? s.tags : [s.tags]).map(t => `<span class="content-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+        ` : ''}
+        <div class="filmed-toggle">
+          <input type="checkbox" id="filmed-${i}" ${s.filmed ? 'checked' : ''}>
+          <label for="filmed-${i}">FILMED</label>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Render gaps
+  function renderGaps(data) {
+    const chapters = data.chapters || data;
+    let totalGaps = 0;
+    let filledGaps = 0;
+
+    // Use top-level counts if available (from the JS module's handbookGapReport)
+    if (data.totalGaps != null) {
+      totalGaps = data.totalGaps;
+      filledGaps = data.filled || 0;
+    } else if (Array.isArray(chapters)) {
+      chapters.forEach(ch => {
+        if (ch.gaps) {
+          ch.gaps.forEach(g => {
+            totalGaps++;
+            if (g.status === 'approved' || g.status === 'filled') filledGaps++;
+          });
+        }
+      });
+    }
+
+    const percentage = totalGaps > 0 ? Math.round((filledGaps / totalGaps) * 100) : 0;
+
+    let html = `
+      <div class="progress-bar-container">
+        <div class="progress-bar-label">HANDBOOK COMPLETION</div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" style="width: ${percentage}%"></div>
+        </div>
+        <div class="progress-percentage">${percentage}% (${filledGaps}/${totalGaps} gaps filled)</div>
+      </div>
+    `;
+
+    if (Array.isArray(chapters)) {
+      html += chapters.map(ch => `
+        <div class="chapter-card">
+          <div class="chapter-title">${escapeHtml(ch.chapter || ch.title || ch.name || 'Chapter')}</div>
+          ${(ch.gaps || []).map(g => {
+            const statusClass = g.status === 'approved' ? 'approved' : g.status === 'ai-draft' ? 'ai-draft' : 'unfilled';
+            return `
+              <div class="gap-item">
+                <div class="gap-dot ${statusClass}"></div>
+                <div class="gap-label">${escapeHtml(g.marker || g.label || g.description || g.name)}</div>
+                ${g.questionId ? `<span class="gap-linked-q" data-q="${escapeHtml(g.questionId)}">Q</span>` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `).join('');
+    }
+
+    handbookContainer.innerHTML = html;
+  }
+
+  // Fullscreen mode
+  function enterFullscreen(index) {
+    fullscreenIndex = index;
+    fullscreenOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    showFullscreenQuestion(index);
+  }
+
+  function exitFullscreen() {
+    fullscreenOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    if (wordInterval) {
+      clearInterval(wordInterval);
+      wordInterval = null;
+    }
+  }
+
+  function showFullscreenQuestion(index) {
+    if (index >= sessionQuestions.length) {
+      exitFullscreen();
+      return;
+    }
+
+    const q = sessionQuestions[index];
+    const text = q.question || q.text || '';
+    const followUp = q.followUp || '';
+
+    fullscreenCounter.textContent = `${index + 1} / ${sessionQuestions.length}`;
+    fullscreenFollowup.classList.remove('visible');
+    fullscreenFollowup.textContent = followUp;
+    fullscreenNextBtn.classList.remove('visible');
+
+    // Split into words
+    const words = text.split(/\s+/);
+    fullscreenQuestionText.innerHTML = words.map(w => `<span class="word">${escapeHtml(w)}</span>`).join(' ');
+
+    // Animate word by word
+    const wordEls = fullscreenQuestionText.querySelectorAll('.word');
+    let wordIndex = 0;
+
+    if (wordInterval) clearInterval(wordInterval);
+
+    wordInterval = setInterval(() => {
+      if (wordIndex < wordEls.length) {
+        wordEls[wordIndex].classList.add('visible');
+        wordIndex++;
+      } else {
+        clearInterval(wordInterval);
+        wordInterval = null;
+
+        // After all words shown, wait 2s then show follow-up
+        setTimeout(() => {
+          if (followUp) {
+            fullscreenFollowup.classList.add('visible');
+          }
+          // Show next button after follow-up fades in
+          setTimeout(() => {
+            fullscreenNextBtn.classList.add('visible');
+          }, followUp ? 1000 : 0);
+        }, 2000);
+      }
+    }, 150);
+  }
+
+  // Next question
+  fullscreenNextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    fullscreenIndex++;
+    showFullscreenQuestion(fullscreenIndex);
+  });
+
+  // Exit fullscreen on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && fullscreenOverlay.classList.contains('active')) {
+      exitFullscreen();
+    }
+  });
+
+  // Exit fullscreen on tap (not on next button)
+  fullscreenOverlay.addEventListener('click', (e) => {
+    if (e.target === fullscreenNextBtn || fullscreenNextBtn.contains(e.target)) return;
+    exitFullscreen();
+  });
+
+  // Swipe left to advance
+  fullscreenOverlay.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  fullscreenOverlay.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+
+    // Swipe left (diff > 60px)
+    if (diff > 60) {
+      e.preventDefault();
+      e.stopPropagation();
+      fullscreenIndex++;
+      showFullscreenQuestion(fullscreenIndex);
+    }
+  });
+
+  // Utility
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Load gaps on init if handbook tab is visible
+  // (It's not by default, so we wait for tab switch)
+</script>
+
+</body>
+</html>

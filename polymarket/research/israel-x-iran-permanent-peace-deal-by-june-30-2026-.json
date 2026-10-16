@@ -1,0 +1,94 @@
+{
+  "marketId": "2002564",
+  "question": "Israel x Iran permanent peace deal by June 30, 2026?",
+  "eventTitle": "Israel x Iran permanent peace deal by...?",
+  "marketYes": 0.1075,
+  "marketNo": 0.8925,
+  "volume24hr": 1094874.8005420004,
+  "daysToResolution": 12,
+  "analysis": {
+    "question": "Israel x Iran permanent peace deal by June 30, 2026?",
+    "factors": [
+      {
+        "factor": "Historical hostility and lack of diplomatic relations",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Israel and Iran have been in a shadow war for decades, with no formal diplomatic relations since 1979. No prior permanent peace deal exists."
+      },
+      {
+        "factor": "Current escalation and military posture",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "As of June 2026, tensions remain high with ongoing proxy conflicts, nuclear program disputes, and recent airstrikes. No credible reports of secret peace talks."
+      },
+      {
+        "factor": "Time remaining (12 days)",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Only 12 days until deadline. Permanent peace deals require extensive negotiations, ratification, and public announcements—impossible in this window without prior groundwork."
+      },
+      {
+        "factor": "No credible reports of negotiations",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "Major news outlets, intelligence reports, and diplomatic channels show no evidence of active peace talks between Israel and Iran. Silence suggests no progress."
+      },
+      {
+        "factor": "Structural obstacles: nuclear program, proxies, regional alliances",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Iran's nuclear ambitions, support for Hezbollah/Hamas, and Israel's preemptive strike doctrine create fundamental incompatibilities for a permanent deal."
+      },
+      {
+        "factor": "Potential for surprise diplomatic breakthrough",
+        "direction": "supports_yes",
+        "weight": "low",
+        "evidence": "Historically, some conflicts have seen sudden deals (e.g., Israel-UAE Abraham Accords), but those involved months of secret talks. No such signals here."
+      }
+    ],
+    "baseRate": {
+      "value": 0.01,
+      "reasoning": "Permanent peace deals between bitter enemies (especially involving Israel and Iran) are extremely rare. Base rate for any new permanent peace treaty between nations with active hostilities is <1% per year. With only 12 days, the base rate approaches zero."
+    },
+    "adjustments": [
+      {
+        "reason": "No positive evidence or diplomatic momentum",
+        "delta": -0.005
+      },
+      {
+        "reason": "Extreme time pressure reduces probability further",
+        "delta": -0.003
+      },
+      {
+        "reason": "Tail risk of last-minute mediated deal (e.g., by US or UN) is non-zero but negligible",
+        "delta": 0.002
+      }
+    ],
+    "finalEstimate": 0.004,
+    "confidence": "high",
+    "confidenceInterval": [
+      0.001,
+      0.02
+    ],
+    "keyUncertainties": [
+      "Possibility of a secret backchannel that could produce a surprise announcement",
+      "Potential for a dramatic shift in Iranian leadership or Israeli government policy in the next 12 days",
+      "Role of external mediators (US, Russia, China) in forcing a last-minute deal"
+    ],
+    "researchNeeded": [
+      "Check for any recent diplomatic visits or statements from Israeli/Iranian officials hinting at talks",
+      "Review intelligence community assessments on likelihood of Iran-Israel rapprochement",
+      "Analyze historical precedents for rapid peace deals between hostile states (e.g., Egypt-Israel Camp David took months)"
+    ],
+    "reasoning": "This market asks for a permanent peace deal between Israel and Iran by June 30, 2026—just 12 days from now. The historical context is one of deep, entrenched hostility: no diplomatic relations since 1979, ongoing proxy wars, Iran's nuclear program, and Israel's military strikes. There is zero credible evidence of any peace negotiations, secret or public, in the current period. The time window is far too short to negotiate, draft, sign, and announce a permanent peace treaty, which typically requires months of intensive diplomacy. Even the fastest peace deals in modern history (e.g., the 2020 Abraham Accords) involved months of secret talks and preparation. The base rate for such an event is essentially zero, and the current situation provides no reason to deviate upward. The only non-zero probability comes from a hypothetical, unprecedented last-minute intervention by a major power, but this is extremely unlikely given the lack of any preparatory signals. Therefore, the true probability is well below 1%, estimated at 0.4% with a tight confidence interval reflecting the near-impossibility of the event."
+  },
+  "edge": {
+    "side": "NO",
+    "edge": 0.1035,
+    "edgePct": "10.3%",
+    "ourEstimate": "0.4%",
+    "marketPrice": "10.8%",
+    "tradeable": false
+  },
+  "researchedAt": "2026-06-18T11:02:44.524Z"
+}

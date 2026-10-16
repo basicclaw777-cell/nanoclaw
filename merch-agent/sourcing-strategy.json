@@ -1,0 +1,78 @@
+{
+  "sourcing_tiers": {
+    "updated": "2026-05-15",
+    "tier_1_local_fast": {
+      "name": "Print House HK (default)",
+      "use_when": "Urgent runs, small batches, samples, first-time designs, quality testing",
+      "supplier": "print-house-hk",
+      "cost_at_60": "HK$94/tee",
+      "cost_at_100": "HK$76/tee",
+      "lead_time": "7-14 days samples, 14-21 days bulk",
+      "shipping": "HK$0 (local pickup Wong Chuk Hang)",
+      "risk": "lowest — established relationship, confirmed quality, no MOQ",
+      "best_for": ["poster tees", "new designs needing samples", "rush orders", "kids sizes"]
+    },
+    "tier_2_alibaba_full_garment": {
+      "name": "Alibaba Full Garment (cost play)",
+      "use_when": "Planned runs with 3+ week lead time, proven designs, bulk 60-100+",
+      "cost_at_60": "~HK$35-47/tee (estimated, needs confirmed quotes)",
+      "lead_time": "2-5 days production + 2-5 days SF Express to HK",
+      "shipping": "HK$100-300 for 60 pcs via SF Express",
+      "landed_cost_at_60": "~HK$40-52/tee all-in",
+      "savings_vs_local": "~45-57%",
+      "risk": "medium — use Trade Assurance, order samples first",
+      "action_needed": [
+        "Order 1-2 sample tees via Alibaba Trade Assurance",
+        "Compare quality side-by-side with Print House",
+        "Confirm DTF on 100% cotton, A3 back print capability",
+        "Establish 1 trusted Alibaba supplier before bulk"
+      ],
+      "suppliers_to_test": "See supplier-scout-international.json"
+    },
+    "tier_3_dtf_transfers_inhouse": {
+      "name": "DTF Transfers + Heat Press (cheat code)",
+      "use_when": "Ongoing regular runs, maximum margin, full control over timing",
+      "how_it_works": "Order printed DTF transfer sheets from China. Buy blank 100% cotton tees locally or wholesale. Heat press in-house at gym/storage.",
+      "transfer_cost": "US$0.15-0.58 per A3 transfer (~HK$1.20-4.50)",
+      "blank_tee_cost": "~HK$15-25 (wholesale 100% cotton)",
+      "total_cost_per_tee": "~HK$20-35",
+      "heat_press_investment": "HK$1,500-3,000 one-time (pays for itself in 1 run of 60)",
+      "shipping_transfers": "~HK$100 for 60 transfers via SF Express",
+      "savings_vs_local": "63-78%",
+      "risk": "low-medium — requires learning heat press technique, storage space",
+      "action_needed": [
+        "Research heat press models (A3+ platen for poster tees)",
+        "Order 5-10 test transfers from Alibaba",
+        "Practice on cheap blank tees before production",
+        "Find blank tee wholesale supplier in HK (Sham Shui Po?)"
+      ],
+      "note": "This is the long-term play. Print House stays for samples/testing. Transfers for proven designs at scale."
+    },
+    "tier_4_india_freight_bundle": {
+      "name": "India (piggyback on glove imports)",
+      "use_when": "Combining with existing India glove shipments, larger planned batches",
+      "cost_at_60": "~HK$44/tee (estimated)",
+      "shipping": "Bundle with glove freight — marginal cost",
+      "savings_vs_local": "~53%",
+      "risk": "medium — new relationship needed, but same freight route as gloves",
+      "action_needed": [
+        "Ask glove supplier: 'Do you know garment printers in Tiruppur? We need DTF on 100% cotton.'",
+        "If yes, request sample + quote for 60 pcs poster tee",
+        "Test quality before committing"
+      ],
+      "note": "Tiruppur is India's t-shirt capital. Same freight route as gloves = near-zero incremental shipping."
+    }
+  },
+  "decision_matrix": {
+    "urgent_small_run": "tier_1_local_fast",
+    "planned_bulk_proven_design": "tier_2_alibaba_full_garment",
+    "ongoing_regular_production": "tier_3_dtf_transfers_inhouse",
+    "bundling_with_glove_imports": "tier_4_india_freight_bundle",
+    "new_design_testing": "tier_1_local_fast",
+    "limited_edition_box_packaging": "tier_1_local_fast"
+  },
+  "hk_alternatives_pending": {
+    "a_one_print": { "phone": "+852 6547 9582", "status": "WhatsApp sent, awaiting reply" },
+    "lamma_brand": { "phone": "+852 6818 0181", "status": "WhatsApp sent, awaiting reply" }
+  }
+}

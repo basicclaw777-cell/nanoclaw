@@ -1,0 +1,72 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Lateral movement across the ring from left to right with a bouncing rhythm",
+        "stance_width": "normal",
+        "guard": "High guard, hands up",
+        "upper_body": "Relaxed, slight shoulder movement",
+        "distance": "Solo, working alone",
+        "notable": "Controlled movement, shadowboxing"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Reverses direction, moving back to the left side of the frame",
+        "stance_width": "normal",
+        "guard": "Guard up, briefly drops in F10",
+        "upper_body": "Turning and adjusting as he moves",
+        "distance": "Moving towards the left edge",
+        "notable": "A second person enters the frame around F10"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Steps into range and engages with the partner",
+        "stance_width": "normal",
+        "guard": "Hands up, active",
+        "upper_body": "Throwing punches at the pads",
+        "distance": "Close, in pad range",
+        "notable": "The blue-shirted person is holding pads; padwork exchange occurs"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F6",
+      "type": "step",
+      "detail": "Lateral step across the ring to the right"
+    },
+    {
+      "frames": "F7-F10",
+      "type": "step",
+      "detail": "Lateral step back to the left"
+    },
+    {
+      "frames": "F10-F11",
+      "type": "distance_close",
+      "detail": "The second person enters the frame and they close the distance"
+    },
+    {
+      "frames": "F12-F14",
+      "type": "punch_extension",
+      "detail": "The boxer throws punches into the pads held by the partner"
+    },
+    {
+      "frames": "F15",
+      "type": "reset",
+      "detail": "The boxer steps away after the exchange"
+    }
+  ],
+  "overall_rhythm": "fluid"
+}

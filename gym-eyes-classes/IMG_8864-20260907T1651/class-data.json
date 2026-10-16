@@ -1,0 +1,598 @@
+{
+  "id": "class-20260907T1651",
+  "date": "2026-09-07",
+  "video": "IMG_8864.MOV",
+  "duration": 2854.935,
+  "theme": null,
+  "students": null,
+  "type": "group",
+  "windowCount": 8,
+  "windows": [
+    {
+      "time": "2:55",
+      "observations": {
+        "people_detected": 1,
+        "activity_type": "padwork",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Widening stance, left foot steps forward and plants firmly.",
+              "stance_width": "wide",
+              "guard": "Right focus mitt raised high, left focus mitt held lower near chest.",
+              "upper_body": "Torso rotates slightly, leaning into the widening stance.",
+              "distance": "Constant distance from camera.",
+              "notable": "Dynamic weight shifting with the left leg extending outward."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Steps back, narrows stance, then steps out wide again.",
+              "stance_width": "changing",
+              "guard": "Right mitt raised, left mitt stays lower, bobbing with movement.",
+              "upper_body": "Rotates back and forth as the feet adjust.",
+              "distance": "Opens and closes slightly during the step sequence.",
+              "notable": "Brief pause and regroup in the middle, then re-engages with a step-out."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Drops weight, slides, and extends into a wide stance.",
+              "stance_width": "wide",
+              "guard": "Both mitts held up consistently.",
+              "upper_body": "Crouching and shifting weight forward and backward.",
+              "distance": "Constant.",
+              "notable": "End of sequence, returns to initial position."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F4-F5",
+            "type": "step",
+            "detail": "Left foot steps forward, widening the stance."
+          },
+          {
+            "frames": "F6-F7",
+            "type": "distance_open",
+            "detail": "Steps back, narrowing the stance and opening distance slightly."
+          },
+          {
+            "frames": "F8-F10",
+            "type": "distance_close",
+            "detail": "Steps in and widens stance, closing distance again."
+          },
+          {
+            "frames": "F11-F13",
+            "type": "stance_change",
+            "detail": "Drops weight and adjusts feet into a lower, wider position."
+          },
+          {
+            "frames": "F14-F15",
+            "type": "reset",
+            "detail": "Returns to the starting posture and guard position."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "8:52",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Feet are planted at a comfortable stance width. Minimal lateral movement.",
+              "stance_width": "normal",
+              "guard": "Both hands are engaged holding the red stick horizontally across the torso.",
+              "upper_body": "Torso is upright and relatively stationary.",
+              "distance": "Steady distance to the second person partially visible on the right edge.",
+              "notable": "The red stick remains held horizontally across the body."
+            }
+          },
+          {
+            "frames": "F6-F9",
+            "time": "1.7s-2.7s",
+            "observations": {
+              "footwork": "Lateral movement is visible; the fighter crouches slightly and shifts weight.",
+              "stance_width": "changing",
+              "guard": "Red stick is angled upward while maintained in both hands.",
+              "upper_body": "Torso leans forward and down with the movement.",
+              "distance": "Distance to the second person appears open.",
+              "notable": "A step and crouch sequence with the stick angled upward."
+            }
+          },
+          {
+            "frames": "F10-F12",
+            "time": "3.0s-3.7s",
+            "observations": {
+              "footwork": "Footwork resets, moving back toward a more upright, stationary posture.",
+              "stance_width": "normal",
+              "guard": "Red stick is angled downward and held with both hands.",
+              "upper_body": "Torso is more upright again.",
+              "distance": "Distance remains open.",
+              "notable": "The red stick swings downward through the sequence."
+            }
+          },
+          {
+            "frames": "F13-F15",
+            "time": "4.0s-4.7s",
+            "observations": {
+              "footwork": "A forward step is taken; the stance widens during the movement.",
+              "stance_width": "changing",
+              "guard": "Red stick moves toward a horizontal angle and then shifts.",
+              "upper_body": "Torso bends forward as the step is completed.",
+              "distance": "Distance closes with the forward step.",
+              "notable": "Forward movement and bending of the torso at the end of the sequence."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F6-F9",
+            "type": "step",
+            "detail": "Lateral step combined with a crouch and upward angle of the red stick."
+          },
+          {
+            "frames": "F10-F12",
+            "type": "reset",
+            "detail": "Body resets to an upright position while the stick is angled downward."
+          },
+          {
+            "frames": "F13-F15",
+            "type": "step",
+            "detail": "Forward step with the torso bending forward and the stick shifting angle."
+          }
+        ],
+        "overall_rhythm": "burst_then_rest"
+      }
+    },
+    {
+      "time": "14:49",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "padwork",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Lateral movement across the ring from left to right with a bouncing rhythm",
+              "stance_width": "normal",
+              "guard": "High guard, hands up",
+              "upper_body": "Relaxed, slight shoulder movement",
+              "distance": "Solo, working alone",
+              "notable": "Controlled movement, shadowboxing"
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Reverses direction, moving back to the left side of the frame",
+              "stance_width": "normal",
+              "guard": "Guard up, briefly drops in F10",
+              "upper_body": "Turning and adjusting as he moves",
+              "distance": "Moving towards the left edge",
+              "notable": "A second person enters the frame around F10"
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Steps into range and engages with the partner",
+              "stance_width": "normal",
+              "guard": "Hands up, active",
+              "upper_body": "Throwing punches at the pads",
+              "distance": "Close, in pad range",
+              "notable": "The blue-shirted person is holding pads; padwork exchange occurs"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F6",
+            "type": "step",
+            "detail": "Lateral step across the ring to the right"
+          },
+          {
+            "frames": "F7-F10",
+            "type": "step",
+            "detail": "Lateral step back to the left"
+          },
+          {
+            "frames": "F10-F11",
+            "type": "distance_close",
+            "detail": "The second person enters the frame and they close the distance"
+          },
+          {
+            "frames": "F12-F14",
+            "type": "punch_extension",
+            "detail": "The boxer throws punches into the pads held by the partner"
+          },
+          {
+            "frames": "F15",
+            "type": "reset",
+            "detail": "The boxer steps away after the exchange"
+          }
+        ],
+        "overall_rhythm": "fluid"
+      }
+    },
+    {
+      "time": "20:46",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "The fighter on the left moves in with a forward step, closing the distance to his partner.",
+              "stance_width": "normal",
+              "guard": "Both fighters maintain a high guard with gloved hands positioned near the chin.",
+              "upper_body": "The fighter on the left extends his lead arm (jab) at F4, then extends the rear arm (cross) at F5. The partner raises his gloves to defend.",
+              "distance": "closes from medium to close range",
+              "notable": "Initial engagement initiated by the fighter on the left."
+            }
+          },
+          {
+            "frames": "F6-F7",
+            "time": "1.7s-2.0s",
+            "observations": {
+              "footwork": "The left fighter steps back, re-establishing a wider distance.",
+              "stance_width": "normal",
+              "guard": "Both fighters return to a tight defensive guard.",
+              "upper_body": "The left fighter recovers to an upright posture.",
+              "distance": "opens to medium range",
+              "notable": "Short reset period."
+            }
+          },
+          {
+            "frames": "F8-F10",
+            "time": "2.3s-3.0s",
+            "observations": {
+              "footwork": "The left fighter steps in again, closing the distance.",
+              "stance_width": "normal",
+              "guard": "The left fighter keeps his hands up while moving in.",
+              "upper_body": "The left fighter extends his lead arm (jab), then leans forward and down in a slipping or ducking motion at F10.",
+              "distance": "closes to close range",
+              "notable": "Second exchange; the left fighter evades after punching."
+            }
+          },
+          {
+            "frames": "F11-F14",
+            "time": "3.3s-4.3s",
+            "observations": {
+              "footwork": "The left fighter steps in for another exchange.",
+              "stance_width": "normal",
+              "guard": "Both fighters maintain a high guard.",
+              "upper_body": "The left fighter extends his lead arm (jab) at F14 while the partner reacts defensively.",
+              "distance": "closes to close range",
+              "notable": "Third exchange of the sequence."
+            }
+          },
+          {
+            "frames": "F15",
+            "time": "4.7s",
+            "observations": {
+              "footwork": "The fighters separate by stepping back.",
+              "stance_width": "normal",
+              "guard": "Both fighters have their guard up in a ready stance.",
+              "upper_body": "The left fighter is upright and in posture.",
+              "distance": "medium range",
+              "notable": "Reset or end of the sequence."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F4",
+            "type": "punch_extension",
+            "detail": "The fighter on the left extends his lead hand in a jab."
+          },
+          {
+            "frames": "F5",
+            "type": "punch_extension",
+            "detail": "The fighter on the left extends his rear hand in a cross."
+          },
+          {
+            "frames": "F6-F7",
+            "type": "distance_open",
+            "detail": "The left fighter steps back, creating space."
+          },
+          {
+            "frames": "F8-F9",
+            "type": "distance_close",
+            "detail": "The left fighter steps in to close the distance."
+          },
+          {
+            "frames": "F9",
+            "type": "punch_extension",
+            "detail": "The left fighter throws a jab."
+          },
+          {
+            "frames": "F10",
+            "type": "slip",
+            "detail": "The left fighter ducks or slips underneath."
+          },
+          {
+            "frames": "F11-F12",
+            "type": "distance_close",
+            "detail": "The left fighter moves in again."
+          },
+          {
+            "frames": "F14",
+            "type": "punch_extension",
+            "detail": "The left fighter extends his arm in a jab."
+          },
+          {
+            "frames": "F15",
+            "type": "reset",
+            "detail": "The fighters return to a neutral distance."
+          }
+        ],
+        "overall_rhythm": "burst_then_rest"
+      }
+    },
+    {
+      "time": "26:43",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "No distinct footwork. Frame shows empty gym.",
+              "stance_width": "n/a",
+              "guard": "No fighter in center view. Blurry figure exiting right.",
+              "upper_body": "Empty gym with heavy bags. Blurry figure on far right in F4-F5.",
+              "distance": "No fighters in foreground. Figure at far right edge.",
+              "notable": "Heavy bags visible. Class is in progress but camera is on empty area at start."
+            }
+          },
+          {
+            "frames": "F6-F9",
+            "time": "1.7s-2.7s",
+            "observations": {
+              "footwork": "Fighter enters from left, walking across and towards the camera.",
+              "stance_width": "n/a",
+              "guard": "Arms are down, relaxed walking posture.",
+              "upper_body": "Torso upright while walking in.",
+              "distance": "Fighter moves from left edge to center of frame.",
+              "notable": "Fighter enters the scene from the left, headgear and gloves on."
+            }
+          },
+          {
+            "frames": "F10-F15",
+            "time": "3.0s-4.7s",
+            "observations": {
+              "footwork": "Plants feet in a boxing stance, steps in to throw a punch, then small resets.",
+              "stance_width": "normal",
+              "guard": "Hands are raised to the chin in a boxing guard.",
+              "upper_body": "Throws a straight left hand (jab) in F12-F13, returns to guard.",
+              "distance": "Fighter is in foreground, centered in frame.",
+              "notable": "Fighter demonstrates a jab and returns to guard, bouncing slightly at the end."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F4-F5",
+            "type": "distance_open",
+            "detail": "Blurry figure exits the frame on the right."
+          },
+          {
+            "frames": "F6-F8",
+            "type": "step",
+            "detail": "Fighter walks into the frame from the left."
+          },
+          {
+            "frames": "F12-F13",
+            "type": "punch_extension",
+            "detail": "Fighter throws a left jab, extending the arm."
+          },
+          {
+            "frames": "F14",
+            "type": "punch_recovery",
+            "detail": "Fighter retracts the jab and returns to guard."
+          },
+          {
+            "frames": "F15",
+            "type": "reset",
+            "detail": "Fighter bounces slightly, resetting the stance."
+          }
+        ],
+        "overall_rhythm": "burst_then_rest"
+      }
+    },
+    {
+      "time": "32:40",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Both fighters in orthodox stance, stepping and pivoting; the fighter in black steps away after the final exchange.",
+              "stance_width": "normal",
+              "guard": "High guard, hands up by the face.",
+              "upper_body": "Padwork drill, the fighter in black throws combinations at focus mitts held by the fighter in white shorts.",
+              "distance": "Close, inside punching range.",
+              "notable": "Padwork session, then the pad holder leaves the frame."
+            }
+          },
+          {
+            "frames": "F6-F15",
+            "time": "1.7s-4.7s",
+            "observations": {
+              "footwork": "Solo fighter in orthodox stance, stepping laterally and pivoting around the heavy bag.",
+              "stance_width": "normal",
+              "guard": "Guard maintained, hands up.",
+              "upper_body": "Throwing punches at the heavy bag, bobbing and weaving.",
+              "distance": "N/A, solo movement around the heavy bag.",
+              "notable": "Heavy bag drill, moving in and out of range."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F3",
+            "type": "punch_extension",
+            "detail": "Punching combinations on focus mitts during padwork."
+          },
+          {
+            "frames": "F4-F5",
+            "type": "distance_open",
+            "detail": "Pad holder leaves frame, fighter moves towards the heavy bag area."
+          },
+          {
+            "frames": "F6-F10",
+            "type": "pivot",
+            "detail": "Pivoting and stepping around the heavy bag."
+          },
+          {
+            "frames": "F11-F15",
+            "type": "punch_preparation",
+            "detail": "Setting up punches and movement on the heavy bag."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "38:37",
+      "observations": {
+        "people_detected": 1,
+        "activity_type": "drilling",
+        "intensity": "low",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F15",
+            "time": "0.0s-4.7s",
+            "observations": {
+              "footwork": "boxer maintains a stable stance with minimal foot movement across all frames; feet remain planted in roughly the same position",
+              "stance_width": "normal",
+              "guard": "both hands held raised near the chin, elbows tucked in, maintaining a defensive guard throughout",
+              "upper_body": "slightly hunched forward, shoulders rounded, head lowered behind the guard",
+              "distance": "no sparring partner or training pads visible; boxer stands alone in the gym",
+              "notable": "boxer holds a consistent defensive stance with no punches thrown; pose shows very little variation across the entire 15-frame sequence"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F15",
+            "type": "reset",
+            "detail": "boxer holds a stable defensive stance for the entire sequence, with no visible punches, steps, or footwork movements"
+          }
+        ],
+        "overall_rhythm": "inactive"
+      }
+    },
+    {
+      "time": "44:34",
+      "observations": {
+        "people_detected": 3,
+        "activity_type": "drilling",
+        "intensity": "low",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Light bouncing on the balls of the feet, staying in a stable stance.",
+              "stance_width": "normal",
+              "guard": "High guard, hands up near the chin.",
+              "upper_body": "Slight forward lean, torso rotating slightly with small movements.",
+              "distance": "Standing at the heavy bag, at striking distance.",
+              "notable": "Person on the far left is stationary."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Steps in closer to the bag, then steps back out to reset.",
+              "stance_width": "normal",
+              "guard": "Guard drops slightly during the punch sequence, then returns to high guard.",
+              "upper_body": "Throws a short combination (jab-cross) into the heavy bag, then retracts.",
+              "distance": "Closes distance to the bag, then opens it again.",
+              "notable": "Person on the far left begins walking to the right."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Resetting to a neutral stance with a small bounce.",
+              "stance_width": "normal",
+              "guard": "Back to a high guard.",
+              "upper_body": "Resetting posture, preparing for the next sequence.",
+              "distance": "Back to the original striking distance.",
+              "notable": "Person on the left continues walking across the background."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F6-F7",
+            "type": "punch_extension",
+            "detail": "Subject throws a combination into the heavy bag."
+          },
+          {
+            "frames": "F8-F9",
+            "type": "punch_recovery",
+            "detail": "Subject retracts arms and resets guard."
+          },
+          {
+            "frames": "F10-F11",
+            "type": "distance_open",
+            "detail": "Subject steps back away from the bag, opening distance."
+          },
+          {
+            "frames": "F10-F15",
+            "type": "step",
+            "detail": "Person on the far left walks from left to right."
+          },
+          {
+            "frames": "F11-F15",
+            "type": "reset",
+            "detail": "Subject resets their stance and rhythm."
+          }
+        ],
+        "overall_rhythm": "burst_then_rest"
+      }
+    }
+  ],
+  "recordPath": "/Users/basicclaw777/nanoclaw/gym-eyes-classes/IMG_8864-20260907T1651/class-record.md"
+}

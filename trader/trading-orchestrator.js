@@ -87,6 +87,29 @@ function injectFeedback(config) {
     adjusted.strategy_weights[sp.strategy] = newWeight;
   }
 
+  // 1b. Corner advice — recent form + process score + streaks + profit factor
+  try {
+    const cornerPath = path.join(__dirname, 'corner-advice.json');
+    if (fs.existsSync(cornerPath)) {
+      const corner = JSON.parse(fs.readFileSync(cornerPath, 'utf8'));
+      const age = (Date.now() - new Date(corner.timestamp).getTime()) / 3600000;
+      if (age <= 48 && corner.multipliers) {
+        for (const [strat, mult] of Object.entries(corner.multipliers)) {
+          const before = adjusted.strategy_weights[strat];
+          if (before !== undefined && Math.abs(mult - 1.0) > 0.05) {
+            adjusted.strategy_weights[strat] = +Math.max(0.1, (before * mult)).toFixed(2);
+            feedback.push(`  Corner: ${strat} ${before} × ${mult} → ${adjusted.strategy_weights[strat]} (${corner.reasoning?.[strat] || ''})`);
+          }
+        }
+        feedback.push(`  Corner advice applied (${age.toFixed(1)}h old)`);
+      } else if (age > 48) {
+        feedback.push(`  Corner advice: stale (${age.toFixed(0)}h old) — skipping`);
+      }
+    }
+  } catch (e) {
+    feedback.push(`  Corner: error — ${e.message}`);
+  }
+
   // 2. Gold miner findings — extract actionable direction locks + asset insights
   let goldFindings = [];
   try {
@@ -158,23 +181,24 @@ function injectFeedback(config) {
   return adjusted;
 }
 
-// Telegram notify (optional — uses cathedral-bot's sendMessage if available)
-const BOT_TOKEN = process.env.TELEGRAM_TOKEN;
-const CHAT_ID = process.env.PAUL_CHAT_ID;
+// Slack notify — posts to #cathedral-channel (or SLACK_TRADING_CHANNEL if set)
+const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN;
+const SLACK_CHANNEL = process.env.SLACK_TRADING_CHANNEL || 'C0BSL8U56G4'; // cathedral-channel
 
 async function notify(message) {
-  if (!BOT_TOKEN || !CHAT_ID) {
-    console.log('[notify]', message);
-    return;
-  }
+  console.log('[notify]', message);
+  if (!SLACK_TOKEN) return;
   try {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    await fetch('https://slack.com/api/chat.postMessage', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SLACK_TOKEN}`,
+      },
+      body: JSON.stringify({ channel: SLACK_CHANNEL, text: message }),
     });
   } catch (e) {
-    console.error('[notify] Telegram error:', e.message);
+    console.error('[notify] Slack error:', e.message);
   }
 }
 
@@ -252,6 +276,21 @@ async function fetchSignals() {
     }
   } catch (e) {
     console.error('[simpsons-signal] Failed:', e.message);
+  }
+
+  // Run strategy: APD (Attention-Positioning Divergence)
+  try {
+    const apdModule = await import('./strategies/apd-signal.js');
+    const apdData = await apdModule.generateAPDSignals();
+    if (apdData.warming_up) {
+      console.log(`  APD: warming up (${apdData.history_depth}/${4} readings) — ${apdData.binance_hits} Binance responses`);
+    } else {
+      baseData.signals = [...baseData.signals, ...apdData.signals];
+      baseData.strategy_count = (baseData.strategy_count || 10) + 1;
+      console.log(`  APD signals: ${apdData.signals.length} from ${apdData.assets_scanned} assets (${apdData.binance_hits} Binance, depth ${apdData.history_depth})`);
+    }
+  } catch (e) {
+    console.error('[apd-signal] Failed:', e.message);
   }
 
   return baseData;

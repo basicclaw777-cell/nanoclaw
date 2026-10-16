@@ -1,0 +1,17 @@
+{
+  "title": "Vault Graph Data Pipeline",
+  "subtitle": "SQLite → JSON → interactive visualization in under 2 seconds",
+  "key_concept": "Real-time data pipeline from embeddings to explorable graph",
+  "visual_metaphor": "A dark cathedral scriptorium where a scribe (SQLite) passes a scroll (JSON) to an illuminator (d3.js) under amber candlelight",
+  "highlights": [
+    "Reads vault_embeddings SQLite directly",
+    "Outputs 1.1MB JSON with 1907 nodes and 13794 edges",
+    "BUILD_LOG and SYSTEM_MAP updated automatically"
+  ],
+  "why_it_matters": "Establishes a repeatable, fast pipeline that makes the vault brain continuously mappable",
+  "zone_change": "New system: data pipeline from embeddings to graph visualization",
+  "date": "2026-07-01",
+  "source": "session-harvest-2026-07-01b-pass1.md",
+  "pipeline": "cartographer-auto",
+  "generated_at": "2026-07-01T07:34:33.820Z"
+}

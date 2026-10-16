@@ -1,0 +1,103 @@
+{
+  "runs": [
+    {
+      "date": "2026-07-22",
+      "corpusCount": 9,
+      "compressionAvg": 86,
+      "identityDrifts": [
+        {
+          "name": "emerald-tablet-as-above",
+          "drift": 0.335,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "emerald-tablet-distillation",
+          "drift": 0.382,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "hermetic-gnosis",
+          "drift": 0.249,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "sumerian-temple-acoustic",
+          "drift": 0.387,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "gilgamesh-plant-of-life",
+          "drift": 0.291,
+          "status": "SIGNIFICANT_DRIFT"
+        }
+      ],
+      "isomorphismLength": 1533
+    },
+    {
+      "date": "2026-07-22",
+      "corpusCount": 9,
+      "compressionAvg": 82,
+      "identityDrifts": [
+        {
+          "name": "emerald-tablet-as-above",
+          "drift": 0.335,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "emerald-tablet-distillation",
+          "drift": 0.382,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "hermetic-gnosis",
+          "drift": 0.249,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "sumerian-temple-acoustic",
+          "drift": 0.387,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "gilgamesh-plant-of-life",
+          "drift": 0.291,
+          "status": "SIGNIFICANT_DRIFT"
+        }
+      ],
+      "isomorphismLength": 2876
+    },
+    {
+      "date": "2026-07-29",
+      "corpusCount": 9,
+      "compressionAvg": 74,
+      "identityDrifts": [
+        {
+          "name": "emerald-tablet-as-above",
+          "drift": 0.335,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "emerald-tablet-distillation",
+          "drift": 0.382,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "hermetic-gnosis",
+          "drift": 0.249,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "sumerian-temple-acoustic",
+          "drift": 0.387,
+          "status": "SIGNIFICANT_DRIFT"
+        },
+        {
+          "name": "gilgamesh-plant-of-life",
+          "drift": 0.291,
+          "status": "SIGNIFICANT_DRIFT"
+        }
+      ],
+      "isomorphismLength": 3057
+    }
+  ]
+}

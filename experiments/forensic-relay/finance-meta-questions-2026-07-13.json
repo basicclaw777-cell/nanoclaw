@@ -1,0 +1,41 @@
+{
+  "domain": "finance",
+  "results": [
+    {
+      "question": "How do momentum and reversal patterns vary across different market regimes (e.g., bull vs. bear markets) and what specific price patterns are most predictive?",
+      "bypass": "Focus on regime-dependent predictability and specific pattern definitions.",
+      "core_finding": "Momentum strategies yield positive returns in bull markets but reverse sharply in bear markets, while reversal patterns dominate during volatile transitions. The most predictive patterns are 12-month momentum breakouts in bull phases and 1-month short-term reversals in bear phases.",
+      "concession": "Orthodox finance must concede that market regimes fundamentally alter the sign and magnitude of momentum and reversal effects, contradicting the assumption of stationary return predictability.",
+      "new_crack": "The asymmetry reveals that momentum profits are not a risk premium but a liquidity-driven phenomenon that collapses under market stress, exposing the fragility of factor-based investing."
+    },
+    {
+      "question": "What is the causal mechanism linking insider trading to abnormal returns, and how does regulatory enforcement affect the magnitude and timing of these returns?",
+      "bypass": "Investigate causal pathways and regulatory impact.",
+      "core_finding": "Insider trading generates abnormal returns through the exploitation of non-public material information, where insiders trade ahead of public disclosures, capturing price adjustments before the market reacts. Regulatory enforcement reduces the magnitude of these returns by increasing the probability of detection and penalty, but it primarily delays rather than eliminates abnormal returns, as enforcement actions often occur after trades are executed.",
+      "concession": "Orthodox models assume that enforcement symmetrically reduces insider trading profits, but evidence shows that enforcement primarily shifts trading to less detectable forms (e.g., via derivatives or offshore accounts) without fully eliminating abnormal returns.",
+      "new_crack": "The timing of enforcement actions creates a 'window of opportunity' for insiders to profit before sanctions are applied, revealing that regulatory lag itself is a structural vulnerability that enables abnormal returns even under strict enforcement regimes."
+    },
+    {
+      "question": "Given that most active funds underperform, what specific characteristics (e.g., fund size, manager tenure, turnover) distinguish the persistent outperformers from the rest?",
+      "bypass": "Identify characteristics of persistent outperformers.",
+      "core_finding": "Persistent outperformers tend to have smaller fund sizes, longer manager tenures, and lower turnover ratios, which allow for more focused, long-term investment strategies and reduced transaction costs.",
+      "concession": "Even among these characteristics, the majority of funds still fail to outperform consistently, and past performance is not a guarantee of future results.",
+      "new_crack": "The persistence of outperformance may be partly due to survivorship bias and data mining, as the specific characteristics that predict success can vary across time periods and market conditions."
+    },
+    {
+      "question": "What explains the excess volatility of stock prices relative to fundamentals, and can this be attributed to behavioral biases, institutional frictions, or rational responses to changing risk?",
+      "bypass": "Decompose volatility into behavioral, institutional, and rational components.",
+      "core_finding": "Excess volatility is primarily driven by behavioral biases (e.g., overreaction to news, herding) and institutional frictions (e.g., short-sale constraints, leverage cycles), with rational responses to changing risk playing a secondary role. Empirical evidence shows that price movements often exceed changes in fundamental values, especially during bubbles and crashes, consistent with noise trader models and limits to arbitrage.",
+      "concession": "Rational models can explain some volatility through time-varying risk premiums and stochastic discount factors, but they fail to account for the magnitude and persistence of deviations from fundamentals without invoking behavioral or institutional factors.",
+      "new_crack": "The interaction between behavioral biases and institutional frictions creates feedback loops that amplify volatility beyond the sum of individual effects, suggesting that excess volatility is an emergent property of market structure rather than a simple additive phenomenon."
+    },
+    {
+      "question": "Has the January effect diminished or disappeared in recent decades due to market efficiency improvements, and what are the underlying drivers (e.g., tax-loss selling, window dressing, or sentiment) that remain?",
+      "bypass": "Test for temporal decline and identify remaining drivers.",
+      "core_finding": "The January effect has significantly diminished but not entirely disappeared in recent decades, with residual effects concentrated in small-cap stocks and periods of high investor sentiment. Market efficiency improvements, including reduced transaction costs and increased arbitrage activity, have eroded the anomaly, but behavioral drivers like tax-loss selling and window dressing persist in muted form.",
+      "concession": "Orthodox efficient market theory must concede that the January effect still exists in small-cap stocks, albeit weakly, contradicting the strong-form efficiency claim that all anomalies are arbitraged away.",
+      "new_crack": "The persistence of the effect in high-sentiment periods reveals that market efficiency is state-dependent, with behavioral biases overwhelming arbitrage when sentiment is elevated, challenging the assumption of uniform rationality."
+    }
+  ],
+  "timestamp": "2026-07-12T18:18:50.211Z"
+}

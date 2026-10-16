@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Basic Reflex — AI Intelligence Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --gold: #f7b408;
+    --gold-light: #ffd54f;
+    --gold-dim: rgba(247,180,8,0.08);
+    --gold-border: rgba(247,180,8,0.2);
+    --white: #ffffff;
+    --off-white: #fafaf8;
+    --warm-gray: #f5f3ef;
+    --text: #1a1a1a;
+    --text-mid: #555;
+    --text-light: #888;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, sans-serif; color: var(--text); background: var(--white); line-height: 1.6; }
+
+  /* ── Hero ──────────────────────────────────────── */
+  .hero {
+    background: var(--black);
+    color: var(--white);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 80%, rgba(247,180,8,0.06) 0%, transparent 50%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+    max-width: 600px;
+    margin: 0 auto 32px;
+    font-weight: 300;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .hero-stat {
+    text-align: center;
+  }
+  .hero-stat .num {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+  }
+  .hero-stat .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+  }
+
+  /* ── Section ──────────────────────────────────── */
+  section {
+    padding: 60px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  section.alt { background: var(--warm-gray); max-width: 100%; }
+  section.alt > .inner { max-width: 1000px; margin: 0 auto; }
+
+  .section-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: var(--text-mid);
+    margin-bottom: 32px;
+    max-width: 600px;
+  }
+
+  /* ── Cards ────────────────────────────────────── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid #e8e6e1;
+    border-radius: 14px;
+    padding: 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  section.alt .card { background: var(--white); }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  .card-icon.gold { background: var(--gold-dim); }
+  .card-icon.green { background: rgba(34,197,94,0.08); }
+  .card-icon.blue { background: rgba(59,130,246,0.08); }
+  .card-icon.purple { background: rgba(139,92,246,0.08); }
+  .card-icon.red { background: rgba(239,68,68,0.08); }
+  .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+  .card .status {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-top: 12px;
+  }
+  .status.live { background: rgba(34,197,94,0.1); color: var(--green); }
+  .status.ready { background: var(--gold-dim); color: #b8960a; }
+  .status.next { background: rgba(59,130,246,0.08); color: var(--blue); }
+
+  /* ── Phone mockup ─────────────────────────────── */
+  .phone-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  @media(max-width:700px) { .phone-section { grid-template-columns: 1fr; } }
+  .phone {
+    width: 280px;
+    margin: 0 auto;
+    background: var(--black);
+    border-radius: 36px;
+    padding: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+  .phone-screen {
+    background: #1a1a2e;
+    border-radius: 26px;
+    overflow: hidden;
+    padding: 0;
+  }
+  .phone-header {
+    background: #075e54;
+    color: white;
+    padding: 14px 16px 10px;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .phone-header .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--black);
+  }
+  .phone-chat {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 300px;
+    background: #0b141a;
+  }
+  .msg {
+    max-width: 85%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .msg.in {
+    background: #1f2c34;
+    color: #e9e9e9;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+  .msg.out {
+    background: #005c4b;
+    color: #e9e9e9;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  .msg .time {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    text-align: right;
+    margin-top: 2px;
+  }
+  .phone-text-list { list-style: none; }
+  .phone-text-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #e8e6e1;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .phone-text-list li:last-child { border: none; }
+  .phone-text-list .bullet {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .phone-text-list .text { font-size: 14px; }
+  .phone-text-list .text strong { display: block; margin-bottom: 2px; }
+  .phone-text-list .text span { color: var(--text-mid); font-size: 13px; }
+
+  /* ── Impact bar ───────────────────────────────── */
+  .impact-strip {
+    background: var(--black);
+    color: var(--white);
+    padding: 50px 40px;
+  }
+  .impact-strip .inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+  @media(max-width:600px) { .impact-strip .inner { grid-template-columns: 1fr 1fr; } }
+  .impact-item .number {
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .impact-item .desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* ── Timeline ─────────────────────────────────── */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), var(--gold-dim));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -32px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 3px solid var(--white);
+  }
+  .tl-item.done::before { background: var(--green); }
+  .tl-item.next::before { background: var(--blue); }
+  .tl-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+  .tl-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .tl-desc { font-size: 14px; color: var(--text-mid); }
+
+  /* ── Loop diagram ─────────────────────────────── */
+  .loop-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 32px 0;
+  }
+  .loop-node {
+    background: var(--white);
+    border: 2px solid var(--gold-border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    text-align: center;
+    min-width: 160px;
+    position: relative;
+  }
+  .loop-node .icon { font-size: 28px; margin-bottom: 8px; }
+  .loop-node .name { font-size: 14px; font-weight: 700; }
+  .loop-node .role { font-size: 12px; color: var(--text-mid); }
+  .loop-arrow {
+    font-size: 24px;
+    color: var(--gold);
+    padding: 0 8px;
+    font-weight: 300;
+  }
+
+  /* ── CTA ──────────────────────────────────────── */
+  .cta {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 60px 40px;
+  }
+  .cta h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .cta h2 span { color: var(--gold); }
+  .cta p {
+    color: rgba(255,255,255,0.5);
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto 28px;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--black);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s;
+  }
+  .cta-btn:hover { transform: scale(1.03); }
+
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════ HERO ════════════ -->
+<div class="hero">
+  <div class="hero-badge">Prepared for Basic Reflex</div>
+  <h1>Your Gym Already Has<br>an <span>AI Brain</span></h1>
+  <p>We analyzed Basic Reflex and built a sovereign intelligence layer that runs 24/7 — no subscriptions, no vendor lock-in, no monthly fees.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">7</span><span class="label">AI Systems Live</span></div>
+    <div class="hero-stat"><span class="num">$0</span><span class="label">Monthly AI Cost</span></div>
+    <div class="hero-stat"><span class="num">24/7</span><span class="label">Response Time</span></div>
+    <div class="hero-stat"><span class="num">1</span><span class="label">Person Needed</span></div>
+  </div>
+</div>
+
+<!-- ════════════ WHAT'S LIVE ════════════ -->
+<section>
+  <div class="section-tag">Already Running</div>
+  <div class="section-title">Seven systems. Zero staff overhead.</div>
+  <div class="section-sub">Each one was built for Basic Reflex specifically — not a generic SaaS template. They talk to each other.</div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon gold">💬</div>
+      <h3>WhatsApp Front Desk</h3>
+      <p>Every inbound message gets classified — lead, member, parent, or lapsed. AI drafts a response in Coach Paul's voice. You approve from your phone or let it fly.</p>
+      <span class="status live">Live</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon green">👁️</div>
+      <h3>Gym Eyes Analytics</h3>
+      <p>Member behavior patterns. Who's slipping, who's consistent, who's about to leave. Three-layer intelligence with counter-intel built in.</p>
+      <span class="status live">Live</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon blue">📊</div>
+      <h3>Member Intelligence</h3>
+      <p>PunchPass data scraped daily. Every member's attendance history, pass status, and engagement score — searchable, actionable.</p>
+      <span class="status live">Live</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon purple">📧</div>
+      <h3>Comms Engine</h3>
+      <p>11 WhatsApp templates. Daily scanners catch expiring passes, missed birthdays, absence streaks, milestones. Messages queue for your review.</p>
+      <span class="status live">Live</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon gold">🎬</div>
+      <h3>Content Studio</h3>
+      <p>7 content projects generating social media, training insights, and brand content. Agent review loop ensures quality. Daily output, zero content anxiety.</p>
+      <span class="status live">Live</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon green">🏷️</div>
+      <h3>Absence & Retention Alerts</h3>
+      <p>Know who hasn't trained in 2 weeks BEFORE they decide to quit. Automated re-engagement suggestions in Coach Paul's voice.</p>
+      <span class="status live">Live</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon red">🎯</div>
+      <h3>Lead Qualification</h3>
+      <p>WhatsApp leads auto-classified: serious inquirer vs. price shopper vs. parent. Each gets a different approach. No lead falls through the cracks.</p>
+      <span class="status live">Live</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ WHATSAPP MOCKUP ════════════ -->
+<section class="alt">
+  <div class="inner">
+    <div class="phone-section">
+      <div>
+        <div class="section-tag">The Front Desk That Never Sleeps</div>
+        <div class="section-title">Every message answered.<br>Your voice. Your rules.</div>
+        <ul class="phone-text-list">
+          <li>
+            <div class="bullet">🎯</div>
+            <div class="text">
+              <strong>Smart routing</strong>
+              <span>Parent asking about kids program? Goes straight to the parent agent with youth-specific info.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet">🔍</div>
+            <div class="text">
+              <strong>Member recognition</strong>
+              <span>Known member messages? System pulls their attendance, pass status, history — response is personalized.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet">🛡️</div>
+            <div class="text">
+              <strong>You stay in control</strong>
+              <span>Every response queued for your approval. One tap to send. Or flip auto-reply on per agent when you trust it.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet">💰</div>
+            <div class="text">
+              <strong>Zero monthly cost</strong>
+              <span>Runs on your hardware. No Mindbody fees. No chatbot subscription. Yours forever.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div class="avatar">BR</div>
+            <div>Basic Reflex Boxing</div>
+          </div>
+          <div class="phone-chat">
+            <div class="msg in">
+              Hi, my 14 year old son wants to try boxing. What do you offer for kids?
+              <div class="time">10:23 AM</div>
+            </div>
+            <div class="msg out">
+              Hey there! We've got a kids program for ages 12-16, separate sessions with a focus on technique and discipline — not fighting. Your son can come by for a trial, I coach the youth sessions personally. When works for you?
+              <div class="time">10:23 AM</div>
+            </div>
+            <div class="msg in">
+              That sounds great. Is it safe? He's never done any martial arts before
+              <div class="time">10:24 AM</div>
+            </div>
+            <div class="msg out">
+              Totally safe — we start with footwork, coordination, and the basics. No sparring until they're ready and it's always controlled. Most kids who start with zero experience end up loving it. Bring him by Saturday morning? — Coach Paul
+              <div class="time">10:24 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ IMPACT STRIP ════════════ -->
+<div class="impact-strip">
+  <div class="inner">
+    <div class="impact-item">
+      <div class="number">10+</div>
+      <div class="desc">Hours saved per week<br>on admin & replies</div>
+    </div>
+    <div class="impact-item">
+      <div class="number">100%</div>
+      <div class="desc">Lead response rate<br>even at 3 AM</div>
+    </div>
+    <div class="impact-item">
+      <div class="number">0</div>
+      <div class="desc">Leads lost to<br>slow follow-up</div>
+    </div>
+    <div class="impact-item">
+      <div class="number">14</div>
+      <div class="desc">Days early warning<br>on member churn</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ THE CLOSED LOOP ════════════ -->
+<section>
+  <div class="section-tag">The Bigger Picture</div>
+  <div class="section-title">The Closed Loop Coach</div>
+  <div class="section-sub">Three systems that connect into something no other gym has: an AI coaching loop that analyzes, diagnoses, and demonstrates.</div>
+
+  <div class="loop-diagram">
+    <div class="loop-node">
+      <div class="icon">👁️</div>
+      <div class="name">Gym Eyes</div>
+      <div class="role">Analyze performance</div>
+    </div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-node">
+      <div class="icon">🧠</div>
+      <div class="name">Virtual Tutor</div>
+      <div class="role">Diagnose & prescribe</div>
+    </div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-node">
+      <div class="icon">🥊</div>
+      <div class="name">Drill Player</div>
+      <div class="role">Show the fix</div>
+    </div>
+  </div>
+
+  <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+    <div class="card">
+      <h3>For Members</h3>
+      <p>"Your jab improved 15% this month. Here's what to focus on next." Personalized training intelligence that feels like having a second coach in the room — powered by real data, not generic programs.</p>
+    </div>
+    <div class="card">
+      <h3>For Parents</h3>
+      <p>"Your son hit 3 new milestones this month." Parents see progress. Progress = retention. Retention = revenue. The kids program becomes a machine that parents tell other parents about.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ KIDS PROGRAM ════════════ -->
+<section class="alt">
+  <div class="inner">
+    <div class="section-tag">Your Biggest Growth Lever</div>
+    <div class="section-title">The Kids Program, Supercharged</div>
+    <div class="section-sub">Kids aged 12-16 are your best-growth-potential segment. Here's what the AI layer does for it.</div>
+
+    <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">📱</div>
+        <h3>Parent Portal</h3>
+        <p>Parents see skill milestones, attendance streaks, and Coach Paul's notes. They don't have to ask — progress comes to them.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">🎯</div>
+        <h3>WhatsApp for Parents</h3>
+        <p>Dedicated parent agent answers enrollment questions, schedule queries, and safety concerns. Warm, reassuring, immediate.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">🗣️</div>
+        <h3>Word of Mouth Engine</h3>
+        <p>When parents see measurable progress, they talk. Milestone cards designed to be screenshot and shared. Organic growth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ TIMELINE ════════════ -->
+<section>
+  <div class="section-tag">The Roadmap</div>
+  <div class="section-title">What's done. What's next.</div>
+  <div class="section-sub">Built at your pace. Everything sovereign — runs on your machine, your data stays yours.</div>
+
+  <div class="timeline">
+    <div class="tl-item done">
+      <div class="tl-label">Complete</div>
+      <div class="tl-title">WhatsApp AI Front Desk</div>
+      <div class="tl-desc">4 agent personas, intent classification, member lookup, review dashboard. Ready for API credentials.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-label">Complete</div>
+      <div class="tl-title">Gym Eyes & Member Intelligence</div>
+      <div class="tl-desc">Tier 1 analytics, The Guard (3 layers), attendance patterns, churn detection.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-label">Complete</div>
+      <div class="tl-title">Comms Engine & Retention Scanners</div>
+      <div class="tl-desc">11 templates, daily cron, expiry/birthday/absence/milestone triggers.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-label">Complete</div>
+      <div class="tl-title">Content Studio</div>
+      <div class="tl-desc">7 projects, 4 PM2 crons, agent review loop, social content pipeline.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-label">Activate</div>
+      <div class="tl-title">WhatsApp Business API</div>
+      <div class="tl-desc">Connect Meta Business Account → webhook → live inbound handling. 30 minutes setup.</div>
+    </div>
+    <div class="tl-item next">
+      <div class="tl-label">Next Build</div>
+      <div class="tl-title">Parent Progress Dashboard</div>
+      <div class="tl-desc">Skill milestone tracking, attendance streaks, shareable progress cards for parents.</div>
+    </div>
+    <div class="tl-item next">
+      <div class="tl-label">Next Build</div>
+      <div class="tl-title">Closed Loop Coach</div>
+      <div class="tl-desc">Connect Gym Eyes → Virtual Tutor → Drill Player. The $0 AI coaching system.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ VS COMPETITORS ════════════ -->
+<div class="impact-strip">
+  <div class="inner" style="grid-template-columns: 1fr 1fr 1fr; text-align: left;">
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:16px;">BASIC REFLEX AI</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:2;">
+        ✓ Sovereign — runs on your Mac<br>
+        ✓ Your voice, your rules<br>
+        ✓ $0/month ongoing<br>
+        ✓ Data stays on your machine<br>
+        ✓ Custom-built for boxing<br>
+        ✓ Systems talk to each other<br>
+        ✓ Unlimited messages
+      </div>
+    </div>
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--text-light);margin-bottom:16px;">TYPICAL GYM CHATBOT</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.35);line-height:2;">
+        ✗ Cloud vendor lock-in<br>
+        ✗ Generic templates<br>
+        ✗ $200-500/month<br>
+        ✗ Your data on their servers<br>
+        ✗ Same for every gym<br>
+        ✗ Siloed, no integration<br>
+        ✗ Per-message pricing
+      </div>
+    </div>
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--text-light);margin-bottom:16px;">HIRING A RECEPTIONIST</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.35);line-height:2;">
+        ✗ Limited to business hours<br>
+        ✗ Inconsistent responses<br>
+        ✗ $15-25K/year HK salary<br>
+        ✗ Sick days, turnover<br>
+        ✗ Training overhead<br>
+        ✗ One person, one task<br>
+        ✗ No analytics
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ MENTOR NETWORK ════════════ -->
+<section>
+  <div class="section-tag">Bonus</div>
+  <div class="section-title">Your Mentor Network — Mapped</div>
+  <div class="section-sub">14 gym owners 1-3 levels above you, scored and ranked. Three recommended first contacts.</div>
+
+  <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="card" style="border-color: var(--gold-border);">
+      <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">SCORE: 18/20</div>
+      <h3>Naz Musa</h3>
+      <p><strong>Spartans Boxing Club, Singapore</strong><br>19 gyms, 5 countries. Same sport, same community philosophy. Was where you are in 2016.</p>
+    </div>
+    <div class="card" style="border-color: var(--gold-border);">
+      <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">SCORE: 17/20</div>
+      <h3>Nick Castiglia</h3>
+      <p><strong>Legacy MA Consulting, Canada</strong><br>Grew client from 70 members to 1,000+. Solves "owner does everything" burnout. Podcast + 1:1 mentorship.</p>
+    </div>
+    <div class="card" style="border-color: var(--gold-border);">
+      <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">SCORE: 18/20</div>
+      <h3>Combat Business Success</h3>
+      <p><strong>Online community</strong><br>Combat-sports-specific coaching. Free course. "Business systems without compromising training integrity."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ CTA ════════════ -->
+<div class="cta">
+  <h2>This Is <span>Your System</span></h2>
+  <p>Everything above runs on your machine. No subscriptions. No vendor. No permission needed. The gym that runs itself while you coach.</p>
+  <a href="/wa" class="cta-btn">Open WhatsApp Dashboard →</a>
+</div>
+
+<div class="footer">BASIC REFLEX × CATHEDRAL AI — SOVEREIGN INTELLIGENCE FOR BOXING</div>
+
+</body>
+</html>

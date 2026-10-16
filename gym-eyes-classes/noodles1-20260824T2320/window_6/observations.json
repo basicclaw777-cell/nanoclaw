@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Lateral steps to the right, maintaining a boxing stance.",
+        "stance_width": "normal",
+        "guard": "High guard, hands held up near the face.",
+        "upper_body": "Slight bobbing and lateral drifting with the steps.",
+        "distance": "Moderate distance between the two individuals.",
+        "notable": "Both individuals in boxing stances; yellow fighter on the right, red partner on the left."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Continued lateral movement to the right, steady rhythmic steps.",
+        "stance_width": "normal",
+        "guard": "Guard maintained consistently.",
+        "upper_body": "Torso rotates slightly with the directional movement.",
+        "distance": "Distance maintained as the pair moves across the floor.",
+        "notable": "The pair moves together laterally across the gym."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Further steps to the right, reaching the boundary of the frame.",
+        "stance_width": "changing",
+        "guard": "Guard remains up through the end of the sequence.",
+        "upper_body": "Body starts to turn and settle as movement concludes.",
+        "distance": "Distance from partner begins to open slightly at the very end.",
+        "notable": "Yellow fighter reaches the far right side and begins to reset position."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "step",
+      "detail": "Lateral stepping to the right in boxing stance."
+    },
+    {
+      "frames": "F6-F10",
+      "type": "step",
+      "detail": "Continued lateral movement to the right, maintaining rhythm."
+    },
+    {
+      "frames": "F11-F15",
+      "type": "reset",
+      "detail": "Fighter reaches the boundary and begins to reset position."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

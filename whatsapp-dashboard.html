@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp Agent — Basic Reflex</title>
+<style>
+  :root{--bg:#0a0b0e;--panel:#14161c;--panel2:#1b1e26;--line:#2a2f3a;
+    --gold:#c9a24b;--gold-bright:#e3bd63;--green:#25d366;--green-dim:#1a3d2a;
+    --ink:#e9e7e1;--muted:#888d99;--red:#e55353;--blue:#7fb0d6}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:20px}
+
+  h1{font-size:22px;margin-bottom:4px}
+  h1 .wa{color:var(--green)}
+  .tag{color:var(--muted);font-size:12px;margin-bottom:20px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  @media(max-width:800px){.grid{grid-template-columns:1fr}}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .card h2{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+
+  .stat-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)}
+  .stat-row:last-child{border:none}
+  .stat-label{color:var(--muted)}
+  .stat-value{font-weight:700;font-variant-numeric:tabular-nums}
+  .stat-value.green{color:var(--green)}
+  .stat-value.gold{color:var(--gold)}
+  .stat-value.red{color:var(--red)}
+
+  .agent-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+  .agent-toggle:last-child{border:none}
+  .agent-name{font-weight:600;text-transform:capitalize}
+  .toggle{width:44px;height:24px;border-radius:12px;background:var(--line);cursor:pointer;position:relative;transition:.2s}
+  .toggle.on{background:var(--green)}
+  .toggle::after{content:'';width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:.2s}
+  .toggle.on::after{left:22px}
+
+  .queue-item{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px}
+  .qi-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .qi-phone{font-weight:700;font-size:13px}
+  .qi-intent{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+  .qi-intent.lead{background:#2a3d2a;color:var(--green)}
+  .qi-intent.member{background:#2a2a3d;color:var(--blue)}
+  .qi-intent.parent{background:#3d3a2a;color:var(--gold)}
+  .qi-intent.retention{background:#3d2a2a;color:var(--red)}
+  .qi-msg{color:var(--muted);font-size:13px;margin-bottom:6px;font-style:italic}
+  .qi-reply{font-size:13px;margin-bottom:8px;padding:8px;background:var(--green-dim);border-radius:6px;border-left:3px solid var(--green)}
+  .qi-actions{display:flex;gap:8px}
+  .btn{padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600}
+  .btn-send{background:var(--green);color:#fff}
+  .btn-edit{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+  .btn-skip{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
+
+  .conv-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .conv-item:last-child{border:none}
+  .conv-avatar{width:36px;height:36px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--green);font-weight:700;flex-shrink:0}
+  .conv-info{flex:1;min-width:0}
+  .conv-name{font-weight:600;font-size:13px}
+  .conv-last{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .conv-time{color:var(--muted);font-size:11px;flex-shrink:0}
+
+  .empty{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+
+  .setup-banner{background:var(--panel2);border:1px solid var(--gold);border-radius:10px;padding:16px;margin-bottom:20px}
+  .setup-banner h3{color:var(--gold);margin-bottom:8px}
+  .setup-banner ol{padding-left:20px;color:var(--muted);font-size:13px}
+  .setup-banner li{margin-bottom:4px}
+  .setup-banner code{background:var(--bg);padding:2px 6px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1><span class="wa">WhatsApp</span> Agent</h1>
+<div class="tag">Basic Reflex — AI-powered inbound messaging</div>
+
+<div id="setup-banner" class="setup-banner" style="display:none">
+  <h3>Setup Required</h3>
+  <ol>
+    <li>Create a <strong>Meta Business Account</strong> at <code>business.facebook.com</code></li>
+    <li>Set up <strong>WhatsApp Business API</strong> in Meta Developer portal</li>
+    <li>Get your <strong>Phone Number ID</strong> and <strong>Permanent Token</strong></li>
+    <li>Add to <code>~/nanoclaw/.env</code>:
+      <br><code>WHATSAPP_TOKEN=your_token</code>
+      <br><code>WHATSAPP_PHONE_ID=your_phone_id</code>
+    </li>
+    <li>Set webhook URL to <code>https://your-domain/wa/webhook</code></li>
+    <li>Use Cloudflare Tunnel: <code>cloudflared tunnel --url http://localhost:8080</code></li>
+  </ol>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>Stats</h2>
+    <div id="stats">
+      <div class="stat-row"><span class="stat-label">Received</span><span class="stat-value" id="s-received">—</span></div>
+      <div class="stat-row"><span class="stat-label">Auto-replied</span><span class="stat-value green" id="s-replied">—</span></div>
+      <div class="stat-row"><span class="stat-label">Queued for review</span><span class="stat-value gold" id="s-queued">—</span></div>
+      <div class="stat-row"><span class="stat-label">Pending now</span><span class="stat-value red" id="s-pending">—</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Auto-Reply Toggles</h2>
+    <div id="toggles">
+      <div class="agent-toggle"><span class="agent-name">Lead</span><div class="toggle" data-agent="lead" onclick="toggleAgent('lead')"></div></div>
+      <div class="agent-toggle"><span class="agent-name">Member</span><div class="toggle" data-agent="member" onclick="toggleAgent('member')"></div></div>
+      <div class="agent-toggle"><span class="agent-name">Parent</span><div class="toggle" data-agent="parent" onclick="toggleAgent('parent')"></div></div>
+      <div class="agent-toggle"><span class="agent-name">Retention</span><div class="toggle" data-agent="retention" onclick="toggleAgent('retention')"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:20px">
+  <h2>Pending Review</h2>
+  <div id="queue"><div class="empty">No pending messages</div></div>
+</div>
+
+<div class="card">
+  <h2>Recent Conversations</h2>
+  <div id="conversations"><div class="empty">No conversations yet</div></div>
+</div>
+
+<script>
+async function load() {
+  try {
+    const r = await fetch('/wa/dashboard');
+    const d = await r.json();
+
+    document.getElementById('s-received').textContent = d.stats.received;
+    document.getElementById('s-replied').textContent = d.stats.replied;
+    document.getElementById('s-queued').textContent = d.stats.queued;
+    document.getElementById('s-pending').textContent = d.pending;
+
+    // Show setup banner if no API configured
+    // (detected by 0 received and checking env presence via a flag)
+    if (d.apiConfigured === false) {
+      document.getElementById('setup-banner').style.display = 'block';
+    }
+
+    // Toggles
+    for (const [agent, on] of Object.entries(d.autoReply)) {
+      const el = document.querySelector(`.toggle[data-agent="${agent}"]`);
+      if (el) el.classList.toggle('on', on);
+    }
+
+    // Queue
+    const queueEl = document.getElementById('queue');
+    if (d.pendingMessages.length === 0) {
+      queueEl.innerHTML = '<div class="empty">No pending messages</div>';
+    } else {
+      queueEl.innerHTML = d.pendingMessages.map(m => `
+        <div class="queue-item" id="qi-${m.id}">
+          <div class="qi-header">
+            <span class="qi-phone">${m.memberName || m.from}</span>
+            <span class="qi-intent ${m.intent}">${m.intent}</span>
+          </div>
+          <div class="qi-msg">"${esc(m.message)}"</div>
+          <div class="qi-reply">${esc(m.suggestedReply)}</div>
+          <div class="qi-actions">
+            <button class="btn btn-send" onclick="approveMsg('${m.id}')">Send</button>
+            <button class="btn btn-edit" onclick="editMsg('${m.id}')">Edit</button>
+            <button class="btn btn-skip" onclick="skipMsg('${m.id}')">Skip</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Conversations
+    const convEl = document.getElementById('conversations');
+    if (d.recentConversations.length === 0) {
+      convEl.innerHTML = '<div class="empty">No conversations yet</div>';
+    } else {
+      convEl.innerHTML = d.recentConversations.map(c => {
+        const initials = (c.memberName || c.phone.slice(-4)).slice(0, 2).toUpperCase();
+        const lastText = c.lastMessage?.text || '';
+        const time = c.lastMessage?.ts ? new Date(c.lastMessage.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+        return `
+          <div class="conv-item">
+            <div class="conv-avatar">${initials}</div>
+            <div class="conv-info">
+              <div class="conv-name">${c.memberName || c.phone}</div>
+              <div class="conv-last">${esc(lastText.slice(0, 60))}</div>
+            </div>
+            <div class="conv-time">${time}</div>
+          </div>
+        `;
+      }).join('');
+    }
+  } catch(e) { console.error('Load error:', e); }
+}
+
+function esc(s) { return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function toggleAgent(agent) {
+  await fetch('/wa/toggle', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({agent}) });
+  load();
+}
+
+async function approveMsg(id) {
+  await fetch('/wa/approve', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
+  load();
+}
+
+async function editMsg(id) {
+  const el = document.getElementById('qi-' + id);
+  const replyEl = el.querySelector('.qi-reply');
+  const current = replyEl.textContent;
+  const newReply = prompt('Edit reply:', current);
+  if (newReply && newReply !== current) {
+    await fetch('/wa/approve', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id, customReply: newReply}) });
+    load();
+  }
+}
+
+async function skipMsg(id) {
+  await fetch('/wa/skip', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
+  load();
+}
+
+load();
+setInterval(load, 15000);
+</script>
+</body>
+</html>

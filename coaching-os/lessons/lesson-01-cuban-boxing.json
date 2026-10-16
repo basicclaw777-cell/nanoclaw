@@ -1,0 +1,201 @@
+{
+  "id": "lesson-01",
+  "position": 1,
+  "title": "What is Cuban Boxing?",
+  "subtitle": "The school that produced more Olympic gold than any other",
+  "slug": "what-is-cuban-boxing",
+
+  "curriculum": {
+    "blocks": [1, 2, 3],
+    "pillars": ["skill"],
+    "domains": ["strategy", "footwork", "defense"],
+    "engines": {
+      "body": "Stance architecture, lateral movement, upright posture — built from salsa/ballet foundations",
+      "mind": "Systematic Russian method, read-and-react, angle calculation, tactical patience",
+      "emotion": "National pride as fuel — fighting for family and country, not money. Composure under pressure, the counter-puncher's calm"
+    }
+  },
+
+  "audience": {
+    "level": "all",
+    "hook": "Cuba is a tiny island that dominated world boxing for 40 years. This is how.",
+    "question": "What makes Cuban boxing different from every other style?"
+  },
+
+  "core": {
+    "thesis": "Cuban boxing is mastery over might — a defensive-first system built on fundamentals, footwork, and angles, forged from necessity, enriched by culture, and kept pure by isolation.",
+    "keyPoints": [
+      "Systematic training: not natural talent — a structured teaching method that produces champions repeatedly",
+      "Born from disadvantage: no money for equipment or nutrition — so fighters HAD to be technical, tactical, cunning. Couldn't rely on power.",
+      "Access to the well-developed Russian/Soviet school of boxing through communist alliance — systematic, scientific, disciplined. Cuba took that structured approach and added their own cultural DNA",
+      "Clever use of available resources: salsa gave them footwork and weight transfer, ballet gave them athleticism and body control, music culture gave them timing and rhythm — all folded into boxing",
+      "Defensive mastery as the foundation — you learn to not get hit before you learn to hit",
+      "Footwork and angles over straight-line aggression",
+      "Upright stance, high guard, lateral movement",
+      "Counter-punching as the highest expression of skill",
+      "Forced amateur system kept the method PURE: no pro boxing = no promoters, no pay-per-view, no incentive to train for knockouts and spectacle. Coaches stayed focused on developing the system and the athlete, not selling tickets. Amateur scoring rewards clean technique, not aggression. The method never got corrupted by commercial pressure.",
+      "National and regional pride as emotional fuel: with limited economic opportunities, boxing was one of the few areas Cubans could achieve, represent their community, feel pride. They weren't fighting for money — they were fighting for family, neighbourhood, country. When pride is the currency, you don't cut corners.",
+      "Produced Teófilo Stevenson (3× Olympic gold), Félix Savón (3× Olympic gold), Kid Chocolate, Guillermo Rigondeaux",
+      "The school survived because fundamentals don't go out of date — and because it was built for people who had nothing except discipline and intelligence"
+    ],
+    "commonMisconceptions": [
+      "Cuban boxing is flashy or showy — it's the opposite: disciplined fundamentals born from necessity",
+      "It's only for amateurs — the principles apply at every level",
+      "It's about natural talent — it's a SYSTEM. Talent is a bonus, not a requirement",
+      "They had advantages other countries didn't — the opposite: they had NOTHING, so they had to be smarter"
+    ],
+    "coachEye": {
+      "observe": "Watch how a Cuban-trained boxer moves between punches — the feet never stop",
+      "compare": "Compare a Cuban guard (high, tight, upright) to a typical Western peek-a-boo",
+      "predict": "When a Cuban boxer steps offline, the counter is already loaded",
+      "diagnose": "The difference is visible in the SPACE between exchanges, not the exchanges themselves"
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["strategy", "footwork", "defense"],
+    "motions": ["sweep", "fade", "rotate"],
+    "lines": ["ghost", "solid", "dashed"],
+    "diagnostics": ["gold-pulse"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "The Island",
+      "duration": "20s",
+      "visualMode": "vox",
+      "narration": "Cuba. A Caribbean island of 11 million people. No professional boxing since 1962. And that ban didn't weaken Cuban boxing — it kept it pure. No promoters. No pay-per-view. No training for spectacle. Just the method. And it produced the most dominant boxing programme the world has ever seen.",
+      "components": ["CalloutLabel", "ProgressStepper"],
+      "assets": ["map-caribbean", "olympic-medal-count"],
+      "learningObjective": "Establish scale of Cuban dominance"
+    },
+    {
+      "id": "scene_02",
+      "title": "The Legends",
+      "duration": "25s",
+      "visualMode": "noir",
+      "narration": "Teófilo Stevenson. Three Olympic golds. Refused millions to turn professional. Félix Savón. Three more. Rigondeaux. Kid Chocolate. These weren't lucky athletes — they were products of a system.",
+      "components": ["CalloutLabel", "TimingPulse"],
+      "assets": ["archival-stevenson", "archival-savon"],
+      "learningObjective": "Show the system produces greatness repeatedly — not one-offs"
+    },
+    {
+      "id": "scene_03",
+      "title": "Necessity",
+      "duration": "25s",
+      "visualMode": "vox",
+      "narration": "No money for equipment. No budget for nutrition. You can't build power when your fighters don't eat enough protein. So Cuba did the only thing it could — it built the smartest, most technical, most cunning boxers on earth. The disadvantage became the method.",
+      "components": ["CalloutLabel", "ProgressStepper"],
+      "assets": ["cuban-gym-footage"],
+      "learningObjective": "Necessity drove the method — disadvantage became advantage"
+    },
+    {
+      "id": "scene_04",
+      "title": "Rhythm",
+      "duration": "20s",
+      "visualMode": "noir",
+      "narration": "And they drew from what they had. The Russian school — systematic, scientific, disciplined — came through the communist alliance. Salsa gave them footwork and weight transfer. Ballet gave them athleticism and body control. An entire culture of movement and rhythm, folded into a structured method. Cuban boxers don't just fight. They flow.",
+      "components": ["RhythmVisualizer", "FootworkGrid", "TimingPulse"],
+      "assets": ["cuban-music-montage"],
+      "learningObjective": "Rhythm as a training resource — salsa footwork, ballet athleticism, music culture → boxing movement"
+    },
+    {
+      "id": "scene_05",
+      "title": "The Method",
+      "duration": "30s",
+      "visualMode": "blueprint",
+      "narration": "The Cuban school teaches defence before offence. Footwork before punches. Position before power. A systematic method — not talent, a system. You learn to not get hit. Then you learn why that makes your own punches land.",
+      "components": ["FootworkGrid", "GuardWindow", "CenterLine", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Core principle: defensive foundation enables offensive precision"
+    },
+    {
+      "id": "scene_06",
+      "title": "Angles Over Aggression",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "Western boxing often rewards walking forward. Cuban boxing rewards stepping OFFLINE. Every angle creates an opening. Every opening is a counter waiting to happen.",
+      "components": ["FootworkGrid", "PunchTrajectory", "DistanceBands", "CenterLine"],
+      "assets": [],
+      "learningObjective": "Footwork and angles as offensive weapons"
+    },
+    {
+      "id": "scene_07",
+      "title": "Why It Works",
+      "duration": "20s",
+      "visualMode": "blueprint",
+      "narration": "Styles change. Trends come and go. Fundamentals don't. The Cuban system survives because it teaches the physics of boxing — stance, balance, timing, angles. Built for people who had nothing except discipline and intelligence.",
+      "components": ["BalanceIndicator", "TimingPulse", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Fundamentals are timeless — and born from necessity"
+    },
+    {
+      "id": "scene_08",
+      "title": "Basic Reflex",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "This is what we teach at Basic Reflex. Not tricks. Not trends. The systematic method that made Cuba the greatest boxing school on earth. In Hong Kong.",
+      "components": ["CalloutLabel"],
+      "assets": ["br-logo", "gym-exterior"],
+      "learningObjective": "Bridge: Cuban method → Basic Reflex → you"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_03", "scene_08"],
+      "hook": "Cuba has 11 million people and more Olympic boxing gold than the USA. They had no money. No equipment. So they built the smartest boxers on earth.",
+      "cta": "This is what we teach. Link in bio."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "The Island"},
+        {"time": "1:30", "title": "The Legends"},
+        {"time": "3:00", "title": "Necessity — The Disadvantage That Became the Method"},
+        {"time": "4:30", "title": "Salsa, Ballet & Rhythm — The Resources Nobody Else Had"},
+        {"time": "5:30", "title": "The Method"},
+        {"time": "7:00", "title": "Angles Over Aggression"},
+        {"time": "8:30", "title": "Why Fundamentals Win"},
+        {"time": "9:30", "title": "Basic Reflex"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "20s",
+      "sceneIds": ["scene_05", "scene_06"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "What is Cuban Boxing?",
+        "The 4 Principles: Defence First, Footwork, Angles, Counter",
+        "Key Figures: Stevenson, Savón, Rigondeaux",
+        "How This Connects to Your Training at BR"
+      ],
+      "diagrams": ["cuban-guard-vs-western", "angle-stepping-diagram"],
+      "checkpoints": [
+        "Can you name the 4 Cuban principles?",
+        "Why does defence come before offence?",
+        "What does 'stepping offline' mean?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Use this lesson in Block 1 intro sessions — sets context for WHY we drill fundamentals",
+        "Show Stevenson footage if available — the calm is the teaching point, not the power",
+        "Ask students: 'What do you think Cuban coaches teach FIRST?' — most say jab. Answer: stance."
+      ],
+      "regressions": [
+        "If student has existing boxing habits (hands low, squared stance), use this lesson to reframe: we're not correcting you, we're teaching a different system"
+      ],
+      "observations": [
+        "Watch for students who light up at the counter-punching concept — they're your natural Cuban-style learners"
+      ],
+      "progressionTo": "lesson-02-what-is-basic-reflex"
+    }
+  }
+}

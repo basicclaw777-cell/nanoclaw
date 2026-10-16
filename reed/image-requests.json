@@ -1,0 +1,32 @@
+[
+  {
+    "id": "req-001",
+    "pillar": "Member Celebration",
+    "brief": "A new member, hands wrapped for the first time, standing in front of the heavy bag with a quiet, proud smile. Warm gym light, genuine moment, no staged action.",
+    "format": "post",
+    "status": "requested",
+    "ts": "2026-06-02T05:50:53.350Z",
+    "source": "maya-plan"
+  },
+  {
+    "id": "req-002",
+    "pillar": "Technique",
+    "brief": "Coach Paul demonstrating a clean left hook on the mitts, side-on view, gym light catching the movement. One sharp frame, no motion blur, focus on the form.",
+    "format": "post",
+    "status": "generated",
+    "ts": "2026-06-02T05:50:53.350Z",
+    "source": "maya-plan",
+    "output": "/Users/basicclaw777/reed-dump/ready/prompts/2026-06-02-technique-coach-paul-demonstrating-a-clean-left-hook-on-the-.md",
+    "tool": "openart(prompt)",
+    "generatedTs": "2026-06-02T05:51:01.912Z"
+  },
+  {
+    "id": "req-003",
+    "pillar": "Internal Game",
+    "brief": "A member sitting alone on the bench after a session, towel over shoulder, looking down at their wraps. Stillness, reflection, the quiet after work. Low warm light.",
+    "format": "post",
+    "status": "requested",
+    "ts": "2026-06-02T05:50:53.350Z",
+    "source": "maya-plan"
+  }
+]

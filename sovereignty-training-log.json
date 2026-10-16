@@ -1,0 +1,20 @@
+[
+  {
+    "id": "run_1783019592645",
+    "date": "2026-07-02",
+    "config": {
+      "model": "hermes3",
+      "datasetSize": 64,
+      "iterations": 100,
+      "batchSize": 4,
+      "hardware": "M4 16GB (pre-M5)",
+      "dryRun": true
+    },
+    "metrics": {
+      "timeMinutes": null,
+      "peakMemoryGB": null,
+      "validationScore": 0.36,
+      "notes": "pre-hardware pipeline smoke test"
+    }
+  }
+]

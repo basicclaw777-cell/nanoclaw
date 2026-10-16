@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triangulation Relay</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0a0f; color:#e8e6df; font-family:'Crimson Pro',Georgia,serif; min-height:100vh; }
+  .header { background:linear-gradient(135deg,#0f0f1a 0%,#1a1528 100%); border-bottom:1px solid #f7b40833; padding:2rem; text-align:center; }
+  .header h1 { font-family:'Share Tech Mono',monospace; font-size:1.8rem; color:#f7b408; letter-spacing:0.15em; margin-bottom:0.5rem; }
+  .header .subtitle { font-style:italic; color:#888; font-size:1.1rem; }
+  .meta { text-align:center; padding:1rem; font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:#666; }
+  .meta .pill { display:inline-block; background:#ffffff08; padding:0.3rem 0.8rem; border-radius:12px; border:1px solid #ffffff0a; margin:0 0.3rem; }
+  .meta .active { border-color:#1D9E7533; color:#1D9E75; }
+  .relay-body { max-width:800px; margin:0 auto; padding:2rem; }
+  .round { margin-bottom:2rem; border-left:3px solid #534AB7; padding:0 0 0 1.5rem; }
+  .round.model-a { border-left-color:#f7b408; }
+  .round.model-b { border-left-color:#06b6d4; }
+  .round-header { font-family:'Share Tech Mono',monospace; font-size:0.85rem; margin-bottom:0.8rem; }
+  .round-header .model-a { color:#f7b408; }
+  .round-header .model-b { color:#06b6d4; }
+  .round p { line-height:1.7; margin-bottom:0.8rem; font-size:1.02rem; }
+  .round strong { color:#1D9E75; }
+  .round em { color:#a99bdf; }
+  .round blockquote { border-left:3px solid #534AB7; padding:0.5rem 1rem; margin:1rem 0; background:#534AB710; }
+  .empty { text-align:center; padding:4rem 2rem; color:#555; font-style:italic; font-size:1.2rem; }
+  .discoveries { background:#f7b40808; border:1px dashed #f7b40833; border-radius:8px; padding:1.5rem; margin:2rem 0; }
+  .discoveries h3 { font-family:'Share Tech Mono',monospace; color:#f7b408; font-size:0.9rem; margin-bottom:0.8rem; }
+  .discoveries li { font-size:0.95rem; margin-bottom:0.3rem; color:#ddd; }
+  .back-btn { position:fixed; top:1rem; left:1rem; font-family:'Share Tech Mono',monospace; background:#ffffff08; color:#888; border:1px solid #ffffff15; padding:0.4rem 0.8rem; border-radius:4px; cursor:pointer; font-size:0.75rem; text-decoration:none; z-index:10; }
+  .back-btn:hover { color:#f7b408; border-color:#f7b40833; }
+  .queue { max-width:800px; margin:2rem auto; padding:0 2rem; }
+  .queue h2 { font-family:'Share Tech Mono',monospace; color:#f7b408; font-size:1.1rem; margin-bottom:1rem; }
+  .queue-item { background:#ffffff05; border:1px solid #ffffff0a; border-radius:8px; padding:1rem; margin-bottom:0.8rem; }
+  .queue-item .title { font-family:'Share Tech Mono',monospace; color:#f7b408; font-size:0.9rem; }
+  .queue-item .why { color:#888; font-size:0.9rem; margin-top:0.3rem; }
+</style>
+</head>
+<body>
+<a href="/lobby" class="back-btn">< lobby</a>
+
+<div class="header">
+  <h1>TRIANGULATION RELAY</h1>
+  <div class="subtitle">Two LLMs. One selector. Evolution made visible.</div>
+</div>
+
+<div class="meta" id="metaBar"></div>
+<div class="relay-body" id="relayBody">
+  <div class="empty">Loading...</div>
+</div>
+<div class="queue" id="queueSection"></div>
+
+<script>
+const QUEUE = [
+  { title: '1. What is Basic Reflex actually selling?', why: 'Cathedral has ~15 products but no unified revenue model' },
+  { title: '2. The Closed-Loop Coach spine', why: 'Gym Eyes + Virtual Tutor + Drill Player — 80% built, unwired' },
+  { title: '3. Is the Forgotten Shelf a real moat?', why: '5,000+ techniques — defensibility needs stress-testing' },
+  { title: '4. The Master Game unified model', why: 'How leverage + meaning compound' },
+  { title: '5. 10-Block Curriculum progression', why: 'Gates are Paul\'s drafts — outside validation needed' },
+  { title: '6. Agent autonomy boundaries', why: 'Trust taxonomy before the propose-mutations phase' },
+  { title: '7. Ancient Corpus extraction gaps', why: 'Pipeline proven — are we extracting the right things?' },
+  { title: '8. A Cathedral for someone else', why: 'Paul-specific vs universal architecture separation' },
+  { title: '9. Paul\'s coaching IP product form', why: 'Preserve the Trojan Horse while scaling' },
+  { title: '10. Cosmology evidence grade', why: 'Independent outside grading of the same evidence' }
+];
+
+async function load() {
+  try {
+    const resp = await fetch('/api/relay/status');
+    const data = await resp.json();
+
+    if (data.active || data.topic) {
+      document.getElementById('metaBar').innerHTML =
+        `<span class="pill active">${data.status}</span>` +
+        `<span class="pill">Round ${data.round}</span>` +
+        `<span class="pill">${data.topic}</span>`;
+    }
+
+    // Try loading latest relay file
+    const latest = await fetch('/api/relay/latest');
+    const ld = await latest.json();
+    if (ld.ok && ld.rounds?.length) {
+      let html = '';
+      for (const r of ld.rounds) {
+        const cls = r.model === 'A' ? 'model-a' : 'model-b';
+        const label = r.model === 'A' ? '<span class="model-a">Claude (Forge)</span>' : '<span class="model-b">DeepSeek (Analyst)</span>';
+        let content = r.content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+        content = content.split('\n\n').map(p => {
+          if (p.startsWith('<')) return p;
+          return `<p>${p.replace(/\n/g, ' ')}</p>`;
+        }).join('');
+        html += `<div class="round ${cls}"><div class="round-header">Round ${r.round} — ${label}</div>${content}</div>`;
+      }
+      if (ld.discoveries?.length) {
+        html += `<div class="discoveries"><h3>Extracted Discoveries</h3><ul>${ld.discoveries.map(d => `<li>${d}</li>`).join('')}</ul></div>`;
+      }
+      document.getElementById('relayBody').innerHTML = html;
+    } else {
+      document.getElementById('relayBody').innerHTML = '<div class="empty">No relay completed yet. Start one via Telegram: /relay run &lt;topic&gt;</div>';
+    }
+  } catch {
+    document.getElementById('relayBody').innerHTML = '<div class="empty">API offline.</div>';
+  }
+
+  // Render queue
+  document.getElementById('queueSection').innerHTML =
+    '<h2>RELAY QUEUE</h2>' +
+    QUEUE.map(q => `<div class="queue-item"><div class="title">${q.title}</div><div class="why">${q.why}</div></div>`).join('');
+}
+
+load();
+</script>
+</body>
+</html>

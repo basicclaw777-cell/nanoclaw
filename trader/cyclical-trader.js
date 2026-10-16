@@ -41,8 +41,8 @@ const DB_PATH = path.join(__dirname, 'logs', 'trades.db');
 const PORTFOLIO_PATH = path.join(__dirname, 'cyclical-portfolio.json');
 const STRATEGY_SCRIPT = path.join(__dirname, 'strategies', 'cathedral-strategies.py');
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN;
+const SLACK_CHANNEL = process.env.SLACK_TRADING_CHANNEL || 'C0BSL8U56G4';
 
 // Eliminated: lunar_cycles (12% WR, -$178), fibonacci_time (0% WR), harmonic_year (0% WR)
 // Surviving: gann_geometry (80% WR, +$45), historical_cycles (67% WR, +$40)
@@ -194,7 +194,7 @@ function generateSignals() {
     console.log('  Cathedral signals stale — running strategy generator...');
     execFileSync('python3', [STRATEGY_SCRIPT], {
       cwd: __dirname,
-      timeout: 60000,
+      timeout: 120000,
       encoding: 'utf8',
       stdio: ['pipe', 'pipe', 'pipe'], // suppress stdout/stderr
     });
@@ -212,15 +212,16 @@ function generateSignals() {
   }
 }
 
-// ── Telegram ────────────────────────────────────────────────────────────────
+// ── Slack ────────────────────────────────────────────────────────────────
 
 async function notify(msg) {
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
+  console.log('[notify]', msg);
+  if (!SLACK_TOKEN) return;
   try {
-    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    await fetch('https://slack.com/api/chat.postMessage', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg, parse_mode: 'Markdown' }),
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SLACK_TOKEN}` },
+      body: JSON.stringify({ channel: SLACK_CHANNEL, text: msg }),
     });
   } catch (e) {}
 }
@@ -296,13 +297,17 @@ function getConfidenceMultiplier() {
 
   if (recent.length < 3) return { mult: 1.0, reason: 'too few trades' };
 
-  const wins = recent.filter(t => t.pnl > 0).length;
-  const winRate = wins / recent.length;
+  // $0 P&L (stale exits at breakeven) are neutral, not losses
+  const meaningful = recent.filter(t => t.pnl !== 0);
+  if (meaningful.length < 3) return { mult: 1.0, reason: 'too few meaningful trades' };
 
-  // Streak detection
+  const wins = meaningful.filter(t => t.pnl > 0).length;
+  const winRate = wins / meaningful.length;
+
+  // Streak detection (skip $0 neutral trades)
   let streak = 0;
-  const firstWin = recent[0]?.pnl > 0;
-  for (const t of recent) {
+  const firstWin = meaningful[0]?.pnl > 0;
+  for (const t of meaningful) {
     if ((t.pnl > 0) === firstWin) streak++;
     else break;
   }
@@ -465,6 +470,7 @@ async function run() {
   const fightDecision = shouldFight();
   if (fightDecision.fight) {
     console.log(`  FIGHT: ${fightDecision.reasons[0]}`);
+    if (fightDecision.checks?.loss_momentum?.recovery_probe) console.log('  RECOVERY PROBE: 1 position max, best signal only');
     if (fightDecision.allowed_direction) console.log(`  RESTRICTION: ${fightDecision.allowed_direction}`);
     if (fightDecision.warnings.length) console.log(`  WARNING: ${fightDecision.warnings.join(', ')}`);
   } else {
@@ -551,9 +557,10 @@ async function run() {
     })
     .sort((a, b) => (b.strength || 0) - (a.strength || 0));
 
-  const belowThreshold = signals.filter(s => s.strength < 0.45).length;
+  const effectiveThreshold = fightDecision.checks?.loss_momentum?.recovery_probe ? 0.15 : 0.45;
+  const belowThreshold = signals.filter(s => s.strength < effectiveThreshold).length;
   if (belowThreshold > 0) {
-    console.log(`  ${belowThreshold} signals below 0.45 threshold after filtering`);
+    console.log(`  ${belowThreshold} signals below ${effectiveThreshold} threshold after filtering`);
   }
 
   for (const s of signals) {
@@ -584,7 +591,12 @@ async function run() {
   // Step 7: Execute trades
   console.log('\n[9/9] Executing trades...');
   let tradesOpened = 0;
-  const effectiveMaxConcurrent = Math.min(portfolio.max_concurrent, cutMan.maxConcurrent);
+  const isRecoveryProbe = fightDecision.checks?.loss_momentum?.recovery_probe;
+  const effectiveMaxConcurrent = isRecoveryProbe
+    ? 1
+    : Math.min(portfolio.max_concurrent, cutMan.maxConcurrent);
+  // Recovery probe: lower threshold so best available signal can fire
+  const signalThreshold = isRecoveryProbe ? 0.15 : 0.45;
 
   // Gate 1: Matchmaker says sit out — no new entries at all
   if (!fightDecision.fight) {
@@ -639,8 +651,8 @@ async function run() {
     }
 
     // Skip weak signals
-    if (signal.strength < 0.45) {
-      console.log(`  ${signal.asset} strength ${signal.strength} < 0.45 — skipping`);
+    if (signal.strength < signalThreshold) {
+      console.log(`  ${signal.asset} strength ${signal.strength} < ${signalThreshold} — skipping`);
       continue;
     }
 

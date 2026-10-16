@@ -1,0 +1,72 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Foreground person holds a stationary stance. Background person is moving laterally from center to the far right side of the frame.",
+        "stance_width": "normal",
+        "guard": "Foreground person has both hands up in a guard position, holding green pad-like objects. Background person's arms are down.",
+        "upper_body": "Foreground person is in an orthodox boxing stance with a slight forward lean. Background person is upright and running.",
+        "distance": "Background person is moving away from the foreground person, increasing distance.",
+        "notable": "Background person appears to be performing a conditioning or footwork drill, moving quickly around the perimeter. Foreground person is anchored."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Foreground person has stopped actively moving. Background person continues moving laterally, now from the right side back toward the center.",
+        "stance_width": "normal",
+        "guard": "Foreground person's hands are dropped to waist level. Guard is down.",
+        "upper_body": "Foreground person is more upright and relaxed. Background person is moving fluidly back and forth.",
+        "distance": "Background person is moving closer to the foreground person again.",
+        "notable": "A rest or instruction pause appears to occur in this segment as the foreground person drops their guard."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Foreground person resumes a grounded stance. Background person has moved to the far left side of the frame and remains there.",
+        "stance_width": "normal",
+        "guard": "Foreground person's hands are back up in a guard position.",
+        "upper_body": "Foreground person is back in an athletic, defensive posture. Background person is upright on the left side.",
+        "distance": "Background person is on the far left, maintaining a wide distance from the foreground person.",
+        "notable": "The foreground person has returned to a ready stance, suggesting the drill or rest period is over."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F2-F4",
+      "type": "distance_open",
+      "detail": "Background person moves rapidly from the center to the far right side, increasing separation from the foreground person."
+    },
+    {
+      "frames": "F6-F7",
+      "type": "guard_drop",
+      "detail": "Foreground person lowers their hands from guard to waist level, indicating a brief rest or instruction period."
+    },
+    {
+      "frames": "F7-F8",
+      "type": "distance_close",
+      "detail": "Background person changes direction and runs from the right side back toward the center, decreasing the distance."
+    },
+    {
+      "frames": "F11-F12",
+      "type": "reset",
+      "detail": "Foreground person raises their hands back into a guard position, resuming the drill."
+    },
+    {
+      "frames": "F11-F13",
+      "type": "step",
+      "detail": "Background person continues moving and settles on the far left side of the frame."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

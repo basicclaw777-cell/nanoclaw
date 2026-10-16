@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Resonant Enclosure</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e1a;
+    color: #c8d0e0;
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  #canvas-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Info panel */
+  #info-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 360px;
+    height: 100vh;
+    background: rgba(10, 14, 26, 0.95);
+    border-left: 1px solid rgba(120, 160, 255, 0.2);
+    padding: 24px;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+
+  #info-panel.open { transform: translateX(0); }
+
+  #info-panel h2 {
+    font-size: 16px;
+    color: #f7b408;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  #info-panel h3 {
+    font-size: 13px;
+    color: #78a0ff;
+    margin: 16px 0 6px;
+    letter-spacing: 1px;
+  }
+
+  #info-panel p, #info-panel li {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #8898b8;
+  }
+
+  #info-panel ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  #info-panel ul li::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  #info-panel .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: 1px solid rgba(120, 160, 255, 0.3);
+    color: #78a0ff;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+
+  #info-panel .close-btn:hover { background: rgba(120, 160, 255, 0.1); }
+
+  /* Legend */
+  #legend {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background: rgba(10, 14, 26, 0.85);
+    border: 1px solid rgba(120, 160, 255, 0.15);
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 11px;
+    z-index: 50;
+    max-width: 260px;
+  }
+
+  #legend h4 {
+    color: #f7b408;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+    color: #8898b8;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Title */
+  #title {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    z-index: 50;
+  }
+
+  #title h1 {
+    font-size: 18px;
+    color: #f7b408;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+
+  #title .subtitle {
+    font-size: 11px;
+    color: #556;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* Controls */
+  #controls {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 50;
+    display: flex;
+    gap: 8px;
+  }
+
+  .ctrl-btn {
+    background: rgba(10, 14, 26, 0.85);
+    border: 1px solid rgba(120, 160, 255, 0.2);
+    color: #78a0ff;
+    padding: 8px 14px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+
+  .ctrl-btn:hover { background: rgba(120, 160, 255, 0.1); }
+  .ctrl-btn.active { border-color: #f7b408; color: #f7b408; }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed;
+    background: rgba(10, 14, 26, 0.95);
+    border: 1px solid rgba(120, 160, 255, 0.3);
+    padding: 8px 12px;
+    font-size: 11px;
+    border-radius: 4px;
+    pointer-events: none;
+    display: none;
+    z-index: 200;
+    max-width: 240px;
+    color: #c8d0e0;
+  }
+
+  /* Back button */
+  .back-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 50;
+    background: rgba(10, 14, 26, 0.85);
+    border: 1px solid rgba(120, 160, 255, 0.2);
+    color: #78a0ff;
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  .back-btn:hover { background: rgba(120, 160, 255, 0.1); }
+</style>
+</head>
+<body>
+
+<div id="title">
+  <h1>The Resonant Enclosure</h1>
+  <div class="subtitle">Structural map of the cavity and its modes</div>
+</div>
+
+<a href="/lobby" class="back-btn">LOBBY</a>
+
+<div id="canvas-container">
+  <canvas id="map"></canvas>
+</div>
+
+<div id="legend">
+  <h4>LAYERS</h4>
+  <div class="legend-item"><div class="legend-dot" style="background:#2a4a8a"></div> Firmament boundary</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f7b408"></div> Sun circuit (365.25d / 360d original)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c0c8d8"></div> Moon circuit (29.53d / 30d original)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8b4513"></div> Wandering stars (5 visible)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1a3a6a"></div> Fixed stars (outer dome)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ff4444"></div> The detuning event</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#44ff88"></div> Research domain windows</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#aa66ff"></div> The five retuners</div>
+  <h4 style="margin-top:12px">FREQUENCY BANDS</h4>
+  <div class="legend-item"><div class="legend-dot" style="background:#334488; border:1px solid #4466aa"></div> Schumann 7.83 Hz (cavity voice)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#445533; border:1px solid #668844"></div> 60-120 Hz (operating band)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#553344; border:1px solid #884466"></div> 432 Hz (native concert pitch)</div>
+</div>
+
+<div id="controls">
+  <button class="ctrl-btn active" onclick="toggleLayer('circuits')">CIRCUITS</button>
+  <button class="ctrl-btn active" onclick="toggleLayer('frequencies')">FREQUENCIES</button>
+  <button class="ctrl-btn active" onclick="toggleLayer('domains')">DOMAINS</button>
+  <button class="ctrl-btn active" onclick="toggleLayer('retuners')">RETUNERS</button>
+  <button class="ctrl-btn" onclick="toggleLayer('detuned')">DETUNED</button>
+  <button class="ctrl-btn" onclick="toggleLayer('original')">ORIGINAL (360)</button>
+</div>
+
+<div id="info-panel">
+  <button class="close-btn" onclick="closePanel()">x</button>
+  <div id="panel-content"></div>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+const canvas = document.getElementById('map');
+const ctx = canvas.getContext('2d');
+let W, H, cx, cy, R;
+let time = 0;
+let mouseX = 0, mouseY = 0;
+let hoveredItem = null;
+
+const layers = {
+  circuits: true,
+  frequencies: true,
+  domains: true,
+  retuners: true,
+  detuned: false,
+  original: false,
+};
+
+function toggleLayer(name) {
+  layers[name] = !layers[name];
+  document.querySelectorAll('.ctrl-btn').forEach(btn => {
+    if (btn.textContent.toLowerCase().includes(name.substring(0,4))) {
+      btn.classList.toggle('active', layers[name]);
+    }
+  });
+  // Mutual exclusion: detuned and original
+  if (name === 'detuned' && layers.detuned) { layers.original = false; }
+  if (name === 'original' && layers.original) { layers.detuned = false; }
+  updateButtons();
+}
+
+function updateButtons() {
+  document.querySelectorAll('.ctrl-btn').forEach(btn => {
+    const t = btn.textContent.trim().toLowerCase();
+    for (const key of Object.keys(layers)) {
+      if (t.includes(key.substring(0,4))) {
+        btn.classList.toggle('active', layers[key]);
+      }
+    }
+  });
+}
+
+// Research domains positioned around the enclosure
+const domains = [
+  { name: 'Suppressed Energy', angle: 0, color: '#ff6644', desc: 'Tesla, Schauberger, Rife, Moray — researchers who found the instrument\'s modes', vault: 'cosmology track 3' },
+  { name: 'Sacred Geometry', angle: Math.PI * 2 / 10, color: '#44aaff', desc: 'The cavity\'s structural mathematics. Phi, sqrt(2), platonic solids as resonant geometry.', vault: 'sacred geometry nuggets' },
+  { name: 'Frequency & Resonance', angle: Math.PI * 2 * 2 / 10, color: '#ffaa22', desc: 'The cavity\'s operating frequency. Schumann, cymatics, sonoluminescence.', vault: 'cosmology track 10' },
+  { name: 'Ancient Knowledge', angle: Math.PI * 2 * 3 / 10, color: '#22dd88', desc: 'The Builder\'s Manual. Sumerian maintenance logs, Egyptian operating manual, Maya treatment protocols.', vault: 'the-builders-manual.md' },
+  { name: 'Water & Matter', angle: Math.PI * 2 * 4 / 10, color: '#4488dd', desc: 'The cavity\'s medium. Pollack EZ water, Schauberger living water, structured matter.', vault: 'cosmology track 9' },
+  { name: 'Cosmology', angle: Math.PI * 2 * 5 / 10, color: '#8866ff', desc: 'The cavity itself. Enclosed plane, firmament, luminary circuits.', vault: 'cosmology series' },
+  { name: 'Suppression Pattern', angle: Math.PI * 2 * 6 / 10, color: '#ff4466', desc: 'Who broke the instrument and how. 5-stage playbook across decades.', vault: 'suppression topology' },
+  { name: 'Mathematics', angle: Math.PI * 2 * 7 / 10, color: '#66ddaa', desc: 'The cavity\'s native math. Base-60, 360-degree division, 432 web.', vault: 'mathematics nuggets' },
+  { name: 'Consciousness', angle: Math.PI * 2 * 8 / 10, color: '#cc66ff', desc: 'The cavity\'s awareness layer. Gateway Process, NDEs, meditation.', vault: 'cosmology track 17' },
+  { name: 'Vortex Mathematics', angle: Math.PI * 2 * 9 / 10, color: '#ffdd44', desc: 'Rodin coils, toroidal flow. The cavity\'s energy circulation pattern.', vault: 'vortex mathematics nuggets' },
+];
+
+// The five retuners
+const retuners = [
+  { name: 'Tesla', mode: 'Energy', freq: 'Electromagnetic', angle: Math.PI * 0.3, year: '1891-1943', suppression: 'Papers seized, lab burned, career marginalised', color: '#aa66ff' },
+  { name: 'Rife', mode: 'Biological', freq: 'MOR Frequencies', angle: Math.PI * 0.7, year: '1920-1939', suppression: 'Lab destroyed, AMA prosecution, records erased', color: '#bb77ff' },
+  { name: 'Schauberger', mode: 'Material', freq: 'Vortex/Implosion', angle: Math.PI * 1.1, year: '1920-1958', suppression: 'Conscripted, patents seized, died 5 days after', color: '#cc88ff' },
+  { name: 'Moray', mode: 'Power', freq: 'Radiant Energy', angle: Math.PI * 1.5, year: '1926-1940s', suppression: 'Shot at, lab destroyed, device seized', color: '#dd99ff' },
+  { name: 'Gateway Process', mode: 'Consciousness', freq: 'Hemi-Sync', angle: Math.PI * 1.9, year: '1972-1983', suppression: 'Classified, public report redacted', color: '#eeaaff' },
+];
+
+// Luminary circuits
+const luminaries = {
+  sun: { name: 'Sun', radius: 0.45, period: 365.25, originalPeriod: 360, color: '#f7b408', size: 12 },
+  moon: { name: 'Moon', radius: 0.35, period: 29.53, originalPeriod: 30, color: '#c0c8d8', size: 8 },
+  mercury: { name: 'Mercury', radius: 0.28, period: 87.97, color: '#8b7355', size: 4 },
+  venus: { name: 'Venus', radius: 0.38, period: 224.7, color: '#daa520', size: 5 },
+  mars: { name: 'Mars', radius: 0.52, period: 687, color: '#cd5c5c', size: 5 },
+  jupiter: { name: 'Jupiter', radius: 0.58, period: 4333, color: '#d2b48c', size: 7 },
+  saturn: { name: 'Saturn', radius: 0.64, period: 10759, color: '#c2b280', size: 6 },
+};
+
+// Clickable items for hit detection
+let clickables = [];
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx = W / 2;
+  cy = H / 2;
+  R = Math.min(W, H) * 0.42;
+}
+
+function drawDome() {
+  // Firmament — outer boundary
+  const grad = ctx.createRadialGradient(cx, cy, R * 0.1, cx, cy, R);
+  grad.addColorStop(0, 'rgba(10, 20, 50, 0.0)');
+  grad.addColorStop(0.7, 'rgba(15, 25, 60, 0.2)');
+  grad.addColorStop(0.9, 'rgba(20, 40, 80, 0.3)');
+  grad.addColorStop(1.0, 'rgba(30, 55, 110, 0.5)');
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Firmament edge
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(42, 74, 138, 0.6)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Dome label
+  ctx.font = '10px "Share Tech Mono", monospace';
+  ctx.fillStyle = 'rgba(42, 74, 138, 0.5)';
+  ctx.textAlign = 'center';
+  ctx.fillText('F I R M A M E N T', cx, cy - R - 8);
+
+  // Fixed stars on dome
+  ctx.fillStyle = 'rgba(26, 58, 106, 0.4)';
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * Math.PI * 2 + time * 0.0001;
+    const r = R * (0.93 + Math.sin(i * 7.3) * 0.05);
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    const s = 1 + Math.sin(i * 3.7 + time * 0.003) * 0.5;
+    ctx.beginPath();
+    ctx.arc(x, y, s, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawFrequencyBands() {
+  if (!layers.frequencies) return;
+
+  // Schumann band — innermost cavity resonance
+  drawFreqRing(0.15, 'rgba(51, 68, 136, 0.12)', 'rgba(68, 102, 170, 0.25)', '7.83 Hz');
+
+  // 60-120 Hz operating band — middle layer
+  drawFreqRing(0.30, 'rgba(68, 85, 51, 0.10)', 'rgba(102, 136, 68, 0.20)', '60-120 Hz');
+
+  // 432 Hz — outer resonant layer
+  drawFreqRing(0.70, 'rgba(85, 51, 68, 0.08)', 'rgba(136, 68, 102, 0.15)', '432 Hz');
+}
+
+function drawFreqRing(radiusFrac, fillColor, strokeColor, label) {
+  const r = R * radiusFrac;
+  const pulse = 1 + Math.sin(time * 0.004) * 0.02;
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * pulse, 0, Math.PI * 2);
+  ctx.fillStyle = fillColor;
+  ctx.fill();
+  ctx.strokeStyle = strokeColor;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 8]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.font = '9px "Share Tech Mono", monospace';
+  ctx.fillStyle = strokeColor;
+  ctx.textAlign = 'left';
+  ctx.fillText(label, cx + r * pulse + 6, cy - 2);
+}
+
+function drawCircuits() {
+  if (!layers.circuits) return;
+
+  clickables = clickables.filter(c => c.type !== 'luminary');
+
+  for (const [key, lum] of Object.entries(luminaries)) {
+    const showOriginal = layers.original && (key === 'sun' || key === 'moon');
+    const showDetuned = layers.detuned && (key === 'sun' || key === 'moon');
+
+    // Circuit path (orbital ring)
+    const r = R * lum.radius;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = lum.color + '30';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // If showing original tuning, draw the 360/30 day circuit too
+    if (showOriginal && lum.originalPeriod) {
+      const origR = r * (lum.originalPeriod / lum.period);
+      ctx.beginPath();
+      ctx.arc(cx, cy, origR, 0, Math.PI * 2);
+      ctx.strokeStyle = '#44ff8840';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 6]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Label
+      ctx.font = '9px "Share Tech Mono", monospace';
+      ctx.fillStyle = '#44ff88';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${lum.originalPeriod}d (original)`, cx - origR - 6, cy + 3);
+    }
+
+    // Detuned: show drift arrow between original and current
+    if (showDetuned && lum.originalPeriod) {
+      const origR = r * (lum.originalPeriod / lum.period);
+      const drift = r - origR;
+      const driftAngle = Math.PI * 0.75;
+      const x1 = cx + Math.cos(driftAngle) * origR;
+      const y1 = cy + Math.sin(driftAngle) * origR;
+      const x2 = cx + Math.cos(driftAngle) * r;
+      const y2 = cy + Math.sin(driftAngle) * r;
+
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = '#ff444488';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Drift label
+      const pct = ((lum.period - lum.originalPeriod) / lum.originalPeriod * 100).toFixed(1);
+      ctx.font = '9px "Share Tech Mono", monospace';
+      ctx.fillStyle = '#ff4444';
+      ctx.textAlign = 'center';
+      ctx.fillText(`+${pct}% drift`, (x1 + x2) / 2 - 30, (y1 + y2) / 2);
+    }
+
+    // Luminary body
+    const speed = (1 / lum.period) * 0.05;
+    const angle = time * speed;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+
+    // Glow
+    const glow = ctx.createRadialGradient(x, y, 0, x, y, lum.size * 3);
+    glow.addColorStop(0, lum.color + '40');
+    glow.addColorStop(1, lum.color + '00');
+    ctx.beginPath();
+    ctx.arc(x, y, lum.size * 3, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    // Body
+    ctx.beginPath();
+    ctx.arc(x, y, lum.size, 0, Math.PI * 2);
+    ctx.fillStyle = lum.color;
+    ctx.fill();
+
+    // Label
+    ctx.font = '10px "Share Tech Mono", monospace';
+    ctx.fillStyle = lum.color + 'aa';
+    ctx.textAlign = 'center';
+    ctx.fillText(lum.name, x, y - lum.size - 6);
+
+    clickables.push({ type: 'luminary', x, y, r: lum.size + 6, data: lum, key });
+  }
+}
+
+function drawDomains() {
+  if (!layers.domains) return;
+
+  clickables = clickables.filter(c => c.type !== 'domain');
+
+  domains.forEach((d, i) => {
+    const x = cx + Math.cos(d.angle - Math.PI / 2) * (R + 40);
+    const y = cy + Math.sin(d.angle - Math.PI / 2) * (R + 40);
+
+    // Connection line to dome
+    const edgeX = cx + Math.cos(d.angle - Math.PI / 2) * R;
+    const edgeY = cy + Math.sin(d.angle - Math.PI / 2) * R;
+
+    ctx.beginPath();
+    ctx.moveTo(edgeX, edgeY);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = d.color + '40';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Window marker on dome
+    ctx.beginPath();
+    ctx.arc(edgeX, edgeY, 4, 0, Math.PI * 2);
+    ctx.fillStyle = d.color + '80';
+    ctx.fill();
+
+    // Domain label
+    ctx.font = '10px "Share Tech Mono", monospace';
+    ctx.fillStyle = d.color;
+    ctx.textAlign = 'center';
+
+    // Wrap text for long names
+    const words = d.name.split(' ');
+    if (words.length > 1 && d.name.length > 12) {
+      ctx.fillText(words.slice(0, Math.ceil(words.length / 2)).join(' '), x, y - 4);
+      ctx.fillText(words.slice(Math.ceil(words.length / 2)).join(' '), x, y + 10);
+    } else {
+      ctx.fillText(d.name, x, y + 3);
+    }
+
+    clickables.push({ type: 'domain', x: edgeX, y: edgeY, r: 12, data: d });
+  });
+}
+
+function drawRetuners() {
+  if (!layers.retuners) return;
+
+  clickables = clickables.filter(c => c.type !== 'retuner');
+
+  retuners.forEach((r, i) => {
+    const radius = R * 0.20;
+    const x = cx + Math.cos(r.angle) * radius;
+    const y = cy + Math.sin(r.angle) * radius;
+
+    // Pulse effect
+    const pulse = 1 + Math.sin(time * 0.005 + i) * 0.15;
+
+    // Retuner glow
+    const glow = ctx.createRadialGradient(x, y, 0, x, y, 20 * pulse);
+    glow.addColorStop(0, r.color + '60');
+    glow.addColorStop(1, r.color + '00');
+    ctx.beginPath();
+    ctx.arc(x, y, 20 * pulse, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    // Diamond marker
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillStyle = r.color;
+    ctx.fillRect(-4, -4, 8, 8);
+    ctx.restore();
+
+    // Label
+    ctx.font = '10px "Share Tech Mono", monospace';
+    ctx.fillStyle = r.color;
+    ctx.textAlign = 'center';
+    ctx.fillText(r.name, x, y - 14);
+
+    ctx.font = '8px "Share Tech Mono", monospace';
+    ctx.fillStyle = r.color + '88';
+    ctx.fillText(r.mode, x, y + 18);
+
+    clickables.push({ type: 'retuner', x, y, r: 16, data: r });
+  });
+}
+
+function drawDetuningEvent() {
+  // Always show a subtle crack; full display when DETUNED layer is on
+  const alpha = layers.detuned ? 0.8 : 0.15;
+
+  // Crack in the firmament
+  const crackAngle = Math.PI * 1.25;
+  const x1 = cx + Math.cos(crackAngle) * R * 0.95;
+  const y1 = cy + Math.sin(crackAngle) * R * 0.95;
+  const x2 = cx + Math.cos(crackAngle) * R * 1.05;
+  const y2 = cy + Math.sin(crackAngle) * R * 1.05;
+
+  // Jagged crack line
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  const segments = 8;
+  for (let i = 1; i <= segments; i++) {
+    const t = i / segments;
+    const mx = x1 + (x2 - x1) * t;
+    const my = y1 + (y2 - y1) * t;
+    const jitter = (Math.sin(i * 4.3 + time * 0.002) * 4) * alpha;
+    ctx.lineTo(mx + jitter, my + jitter);
+  }
+  ctx.strokeStyle = `rgba(255, 68, 68, ${alpha})`;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  if (layers.detuned) {
+    // Detuning label
+    ctx.font = '10px "Share Tech Mono", monospace';
+    ctx.fillStyle = '#ff4444';
+    ctx.textAlign = 'center';
+    const lx = cx + Math.cos(crackAngle) * R * 1.12;
+    const ly = cy + Math.sin(crackAngle) * R * 1.12;
+    ctx.fillText('THE DETUNING', lx, ly);
+    ctx.font = '8px "Share Tech Mono", monospace';
+    ctx.fillStyle = '#ff444488';
+    ctx.fillText('360 > 365.25 days', lx, ly + 14);
+    ctx.fillText('30 > 29.53 days', lx, ly + 26);
+
+    clickables.push({ type: 'detuning', x: lx, y: ly, r: 30, data: {
+      name: 'The Detuning Event',
+      desc: 'Every civilization records this catastrophe. Sun\'s circuit changed from 360 to 365.25 days. Moon\'s cycle from 30 to 29.53 days. ~1.5% drift each. Outer circuits barely moved (<0.03%).',
+    }});
+  }
+}
+
+function drawStandingWaveNodes() {
+  if (!layers.frequencies) return;
+
+  // Standing wave pattern inside the cavity
+  const nodeCount = 8;
+  for (let i = 0; i < nodeCount; i++) {
+    const angle = (i / nodeCount) * Math.PI * 2;
+    const r = R * 0.15;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+
+    const intensity = Math.abs(Math.sin(time * 0.003 + i * Math.PI / 4));
+    ctx.beginPath();
+    ctx.arc(x, y, 3 + intensity * 3, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(120, 160, 255, ${intensity * 0.3})`;
+    ctx.fill();
+  }
+
+  // Center node (fundamental)
+  const cPulse = Math.abs(Math.sin(time * 0.004));
+  ctx.beginPath();
+  ctx.arc(cx, cy, 4 + cPulse * 4, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(120, 160, 255, ${0.2 + cPulse * 0.2})`;
+  ctx.fill();
+}
+
+function drawCenterLabel() {
+  ctx.font = '9px "Share Tech Mono", monospace';
+  ctx.fillStyle = 'rgba(120, 160, 255, 0.4)';
+  ctx.textAlign = 'center';
+  ctx.fillText('CAVITY', cx, cy + 20);
+  ctx.fillText('RESONANCE', cx, cy + 32);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  drawDome();
+  drawFrequencyBands();
+  drawStandingWaveNodes();
+  drawCircuits();
+  drawDetuningEvent();
+  drawRetuners();
+  drawDomains();
+  drawCenterLabel();
+
+  // Hit detection for tooltip
+  checkHover();
+
+  time++;
+  requestAnimationFrame(draw);
+}
+
+function checkHover() {
+  hoveredItem = null;
+  const tooltip = document.getElementById('tooltip');
+
+  for (const item of clickables) {
+    const dx = mouseX - item.x;
+    const dy = mouseY - item.y;
+    if (dx * dx + dy * dy < item.r * item.r) {
+      hoveredItem = item;
+      break;
+    }
+  }
+
+  if (hoveredItem) {
+    tooltip.style.display = 'block';
+    tooltip.style.left = (mouseX + 16) + 'px';
+    tooltip.style.top = (mouseY - 10) + 'px';
+    canvas.style.cursor = 'pointer';
+
+    if (hoveredItem.type === 'domain') {
+      tooltip.textContent = hoveredItem.data.name + ' — click for details';
+    } else if (hoveredItem.type === 'retuner') {
+      tooltip.textContent = hoveredItem.data.name + ' (' + hoveredItem.data.mode + ') — click for details';
+    } else if (hoveredItem.type === 'luminary') {
+      const l = hoveredItem.data;
+      tooltip.textContent = `${l.name} — ${l.period}d circuit` + (l.originalPeriod ? ` (was ${l.originalPeriod}d)` : '');
+    } else if (hoveredItem.type === 'detuning') {
+      tooltip.textContent = 'The Detuning Event — click for details';
+    }
+  } else {
+    tooltip.style.display = 'none';
+    canvas.style.cursor = 'default';
+  }
+}
+
+function showPanel(item) {
+  const panel = document.getElementById('info-panel');
+  const content = document.getElementById('panel-content');
+
+  if (item.type === 'domain') {
+    const d = item.data;
+    content.innerHTML = `
+      <h2>${d.name}</h2>
+      <p>${d.desc}</p>
+      <h3>VIEW IN CAVITY</h3>
+      <p>This domain is a window into the resonant enclosure. Every finding in this domain describes an aspect of the same unified structure.</p>
+      <h3>VAULT REFERENCE</h3>
+      <p style="color:#556">${d.vault}</p>
+    `;
+  } else if (item.type === 'retuner') {
+    const r = item.data;
+    content.innerHTML = `
+      <h2>${r.name}</h2>
+      <h3>MODE: ${r.mode}</h3>
+      <p>Frequency domain: ${r.freq}</p>
+      <p>Active: ${r.year}</p>
+      <h3>SUPPRESSION</h3>
+      <p style="color:#ff6644">${r.suppression}</p>
+      <h3>CONTRIBUTION</h3>
+      <p>Independently discovered one mode of the resonant cavity. Same instrument, different key. Same suppression playbook applied to each.</p>
+    `;
+  } else if (item.type === 'luminary') {
+    const l = item.data;
+    content.innerHTML = `
+      <h2>${l.name}</h2>
+      <p>Current circuit: ${l.period} days</p>
+      ${l.originalPeriod ? `<p>Original circuit: ${l.originalPeriod} days</p><p>Drift: ${((l.period - l.originalPeriod) / l.originalPeriod * 100).toFixed(2)}%</p>` : '<p>Outer circuit — minimal drift (&lt;0.03%)</p>'}
+      <h3>IN THE ENCLOSURE MODEL</h3>
+      <p>Not an orbiting body in void. A standing wave node tracing a path within the cavity. The detuning event shifted local geometry, altering the path the ${l.name.toLowerCase()} traces.</p>
+    `;
+  } else if (item.type === 'detuning') {
+    content.innerHTML = `
+      <h2>The Detuning Event</h2>
+      <h3>WHAT HAPPENED</h3>
+      <p>Every ancient civilization records a catastrophic event. Genesis 7:11 describes two boundary failures. Atra-Hasis describes acoustic pollution. The Gilgamesh flood has gods cowering "by the outer wall."</p>
+      <h3>EVIDENCE</h3>
+      <ul>
+        <li style="color:#ffaa22">Sun circuit: 360 to 365.25 days (+1.46%)</li>
+        <li style="color:#c0c8d8">Moon cycle: 30 to 29.53 days (-1.57%)</li>
+        <li style="color:#8b7355">Outer circuits: &lt;0.03% drift</li>
+      </ul>
+      <h3>CALENDAR FOSSIL</h3>
+      <p>Every civilization used 360-day year FIRST, then added corrections. Egyptian epagomenal days. Maya Wayeb. Hindu intercalary months. 360 degrees in a circle = fossil of the original system.</p>
+      <h3>IMPLICATION</h3>
+      <p>Cavity breach affected local geometry (sun/moon circuits), not outer structure. Standing wave nodes shifted, altering luminary paths. The instrument went out of tune.</p>
+    `;
+  }
+
+  panel.classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('info-panel').classList.remove('open');
+}
+
+// Events
+canvas.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+canvas.addEventListener('click', () => {
+  if (hoveredItem) showPanel(hoveredItem);
+});
+
+window.addEventListener('resize', resize);
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePanel();
+});
+
+// Init
+resize();
+draw();
+</script>
+</body>
+</html>

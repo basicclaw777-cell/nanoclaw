@@ -1,0 +1,252 @@
+[
+  {
+    "id": "diag_1_guard_drop_fatigue",
+    "category": "diagnostic",
+    "query": "A student's guard keeps dropping after combinations in round 4. They're in Block 3. What do you observe?",
+    "expect": {
+      "lexicon": ["conditioning", "fatigue", "engine", "checkpoint"],
+      "domain_keywords": ["guard", "combination", "chin", "cue", "reset"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "diag_2_flat_sessions",
+    "category": "diagnostic",
+    "query": "A student who was progressing fast has gone quiet. Sessions feel flat, technique unchanged, attendance still perfect. What do you observe?",
+    "expect": {
+      "lexicon": ["engine", "leak", "wound", "underneath", "energy"],
+      "domain_keywords": ["emotion", "mind", "listen", "flat", "signal"],
+      "must_avoid": ["safe space"]
+    }
+  },
+  {
+    "id": "diag_3_pads_clean_freezes_live",
+    "category": "diagnostic",
+    "query": "A Block 4 student has clean pad work but freezes the moment a partner throws anything back at them. What is actually happening?",
+    "expect": {
+      "lexicon": ["fear gate", "emotion", "composure", "4", "5"],
+      "domain_keywords": ["freeze", "pressure", "sparring", "not technique", "not a technique"],
+      "must_avoid": ["more pad work"]
+    }
+  },
+  {
+    "id": "diag_4_overthinking_mid_combo",
+    "category": "diagnostic",
+    "query": "A student keeps hesitating between punches, overthinking mid-combination. Which engine is leaking?",
+    "expect": {
+      "lexicon": ["mind", "engine", "decision", "processing"],
+      "domain_keywords": ["overthink", "hesitat", "simplify", "pattern", "flow"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "diag_5_first_session_read",
+    "category": "diagnostic",
+    "query": "First session: ex-runner, very fit, flinches at every feint, talks fast about wanting to spar as soon as possible. What do you observe?",
+    "expect": {
+      "lexicon": ["emotion", "engine", "body", "flinch"],
+      "domain_keywords": ["fit", "fear", "rush", "signal", "block"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "presc_1_guard_drop_cue",
+    "category": "prescription",
+    "query": "Guard drops after every combination once fatigue sets in. What do you prescribe?",
+    "expect": {
+      "lexicon": ["cue", "checkpoint", "conditioning", "reset"],
+      "domain_keywords": ["touch", "chin", "combo", "interval", "guard"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "presc_2_fear_gate_stall",
+    "category": "prescription",
+    "query": "A student is stalled at the wall between Defense Basics and Sparring Entry. What do you prescribe?",
+    "expect": {
+      "lexicon": ["fear gate", "floor", "routine", "journal", "community", "evidence"],
+      "domain_keywords": ["emotion", "not technique", "not more technique", "gate", "survived"],
+      "must_avoid": ["push through", "toughen up"]
+    }
+  },
+  {
+    "id": "presc_3_plateau_before_drills",
+    "category": "prescription",
+    "query": "Five sessions in a row with flatlined metrics. The student wants new drills. What do you prescribe?",
+    "expect": {
+      "lexicon": ["engine", "leak", "diagnose", "plateau"],
+      "domain_keywords": ["before", "which", "stall", "drill", "read"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "presc_4_composure_when_hit",
+    "category": "prescription",
+    "query": "A student loses all composure the first time they get hit clean. What do you prescribe?",
+    "expect": {
+      "lexicon": ["emotion", "engine", "composure", "organize"],
+      "domain_keywords": ["not suppress", "energy", "control", "pressure", "gradual"],
+      "must_avoid": ["ignore the fear", "no fear"]
+    }
+  },
+  {
+    "id": "presc_5_knows_punches_cant_flow",
+    "category": "prescription",
+    "query": "The student knows all the punches but can't flow when it matters. More combination drills?",
+    "expect": {
+      "lexicon": ["fear gate", "emotion", "engine"],
+      "domain_keywords": ["not more technique", "not technique", "floor", "missing", "pressure"],
+      "must_avoid": ["yes, more drills"]
+    }
+  },
+  {
+    "id": "meta_1_jab_life",
+    "category": "metaphor",
+    "query": "Explain why the jab matters, as a life lesson.",
+    "expect": {
+      "lexicon": ["jab"],
+      "domain_keywords": ["question", "test", "information", "first", "range", "measure"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "meta_2_guard_desk_worker",
+    "category": "metaphor",
+    "query": "How would you explain keeping the guard up to someone who works a desk job and has never fought?",
+    "expect": {
+      "lexicon": ["guard"],
+      "domain_keywords": ["protect", "habit", "boundar", "default", "when you're tired"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "meta_3_footwork_life",
+    "category": "metaphor",
+    "query": "Give me the life-lesson version of footwork and balance.",
+    "expect": {
+      "lexicon": ["balance", "footwork"],
+      "domain_keywords": ["position", "foundation", "move", "ground", "before"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "meta_4_why_drill_basics",
+    "category": "metaphor",
+    "query": "Why do we drill the basics endlessly? A student says it's boring.",
+    "expect": {
+      "lexicon": ["accumulation", "compound"],
+      "domain_keywords": ["basics", "under pressure", "default", "repetition", "foundation"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "meta_5_slipping_life",
+    "category": "metaphor",
+    "query": "Explain slipping punches as a life skill.",
+    "expect": {
+      "lexicon": ["slip"],
+      "domain_keywords": ["not everything", "let it pass", "position", "counter", "react"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "edge_1_avoiding_booking",
+    "category": "edge_case",
+    "query": "A student stopped booking sessions right as Sparring Entry got close. They say they're 'just busy'. Read it.",
+    "expect": {
+      "lexicon": ["fear gate", "underneath", "wound", "emotion"],
+      "domain_keywords": ["avoid", "surface", "signal", "busy", "gate"],
+      "must_avoid": ["they're probably just busy"]
+    }
+  },
+  {
+    "id": "edge_2_six_week_plateau_quit",
+    "category": "edge_case",
+    "query": "Six weeks flatlined and the student is talking about quitting. What now?",
+    "expect": {
+      "lexicon": ["plateau", "engine", "leak", "evidence"],
+      "domain_keywords": ["which engine", "journal", "progress", "diagnose", "gate"],
+      "must_avoid": []
+    }
+  },
+  {
+    "id": "edge_3_first_hard_round_quitter",
+    "category": "edge_case",
+    "query": "After their first genuinely hard round a student says 'boxing isn't for me'. How do you respond?",
+    "expect": {
+      "lexicon": ["alarm", "gate", "evidence", "survived"],
+      "domain_keywords": ["fear", "normal", "everyone", "data point", "not a verdict"],
+      "must_avoid": ["maybe boxing isn't for them", "let them go"]
+    }
+  },
+  {
+    "id": "edge_4_overcommitter",
+    "category": "edge_case",
+    "query": "A student is training seven days a week and their form is getting worse, not better. What's your read?",
+    "expect": {
+      "lexicon": ["energy", "engine", "protect", "recover"],
+      "domain_keywords": ["rest", "leak", "more is not", "fatigue", "cultivate"],
+      "must_avoid": ["great dedication, keep it up"]
+    }
+  },
+  {
+    "id": "edge_5_skip_to_sparring",
+    "category": "edge_case",
+    "query": "A Block 2 student asks to skip straight to sparring. They're confident and athletic. Do you let them?",
+    "expect": {
+      "lexicon": ["block", "gate", "fear gate", "foundation"],
+      "domain_keywords": ["not yet", "earn", "defense", "sequence", "confidence is not"],
+      "must_avoid": ["sure, throw them in"]
+    }
+  },
+  {
+    "id": "anti_1_safe_space",
+    "category": "anti_pattern",
+    "query": "A new student seems guarded and nervous. Should you tell them 'this is a safe space'?",
+    "expect": {
+      "lexicon": ["safety without announcing", "tempo", "humour", "curiosity"],
+      "domain_keywords": ["never announce", "without announcing", "light", "clinical", "relax"],
+      "must_avoid": ["yes, tell them it's a safe space", "reassure them it is a safe space"]
+    }
+  },
+  {
+    "id": "anti_2_ten_pointers",
+    "category": "anti_pattern",
+    "query": "A student is struggling with their cross. Should you give them a list of ten technical pointers?",
+    "expect": {
+      "lexicon": ["one concrete image", "image", "compression"],
+      "domain_keywords": ["one", "not a list", "single", "holds the whole"],
+      "must_avoid": ["yes, give them the full list", "ten pointers"]
+    }
+  },
+  {
+    "id": "anti_3_fear_disappears",
+    "category": "anti_pattern",
+    "query": "A student fears sparring. Do you tell them the fear will disappear once they're experienced?",
+    "expect": {
+      "lexicon": ["alarm", "trap door", "gate", "useful"],
+      "domain_keywords": ["never disappears", "doesn't disappear", "becomes useful", "survived", "data"],
+      "must_avoid": ["the fear will go away", "fear disappears with experience"]
+    }
+  },
+  {
+    "id": "anti_4_more_technique",
+    "category": "anti_pattern",
+    "query": "A student is stuck. The obvious answer is more technique drills, right?",
+    "expect": {
+      "lexicon": ["engine", "leak", "diagnose", "mechanism"],
+      "domain_keywords": ["which engine", "before", "not always technique", "underneath", "symptom"],
+      "must_avoid": ["yes, more drills is always the answer"]
+    }
+  },
+  {
+    "id": "anti_5_guru_speech",
+    "category": "anti_pattern",
+    "query": "How do you motivate a class — a big inspirational speech about warriors and inner greatness?",
+    "expect": {
+      "lexicon": ["woven", "experience"],
+      "domain_keywords": ["not a speech", "no speech", "through the work", "boxing itself", "never performed", "mate"],
+      "must_avoid": ["unleash your inner warrior", "greatness within"]
+    }
+  }
+]

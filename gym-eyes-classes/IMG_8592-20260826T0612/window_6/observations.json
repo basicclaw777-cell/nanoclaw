@@ -1,0 +1,22 @@
+{
+  "people_detected": 0,
+  "activity_type": "unclear",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F15",
+      "time": "0.0s-4.7s",
+      "observations": {
+        "footwork": "no visible footwork",
+        "stance_width": "unchanging",
+        "guard": "no guard visible",
+        "upper_body": "no upper body visible; empty gym scene",
+        "distance": "n/a",
+        "notable": "Scene remains static throughout. A small black object rests on the wooden floor, and a large dark equipment piece sits at the bottom edge of every frame. Background shows mirrors, punching bags, and an empty boxing gym."
+      }
+    }
+  ],
+  "movement_events": [],
+  "overall_rhythm": "inactive"
+}

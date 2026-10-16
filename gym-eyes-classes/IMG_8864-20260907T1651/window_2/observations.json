@@ -1,0 +1,74 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Feet are planted at a comfortable stance width. Minimal lateral movement.",
+        "stance_width": "normal",
+        "guard": "Both hands are engaged holding the red stick horizontally across the torso.",
+        "upper_body": "Torso is upright and relatively stationary.",
+        "distance": "Steady distance to the second person partially visible on the right edge.",
+        "notable": "The red stick remains held horizontally across the body."
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.7s-2.7s",
+      "observations": {
+        "footwork": "Lateral movement is visible; the fighter crouches slightly and shifts weight.",
+        "stance_width": "changing",
+        "guard": "Red stick is angled upward while maintained in both hands.",
+        "upper_body": "Torso leans forward and down with the movement.",
+        "distance": "Distance to the second person appears open.",
+        "notable": "A step and crouch sequence with the stick angled upward."
+      }
+    },
+    {
+      "frames": "F10-F12",
+      "time": "3.0s-3.7s",
+      "observations": {
+        "footwork": "Footwork resets, moving back toward a more upright, stationary posture.",
+        "stance_width": "normal",
+        "guard": "Red stick is angled downward and held with both hands.",
+        "upper_body": "Torso is more upright again.",
+        "distance": "Distance remains open.",
+        "notable": "The red stick swings downward through the sequence."
+      }
+    },
+    {
+      "frames": "F13-F15",
+      "time": "4.0s-4.7s",
+      "observations": {
+        "footwork": "A forward step is taken; the stance widens during the movement.",
+        "stance_width": "changing",
+        "guard": "Red stick moves toward a horizontal angle and then shifts.",
+        "upper_body": "Torso bends forward as the step is completed.",
+        "distance": "Distance closes with the forward step.",
+        "notable": "Forward movement and bending of the torso at the end of the sequence."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F9",
+      "type": "step",
+      "detail": "Lateral step combined with a crouch and upward angle of the red stick."
+    },
+    {
+      "frames": "F10-F12",
+      "type": "reset",
+      "detail": "Body resets to an upright position while the stick is angled downward."
+    },
+    {
+      "frames": "F13-F15",
+      "type": "step",
+      "detail": "Forward step with the torso bending forward and the stick shifting angle."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

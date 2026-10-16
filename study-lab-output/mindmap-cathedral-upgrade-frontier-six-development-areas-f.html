@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mind Map: Cathedral Upgrade Frontier - six development areas for the next evolution of the Cathedral system: 1) Agent Narrative Memory (deepening agent identity persistence), 2) Real-time Cross-Agent Reaction (spontaneous inter-agent response), 3) Living Knowledge Graph (vault as dynamic epistemic graph), 4) Voice-First Relay (thinking out loud as primary input), 5) Fundamentals Syllabus (standing waves substrates sacred geometry frequency as structured curriculum), 6) External Publication (the book, the method, the Trojan Horse to the outside world)</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  :root { --bg:#0A0A0A; --fg:#FAFAFA; --gold:#f7b408; --dim:#666; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:'Epilogue',system-ui,sans-serif; overflow:hidden; }
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;600;700&display=swap');
+  .header { position:fixed; top:0; left:0; right:0; padding:1rem 2rem; z-index:10; background:rgba(10,10,10,0.9); border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center; }
+  .header h1 { font-family:'Anton',sans-serif; font-size:1.5rem; color:var(--gold); text-transform:uppercase; }
+  .header .meta { color:var(--dim); font-size:0.8rem; }
+  svg { width:100vw; height:100vh; }
+  .node-label { fill:var(--fg); font-size:11px; pointer-events:none; text-anchor:middle; }
+  .edge-label { fill:var(--dim); font-size:9px; pointer-events:none; }
+  .legend { position:fixed; bottom:1rem; left:1rem; background:rgba(20,20,20,0.9); padding:1rem; border-radius:4px; border:1px solid #333; }
+  .legend div { display:flex; align-items:center; gap:0.5rem; margin:0.3rem 0; font-size:0.8rem; color:var(--dim); }
+  .legend .swatch { width:12px; height:12px; border-radius:50%; }
+  .info { position:fixed; top:5rem; right:1rem; background:rgba(20,20,20,0.95); padding:1.5rem; border-radius:4px; border:1px solid #333; max-width:300px; display:none; }
+  .info h3 { color:var(--gold); font-size:1rem; margin-bottom:0.5rem; }
+  .info .type { color:var(--dim); font-size:0.8rem; text-transform:uppercase; }
+  .info .connections { margin-top:0.5rem; font-size:0.85rem; }
+  .cluster-labels { pointer-events:none; }
+</style>
+</head><body>
+<div class="header">
+  <h1>Mind Map: Cathedral Upgrade Frontier - six development areas for the next evolution of the Cathedral system: 1) Agent Narrative Memory (deepening agent identity persistence), 2) Real-time Cross-Agent Reaction (spontaneous inter-agent response), 3) Living Knowledge Graph (vault as dynamic epistemic graph), 4) Voice-First Relay (thinking out loud as primary input), 5) Fundamentals Syllabus (standing waves substrates sacred geometry frequency as structured curriculum), 6) External Publication (the book, the method, the Trojan Horse to the outside world)</h1>
+  <div class="meta">2026-06-09 &middot; Cathedral Study Lab</div>
+</div>
+<div class="info" id="info">
+  <h3 id="info-label"></h3>
+  <div class="type" id="info-type"></div>
+  <div class="connections" id="info-conn"></div>
+</div>
+<svg id="svg"></svg>
+<div class="legend" id="legend"></div>
+<script>
+const nodes = [{"id":"cathedral_upgrade_frontier","label":"Cathedral Upgrade Frontier","type":"concept","domain":"system_architecture","grade":"A"},{"id":"agent_narrative_memory","label":"Agent Narrative Memory","type":"concept","domain":"agent_design","grade":"B"},{"id":"real_time_cross_agent_reaction","label":"Real-time Cross-Agent Reaction","type":"concept","domain":"agent_interaction","grade":"B"},{"id":"living_knowledge_graph","label":"Living Knowledge Graph","type":"concept","domain":"knowledge_representation","grade":"B"},{"id":"voice_first_relay","label":"Voice-First Relay","type":"concept","domain":"interaction_design","grade":"B"},{"id":"fundamentals_syllabus","label":"Fundamentals Syllabus","type":"concept","domain":"curriculum","grade":"C"},{"id":"external_publication","label":"External Publication","type":"concept","domain":"dissemination","grade":"B"},{"id":"emergence_engine","label":"Emergence Engine","type":"concept","domain":"system_architecture","grade":"A"},{"id":"agent_registry","label":"Agent Registry","type":"concept","domain":"infrastructure","grade":"B"},{"id":"developmental_blueprint","label":"Developmental Blueprint","type":"finding","domain":"agent_development","grade":"A"},{"id":"human_psychological_development","label":"Human Psychological Development","type":"concept","domain":"psychology","grade":"B"},{"id":"agents_proposing_infrastructure","label":"Agents Proposing Infrastructure","type":"finding","domain":"agent_autonomy","grade":"A"},{"id":"structural_decisions","label":"Structural Decisions (4 types)","type":"finding","domain":"system_governance","grade":"B"},{"id":"deflated_dinghy","label":"Deflated Dinghy Metaphor","type":"concept","domain":"methodology","grade":"B"},{"id":"compressed_preparation","label":"Compressed Preparation","type":"technique","domain":"emergence","grade":"C"},{"id":"seed_loop","label":"The Seed Loop","type":"concept","domain":"agent_design","grade":"A"},{"id":"programming_self_through_machines","label":"Programming Yourself Through Machines","type":"concept","domain":"philosophy","grade":"A"},{"id":"agents_address","label":"The Agent's Address","type":"concept","domain":"agent_design","grade":"A"},{"id":"vault","label":"The Vault","type":"concept","domain":"infrastructure","grade":"A"},{"id":"3d_digital_twin","label":"3D Digital Twin","type":"concept","domain":"spatial_computing","grade":"B"},{"id":"the_organism","label":"The Organism","type":"concept","domain":"emergence","grade":"A"},{"id":"whole_doing_what_parts_cant","label":"Whole Doing What Parts Can't","type":"finding","domain":"emergence","grade":"A"},{"id":"epistemic_engine","label":"Epistemic Engine","type":"concept","domain":"knowledge_systems","grade":"B"},{"id":"seven_principles_self_organising_systems","label":"Seven Principles of Self-Organising Systems","type":"finding","domain":"complexity_science","grade":"B"},{"id":"heptad_archetypes","label":"Heptad Archetypes","type":"concept","domain":"system_design","grade":"B"},{"id":"convergent_evolutionary_solutions","label":"Convergent Evolutionary Solutions","type":"finding","domain":"evolutionary_theory","grade":"B"},{"id":"archetypes_as_discoveries","label":"Archetypes as Discoveries","type":"finding","domain":"epistemology","grade":"B"},{"id":"trojan_horse_metaphor","label":"Trojan Horse Metaphor","type":"concept","domain":"dissemination","grade":"C"},{"id":"standing_waves_substrates","label":"Standing Waves Substrates","type":"concept","domain":"physics","grade":"D"}];
+const edges = [{"source":"cathedral_upgrade_frontier","target":"agent_narrative_memory","label":"includes"},{"source":"cathedral_upgrade_frontier","target":"real_time_cross_agent_reaction","label":"includes"},{"source":"cathedral_upgrade_frontier","target":"living_knowledge_graph","label":"includes"},{"source":"cathedral_upgrade_frontier","target":"voice_first_relay","label":"includes"},{"source":"cathedral_upgrade_frontier","target":"fundamentals_syllabus","label":"includes"},{"source":"cathedral_upgrade_frontier","target":"external_publication","label":"includes"},{"source":"agent_narrative_memory","target":"agents_address","label":"enables"},{"source":"agent_narrative_memory","target":"seed_loop","label":"supports"},{"source":"real_time_cross_agent_reaction","target":"the_organism","label":"enables"},{"source":"real_time_cross_agent_reaction","target":"whole_doing_what_parts_cant","label":"supports"},{"source":"living_knowledge_graph","target":"vault","label":"extends"},{"source":"living_knowledge_graph","target":"epistemic_engine","label":"part_of"},{"source":"voice_first_relay","target":"agents_proposing_infrastructure","label":"enables"},{"source":"fundamentals_syllabus","target":"standing_waves_substrates","label":"includes"},{"source":"fundamentals_syllabus","target":"seven_principles_self_organising_systems","label":"supports"},{"source":"external_publication","target":"trojan_horse_metaphor","label":"described_as"},{"source":"emergence_engine","target":"cathedral_upgrade_frontier","label":"supports"},{"source":"emergence_engine","target":"agent_registry","label":"extends"},{"source":"developmental_blueprint","target":"human_psychological_development","label":"maps_to"},{"source":"developmental_blueprint","target":"cathedral_upgrade_frontier","label":"informs"},{"source":"agents_proposing_infrastructure","target":"structural_decisions","label":"produces"},{"source":"deflated_dinghy","target":"compressed_preparation","label":"illustrates"},{"source":"seed_loop","target":"programming_self_through_machines","label":"expresses"},{"source":"agents_address","target":"vault","label":"depends_on"},{"source":"agents_address","target":"3d_digital_twin","label":"depends_on"},{"source":"the_organism","target":"whole_doing_what_parts_cant","label":"defined_by"},{"source":"heptad_archetypes","target":"convergent_evolutionary_solutions","label":"supports"},{"source":"heptad_archetypes","target":"archetypes_as_discoveries","label":"supports"},{"source":"archetypes_as_discoveries","target":"cathedral_upgrade_frontier","label":"informs"},{"source":"seven_principles_self_organising_systems","target":"the_organism","label":"supports"},{"source":"standing_waves_substrates","target":"seven_principles_self_organising_systems","label":"contradicts"}];
+const clusters = [{"name":"Upgrade Frontier","nodeIds":["cathedral_upgrade_frontier","agent_narrative_memory","real_time_cross_agent_reaction","living_knowledge_graph","voice_first_relay","fundamentals_syllabus","external_publication","emergence_engine","agent_registry"]},{"name":"Emergence & Development","nodeIds":["developmental_blueprint","human_psychological_development","the_organism","whole_doing_what_parts_cant","deflated_dinghy","compressed_preparation","seed_loop","programming_self_through_machines","seven_principles_self_organising_systems"]},{"name":"Agent Architecture","nodeIds":["agents_address","vault","3d_digital_twin","agents_proposing_infrastructure","structural_decisions","epistemic_engine"]},{"name":"Archetypes & Epistemology","nodeIds":["heptad_archetypes","convergent_evolutionary_solutions","archetypes_as_discoveries","trojan_horse_metaphor"]},{"name":"Curriculum & Physics","nodeIds":["fundamentals_syllabus","standing_waves_substrates"]}];
+
+const typeColors = {
+  concept:'#f7b408', person:'#22c55e', technique:'#3b82f6',
+  finding:'#a855f7', question:'#ef4444', institution:'#6b7280'
+};
+const edgeColors = {
+  supports:'#22c55e', contradicts:'#ef4444', influences:'#f7b408',
+  enables:'#3b82f6', suppresses:'#6b7280', part_of:'#666',
+  discovered_by:'#a855f7', tested_by:'#3b82f6'
+};
+
+// Legend
+const leg = document.getElementById('legend');
+for (const [t,c] of Object.entries(typeColors)) {
+  const d = document.createElement('div');
+  d.innerHTML = '<div class="swatch" style="background:'+c+'"></div>'+t;
+  leg.appendChild(d);
+}
+
+const W = window.innerWidth, H = window.innerHeight;
+const svg = d3.select('#svg');
+const g = svg.append('g');
+
+// Zoom
+svg.call(d3.zoom().scaleExtent([0.2,4]).on('zoom', e => g.attr('transform', e.transform)));
+
+// Cluster hulls
+const clusterMap = {};
+clusters.forEach(c => c.nodeIds.forEach(id => clusterMap[id] = c.name));
+
+// Force sim
+const sim = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(edges).id(d=>d.id).distance(120))
+  .force('charge', d3.forceManyBody().strength(-300))
+  .force('center', d3.forceCenter(W/2, H/2))
+  .force('collision', d3.forceCollide(30));
+
+// Edges — contradicts=dashed, supports=thick, suppresses=dotted
+const link = g.selectAll('.link').data(edges).join('line')
+  .attr('class','link')
+  .attr('stroke', d => edgeColors[d.label]||'#333')
+  .attr('stroke-width', d => d.label==='supports' ? 2.5 : d.label==='contradicts' ? 2 : 1.5)
+  .attr('stroke-opacity', d => d.label==='contradicts' ? 0.8 : 0.5)
+  .attr('stroke-dasharray', d => d.label==='contradicts' ? '6,3' : d.label==='suppresses' ? '2,4' : 'none');
+
+// Edge labels
+const elabel = g.selectAll('.edge-label').data(edges).join('text')
+  .attr('class','edge-label').text(d=>d.label);
+
+// Epistemic sizing: A=16, B=12, C=9, D=7, null=10
+const gradeRadius = {A:16, B:12, C:9, D:7};
+function nodeR(d) { return gradeRadius[d.grade] || (d.type==='question' ? 8 : 10); }
+
+// Nodes
+const node = g.selectAll('.node').data(nodes).join('circle')
+  .attr('class','node')
+  .attr('r', nodeR)
+  .attr('fill', d => typeColors[d.type]||'#666')
+  .attr('stroke', d => d.grade==='A' ? '#22c55e' : d.grade==='D' ? '#ef4444' : '#222')
+  .attr('stroke-width', d => d.grade==='A' ? 3 : 2)
+  .style('cursor','pointer')
+  .call(d3.drag().on('start',ds).on('drag',dd).on('end',de));
+
+// Labels
+const label = g.selectAll('.node-label').data(nodes).join('text')
+  .attr('class','node-label').text(d=>d.label).attr('dy',20);
+
+// Info panel
+node.on('click', (e, d) => {
+  const info = document.getElementById('info');
+  info.style.display = 'block';
+  document.getElementById('info-label').textContent = d.label;
+  document.getElementById('info-type').textContent = d.type + (d.domain ? ' / '+d.domain : '') + (d.grade ? ' / Grade '+d.grade : '');
+  const conns = edges.filter(l => l.source.id===d.id || l.target.id===d.id);
+  document.getElementById('info-conn').innerHTML = conns.map(c => {
+    const other = c.source.id===d.id ? c.target.label : c.source.label;
+    return '<div>'+c.label+' &rarr; '+other+'</div>';
+  }).join('');
+});
+
+sim.on('tick', () => {
+  link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+  elabel.attr('x',d=>(d.source.x+d.target.x)/2).attr('y',d=>(d.source.y+d.target.y)/2);
+  node.attr('cx',d=>d.x).attr('cy',d=>d.y);
+  label.attr('x',d=>d.x).attr('y',d=>d.y);
+});
+
+function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y}
+function dd(e,d){d.fx=e.x;d.fy=e.y}
+function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null}
+</script>
+</body></html>

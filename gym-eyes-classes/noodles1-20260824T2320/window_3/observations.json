@@ -1,0 +1,57 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Static stance, feet planted, no significant movement visible",
+        "stance_width": "normal",
+        "guard": "Hands appear to be held up in a guard position",
+        "upper_body": "Upright posture, facing left toward the coach on the left edge",
+        "distance": "Moderate distance from the coach on the left edge",
+        "notable": "Coach visible on left edge holding pads; person stable in stance"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Shifting position, appears to be stepping or moving toward the left",
+        "stance_width": "changing",
+        "guard": "Guard maintained, hands still up",
+        "upper_body": "Body leaning slightly forward or extending, engaged in activity",
+        "distance": "Distance appears to be closing with the coach",
+        "notable": "Person appears to be executing a movement or punch toward the pads"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Settled back into a stance, feet planted",
+        "stance_width": "normal",
+        "guard": "Hands up in guard position",
+        "upper_body": "Upright posture, facing left toward the coach",
+        "distance": "Moderate distance from the coach",
+        "notable": "Person has reset after the previous movement"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F8",
+      "type": "distance_close",
+      "detail": "Person appears to move toward the coach on the left edge, possibly throwing a punch"
+    },
+    {
+      "frames": "F9-F11",
+      "type": "reset",
+      "detail": "Person returns to a stable stance after the movement"
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

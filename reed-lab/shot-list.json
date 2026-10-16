@@ -1,12 +1,6 @@
 {
-  "date": "2026-05-09T15:30:01.368Z",
+  "date": "2026-06-02T22:35:39.367Z",
   "assignments": [
-    {
-      "tag": "sparring",
-      "desc": "Two people sparring — mid-exchange, caught in action",
-      "have": 0,
-      "need": 3
-    },
     {
       "tag": "padwork",
       "desc": "Pad work — coach feeding, student throwing",
@@ -18,13 +12,19 @@
       "desc": "Heavy bag — single person, full power shot",
       "have": 0,
       "need": 2
+    },
+    {
+      "tag": "bodyshot",
+      "desc": "Body shots — close-up of body punch landing on pads/bag",
+      "have": 0,
+      "need": 2
     }
   ],
   "full_list": [
     {
       "tag": "sparring",
       "desc": "Two people sparring — mid-exchange, caught in action",
-      "have": 0,
+      "have": 2,
       "need": 3
     },
     {

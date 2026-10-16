@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boxing Gym Multi-Camera Setup - Research Report</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f7b408;
+    --green: #3fb950;
+    --red: #f85149;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    line-height: 1.6;
+  }
+  h1 { color: var(--accent); font-size: 28px; margin-bottom: 8px; }
+  h2 { color: var(--accent); font-size: 22px; margin: 32px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  h3 { color: var(--blue); font-size: 18px; margin: 20px 0 10px; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin: 16px 0; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+  }
+  .card.pick-best { border-color: var(--green); }
+  .card.pick-value { border-color: var(--accent); }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .badge-best { background: var(--green); color: #000; }
+  .badge-value { background: var(--accent); color: #000; }
+  .badge-budget { background: var(--purple); color: #000; }
+  .badge-role { background: var(--blue); color: #000; }
+  .badge-warn { background: var(--red); color: #fff; }
+  .model-name { font-size: 18px; font-weight: 700; color: var(--text); }
+  .brand { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+  .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 12px 0; }
+  .spec { font-size: 13px; }
+  .spec-label { color: var(--muted); }
+  .spec-val { color: var(--text); font-weight: 600; }
+  .price { font-size: 20px; font-weight: 700; color: var(--green); margin: 8px 0; }
+  .price-hkd { font-size: 14px; color: var(--muted); }
+  .notes { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+  .where-buy { font-size: 12px; color: var(--blue); margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th { background: var(--card); color: var(--accent); text-align: left; padding: 10px 12px; border: 1px solid var(--border); }
+  td { padding: 10px 12px; border: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: rgba(22, 27, 34, 0.5); }
+  .summary-box {
+    background: linear-gradient(135deg, #161b22, #1a2332);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+  .total-price { font-size: 32px; font-weight: 800; color: var(--accent); }
+  .total-label { color: var(--muted); font-size: 14px; }
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .pro, .con { font-size: 13px; padding: 4px 0; }
+  .pro::before { content: "+ "; color: var(--green); font-weight: 700; }
+  .con::before { content: "- "; color: var(--red); font-weight: 700; }
+  .section-divider { border: none; border-top: 2px solid var(--accent); margin: 40px 0; opacity: 0.3; }
+  .layout-diagram {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    margin: 16px 0;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .path-card {
+    background: linear-gradient(135deg, #161b22, #1a2332);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+  .path-card h3 { margin-top: 0; }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>Boxing Gym Multi-Camera Setup</h1>
+<p class="subtitle">PoE IP Camera Research for Basic Reflex, Wan Chai, Hong Kong &mdash; July 2026</p>
+
+<!-- ============================================================ -->
+<h2>1. Camera Recommendations by Position</h2>
+
+<!-- WIDE ANGLE CAMERAS -->
+<h3>Wide Angle Cameras (2x) &mdash; Establishing Shots, Full Gym Coverage</h3>
+<p class="notes">Target: 120&deg;+ FOV, 4K resolution, PoE, RTSP, mounted in corners for full gym view</p>
+
+<div class="grid">
+  <div class="card pick-best">
+    <span class="badge badge-best">BEST PICK</span>
+    <span class="badge badge-role">WIDE ANGLE</span>
+    <div class="model-name">Dahua IPC-HDW2849T-S-IL</div>
+    <div class="brand">Dahua &mdash; 8MP 4K Smart Dual-Light Eyeball</div>
+    <div class="price">~US$60-85 <span class="price-hkd">(~HK$470-665 via AliExpress)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">8MP / 4K (3840x2160)</span></div>
+      <div class="spec"><span class="spec-label">FOV (2.8mm)</span><br><span class="spec-val">H: 111&deg; / D: 132&deg;</span></div>
+      <div class="spec"><span class="spec-label">RTSP</span><br><span class="spec-val">Yes (full protocol suite)</span></div>
+      <div class="spec"><span class="spec-label">ONVIF</span><br><span class="spec-val">Yes (Profile S/G/T)</span></div>
+      <div class="spec"><span class="spec-label">Low Light</span><br><span class="spec-val">Dual-light (IR + warm LED), WizSense</span></div>
+      <div class="spec"><span class="spec-label">Compression</span><br><span class="spec-val">H.265+ / Smart H.265</span></div>
+      <div class="spec"><span class="spec-label">IR Range</span><br><span class="spec-val">30m</span></div>
+      <div class="spec"><span class="spec-label">Audio</span><br><span class="spec-val">Built-in mic</span></div>
+    </div>
+    <div class="notes">
+      132&deg; diagonal FOV exceeds the 120&deg; target. Smart dual-light automatically switches between IR and warm LED based on scene &mdash; excellent for a gym with variable lighting. Full RTSP/ONVIF means easy integration with any NVR software. Dahua is HQ'd in Hangzhou and has strong HK distribution. AliExpress ships from Shenzhen to HK in 3-7 days.
+    </div>
+    <div class="where-buy">Buy: AliExpress (Dahua Official Store) | eBay (~US$100-108) | HK CCTV shops (Sham Shui Po)</div>
+  </div>
+
+  <div class="card pick-value">
+    <span class="badge badge-value">BEST VALUE ALT</span>
+    <span class="badge badge-role">WIDE ANGLE</span>
+    <div class="model-name">Hikvision DS-2CD2183G2-IU</div>
+    <div class="brand">Hikvision &mdash; 8MP 4K AcuSense Fixed Dome</div>
+    <div class="price">~US$120-135 <span class="price-hkd">(~HK$940-1055)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">8MP / 4K (3840x2160)</span></div>
+      <div class="spec"><span class="spec-label">FOV (2.8mm)</span><br><span class="spec-val">H: 107&deg; / D: 128&deg;</span></div>
+      <div class="spec"><span class="spec-label">RTSP</span><br><span class="spec-val">Yes</span></div>
+      <div class="spec"><span class="spec-label">ONVIF</span><br><span class="spec-val">Yes</span></div>
+      <div class="spec"><span class="spec-label">Low Light</span><br><span class="spec-val">0.005 Lux, EXIR 2.0, 120dB WDR</span></div>
+      <div class="spec"><span class="spec-label">Compression</span><br><span class="spec-val">H.265+</span></div>
+    </div>
+    <div class="notes">
+      Premium image quality. AcuSense AI (human/vehicle detection). 128&deg; diagonal. More expensive but Hikvision is the world's #1 surveillance brand and extremely easy to source in HK. IK10 vandal-proof dome.
+    </div>
+    <div class="where-buy">Buy: Amazon | Price.com.hk | Sham Shui Po CCTV shops | Hikvision HK distributors</div>
+  </div>
+</div>
+
+<!-- STANDARD CAMERAS -->
+<h3>Standard Cameras (2x) &mdash; Bag Work & Training Areas</h3>
+<p class="notes">Target: 87-105&deg; FOV, 4K resolution, PoE, RTSP, positioned for specific training zones</p>
+
+<div class="grid">
+  <div class="card pick-best">
+    <span class="badge badge-best">BEST PICK</span>
+    <span class="badge badge-role">STANDARD</span>
+    <div class="model-name">Reolink RLC-810A</div>
+    <div class="brand">Reolink &mdash; 8MP 4K PoE Bullet Camera</div>
+    <div class="price">~US$90 <span class="price-hkd">(~HK$509-730 on Price.com.hk)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">8MP / 4K (3840x2160) @25fps</span></div>
+      <div class="spec"><span class="spec-label">FOV (4mm)</span><br><span class="spec-val">H: 87&deg; / D: 105&deg;</span></div>
+      <div class="spec"><span class="spec-label">RTSP</span><br><span class="spec-val">Yes (confirmed, works with all NVRs)</span></div>
+      <div class="spec"><span class="spec-label">ONVIF</span><br><span class="spec-val">Yes (Profile T)</span></div>
+      <div class="spec"><span class="spec-label">Low Light</span><br><span class="spec-val">IR 30m (100ft), 18 LEDs</span></div>
+      <div class="spec"><span class="spec-label">Compression</span><br><span class="spec-val">H.265</span></div>
+      <div class="spec"><span class="spec-label">Smart Detection</span><br><span class="spec-val">Person/Vehicle/Pet (on-device)</span></div>
+      <div class="spec"><span class="spec-label">Storage</span><br><span class="spec-val">microSD up to 512GB</span></div>
+    </div>
+    <div class="notes">
+      The workhorse 4K PoE camera under US$100. Widely reviewed as the best value 4K PoE camera in 2026. No subscription fees for smart detection. Reolink has official HK distribution via Fortress and Everbest Technologies.
+    </div>
+    <div class="where-buy">Buy: store.reolink.com/hk | Fortress.com.hk | Price.com.hk | Amazon (ships to HK)</div>
+  </div>
+
+  <div class="card pick-value">
+    <span class="badge badge-value">BUDGET ALT</span>
+    <span class="badge badge-role">STANDARD</span>
+    <div class="model-name">TP-Link VIGI C440 (2.8mm)</div>
+    <div class="brand">TP-Link &mdash; 4MP Full-Color Turret</div>
+    <div class="price">~US$40-59 <span class="price-hkd">(~HK$310-460)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">4MP (2560x1440) @30fps</span></div>
+      <div class="spec"><span class="spec-label">FOV (2.8mm)</span><br><span class="spec-val">H: 102&deg; / D: 122&deg;</span></div>
+      <div class="spec"><span class="spec-label">RTSP</span><br><span class="spec-val">Yes</span></div>
+      <div class="spec"><span class="spec-label">ONVIF</span><br><span class="spec-val">Yes</span></div>
+      <div class="spec"><span class="spec-label">Low Light</span><br><span class="spec-val">Full-color night vision (spotlight + IR), 30m</span></div>
+      <div class="spec"><span class="spec-label">Compression</span><br><span class="spec-val">H.265+</span></div>
+    </div>
+    <div class="notes">
+      Half the price of Reolink. Only 4MP (not 4K) but 30fps is smoother. Full-color night vision is excellent for gym dim-light classes. TP-Link has official HK presence with local warranty. Easiest to buy in HK.
+    </div>
+    <div class="where-buy">Buy: HKTVmall (TP-Link Flagship Store) | Price.com.hk | tp-link.com/hk | local IT shops</div>
+  </div>
+</div>
+
+<!-- OVERHEAD CAMERA -->
+<h3>Overhead/Ceiling Camera (1x) &mdash; Bird's Eye Footwork Analysis</h3>
+<p class="notes">Target: Fisheye 180&deg;+ or very wide angle, ceiling-mount, looking straight down for footwork and spacing</p>
+
+<div class="grid">
+  <div class="card pick-best">
+    <span class="badge badge-best">BEST PICK</span>
+    <span class="badge badge-role">OVERHEAD</span>
+    <div class="model-name">Reolink FE-P</div>
+    <div class="brand">Reolink &mdash; 6MP PoE 360&deg; Fisheye</div>
+    <div class="price">~US$70-90 <span class="price-hkd">(~HK$550-700)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">6MP (2560x2560) @25fps</span></div>
+      <div class="spec"><span class="spec-label">FOV</span><br><span class="spec-val">360&deg; (180&deg;H x 180&deg;V fisheye)</span></div>
+      <div class="spec"><span class="spec-label">Lens</span><br><span class="spec-val">1.98mm F2.0 fisheye</span></div>
+      <div class="spec"><span class="spec-label">RTSP</span><br><span class="spec-val">Yes (raw fisheye stream)</span></div>
+      <div class="spec"><span class="spec-label">ONVIF</span><br><span class="spec-val">Partial (some quirks reported)</span></div>
+      <div class="spec"><span class="spec-label">Mounting</span><br><span class="spec-val">Ceiling / Wall / Desk</span></div>
+      <div class="spec"><span class="spec-label">Night Vision</span><br><span class="spec-val">IR 8m (3 LEDs, 850nm)</span></div>
+      <div class="spec"><span class="spec-label">Audio</span><br><span class="spec-val">Two-way (mic + speaker)</span></div>
+    </div>
+    <div class="notes">
+      Cheapest branded PoE fisheye camera available. Ceiling-mount gives full 360&deg; bird's-eye view &mdash; ideal for footwork analysis. The raw fisheye RTSP stream is what you want for software dewarping (FFmpeg v360 filter or OpenCV). 6MP is plenty for tracking feet on a gym floor. Dewarping modes (quad view, panoramic) available in Reolink app. Only indoor-rated &mdash; fine for gym use.
+    </div>
+    <div class="where-buy">Buy: Amazon (ships to HK, ~US$15-25 shipping) | AliExpress (Reolink Official) | store.reolink.com/hk</div>
+  </div>
+
+  <div class="card">
+    <span class="badge badge-budget">PREMIUM ALT</span>
+    <span class="badge badge-role">OVERHEAD</span>
+    <div class="model-name">Hikvision DS-2CD2955G0-ISU</div>
+    <div class="brand">Hikvision &mdash; 5MP Fisheye</div>
+    <div class="price">~US$150-250 <span class="price-hkd">(~HK$1,170-1,950)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">5MP (2560x1920) @30fps</span></div>
+      <div class="spec"><span class="spec-label">FOV</span><br><span class="spec-val">180&deg;H x 180&deg;V</span></div>
+      <div class="spec"><span class="spec-label">RTSP / ONVIF</span><br><span class="spec-val">Yes / Yes (gold standard)</span></div>
+      <div class="spec"><span class="spec-label">Low Light</span><br><span class="spec-val">EXIR 2.0, 120dB WDR</span></div>
+    </div>
+    <div class="notes">
+      Gold standard image quality. Easy to source at Sham Shui Po CCTV shops (~HK$800-1500). Above budget but if image quality for footwork analysis is paramount, this is the one.
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL CAMERA -->
+<h3>Detail Camera (1x) &mdash; Close-up Training Station</h3>
+<p class="notes">Target: Narrower FOV (50-80&deg;), high resolution, focused on one station for close-up content. Varifocal/zoom is a plus.</p>
+
+<div class="grid">
+  <div class="card pick-best">
+    <span class="badge badge-best">BEST PICK</span>
+    <span class="badge badge-role">DETAIL</span>
+    <div class="model-name">Reolink RLC-811A</div>
+    <div class="brand">Reolink &mdash; 8MP 4K PoE 5x Optical Zoom Bullet</div>
+    <div class="price">~US$90-110 <span class="price-hkd">(~HK$700-860)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">8MP / 4K (3840x2160) @25fps</span></div>
+      <div class="spec"><span class="spec-label">FOV</span><br><span class="spec-val">30&deg; to 123&deg; (2.7-13.5mm motorized)</span></div>
+      <div class="spec"><span class="spec-label">RTSP</span><br><span class="spec-val">Yes (Blue Iris, Synology, etc.)</span></div>
+      <div class="spec"><span class="spec-label">ONVIF</span><br><span class="spec-val">Yes (Profile T)</span></div>
+      <div class="spec"><span class="spec-label">Zoom</span><br><span class="spec-val">5x motorized optical zoom</span></div>
+      <div class="spec"><span class="spec-label">Low Light</span><br><span class="spec-val">IR 100ft + spotlights (color night)</span></div>
+    </div>
+    <div class="notes">
+      Motorized 5x zoom means you can remotely adjust the FOV from wide (123&deg;) to narrow (30&deg;) &mdash; perfect for dialing in on a specific training station. At 4K with narrow zoom, you get excellent detail for close-up training content. The same Reolink ecosystem as the RLC-810A.
+    </div>
+    <div class="where-buy">Buy: store.reolink.com/hk | Amazon | Price.com.hk | Fortress HK</div>
+  </div>
+
+  <div class="card">
+    <span class="badge badge-budget">BUDGET ALT</span>
+    <span class="badge badge-role">DETAIL</span>
+    <div class="model-name">Hikvision DS-2CD2143G2-IU (4mm)</div>
+    <div class="brand">Hikvision &mdash; 4MP AcuSense Fixed Dome</div>
+    <div class="price">~US$120-135 <span class="price-hkd">(~HK$940-1055)</span></div>
+    <div class="spec-grid">
+      <div class="spec"><span class="spec-label">Resolution</span><br><span class="spec-val">4MP (2688x1520)</span></div>
+      <div class="spec"><span class="spec-label">FOV (4mm)</span><br><span class="spec-val">H: 84&deg; / D: 100&deg;</span></div>
+      <div class="spec"><span class="spec-label">RTSP / ONVIF</span><br><span class="spec-val">Yes / Yes</span></div>
+      <div class="spec"><span class="spec-label">Low Light</span><br><span class="spec-val">0.005 Lux, IR 30m, 120dB WDR</span></div>
+    </div>
+    <div class="notes">
+      The 4mm lens variant gives 84&deg; horizontal &mdash; tighter than the 2.8mm version. Not a zoom lens but fixed narrower FOV suitable for focusing on a station. Excellent image quality. No remote zoom control.
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>2. Budget Builds &mdash; Two Paths</h2>
+
+<div class="summary-box">
+  <h3 style="color: var(--accent); margin-top: 0;">Path A: Best Value Build (Recommended)</h3>
+  <p class="notes" style="margin-bottom: 16px;">Optimized for budget. Mix of Dahua wide-angle + Reolink standard/detail + Reolink fisheye.</p>
+  <table>
+    <tr><th>Role</th><th>Camera</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr>
+    <tr><td>Wide Angle</td><td>Dahua IPC-HDW2849T-S-IL (2.8mm)</td><td>2</td><td>~US$70</td><td>US$140</td></tr>
+    <tr><td>Standard</td><td>Reolink RLC-810A (4mm)</td><td>2</td><td>~US$90</td><td>US$180</td></tr>
+    <tr><td>Overhead</td><td>Reolink FE-P</td><td>1</td><td>~US$80</td><td>US$80</td></tr>
+    <tr><td>Detail</td><td>Reolink RLC-811A (varifocal)</td><td>1</td><td>~US$100</td><td>US$100</td></tr>
+    <tr style="font-weight:700"><td colspan="3">CAMERA TOTAL</td><td></td><td style="color:var(--green)">~US$500</td></tr>
+  </table>
+  <div class="total-label">Camera total: <span class="total-price">~US$500 (HK$3,900)</span></div>
+  <p class="notes" style="margin-top:8px">Within the $400-600 target. All cameras: PoE, RTSP, H.265, 4K (except fisheye at 6MP). Mixed brands but all ONVIF-compatible.</p>
+</div>
+
+<div class="summary-box" style="border-color: var(--blue);">
+  <h3 style="color: var(--blue); margin-top: 0;">Path B: Single-Brand Build (Reolink Only)</h3>
+  <p class="notes" style="margin-bottom: 16px;">All Reolink for ecosystem consistency. Slightly above budget but simpler management.</p>
+  <table>
+    <tr><th>Role</th><th>Camera</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr>
+    <tr><td>Wide Angle</td><td>Reolink RLC-820A (turret, 87&deg;)</td><td>2</td><td>~US$65</td><td>US$130</td></tr>
+    <tr><td>Standard</td><td>Reolink RLC-810A (bullet, 87&deg;)</td><td>2</td><td>~US$90</td><td>US$180</td></tr>
+    <tr><td>Overhead</td><td>Reolink FE-P (fisheye)</td><td>1</td><td>~US$80</td><td>US$80</td></tr>
+    <tr><td>Detail</td><td>Reolink RLC-811A (5x zoom)</td><td>1</td><td>~US$100</td><td>US$100</td></tr>
+    <tr style="font-weight:700"><td colspan="3">CAMERA TOTAL</td><td></td><td style="color:var(--green)">~US$490</td></tr>
+  </table>
+  <div class="total-label">Camera total: <span class="total-price" style="color: var(--blue);">~US$490 (HK$3,825)</span></div>
+  <p class="notes" style="margin-top:8px">Trade-off: RLC-820A is only 87&deg; FOV (not 120&deg;+). For a small gym, 87&deg; from corner positions may still cover well. All cameras work natively with Reolink NVR and app.</p>
+</div>
+
+<div class="summary-box" style="border-color: var(--purple);">
+  <h3 style="color: var(--purple); margin-top: 0;">Path C: Maximum Budget Squeeze (TP-Link VIGI)</h3>
+  <p class="notes" style="margin-bottom: 16px;">Cheapest path. All TP-Link VIGI. Only 4MP but smooth 30fps. Best local HK support.</p>
+  <table>
+    <tr><th>Role</th><th>Camera</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr>
+    <tr><td>Wide Angle</td><td>VIGI C440 (2.8mm, 122&deg; diagonal)</td><td>2</td><td>~US$50</td><td>US$100</td></tr>
+    <tr><td>Standard</td><td>VIGI C240 (4mm, 94&deg; diagonal)</td><td>2</td><td>~US$45</td><td>US$90</td></tr>
+    <tr><td>Overhead</td><td>Reolink FE-P (no VIGI fisheye at this price)</td><td>1</td><td>~US$80</td><td>US$80</td></tr>
+    <tr><td>Detail</td><td>VIGI C440 (4mm, 93&deg; diagonal)</td><td>1</td><td>~US$50</td><td>US$50</td></tr>
+    <tr style="font-weight:700"><td colspan="3">CAMERA TOTAL</td><td></td><td style="color:var(--green)">~US$320</td></tr>
+  </table>
+  <div class="total-label">Camera total: <span class="total-price" style="color: var(--purple);">~US$320 (HK$2,500)</span></div>
+  <p class="notes" style="margin-top:8px">Trade-off: Only 4MP resolution (not 4K). No varifocal detail camera. But all TP-Link VIGI cameras have RTSP, ONVIF, full-color night vision, and are trivially easy to buy in HK with local warranty.</p>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>3. Infrastructure: PoE Switch, NVR, Storage</h2>
+
+<h3>PoE Switch</h3>
+<div class="grid">
+  <div class="card pick-best">
+    <span class="badge badge-best">RECOMMENDED</span>
+    <div class="model-name">TP-Link TL-SG1008MP</div>
+    <div class="brand">8-Port Gigabit, ALL 8 ports PoE+, 153W budget</div>
+    <div class="price">~US$85 <span class="price-hkd">(~HK$665)</span></div>
+    <div class="notes">
+      153W PoE budget is generous headroom for 6 cameras at ~12-15W each (~90W total). All 8 ports are PoE+ (802.3af/at). Unmanaged = zero config, plug and play. Gigabit. Sturdy metal case. Note: only needed if NOT using an NVR with built-in PoE ports.
+    </div>
+    <div class="where-buy">Buy: tp-link.com/hk | Price.com.hk | Amazon</div>
+  </div>
+
+  <div class="card">
+    <span class="badge badge-warn">NOT ENOUGH PORTS</span>
+    <div class="model-name">TP-Link TL-SG1008P</div>
+    <div class="brand">8-Port Gigabit, only 4 ports PoE, 64W</div>
+    <div class="price">~US$55 <span class="price-hkd">(~HK$389-599 on Price.com.hk)</span></div>
+    <div class="notes">
+      Cheaper but only 4 of 8 ports are PoE &mdash; you need 6 PoE ports. Would require a second switch. Not recommended.
+    </div>
+  </div>
+</div>
+
+<h3>Recording: NVR vs Mac Mini</h3>
+<div class="grid">
+  <div class="path-card" style="border-color: var(--green);">
+    <h3 style="color: var(--green); margin-top: 0;">Option 1: Dedicated NVR (Simplest)</h3>
+    <div class="model-name">Dahua NVR4108-8P-4KS3</div>
+    <div class="price">~US$155 <span class="price-hkd">(~HK$1,210)</span></div>
+    <ul style="font-size:13px; margin: 12px 0; padding-left: 20px;">
+      <li>8 channels, 8 built-in PoE ports</li>
+      <li><strong>Eliminates the need for a separate PoE switch</strong> &mdash; saves ~US$85</li>
+      <li>H.265+ decode, 4K output, AI features (SMD Plus)</li>
+      <li>1x SATA bay (up to 10TB)</li>
+      <li>Mobile app for remote viewing</li>
+      <li>Low power (~10-15W), set-and-forget</li>
+    </ul>
+    <div class="pros-cons">
+      <div>
+        <div class="pro">Single cable per camera (PoE from NVR)</div>
+        <div class="pro">Purpose-built, extremely reliable</div>
+        <div class="pro">Works independently of any computer</div>
+        <div class="pro">No PoE switch needed = simpler + cheaper</div>
+      </div>
+      <div>
+        <div class="con">Fixed to manufacturer software</div>
+        <div class="con">Limited to 1 HDD bay</div>
+        <div class="con">Less flexible for custom AI analytics</div>
+      </div>
+    </div>
+    <div style="background: var(--bg); padding: 12px; border-radius: 6px; margin-top: 12px;">
+      <div class="total-label">NVR + 4TB HDD: <strong style="color:var(--green)">~US$235 (HK$1,835)</strong></div>
+      <div class="notes">No separate PoE switch needed. Plug cameras directly into NVR.</div>
+    </div>
+  </div>
+
+  <div class="path-card" style="border-color: var(--blue);">
+    <h3 style="color: var(--blue); margin-top: 0;">Option 2: Mac Mini NVR (If Already Running 24/7)</h3>
+    <div class="model-name">Fregata App + PoE Switch</div>
+    <div class="price">~US$175 total <span class="price-hkd">(excl. Mac Mini)</span></div>
+    <ul style="font-size:13px; margin: 12px 0; padding-left: 20px;">
+      <li><strong>Fregata</strong> ($10 one-time) &mdash; native macOS port of Frigate NVR</li>
+      <li>Uses Apple Neural Engine for object detection (2ms/frame)</li>
+      <li>VideoToolbox hardware H.265 decode &mdash; CPU under 10%</li>
+      <li>Base M4 Mac Mini handles 8+ cameras at 4K simultaneously</li>
+      <li>TP-Link TL-SG1008MP PoE switch required (~US$85)</li>
+      <li>External 4TB USB drive for storage (~US$80)</li>
+    </ul>
+    <div class="pros-cons">
+      <div>
+        <div class="pro">AI object detection (person/vehicle alerts)</div>
+        <div class="pro">Unlimited storage (external drives)</div>
+        <div class="pro">Open ecosystem &mdash; any ONVIF camera</div>
+        <div class="pro">Mac Mini serves double duty</div>
+      </div>
+      <div>
+        <div class="con">Requires Mac Mini running 24/7</div>
+        <div class="con">More complex setup</div>
+        <div class="con">macOS updates can disrupt recording</div>
+      </div>
+    </div>
+    <div style="background: var(--bg); padding: 12px; border-radius: 6px; margin-top: 12px;">
+      <div class="total-label">Switch + Fregata + 4TB drive: <strong style="color:var(--blue)">~US$175 (HK$1,365)</strong></div>
+      <div class="notes">Only viable if Mac Mini is already running. Fregata: <a href="https://fregata.app" target="_blank">fregata.app</a></div>
+    </div>
+  </div>
+</div>
+
+<h3>Storage Calculations</h3>
+<div class="card">
+  <table>
+    <tr><th>Quality</th><th>Bitrate/Camera</th><th>Per Camera/Day</th><th>6 Cameras/Day</th><th>6 Cameras/Week</th><th>6 Cameras/2 Weeks</th></tr>
+    <tr><td>High (4K)</td><td>8 Mbps</td><td>86 GB</td><td>518 GB</td><td>3.6 TB</td><td>7.3 TB</td></tr>
+    <tr><td>Medium (4K)</td><td>4 Mbps</td><td>43 GB</td><td>259 GB</td><td>1.8 TB</td><td>3.6 TB</td></tr>
+    <tr><td>H.265+ Smart</td><td>~2-3 Mbps</td><td>22-32 GB</td><td>130-190 GB</td><td>0.9-1.3 TB</td><td>1.8-2.6 TB</td></tr>
+  </table>
+  <div class="notes" style="margin-top: 12px;">
+    <strong>Realistic estimate for a boxing gym:</strong> With H.265+ at medium quality, expect ~200 GB/day for 6 cameras (~1.4 TB/week). A gym has moderate motion during sessions but long idle periods &mdash; smart encoding drops bitrate dramatically during off-hours.
+  </div>
+  <div style="margin-top: 16px;">
+    <table>
+      <tr><th>Storage Drive</th><th>Capacity</th><th>Retention (6 cams, H.265+ medium)</th><th>Price</th></tr>
+      <tr><td>Seagate SkyHawk 4TB</td><td>4 TB</td><td>~2 weeks</td><td>~US$80</td></tr>
+      <tr><td>Seagate SkyHawk 8TB</td><td>8 TB</td><td>~4 weeks</td><td>~US$150</td></tr>
+      <tr><td>WD Purple 4TB</td><td>4 TB</td><td>~2 weeks</td><td>~US$85</td></tr>
+    </table>
+    <div class="notes" style="margin-top: 8px;">Use surveillance-rated drives (SkyHawk / WD Purple) &mdash; built for continuous 24/7 write workloads. Standard desktop drives will fail within months.</div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>4. Total System Cost Summary</h2>
+
+<div class="summary-box">
+  <h3 style="color: var(--accent); margin-top: 0;">Recommended Complete Setup (Path A + NVR)</h3>
+  <table>
+    <tr><th>Item</th><th>Model</th><th>Qty</th><th>Price (USD)</th></tr>
+    <tr><td>Wide Angle Cameras</td><td>Dahua IPC-HDW2849T-S-IL</td><td>2</td><td>$140</td></tr>
+    <tr><td>Standard Cameras</td><td>Reolink RLC-810A</td><td>2</td><td>$180</td></tr>
+    <tr><td>Overhead Camera</td><td>Reolink FE-P</td><td>1</td><td>$80</td></tr>
+    <tr><td>Detail Camera</td><td>Reolink RLC-811A</td><td>1</td><td>$100</td></tr>
+    <tr><td>NVR (with PoE)</td><td>Dahua NVR4108-8P-4KS3</td><td>1</td><td>$155</td></tr>
+    <tr><td>Storage</td><td>Seagate SkyHawk 4TB</td><td>1</td><td>$80</td></tr>
+    <tr><td colspan="2" style="color: var(--muted); font-size: 12px;">Ethernet cables (Cat5e/Cat6, 5-15m)</td><td>6</td><td>~$30</td></tr>
+    <tr style="font-weight:800; font-size: 18px;">
+      <td colspan="3" style="color: var(--accent);">COMPLETE SYSTEM TOTAL</td>
+      <td style="color: var(--accent);">~US$765</td>
+    </tr>
+    <tr><td colspan="3" style="color: var(--muted);">In HKD</td><td style="color: var(--muted);">~HK$5,970</td></tr>
+  </table>
+  <div class="notes" style="margin-top: 12px;">
+    Cameras alone = ~US$500 (within the $400-600 target). The NVR with built-in PoE eliminates the need for a separate PoE switch. If using Mac Mini instead of NVR, replace NVR line with PoE switch ($85) + Fregata ($10) = total drops to ~US$685.
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>5. Where to Buy in Hong Kong</h2>
+
+<div class="card">
+  <table>
+    <tr><th>Source</th><th>Brands</th><th>Notes</th></tr>
+    <tr>
+      <td><strong><a href="https://store.reolink.com/hk/" target="_blank">store.reolink.com/hk</a></strong></td>
+      <td>Reolink</td>
+      <td>Official HK store. Ships from HK warehouse. HKD pricing.</td>
+    </tr>
+    <tr>
+      <td><strong><a href="https://www.fortress.com.hk/en/brands/169010/reolink" target="_blank">Fortress</a></strong></td>
+      <td>Reolink</td>
+      <td>Authorized Reolink dealer. Walk-in stores across HK.</td>
+    </tr>
+    <tr>
+      <td><strong><a href="https://www.everbesthk.com/reolink/" target="_blank">Everbest Technologies</a></strong></td>
+      <td>Reolink</td>
+      <td>HK distributor. Central/Sheung Wan area.</td>
+    </tr>
+    <tr>
+      <td><strong><a href="https://www.price.com.hk/category.php?c=100078" target="_blank">Price.com.hk</a></strong></td>
+      <td>Reolink, Dahua, Hikvision</td>
+      <td>HK price comparison. Lists all local retailers. Best for comparing prices.</td>
+    </tr>
+    <tr>
+      <td><strong>HKTVmall</strong></td>
+      <td>TP-Link VIGI</td>
+      <td>TP-Link Flagship Store. Good for VIGI cameras. Local warranty.</td>
+    </tr>
+    <tr>
+      <td><strong>Sham Shui Po (Ap Liu Street)</strong></td>
+      <td>Hikvision, Dahua</td>
+      <td>Walk-in CCTV shops. Often best prices for Hikvision/Dahua. Bargain in person. MTR: Sham Shui Po station.</td>
+    </tr>
+    <tr>
+      <td><strong>AliExpress</strong></td>
+      <td>Dahua, Reolink, generic</td>
+      <td>Best for Dahua OEM pricing. Ships from Shenzhen, 3-7 days to HK. Watch for genuine vs OEM listings.</td>
+    </tr>
+    <tr>
+      <td><strong>Amazon (US/Global)</strong></td>
+      <td>Reolink, SV3C</td>
+      <td>Ships to HK. Add ~US$15-25 shipping. Good for Reolink bundles.</td>
+    </tr>
+    <tr>
+      <td><strong><a href="https://www.tp-link.com/hk/business-networking/vigi-network-camera/" target="_blank">TP-Link HK</a></strong></td>
+      <td>TP-Link VIGI</td>
+      <td>Official TP-Link HK. Full VIGI range. Local warranty via Good Century Holdings (852-3898-4900).</td>
+    </tr>
+  </table>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>6. Camera Placement Layout (Suggested)</h2>
+
+<div class="layout-diagram">
++-----------------------------------------------------------+
+|                    GYM FLOOR PLAN                          |
+|                                                           |
+|  [CAM 1: WIDE]                        [CAM 2: WIDE]      |
+|  Dahua 2849T-S-IL                  Dahua 2849T-S-IL       |
+|  Corner mount, 132deg              Corner mount, 132deg    |
+|  Covering full gym                 Covering full gym       |
+|                                                           |
+|       +--------+     +---------+                          |
+|       | HEAVY  |     |  RING   |                          |
+|       |  BAGS  |     |  AREA   |        [CAM 4: STD]     |
+|       |        |     |         |       Reolink RLC-810A   |
+|       +--------+     +---------+       Wall mount, 87deg  |
+|                                        Training area      |
+|  [CAM 3: STD]              [CAM 5: OVERHEAD]             |
+|  Reolink RLC-810A          Reolink FE-P                   |
+|  Wall mount, 87deg          CEILING CENTER                 |
+|  Bag area                   360deg bird's eye              |
+|                             Footwork analysis              |
+|                                                           |
+|       [CAM 6: DETAIL]                                     |
+|       Reolink RLC-811A                                     |
+|       Wall/ceiling mount                                   |
+|       5x zoom on one station                              |
+|       Close-up content                                     |
++-----------------------------------------------------------+
+
+ALL CAMERAS ---[Cat5e/6]---&gt; NVR (Dahua NVR4108-8P-4KS3)
+                              Built-in PoE powers all cameras
+                              Single ethernet cable per camera
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>7. Full Comparison Table</h2>
+
+<div style="overflow-x: auto;">
+<table>
+  <tr>
+    <th>Camera</th>
+    <th>Brand</th>
+    <th>Resolution</th>
+    <th>FOV (Diag)</th>
+    <th>RTSP</th>
+    <th>ONVIF</th>
+    <th>Low Light</th>
+    <th>Price (USD)</th>
+    <th>HK Price (HKD)</th>
+    <th>Best For</th>
+  </tr>
+  <tr>
+    <td><strong>IPC-HDW2849T-S-IL</strong></td>
+    <td>Dahua</td>
+    <td>8MP/4K</td>
+    <td>132&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Dual-light, WizSense</td>
+    <td>$60-85</td>
+    <td>~$470-665</td>
+    <td>Wide Angle</td>
+  </tr>
+  <tr>
+    <td><strong>DS-2CD2183G2-IU</strong></td>
+    <td>Hikvision</td>
+    <td>8MP/4K</td>
+    <td>128&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>0.005 Lux, EXIR, WDR</td>
+    <td>$120-135</td>
+    <td>~$940-1055</td>
+    <td>Wide (Premium)</td>
+  </tr>
+  <tr>
+    <td><strong>RLC-810A</strong></td>
+    <td>Reolink</td>
+    <td>8MP/4K</td>
+    <td>105&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>IR 30m, 18 LEDs</td>
+    <td>~$90</td>
+    <td>~$509-730</td>
+    <td>Standard</td>
+  </tr>
+  <tr>
+    <td><strong>RLC-820A</strong></td>
+    <td>Reolink</td>
+    <td>8MP/4K</td>
+    <td>105&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>IR 30m + spotlight</td>
+    <td>~$65</td>
+    <td>~$509</td>
+    <td>Standard (turret)</td>
+  </tr>
+  <tr>
+    <td><strong>VIGI C440 (2.8mm)</strong></td>
+    <td>TP-Link</td>
+    <td>4MP</td>
+    <td>122&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Full-color 30m, F1.6</td>
+    <td>~$50</td>
+    <td>~$390</td>
+    <td>Wide (Budget)</td>
+  </tr>
+  <tr>
+    <td><strong>VIGI C240 (4mm)</strong></td>
+    <td>TP-Link</td>
+    <td>4MP</td>
+    <td>94&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Smart IR, WDR, 3D DNR</td>
+    <td>~$45</td>
+    <td>~$350</td>
+    <td>Standard (Budget)</td>
+  </tr>
+  <tr>
+    <td><strong>FE-P</strong></td>
+    <td>Reolink</td>
+    <td>6MP</td>
+    <td>360&deg;</td>
+    <td>Yes</td>
+    <td>Partial</td>
+    <td>IR 8m</td>
+    <td>~$80</td>
+    <td>~$625</td>
+    <td>Overhead/Fisheye</td>
+  </tr>
+  <tr>
+    <td><strong>RLC-811A</strong></td>
+    <td>Reolink</td>
+    <td>8MP/4K</td>
+    <td>30-123&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>IR + spotlights, color</td>
+    <td>~$100</td>
+    <td>~$780</td>
+    <td>Detail (5x zoom)</td>
+  </tr>
+  <tr>
+    <td><strong>DS-2CD2143G2-IU</strong></td>
+    <td>Hikvision</td>
+    <td>4MP</td>
+    <td>100-122&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>0.005 Lux, 120dB WDR</td>
+    <td>~$120-135</td>
+    <td>~$940-1055</td>
+    <td>Premium All-Rounder</td>
+  </tr>
+  <tr>
+    <td><strong>IPC-HDW2441T-S</strong></td>
+    <td>Dahua</td>
+    <td>4MP</td>
+    <td>114&deg;</td>
+    <td>Yes</td>
+    <td>Yes</td>
+    <td>Starlight, IR 30m</td>
+    <td>~$45-65</td>
+    <td>~$350-510</td>
+    <td>Budget Standard</td>
+  </tr>
+</table>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<h2>8. Key Considerations</h2>
+
+<div class="grid">
+  <div class="card">
+    <h3 style="margin-top:0">RTSP Stream URLs</h3>
+    <div class="notes">
+      <strong>Reolink:</strong><br>
+      <code style="color:var(--green); font-size:12px;">rtsp://admin:password@IP:554/h264Preview_01_main</code><br><br>
+      <strong>Dahua:</strong><br>
+      <code style="color:var(--green); font-size:12px;">rtsp://admin:password@IP:554/cam/realmonitor?channel=1&subtype=0</code><br><br>
+      <strong>Hikvision:</strong><br>
+      <code style="color:var(--green); font-size:12px;">rtsp://admin:password@IP:554/Streaming/Channels/101</code><br><br>
+      <strong>TP-Link VIGI:</strong><br>
+      <code style="color:var(--green); font-size:12px;">rtsp://admin:password@IP:554/stream1</code><br><br>
+      All cameras confirmed RTSP. Stream URLs follow standard patterns per brand.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Gym Lighting Notes</h3>
+    <div class="notes">
+      <strong>Overhead LED panels (normal):</strong> Any camera will perform well. 4K captures detail cleanly.<br><br>
+      <strong>Dimmed lighting (classes):</strong> The Dahua dual-light cameras automatically switch to warm LED, maintaining color video. Reolink cameras fall back to IR (black & white). Hikvision cameras with 0.005 Lux rating maintain some color even in very low light.<br><br>
+      <strong>Recommendation:</strong> If you regularly dim lights for boxing classes, prioritize Dahua or VIGI cameras for the main positions &mdash; they maintain full-color video in low light via spotlight LEDs.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Network Bandwidth</h3>
+    <div class="notes">
+      <strong>Per camera (4K H.265 main stream):</strong> ~8 Mbps<br>
+      <strong>6 cameras total:</strong> ~48 Mbps<br>
+      <strong>Gigabit switch capacity:</strong> 1000 Mbps<br><br>
+      A Gigabit PoE switch handles this easily (under 5% utilization). No need for 2.5G or 10G networking. Cat5e cable is sufficient for all runs under 100m.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">HK Power / Voltage</h3>
+    <div class="notes">
+      Hong Kong uses 220V/50Hz with UK-style plugs (Type G). PoE cameras are powered through the ethernet cable from the switch/NVR, so the only device needing a power outlet is the PoE switch or NVR itself. Most TP-Link/Netgear switches come with universal power adapters (100-240V). No voltage conversion needed.
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<div class="card" style="border-color: var(--accent); text-align: center; padding: 32px;">
+  <div style="color: var(--accent); font-size: 20px; font-weight: 700; margin-bottom: 8px;">Bottom Line</div>
+  <div style="font-size: 15px; max-width: 600px; margin: 0 auto; color: var(--muted);">
+    6 cameras (all 4K, all PoE, all RTSP) for ~US$500. Add a Dahua NVR for ~US$235 (includes PoE switch + storage). Total system: ~US$765 (HK$5,970). Start ordering on AliExpress for the Dahua cameras (3-7 days from Shenzhen), Reolink HK store or Amazon for the rest.
+  </div>
+</div>
+
+<div style="margin-top: 40px; padding: 16px; text-align: center; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border);">
+  Research compiled July 2026 &mdash; Prices approximate and subject to change. Verify current stock before ordering.
+</div>
+
+</body>
+</html>

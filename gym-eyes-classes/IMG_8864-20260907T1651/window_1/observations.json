@@ -1,0 +1,72 @@
+{
+  "people_detected": 1,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Widening stance, left foot steps forward and plants firmly.",
+        "stance_width": "wide",
+        "guard": "Right focus mitt raised high, left focus mitt held lower near chest.",
+        "upper_body": "Torso rotates slightly, leaning into the widening stance.",
+        "distance": "Constant distance from camera.",
+        "notable": "Dynamic weight shifting with the left leg extending outward."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Steps back, narrows stance, then steps out wide again.",
+        "stance_width": "changing",
+        "guard": "Right mitt raised, left mitt stays lower, bobbing with movement.",
+        "upper_body": "Rotates back and forth as the feet adjust.",
+        "distance": "Opens and closes slightly during the step sequence.",
+        "notable": "Brief pause and regroup in the middle, then re-engages with a step-out."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Drops weight, slides, and extends into a wide stance.",
+        "stance_width": "wide",
+        "guard": "Both mitts held up consistently.",
+        "upper_body": "Crouching and shifting weight forward and backward.",
+        "distance": "Constant.",
+        "notable": "End of sequence, returns to initial position."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F4-F5",
+      "type": "step",
+      "detail": "Left foot steps forward, widening the stance."
+    },
+    {
+      "frames": "F6-F7",
+      "type": "distance_open",
+      "detail": "Steps back, narrowing the stance and opening distance slightly."
+    },
+    {
+      "frames": "F8-F10",
+      "type": "distance_close",
+      "detail": "Steps in and widens stance, closing distance again."
+    },
+    {
+      "frames": "F11-F13",
+      "type": "stance_change",
+      "detail": "Drops weight and adjusts feet into a lower, wider position."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "reset",
+      "detail": "Returns to the starting posture and guard position."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

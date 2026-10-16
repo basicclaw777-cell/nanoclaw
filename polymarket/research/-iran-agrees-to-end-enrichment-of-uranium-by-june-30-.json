@@ -1,0 +1,84 @@
+{
+  "marketId": "1370652",
+  "question": " Iran agrees to end enrichment of uranium by June 30?",
+  "eventTitle": " Iran agrees to end enrichment of uranium by June 30?",
+  "marketYes": 0.475,
+  "marketNo": 0.525,
+  "volume24hr": 826226.3267950005,
+  "daysToResolution": 12,
+  "analysis": {
+    "question": "Iran agrees to end enrichment of uranium by June 30?",
+    "factors": [
+      {
+        "factor": "Historical precedent: Iran has never voluntarily and unconditionally agreed to end all enrichment, even under maximum pressure or negotiations (e.g., JCPOA only capped enrichment, did not end it).",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Since 2003, Iran has consistently maintained a right to enrich under the NPT. The JCPOA (2015) limited enrichment to 3.67% but did not end it. Iran has never agreed to zero enrichment."
+      },
+      {
+        "factor": "Current geopolitical context: U.S.-Iran tensions remain high; no credible reports of secret negotiations for a total enrichment halt. Recent IAEA reports show Iran continues enrichment at 60%.",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "IAEA quarterly reports (2025-2026) confirm Iran has not paused 60% enrichment. No major diplomatic breakthrough reported in credible media (Reuters, AP, NYT) in the last 90 days."
+      },
+      {
+        "factor": "Timing: Only 12 days remain until the deadline. A complete enrichment halt would require a dramatic reversal of stated policy, likely requiring a formal agreement or unilateral pledge—extremely unlikely in such a short window.",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Diplomatic agreements of this magnitude typically take months to years. No public signals of imminent talks or a unilateral Iranian announcement."
+      },
+      {
+        "factor": "Domestic Iranian politics: Hardliners control key institutions; any agreement to end enrichment would be seen as surrender and politically destabilizing for the regime.",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "Iran's Supreme Leader Khamenei has repeatedly stated that enrichment is a 'red line.' The IRGC and conservative parliament would oppose any zero-enrichment deal."
+      },
+      {
+        "factor": "Market liquidity and volume: High volume ($826k) and near-even pricing suggest significant uncertainty, but prediction markets often overestimate probability of dramatic events in short timeframes.",
+        "direction": "neutral",
+        "weight": "low",
+        "evidence": "Prediction markets can be noisy; high volume may reflect hedging or speculation rather than informed probability."
+      }
+    ],
+    "baseRate": {
+      "value": 0.02,
+      "reasoning": "Historical base rate for a state voluntarily and completely ending a strategic nuclear enrichment program in a 12-day window is extremely low. Since the nuclear age, no state has done so under similar conditions. Even Libya's 2003 WMD renunciation took months of negotiations and was not a complete enrichment halt (Libya had no enrichment program). Base rate for any major nuclear concession in <2 weeks is <2%."
+    },
+    "adjustments": [
+      {
+        "reason": "Unlikely but not impossible: Iran could make a tactical pledge to halt enrichment temporarily to avoid military action or sanctions escalation. However, no credible evidence of such a move exists.",
+        "delta": 0.01
+      },
+      {
+        "reason": "Market price (47.5%) is far above base rate, suggesting possible mispricing or speculative frenzy. This adjustment corrects for market overreaction to recent news (if any) or wishful thinking.",
+        "delta": -0.01
+      }
+    ],
+    "finalEstimate": 0.02,
+    "confidence": "high",
+    "confidenceInterval": [
+      0.005,
+      0.08
+    ],
+    "keyUncertainties": [
+      "Could a surprise military threat or ultimatum from the U.S./Israel force a last-minute Iranian pledge?",
+      "Is there any secret backchannel negotiation that could produce a sudden announcement?",
+      "Could Iran make a vague or ambiguous statement that the market interprets as 'ending enrichment' but is later disputed?"
+    ],
+    "researchNeeded": [
+      "Check for any recent (last 48 hours) credible reports of U.S.-Iran backchannel talks or an Iranian offer to halt enrichment.",
+      "Monitor IAEA statements and Iranian official media for any change in rhetoric.",
+      "Review historical cases of states making sudden nuclear concessions under threat (e.g., South Africa, Libya) to assess timing patterns."
+    ],
+    "reasoning": "The probability that Iran agrees to end all uranium enrichment by June 30, 2026—just 12 days from now—is extremely low. This conclusion is driven by three robust factors: (1) Iran has never, in over two decades of negotiations, agreed to completely end enrichment, even under severe sanctions or military threats. The JCPOA, the most comprehensive deal ever reached, only capped enrichment at 3.67%. (2) There is no credible evidence of any ongoing diplomatic process that could produce such a dramatic reversal in such a short timeframe. IAEA reports confirm Iran continues enriching at 60%, and no major news outlets have reported any secret talks. (3) The domestic political cost for Iran's leadership would be immense, as ending enrichment is framed as a surrender of sovereign rights and a threat to regime stability. Hardliners would likely block any such move.\n\nWhile prediction markets currently price this at ~47.5%, this appears to be a classic case of market overreaction to uncertainty or speculative noise. The base rate for a state voluntarily ending a strategic nuclear program in under two weeks is near zero. Even allowing for a black swan event—such as a sudden military ultimatum or a secret deal—the probability remains below 5%. The market may be conflating 'limiting enrichment' (which has happened) with 'ending enrichment' (which has not). The 12-day window is the critical constraint: diplomatic agreements of this magnitude take months to negotiate and implement. Therefore, my independent estimate is 2%, with a confidence interval of 0.5% to 8% to account for tail risks."
+  },
+  "edge": {
+    "side": "NO",
+    "edge": 0.45499999999999996,
+    "edgePct": "45.5%",
+    "ourEstimate": "2.0%",
+    "marketPrice": "47.5%",
+    "tradeable": true
+  },
+  "researchedAt": "2026-06-18T11:03:02.683Z"
+}

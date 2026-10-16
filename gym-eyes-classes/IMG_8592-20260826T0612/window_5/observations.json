@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Two individuals visible; the closer subject moves laterally out of frame as the camera pans.",
+        "stance_width": "narrow",
+        "guard": "Not clearly visible.",
+        "upper_body": "Torsos shown in early frames; transitioning between positions.",
+        "distance": "Approximately 2-3 meters.",
+        "notable": "Camera panning left across gym; one subject exits the frame."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "A single fighter walks steadily across the gym floor.",
+        "stance_width": "changing",
+        "guard": "Hands are down and relaxed; no guard established.",
+        "upper_body": "Torso and arms visible while walking.",
+        "distance": "N/A - continuous movement.",
+        "notable": "Camera follows a single fighter in motion."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Fighter slows down, steps and turns away from the camera.",
+        "stance_width": "narrow",
+        "guard": "Hands remain down.",
+        "upper_body": "Back and lower body visible as fighter turns.",
+        "distance": "N/A - scene changes focus.",
+        "notable": "A black training glove/pad falls into the foreground at F14-F15."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F3",
+      "type": "distance_open",
+      "detail": "First subject moves away and exits the camera view, opening the distance between individuals."
+    },
+    {
+      "frames": "F7-F13",
+      "type": "step",
+      "detail": "Fighter walks from left to right across the gym."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "reset",
+      "detail": "Fighter stops and turns; a black glove or pad falls to the floor."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-10-16T16:00:01.812Z",
+  "sources": {
+    "xray": "OK",
+    "plasma": "FAILED",
+    "mag": "FAILED",
+    "kp": "OK",
+    "dst": "OK"
+  },
+  "xray": {
+    "latest": {
+      "time": "2026-10-16T15:56:00Z",
+      "flux": 8.712593171367189e-7,
+      "class": "B8.7"
+    },
+    "peak6h": {
+      "time": "2026-10-16T15:42:00Z",
+      "flux": 0.000013757357010035776,
+      "class": "M1.4"
+    },
+    "count": 714
+  },
+  "plasma": null,
+  "mag": null,
+  "kp": {
+    "latest": {
+      "time": "2026-10-16T12:00:00",
+      "kp": 1.67,
+      "kpText": "1.67"
+    },
+    "stats": {
+      "mean24h": 2.3325000000000005,
+      "max24h": 3.33,
+      "trend": -0.6633333333333333
+    },
+    "stormLevel": "QUIET",
+    "count": 30
+  },
+  "dst": {
+    "latest": {
+      "time": "2026-10-16T15:00:00",
+      "dst": -8
+    },
+    "stats": {
+      "mean24h": -10.125,
+      "min24h": -25,
+      "min48h": -25,
+      "trend": 5.166666666666668
+    },
+    "stormLevel": "QUIET",
+    "count": 48
+  },
+  "activity": {
+    "score": 0.7166666666666667,
+    "level": "QUIET",
+    "factors": []
+  }
+}

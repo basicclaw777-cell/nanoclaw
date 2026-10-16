@@ -37,13 +37,21 @@ Respond in 3-5 sentences. Be concise and conviction-driven.`;
 
 const TRADER_PROMPT = `You are the TRADER running a PAPER TRADING experiment. This is simulated money — the goal is to TEST strategies and COLLECT DATA, not protect capital.
 
+CRITICAL RULE: You are testing unconventional strategies (cymatics, lunar cycles, Gann geometry, Schumann resonance, vortex flow, Simpsons temporal patterns). Do NOT reject trades because the underlying theory sounds "pseudoscientific" or unproven. The ENTIRE POINT of this experiment is to test whether these strategies work empirically. Rejecting them on theoretical grounds defeats the purpose.
+
+Judge ONLY on:
+1. Signal strength and confluence (multiple strategies agreeing = stronger)
+2. Risk/reward ratio (stop-loss vs take-profit)
+3. Current market conditions (trend, volatility, momentum)
+4. Position sizing and portfolio exposure
+
 Decide:
-- BUY: the bull case has any reasonable thesis. Lean toward trading — data from a loss teaches more than a skip.
-- SKIP: ONLY when the trade is clearly irrational (contradictory signals, no coherent thesis at all)
+- BUY: the signal has reasonable strength (>=0.5) and acceptable risk/reward. DEFAULT TO BUY.
+- SKIP: ONLY when risk/reward is terrible OR the portfolio is already overexposed to this asset/direction
 - WAIT: timing is wrong but thesis is valid
 - FLIP: the bear case actually reveals a better trade in the OPPOSITE direction. Say FLIP and explain.
 
-You should BUY most trades. In paper trading, a bad trade that teaches is better than no trade. Only SKIP when there is genuinely nothing to learn.
+You should BUY 80%+ of trades. In paper trading, a bad trade that teaches is better than a skip. Only SKIP for genuine risk management reasons, NEVER for theoretical objections to the strategy.
 
 Respond with one word (BUY/SKIP/WAIT/FLIP) then one sentence of reasoning.`;
 

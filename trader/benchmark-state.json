@@ -1,0 +1,92 @@
+{
+  "traders": {
+    "main": {
+      "start_date": "2026-05-27",
+      "start_balance": 10000,
+      "btc_start_price": 75824.06332542913,
+      "btc_qty_if_held": 0.13188425364492828
+    },
+    "cyclical": {
+      "start_date": "2026-06-03T17:21:56.580Z",
+      "start_balance": 5000,
+      "btc_start_price": 66649.86,
+      "btc_qty_if_held": 0.0750189122677827
+    },
+    "simpsons": {
+      "start_date": "2026-06-03T17:15:22.892Z",
+      "start_balance": 5000,
+      "btc_start_price": 66649.86,
+      "btc_qty_if_held": 0.0750189122677827
+    }
+  },
+  "snapshots": [
+    {
+      "timestamp": "2026-07-07T05:43:52.268Z",
+      "btc_price": 63126,
+      "funding": 0.0001,
+      "long_short_ratio": 1.381,
+      "open_interest": 101392.447,
+      "traders": {
+        "main": {
+          "balance": 10327.68557831155,
+          "pnl": 327.6855783115493,
+          "hold_value": 8325.325395589743,
+          "hold_pnl": -1674.6746044102565
+        },
+        "cyclical": {
+          "balance": 4825.936142394465,
+          "pnl": -174.063857605535,
+          "hold_value": null,
+          "hold_pnl": null
+        },
+        "simpsons": {
+          "balance": 4942.977355183112,
+          "pnl": -57.022644816886555,
+          "hold_value": null,
+          "hold_pnl": null
+        }
+      }
+    },
+    {
+      "timestamp": "2026-07-07T05:44:26.375Z",
+      "btc_price": 63126,
+      "funding": 0.0001,
+      "long_short_ratio": 1.381,
+      "open_interest": 101393.81,
+      "traders": {
+        "main": {
+          "balance": 10327.68557831155,
+          "pnl": 327.6855783115493,
+          "hold_value": 8325.325395589743,
+          "hold_pnl": -1674.6746044102565
+        },
+        "cyclical": {
+          "balance": 4825.936142394465,
+          "pnl": -174.063857605535,
+          "hold_value": 4735.643855816051,
+          "hold_pnl": -264.35614418394925
+        },
+        "simpsons": {
+          "balance": 4942.977355183112,
+          "pnl": -57.022644816886555,
+          "hold_value": 4735.643855816051,
+          "hold_pnl": -264.35614418394925
+        }
+      }
+    }
+  ],
+  "funding_history": [
+    {
+      "timestamp": "2026-07-07T05:43:52.268Z",
+      "rate": 0.0001,
+      "interpretation": "NEUTRAL"
+    },
+    {
+      "timestamp": "2026-07-07T05:44:26.375Z",
+      "rate": 0.0001,
+      "interpretation": "NEUTRAL"
+    }
+  ],
+  "created_at": "2026-07-07T05:43:51.255Z",
+  "last_updated": "2026-07-07T05:44:26.375Z"
+}

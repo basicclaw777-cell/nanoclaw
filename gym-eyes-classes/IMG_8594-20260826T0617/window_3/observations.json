@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "movement",
+  "intensity": "high",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F6",
+      "time": "0.0s-1.7s",
+      "observations": {
+        "footwork": "Continuous running motion from the right side of the frame towards the left.",
+        "stance_width": "changing",
+        "guard": "Arms are bent and pumping in a running motion, not held in a guard.",
+        "upper_body": "Upright with a forward lean indicative of running.",
+        "distance": "Moving from the right side towards the stationary person on the far left, then passing them.",
+        "notable": "A person in dark clothing is sprinting across the gym. A person in light clothing is standing at the extreme left edge."
+      }
+    },
+    {
+      "frames": "F7-F11",
+      "time": "2.0s-3.3s",
+      "observations": {
+        "footwork": "Running motion from right to left across the frame again.",
+        "stance_width": "changing",
+        "guard": "Arms pumping while running.",
+        "upper_body": "Leaning forward in a run.",
+        "distance": "The person in dark clothing has reappeared on the right side and is moving left, away from the left edge.",
+        "notable": "There is a sudden spatial jump between F6 and F7, indicating a shuttle run or a cut in the footage."
+      }
+    },
+    {
+      "frames": "F12-F15",
+      "time": "3.7s-4.7s",
+      "observations": {
+        "footwork": "Running motion, now appearing to move from left back towards the right side of the frame.",
+        "stance_width": "changing",
+        "guard": "Arms pumping while running.",
+        "upper_body": "Running posture.",
+        "distance": "The person in dark clothing is moving rightward across the frame.",
+        "notable": "The person in light clothing remains at the far left edge."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F6",
+      "type": "step",
+      "detail": "Continuous high-speed run from right to left across the gym floor."
+    },
+    {
+      "frames": "F7-F11",
+      "type": "step",
+      "detail": "Another run from right to left, following a jump cut or rapid shuttle."
+    },
+    {
+      "frames": "F12-F15",
+      "type": "step",
+      "detail": "Running from left back towards the right side of the frame."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

@@ -1,0 +1,36 @@
+{
+  "capabilities": [
+    {
+      "name": "EvaluateBoxingSession",
+      "version": "1.0",
+      "description": "Analyze boxing training session data and return coaching diagnoses + drill prescriptions",
+      "inputSchema": {
+        "sessions": "array of { date, type, duration_min, drills, self_rating, notes }",
+        "goals": "array of strings",
+        "constraints": "array of strings (injuries, limitations)"
+      },
+      "outputSchema": {
+        "diagnoses": "array of { area, finding, priority }",
+        "prescriptions": "array of { drill, description, frequency, duration }",
+        "constraints_acknowledged": "array of strings",
+        "next_check": "ISO date"
+      },
+      "requiredPermission": "send_training_log"
+    },
+    {
+      "name": "GetStudentProgress",
+      "version": "1.0",
+      "description": "Return progress summary for a registered student",
+      "inputSchema": {
+        "studentId": "string"
+      },
+      "outputSchema": {
+        "totalSessions": "number",
+        "currentLevel": "string",
+        "recentMilestones": "array of strings",
+        "trend": "string"
+      },
+      "requiredPermission": "view_progress"
+    }
+  ]
+}

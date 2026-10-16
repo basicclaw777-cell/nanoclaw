@@ -121,12 +121,10 @@ export function closeTrade(tradeId, exitPrice) {
   const trade = d.prepare('SELECT * FROM trades WHERE id = ?').get(tradeId);
   if (!trade) return null;
 
-  const pnl = trade.direction === 'long'
-    ? (exitPrice - trade.entry_price) * trade.position_size
-    : (trade.entry_price - exitPrice) * trade.position_size;
   const pnlPct = trade.direction === 'long'
     ? (exitPrice - trade.entry_price) / trade.entry_price
     : (trade.entry_price - exitPrice) / trade.entry_price;
+  const pnl = pnlPct * trade.position_size;
 
   d.prepare(`
     UPDATE trades SET closed_at = datetime('now'), exit_price = ?, status = 'closed', pnl = ?, pnl_pct = ?

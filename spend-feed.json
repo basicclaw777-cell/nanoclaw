@@ -1,0 +1,383 @@
+{
+  "generated_at": "2026-06-06T17:01:03.089Z",
+  "status": {
+    "ok": true,
+    "email": "basicclaw777@gmail.com",
+    "plan": "free",
+    "balance": 0.58,
+    "error": null
+  },
+  "transactions_ok": true,
+  "transactions_error": null,
+  "totals": {
+    "lines": 20,
+    "spend": 64,
+    "refund": 0,
+    "net": 64
+  },
+  "days": [
+    {
+      "date": "2026-06-02",
+      "spend": 64,
+      "refund": 0,
+      "net": 64,
+      "count": 20,
+      "lines": [
+        {
+          "date": "2026-06-02",
+          "time": "22:44",
+          "datetime": "2026-06-02 22:44",
+          "model": "Kling O1 Image",
+          "credits": -0.5,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "22:42",
+          "datetime": "2026-06-02 22:42",
+          "model": "Kling O1 Image",
+          "credits": -0.5,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "22:41",
+          "datetime": "2026-06-02 22:41",
+          "model": "Marketing Studio Image",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "17:08",
+          "datetime": "2026-06-02 17:08",
+          "model": "GPT Image 2.0",
+          "credits": -7,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "17:05",
+          "datetime": "2026-06-02 17:05",
+          "model": "GPT Image 2.0",
+          "credits": -7,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:47",
+          "datetime": "2026-06-02 16:47",
+          "model": "GPT Image 2.0",
+          "credits": -7,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:45",
+          "datetime": "2026-06-02 16:45",
+          "model": "GPT Image 2.0",
+          "credits": -7,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:42",
+          "datetime": "2026-06-02 16:42",
+          "model": "GPT Image 2.0",
+          "credits": -7,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:40",
+          "datetime": "2026-06-02 16:40",
+          "model": "Cinematic Studio 2.5",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:39",
+          "datetime": "2026-06-02 16:39",
+          "model": "FLUX.2 Pro",
+          "credits": -1.5,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:38",
+          "datetime": "2026-06-02 16:38",
+          "model": "Kling O1 Image",
+          "credits": -0.5,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:36",
+          "datetime": "2026-06-02 16:36",
+          "model": "Nano Banana Pro",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:36",
+          "datetime": "2026-06-02 16:36",
+          "model": "FLUX.2 Pro",
+          "credits": -1.5,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "16:35",
+          "datetime": "2026-06-02 16:35",
+          "model": "Nano Banana 2",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "13:53",
+          "datetime": "2026-06-02 13:53",
+          "model": "Nano Banana 2",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "13:52",
+          "datetime": "2026-06-02 13:52",
+          "model": "Nano Banana Pro",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "13:51",
+          "datetime": "2026-06-02 13:51",
+          "model": "Marketing Studio Image",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "13:49",
+          "datetime": "2026-06-02 13:49",
+          "model": "Nano Banana 2",
+          "credits": -2,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "13:49",
+          "datetime": "2026-06-02 13:49",
+          "model": "FLUX.2 Pro",
+          "credits": -1.5,
+          "action": "spend"
+        },
+        {
+          "date": "2026-06-02",
+          "time": "13:47",
+          "datetime": "2026-06-02 13:47",
+          "model": "GPT Image 2.0",
+          "credits": -7,
+          "action": "spend"
+        }
+      ]
+    }
+  ],
+  "bursts": [
+    {
+      "date": "2026-06-02",
+      "from": "13:47",
+      "to": "13:52",
+      "count": 5,
+      "credits": 14.5,
+      "models": [
+        "GPT Image 2.0",
+        "Nano Banana 2",
+        "FLUX.2 Pro",
+        "Marketing Studio Image",
+        "Nano Banana Pro"
+      ],
+      "note": "5 spends in 5min — looks autonomous"
+    },
+    {
+      "date": "2026-06-02",
+      "from": "16:35",
+      "to": "16:40",
+      "count": 6,
+      "credits": 9.5,
+      "models": [
+        "Nano Banana 2",
+        "Nano Banana Pro",
+        "FLUX.2 Pro",
+        "Kling O1 Image",
+        "Cinematic Studio 2.5"
+      ],
+      "note": "6 spends in 5min — looks autonomous"
+    }
+  ],
+  "recent": [
+    {
+      "date": "2026-06-02",
+      "time": "22:44",
+      "datetime": "2026-06-02 22:44",
+      "model": "Kling O1 Image",
+      "credits": -0.5,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "22:42",
+      "datetime": "2026-06-02 22:42",
+      "model": "Kling O1 Image",
+      "credits": -0.5,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "22:41",
+      "datetime": "2026-06-02 22:41",
+      "model": "Marketing Studio Image",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "17:08",
+      "datetime": "2026-06-02 17:08",
+      "model": "GPT Image 2.0",
+      "credits": -7,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "17:05",
+      "datetime": "2026-06-02 17:05",
+      "model": "GPT Image 2.0",
+      "credits": -7,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:47",
+      "datetime": "2026-06-02 16:47",
+      "model": "GPT Image 2.0",
+      "credits": -7,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:45",
+      "datetime": "2026-06-02 16:45",
+      "model": "GPT Image 2.0",
+      "credits": -7,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:42",
+      "datetime": "2026-06-02 16:42",
+      "model": "GPT Image 2.0",
+      "credits": -7,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:40",
+      "datetime": "2026-06-02 16:40",
+      "model": "Cinematic Studio 2.5",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:39",
+      "datetime": "2026-06-02 16:39",
+      "model": "FLUX.2 Pro",
+      "credits": -1.5,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:38",
+      "datetime": "2026-06-02 16:38",
+      "model": "Kling O1 Image",
+      "credits": -0.5,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:36",
+      "datetime": "2026-06-02 16:36",
+      "model": "Nano Banana Pro",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:36",
+      "datetime": "2026-06-02 16:36",
+      "model": "FLUX.2 Pro",
+      "credits": -1.5,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "16:35",
+      "datetime": "2026-06-02 16:35",
+      "model": "Nano Banana 2",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "13:53",
+      "datetime": "2026-06-02 13:53",
+      "model": "Nano Banana 2",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "13:52",
+      "datetime": "2026-06-02 13:52",
+      "model": "Nano Banana Pro",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "13:51",
+      "datetime": "2026-06-02 13:51",
+      "model": "Marketing Studio Image",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "13:49",
+      "datetime": "2026-06-02 13:49",
+      "model": "Nano Banana 2",
+      "credits": -2,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "13:49",
+      "datetime": "2026-06-02 13:49",
+      "model": "FLUX.2 Pro",
+      "credits": -1.5,
+      "action": "spend"
+    },
+    {
+      "date": "2026-06-02",
+      "time": "13:47",
+      "datetime": "2026-06-02 13:47",
+      "model": "GPT Image 2.0",
+      "credits": -7,
+      "action": "spend"
+    }
+  ]
+}

@@ -17,10 +17,40 @@ const SEED_PROMPT = fs.readFileSync(
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
+// Product pipeline tracker — closes the loop on briefs (detected→briefed→...→revenue).
+const PIPELINE_PATH = path.join(process.env.HOME, 'Cathedral/product-pipeline.json');
+const PIPELINE_STAGES = ['detected', 'briefed', 'reviewed', 'prototyped', 'shipped', 'revenue'];
+
 // ── Helpers ──
 
 function today() {
   return new Date().toISOString().slice(0, 10);
+}
+
+// Auto-register a newly-filed brief into the product pipeline at stage "briefed".
+// Additive + idempotent: keyed on brief_path, never clobbers an existing entry.
+function registerInPipeline(productName, briefPath, detectedDate) {
+  try {
+    let db = { stages: PIPELINE_STAGES, products: [] };
+    if (fs.existsSync(PIPELINE_PATH)) db = JSON.parse(fs.readFileSync(PIPELINE_PATH, 'utf-8'));
+    if (db.products.some(p => p.brief_path === briefPath)) return; // already tracked
+    const slug = slugify(productName);
+    let baseId = `${slug}-${detectedDate}`, id = baseId, n = 2;
+    while (db.products.some(p => p.id === id)) id = `${baseId}-${n++}`;
+    db.products.push({
+      id,
+      title: productName,
+      brief_path: briefPath,
+      stage: 'briefed',
+      detected_date: detectedDate,
+      last_updated: today(),
+      notes: [],
+    });
+    fs.writeFileSync(PIPELINE_PATH, JSON.stringify(db, null, 2) + '\n');
+    console.log(`[prospector] Registered in product pipeline: ${id}`);
+  } catch (err) {
+    console.error(`[prospector] Pipeline register failed (non-fatal): ${err.message}`);
+  }
 }
 
 function getHarvestsForDate(date) {
@@ -135,6 +165,9 @@ IMPORTANT RULES:
     fs.writeFileSync(briefPath, result);
     console.log(`[prospector] Product brief filed: ${briefPath}`);
     appendLog(`PRODUCT DETECTED: ${productName} → ${path.basename(briefPath)}`);
+
+    // Auto-register into the product pipeline (additive, idempotent)
+    registerInPipeline(productName, briefPath, date);
 
     // Notify Telegram
     await sendTelegram(`🔍 *Prospector*: Found product potential in ${date} session.\n\n*${productName}*\n\nBrief filed: \`${path.basename(briefPath)}\``);

@@ -15,10 +15,9 @@ import { join } from 'path';
 import { smartQuery } from './deepseek-query.js';
 
 const SAGE_PATH = join(process.cwd(), 'sages', 'ling.json');
-const MEMORY_PATH = join(process.cwd(), 'sages', 'ling-memory.json');
-// Registry-declared memoryFile — the live markdown corpus where 20+ days of real
-// LING activity accumulate (What Works / What Doesn't Work / Interactions). The JSON
-// above is a frozen legacy store; this is the one that actually grows. Read both.
+// Live memory paths — the frozen sages/ling-memory.json (May 2026) is stale.
+// All memory reads now go through the Cathedral agent memory system.
+const MEMORY_PATH = join(process.env.HOME, 'Cathedral', 'agents', 'memory', 'ling-memory.json');
 const MD_MEMORY_PATH = join(process.env.HOME, 'Cathedral', 'agents', 'memory', 'ling.md');
 const DRAFTS_DIR = join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'cathedral-intelligence-hk', 'drafts');
 const REVIEWS_DIR = join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'cathedral-intelligence-hk');

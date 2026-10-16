@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mind Map: golden ratio convergence</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  :root { --bg:#0A0A0A; --fg:#FAFAFA; --gold:#f7b408; --dim:#666; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:'Epilogue',system-ui,sans-serif; overflow:hidden; }
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;600;700&display=swap');
+  .header { position:fixed; top:0; left:0; right:0; padding:1rem 2rem; z-index:10; background:rgba(10,10,10,0.9); border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center; }
+  .header h1 { font-family:'Anton',sans-serif; font-size:1.5rem; color:var(--gold); text-transform:uppercase; }
+  .header .meta { color:var(--dim); font-size:0.8rem; }
+  svg { width:100vw; height:100vh; }
+  .node-label { fill:var(--fg); font-size:11px; pointer-events:none; text-anchor:middle; }
+  .edge-label { fill:var(--dim); font-size:9px; pointer-events:none; }
+  .legend { position:fixed; bottom:1rem; left:1rem; background:rgba(20,20,20,0.9); padding:1rem; border-radius:4px; border:1px solid #333; }
+  .legend div { display:flex; align-items:center; gap:0.5rem; margin:0.3rem 0; font-size:0.8rem; color:var(--dim); }
+  .legend .swatch { width:12px; height:12px; border-radius:50%; }
+  .info { position:fixed; top:5rem; right:1rem; background:rgba(20,20,20,0.95); padding:1.5rem; border-radius:4px; border:1px solid #333; max-width:300px; display:none; }
+  .info h3 { color:var(--gold); font-size:1rem; margin-bottom:0.5rem; }
+  .info .type { color:var(--dim); font-size:0.8rem; text-transform:uppercase; }
+  .info .connections { margin-top:0.5rem; font-size:0.85rem; }
+  .cluster-labels { pointer-events:none; }
+</style>
+</head><body>
+<div class="header">
+  <h1>Mind Map: golden ratio convergence</h1>
+  <div class="meta">2026-06-08 &middot; Cathedral Study Lab</div>
+</div>
+<div class="info" id="info">
+  <h3 id="info-label"></h3>
+  <div class="type" id="info-type"></div>
+  <div class="connections" id="info-conn"></div>
+</div>
+<svg id="svg"></svg>
+<div class="legend" id="legend"></div>
+<script>
+const nodes = [{"id":"n1","label":"Golden Ratio (Phi ≈1.618)","type":"concept","domain":"mathematics"},{"id":"n2","label":"Fibonacci Sequence","type":"concept","domain":"mathematics"},{"id":"n3","label":"Keith Devlin","type":"person","domain":"mathematics"},{"id":"n4","label":"Sacred Geometry","type":"concept","domain":"philosophy"},{"id":"n5","label":"Biological Growth Patterns","type":"concept","domain":"biology"},{"id":"n6","label":"Architecture","type":"concept","domain":"art/design"},{"id":"n7","label":"Acoustic Resonance","type":"concept","domain":"physics"},{"id":"n8","label":"Cuban Boxing Slip Angle (45°)","type":"concept","domain":"sports"},{"id":"n9","label":"Golden Spiral","type":"concept","domain":"mathematics"},{"id":"n10","label":"Maximum Efficiency Through Geometric Proportion","type":"finding","domain":"general"},{"id":"n11","label":"Phi as Generative Mechanism vs Descriptive Pattern","type":"question","domain":"philosophy"},{"id":"n12","label":"Normalized Maximum Likelihood (NML)","type":"technique","domain":"statistics"},{"id":"n13","label":"Jorma Rissanen","type":"person","domain":"statistics"},{"id":"n14","label":"Stochastic Complexity","type":"concept","domain":"statistics"},{"id":"n15","label":"Johansen Cointegration Test","type":"technique","domain":"econometrics"},{"id":"n16","label":"Vector Error Correction Model (VECM)","type":"technique","domain":"econometrics"},{"id":"n17","label":"Søren Johansen","type":"person","domain":"econometrics"},{"id":"n18","label":"Robert Engle","type":"person","domain":"econometrics"},{"id":"n19","label":"Clive Granger","type":"person","domain":"econometrics"},{"id":"n20","label":"Multi-Asset Statistical Arbitrage","type":"technique","domain":"finance"},{"id":"n21","label":"Variance Ratio (VR) as Mean-Reversion Meter","type":"technique","domain":"finance"},{"id":"n22","label":"Lo & MacKinlay","type":"person","domain":"econometrics"},{"id":"n23","label":"Matching Pursuit (MP) with Gabor Dictionaries","type":"technique","domain":"signal processing"},{"id":"n24","label":"Stéphane Mallat","type":"person","domain":"signal processing"},{"id":"n25","label":"Zhifeng Zhang","type":"person","domain":"signal processing"},{"id":"n26","label":"Convergence Proof (MP)","type":"finding","domain":"signal processing"},{"id":"n27","label":"Davis, Mallat & Avellaneda","type":"person","domain":"signal processing"},{"id":"n28","label":"Stochastic Meta-Descent (SMD)","type":"technique","domain":"machine learning"},{"id":"n29","label":"Nicol N. Schraudolph","type":"person","domain":"machine learning"},{"id":"n30","label":"Gain Vector Adaptation","type":"concept","domain":"machine learning"}];
+const edges = [{"source":"n1","target":"n2","label":"related_to"},{"source":"n1","target":"n4","label":"part_of"},{"source":"n1","target":"n5","label":"supports"},{"source":"n1","target":"n6","label":"supports"},{"source":"n1","target":"n7","label":"supports"},{"source":"n1","target":"n9","label":"generates"},{"source":"n3","target":"n1","label":"studied"},{"source":"n8","target":"n9","label":"shares_structure_with"},{"source":"n8","target":"n10","label":"supports"},{"source":"n9","target":"n10","label":"supports"},{"source":"n1","target":"n11","label":"inspires"},{"source":"n12","target":"n14","label":"enables"},{"source":"n13","target":"n12","label":"discovered_by"},{"source":"n13","target":"n14","label":"discovered_by"},{"source":"n15","target":"n16","label":"enables"},{"source":"n17","target":"n15","label":"discovered_by"},{"source":"n18","target":"n19","label":"collaborated_with"},{"source":"n15","target":"n20","label":"enables"},{"source":"n16","target":"n20","label":"enables"},{"source":"n21","target":"n20","label":"supports"},{"source":"n22","target":"n21","label":"discovered_by"},{"source":"n23","target":"n26","label":"enables"},{"source":"n24","target":"n25","label":"collaborated_with"},{"source":"n27","target":"n26","label":"discovered_by"},{"source":"n28","target":"n30","label":"enables"},{"source":"n29","target":"n28","label":"discovered_by"},{"source":"n1","target":"n20","label":"influences"},{"source":"n2","target":"n20","label":"influences"},{"source":"n14","target":"n20","label":"supports"},{"source":"n23","target":"n20","label":"supports"}];
+const clusters = [{"name":"Golden Ratio & Fibonacci","nodeIds":["n1","n2","n3","n4","n9","n11"]},{"name":"Applications of Golden Ratio","nodeIds":["n5","n6","n7","n8","n10"]},{"name":"Statistical & Stochastic Methods","nodeIds":["n12","n13","n14"]},{"name":"Econometrics & Finance","nodeIds":["n15","n16","n17","n18","n19","n20","n21","n22"]},{"name":"Signal Processing & Optimization","nodeIds":["n23","n24","n25","n26","n27","n28","n29","n30"]}];
+
+const typeColors = {
+  concept:'#f7b408', person:'#22c55e', technique:'#3b82f6',
+  finding:'#a855f7', question:'#ef4444', institution:'#6b7280'
+};
+const edgeColors = {
+  supports:'#22c55e', contradicts:'#ef4444', influences:'#f7b408',
+  enables:'#3b82f6', suppresses:'#6b7280', part_of:'#666',
+  discovered_by:'#a855f7', tested_by:'#3b82f6'
+};
+
+// Legend
+const leg = document.getElementById('legend');
+for (const [t,c] of Object.entries(typeColors)) {
+  const d = document.createElement('div');
+  d.innerHTML = '<div class="swatch" style="background:'+c+'"></div>'+t;
+  leg.appendChild(d);
+}
+
+const W = window.innerWidth, H = window.innerHeight;
+const svg = d3.select('#svg');
+const g = svg.append('g');
+
+// Zoom
+svg.call(d3.zoom().scaleExtent([0.2,4]).on('zoom', e => g.attr('transform', e.transform)));
+
+// Cluster hulls
+const clusterMap = {};
+clusters.forEach(c => c.nodeIds.forEach(id => clusterMap[id] = c.name));
+
+// Force sim
+const sim = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(edges).id(d=>d.id).distance(120))
+  .force('charge', d3.forceManyBody().strength(-300))
+  .force('center', d3.forceCenter(W/2, H/2))
+  .force('collision', d3.forceCollide(30));
+
+// Edges
+const link = g.selectAll('.link').data(edges).join('line')
+  .attr('class','link')
+  .attr('stroke', d => edgeColors[d.label]||'#333')
+  .attr('stroke-width', 1.5)
+  .attr('stroke-opacity', 0.5);
+
+// Edge labels
+const elabel = g.selectAll('.edge-label').data(edges).join('text')
+  .attr('class','edge-label').text(d=>d.label);
+
+// Nodes
+const node = g.selectAll('.node').data(nodes).join('circle')
+  .attr('class','node')
+  .attr('r', d => d.type==='question' ? 8 : 10)
+  .attr('fill', d => typeColors[d.type]||'#666')
+  .attr('stroke','#222').attr('stroke-width',2)
+  .style('cursor','pointer')
+  .call(d3.drag().on('start',ds).on('drag',dd).on('end',de));
+
+// Labels
+const label = g.selectAll('.node-label').data(nodes).join('text')
+  .attr('class','node-label').text(d=>d.label).attr('dy',20);
+
+// Info panel
+node.on('click', (e, d) => {
+  const info = document.getElementById('info');
+  info.style.display = 'block';
+  document.getElementById('info-label').textContent = d.label;
+  document.getElementById('info-type').textContent = d.type + (d.domain ? ' / '+d.domain : '');
+  const conns = edges.filter(l => l.source.id===d.id || l.target.id===d.id);
+  document.getElementById('info-conn').innerHTML = conns.map(c => {
+    const other = c.source.id===d.id ? c.target.label : c.source.label;
+    return '<div>'+c.label+' &rarr; '+other+'</div>';
+  }).join('');
+});
+
+sim.on('tick', () => {
+  link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+  elabel.attr('x',d=>(d.source.x+d.target.x)/2).attr('y',d=>(d.source.y+d.target.y)/2);
+  node.attr('cx',d=>d.x).attr('cy',d=>d.y);
+  label.attr('x',d=>d.x).attr('y',d=>d.y);
+});
+
+function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y}
+function dd(e,d){d.fx=e.x;d.fy=e.y}
+function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null}
+</script>
+</body></html>

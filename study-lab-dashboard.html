@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study Lab — Cathedral</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;600;700&display=swap');
+  :root { --bg:#0A0A0A; --fg:#FAFAFA; --gold:#f7b408; --dim:#888; --card:#141414; --border:#222; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:'Epilogue',system-ui,sans-serif; min-height:100vh; }
+
+  .top { padding:2rem 2rem 1rem; border-bottom:1px solid var(--border); }
+  .top h1 { font-family:'Anton',sans-serif; font-size:2.5rem; color:var(--gold); text-transform:uppercase; letter-spacing:3px; }
+  .top p { color:var(--dim); margin-top:0.3rem; }
+
+  /* Generate bar */
+  .gen-bar { padding:1.5rem 2rem; display:flex; gap:1rem; align-items:center; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .gen-bar input { flex:1; min-width:200px; background:#111; border:1px solid #333; color:var(--fg); padding:0.7rem 1rem; border-radius:4px; font-size:1rem; font-family:inherit; }
+  .gen-bar input:focus { outline:none; border-color:var(--gold); }
+  .gen-bar button { background:var(--gold); color:#000; border:none; padding:0.7rem 1.5rem; border-radius:4px; font-weight:700; cursor:pointer; font-size:0.9rem; font-family:inherit; }
+  .gen-bar button:hover { opacity:0.9; }
+  .gen-bar button:disabled { opacity:0.4; cursor:not-allowed; }
+  .gen-bar select { background:#111; border:1px solid #333; color:var(--fg); padding:0.7rem; border-radius:4px; font-family:inherit; }
+
+  /* Tabs */
+  .tabs { display:flex; gap:0; border-bottom:1px solid var(--border); padding:0 2rem; }
+  .tab { padding:0.8rem 1.5rem; cursor:pointer; color:var(--dim); border-bottom:2px solid transparent; font-weight:600; font-size:0.9rem; }
+  .tab:hover { color:var(--fg); }
+  .tab.active { color:var(--gold); border-color:var(--gold); }
+
+  /* Content */
+  .content { padding:2rem; }
+  .panel { display:none; }
+  .panel.active { display:block; }
+
+  /* Cards */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:1.5rem; }
+  .card:hover { border-color:#444; }
+  .card h3 { color:var(--gold); font-size:1rem; margin-bottom:0.5rem; }
+  .card .meta { color:var(--dim); font-size:0.8rem; margin-bottom:1rem; }
+  .card .actions { display:flex; gap:0.5rem; }
+  .card .actions a { color:var(--fg); text-decoration:none; padding:0.4rem 0.8rem; background:#222; border-radius:3px; font-size:0.8rem; }
+  .card .actions a:hover { background:#333; }
+
+  /* Podcast player */
+  .player { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:1.5rem; margin-bottom:1.5rem; }
+  .player h3 { color:var(--gold); margin-bottom:0.5rem; }
+  .player audio { width:100%; margin-top:0.5rem; }
+  .player .info { color:var(--dim); font-size:0.85rem; margin-top:0.5rem; }
+
+  /* Status */
+  .status { padding:1rem 2rem; background:#0d0d0d; color:var(--dim); font-size:0.85rem; position:fixed; bottom:0; left:0; right:0; border-top:1px solid var(--border); }
+  .status .spinner { display:inline-block; width:14px; height:14px; border:2px solid var(--gold); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; margin-right:0.5rem; vertical-align:middle; }
+  @keyframes spin { to { transform:rotate(360deg) } }
+
+  .empty { color:var(--dim); padding:3rem; text-align:center; font-size:1.1rem; }
+
+  /* Iframe viewer */
+  .viewer { position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:100; display:none; }
+  .viewer iframe { width:100%; height:calc(100% - 3rem); border:none; }
+  .viewer .toolbar { height:3rem; display:flex; align-items:center; padding:0 1rem; background:#111; border-bottom:1px solid var(--border); }
+  .viewer .toolbar button { background:none; border:1px solid #333; color:var(--fg); padding:0.3rem 1rem; border-radius:3px; cursor:pointer; }
+</style>
+</head><body>
+
+<div class="top">
+  <h1>Study Lab</h1>
+  <p>Podcast &middot; Slides &middot; Mind Map &middot; Quiz — from any vault topic</p>
+</div>
+
+<div class="gen-bar">
+  <input type="text" id="topic" placeholder="Enter a topic... (e.g. golden ratio, fear gate, sacred geometry)">
+  <select id="genType">
+    <option value="slides">Slides</option>
+    <option value="mindmap">Mind Map</option>
+    <option value="podcast">Podcast</option>
+    <option value="quiz">Quiz</option>
+    <option value="all">All Four</option>
+  </select>
+  <select id="speakers" style="display:none">
+    <option value="physicist,librarian">Physicist + Librarian</option>
+    <option value="cathy,forge">Cathy + Forge</option>
+    <option value="archivist,experimentalist">Archivist + Experimentalist</option>
+    <option value="physicist,cathy">Physicist + Cathy</option>
+  </select>
+  <button id="genBtn" onclick="generate()">Generate</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-panel="podcasts">Podcasts</div>
+  <div class="tab" data-panel="slides">Slides</div>
+  <div class="tab" data-panel="mindmaps">Mind Maps</div>
+  <div class="tab" data-panel="quizzes">Quizzes</div>
+</div>
+
+<div class="content">
+  <div class="panel active" id="panel-podcasts">
+    <div id="podcast-list" class="card-grid"><div class="empty">No podcasts yet. Generate one above.</div></div>
+  </div>
+  <div class="panel" id="panel-slides">
+    <div id="slides-list" class="card-grid"><div class="empty">No slides yet. Generate from a vault topic.</div></div>
+  </div>
+  <div class="panel" id="panel-mindmaps">
+    <div id="mindmap-list" class="card-grid"><div class="empty">No mind maps yet. Generate from a vault topic.</div></div>
+  </div>
+  <div class="panel" id="panel-quizzes">
+    <div id="quiz-list" class="card-grid"><div class="empty">No quizzes yet. Generate from a vault topic.</div></div>
+  </div>
+</div>
+
+<div class="status" id="status">Ready</div>
+
+<div class="viewer" id="viewer">
+  <div class="toolbar">
+    <button onclick="closeViewer()">Close</button>
+  </div>
+  <iframe id="viewerFrame"></iframe>
+</div>
+
+<script>
+// Tabs
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById('panel-' + t.dataset.panel).classList.add('active');
+});
+
+// Show speaker select for podcast
+document.getElementById('genType').onchange = function() {
+  document.getElementById('speakers').style.display =
+    (this.value === 'podcast' || this.value === 'all') ? '' : 'none';
+};
+
+// Load existing
+async function loadAll() {
+  try {
+    const r = await fetch('/api/study-lab');
+    const d = await r.json();
+
+    // Podcasts
+    const pl = document.getElementById('podcast-list');
+    if (d.podcasts && d.podcasts.length) {
+      pl.innerHTML = d.podcasts.map(p => `
+        <div class="player">
+          <h3>${p.title || p.file}</h3>
+          <div class="meta">${p.speakers || ''} &middot; ${p.duration ? (p.duration/60).toFixed(1)+'m' : ''}</div>
+          <audio controls src="/study-lab/audio/${p.file}"></audio>
+        </div>`).join('');
+    }
+
+    // Slides
+    const sl = document.getElementById('slides-list');
+    if (d.slides && d.slides.length) {
+      sl.innerHTML = d.slides.map(s => `
+        <div class="card">
+          <h3>${s.replace('slides-','').replace('.html','').replace(/-/g,' ')}</h3>
+          <div class="actions">
+            <a href="#" onclick="openViewer('/study-lab/file/${s}');return false">View</a>
+          </div>
+        </div>`).join('');
+    }
+
+    // Mind maps
+    const ml = document.getElementById('mindmap-list');
+    if (d.mindmaps && d.mindmaps.length) {
+      ml.innerHTML = d.mindmaps.map(m => `
+        <div class="card">
+          <h3>${m.replace('mindmap-','').replace('.html','').replace(/-/g,' ')}</h3>
+          <div class="actions">
+            <a href="#" onclick="openViewer('/study-lab/file/${m}');return false">View</a>
+          </div>
+        </div>`).join('');
+    }
+
+    // Quizzes
+    const ql = document.getElementById('quiz-list');
+    if (d.quizzes && d.quizzes.length) {
+      ql.innerHTML = d.quizzes.map(q => `
+        <div class="card">
+          <h3>${q.replace('quiz-','').replace('.html','').replace(/-/g,' ')}</h3>
+          <div class="actions">
+            <a href="#" onclick="openViewer('/study-lab/file/${q}');return false">Take Quiz</a>
+          </div>
+        </div>`).join('');
+    }
+  } catch(e) { console.error('Load error:', e); }
+}
+
+function openViewer(url) {
+  document.getElementById('viewer').style.display = 'block';
+  document.getElementById('viewerFrame').src = url;
+}
+function closeViewer() {
+  document.getElementById('viewer').style.display = 'none';
+  document.getElementById('viewerFrame').src = '';
+}
+
+async function generate() {
+  const topic = document.getElementById('topic').value.trim();
+  if (!topic) return;
+  const type = document.getElementById('genType').value;
+  const speakers = document.getElementById('speakers').value;
+  const btn = document.getElementById('genBtn');
+  const status = document.getElementById('status');
+
+  btn.disabled = true;
+  status.innerHTML = '<span class="spinner"></span>Generating ' + type + '...';
+
+  try {
+    const r = await fetch('/api/study-lab/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic, type, speakers })
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    status.textContent = 'Done! ' + (d.message || '');
+    loadAll();
+  } catch(e) {
+    status.textContent = 'Error: ' + e.message;
+  }
+  btn.disabled = false;
+}
+
+document.getElementById('topic').addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
+loadAll();
+</script>
+</body></html>

@@ -1,0 +1,177 @@
+{
+  "id": "lesson-03",
+  "position": 3,
+  "title": "The Stance",
+  "subtitle": "Everything starts here",
+  "slug": "the-stance",
+
+  "curriculum": {
+    "blocks": [1],
+    "pillars": ["skill"],
+    "domains": ["footwork", "defense"],
+    "engines": {
+      "body": "Foot placement, weight distribution, spine alignment, knee bend",
+      "mind": "Understanding WHY this position works — geometry, not just instruction",
+      "emotion": "First moment of 'I feel stable' — confidence from structure"
+    }
+  },
+
+  "audience": {
+    "level": "beginner",
+    "hook": "Every punch, every slip, every step starts from the same place. Get this wrong and nothing else works.",
+    "question": "Why does stance matter more than any punch?"
+  },
+
+  "core": {
+    "thesis": "The stance is not a starting position — it's the operating system. Every movement in boxing is an extension of stance, and every mistake traces back to it.",
+    "keyPoints": [
+      "Stance is the foundation — not something you learn once and forget, something you return to constantly",
+      "Foot width: shoulder-width base. Too narrow = no balance. Too wide = no mobility.",
+      "Weight distribution: roughly 50/50, slight forward bias. Ready to move in any direction.",
+      "Lead foot points toward opponent, rear foot at ~45 degrees",
+      "Knees slightly bent — springs loaded, never locked",
+      "Upright posture: Cuban style. Not crouched, not leaning. Spine stacked.",
+      "Hands up, chin down, elbows in — but that comes from guard (lesson 4). Stance is feet first.",
+      "The stance test: can you move any direction instantly without adjusting first? If not, your stance is wrong."
+    ],
+    "commonMisconceptions": [
+      "Stance is boring / basic — it's the most important thing in boxing and the first thing that breaks under pressure",
+      "You learn stance in session 1 and move on — even professionals drill stance",
+      "Wider is more stable — wider kills your mobility",
+      "Copying a pro's stance works — your body is different, the principles are the same but the measurements adapt"
+    ],
+    "coachEye": {
+      "observe": "Watch the rear heel — is it planted or floating? Floating = not committed, planted = loaded",
+      "compare": "Same student, hands-down relaxed stance vs fighting stance — how much did their balance actually change?",
+      "predict": "A student with locked knees will fall off balance on their first cross. Every time.",
+      "diagnose": "If a punch has no power, check the feet before checking the hands. It's almost always the feet."
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["footwork", "defense"],
+    "motions": ["pulse", "snap"],
+    "lines": ["solid", "dashed", "double-line"],
+    "diagnostics": ["gold-pulse", "red-flash"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "Everything Starts Here",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "Before the jab. Before the guard. Before footwork. There's the stance. Get this right and everything else gets easier. Get this wrong and nothing else works.",
+      "components": ["CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Establish stance as the foundation"
+    },
+    {
+      "id": "scene_02",
+      "title": "The Feet",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "Shoulder-width apart. Lead foot pointing forward. Rear foot at forty-five degrees. Knees bent — springs loaded, never locked. This is your base. Everything you do in boxing is an extension of this position.",
+      "components": ["FootworkGrid", "BalanceIndicator", "CenterLine", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Foot placement and weight distribution"
+    },
+    {
+      "id": "scene_03",
+      "title": "Weight Distribution",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "Fifty-fifty. Ready to move in any direction without shifting first. Too much weight forward — you can't retreat. Too much weight back — your punches have nothing behind them.",
+      "components": ["WeightTransfer", "BalanceIndicator", "CenterLine"],
+      "assets": [],
+      "learningObjective": "Weight distribution principles"
+    },
+    {
+      "id": "scene_04",
+      "title": "Upright",
+      "duration": "20s",
+      "visualMode": "blueprint",
+      "narration": "Cuban stance is upright. Not crouched. Not leaning. Spine stacked over hips. This isn't a choice — it's physics. An upright spine gives you rotation, vision, and the ability to move your feet without resetting.",
+      "components": ["CenterLine", "HipRotation", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Upright posture — Cuban style vs crouch"
+    },
+    {
+      "id": "scene_05",
+      "title": "The Test",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "Here's how you know your stance is right. Can you move forward, back, left, or right — instantly — without adjusting first? If you have to shift your weight before you move, your stance is wrong.",
+      "components": ["FootworkGrid", "DistanceBands", "BalanceIndicator"],
+      "assets": [],
+      "learningObjective": "Self-diagnostic: the instant movement test"
+    },
+    {
+      "id": "scene_06",
+      "title": "It Never Stops",
+      "duration": "15s",
+      "visualMode": "noir",
+      "narration": "Beginners learn stance. Professionals drill stance. The difference between a good boxer and a great one often comes down to whether their stance holds under pressure. This is lesson three — and it's the lesson you'll practice longest.",
+      "components": ["CalloutLabel"],
+      "assets": ["pro-stance-footage"],
+      "learningObjective": "Stance is lifelong, not beginner-level"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_02", "scene_05"],
+      "hook": "If a punch has no power, don't check the hands. Check the feet.",
+      "cta": "The stance is everything. Learn it right."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "Everything Starts Here"},
+        {"time": "1:30", "title": "The Feet"},
+        {"time": "3:30", "title": "Weight Distribution"},
+        {"time": "5:00", "title": "Why Cuban Stance is Upright"},
+        {"time": "6:30", "title": "The Instant Movement Test"},
+        {"time": "8:00", "title": "Why Pros Still Drill Stance"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "15s",
+      "sceneIds": ["scene_02", "scene_03"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "Why Stance Matters",
+        "Foot Placement: Width, Angle, Weight",
+        "The Cuban Upright Posture",
+        "The Instant Movement Test",
+        "Common Stance Errors"
+      ],
+      "diagrams": ["foot-placement-overhead", "weight-distribution-diagram", "upright-vs-crouch"],
+      "checkpoints": [
+        "Can you move any direction without adjusting first?",
+        "Is your rear heel floating or planted?",
+        "Are your knees bent or locked?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Don't correct hands in session 1 — get the feet right first. Guard is lesson 4.",
+        "Use the 'push test': gently push the student's shoulder. If they stumble, stance needs work.",
+        "Ask students to close their eyes in stance — if they sway, weight distribution is off"
+      ],
+      "regressions": [
+        "If a student can't hold stance, check shoes — some trainers have too much grip and hide bad weight distribution",
+        "Tall students tend to crouch — keep reminding: upright, not smaller"
+      ],
+      "observations": [
+        "Watch for students whose stance collapses the moment they throw a punch — they're moving from their arms, not their base"
+      ],
+      "progressionTo": "lesson-04-the-guard"
+    }
+  }
+}

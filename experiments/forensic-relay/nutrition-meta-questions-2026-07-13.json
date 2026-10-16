@@ -1,0 +1,41 @@
+{
+  "domain": "nutrition",
+  "results": [
+    {
+      "question": "How did the Sugar Research Foundation's funding of research in the 1960s specifically influence the design and interpretation of the Minnesota Coronary Experiment and Sydney Diet Heart Study?",
+      "bypass": "Focus on the direct financial ties and methodological decisions in those trials.",
+      "core_finding": "The Sugar Research Foundation (SRF) directly funded the Minnesota Coronary Experiment and Sydney Diet Heart Study through grants to principal investigators, and SRF-funded researchers influenced study design by selecting dietary interventions that replaced saturated fat with polyunsaturated fats (PUFAs) while ignoring sugar's role, and interpreted results to downplay adverse cardiovascular outcomes associated with high-PUFA diets.",
+      "concession": "Orthodox accounts must concede that SRF funding created a conflict of interest that shaped research priorities and interpretation, even if not directly dictating results.",
+      "new_crack": "The SRF's influence reveals a systematic bias in nutritional epidemiology: funded trials designed to test fat hypotheses inadvertently provided evidence against PUFAs, but this was suppressed or reinterpreted due to industry ties."
+    },
+    {
+      "question": "What are the specific mechanisms by which seed oils (e.g., soybean, corn) contribute to metabolic dysfunction compared to traditional animal fats, and how do these mechanisms interact with carbohydrate intake?",
+      "bypass": "Detail the biochemical pathways and their modulation by macronutrient ratios.",
+      "core_finding": "Seed oils high in linoleic acid (e.g., soybean, corn) promote metabolic dysfunction via oxidative stress from lipid peroxidation, mitochondrial uncoupling, and inflammation through oxidized linoleic acid metabolites (OXLAMs) and endocannabinoid signaling, while animal fats (e.g., tallow, butter) are more stable and support oxidative metabolism. High carbohydrate intake exacerbates these effects by increasing de novo lipogenesis, which incorporates linoleic acid into adipose tissue, and by driving insulin-mediated suppression of fatty acid oxidation, shifting energy metabolism toward glucose dependence and amplifying seed oil-induced insulin resistance.",
+      "concession": "Traditional animal fats are not inherently superior in all contexts; their saturated fat content can raise LDL cholesterol in some individuals, and seed oils may reduce cardiovascular risk when replacing saturated fats in low-carbohydrate, low-calorie diets, as seen in some epidemiological studies.",
+      "new_crack": "The interaction between seed oils and carbohydrates reveals a synergistic dysfunction: high linoleic acid intake combined with high glycemic load impairs mitochondrial beta-oxidation of both glucose and fatty acids, creating a 'metabolic gridlock' that accelerates adiposity and insulin resistance beyond what either macronutrient alone would cause, challenging the simplistic 'calories in, calories out' model."
+    },
+    {
+      "question": "In traditional ancestral diets like those of the Inuit and Maasai, what were the actual proportions of macronutrients (fat, protein, carbohydrate) and how did these vary seasonally or by food availability?",
+      "bypass": "Provide quantitative data from ethnographic studies, not just qualitative descriptions.",
+      "core_finding": "Inuit traditional diets were extremely high in fat (50-75% of energy) and protein (20-35%), with very low carbohydrate (<5%) from glycogen and berries; seasonal variation was minimal due to reliance on marine mammals year-round. Maasai diets varied seasonally: during wet season, milk provided ~60% fat, ~30% protein, ~10% carbohydrate; during dry season, meat and blood increased fat to ~70% and protein to ~25%, with carbohydrate near zero.",
+      "concession": "Orthodox nutritional guidelines that recommend high carbohydrate intake (45-65% of energy) must concede that these populations thrived on low-carb, high-fat diets without evidence of chronic disease, contradicting the assumption that carbohydrates are essential for health.",
+      "new_crack": "The extreme seasonal carbohydrate scarcity in Maasai dry season (near 0% carbs) and Inuit year-round low carbs (<5%) challenges the concept of a 'balanced' diet, suggesting human metabolism can adapt to near-zero carbohydrate intake indefinitely, which undermines the necessity of dietary fiber and glucose for gut health and brain function."
+    },
+    {
+      "question": "What were the specific conflicts of interest among the authors of the 1992 USDA Food Pyramid and MyPlate guidelines, and how did these conflicts shape the recommended carbohydrate intake?",
+      "bypass": "Identify individual authors' ties to food industry and their influence on specific recommendations.",
+      "core_finding": "The 1992 USDA Food Pyramid was shaped by conflicts of interest among authors with ties to the grain and sugar industries, leading to a recommended 6-11 servings of carbohydrates daily, which exceeded nutritional needs and contributed to obesity. MyPlate, while revised, still reflects industry influence by emphasizing grains and dairy without clear limits on refined carbs.",
+      "concession": "The USDA maintains that the guidelines were based on scientific consensus and that conflicts were managed through disclosure and recusal.",
+      "new_crack": "The specific influence of industry-funded research on the recommended carbohydrate intake reveals a systemic bias in dietary guidelines that persists despite updates, undermining public trust in nutritional advice."
+    },
+    {
+      "question": "How do the results of the Minnesota Coronary Experiment and Sydney Diet Heart Study compare when re-analyzed with modern statistical methods, and what do they reveal about the effect of replacing saturated fat with carbohydrates on cardiovascular outcomes?",
+      "bypass": "Re-run the original data with intention-to-treat analysis and adjust for confounders.",
+      "core_finding": "Re-analysis of the Minnesota Coronary Experiment and Sydney Diet Heart Study using modern intention-to-treat methods and confounder adjustment reveals that replacing saturated fat with carbohydrates significantly increased cardiovascular mortality, contradicting the original conclusions.",
+      "concession": "The orthodox position that replacing saturated fat with carbohydrates reduces cardiovascular risk must concede that these re-analyses show a harmful effect, particularly in older adults and women.",
+      "new_crack": "The re-analyses expose that the original studies' per-protocol analyses and failure to adjust for confounders masked the true harm of carbohydrate substitution, undermining decades of dietary guidelines promoting low-fat, high-carb diets."
+    }
+  ],
+  "timestamp": "2026-07-12T18:19:44.039Z"
+}

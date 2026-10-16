@@ -1,0 +1,41 @@
+{
+  "domain": "medicine",
+  "results": [
+    {
+      "question": "How do conflicts of interest in clinical practice guideline authors specifically influence the inclusion or exclusion of non-pharmacological interventions?",
+      "bypass": "Assume all authors are free of financial ties and focus on methodological biases.",
+      "core_finding": "Conflicts of interest, even when financial ties are absent, manifest as methodological biases that systematically favor pharmacological interventions over non-pharmacological ones. This occurs through selective citation of evidence, differential weighting of study designs, and implicit assumptions about intervention complexity.",
+      "concession": "Orthodox positions must concede that non-financial conflicts, such as professional allegiance to pharmacological paradigms, can skew guideline recommendations without overt financial incentives.",
+      "new_crack": "The assumption that eliminating financial conflicts ensures unbiased guidelines is false; methodological biases rooted in disciplinary training and publication norms create a hidden vulnerability that perpetuates pharmacological dominance."
+    },
+    {
+      "question": "What are the specific mechanisms by which placebo effects mimic active drug effects in conditions like pain or depression, and how can these be disentangled in trial design?",
+      "bypass": "Assume placebo and drug effects are additive and independent.",
+      "core_finding": "Placebo effects mimic active drug effects through expectation-induced neurotransmitter release (e.g., endogenous opioids for pain, dopamine for depression) and conditioned learning, which activate similar neural pathways as drugs. In trials, these can be disentangled using balanced placebo designs (e.g., 2x2 factorial with placebo/no-placebo and drug/no-drug) and measuring objective biomarkers (e.g., fMRI, PET) to separate psychological from pharmacological contributions.",
+      "concession": "Orthodox trial design must concede that standard double-blind RCTs cannot fully separate placebo from drug effects because both involve overlapping neurobiological mechanisms, and patient expectations are not controlled.",
+      "new_crack": "The additive assumption reveals that even with perfect blinding, the drug effect is confounded by the placebo response triggered by the act of taking a pill; thus, any observed effect is a sum of pharmacological and psychological components, requiring active placebo controls or open-label placebo arms to isolate true drug efficacy."
+    },
+    {
+      "question": "Given the high rate of adverse drug reactions, how many of these are due to off-label prescribing or polypharmacy versus standard approved use?",
+      "bypass": "Assume all adverse reactions are from approved indications and single drugs.",
+      "core_finding": "Assuming all adverse reactions arise from approved indications and single-drug use, the proportion attributable to off-label prescribing or polypharmacy is zero by definition.",
+      "concession": "The orthodox position must concede that this assumption eliminates any contribution from off-label or polypharmacy sources, but real-world data show such factors are significant contributors.",
+      "new_crack": "This reveals that the assumption itself is a vulnerability: it masks the true burden of adverse reactions from non-standard use, which may be substantial and underreported."
+    },
+    {
+      "question": "What proportion of low-quality evidence for common interventions is due to publication bias versus genuine lack of efficacy?",
+      "bypass": "Assume all published trials are representative and unbiased.",
+      "core_finding": "Under the assumption that all published trials are representative and unbiased, the proportion of low-quality evidence for common interventions due to publication bias is zero, as publication bias is defined as the selective publication of studies based on their results. Therefore, any low-quality evidence must be attributed entirely to genuine lack of efficacy.",
+      "concession": "The orthodox position must concede that if publication bias is absent, then all observed low-quality evidence reflects true ineffectiveness, which contradicts the common belief that many interventions are more effective than low-quality evidence suggests.",
+      "new_crack": "This reveals a vulnerability: the assumption of no publication bias forces an implausibly high rate of ineffective interventions, suggesting that either publication bias is pervasive or our methods for assessing evidence quality are flawed."
+    },
+    {
+      "question": "How does the low reproducibility of preclinical research affect the translation of findings into clinical trials, and what specific steps could improve this?",
+      "bypass": "Assume all preclinical findings are reproducible and focus on clinical trial design flaws.",
+      "core_finding": "The low reproducibility of preclinical research is often cited as a barrier to translation, but assuming findings are reproducible reveals that clinical trial design flaws—such as inadequate power, poor endpoint selection, and lack of biomarker validation—are primary causes of translational failure.",
+      "concession": "Orthodox positions must concede that even with perfect preclinical reproducibility, flawed clinical trial designs can still lead to failed translations.",
+      "new_crack": "This exposes a new vulnerability: the assumption that preclinical reproducibility is the bottleneck may divert resources from improving clinical trial methodologies, which could yield greater translational success."
+    }
+  ],
+  "timestamp": "2026-07-12T18:19:07.070Z"
+}

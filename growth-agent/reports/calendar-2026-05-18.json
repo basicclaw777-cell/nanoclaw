@@ -1,16 +1,16 @@
 {
   "week": "2026-05-18",
-  "generated": "2026-05-14T12:56:50.903Z",
+  "generated": "2026-05-15T06:22:13.256Z",
   "principle": "Test range",
   "featuredBlock": {
-    "num": 10,
-    "name": "Arena"
+    "num": 9,
+    "name": "Control"
   },
   "posts": [
     {
       "day": "Monday",
       "type": "reel",
-      "topic": "Block 10 drill breakdown",
+      "topic": "Block 9 drill breakdown",
       "angle": "Start the week with fundamentals",
       "visual": "Reed pro_photo: clean technique demo",
       "template": "technique_reel",
@@ -19,8 +19,8 @@
         "#BasicReflex",
         "#BoxingHK",
         "#CubanBoxing",
-        "#HongKongBoxing",
-        "#BoxingLife"
+        "#BoxingIsTherapy",
+        "#PadWork"
       ],
       "status": "planned"
     },
@@ -36,25 +36,42 @@
         "#BasicReflex",
         "#BoxingHK",
         "#CubanBoxing",
-        "#BoxingGym",
-        "#BoxingTraining"
+        "#SheungWan",
+        "#FootworkMatters"
       ],
       "status": "planned"
     },
     {
       "day": "Wednesday",
-      "type": "post",
-      "topic": "\"Test range...\"",
-      "angle": "Weekly principle — surface layer only",
-      "visual": "Text overlay on gym atmosphere shot",
-      "template": "quick_post",
+      "type": "reel",
+      "template": "maya_asks",
+      "topic": "Maya Asks: The pinnacle of combat skill is the choice to not use it",
+      "angle": "What's the difference between fighting for something and just fighting? — Paul answers with his take, then cut to Fearless",
+      "visual": "ACT 1: Maya question as text on dark screen with gym ambient sound (3s). ACT 2: Coach Paul answers on camera — gym setting, natural, 30-60s. ACT 3: Cut to clip from \"Fearless\" (film) — Huo Yuanjia refusing to fight in the final round — the highest level is choosing peace. ACT 4: Principle text overlay on black: \"The pinnacle of combat skill is the choice to not use it.\"",
       "cta": "Save this for your next session",
+      "maya_question": "What's the difference between fighting for something and just fighting?",
+      "paul_answer_angle": "Fighting for pride nearly destroyed him. Fighting for others redeemed him. The highest level of martial arts is knowing when NOT to fight.",
+      "screening_ref": {
+        "title": "Fearless",
+        "type": "film",
+        "artist": null,
+        "principle": "The pinnacle of combat skill is the choice to not use it.",
+        "scene_to_cut": "Huo Yuanjia refusing to fight in the final round — the highest level is choosing peace",
+        "blocks": [
+          9,
+          10
+        ],
+        "themes": [
+          "redemption",
+          "purpose"
+        ]
+      },
       "hashtags": [
         "#BasicReflex",
         "#BoxingHK",
         "#CubanBoxing",
-        "#BoxingTraining",
-        "#LearnToBox"
+        "#LearnToBox",
+        "#HKFitness"
       ],
       "status": "planned"
     },
@@ -70,8 +87,8 @@
         "#BasicReflex",
         "#BoxingHK",
         "#CubanBoxing",
-        "#HongKongBoxing",
-        "#BoxingGym"
+        "#BoxingTraining",
+        "#DefenceFirst"
       ],
       "status": "planned"
     },
@@ -88,7 +105,7 @@
         "#BoxingHK",
         "#CubanBoxing",
         "#SheungWan",
-        "#PadWork"
+        "#FootworkMatters"
       ],
       "status": "planned"
     }

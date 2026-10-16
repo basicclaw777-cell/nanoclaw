@@ -1,0 +1,74 @@
+{
+  "people_detected": 1,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F2",
+      "time": "0.0s-0.3s",
+      "observations": {
+        "footwork": "Stance held, feet planted in a fixed orthodox position.",
+        "stance_width": "normal",
+        "guard": "Left hand extended forward, right hand held high near the chin.",
+        "upper_body": "Slight forward lean, torso rotated slightly to the right.",
+        "distance": "N/A (solo drilling)",
+        "notable": "Left arm fully extended, appearing to be the conclusion of a jab or a lead-hand probe."
+      }
+    },
+    {
+      "frames": "F2-F8",
+      "time": "0.3s-2.3s",
+      "observations": {
+        "footwork": "Feet remain planted, no visible stepping or pivoting.",
+        "stance_width": "normal",
+        "guard": "Both hands held up in a high guard, fists near the chin.",
+        "upper_body": "Upright, slightly bladed posture maintained.",
+        "distance": "N/A (solo drilling)",
+        "notable": "Minimal movement; boxer holds position, likely between strikes or during a brief pause."
+      }
+    },
+    {
+      "frames": "F9",
+      "time": "2.7s",
+      "observations": {
+        "footwork": "Feet planted, weight shifted forward.",
+        "stance_width": "normal",
+        "guard": "Right hand fully extended forward, left hand pulled back to the chin.",
+        "upper_body": "Torso rotated sharply to the left, throwing a rear straight (cross).",
+        "distance": "N/A (solo drilling)",
+        "notable": "A distinct punch extension: the rear hand (right) is thrown straight out. Lead hand retracts to guard."
+      }
+    },
+    {
+      "frames": "F10-F15",
+      "time": "3.0s-4.7s",
+      "observations": {
+        "footwork": "Feet still planted in the same stance.",
+        "stance_width": "normal",
+        "guard": "Both hands returned to a high guard position.",
+        "upper_body": "Stance re-established, torso squared back to the pre-punch position.",
+        "distance": "N/A (solo drilling)",
+        "notable": "The boxer has recovered from the punch and is holding the guard again."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1",
+      "type": "punch_recovery",
+      "detail": "Left hand is extended, suggesting a jab at its full extension or beginning its retraction back to guard."
+    },
+    {
+      "frames": "F9",
+      "type": "punch_extension",
+      "detail": "Right cross is fully extended, with torso rotation driving the rear hand forward."
+    },
+    {
+      "frames": "F10",
+      "type": "punch_recovery",
+      "detail": "The right hand retracts to the guard position after the punch."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

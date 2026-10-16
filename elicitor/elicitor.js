@@ -65,8 +65,9 @@ const CATH_STATE = path.join(HOME, 'Cathedral/cath-state.json');
 const SPRINT_PLAN = path.join(NANOCLAW, 'reed/sprint-plan.json');
 const IN_PROGRESS = path.join(NANOCLAW, 'in-progress-index.json');
 
+const { llmCall } = require(path.join(HOME, 'Cathedral', 'emergence', 'llm-fallback'));
+
 // ── config / budget caps (SI-31) ──────────────────────────────────────────────
-const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
 const GOLD_BAR = 8;              // score >= 8 (out of 10) = an A (genuinely worth acting on)
 // RANKED BRIEF (Paul's correction 2026-06-03): no longer a silent hard gate that hides
 // everything below 8. Paul has strong taste and filters himself — he wants the COLLECTION
@@ -242,35 +243,15 @@ function gatherContext() {
 
 // ── DeepSeek call (budget-aware) ────────────────────────────────────────────────
 async function callDeepSeek(systemPrompt, userMessage, { temperature = 0.4, maxTokens = 2000, json = false } = {}) {
-  const apiKey = process.env.DEEPSEEK_API_KEY;
-  if (!apiKey) throw new Error('DEEPSEEK_API_KEY not set');
-
   if (callsThisRun >= PER_RUN_CALL_CAP) {
-    throw new Error(`per-run DeepSeek call cap reached (${PER_RUN_CALL_CAP})`);
+    throw new Error(`per-run call cap reached (${PER_RUN_CALL_CAP})`);
   }
   callsThisRun++;
 
-  const body = {
-    model: 'deepseek-chat',
-    temperature,
-    max_tokens: maxTokens,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userMessage },
-    ],
-  };
-  if (json) body.response_format = { type: 'json_object' };
-
-  const resp = await fetch(DEEPSEEK_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify(body),
-  });
-  const data = await resp.json();
-  if (!data.choices?.[0]?.message?.content) {
-    throw new Error(`DeepSeek error: ${JSON.stringify(data).slice(0, 300)}`);
-  }
-  return data.choices[0].message.content;
+  const { content, provider } = await llmCall(systemPrompt, userMessage, maxTokens);
+  if (!content) throw new Error('All LLM providers failed');
+  if (provider !== 'deepseek') console.log(`[elicitor] using ${provider} fallback`);
+  return content;
 }
 
 // ── 2. GENERATE STANDING QUESTIONS ──────────────────────────────────────────────

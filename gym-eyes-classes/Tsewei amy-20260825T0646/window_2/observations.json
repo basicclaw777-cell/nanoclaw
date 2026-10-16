@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "multiple",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Mover (left) steps right, pivots and turns. Holder (right) pivots slightly to track mover.",
+        "stance_width": "normal",
+        "guard": "Holder keeps hands up in guard. Mover's guard is lower while moving.",
+        "upper_body": "Mover rotates during pivot.",
+        "distance": "close",
+        "notable": "Heavy bag on the left side, unused."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Mover steps back left, then shifts right, bouncing.",
+        "stance_width": "normal",
+        "guard": "Both maintain guard.",
+        "upper_body": "Light bouncing movement.",
+        "distance": "medium",
+        "notable": ""
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Mover steps right, pivots to face holder, then steps left.",
+        "stance_width": "normal",
+        "guard": "Guard maintained.",
+        "upper_body": "Mover squares up to holder.",
+        "distance": "close",
+        "notable": ""
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F3",
+      "type": "step",
+      "detail": "Mover steps laterally to the right."
+    },
+    {
+      "frames": "F3-F5",
+      "type": "pivot",
+      "detail": "Mover turns away from holder."
+    },
+    {
+      "frames": "F6-F8",
+      "type": "step",
+      "detail": "Mover resets position back to the left."
+    },
+    {
+      "frames": "F12-F14",
+      "type": "pivot",
+      "detail": "Mover pivots back to face the holder."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

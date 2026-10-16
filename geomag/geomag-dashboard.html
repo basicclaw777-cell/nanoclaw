@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geomagnetic Prediction Engine</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --text: #e0e0e8;
+    --muted: #6b6b80;
+    --blue: #378ADD;
+    --green: #1D9E75;
+    --red: #ef4444;
+    --amber: #EF9F27;
+    --purple: #534AB7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Share Tech Mono', 'SF Mono', monospace; background: var(--bg); color: var(--text); padding: 20px; }
+  h1 { font-size: 1.1rem; color: var(--blue); margin-bottom: 16px; letter-spacing: 2px; }
+  h2 { font-size: 0.9rem; color: var(--muted); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+  .card-title { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .big-number { font-size: 2rem; font-weight: bold; }
+  .label { font-size: 0.7rem; color: var(--muted); }
+  .quiet { color: var(--green); }
+  .unsettled { color: var(--amber); }
+  .active { color: var(--amber); }
+  .severe { color: var(--red); }
+  .extreme { color: var(--red); }
+  .strategy-row { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .strategy-row:last-child { border-bottom: none; }
+  .strategy-name { flex: 1; font-size: 0.85rem; }
+  .strategy-value { width: 60px; text-align: right; font-weight: bold; }
+  .strategy-conf { width: 50px; text-align: right; color: var(--muted); font-size: 0.8rem; }
+  .bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  .meter { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .meter-label { width: 80px; font-size: 0.75rem; color: var(--muted); }
+  .meter-bar { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 4px; }
+  .meter-value { width: 60px; text-align: right; font-size: 0.8rem; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--amber); }
+  .dot-red { background: var(--red); }
+  .timestamp { color: var(--muted); font-size: 0.7rem; margin-top: 12px; }
+  .refresh-btn { background: var(--surface); border: 1px solid var(--border); color: var(--blue); padding: 6px 14px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 0.8rem; }
+  .refresh-btn:hover { border-color: var(--blue); }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<h1>GEOMAGNETIC PREDICTION ENGINE</h1>
+
+<div class="grid" id="overview">
+  <div class="card">
+    <div class="card-title">Activity Level</div>
+    <div class="big-number" id="activity-level">—</div>
+    <div class="bar"><div class="bar-fill" id="activity-bar" style="width:0; background:var(--green)"></div></div>
+    <div class="label" id="activity-score">—/10</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Dst Index</div>
+    <div class="big-number" id="dst-value">—</div>
+    <div class="label" id="dst-storm">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Kp Index</div>
+    <div class="big-number" id="kp-value">—</div>
+    <div class="label" id="kp-storm">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">IMF Bz</div>
+    <div class="big-number" id="bz-value">—</div>
+    <div class="label" id="bz-detail">—</div>
+  </div>
+</div>
+
+<h2>Space Weather Meters</h2>
+<div class="card" style="margin-bottom: 20px">
+  <div class="meter">
+    <div class="meter-label">Solar Wind</div>
+    <div class="meter-bar"><div class="meter-fill" id="sw-bar" style="width:0; background:var(--blue)"></div></div>
+    <div class="meter-value" id="sw-value">—</div>
+  </div>
+  <div class="meter">
+    <div class="meter-label">Density</div>
+    <div class="meter-bar"><div class="meter-fill" id="density-bar" style="width:0; background:var(--purple)"></div></div>
+    <div class="meter-value" id="density-value">—</div>
+  </div>
+  <div class="meter">
+    <div class="meter-label">X-ray</div>
+    <div class="meter-bar"><div class="meter-fill" id="xray-bar" style="width:0; background:var(--amber)"></div></div>
+    <div class="meter-value" id="xray-value">—</div>
+  </div>
+  <div class="meter">
+    <div class="meter-label">Southward Bz</div>
+    <div class="meter-bar"><div class="meter-fill" id="southward-bar" style="width:0; background:var(--red)"></div></div>
+    <div class="meter-value" id="southward-value">—</div>
+  </div>
+</div>
+
+<h2>Strategy Predictions (Dst @ +6h)</h2>
+<div class="card" id="strategies">
+  <div style="color:var(--muted); font-size: 0.8rem">Loading...</div>
+</div>
+
+<h2>Tidal Context</h2>
+<div class="card" id="tidal">
+  <div style="color:var(--muted); font-size: 0.8rem">Loading...</div>
+</div>
+
+<div style="margin-top: 16px; display: flex; align-items: center; gap: 12px;">
+  <button class="refresh-btn" onclick="loadData()">REFRESH</button>
+  <span class="timestamp" id="last-update">—</span>
+</div>
+
+<script>
+async function loadData() {
+  try {
+    const res = await fetch('/geomag/data');
+    const data = await res.json();
+    render(data);
+  } catch (e) {
+    console.error('Load failed:', e);
+  }
+}
+
+function render(d) {
+  if (!d || !d.spaceWeather) return;
+  const sw = d.spaceWeather;
+
+  // Activity
+  const al = document.getElementById('activity-level');
+  al.textContent = sw.activity.level;
+  al.className = 'big-number ' + sw.activity.level.toLowerCase().replace(/[^a-z]/g, '');
+  document.getElementById('activity-score').textContent = sw.activity.score.toFixed(1) + '/10';
+  const bar = document.getElementById('activity-bar');
+  bar.style.width = (sw.activity.score * 10) + '%';
+  bar.style.background = sw.activity.score > 5 ? 'var(--red)' : sw.activity.score > 2 ? 'var(--amber)' : 'var(--green)';
+
+  // Dst
+  if (sw.dst) {
+    document.getElementById('dst-value').textContent = sw.dst.latest.dst + 'nT';
+    document.getElementById('dst-storm').textContent = sw.dst.stormLevel;
+  }
+
+  // Kp
+  if (sw.kp) {
+    document.getElementById('kp-value').textContent = sw.kp.latest.kp.toFixed(1);
+    document.getElementById('kp-storm').textContent = sw.kp.stormLevel;
+  }
+
+  // Bz
+  if (sw.mag) {
+    document.getElementById('bz-value').textContent = sw.mag.latest.bz.toFixed(1) + 'nT';
+    document.getElementById('bz-detail').textContent = `Bt: ${sw.mag.latest.bt.toFixed(1)}nT | ${sw.mag.southwardMinutes.toFixed(0)}min southward`;
+    document.getElementById('southward-bar').style.width = Math.min(sw.mag.southwardMinutes / 120 * 100, 100) + '%';
+    document.getElementById('southward-value').textContent = sw.mag.southwardMinutes.toFixed(0) + 'min';
+  }
+
+  // Meters
+  if (sw.plasma) {
+    const pct = Math.min((sw.plasma.latest.speed - 300) / 500 * 100, 100);
+    document.getElementById('sw-bar').style.width = Math.max(pct, 0) + '%';
+    document.getElementById('sw-value').textContent = sw.plasma.latest.speed.toFixed(0) + 'km/s';
+    const dpct = Math.min(sw.plasma.latest.density / 20 * 100, 100);
+    document.getElementById('density-bar').style.width = Math.max(dpct, 0) + '%';
+    document.getElementById('density-value').textContent = sw.plasma.latest.density.toFixed(1) + '/cm³';
+  }
+  if (sw.xray) {
+    document.getElementById('xray-value').textContent = sw.xray.latest.class;
+    const flux = sw.xray.latest.flux || 0;
+    const xpct = Math.min(Math.log10(flux / 1e-8) / 5 * 100, 100);
+    document.getElementById('xray-bar').style.width = Math.max(xpct, 0) + '%';
+  }
+
+  // Strategies
+  if (d.predictions && d.predictions.length) {
+    const el = document.getElementById('strategies');
+    el.innerHTML = d.predictions.sort((a,b) => a.predictions.h6 - b.predictions.h6).map(p => {
+      const color = p.predictions.h6 < sw.dst.latest.dst - 10 ? 'var(--red)' :
+                    p.predictions.h6 > sw.dst.latest.dst + 5 ? 'var(--green)' : 'var(--amber)';
+      return `<div class="strategy-row">
+        <span class="status-dot" style="background:${color}"></span>
+        <span class="strategy-name">${p.strategy}</span>
+        <span class="strategy-value" style="color:${color}">${p.predictions.h6}nT</span>
+        <span class="strategy-value">${p.predictions.h12 ?? '—'}nT</span>
+        <span class="strategy-value">${p.predictions.h24 ?? '—'}nT</span>
+        <span class="strategy-conf">${(p.confidence*100).toFixed(0)}%</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Tidal
+  const tidal = d.predictions?.find(p => p.strategyId === 'planetary_tidal');
+  if (tidal && tidal.tidalData) {
+    const td = tidal.tidalData;
+    document.getElementById('tidal').innerHTML = `
+      <div class="meter">
+        <div class="meter-label">Stress Now</div>
+        <div class="meter-bar"><div class="meter-fill" style="width:${td.currentStress.normalized*100}%; background:var(--purple)"></div></div>
+        <div class="meter-value">${td.currentStress.normalized.toFixed(2)}</div>
+      </div>
+      <div class="meter">
+        <div class="meter-label">48h Ago</div>
+        <div class="meter-bar"><div class="meter-fill" style="width:${td.past48h.normalized*100}%; background:var(--blue)"></div></div>
+        <div class="meter-value">${td.past48h.normalized.toFixed(2)}</div>
+      </div>
+      <div class="meter">
+        <div class="meter-label">Storm Prime</div>
+        <div class="meter-bar"><div class="meter-fill" style="width:${td.launchedStormProbability*100}%; background:${td.launchedStormProbability > 0.7 ? 'var(--red)' : 'var(--amber)'}"></div></div>
+        <div class="meter-value">${td.launchedStormProbability.toFixed(2)}</div>
+      </div>
+      ${td.currentStress.alignment ? '<div style="margin-top:8px; color:var(--amber)">ALIGNMENT: ' + td.currentStress.alignedPlanets.join(' + ') + '</div>' : ''}
+    `;
+  }
+
+  document.getElementById('last-update').textContent = 'Updated: ' + new Date(d.timestamp).toLocaleString();
+}
+
+loadData();
+setInterval(loadData, 120000); // refresh every 2 min
+</script>
+</body>
+</html>

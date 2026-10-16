@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "White boxer stationary in orthodox stance, black trainer moving minimally at the left edge of frame.",
+        "stance_width": "normal",
+        "guard": "White boxer has hands held up near the chin.",
+        "upper_body": "White boxer is in a ready posture, facing forward.",
+        "distance": "Long",
+        "notable": "Black trainer is holding a green stick or long pad off to the side."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Black trainer steps into the center frame, moving towards the white boxer. White boxer begins weight shifts.",
+        "stance_width": "normal",
+        "guard": "White boxer maintains a high guard while moving.",
+        "upper_body": "White boxer turns slightly to the right, addressing the incoming trainer.",
+        "distance": "Closing",
+        "notable": "Black trainer enters the center of the frame, bringing the pad into play."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Boxers are in close proximity, taking small shuffling steps to maintain balance.",
+        "stance_width": "normal",
+        "guard": "Both fighters have hands up in an engaged position.",
+        "upper_body": "White boxer throws straight punches towards the green pad held by the black trainer.",
+        "distance": "Close",
+        "notable": "Padwork exchange occurs at close range."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F8",
+      "type": "distance_close",
+      "detail": "Black trainer steps in from the left, closing the distance toward the white boxer."
+    },
+    {
+      "frames": "F11-F13",
+      "type": "punch_extension",
+      "detail": "White boxer extends arms and throws straight punches at the trainer's pad."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "punch_recovery",
+      "detail": "White boxer retracts arms and resets to guard position."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

@@ -1,0 +1,177 @@
+{
+  "id": "lesson-08",
+  "position": 8,
+  "title": "The Hook",
+  "subtitle": "The most misunderstood punch in boxing",
+  "slug": "the-hook",
+
+  "curriculum": {
+    "blocks": [3, 4],
+    "pillars": ["skill"],
+    "domains": ["combos"],
+    "engines": {
+      "body": "Horizontal rotation, elbow angle, torso as the engine, short-range power generation",
+      "mind": "Understanding range context — the hook exists INSIDE jab-cross range",
+      "emotion": "The punch that feels wrong at first — building trust in a different mechanic"
+    }
+  },
+
+  "audience": {
+    "level": "beginner",
+    "hook": "Everyone thinks they can throw a hook. Almost nobody throws it right.",
+    "question": "Why is the hook the hardest basic punch to learn?"
+  },
+
+  "core": {
+    "thesis": "The hook is boxing's short-range weapon — it travels a different path, uses a different rotation, and works at a different distance. It's the most misunderstood punch because it breaks every habit the jab and cross built.",
+    "keyPoints": [
+      "Different path: the hook travels horizontally, not straight. It comes from the side.",
+      "Elbow angle: approximately 90 degrees. Too tight = no reach. Too wide = arm punch, no power.",
+      "The torso rotates — same chain as the cross, but the rotation is lateral, not linear",
+      "Short range: the hook works INSIDE jab-cross distance. You have to be closer.",
+      "Lead hook vs rear hook: lead hook is faster, rear hook has more body mass behind it",
+      "The hook to the body: same mechanics, lower target. Changes the opponent's breathing.",
+      "Why it's misunderstood: the jab and cross go straight. The hook breaks that pattern. Students instinctively want to extend their arm.",
+      "The hook rewards patience — it lands when the opponent comes forward into your range"
+    ],
+    "commonMisconceptions": [
+      "Wider = more powerful — tighter, controlled arc = more power",
+      "The hook is a swinging punch — it's a rotation with a fixed arm angle",
+      "You wind up for the hook — the wind-up telegraphs it. The rotation IS the wind-up.",
+      "The hook is optional / advanced — it's fundamental. It completes the basic punch triangle: straight-straight-curve."
+    ],
+    "coachEye": {
+      "observe": "Watch the elbow angle at impact — is it locked at 90 degrees or is the arm extending?",
+      "compare": "Hook with feet planted vs hook with pivot — the pivot version has noticeably more pop",
+      "predict": "A student who swings wide will hit with the outside of the glove. No damage, wasted energy.",
+      "diagnose": "If the hook has no power, the student is arm-punching. Check: is the torso rotating or is only the arm moving?"
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["combos"],
+    "motions": ["rotate", "snap"],
+    "lines": ["solid", "thick"],
+    "diagnostics": ["gold-pulse", "red-flash"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "The Misunderstood Punch",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "Everyone thinks they can throw a hook. Swing your arm sideways, right? Wrong. The hook is the most technical punch in boxing's basic arsenal. And the most satisfying when you get it right.",
+      "components": ["CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Set expectations: this one is different"
+    },
+    {
+      "id": "scene_02",
+      "title": "A Different Path",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "The jab goes straight. The cross goes straight. The hook goes around. Different path, different range, different rotation. Your arm doesn't extend — it stays bent. The elbow locks at ninety degrees. The power comes from the torso, not the arm.",
+      "components": ["PunchTrajectory", "HipRotation", "CenterLine", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Hook mechanics — horizontal path, fixed elbow, torso rotation"
+    },
+    {
+      "id": "scene_03",
+      "title": "The Angle",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "Ninety degrees. That's the elbow angle. Too tight and you can't reach. Too wide and you're swinging — no power, no control, and your opponent sees it coming from across the room.",
+      "components": ["PunchTrajectory", "ForceVector", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Elbow angle — the 90-degree rule"
+    },
+    {
+      "id": "scene_04",
+      "title": "Inside Range",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "The hook lives inside jab-cross distance. You have to be closer. That means the hook is a mid-fight punch — it lands when the distance closes, when the opponent comes forward, when the straight punches have done their job.",
+      "components": ["DistanceBands", "PunchTrajectory", "FootworkGrid"],
+      "assets": [],
+      "learningObjective": "Range context — hook distance vs jab-cross distance"
+    },
+    {
+      "id": "scene_05",
+      "title": "Hook to the Body",
+      "duration": "20s",
+      "visualMode": "blueprint",
+      "narration": "Same punch. Lower target. The body hook changes the fight. It takes away breathing. It slows the legs. It makes the opponent think about two levels instead of one. And it opens the head.",
+      "components": ["PunchTrajectory", "ForceVector", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Body hook — same mechanics, different target, different effect"
+    },
+    {
+      "id": "scene_06",
+      "title": "The Triangle",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "Jab. Cross. Hook. Straight. Straight. Curve. That's the basic punch triangle. Three punches. Three paths. Every combination in boxing is built from these three.",
+      "components": ["PunchTrajectory", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "The punch triangle — complete basic toolkit"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_03", "scene_06"],
+      "hook": "Everyone thinks they can throw a hook. Almost nobody throws it right.",
+      "cta": "Three punches. Three paths. Learn them all."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "The Misunderstood Punch"},
+        {"time": "1:30", "title": "A Different Path"},
+        {"time": "3:00", "title": "The 90-Degree Rule"},
+        {"time": "4:30", "title": "Inside Range"},
+        {"time": "6:00", "title": "Hook to the Body"},
+        {"time": "7:30", "title": "The Punch Triangle"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "15s",
+      "sceneIds": ["scene_02", "scene_03"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "Why the Hook is Different",
+        "Mechanics: Elbow, Rotation, Path",
+        "The 90-Degree Rule",
+        "Hook to the Body",
+        "The Punch Triangle: Jab, Cross, Hook"
+      ],
+      "diagrams": ["hook-path-overhead", "elbow-angle-diagram", "punch-triangle", "hook-vs-swing"],
+      "checkpoints": [
+        "Is your elbow at 90 degrees at impact?",
+        "Is the power coming from your torso or your arm?",
+        "Can you throw the hook without winding up?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Students will want to extend the arm — 'arm stays bent, body does the work'",
+        "Drill the rotation without the punch first: hands on hips, rotate, feel the torque. Then add the arm.",
+        "The body hook is often easier to teach first — lower target removes the temptation to overreach"
+      ],
+      "regressions": [
+        "If the hook swings wide, put a pad close to the student's body. They have to arc tightly or miss the pad.",
+        "If there's no rotation, go back to the cross (lesson 7) — same rotational principle"
+      ],
+      "observations": [
+        "When a student lands a clean hook for the first time, you can see it in their face. That's the moment boxing clicks."
+      ],
+      "progressionTo": "lesson-09-basic-combinations"
+    }
+  }
+}

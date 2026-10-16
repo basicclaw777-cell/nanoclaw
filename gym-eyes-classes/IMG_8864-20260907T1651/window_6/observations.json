@@ -1,0 +1,55 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Both fighters in orthodox stance, stepping and pivoting; the fighter in black steps away after the final exchange.",
+        "stance_width": "normal",
+        "guard": "High guard, hands up by the face.",
+        "upper_body": "Padwork drill, the fighter in black throws combinations at focus mitts held by the fighter in white shorts.",
+        "distance": "Close, inside punching range.",
+        "notable": "Padwork session, then the pad holder leaves the frame."
+      }
+    },
+    {
+      "frames": "F6-F15",
+      "time": "1.7s-4.7s",
+      "observations": {
+        "footwork": "Solo fighter in orthodox stance, stepping laterally and pivoting around the heavy bag.",
+        "stance_width": "normal",
+        "guard": "Guard maintained, hands up.",
+        "upper_body": "Throwing punches at the heavy bag, bobbing and weaving.",
+        "distance": "N/A, solo movement around the heavy bag.",
+        "notable": "Heavy bag drill, moving in and out of range."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F3",
+      "type": "punch_extension",
+      "detail": "Punching combinations on focus mitts during padwork."
+    },
+    {
+      "frames": "F4-F5",
+      "type": "distance_open",
+      "detail": "Pad holder leaves frame, fighter moves towards the heavy bag area."
+    },
+    {
+      "frames": "F6-F10",
+      "type": "pivot",
+      "detail": "Pivoting and stepping around the heavy bag."
+    },
+    {
+      "frames": "F11-F15",
+      "type": "punch_preparation",
+      "detail": "Setting up punches and movement on the heavy bag."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

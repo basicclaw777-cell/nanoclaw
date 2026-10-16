@@ -1,0 +1,548 @@
+{
+  "mined_at": "2026-06-03T16:49:31.295Z",
+  "findings": [
+    {
+      "id": "hold-time-pattern",
+      "title": "SHORT-HOLD AND LONG-HOLD TRADES WIN — MIDDLE LOSES",
+      "grade": "B",
+      "finding": "<2.5 days: 11 trades, 55% win, $255.48. 2.5-6 days: 15 trades, 40% win, $-195.66. >6 days: 4 trades, 100% win, $135.31.",
+      "action": "Consider: (1) tighter stop-loss to cut losers faster (2-3 day max for losing positions), (2) wider take-profit for winners (let runners run), (3) add a time-based exit: if position is flat after 3 days, close it.",
+      "data": {
+        "shortHold": {
+          "n": 11,
+          "wins": 6,
+          "winPct": 55,
+          "pnl": 255.48
+        },
+        "medHold": {
+          "n": 15,
+          "wins": 6,
+          "winPct": 40,
+          "pnl": -195.66
+        },
+        "longHold": {
+          "n": 4,
+          "wins": 4,
+          "winPct": 100,
+          "pnl": 135.31
+        }
+      }
+    },
+    {
+      "id": "asset-performance",
+      "title": "ALTCOINS (ARB, SOL, AVAX) OUTPERFORM — ETH IS NET NEGATIVE",
+      "grade": "B",
+      "finding": "ARB: 3 trades, 2 wins, $149. SOL: 4 trades, 3 wins, $84.51. AVAX: 6 trades, 5 wins, $68.18. BTC: 8 trades, 3 wins, $11.03. LINK: 1 trades, 0 wins, $-51.4. ETH: 8 trades, 3 wins, $-66.2",
+      "action": "Consider: (1) increase position sizing on high-performing assets (ARB, SOL, AVAX), (2) reduce ETH exposure or require higher confluence for ETH trades, (3) add more altcoin targets (DOT, ATOM not yet traded despite signals).",
+      "data": {
+        "rows": [
+          {
+            "asset": "ARB",
+            "n": 3,
+            "wins": 2,
+            "pnl": 149
+          },
+          {
+            "asset": "SOL",
+            "n": 4,
+            "wins": 3,
+            "pnl": 84.51
+          },
+          {
+            "asset": "AVAX",
+            "n": 6,
+            "wins": 5,
+            "pnl": 68.18
+          },
+          {
+            "asset": "BTC",
+            "n": 8,
+            "wins": 3,
+            "pnl": 11.03
+          },
+          {
+            "asset": "LINK",
+            "n": 1,
+            "wins": 0,
+            "pnl": -51.4
+          },
+          {
+            "asset": "ETH",
+            "n": 8,
+            "wins": 3,
+            "pnl": -66.2
+          }
+        ],
+        "winners": [
+          {
+            "asset": "ARB",
+            "n": 3,
+            "wins": 2,
+            "pnl": 149
+          },
+          {
+            "asset": "SOL",
+            "n": 4,
+            "wins": 3,
+            "pnl": 84.51
+          },
+          {
+            "asset": "AVAX",
+            "n": 6,
+            "wins": 5,
+            "pnl": 68.18
+          },
+          {
+            "asset": "BTC",
+            "n": 8,
+            "wins": 3,
+            "pnl": 11.03
+          }
+        ],
+        "losers": [
+          {
+            "asset": "LINK",
+            "n": 1,
+            "wins": 0,
+            "pnl": -51.4
+          },
+          {
+            "asset": "ETH",
+            "n": 8,
+            "wins": 3,
+            "pnl": -66.2
+          }
+        ]
+      }
+    },
+    {
+      "id": "convergence-pairs",
+      "title": "TOP STRATEGY PAIRS BY AGREEMENT FREQUENCY",
+      "grade": "B",
+      "finding": "Top 10 convergence pairs: simpsons_temporal+simpsons_temporal (1848x), gann_geometry+historical_cycles (658x), historical_cycles+range_trader (618x), historical_cycles+historical_cycles (329x), gann_geometry+range_trader (303x), fibonacci_time+range_trader (169x), fibonacci_time+historical_cycles (166x), cymatics_schumann+fibonacci_time (112x), fibonacci_time+vortex_flow (65x), fibonacci_time+gann_geometry (64x). simpsons_temporal self-pairs 1848x but generates NO trades (debate kills them all). gann+historical (658x) is the strongest cross-strategy pair.",
+      "action": "gann+historical_cycles SHORT signals should get fast-tracked through debate (both have 100% short win rate). simpsons_temporal needs debate prompt fix most urgently — 1848 signals, 0 trades.",
+      "data": {
+        "topPairs": [
+          [
+            "simpsons_temporal+simpsons_temporal",
+            1848
+          ],
+          [
+            "gann_geometry+historical_cycles",
+            658
+          ],
+          [
+            "historical_cycles+range_trader",
+            618
+          ],
+          [
+            "historical_cycles+historical_cycles",
+            329
+          ],
+          [
+            "gann_geometry+range_trader",
+            303
+          ],
+          [
+            "fibonacci_time+range_trader",
+            169
+          ],
+          [
+            "fibonacci_time+historical_cycles",
+            166
+          ],
+          [
+            "cymatics_schumann+fibonacci_time",
+            112
+          ],
+          [
+            "fibonacci_time+vortex_flow",
+            65
+          ],
+          [
+            "fibonacci_time+gann_geometry",
+            64
+          ]
+        ]
+      }
+    },
+    {
+      "id": "missed-opportunities",
+      "title": "MASSIVE SIGNAL VOLUME ON UNTRADED ASSETS",
+      "grade": "B",
+      "finding": "Assets with signals but NEVER traded: DOT(123), ADA(2), ATOM(1). Stock tickers (QQQ/SPY/ARKK) getting signals but system only trades crypto — these signals are wasted. DOT has 123 signals and zero trades. LINK got 1 trade (a loss) from 133 signals.",
+      "action": "DOT should be added to active trading. Consider: the system generates signals for stocks (QQQ, SPY, ARKK) but can't trade them — either add stock paper trading or filter them out to stop wasting compute.",
+      "data": {
+        "missed": {
+          "SOL": 286,
+          "ARB": 179,
+          "BTC": 329,
+          "ETH": 329,
+          "AVAX": 191,
+          "LINK": 133,
+          "DOT": 123,
+          "QQQ": 308,
+          "SPY": 308,
+          "ARKK": 308,
+          "ADA": 2,
+          "ATOM": 1,
+          "UNI": 1
+        },
+        "doNotTraded": [
+          [
+            "DOT",
+            123
+          ],
+          [
+            "ADA",
+            2
+          ],
+          [
+            "ATOM",
+            1
+          ]
+        ],
+        "tradedAssets": [
+          "ARB",
+          "AVAX",
+          "BTC",
+          "ETH",
+          "LINK",
+          "SOL",
+          "UNI"
+        ]
+      }
+    },
+    {
+      "id": "best-callers",
+      "title": "STRATEGIES THAT CORRECTLY CALLED THE MOVE (META-WATCHER DATA)",
+      "grade": "B",
+      "finding": "Best callers: historical_cycles(9x), gann_geometry(6x), fibonacci_time(3x), range_trader(2x), vortex_flow(1x), cymatics_schumann(1x). historical_cycles called 9 moves correctly — highest of any strategy. gann_geometry called 6. These two should be weighted highest.",
+      "action": "Increase weight for historical_cycles and gann_geometry in config. These strategies call moves correctly even when the debate rejects them.",
+      "data": {
+        "callers": [
+          [
+            "historical_cycles",
+            9
+          ],
+          [
+            "gann_geometry",
+            6
+          ],
+          [
+            "fibonacci_time",
+            3
+          ],
+          [
+            "range_trader",
+            2
+          ],
+          [
+            "vortex_flow",
+            1
+          ],
+          [
+            "cymatics_schumann",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "counterfactual",
+      "title": "OPPOSITE TRADE WOULD HAVE WON 42% OF THE TIME",
+      "grade": "C",
+      "finding": "8/19 times (42%). This is EXPECTED in a trending market — when market trends down, long signals lose. The fix is not \"always go opposite\" but \"detect the regime and bias direction accordingly.\"",
+      "action": "Add regime detection: simple 7-day price trend. If BTC down >5% in 7 days, bias all signals toward short. If up >5%, bias long. The 100% short win rate is partly because we were in a bearish period.",
+      "data": {
+        "raw": "8/19 times (42%)"
+      }
+    },
+    {
+      "id": "direction-bias",
+      "title": "SHORT TRADES MASSIVELY OUTPERFORM LONGS",
+      "grade": "A",
+      "finding": "Shorts: 6 trades, 6/6 wins (100%), $286.4 total, $47.73 avg. Longs: 24 trades, 10/24 wins (42%), $-91.28 total, $-3.8 avg.",
+      "action": "INCREASE SHORT WEIGHT. Consider: (1) boost short signal multiplier 1.5x, (2) tighten long entry requirements (require 3+ confluence instead of 2), (3) add a bear-market-mode flag when overall market bias is bearish.",
+      "data": {
+        "long": {
+          "direction": "long",
+          "n": 24,
+          "wins": 10,
+          "pnl": -91.28,
+          "avg_pnl": -3.8
+        },
+        "short": {
+          "direction": "short",
+          "n": 6,
+          "wins": 6,
+          "pnl": 286.4,
+          "avg_pnl": 47.73
+        }
+      }
+    },
+    {
+      "id": "strategy-direction-edge",
+      "title": "STRATEGIES HAVE STRONG DIRECTIONAL BIAS",
+      "grade": "A",
+      "finding": "Short-side winners: historical_cycles ($68.72), range_trader ($61.41), vortex_flow ($55.02), options_flow ($50.64), gann_geometry ($50.62). Long-side losers: dca_baseline ($-24.8), historical_cycles ($-46.96), suppression_signal ($-50.91), lunar_cycles ($-68.98), range_trader ($-76.07). historical_cycles: SHORTS ONLY ($68.72 profit) — longs lose ($-46.96) | range_trader: SHORTS ONLY ($61.41 profit) — longs lose ($-76.07) | dca_baseline: only traded long (losing $-24.8) — NEVER TESTED SHORT | suppression_signal: only traded long (losing $-50.91) — NEVER TESTED SHORT | lunar_cycles: only traded long (losing $-68.98) — NEVER TESTED SHORT",
+      "action": "Wire direction-specific weights into config. historical_cycles should only SHORT. lunar_cycles and suppression_signal should be DISABLED for longs (0% win rate on long). range_trader longs disabled (0% win rate).",
+      "data": {
+        "byStrategy": {
+          "relative_strength": {
+            "long": {
+              "strategy": "relative_strength",
+              "direction": "long",
+              "n": 6,
+              "wins": 4,
+              "pnl": 152.25
+            }
+          },
+          "historical_cycles": {
+            "short": {
+              "strategy": "historical_cycles",
+              "direction": "short",
+              "n": 2,
+              "wins": 2,
+              "pnl": 68.72
+            },
+            "long": {
+              "strategy": "historical_cycles",
+              "direction": "long",
+              "n": 3,
+              "wins": 1,
+              "pnl": -46.96
+            }
+          },
+          "range_trader": {
+            "short": {
+              "strategy": "range_trader",
+              "direction": "short",
+              "n": 1,
+              "wins": 1,
+              "pnl": 61.41
+            },
+            "long": {
+              "strategy": "range_trader",
+              "direction": "long",
+              "n": 2,
+              "wins": 0,
+              "pnl": -76.07
+            }
+          },
+          "vortex_flow": {
+            "short": {
+              "strategy": "vortex_flow",
+              "direction": "short",
+              "n": 1,
+              "wins": 1,
+              "pnl": 55.02
+            },
+            "long": {
+              "strategy": "vortex_flow",
+              "direction": "long",
+              "n": 1,
+              "wins": 1,
+              "pnl": 18.81
+            }
+          },
+          "options_flow": {
+            "short": {
+              "strategy": "options_flow",
+              "direction": "short",
+              "n": 1,
+              "wins": 1,
+              "pnl": 50.64
+            }
+          },
+          "gann_geometry": {
+            "short": {
+              "strategy": "gann_geometry",
+              "direction": "short",
+              "n": 1,
+              "wins": 1,
+              "pnl": 50.62
+            }
+          },
+          "fibonacci_time": {
+            "long": {
+              "strategy": "fibonacci_time",
+              "direction": "long",
+              "n": 8,
+              "wins": 4,
+              "pnl": 5.38
+            }
+          },
+          "dca_baseline": {
+            "long": {
+              "strategy": "dca_baseline",
+              "direction": "long",
+              "n": 1,
+              "wins": 0,
+              "pnl": -24.8
+            }
+          },
+          "suppression_signal": {
+            "long": {
+              "strategy": "suppression_signal",
+              "direction": "long",
+              "n": 1,
+              "wins": 0,
+              "pnl": -50.91
+            }
+          },
+          "lunar_cycles": {
+            "long": {
+              "strategy": "lunar_cycles",
+              "direction": "long",
+              "n": 2,
+              "wins": 0,
+              "pnl": -68.98
+            }
+          }
+        },
+        "shortWinners": [
+          {
+            "strategy": "historical_cycles",
+            "direction": "short",
+            "n": 2,
+            "wins": 2,
+            "pnl": 68.72
+          },
+          {
+            "strategy": "range_trader",
+            "direction": "short",
+            "n": 1,
+            "wins": 1,
+            "pnl": 61.41
+          },
+          {
+            "strategy": "vortex_flow",
+            "direction": "short",
+            "n": 1,
+            "wins": 1,
+            "pnl": 55.02
+          },
+          {
+            "strategy": "options_flow",
+            "direction": "short",
+            "n": 1,
+            "wins": 1,
+            "pnl": 50.64
+          },
+          {
+            "strategy": "gann_geometry",
+            "direction": "short",
+            "n": 1,
+            "wins": 1,
+            "pnl": 50.62
+          }
+        ],
+        "longLosers": [
+          {
+            "strategy": "dca_baseline",
+            "direction": "long",
+            "n": 1,
+            "wins": 0,
+            "pnl": -24.8
+          },
+          {
+            "strategy": "historical_cycles",
+            "direction": "long",
+            "n": 3,
+            "wins": 1,
+            "pnl": -46.96
+          },
+          {
+            "strategy": "suppression_signal",
+            "direction": "long",
+            "n": 1,
+            "wins": 0,
+            "pnl": -50.91
+          },
+          {
+            "strategy": "lunar_cycles",
+            "direction": "long",
+            "n": 2,
+            "wins": 0,
+            "pnl": -68.98
+          },
+          {
+            "strategy": "range_trader",
+            "direction": "long",
+            "n": 2,
+            "wins": 0,
+            "pnl": -76.07
+          }
+        ]
+      }
+    },
+    {
+      "id": "debate-filter-analysis",
+      "title": "BULL-BEAR DEBATE REJECTS ~96% OF SIGNALS — MANY WITH \"PSEUDOSCIENCE\" REASONING",
+      "grade": "A",
+      "finding": "Total decisions: 2514. Bought: 154 (6%). Skipped: 2141 (85%). Of last 30 skips, 9 rejected as \"pseudoscientific\" — this is the debate model (hermes3) imposing its own worldview on Cathedral strategies like cymatics, lunar, gann. The debate was designed to filter BAD signals, but it's actually filtering CATHEDRAL signals based on mainstream bias.",
+      "action": "FIX THE DEBATE PROMPT. The bull-bear debate model must be told: \"These strategies are being tested empirically. Do NOT reject based on whether the underlying theory is mainstream. Judge ONLY on: signal strength, market conditions, risk/reward ratio, and confluence with other signals. The question is not WHETHER cymatics works — we are TESTING whether it works.\"",
+      "data": {
+        "total": 2514,
+        "bought": 154,
+        "skipped": 2141,
+        "pseudoscienceKills": 9
+      }
+    },
+    {
+      "id": "simpsons-black-hole",
+      "title": "SIMPSONS STRATEGY: 2156 SIGNALS, ZERO TRADES — TOTAL WASTE",
+      "grade": "A",
+      "finding": "simpsons_temporal generated 7 signals in the DB and ~2156 in watcher data. Trades executed: 0. Either the debate kills every single one, or the confluence filter blocks them. This is the largest signal generator producing ZERO output.",
+      "action": "DIAGNOSE: (1) Does simpsons_temporal ever achieve confluence with another strategy? Check convergence pairs. (2) If debate kills them, fix the debate prompt. (3) If no confluence, lower confluence requirement for simpsons or pair it with a complementary strategy. (4) If still zero trades after fix, REMOVE IT — it wastes compute.",
+      "data": {
+        "signalCount": 7,
+        "tradeCount": 0
+      }
+    },
+    {
+      "id": "cron-vs-manual",
+      "title": "MANUAL RESTARTS MASSIVELY OUTPERFORM SCHEDULED RUNS",
+      "grade": "A",
+      "finding": "manual_restart: 19 trades, 14 wins, $471.11. scheduled: 11 trades, 2 wins, $-275.99",
+      "action": "Scheduled cron runs (8am/8pm) are losing $276. Manual/restart runs profiting $471. Hypothesis: manual runs happen when market is moving (Paul restarts during action) while cron runs fire at arbitrary times. Consider: (1) add volatility gate — skip run if 24h volatility below threshold, (2) add event-triggered runs on large price moves, (3) increase run frequency during high-volatility periods.",
+      "data": {
+        "rows": [
+          {
+            "run_type": "manual_restart",
+            "n": 19,
+            "wins": 14,
+            "pnl": 471.11
+          },
+          {
+            "run_type": "scheduled",
+            "n": 11,
+            "wins": 2,
+            "pnl": -275.99
+          }
+        ]
+      }
+    },
+    {
+      "id": "promotion-bottleneck",
+      "title": "PROMOTION STATUS: WHAT NEEDS TO HAPPEN",
+      "grade": "A",
+      "finding": "Need 30 trades, have 30. Need 55.00000000000001% win rate, have 53.3%. Need 1.5 profit factor, have 1.44. Need 21 days, have 8. AT CURRENT RATE (~1 trade/day), need 0 more days just for trade count. Win rate (53.3%) is below target (55.00000000000001%). Fix the long bias problem first.",
+      "action": "To accelerate promotion: (1) Fix debate prompt to stop killing valid signals (biggest lever — could 3-5x trade frequency). (2) Bias toward shorts (100% WR). (3) Add volatility-triggered extra runs. (4) Time-based exits to free slots faster. Current pace: ~30 days to promotion. With fixes: could be 10-15 days.",
+      "data": {
+        "closedTrades": 30,
+        "winRate": 53.3,
+        "profitFactor": 1.44,
+        "daysSince": 8,
+        "rules": {
+          "min_trades": 30,
+          "min_win_rate": 0.55,
+          "min_profit_factor": 1.5,
+          "max_drawdown": 0.1,
+          "min_days": 21
+        }
+      }
+    }
+  ]
+}

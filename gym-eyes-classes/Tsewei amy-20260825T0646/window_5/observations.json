@@ -1,0 +1,87 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Fighter stays in stance, making small weight shifts while moving into pad range.",
+        "stance_width": "normal",
+        "guard": "Hands held high in boxing guard; right hand extends then returns to guard.",
+        "upper_body": "Torso rotates to drive a straight right hand toward the pad.",
+        "distance": "Close, at pad-work distance with both fighters maintaining contact range.",
+        "notable": "First punch sequence of the window."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Fighter adjusts feet slightly to reset position.",
+        "stance_width": "normal",
+        "guard": "Hands remain high in guard between strikes.",
+        "upper_body": "Fighter throws another straight punch, rotating the shoulders.",
+        "distance": "Close, in pad range.",
+        "notable": "Second punch sequence; includes load and extension."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Fighter maintains a stable stance.",
+        "stance_width": "normal",
+        "guard": "Guard is held up, with recovery back to position after punch.",
+        "upper_body": "Third punch thrown, followed by a return to neutral boxing stance.",
+        "distance": "Close pad distance.",
+        "notable": "Third and final punch in the window; ends in stance."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F2",
+      "type": "punch_extension",
+      "detail": "Right hand extends toward the pad."
+    },
+    {
+      "frames": "F3-F4",
+      "type": "punch_recovery",
+      "detail": "Hand retracts and guard is re-established."
+    },
+    {
+      "frames": "F6-F7",
+      "type": "punch_preparation",
+      "detail": "Fighter loads weight and prepares to strike."
+    },
+    {
+      "frames": "F7-F8",
+      "type": "punch_extension",
+      "detail": "Second straight punch reaches the pad."
+    },
+    {
+      "frames": "F9-F10",
+      "type": "punch_recovery",
+      "detail": "Punch retracts and stance resets."
+    },
+    {
+      "frames": "F11-F12",
+      "type": "punch_preparation",
+      "detail": "Fighter begins third punch, loading the rear hand."
+    },
+    {
+      "frames": "F12-F13",
+      "type": "punch_extension",
+      "detail": "Third punch extends toward the pad."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "punch_recovery",
+      "detail": "Punch retracts and guard returns to normal."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

@@ -1,0 +1,80 @@
+{
+  "generated": "2026-05-17T10:00:00.000Z",
+  "projects": {
+    "reed_visuals": {
+      "status": "production",
+      "owner": "reed",
+      "posts_this_week": 0,
+      "posts_this_month": 0,
+      "selection_rate": null,
+      "last_generation": null,
+      "style_experiments_running": 0,
+      "platforms": ["instagram", "telegram", "website"]
+    },
+    "maya_social": {
+      "status": "production",
+      "owner": "maya",
+      "posts_this_week": 0,
+      "posts_this_month": 0,
+      "engagement_rate": null,
+      "members_celebrated": 0,
+      "stories_this_week": 0,
+      "platforms": ["instagram", "stories", "reels"]
+    },
+    "ling_publishing": {
+      "status": "production",
+      "owner": "ling",
+      "articles_this_week": 0,
+      "articles_this_month": 0,
+      "avg_read_time": null,
+      "subscriber_growth": null,
+      "platforms": ["linkedin", "substack", "twitter"]
+    },
+    "build_cards": {
+      "status": "production",
+      "owner": "ling",
+      "secondary": ["reed", "maya"],
+      "cards_this_week": 0,
+      "cards_this_month": 0,
+      "platforms": ["linkedin", "twitter", "instagram"],
+      "description": "Cathedral/BR builds → shareable authority content"
+    },
+    "newsletter": {
+      "status": "production",
+      "owner": "ling",
+      "secondary": ["reed", "echo"],
+      "editions_this_month": 0,
+      "subscriber_count": 0,
+      "open_rate": null,
+      "platforms": ["substack", "email"],
+      "description": "Curated digest — LING writes, Reed visuals, Echo picks performers"
+    },
+    "capture_wishlist": {
+      "status": "production",
+      "owner": "reed",
+      "secondary": ["maya", "ling"],
+      "open_requests": 0,
+      "fulfilled_this_week": 0,
+      "platforms": ["internal"],
+      "description": "Studio tells Paul what to film/photograph — reverse flow"
+    },
+    "maya_internal": {
+      "status": "production",
+      "owner": "maya",
+      "secondary": [],
+      "posts_today": 0,
+      "total_posts": 0,
+      "active_participants": 0,
+      "platforms": ["internal"],
+      "description": "Internal Cathedral social feed — Maya's break room, team culture"
+    }
+  },
+  "studio_health": {
+    "channels_active": 0,
+    "channels_total": 10,
+    "longest_silence_days": null,
+    "content_in_queue": 0,
+    "selection_rate_overall": null,
+    "cross_platform_posts": 0
+  }
+}

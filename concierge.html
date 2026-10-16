@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Concierge — Cathedral Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #08080d; color: #e0e0e0; font-family: 'Inter', -apple-system, sans-serif; height: 100vh; display: flex; flex-direction: column; }
+
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid #1a1a28; background: #0d0d14; }
+  .header h1 { color: #fff; font-size: 0.9rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; }
+  .header h1 span { color: #c4a35a; }
+  .header .badge { color: #555; font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; }
+  .header .back { color: #555; text-decoration: none; font-size: 0.75rem; transition: color 0.2s; }
+  .header .back:hover { color: #e94560; }
+
+  .messages { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+
+  .msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 0.85rem; line-height: 1.65; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .msg.system { background: linear-gradient(135deg, #141420, #12121e); border: 1px solid #252530; align-self: flex-start; color: #c4a35a; }
+  .msg.user { background: #1a1a28; border: 1px solid #252535; align-self: flex-end; color: #e0e0e0; }
+  .msg.assistant { background: #0f0f18; border: 1px solid #1a1a28; align-self: flex-start; color: #ccc; }
+  .msg.assistant strong { color: #e94560; }
+  .msg.assistant code { background: #1a1a28; padding: 1px 5px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #c4a35a; }
+  .msg.assistant a { color: #e94560; text-decoration: none; }
+  .msg.assistant a:hover { text-decoration: underline; }
+
+  .intent-tag { display: inline-block; margin: 4px 2px; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .intent-tag.build { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+  .intent-tag.research { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+  .intent-tag.connection { background: rgba(196, 163, 90, 0.15); color: #c4a35a; }
+
+  .msg .engine-tag { display: inline-block; margin-top: 8px; font-size: 0.6rem; color: #444; font-family: 'JetBrains Mono', monospace; }
+
+  .typing { align-self: flex-start; padding: 12px 16px; }
+  .typing .dots { display: flex; gap: 4px; }
+  .typing .dots span { width: 6px; height: 6px; border-radius: 50%; background: #c4a35a; animation: blink 1.4s infinite; }
+  .typing .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: 0.2; } 40% { opacity: 1; } }
+
+  .input-area { padding: 16px 24px; border-top: 1px solid #1a1a28; background: #0d0d14; display: flex; gap: 10px; }
+  .input-area input { flex: 1; background: #0f0f18; border: 1px solid #1a1a28; border-radius: 8px; padding: 12px 16px; color: #e0e0e0; font-family: 'Inter', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
+  .input-area input:focus { border-color: #c4a35a; }
+  .input-area input::placeholder { color: #333; }
+  .input-area button { background: #c4a35a; color: #08080d; border: none; border-radius: 8px; padding: 12px 20px; font-weight: 700; font-size: 0.8rem; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s; }
+  .input-area button:hover { background: #d4b56a; transform: translateY(-1px); }
+  .input-area button:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  .quick-actions { padding: 8px 24px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .quick-btn { background: #0f0f18; border: 1px solid #1a1a28; border-radius: 6px; padding: 6px 12px; color: #666; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+  .quick-btn:hover { border-color: #c4a35a; color: #c4a35a; }
+
+  @media (max-width: 600px) {
+    .msg { max-width: 95%; }
+    .header { padding: 12px 16px; }
+    .messages { padding: 16px; }
+    .input-area { padding: 12px 16px; }
+    .quick-actions { padding: 6px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="/" class="back">&larr; Lobby</a>
+  <h1>THE <span>CONCIERGE</span></h1>
+  <span class="badge" id="engine-badge">ready</span>
+</div>
+
+<div class="messages" id="messages">
+  <div class="msg system">
+    Welcome to the Cathedral. I know every room in this building — what's live, what's half-built, what connects to what. Ask me anything about what we've built, where to find it, or what we could build next.
+  </div>
+</div>
+
+<div class="quick-actions">
+  <button class="quick-btn" onclick="quickAsk('What have we built recently?')">Recent builds</button>
+  <button class="quick-btn" onclick="quickAsk('What systems are half-built or have open threads?')">Open threads</button>
+  <button class="quick-btn" onclick="quickAsk('Show me everything related to Basic Reflex')">Basic Reflex</button>
+  <button class="quick-btn" onclick="quickAsk('What are the strongest cross-domain convergences in the vault?')">Convergences</button>
+  <button class="quick-btn" onclick="quickAsk('What research areas are THIN or GAP that I should look at?')">Research gaps</button>
+  <button class="quick-btn" onclick="quickAsk('Based on my taste map and recent work, what should I work on next?')">What next?</button>
+  <button class="quick-btn" onclick="quickAsk('Show me pending build ideas from previous conversations')">Pending ideas</button>
+</div>
+
+<div class="input-area">
+  <input type="text" id="input" placeholder="Ask the Concierge..." autocomplete="off">
+  <button id="send" onclick="sendMessage()">Ask</button>
+</div>
+
+<script>
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('input');
+const sendBtn = document.getElementById('send');
+const engineBadge = document.getElementById('engine-badge');
+let history = [];
+
+inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !sendBtn.disabled) sendMessage(); });
+
+function quickAsk(q) { inputEl.value = q; sendMessage(); }
+
+function addMessage(role, content, engine) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  if (role === 'assistant') {
+    div.innerHTML = formatMarkdown(content);
+    if (engine) div.innerHTML += `<div class="engine-tag">${engine}</div>`;
+  } else {
+    div.textContent = content;
+  }
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg assistant typing';
+  div.id = 'typing';
+  div.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+function hideTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+function formatMarkdown(text) {
+  return text
+    .replace(/\[BUILD IDEA\]\s*/gi, '<span class="intent-tag build">BUILD IDEA</span> ')
+    .replace(/\[RESEARCH THREAD\]\s*/gi, '<span class="intent-tag research">RESEARCH</span> ')
+    .replace(/\[CONNECTION\]\s*/gi, '<span class="intent-tag connection">CONNECTION</span> ')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/\n/g, '<br>');
+}
+
+async function sendMessage() {
+  const query = inputEl.value.trim();
+  if (!query) return;
+
+  inputEl.value = '';
+  sendBtn.disabled = true;
+  engineBadge.textContent = 'thinking...';
+
+  addMessage('user', query);
+  history.push({ role: 'user', content: query });
+
+  showTyping();
+
+  try {
+    const res = await fetch('/concierge/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, history: history.slice(-8) })
+    });
+    const data = await res.json();
+    hideTyping();
+    addMessage('assistant', data.response || 'No response.', data.engine);
+    history.push({ role: 'assistant', content: data.response || '' });
+    engineBadge.textContent = data.engine || 'ready';
+  } catch (err) {
+    hideTyping();
+    addMessage('assistant', 'Connection error: ' + err.message);
+    engineBadge.textContent = 'error';
+  }
+
+  sendBtn.disabled = false;
+  inputEl.focus();
+}
+</script>
+</body>
+</html>

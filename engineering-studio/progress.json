@@ -49,6 +49,856 @@
           "pipeline_failures_week": 0
         }
       }
+    },
+    {
+      "date": "2026-05-18T02:10:17.595Z",
+      "metrics": {
+        "generated": "2026-05-18T02:10:17.604Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 8,
+            "sessions_processed_week": 8,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-18T20:11:43.679Z",
+      "metrics": {
+        "generated": "2026-05-18T20:11:43.693Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 8,
+            "sessions_processed_week": 8,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-20T00:18:24.460Z",
+      "metrics": {
+        "generated": "2026-05-20T00:18:24.462Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 10,
+            "sessions_processed_week": 10,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-20T18:18:24.643Z",
+      "metrics": {
+        "generated": "2026-05-20T18:18:24.652Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 10,
+            "sessions_processed_week": 10,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-21T20:08:25.171Z",
+      "metrics": {
+        "generated": "2026-05-21T20:08:25.278Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 16,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-22T18:54:33.897Z",
+      "metrics": {
+        "generated": "2026-05-22T18:54:33.905Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 8,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-23T19:06:43.012Z",
+      "metrics": {
+        "generated": "2026-05-23T19:06:43.033Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 8,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-24T23:18:43.602Z",
+      "metrics": {
+        "generated": "2026-05-24T23:18:43.617Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 8,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-25T17:18:43.790Z",
+      "metrics": {
+        "generated": "2026-05-25T17:18:43.796Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 8,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-26T23:18:44.016Z",
+      "metrics": {
+        "generated": "2026-05-26T23:18:44.032Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 6,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-27T23:18:44.307Z",
+      "metrics": {
+        "generated": "2026-05-27T23:18:44.317Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 6,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-28T17:18:44.513Z",
+      "metrics": {
+        "generated": "2026-05-28T17:18:44.517Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 3,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-29T23:38:18.458Z",
+      "metrics": {
+        "generated": "2026-05-29T23:38:18.464Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 0,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-30T17:38:18.708Z",
+      "metrics": {
+        "generated": "2026-05-30T17:38:18.715Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 16,
+            "sessions_processed_week": 0,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-31T17:42:16.815Z",
+      "metrics": {
+        "generated": "2026-05-31T17:42:16.819Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 18,
+            "sessions_processed_week": 2,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-01T17:46:47.712Z",
+      "metrics": {
+        "generated": "2026-06-01T17:46:47.715Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 21,
+            "sessions_processed_week": 5,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-02T17:46:47.817Z",
+      "metrics": {
+        "generated": "2026-06-02T17:46:47.857Z",
+        "projects": {
+          "gym_eyes": {
+            "status": "production",
+            "detection_accuracy": "unknown — needs ground truth",
+            "false_positive_rate": "unknown",
+            "sessions_processed_total": 21,
+            "sessions_processed_week": 5,
+            "students_tracked": 2,
+            "last_model_update": null,
+            "uptime_percent": null
+          },
+          "cnn_training": {
+            "status": "blocked",
+            "blocker": "insufficient labelled data — need ~2000 frames per punch class",
+            "frames_collected": 0,
+            "frames_labelled": 0,
+            "target_frames": 14000
+          },
+          "multi_cam": {
+            "status": "planned",
+            "cameras_available": 1,
+            "fusion_algorithm": null
+          },
+          "fatigue_analysis": {
+            "status": "planned",
+            "data_source": "punch velocity decline over session",
+            "prototype": false
+          },
+          "ingestion_pipeline": {
+            "status": "priority",
+            "target": "autonomous frame capture from gym cameras",
+            "fps_capture": 0,
+            "fps_processed": 0,
+            "storage_used_gb": 0,
+            "days_running_unattended": 0
+          }
+        },
+        "lab_health": {
+          "experiments_this_week": 1,
+          "post_mortems_this_month": 0,
+          "papers_reviewed": 0,
+          "models_benchmarked": 0,
+          "pipeline_failures_week": 0
+        }
+      }
     }
   ]
 }

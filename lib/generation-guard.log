@@ -1,0 +1,10 @@
+2026-06-02T22:55:24.018Z [node] PAUSE  reason="test"
+2026-06-02T22:55:24.019Z [node] BLOCK  autonomous generation blocked by kill-switch
+2026-06-02T22:55:24.019Z [node] RESUME
+2026-06-02T23:02:49.418Z [node] PAUSE  reason="test"
+2026-06-02T23:02:49.419Z [node] BLOCK  autonomous generation blocked by kill-switch
+2026-06-02T23:02:49.419Z [node] RESUME
+2026-06-02T23:02:57.725Z [node] PAUSE  reason="wiring-test"
+2026-06-02T23:02:57.733Z [node] BLOCK  autonomous generation blocked by kill-switch
+2026-06-02T23:03:06.287Z [node] RESUME
+2026-06-02T23:03:15.429Z [node] PAUSE  reason="post-leak safety 2026-06-03; resume deliberately"

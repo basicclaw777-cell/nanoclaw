@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "light lateral shuffling in the background",
+        "stance_width": "normal",
+        "guard": "hands held high but relaxed",
+        "upper_body": "upright with slight bobbing",
+        "distance": "far from camera",
+        "notable": "subject is positioned in the background"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "continuous lateral movement across the background",
+        "stance_width": "normal",
+        "guard": "hands held high",
+        "upper_body": "moving laterally with the feet",
+        "distance": "far to mid-range",
+        "notable": "green training bag visible in the background"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "walking across the foreground",
+        "stance_width": "changing",
+        "guard": "hands down at sides",
+        "upper_body": "relaxed, walking posture",
+        "distance": "close to camera",
+        "notable": "new person enters the frame from the left"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "step",
+      "detail": "lateral shuffling in the background"
+    },
+    {
+      "frames": "F6-F10",
+      "type": "step",
+      "detail": "continued lateral movement"
+    },
+    {
+      "frames": "F11-F15",
+      "type": "distance_close",
+      "detail": "new subject enters the foreground"
+    }
+  ],
+  "overall_rhythm": "steady"
+}

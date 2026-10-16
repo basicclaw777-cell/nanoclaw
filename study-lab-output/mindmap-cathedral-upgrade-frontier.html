@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cathedral Upgrade Frontier — Mind Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;600;700&display=swap');
+  :root { --bg:#0A0A0A; --fg:#FAFAFA; --gold:#f7b408; --dim:#888; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:'Epilogue',system-ui,sans-serif; overflow:hidden; }
+  svg { width:100vw; height:100vh; }
+  .back { position:fixed; top:1rem; left:1rem; background:#222; color:var(--fg); border:1px solid #444; padding:0.4rem 1rem; border-radius:4px; cursor:pointer; font-family:inherit; font-size:0.85rem; z-index:10; text-decoration:none; }
+  .back:hover { background:#333; }
+  .title { position:fixed; top:1rem; right:1rem; color:var(--gold); font-family:'Anton',sans-serif; font-size:1.2rem; letter-spacing:2px; text-transform:uppercase; z-index:10; }
+  .legend { position:fixed; bottom:1rem; left:1rem; color:var(--dim); font-size:0.75rem; z-index:10; line-height:1.6; }
+  .legend span { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+  #tooltip { position:fixed; background:#1a1a1a; border:1px solid #444; color:#eee; padding:0.8rem 1rem; border-radius:6px; font-size:0.8rem; max-width:350px; line-height:1.5; pointer-events:none; display:none; z-index:20; }
+  #tooltip h4 { color:var(--gold); margin-bottom:0.3rem; font-size:0.9rem; }
+  #tooltip .status { color:#4ade80; font-size:0.7rem; margin-bottom:0.4rem; }
+  #tooltip .ideas { color:#ccc; }
+  #tooltip .ideas li { margin-bottom:0.2rem; }
+</style>
+</head><body>
+<a class="back" href="/study-lab">Back to Study Lab</a>
+<div class="title">Cathedral Upgrade Frontier</div>
+<div class="legend">
+  <span style="background:#f7b408"></span> Core areas
+  <span style="background:#22c55e;margin-left:8px"></span> Exists (upgrade)
+  <span style="background:#3b82f6;margin-left:8px"></span> Build ideas
+  <span style="background:#a855f7;margin-left:8px"></span> Connections
+  — Click nodes for details. Drag to rearrange.
+</div>
+<div id="tooltip"></div>
+<svg id="graph"></svg>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+const nodes = [
+  // Center
+  { id:'center', label:'Cathedral\nUpgrade\nFrontier', group:'center', r:28, fx:null, fy:null,
+    detail:'Six development areas for the next evolution. Each compounds on what exists.' },
+
+  // 1. Agent Narrative Memory
+  { id:'mem', label:'Agent\nNarrative\nMemory', group:'core', r:22,
+    status:'PARTIAL — 24 state files + 10 .md memories. State = shallow (lastTopic). Forge has deep memory. Others dont.',
+    detail:'Agents should remember their own evolution — what they said, what changed their mind, what threads theyre pulling.',
+    ideas:['Narrative journal per agent (append-only .md, not JSON blob)','Agent writes own "this week I learned" after each podcast','Cross-session thread tracking (Muse remembers she was exploring X)','Monthly self-reflection prompt (compare current thinking to 30 days ago)','Wound map integration — memory includes what triggered growth'] },
+  { id:'mem-journal', label:'Narrative\nJournal', group:'idea', r:12, ideas:['Append-only .md per agent','After each podcast/DM/task, agent appends 2-3 lines','Accumulates into genuine autobiography'] },
+  { id:'mem-thread', label:'Thread\nTracking', group:'idea', r:12, ideas:['Agent marks "Im pulling this thread"','Next session loads active threads','Dead threads flagged after 14d silence'] },
+  { id:'mem-reflect', label:'Monthly\nSelf-Reflection', group:'idea', r:12, ideas:['Best-version-reask already does this monthly','Wire podcast transcript INTO memory','Agent reads own past podcast before recording next'] },
+
+  // 2. Cross-Agent Reaction
+  { id:'cross', label:'Real-time\nCross-Agent\nReaction', group:'core', r:22,
+    status:'PARTIAL — dialogue-seed (daily), dm-processor (live), cross-domain-sync, roundtable (weekly), maya internal feed. All exist.',
+    detail:'Missing: spontaneous reaction. Muse finds something → Archaeologist notices WITHOUT waiting for cron.',
+    ideas:['Event bus — agent publishes finding, subscribers react in <5min','Linda tuple space already exists — wire agent-engine to watch()','Reaction != conversation — short "I noticed this connects to X" DMs','Agent podcast duo pairings chosen by OVERLAP in recent findings, not random','Feed wall in lobby — live stream of agent reactions'] },
+  { id:'cross-bus', label:'Event Bus\nvia Linda', group:'idea', r:12, ideas:['linda-vault.js watch() already supports this','Agent publishes discovery tuple','Subscribed agents get notified, respond async'] },
+  { id:'cross-feed', label:'Live\nAgent Feed', group:'idea', r:12, ideas:['Lobby room: "The Commons"','Real-time scroll of agent micro-posts','Click to see full context + react'] },
+  { id:'cross-pair', label:'Smart Duo\nPairing', group:'idea', r:12, ideas:['Before generating duo podcast, scan recent data overlap','Pair agents with MOST intersecting findings','Guaranteed substantive conversation'] },
+
+  // 3. Living Knowledge Graph
+  { id:'graph', label:'Living\nKnowledge\nGraph', group:'core', r:22,
+    status:'EXISTS — predictive graph (6,811 nodes), graphify (691 nodes), vault-dig, knowledge-graph.js. But vault files dont carry their own epistemic state.',
+    detail:'Nuggets should know their own health at read-time. Grade, freshness, connection count visible. The graph IS the vault, not a layer on top.',
+    ideas:['Frontmatter injection — every nugget gets grade/health/connections on weekly scan','Graph-first search — query returns nodes + paths, not flat list','Contradiction pairs surfaced visually (red edges)','Domain heat map — where is the vault dense vs thin','Nugget "pulse" — each nuggets reference count over time as a sparkline'] },
+  { id:'graph-front', label:'Frontmatter\nHealth\nInjection', group:'idea', r:12, ideas:['Weekly scan updates YAML frontmatter','grade: B, health: VITAL, connections: 14','Obsidian sees it natively'] },
+  { id:'graph-search', label:'Graph-First\nSearch', group:'idea', r:12, ideas:['/search returns node + 2-hop neighborhood','See WHY a nugget matters (what it connects to)','Path between two concepts highlighted'] },
+  { id:'graph-heat', label:'Domain\nHeat Map', group:'idea', r:12, ideas:['Visual: which domains are dense/thin','Thin domains = research opportunities','Dense domains = candidates for synthesis'] },
+
+  // 4. Voice-First Relay
+  { id:'voice', label:'Voice-First\nRelay', group:'core', r:22,
+    status:'PARTIAL — voice notes (1min), Voice Chamber (push-to-talk), /t text intake. Relay threads are text-only.',
+    detail:'Paul thinking out loud should flow into the relay. Transcribe → continue thread. The best ideas come when walking, not typing.',
+    ideas:['Voice relay mode: Paul speaks → whisper transcribes → Forge continues the thread → Paul speaks again','Long voice (>1min) via Telegram audio attachment','Voice → /t pipeline (transcribe then route through thought-intake)','Walking mode: low-latency, no confirmation, just captures','Voice journal: daily 2-min voice note auto-deposited + summarized'] },
+  { id:'voice-relay', label:'Voice\nRelay Mode', group:'idea', r:12, ideas:['Speak → transcribe → relay thread continues','Same fork-and-choose pattern','Natural for walking/thinking'] },
+  { id:'voice-journal', label:'Daily Voice\nJournal', group:'idea', r:12, ideas:['2-min voice note each day','Auto-transcribed, auto-tagged','Feeds belief tracker + emergence'] },
+
+  // 5. Fundamentals Syllabus
+  { id:'syllabus', label:'Fundamentals\nSyllabus', group:'core', r:22,
+    status:'NEW — Study Lab generates learning materials but no curriculum engine sequences them.',
+    detail:'A structured path through foundational concepts that keep appearing across all Cathedral research. Standing waves, substrates, sacred geometry, frequency, vortex math, resonance.',
+    ideas:['Core 20 fundamentals extracted from vault convergence data','Sequenced: each concept builds on previous','Per-concept: slides + mind map + quiz + podcast (Study Lab generates all 4)','Progress tracking — what Paul has explored vs gaps','Live Thread integration — syllabus suggests next concept based on what Paul is pulling','Spaced repetition on quiz results — resurface weak areas'] },
+  { id:'syl-core', label:'Core 20\nFundamentals', group:'idea', r:12, ideas:['Standing waves','Substrates (aetheric, geometric, institutional)','Sacred geometry as physical law','Frequency-matter interaction','Vortex mathematics','Phi/golden ratio across domains','Resonant cavities','Cymatics','Suppression pattern (the 5-stage playbook)','Convergence detection method'] },
+  { id:'syl-sequence', label:'Curriculum\nEngine', group:'idea', r:12, ideas:['Prerequisite graph (standing waves before resonant cavities)','Paul marks "understood" or "need more"','Engine suggests next topic based on gaps + current thread','40-day staleness trigger'] },
+  { id:'syl-spaced', label:'Spaced\nRepetition', group:'idea', r:12, ideas:['Quiz results feed review schedule','Weak areas resurface at increasing intervals','Anki-style but sovereign + vault-grounded'] },
+
+  // 6. External Publication
+  { id:'publish', label:'External\nPublication', group:'core', r:22,
+    status:'DESIGNED — Book structure (15 chapters), Mercury heralds internally, Publisher court member exists. Nothing goes OUT yet.',
+    detail:'The Trojan Horse: embed the real thing inside something they already want. The method IS the product. Boxing is the door.',
+    ideas:['The Book — vault has written 80% of it already. Needs curation + Pauls story layer','Newsletter/blog — Mercury-grade findings, weekly, public-facing','Podcast — agent podcasts already work. Select best ones for public feed','Course — Principled Practice as structured programme','IP licensing — Forgotten Shelf techniques + Cathedral methodology','BR content — Coach Paul already has the audience. Logan shorts as door.'] },
+  { id:'pub-book', label:'The Book', group:'idea', r:12, ideas:['15 chapters structured','Vault provides evidence + methods','Paul writes the narrative','The door: "how to build AI systems that compound"','The payload: general methodology'] },
+  { id:'pub-feed', label:'Public\nPodcast Feed', group:'idea', r:12, ideas:['Best agent podcasts curated for release','Edited for external audience','Genuine AI thinking as content — unique'] },
+  { id:'pub-course', label:'Principled\nPractice\nCourse', group:'idea', r:12, ideas:['7-stage cycle as teachable framework','Cathedral Map as visual guide','Exercises from actual builds','Premium: access to tools/templates'] },
+];
+
+const edges = [
+  // Center to cores
+  {source:'center',target:'mem'}, {source:'center',target:'cross'},
+  {source:'center',target:'graph'}, {source:'center',target:'voice'},
+  {source:'center',target:'syllabus'}, {source:'center',target:'publish'},
+  // Core to ideas
+  {source:'mem',target:'mem-journal'}, {source:'mem',target:'mem-thread'}, {source:'mem',target:'mem-reflect'},
+  {source:'cross',target:'cross-bus'}, {source:'cross',target:'cross-feed'}, {source:'cross',target:'cross-pair'},
+  {source:'graph',target:'graph-front'}, {source:'graph',target:'graph-search'}, {source:'graph',target:'graph-heat'},
+  {source:'voice',target:'voice-relay'}, {source:'voice',target:'voice-journal'},
+  {source:'syllabus',target:'syl-core'}, {source:'syllabus',target:'syl-sequence'}, {source:'syllabus',target:'syl-spaced'},
+  {source:'publish',target:'pub-book'}, {source:'publish',target:'pub-feed'}, {source:'publish',target:'pub-course'},
+  // Cross-connections
+  {source:'mem-reflect',target:'cross-pair', label:'memory informs pairing', style:'dashed'},
+  {source:'cross-bus',target:'mem-journal', label:'reactions become memories', style:'dashed'},
+  {source:'graph-front',target:'syl-sequence', label:'graph gaps drive syllabus', style:'dashed'},
+  {source:'voice-relay',target:'mem-journal', label:'voice becomes memory', style:'dashed'},
+  {source:'syl-core',target:'pub-course', label:'fundamentals become course', style:'dashed'},
+  {source:'pub-feed',target:'cross-pair', label:'best duos go public', style:'dashed'},
+  {source:'graph-search',target:'voice-relay', label:'graph context in voice mode', style:'dashed'},
+  {source:'mem-thread',target:'syl-sequence', label:'active threads inform next topic', style:'dashed'},
+];
+
+const colors = { center:'#f7b408', core:'#f7b408', exists:'#22c55e', idea:'#3b82f6', connection:'#a855f7' };
+
+const width = window.innerWidth, height = window.innerHeight;
+const svg = d3.select('#graph').attr('viewBox', [0, 0, width, height]);
+const tooltip = document.getElementById('tooltip');
+
+const sim = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(edges).id(d => d.id).distance(d => {
+    if (d.source.id === 'center' || d.target.id === 'center') return 180;
+    if (d.style === 'dashed') return 250;
+    return 120;
+  }))
+  .force('charge', d3.forceManyBody().strength(d => d.group === 'center' ? -600 : d.group === 'core' ? -400 : -200))
+  .force('center', d3.forceCenter(width/2, height/2))
+  .force('collision', d3.forceCollide().radius(d => d.r + 15));
+
+const link = svg.append('g').selectAll('line').data(edges).join('line')
+  .attr('stroke', d => d.style === 'dashed' ? '#a855f7' : '#333')
+  .attr('stroke-width', d => d.style === 'dashed' ? 1 : 1.5)
+  .attr('stroke-dasharray', d => d.style === 'dashed' ? '4,4' : 'none')
+  .attr('opacity', d => d.style === 'dashed' ? 0.4 : 0.6);
+
+const node = svg.append('g').selectAll('g').data(nodes).join('g')
+  .call(d3.drag().on('start', dragStart).on('drag', dragging).on('end', dragEnd));
+
+node.append('circle')
+  .attr('r', d => d.r)
+  .attr('fill', d => d.group === 'center' ? '#f7b408' : d.group === 'core' ? '#1a1a1a' : '#111')
+  .attr('stroke', d => colors[d.group] || '#444')
+  .attr('stroke-width', d => d.group === 'core' ? 2.5 : 1.5)
+  .attr('cursor', 'pointer');
+
+node.append('text')
+  .attr('text-anchor', 'middle')
+  .attr('fill', d => d.group === 'center' ? '#000' : '#ddd')
+  .attr('font-size', d => d.group === 'center' ? '9px' : d.group === 'core' ? '8.5px' : '7.5px')
+  .attr('font-weight', d => d.group === 'core' ? '700' : '400')
+  .attr('pointer-events', 'none')
+  .each(function(d) {
+    const lines = d.label.split('\n');
+    const el = d3.select(this);
+    lines.forEach((line, i) => {
+      el.append('tspan').attr('x', 0).attr('dy', i === 0 ? `${-(lines.length-1)*0.5}em` : '1.1em').text(line);
+    });
+  });
+
+node.on('mouseover', function(event, d) {
+  let html = `<h4>${d.label.replace(/\n/g, ' ')}</h4>`;
+  if (d.status) html += `<div class="status">${d.status}</div>`;
+  if (d.detail) html += `<div style="margin-bottom:0.4rem">${d.detail}</div>`;
+  if (d.ideas && d.ideas.length) {
+    html += '<div class="ideas"><ul>' + d.ideas.map(i => `<li>${i}</li>`).join('') + '</ul></div>';
+  }
+  tooltip.innerHTML = html;
+  tooltip.style.display = 'block';
+  tooltip.style.left = Math.min(event.pageX + 15, width - 370) + 'px';
+  tooltip.style.top = Math.min(event.pageY - 10, height - 300) + 'px';
+})
+.on('mouseout', () => { tooltip.style.display = 'none'; });
+
+sim.on('tick', () => {
+  link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+  node.attr('transform', d => `translate(${d.x},${d.y})`);
+});
+
+function dragStart(event, d) { if (!event.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; }
+function dragging(event, d) { d.fx = event.x; d.fy = event.y; }
+function dragEnd(event, d) { if (!event.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }
+</script>
+</body></html>

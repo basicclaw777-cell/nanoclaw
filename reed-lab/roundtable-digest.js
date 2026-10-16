@@ -78,17 +78,17 @@ function buildInfographic(roundtables, summary) {
   .header {
     background: linear-gradient(135deg, #0a0a0a, #1a0808);
     padding: 40px 32px 32px;
-    border-bottom: 2px solid #8B2020;
+    border-bottom: 2px solid #f7b408;
   }
   .header h1 { font-size: 22px; color: #fff; letter-spacing: 3px; margin-bottom: 4px; }
-  .header .date { font-size: 12px; color: #8B2020; }
+  .header .date { font-size: 12px; color: #f7b408; }
   .header .subtitle { font-size: 12px; color: #666; margin-top: 8px; }
 
   .big-picture {
-    background: #111; border-left: 3px solid #8B2020;
+    background: #111; border-left: 3px solid #f7b408;
     padding: 24px 32px; margin: 24px;
   }
-  .big-picture h2 { font-size: 11px; color: #8B2020; letter-spacing: 2px; margin-bottom: 12px; }
+  .big-picture h2 { font-size: 11px; color: #f7b408; letter-spacing: 2px; margin-bottom: 12px; }
   .big-picture p { font-size: 14px; color: #ccc; line-height: 1.6; }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 24px; }
@@ -97,17 +97,17 @@ function buildInfographic(roundtables, summary) {
   .card {
     background: #111; border: 1px solid #1a1a1a; padding: 20px;
   }
-  .card h3 { font-size: 11px; color: #8B2020; letter-spacing: 1.5px; margin-bottom: 12px; }
+  .card h3 { font-size: 11px; color: #f7b408; letter-spacing: 1.5px; margin-bottom: 12px; }
   .card .topic { font-size: 13px; color: #fff; font-weight: 600; margin-bottom: 8px; }
   .card .agents { font-size: 10px; color: #666; margin-bottom: 10px; }
   .card .consensus { font-size: 11px; color: #999; line-height: 1.5; margin-bottom: 8px; }
   .card .principle {
-    font-size: 11px; color: #8B2020; font-style: italic;
+    font-size: 11px; color: #f7b408; font-style: italic;
     border-top: 1px solid #1a1a1a; padding-top: 8px; margin-top: 8px;
   }
   .card .actions { font-size: 11px; color: #777; }
   .card .actions li { margin-bottom: 4px; list-style: none; }
-  .card .actions li::before { content: '→ '; color: #8B2020; }
+  .card .actions li::before { content: '→ '; color: #f7b408; }
 
   .actions-panel {
     background: #0d1a0d; border: 1px solid #1D9E75; padding: 24px 32px; margin: 24px;
@@ -123,10 +123,10 @@ function buildInfographic(roundtables, summary) {
   .tension p { font-size: 12px; color: #ccc; line-height: 1.5; }
 
   .next-q {
-    background: #111; border: 2px solid #8B2020; padding: 24px 32px; margin: 0 24px 40px;
+    background: #111; border: 2px solid #f7b408; padding: 24px 32px; margin: 0 24px 40px;
     text-align: center;
   }
-  .next-q h2 { font-size: 11px; color: #8B2020; letter-spacing: 2px; margin-bottom: 12px; }
+  .next-q h2 { font-size: 11px; color: #f7b408; letter-spacing: 2px; margin-bottom: 12px; }
   .next-q p { font-size: 16px; color: #fff; font-weight: 600; line-height: 1.4; }
 
   .footer {

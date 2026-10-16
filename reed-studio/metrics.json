@@ -1,27 +1,27 @@
 {
-  "lastUpdated": "2026-05-17T07:33:24.464Z",
+  "lastUpdated": "2026-06-02T21:48:09.917Z",
   "lifetime": {
     "totalGenerated": 26,
-    "totalBriefs": 6,
-    "briefsExecuted": 0,
-    "feedPostsMade": 0,
+    "totalBriefs": 287,
+    "briefsExecuted": 59,
+    "feedPostsMade": 59,
     "feedInspirationsUsed": 0,
     "experimentsRun": 0,
     "paulSelections": 0,
     "paulReplacements": 0
   },
   "weekly": {
-    "weekStart": "2026-05-17",
-    "generated": 7,
+    "weekStart": "2026-05-30",
+    "generated": 0,
     "briefs": 0,
-    "executed": 0,
-    "feedPosts": 0,
+    "executed": 5,
+    "feedPosts": 5,
     "experiments": 0,
     "staleStylesFixed": 0,
     "characterGapsFilled": 0
   },
   "rates": {
-    "briefToExecution": 0,
+    "briefToExecution": 21,
     "preVisHitRate": 0,
     "feedEngagement": 0,
     "paulApprovalRate": 0,
@@ -31,48 +31,48 @@
     "styles": {
       "pro_photo": {
         "count": 6,
-        "daysSinceLast": 0,
-        "health": "fresh"
+        "daysSinceLast": 16,
+        "health": "stale"
       },
       "manga": {
         "count": 1,
-        "daysSinceLast": 0,
-        "health": "fresh"
+        "daysSinceLast": 16,
+        "health": "stale"
       },
       "noir": {
         "count": 8,
-        "daysSinceLast": 7,
-        "health": "aging"
+        "daysSinceLast": 23,
+        "health": "stale"
       },
       "ippo": {
         "count": 1,
-        "daysSinceLast": 0,
-        "health": "fresh"
+        "daysSinceLast": 16,
+        "health": "stale"
       },
       "neon": {
         "count": 1,
-        "daysSinceLast": 0,
-        "health": "fresh"
+        "daysSinceLast": 16,
+        "health": "stale"
       },
       "dramatic": {
         "count": 3,
-        "daysSinceLast": 8,
-        "health": "aging"
+        "daysSinceLast": 24,
+        "health": "stale"
       },
       "poster": {
         "count": 1,
-        "daysSinceLast": 0,
-        "health": "fresh"
+        "daysSinceLast": 16,
+        "health": "stale"
       },
       "oil": {
         "count": 1,
-        "daysSinceLast": 0,
-        "health": "fresh"
+        "daysSinceLast": 16,
+        "health": "stale"
       },
       "video_cinematic": {
         "count": 1,
-        "daysSinceLast": 0,
-        "health": "fresh"
+        "daysSinceLast": 16,
+        "health": "stale"
       }
     },
     "characters": {
@@ -85,9 +85,9 @@
     }
   },
   "streaks": {
-    "daysActive": 1,
-    "lastActiveDate": "2026-05-17",
-    "longestStreak": 1
+    "daysActive": 17,
+    "lastActiveDate": "2026-06-02",
+    "longestStreak": 17
   },
   "quality": {
     "paulUsed": [],

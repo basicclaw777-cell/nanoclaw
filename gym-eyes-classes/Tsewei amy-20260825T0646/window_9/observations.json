@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F6",
+      "time": "0.0s-1.7s",
+      "observations": {
+        "footwork": "Wide base established. Left foot planted, right rear foot pivots and heel lifts as the body rotates.",
+        "stance_width": "normal",
+        "guard": "High and tight guard, hands held up near the chin.",
+        "upper_body": "Straight punch (right cross) extended forward with shoulder rotation.",
+        "distance": "Constant, throwing at an extended range.",
+        "notable": "First rear-hand cross thrown from a grounded, stable stance."
+      }
+    },
+    {
+      "frames": "F7-F10",
+      "time": "2.0s-3.0s",
+      "observations": {
+        "footwork": "Right foot shuffles or shifts, maintaining the wide stance while adjusting position.",
+        "stance_width": "changing",
+        "guard": "High guard maintained throughout the movement.",
+        "upper_body": "Second right cross thrown with a similar side rotation.",
+        "distance": "Constant.",
+        "notable": "Cross thrown in succession, showing a repeating drill pattern."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Deep crouch and wide base, loading onto the back leg for power.",
+        "stance_width": "wide",
+        "guard": "High guard beginning to drop slightly with the extended reach.",
+        "upper_body": "Third right cross, thrown with a deep body twist and forward lean.",
+        "distance": "Constant.",
+        "notable": "Final cross of the set, with the lowest center of gravity and most powerful rotation."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F2-F4",
+      "type": "punch_extension",
+      "detail": "Right cross extends forward with hip and shoulder rotation."
+    },
+    {
+      "frames": "F5-F6",
+      "type": "punch_recovery",
+      "detail": "Right hand retracts back into the high guard."
+    },
+    {
+      "frames": "F8-F9",
+      "type": "step",
+      "detail": "Rear foot adjusts and slight shuffle as the next punch is prepared."
+    },
+    {
+      "frames": "F12-F14",
+      "type": "punch_extension",
+      "detail": "Another right cross is thrown, sinking lower into the stance for power."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

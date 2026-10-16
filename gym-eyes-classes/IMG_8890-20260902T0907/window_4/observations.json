@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Continuous lateral steps to the right",
+        "stance_width": "normal",
+        "guard": "Hands held up in a loose boxing guard",
+        "upper_body": "Upright, oriented towards the right",
+        "distance": "Moving across the gym floor, near a long rope laid on the ground",
+        "notable": "Rope on the floor appears to serve as a boundary/guide for footwork"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Pivot and lateral steps to the left",
+        "stance_width": "normal",
+        "guard": "Hands held up in a loose boxing guard",
+        "upper_body": "Upright, turning to move left",
+        "distance": "Moving back across the gym floor",
+        "notable": "Change of direction in the drill"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Continues left, then steps back to the right",
+        "stance_width": "normal",
+        "guard": "Hands held up in a loose boxing guard",
+        "upper_body": "Upright, changing orientation",
+        "distance": "Reaches the left boundary, then moves right",
+        "notable": "Drill continues with side-to-side movement"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F3",
+      "type": "step",
+      "detail": "Lateral shuffle to the right"
+    },
+    {
+      "frames": "F6-F7",
+      "type": "pivot",
+      "detail": "Change of direction from right to left"
+    },
+    {
+      "frames": "F8-F13",
+      "type": "step",
+      "detail": "Lateral shuffle to the left"
+    },
+    {
+      "frames": "F14-F15",
+      "type": "step",
+      "detail": "Lateral shuffle back to the right"
+    }
+  ],
+  "overall_rhythm": "steady"
+}

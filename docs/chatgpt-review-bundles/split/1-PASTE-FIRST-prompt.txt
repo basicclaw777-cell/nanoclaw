@@ -1,0 +1,57 @@
+# REVIEW PROMPT: Design Bible Stress Test
+
+You helped design the prompt that generated this document. Now review the OUTPUT.
+
+Assume this document will never be seen by the original author again. A frontend team, an AI coding agent, and a future AI model must implement the system using only this document. Judge it as executable specification, not inspirational writing.
+
+This is the Gym Eyes Visual Standard — a design bible for a boxing coaching AI system's visual interface. You pushed for: understand-before-designing, brand tensions, five senses, camera language, three horizons, ten commandments, material bible, personality, anti-patterns.
+
+Grade each section (A/B/C/D) on:
+1. SPECIFICITY — can a developer implement from this alone, no guessing?
+2. INTERNAL CONSISTENCY — do sections contradict each other?
+3. COVERAGE — what's missing that a real build would need?
+4. VOICE — does it read as a constitution or just a style guide?
+
+Then answer:
+- Which section is thinnest? What's missing?
+- Which section is strongest? What makes it work?
+- Does the material bible actually function as characters, or is it just a list of textures with personality labels?
+- Are the Ten Commandments actually commandments (falsifiable rules) or aspirational statements?
+- If you handed this to a frontend developer with no other context, what would they get wrong?
+- What would you add in v2?
+
+## 11. Translation Loss Audit
+For every section answer:
+- Which sentences are objectively implementable?
+- Which require human taste?
+- Which require knowledge that exists only in the author's head?
+Highlight every place where a coding agent would have to guess.
+
+## 12. Machine Interpretability
+Assume Claude Code receives only this document. Which concepts become: deterministic / probabilistic / impossible
+For every impossible concept explain exactly why.
+
+## 13. Drift Resistance
+Imagine three developers implement this independently. How similar would the results be? Identify every place where interpretation would diverge. Estimate divergence as: Low / Medium / High
+
+## 14. Testability
+For every major rule, answer: is it testable?
+- Bad: "Feels premium." (impossible to verify)
+- Good: "Never use more than three simultaneous accent colors." (falsifiable)
+A constitution needs laws, not poetry.
+
+## 15. Semantic Density Map
+Highlight the 20% of the document that carries 80% of the design intent. Those become the immutable core. Everything else becomes commentary.
+
+## 16. Compression Test
+If this document disappeared tomorrow, which five pages would you reconstruct first? That forces prioritization — the answer reveals the actual foundation.
+
+CONSTRAINT: Do not suggest more content unless you first identify which existing section should shrink. Design bibles become encyclopedias. The better question is: what deserves constitutional status?
+
+Be surgical. You designed the brief — hold the output to the standard you set.
+
+---
+
+
+---
+I will paste the source document/code in my next message. Wait for it before reviewing.

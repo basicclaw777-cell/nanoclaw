@@ -1,0 +1,79 @@
+{
+  "people_detected": 3,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "multiple",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Pivoting and stepping to reposition, changing direction",
+        "stance_width": "changing",
+        "guard": "Hands held up in a guard position",
+        "upper_body": "Rotating to face the left side of the frame",
+        "distance": "Maintaining a relative distance to the background partner",
+        "notable": "The primary fighter pivots to change his facing direction"
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.7s-2.7s",
+      "observations": {
+        "footwork": "Standing in place and making slight adjustments",
+        "stance_width": "normal",
+        "guard": "Hands up in guard, elbows tucked",
+        "upper_body": "Facing left, torso upright",
+        "distance": "Positioned at a slight angle to the background partner",
+        "notable": "Settles into a left-facing orthodox stance"
+      }
+    },
+    {
+      "frames": "F10-F12",
+      "time": "3.0s-3.7s",
+      "observations": {
+        "footwork": "Pivoting and stepping to turn the body to the right",
+        "stance_width": "changing",
+        "guard": "Hands up, guard maintained during the turn",
+        "upper_body": "Rotating to face the right side of the frame",
+        "distance": "Moves slightly away from the background partner",
+        "notable": "Turns to face the opposite direction"
+      }
+    },
+    {
+      "frames": "F13-F15",
+      "time": "4.0s-4.7s",
+      "observations": {
+        "footwork": "Standing in stance and settling",
+        "stance_width": "normal",
+        "guard": "Hands up in guard",
+        "upper_body": "Facing right, torso slightly bladed",
+        "distance": "In relation to the background partner",
+        "notable": "Establishes a right-facing southpaw stance"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F4",
+      "type": "stance_change",
+      "detail": "Pivots to face left and steps into an orthodox stance"
+    },
+    {
+      "frames": "F5-F9",
+      "type": "reset",
+      "detail": "Settles into the left-facing orthodox stance"
+    },
+    {
+      "frames": "F10-F12",
+      "type": "stance_change",
+      "detail": "Pivots to face right and steps into a southpaw stance"
+    },
+    {
+      "frames": "F13-F15",
+      "type": "reset",
+      "detail": "Settles into the right-facing southpaw stance"
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

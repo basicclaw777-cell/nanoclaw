@@ -1,0 +1,72 @@
+{
+  "people_detected": 1,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Moving laterally to the right, quick light steps",
+        "stance_width": "normal",
+        "guard": "Hands up near the face, tight guard",
+        "upper_body": "Throwing a right cross at F2, then resetting to guard",
+        "distance": "Moving across the gym floor, away from the heavy bag",
+        "notable": "Green medicine ball visible on the floor"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Moving back to the left and planting feet to engage the bag",
+        "stance_width": "normal to wide",
+        "guard": "Hands up in a defensive posture",
+        "upper_body": "Throwing a left punch towards the heavy bag at F9",
+        "distance": "Closing distance to the heavy bag",
+        "notable": "Initial engagement with heavy bag"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Stepping and repositioning around the bag",
+        "stance_width": "normal",
+        "guard": "Hands up, maintaining guard",
+        "upper_body": "Throwing a left straight at F14, then resetting to guard",
+        "distance": "Working in close proximity to the heavy bag",
+        "notable": "Throwing combinations on the heavy bag"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F2",
+      "type": "punch_extension",
+      "detail": "Throwing a right cross while moving laterally to the right"
+    },
+    {
+      "frames": "F7-F9",
+      "type": "distance_close",
+      "detail": "Moving in from the gym floor towards the heavy bag"
+    },
+    {
+      "frames": "F9",
+      "type": "punch_extension",
+      "detail": "Throwing a left punch (hook or straight) at the heavy bag"
+    },
+    {
+      "frames": "F12-F14",
+      "type": "step",
+      "detail": "Stepping to reposition around the heavy bag"
+    },
+    {
+      "frames": "F14",
+      "type": "punch_extension",
+      "detail": "Throwing a left straight punch at the heavy bag"
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

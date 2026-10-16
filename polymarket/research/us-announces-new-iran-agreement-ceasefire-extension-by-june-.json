@@ -1,0 +1,97 @@
+{
+  "marketId": "2354003",
+  "question": "US announces new Iran agreement/ceasefire extension by June 30?",
+  "eventTitle": "US announces new Iran agreement/ceasefire extension by...?",
+  "marketYes": 0.425,
+  "marketNo": 0.575,
+  "volume24hr": 829498.449314,
+  "daysToResolution": 22,
+  "analysis": {
+    "question": "US announces new Iran agreement/ceasefire extension by June 30?",
+    "factors": [
+      {
+        "factor": "Current status of US-Iran ceasefire",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "The existing ceasefire, brokered in early 2026, was a temporary halt to direct military engagement. As of June 8, 2026, there is no publicly announced extension or new agreement in place. The ceasefire is reportedly fragile and has not been formally renewed since its initial expiration or near-expiration."
+      },
+      {
+        "factor": "Diplomatic momentum and negotiations",
+        "direction": "neutral",
+        "weight": "medium",
+        "evidence": "Indirect talks via Oman and Qatar have continued, but no breakthrough has been reported. The US has signaled willingness to negotiate, but Iran's nuclear enrichment progress and regional proxy activities remain major sticking points. No formal framework for a new agreement has emerged."
+      },
+      {
+        "factor": "US domestic political calendar",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "The US is in a midterm election year (2026). The Trump administration may be reluctant to announce a major diplomatic deal with Iran that could be criticized as weak, especially given hardline Republican opposition. However, a ceasefire extension could be framed as a tactical win."
+      },
+      {
+        "factor": "Iranian internal dynamics",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "Iran's leadership is under pressure from protests and economic sanctions. They may demand significant concessions (e.g., sanctions relief) for any extension. Hardliners in Iran oppose any deal with the US. The window for a quick extension is narrow."
+      },
+      {
+        "factor": "Historical precedent for short-term ceasefires",
+        "direction": "supports_yes",
+        "weight": "low",
+        "evidence": "Temporary ceasefires in asymmetric conflicts (e.g., Yemen, Gaza) are often extended multiple times, sometimes at the last minute. However, US-Iran direct ceasefire is unprecedented in recent decades, making base rates uncertain."
+      },
+      {
+        "factor": "Time remaining (22 days)",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "22 days is a very short window for complex diplomatic negotiations, especially given the lack of visible progress. Even a simple extension requires high-level political will and coordination. The market's 42.5% implies a near-even chance, which seems optimistic given the timeline."
+      }
+    ],
+    "baseRate": {
+      "value": 0.15,
+      "reasoning": "Historical base rate for US announcing a new agreement or ceasefire extension with Iran within a specific 22-day window is extremely low. Since 1979, there have been very few formal US-Iran agreements. The 2015 JCPOA took years. Temporary ceasefires in other contexts (e.g., Israel-Hamas) have a higher extension rate (~40-50%), but US-Iran is a unique, high-stakes bilateral dynamic. A conservative base rate of 15% reflects the rarity of such announcements."
+    },
+    "adjustments": [
+      {
+        "reason": "Existing ceasefire framework reduces negotiation time",
+        "delta": 0.1,
+        "evidence": "The fact that a ceasefire already exists provides a foundation. Extensions are easier than new agreements. This raises probability from base rate."
+      },
+      {
+        "reason": "Lack of public diplomatic progress and hardline opposition",
+        "delta": -0.08,
+        "evidence": "No visible breakthrough, and both sides have domestic constraints. This lowers probability."
+      },
+      {
+        "reason": "Market price anchoring risk (42.5% is too high)",
+        "delta": -0.05,
+        "evidence": "The market may be overestimating due to recency bias or wishful thinking. My independent analysis suggests lower probability."
+      }
+    ],
+    "finalEstimate": 0.12,
+    "confidence": "medium",
+    "confidenceInterval": [
+      0.03,
+      0.3
+    ],
+    "keyUncertainties": [
+      "Whether a last-minute backchannel deal is already in motion but not public",
+      "Whether the US or Iran faces an imminent crisis that forces an extension (e.g., military escalation)",
+      "Whether the definition of 'extension' includes a tacit, non-public commitment that is later announced"
+    ],
+    "researchNeeded": [
+      "Any recent reports of US-Iran backchannel talks in Oman or Qatar",
+      "Statements from US State Department or Iranian foreign ministry in last 7 days",
+      "Historical frequency of US announcing ceasefire extensions with non-state actors (e.g., Taliban, Houthis) within short timeframes"
+    ],
+    "reasoning": "The market currently prices a 42.5% chance of a US announcement of a new Iran agreement or ceasefire extension by June 30. I believe this is too high. The base rate for such a specific diplomatic event in a 22-day window is very low, given the decades of hostility and lack of precedent for quick US-Iran deals. While an existing ceasefire provides a foundation, the lack of visible progress, domestic political constraints on both sides, and the short timeline make a last-minute extension unlikely. My estimate of 12% reflects a skeptical view: extensions are possible but require a confluence of factors that are not currently evident. The wide confidence interval (3-30%) acknowledges that a surprise breakthrough cannot be ruled out, but the evidence leans heavily toward 'No'."
+  },
+  "edge": {
+    "side": "NO",
+    "edge": 0.305,
+    "edgePct": "30.5%",
+    "ourEstimate": "12.0%",
+    "marketPrice": "42.5%",
+    "tradeable": true
+  },
+  "researchedAt": "2026-06-08T06:16:56.171Z"
+}

@@ -1,0 +1,27 @@
+{
+  "autoReply": {},
+  "conversations": {
+    "85291234567": {
+      "messages": [
+        {
+          "role": "user",
+          "text": "Hi, my 14 year old son wants to try boxing. What do you offer for kids?",
+          "ts": "2026-07-09T02:11:11.059Z"
+        },
+        {
+          "role": "assistant",
+          "text": "Hey there! We've got a kids program for ages 12–16, separate sessions with a focus on technique and discipline. Tell your son to come by for a trial — we'll get him started right. — Coach Paul",
+          "ts": "2026-07-09T02:11:11.060Z",
+          "intent": "lead"
+        }
+      ],
+      "intent": "lead",
+      "memberName": null
+    }
+  },
+  "stats": {
+    "received": 1,
+    "replied": 0,
+    "queued": 1
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "people_detected": 2,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "none",
+        "stance_width": "unclear",
+        "guard": "none",
+        "upper_body": "none",
+        "distance": "n/a",
+        "notable": "Wide shot of an empty gym floor. The camera is stationary. Background includes punching bags and equipment."
+      }
+    },
+    {
+      "frames": "F6-F9",
+      "time": "1.7s-2.7s",
+      "observations": {
+        "footwork": "Person in black shirt and shorts is moving across the floor from left to right.",
+        "stance_width": "changing",
+        "guard": "arms are down and swinging",
+        "upper_body": "black shirt with white/yellow logo, moving, slightly blurred",
+        "distance": "mid-ground",
+        "notable": "Subject is walking or running through the gym, not in a fighting stance."
+      }
+    },
+    {
+      "frames": "F10-F13",
+      "time": "3.0s-4.0s",
+      "observations": {
+        "footwork": "not visible",
+        "stance_width": "unclear",
+        "guard": "arms are down",
+        "upper_body": "close-up of torso and arm. Black clothing, skin tone visible.",
+        "distance": "very close",
+        "notable": "The camera has moved very close to the subject, producing significant motion blur."
+      }
+    },
+    {
+      "frames": "F14-F15",
+      "time": "4.3s-4.7s",
+      "observations": {
+        "footwork": "none",
+        "stance_width": "unclear",
+        "guard": "hands are down",
+        "upper_body": "Bent forward, sitting or crouching.",
+        "distance": "subject is in the bottom right corner, far from camera focus.",
+        "notable": "A woman with dark hair in a black top appears at the bottom of the frame. A green medicine ball is visible in the background."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F9",
+      "type": "step",
+      "detail": "The person in black walks/runs across the gym floor."
+    },
+    {
+      "frames": "F10-F13",
+      "type": "distance_close",
+      "detail": "The camera moves close to the person, zooming in on the torso and arm."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "distance_open",
+      "detail": "The camera pulls back, revealing a woman sitting on the floor in the bottom right."
+    }
+  ],
+  "overall_rhythm": "choppy"
+}

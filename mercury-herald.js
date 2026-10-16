@@ -52,10 +52,7 @@ const GOLD_BAR = 8;            // 0-10; only >= this is proclaimed
 const MAX_CANDIDATES = 25;     // hard cap on items scored per run (SI-31)
 const DAILY_CALL_CEILING = 60; // DeepSeek calls/day
 
-const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || (() => {
-  try { return readFileSync(join(HOME, 'nanoclaw', '.env'), 'utf8').match(/DEEPSEEK_API_KEY=(.+)/)?.[1]?.trim(); }
-  catch { return null; }
-})();
+import { llmCall } from './llm-fallback.js';
 const TG_TOKEN = process.env.TELEGRAM_TOKEN || (() => {
   try { return readFileSync(join(HOME, 'nanoclaw', '.env'), 'utf8').match(/TELEGRAM_TOKEN=(.+)/)?.[1]?.trim(); }
   catch { return null; }
@@ -87,18 +84,10 @@ async function sendTelegram(text) {
 }
 
 async function callDeepSeek(system, prompt) {
-  const res = await fetch('https://api.deepseek.com/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${DEEPSEEK_KEY}` },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }],
-      temperature: 0.2, max_tokens: 500,
-    }),
-  });
-  if (!res.ok) throw new Error(`DeepSeek ${res.status}`);
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
+  const { content, provider } = await llmCall(system, prompt, 500);
+  if (!content) throw new Error('All LLM providers failed');
+  if (provider !== 'deepseek') console.log(`[mercury-herald] using ${provider} fallback`);
+  return content;
 }
 
 // ── GATHER: recent self-generated outputs ────────────────────────────────────

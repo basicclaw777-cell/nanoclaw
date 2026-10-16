@@ -1,0 +1,90 @@
+{
+  "$schema": "Lesson Model v1 — single source of pedagogical truth",
+  "$notes": "Each lesson compiles into: 30s reel, 8-min YouTube, website loop, student PDF, coach notes. Components referenced here become Remotion primitives.",
+
+  "id": "lesson-XX",
+  "position": 1,
+  "title": "",
+  "subtitle": "",
+  "slug": "",
+
+  "curriculum": {
+    "blocks": [],
+    "pillars": [],
+    "domains": [],
+    "engines": {
+      "body": "",
+      "mind": "",
+      "emotion": ""
+    }
+  },
+
+  "audience": {
+    "level": "all | beginner | intermediate | advanced",
+    "hook": "One sentence that makes someone stop scrolling",
+    "question": "The question this lesson answers"
+  },
+
+  "core": {
+    "thesis": "One sentence — the irreducible idea",
+    "keyPoints": [],
+    "commonMisconceptions": [],
+    "coachEye": {
+      "observe": "What to watch for",
+      "compare": "Side-by-side: correct vs incorrect",
+      "predict": "Pause — what happens next?",
+      "diagnose": "The exact moment it breaks"
+    }
+  },
+
+  "visualGrammar": {
+    "domains": [],
+    "motions": [],
+    "lines": [],
+    "diagnostics": []
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "",
+      "duration": "15s",
+      "visualMode": "vox | blueprint | noir | brutalist | hud | isometric | telemetry | hybrid",
+      "narration": "",
+      "components": [],
+      "assets": [],
+      "learningObjective": ""
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": [],
+      "hook": "",
+      "cta": ""
+    },
+    "youtube": {
+      "duration": "8-12min",
+      "sceneIds": "all",
+      "chapters": []
+    },
+    "websiteLoop": {
+      "duration": "15-20s",
+      "sceneIds": [],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [],
+      "diagrams": [],
+      "checkpoints": []
+    },
+    "coachNotes": {
+      "teachingCues": [],
+      "regressions": [],
+      "observations": [],
+      "progressionTo": ""
+    }
+  }
+}

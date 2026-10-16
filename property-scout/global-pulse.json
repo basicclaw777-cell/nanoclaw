@@ -1,0 +1,144 @@
+{
+  "scan_date": "2026-09-29",
+  "markets": {
+    "hk": {
+      "name": "Hong Kong",
+      "flag": "🇭🇰",
+      "price_index": 305.8,
+      "price_yoy_pct": -6.1,
+      "rental_yield_pct": 3.2,
+      "mortgage_rate_pct": 4.125,
+      "price_to_rent": 9.6,
+      "sentiment": -0.55,
+      "transactions_mom_pct": -8.2,
+      "sources": [
+        "RVD Private Domestic Price Index",
+        "HKMA Residential Mortgage Survey",
+        "Centaline CCL Index"
+      ],
+      "live_fields": [],
+      "trend": "unknown",
+      "contrarian_signal": "OPPORTUNITY — prices down -6.1% but rental yield holds at 3.2%",
+      "contrarian_alerts": [
+        "OPPORTUNITY — prices down -6.1% but rental yield holds at 3.2%",
+        "WATCH — yield/mortgage spread only 0.9pp while prices falling. Crossover = buy trigger"
+      ]
+    },
+    "thailand": {
+      "name": "Thailand",
+      "flag": "🇹🇭",
+      "price_index": 138.2,
+      "price_yoy_pct": 1.8,
+      "rental_yield_pct": 5.4,
+      "mortgage_rate_pct": 6.75,
+      "price_to_rent": 2.6,
+      "sentiment": 0.1,
+      "transactions_mom_pct": 3.5,
+      "sources": [
+        "Bank of Thailand Property Index",
+        "SET PROPCON Index",
+        "DDProperty Market Report"
+      ],
+      "live_fields": [],
+      "trend": "unknown",
+      "contrarian_signal": "Neutral — no divergence detected",
+      "contrarian_alerts": []
+    },
+    "uk": {
+      "name": "United Kingdom",
+      "flag": "🇬🇧",
+      "price_index": 152.1,
+      "price_yoy_pct": 2.3,
+      "rental_yield_pct": 5.1,
+      "mortgage_rate_pct": 4.85,
+      "price_to_rent": 3,
+      "sentiment": 0.15,
+      "transactions_mom_pct": -2.1,
+      "sources": [
+        "UK Land Registry HPI",
+        "RICS UK Residential Survey",
+        "Bank of England base rate"
+      ],
+      "live_fields": [],
+      "trend": "unknown",
+      "contrarian_signal": "Neutral — no divergence detected",
+      "contrarian_alerts": []
+    },
+    "japan": {
+      "name": "Japan",
+      "flag": "🇯🇵",
+      "price_index": 133.5,
+      "price_yoy_pct": 8.2,
+      "rental_yield_pct": 4.3,
+      "mortgage_rate_pct": 1.85,
+      "price_to_rent": 3.1,
+      "sentiment": 0.45,
+      "transactions_mom_pct": 5.1,
+      "sources": [
+        "Japan REINS Transaction Data",
+        "BOJ Policy Rate",
+        "Tokyo Kantei Condo Index"
+      ],
+      "live_fields": [],
+      "trend": "unknown",
+      "contrarian_signal": "Neutral — no divergence detected",
+      "contrarian_alerts": []
+    }
+  },
+  "contrarian_alerts": [
+    "🇭🇰 Hong Kong: OPPORTUNITY — prices down -6.1% but rental yield holds at 3.2%",
+    "🇭🇰 Hong Kong: WATCH — yield/mortgage spread only 0.9pp while prices falling. Crossover = buy trigger"
+  ],
+  "history": [
+    {
+      "date": "2026-09-29",
+      "markets": {
+        "hk": {
+          "price_index": 305.8,
+          "sentiment": -0.55,
+          "rental_yield_pct": 3.2
+        },
+        "thailand": {
+          "price_index": 138.2,
+          "sentiment": 0.1,
+          "rental_yield_pct": 5.4
+        },
+        "uk": {
+          "price_index": 152.1,
+          "sentiment": 0.15,
+          "rental_yield_pct": 5.1
+        },
+        "japan": {
+          "price_index": 133.5,
+          "sentiment": 0.45,
+          "rental_yield_pct": 4.3
+        }
+      }
+    },
+    {
+      "date": "2026-09-29",
+      "markets": {
+        "hk": {
+          "price_index": 305.8,
+          "sentiment": -0.55,
+          "rental_yield_pct": 3.2
+        },
+        "thailand": {
+          "price_index": 138.2,
+          "sentiment": 0.1,
+          "rental_yield_pct": 5.4
+        },
+        "uk": {
+          "price_index": 152.1,
+          "sentiment": 0.15,
+          "rental_yield_pct": 5.1
+        },
+        "japan": {
+          "price_index": 133.5,
+          "sentiment": 0.45,
+          "rental_yield_pct": 4.3
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "fight": false,
+  "allowed_direction": null,
+  "warnings": [],
+  "reasons": [
+    "[loss_momentum] 1/10 recent wins (10%) — system not working. Pause."
+  ],
+  "checks": {
+    "regime": {
+      "pass": true,
+      "reason": "BTC regime TRENDING_UP — acceptable",
+      "regime": "TRENDING_UP"
+    },
+    "volatility": {
+      "pass": true,
+      "reason": "BTC vol 43.2% (NORMAL)",
+      "vol": 43.2
+    },
+    "loss_momentum": {
+      "pass": false,
+      "reason": "1/10 recent wins (10%) — system not working. Pause."
+    },
+    "crowd": {
+      "pass": true,
+      "reason": "crowd L/S ratio 1.38 — normal",
+      "ratio": 1.381
+    },
+    "timing": {
+      "pass": true,
+      "reason": "normal trading window"
+    }
+  },
+  "timestamp": "2026-10-16T16:00:09.972Z"
+}

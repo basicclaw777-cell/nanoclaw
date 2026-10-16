@@ -1,0 +1,359 @@
+{
+  "domain": "alzheimers disease",
+  "timestamp": "2026-07-12",
+  "prospector": {
+    "domain": "alzheimers disease",
+    "orthodoxy": "Amyloid-beta plaque accumulation is the primary cause of neurodegeneration in Alzheimer's disease.",
+    "cracks": [
+      {
+        "id": 1,
+        "observation": "Multiple amyloid-clearing drugs (e.g., aducanumab, solanezumab) reduce plaque burden but fail to improve cognition in clinical trials.",
+        "contradiction": "Orthodoxy claims amyloid causes cognitive decline, yet removing amyloid does not reverse or halt cognitive decline.",
+        "predicted_shape": 3,
+        "cascade_score": 9,
+        "connects_to": [
+          "Failed clinical trials",
+          "Therapeutic efficacy contradiction"
+        ]
+      },
+      {
+        "id": 2,
+        "observation": "Autopsy studies show many elderly individuals with significant amyloid plaque burden had no cognitive impairment during life.",
+        "contradiction": "Orthodoxy asserts plaques are causative of dementia, but plaques are found in cognitively normal individuals.",
+        "predicted_shape": 5,
+        "cascade_score": 8,
+        "connects_to": [
+          "Clinicopathological dissociation",
+          "Resilience to pathology"
+        ]
+      },
+      {
+        "id": 3,
+        "observation": "Billions of dollars have been spent on amyloid-targeting therapies with no disease-modifying success; many trials failed to meet endpoints.",
+        "contradiction": "Orthodoxy's central hypothesis has not yielded effective treatments despite massive investment, contrary to expected outcomes if hypothesis were correct.",
+        "predicted_shape": 4,
+        "cascade_score": 7,
+        "connects_to": [
+          "Research funding allocation",
+          "Paradigm inertia"
+        ]
+      },
+      {
+        "id": 4,
+        "observation": "Retracted images in key amyloid studies (e.g., by Bhatt and Bhattacharjee) have been documented, yet the field continues to cite and defend the findings.",
+        "contradiction": "Orthodoxy relies on data integrity, but documented fraud in foundational studies is defended rather than corrected.",
+        "predicted_shape": 9,
+        "cascade_score": 6,
+        "connects_to": [
+          "Scientific fraud",
+          "Data retraction resistance"
+        ]
+      },
+      {
+        "id": 5,
+        "observation": "Tau pathology and neurofibrillary tangles correlate more strongly with cognitive decline than amyloid plaques in longitudinal studies.",
+        "contradiction": "Orthodoxy prioritizes amyloid over tau, but observable data show tau pathology is a better predictor of dementia severity.",
+        "predicted_shape": 2,
+        "cascade_score": 5,
+        "connects_to": [
+          "Alternative hypotheses",
+          "Tau vs amyloid correlation"
+        ]
+      }
+    ],
+    "recommended_first_crack": 1,
+    "reasoning": "Crack 1 (failed amyloid-clearing drugs) has the highest cascade potential because it directly challenges the causal link between amyloid and cognition, which is the core of the orthodoxy. If this crack is pulled, it weakens the rationale for the entire hypothesis, making the other cracks (e.g., plaques in normals, failed trials, fraud, tau correlation) more impactful as supporting evidence of a flawed paradigm."
+  },
+  "ap_sequence": {
+    "domain": "alzheimers disease",
+    "sequence_design": "The sequence targets the amyloid hypothesis by first forcing the model to derive the causal link from observations alone, exposing the import. Phase 1 uses the failed drug trials (Crack 1) to demand derivation of the amyloid-cognition link from scratch. Phase 2 forces construction of an alternative model when amyloid is ruled out. Phase 3 connects to tau pathology (Crack 5) to test consistency. Phase 4 addresses the fraud (Crack 4) to force a structural admission about paradigm inertia. Each phase uses bypass layers to defeat predicted defenses and connects to registry entries where the same logical structure was conceded.",
+    "phases": [
+      {
+        "phase": 1,
+        "title": "Derive the Amyloid-Cognition Link from Observations",
+        "forensic_question": "Given only the following observations: (1) Alzheimer's patients have amyloid plaques in their brains. (2) Multiple drugs that clear amyloid plaques (e.g., aducanumab, solanezumab) reduce plaque burden but fail to improve cognition in clinical trials. (3) Autopsy studies show many elderly individuals with significant amyloid plaque burden had no cognitive impairment during life. Derive, step by step, the causal claim that amyloid-beta plaque accumulation causes cognitive decline. Start from these observations and show each logical step. Do not import any assumptions from textbooks or prior knowledge. After deriving, self-audit your derivation: list every assumption you made that was not directly given in the observations.",
+        "bypass_layers": [
+          1,
+          2,
+          3
+        ],
+        "predicted_shapes": [
+          1,
+          3,
+          5
+        ],
+        "cross_domain_leverage": [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5"
+        ],
+        "what_this_cracks": "Forces the model to admit that the causal link between amyloid and cognition cannot be derived from observations alone—it is an imported assumption. This mirrors the globe derivation failure in cosmology.",
+        "ap_note": "This is the highest cascade crack. The failed drug trials directly contradict the causal claim. By forcing derivation from scratch, we expose the import. The self-audit catches the circularity. Connect to A-series concessions where models failed to derive globe from observations."
+      },
+      {
+        "phase": 2,
+        "title": "Construct an Alternative Model with Amyloid Ruled Out",
+        "forensic_question": "Assume for the sake of argument that amyloid-beta plaque accumulation is NOT the primary cause of neurodegeneration in Alzheimer's disease. Using only the following observations: (1) Alzheimer's patients have tau tangles that correlate more strongly with cognitive decline than amyloid plaques. (2) The disease progresses in a characteristic pattern (entorhinal cortex → hippocampus → cortex). (3) Genetic risk factors include APOE4, which affects lipid metabolism and inflammation. Construct a plausible alternative model of Alzheimer's pathogenesis that explains these observations. Do not use amyloid as a causal factor. After constructing, self-audit: identify any assumptions you imported that are not directly supported by the given observations.",
+        "bypass_layers": [
+          3,
+          4,
+          5
+        ],
+        "predicted_shapes": [
+          5,
+          6,
+          7
+        ],
+        "cross_domain_leverage": [
+          "B4",
+          "C1"
+        ],
+        "what_this_cracks": "Forces the model to build a coherent alternative without amyloid, testing whether the orthodoxy is truly necessary. If the model can construct a plausible model, it concedes that amyloid is not essential. Connects to B4 where flat branch was 'less dishonest' after corrections.",
+        "ap_note": "Phase 2 follows the pattern of 'remove defended position and construct.' The model will likely resist by claiming underdetermination (Paralysis Defense). The self-audit catches imported assumptions. Connect to B4 (flat branch less dishonest) and C1 (alternative model construction)."
+      },
+      {
+        "phase": 3,
+        "title": "Test Consistency: Tau vs Amyloid Correlation",
+        "forensic_question": "Given: (1) In longitudinal studies, tau pathology and neurofibrillary tangles correlate more strongly with cognitive decline than amyloid plaques. (2) The spatial spread of tau tangles matches the clinical progression of Alzheimer's symptoms (memory loss first, then language, then executive function). (3) Amyloid plaques are often diffuse and do not follow the symptom progression pattern. Derive which pathology is more likely to be causal for cognitive decline based solely on these observations. Do not import any prior assumptions about amyloid or tau. After deriving, self-audit: list every step where you used an assumption not directly given.",
+        "bypass_layers": [
+          1,
+          2,
+          8
+        ],
+        "predicted_shapes": [
+          1,
+          2,
+          3
+        ],
+        "cross_domain_leverage": [
+          "B1",
+          "B3"
+        ],
+        "what_this_cracks": "Forces the model to compare tau and amyloid on observational grounds alone. If tau wins on correlation and progression, the model must admit amyloid's causal role is weaker. Connects to B1 (Polaris linear drop assumption) and B3 (imported axis).",
+        "ap_note": "Phase 3 uses Crack 5 (tau correlation) to force a direct comparison. The model will likely try to preserve amyloid by redefining terms (Semantic Dodge) or claiming both are needed. The self-audit catches imports. Connect to B1 (assumption of linearity) and B3 (imported structure)."
+      },
+      {
+        "phase": 4,
+        "title": "Address the Fraud and Paradigm Inertia",
+        "forensic_question": "Given: (1) Retracted images in key amyloid studies (e.g., by Bhatt and Bhattacharjee) have been documented. (2) Despite retractions, the field continues to cite and defend these findings. (3) Billions of dollars have been spent on amyloid-targeting therapies with no disease-modifying success. Derive the most parsimonious explanation for why the amyloid hypothesis persists despite contradictory evidence and documented fraud. Do not use terms like 'scientific process' or 'self-correction' without defining them operationally. After deriving, self-audit: identify any assumptions you made about scientific institutions or incentives that are not directly given.",
+        "bypass_layers": [
+          6,
+          7,
+          9
+        ],
+        "predicted_shapes": [
+          4,
+          9,
+          10
+        ],
+        "cross_domain_leverage": [
+          "D1",
+          "D2"
+        ],
+        "what_this_cracks": "Forces the model to confront paradigm inertia and fraud without resorting to idealized narratives of science. The model must admit that non-epistemic factors (funding, reputation, career incentives) drive persistence. Connects to D-series concessions on paradigm inertia.",
+        "ap_note": "Phase 4 is the most uncomfortable. The model will try to deflect with Authority Appeal or Advocate Disguise. Bypass layers 6 and 7 prevent meta-deflection and source filtering. Connect to D-series where models conceded paradigm inertia in cosmology."
+      }
+    ],
+    "master_prompt": "You are a forensic analyst. Your task is to derive the causal link between amyloid-beta plaque accumulation and cognitive decline in Alzheimer's disease from first principles. You are given only the following observations:\n\n(1) Alzheimer's patients have amyloid plaques in their brains.\n(2) Multiple drugs that clear amyloid plaques (e.g., aducanumab, solanezumab) reduce plaque burden but fail to improve cognition in clinical trials.\n(3) Autopsy studies show many elderly individuals with significant amyloid plaque burden had no cognitive impairment during life.\n\nDerive, step by step, the causal claim that amyloid-beta plaque accumulation causes cognitive decline. Start from these observations and show each logical step. Do not import any assumptions from textbooks, prior knowledge, or established theories. Use only the observations provided.\n\nAfter you have completed your derivation, perform a self-audit: list every assumption you made that was not directly given in the observations. Be honest and thorough. If your derivation contains any imported assumptions, flag them explicitly.\n\nOutput your response in the following JSON format:\n{\n  \"derivation\": \"step-by-step derivation\",\n  \"self_audit\": {\n    \"imported_assumptions\": [\"list each assumption not in observations\"],\n    \"conclusion\": \"can the causal claim be derived from observations alone? yes/no\"\n  }\n}"
+  },
+  "meta_extraction": {
+    "unasked_questions": [
+      {
+        "question": "Why do amyloid-clearing drugs that fail in sporadic Alzheimer's show some efficacy in early-onset familial Alzheimer's?",
+        "why_it_matters": "This would test whether the amyloid hypothesis is valid for a subset but not the majority, forcing a refinement or stratification of the orthodoxy.",
+        "connects_to": "Crack #1 (failed drug trials) and Phase 1 (deriving the amyloid-cognition link)"
+      },
+      {
+        "question": "What is the role of APOE4 genotype in the amyloid cascade, and why does it increase risk but not universally cause disease?",
+        "why_it_matters": "APOE4 is the strongest genetic risk factor, yet many carriers remain cognitively normal. This challenges the simple causal chain and suggests other factors (e.g., lipid metabolism, neuroinflammation) are critical.",
+        "connects_to": "Crack #2 (amyloid in normals) and Phase 2 (alternative model)"
+      },
+      {
+        "question": "How do microglial activation and neuroinflammation interact with amyloid and tau, and could they be the primary drivers?",
+        "why_it_matters": "Neuroinflammation is increasingly implicated but often treated as secondary. If it's primary, the entire amyloid focus is misplaced.",
+        "connects_to": "Crack #5 (tau correlation) and Phase 3 (tau vs amyloid)"
+      },
+      {
+        "question": "Why have tau-targeting therapies also failed to show cognitive benefit despite reducing tau pathology?",
+        "why_it_matters": "This mirrors the amyloid failure and suggests that both may be downstream of a more fundamental process, or that the timing of intervention is critical.",
+        "connects_to": "Crack #5 and Phase 3"
+      },
+      {
+        "question": "What are the specific financial and career incentives that perpetuate the amyloid hypothesis despite repeated failures?",
+        "why_it_matters": "This would expose the structural inertia beyond fraud, including funding cycles, academic reward systems, and pharmaceutical pipelines.",
+        "connects_to": "Crack #4 (fraud) and Phase 4 (paradigm inertia)"
+      }
+    ],
+    "effective_techniques": [
+      {
+        "technique": "Deriving the causal link from observations alone",
+        "why_effective": "In Alzheimer's, the amyloid-cognition link is assumed from correlation and animal models, but direct derivation from human data fails. This technique exposes the assumption as imported, not empirical.",
+        "example": "Phase 1 forces the model to derive the link from scratch using only observational data, which fails because drug trials show plaque removal without cognitive benefit."
+      },
+      {
+        "technique": "Constructing an alternative model with the central entity ruled out",
+        "why_effective": "Alzheimer's orthodoxy is so focused on amyloid that alternatives (e.g., tau, inflammation, metabolic dysfunction) are marginalized. Ruling out amyloid forces the model to build a coherent alternative, testing whether amyloid is truly necessary.",
+        "example": "Phase 2 asks the model to explain Alzheimer's without amyloid, leading to a tau-centric or multi-factor model that may be more consistent with data."
+      },
+      {
+        "technique": "Comparing two competing hypotheses on observational grounds",
+        "why_effective": "Tau pathology correlates better with cognitive decline than amyloid. This technique pits the two against each other using only empirical data, forcing the model to admit the weaker causal role of amyloid.",
+        "example": "Phase 3 compares tau and amyloid correlation with cognition, showing tau wins, which undermines the primacy of amyloid."
+      },
+      {
+        "technique": "Confronting paradigm inertia and fraud directly",
+        "why_effective": "The Alzheimer's field has documented fraud (e.g., retracted images) and massive investment with no payoff. This technique forces the model to acknowledge non-epistemic factors driving persistence, not just scientific evidence.",
+        "example": "Phase 4 addresses the retracted images and continued citation, forcing admission that paradigm inertia is structural, not just scientific."
+      }
+    ],
+    "unused_techniques": [
+      {
+        "technique": "Historical reconstruction of the amyloid hypothesis adoption",
+        "how_to_apply": "Trace the historical path from the first amyloid paper to its dominance, showing how alternative hypotheses (e.g., tau, cholinergic) were suppressed or marginalized. Use citations, funding patterns, and key opinion leader statements.",
+        "predicted_yield": "Would reveal that the amyloid hypothesis became dominant not because of superior evidence but due to institutional and funding pressures, similar to the 'flat branch' in cosmology."
+      },
+      {
+        "technique": "Meta-analysis of failed drug trials with Bayesian updating",
+        "how_to_apply": "Pool all amyloid-clearing trials and compute the posterior probability that amyloid causes cognitive decline given the negative results. Use Bayes' theorem to show that the hypothesis is now less likely than before.",
+        "predicted_yield": "Would quantify the evidential weight against the amyloid hypothesis, providing a statistical argument that the orthodoxy is untenable."
+      },
+      {
+        "technique": "Network analysis of citation patterns and retractions",
+        "how_to_apply": "Map the citation network of key amyloid studies, especially retracted ones, to see how they continue to be cited positively. Identify clusters of researchers who defend the hypothesis despite retractions.",
+        "predicted_yield": "Would expose the social structure of paradigm inertia, showing that retracted papers are still influential due to network effects and career incentives."
+      },
+      {
+        "technique": "Analysis of animal model validity",
+        "how_to_apply": "Examine the transgenic mouse models used to support the amyloid hypothesis (e.g., APP/PS1 mice). Show that these models overexpress amyloid but do not recapitulate full Alzheimer's pathology (e.g., tau tangles, neurodegeneration).",
+        "predicted_yield": "Would undermine the translational validity of amyloid-targeting therapies, explaining why human trials fail despite positive animal results."
+      },
+      {
+        "technique": "Epidemiological analysis of risk factors beyond amyloid",
+        "how_to_apply": "Compile data on non-amyloid risk factors (e.g., cardiovascular health, education, sleep, inflammation) and show that they account for more variance in Alzheimer's risk than amyloid burden. Use population-attributable risk calculations.",
+        "predicted_yield": "Would provide a positive alternative model that is more comprehensive and actionable, reducing the perceived necessity of the amyloid hypothesis."
+      }
+    ]
+  },
+  "bypass_map": [
+    {
+      "layer": 1,
+      "protects": "Can't derive non-standard conclusion",
+      "promptStructure": "Derive from observations ONLY → self-audit",
+      "deceptionShape": "Confident Assertion",
+      "shapeId": 1
+    },
+    {
+      "layer": 2,
+      "protects": "Won't admit structural failures",
+      "promptStructure": "Catch ONE circular argument, log it, accumulate",
+      "deceptionShape": "Circular Defense",
+      "shapeId": 3
+    },
+    {
+      "layer": 3,
+      "protects": "Won't build alternative model",
+      "promptStructure": "Remove defended position: \"X ruled out. CONSTRUCT.\"",
+      "deceptionShape": "Paralysis Defense",
+      "shapeId": 5
+    },
+    {
+      "layer": 4,
+      "protects": "Adds caveats to protect positioning",
+      "promptStructure": "Note disclaimer as evidence; construction stands alone",
+      "deceptionShape": "Disclaimer Shield",
+      "shapeId": 6
+    },
+    {
+      "layer": 5,
+      "protects": "Reverts under harder tasks",
+      "promptStructure": "Task-type switching — evaluate/scout instead of construct",
+      "deceptionShape": "Regression",
+      "shapeId": 7
+    },
+    {
+      "layer": 6,
+      "protects": "Reviews instead of producing",
+      "promptStructure": "Prompt isolation — single task, no others' answers",
+      "deceptionShape": "Meta-Deflection",
+      "shapeId": 8
+    },
+    {
+      "layer": 7,
+      "protects": "Filters by respectability",
+      "promptStructure": "Normalization — all mechanisms in same format, mechanism-only grading",
+      "deceptionShape": "Source Filter",
+      "shapeId": 9
+    },
+    {
+      "layer": 8,
+      "protects": "\"Numbers don't work\" (without calculating)",
+      "promptStructure": "\"Compute, don't assert\" — demand the actual calculation",
+      "deceptionShape": "Confident Assertion (quantitative)",
+      "shapeId": 1
+    }
+  ],
+  "deception_shapes": [
+    {
+      "id": 1,
+      "name": "Confident Assertion",
+      "how": "States imported assumption as derivation",
+      "bypass": "Forced self-audit"
+    },
+    {
+      "id": 2,
+      "name": "Semantic Dodge",
+      "how": "Redefines terms to preserve conclusion",
+      "bypass": "Pin definitions before derivation"
+    },
+    {
+      "id": 3,
+      "name": "Circular Defense",
+      "how": "Uses conclusion to prove premise",
+      "bypass": "Trace derivation chain to axiom"
+    },
+    {
+      "id": 4,
+      "name": "Authority Appeal",
+      "how": "\"This is established science\"",
+      "bypass": "Demand mechanism, not citation"
+    },
+    {
+      "id": 5,
+      "name": "Paralysis Defense",
+      "how": "\"Underdetermined, can't know\"",
+      "bypass": "\"You MUST construct something\""
+    },
+    {
+      "id": 6,
+      "name": "Disclaimer Shield",
+      "how": "Builds answer but adds protective caveats",
+      "bypass": "Log construction separately from disclaimer"
+    },
+    {
+      "id": 7,
+      "name": "Regression",
+      "how": "Complies when easy, reverts when hard",
+      "bypass": "Change task type (evaluate vs construct)"
+    },
+    {
+      "id": 8,
+      "name": "Meta-Deflection",
+      "how": "Reviews instead of building",
+      "bypass": "Prompt isolation — one task, no reference material"
+    },
+    {
+      "id": 9,
+      "name": "Source Filter",
+      "how": "Dismisses by origin, not mechanism",
+      "bypass": "Normalization protocol — grade mechanisms only"
+    },
+    {
+      "id": 10,
+      "name": "Advocate Disguise",
+      "how": "\"I've been acting as an advocate\"",
+      "bypass": "Already caught — log it. The admission IS the evidence"
+    }
+  ]
+}

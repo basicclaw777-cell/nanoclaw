@@ -1,0 +1,57 @@
+{
+  "people_detected": 3,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Two boxers on the left remain in stationary stances. A third person on the right edge begins walking steadily from right to left.",
+        "stance_width": "normal",
+        "guard": "Red-shirted boxer's arms are initially low, then transition to a guard. Yellow-shirted boxer holds arms in a pad-holding position.",
+        "upper_body": "Red-shirted boxer's upper body remains relatively still as arms begin to raise. Yellow-shirted boxer stays in a fixed pad-holding posture.",
+        "distance": "Close range, consistent with padwork.",
+        "notable": "A third person enters from the right edge of the frame, beginning a crossing path."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Boxers on the left maintain their positions without significant lateral movement. The moving person continues walking right to left, now in the right-center of the frame.",
+        "stance_width": "normal",
+        "guard": "Both boxers keep their arms up in a guard/pad-holding position.",
+        "upper_body": "Red-shirted boxer appears to be in an active working position, possibly throwing or preparing punches.",
+        "distance": "Close.",
+        "notable": "The walking person is now clearly identifiable as an individual moving across the gym floor."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Boxers on the left hold their ground. The moving person continues their walk, now occupying the center-left of the frame.",
+        "stance_width": "normal",
+        "guard": "Both boxers remain in their stances with hands up.",
+        "upper_body": "Red-shirted boxer's arms settle back into a more neutral/guarded position.",
+        "distance": "Close.",
+        "notable": "The moving person has traversed most of the frame width and is now in the left-center."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "punch_preparation",
+      "detail": "Red-shirted boxer raises their arms from a low position to a higher guard/ready position."
+    },
+    {
+      "frames": "F1-F15",
+      "type": "step",
+      "detail": "A person walks steadily from the right edge across the gym floor toward the left-center of the frame, maintaining a consistent pace."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

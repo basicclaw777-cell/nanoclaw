@@ -1,0 +1,88 @@
+{
+  "marketId": "2296152",
+  "question": "Israel closes its airspace by June 15?",
+  "eventTitle": "Israel closes its airspace by...?",
+  "marketYes": 0.18,
+  "marketNo": 0.82,
+  "volume24hr": 2018553.2583660018,
+  "daysToResolution": 7,
+  "analysis": {
+    "question": "Israel closes its airspace by June 15?",
+    "factors": [
+      {
+        "factor": "Current geopolitical tensions and military activity",
+        "direction": "supports_yes",
+        "weight": "high",
+        "evidence": "Israel is engaged in ongoing conflicts with Hamas and Hezbollah, and has faced missile attacks that occasionally disrupt air traffic. Recent escalations could prompt a preemptive or reactive airspace closure."
+      },
+      {
+        "factor": "Historical frequency of Israeli airspace closures",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Israel has rarely closed its entire civilian airspace. Even during major conflicts (e.g., 2023 war), closures were limited to specific regions or temporary ground stops. Full nationwide closures are extremely rare."
+      },
+      {
+        "factor": "Time remaining until deadline",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "Only 7 days remain. A major closure requires a significant triggering event (e.g., imminent large-scale attack, war escalation). The short window reduces the probability of such an event occurring."
+      },
+      {
+        "factor": "Definition strictness",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "The resolution criteria are narrow: must be a broad, general closure of majority of Israeli airspace, not weather-related, and initiated by Israeli authorities. Minor disruptions or foreign-imposed no-fly zones do not count."
+      },
+      {
+        "factor": "Current security environment",
+        "direction": "neutral",
+        "weight": "medium",
+        "evidence": "As of June 8, 2026, there are no reports of an imminent major attack or war declaration that would necessitate a full airspace closure. Tensions are elevated but not at a crisis point."
+      }
+    ],
+    "baseRate": {
+      "value": 0.05,
+      "reasoning": "Based on historical data from the past 20 years, full civilian airspace closures by Israel (excluding weather) have occurred approximately once every 20 years (e.g., during the 1991 Gulf War Scud attacks). Even during the 2023 war, closures were partial and temporary. Base rate for a 7-day window is very low."
+    },
+    "adjustments": [
+      {
+        "reason": "Current elevated conflict level increases risk compared to peacetime base rate",
+        "delta": 0.03
+      },
+      {
+        "reason": "Short time window reduces probability from annual base rate to weekly window",
+        "delta": -0.02
+      },
+      {
+        "reason": "Narrow definition excludes many plausible disruptions, lowering probability",
+        "delta": -0.01
+      }
+    ],
+    "finalEstimate": 0.05,
+    "confidence": "medium",
+    "confidenceInterval": [
+      0.01,
+      0.15
+    ],
+    "keyUncertainties": [
+      "A sudden major escalation (e.g., Iranian attack, all-out war with Hezbollah) could trigger a closure",
+      "Unexpected security intelligence indicating an imminent threat could prompt a preemptive closure",
+      "Technical or cyber incidents affecting air traffic control could lead to a closure"
+    ],
+    "researchNeeded": [
+      "Current intelligence assessments of near-term attack risks",
+      "Recent statements from Israeli aviation authorities about airspace security",
+      "Historical frequency of airspace closures in comparable conflict periods"
+    ],
+    "reasoning": "The base rate for a full civilian airspace closure by Israel is extremely low, even during active conflicts. Over the past two decades, only a handful of events have met the strict definition (e.g., the 1991 Gulf War, and possibly a brief 2014 incident). The current conflict, while serious, has not yet reached a threshold that would necessitate a nationwide closure. The 7-day window further reduces the probability, as such decisions typically require days of escalation. The market's 18% seems too high given the historical rarity and the narrow resolution criteria. My estimate of 5% reflects a low but non-trivial risk, acknowledging that tail risks (e.g., a sudden Iranian missile barrage) could force a closure, but such events remain unlikely within the timeframe."
+  },
+  "edge": {
+    "side": "NO",
+    "edge": 0.13,
+    "edgePct": "13.0%",
+    "ourEstimate": "5.0%",
+    "marketPrice": "18.0%",
+    "tradeable": false
+  },
+  "researchedAt": "2026-06-08T06:17:08.042Z"
+}

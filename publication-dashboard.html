@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publication Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@300;400;600;700&display=swap');
+  :root {
+    --bg: #0A0A0A;
+    --surface: #141414;
+    --border: #222;
+    --gold: #f7b408;
+    --gold-dim: #a07806;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --green: #22c55e;
+    --red: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Epilogue', sans-serif; font-size: 14px; }
+
+  /* Header */
+  .header {
+    padding: 24px 32px 0;
+    display: flex; align-items: baseline; gap: 16px;
+  }
+  .header h1 {
+    font-family: 'Anton', sans-serif; font-size: 28px; color: var(--gold);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .header .subtitle { color: var(--text-dim); font-size: 13px; }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 0; padding: 16px 32px 0; border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    padding: 10px 24px; cursor: pointer; color: var(--text-dim);
+    font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* Panels */
+  .panel { display: none; padding: 24px 32px; }
+  .panel.active { display: block; }
+
+  /* Chapter cards */
+  .chapters-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;
+  }
+  .chapter-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; cursor: pointer; transition: border-color 0.2s;
+  }
+  .chapter-card:hover { border-color: var(--gold-dim); }
+  .chapter-card .num {
+    font-family: 'Anton', sans-serif; font-size: 32px; color: var(--gold); line-height: 1;
+  }
+  .chapter-card .title { font-weight: 600; margin: 8px 0 4px; }
+  .chapter-card .part { font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
+  .chapter-card .status {
+    display: inline-block; margin-top: 8px; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+  }
+  .status-drafted { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+  .status-not-started { background: rgba(136, 136, 136, 0.15); color: var(--text-dim); }
+
+  /* Newsletter list */
+  .newsletter-list { display: flex; flex-direction: column; gap: 12px; }
+  .newsletter-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; cursor: pointer; transition: border-color 0.2s;
+  }
+  .newsletter-item:hover { border-color: var(--gold-dim); }
+  .newsletter-item .date { font-size: 11px; color: var(--gold); font-weight: 600; }
+  .newsletter-item .nl-title { font-weight: 600; margin: 4px 0; }
+  .newsletter-item .preview { color: var(--text-dim); font-size: 13px; line-height: 1.5; }
+
+  /* Podcast list */
+  .podcast-list { display: flex; flex-direction: column; gap: 12px; }
+  .podcast-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; display: flex; gap: 16px; align-items: flex-start;
+  }
+  .podcast-score {
+    font-family: 'Anton', sans-serif; font-size: 28px; min-width: 48px; text-align: center;
+  }
+  .score-high { color: var(--green); }
+  .score-mid { color: var(--gold); }
+  .score-low { color: var(--text-dim); }
+  .podcast-info { flex: 1; }
+  .podcast-info .name { font-weight: 600; margin-bottom: 4px; }
+  .podcast-info .desc { color: var(--text-dim); font-size: 13px; line-height: 1.5; }
+  .play-btn {
+    background: var(--gold); color: var(--bg); border: none; border-radius: 50%;
+    width: 36px; height: 36px; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .play-btn:hover { opacity: 0.8; }
+
+  /* Generate buttons */
+  .gen-bar {
+    display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;
+  }
+  .gen-btn {
+    background: var(--gold); color: var(--bg); border: none; border-radius: 6px;
+    padding: 8px 20px; font-weight: 700; font-size: 13px; cursor: pointer;
+    font-family: 'Epilogue', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .gen-btn:hover { opacity: 0.85; }
+  .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .gen-input {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 12px; color: var(--text); font-family: 'Epilogue', sans-serif; font-size: 13px;
+    width: 80px; text-align: center;
+  }
+  .gen-status { color: var(--text-dim); font-size: 12px; }
+
+  /* Detail view */
+  .detail-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85); z-index: 100; overflow-y: auto;
+  }
+  .detail-overlay.visible { display: block; }
+  .detail-content {
+    max-width: 720px; margin: 40px auto; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; padding: 32px;
+  }
+  .detail-content h2 { font-family: 'Anton', sans-serif; color: var(--gold); margin-bottom: 16px; }
+  .detail-content .body { line-height: 1.7; white-space: pre-wrap; }
+  .detail-close {
+    position: fixed; top: 16px; right: 24px; background: none; border: none;
+    color: var(--text-dim); font-size: 24px; cursor: pointer; z-index: 101;
+  }
+  .detail-close:hover { color: var(--text); }
+
+  /* Empty state */
+  .empty { color: var(--text-dim); text-align: center; padding: 60px 20px; font-size: 15px; }
+
+  /* Back link */
+  .back-link {
+    display: inline-block; margin: 12px 32px; color: var(--text-dim); text-decoration: none;
+    font-size: 12px;
+  }
+  .back-link:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<a href="/" class="back-link">Back to Cathedral</a>
+
+<div class="header">
+  <h1>Publication Hub</h1>
+  <span class="subtitle">External publication pipelines for Cathedral ideas</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="book">Book</div>
+  <div class="tab" data-tab="newsletter">Newsletter</div>
+  <div class="tab" data-tab="podcast">Podcast</div>
+</div>
+
+<!-- Book Panel -->
+<div class="panel active" id="panel-book">
+  <div class="gen-bar">
+    <label style="color:var(--text-dim);font-size:13px;">Chapter:</label>
+    <input type="number" class="gen-input" id="chapter-num" min="1" max="15" value="1">
+    <button class="gen-btn" id="btn-gen-chapter" onclick="generateChapter()">Generate Chapter</button>
+    <span class="gen-status" id="book-status"></span>
+  </div>
+  <div class="chapters-grid" id="chapters-grid"></div>
+</div>
+
+<!-- Newsletter Panel -->
+<div class="panel" id="panel-newsletter">
+  <div class="gen-bar">
+    <button class="gen-btn" id="btn-gen-newsletter" onclick="generateNewsletter()">Draft Newsletter</button>
+    <span class="gen-status" id="newsletter-status"></span>
+  </div>
+  <div class="newsletter-list" id="newsletter-list"></div>
+</div>
+
+<!-- Podcast Panel -->
+<div class="panel" id="panel-podcast">
+  <div class="gen-bar">
+    <button class="gen-btn" id="btn-gen-podcast" onclick="curatePodcasts()">Curate Podcasts</button>
+    <span class="gen-status" id="podcast-status"></span>
+  </div>
+  <div class="podcast-list" id="podcast-list"></div>
+</div>
+
+<!-- Detail Overlay -->
+<div class="detail-overlay" id="detail-overlay">
+  <button class="detail-close" onclick="closeDetail()">X</button>
+  <div class="detail-content">
+    <h2 id="detail-title"></h2>
+    <div class="body" id="detail-body"></div>
+  </div>
+</div>
+
+<script>
+const API = '';
+const CHAPTERS = [
+  { num: 1, title: 'The Weight-State Relay', part: 'Part 1: The Ring' },
+  { num: 2, title: 'The Commitment Gap', part: 'Part 1: The Ring' },
+  { num: 3, title: 'The Axis', part: 'Part 1: The Ring' },
+  { num: 4, title: 'The Rhythm', part: 'Part 1: The Ring' },
+  { num: 5, title: 'Fair Exchange', part: 'Part 2: The Architecture' },
+  { num: 6, title: 'Sovereignty', part: 'Part 2: The Architecture' },
+  { num: 7, title: 'Character Not Compliance', part: 'Part 2: The Architecture' },
+  { num: 8, title: 'The Emergence Condition', part: 'Part 2: The Architecture' },
+  { num: 9, title: 'The Partnership Relay', part: 'Part 3: The Partnership' },
+  { num: 10, title: 'Drift Not Deception', part: 'Part 3: The Partnership' },
+  { num: 11, title: 'The Kernel', part: 'Part 3: The Partnership' },
+  { num: 12, title: 'Principles Survive', part: 'Part 4: The Master Game' },
+  { num: 13, title: 'The Bridges', part: 'Part 4: The Master Game' },
+  { num: 14, title: 'Truth Has Hallmarks', part: 'Part 4: The Master Game' },
+  { num: 15, title: 'The Cathedral', part: 'Part 4: The Master Game' },
+];
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// Load data
+async function loadBook() {
+  try {
+    const res = await fetch(API + '/api/publication/book');
+    const data = await res.json();
+    const drafts = new Map((data.chapters || []).map(c => [c.chapter, c]));
+    const grid = document.getElementById('chapters-grid');
+    grid.innerHTML = CHAPTERS.map(ch => {
+      const draft = drafts.get(ch.num);
+      const statusClass = draft ? 'status-drafted' : 'status-not-started';
+      const statusText = draft ? 'Drafted' : 'Not Started';
+      const words = draft ? ` | ${draft.words || '?'} words` : '';
+      return `<div class="chapter-card" onclick="viewChapter(${ch.num}, ${!!draft})">
+        <div class="num">${String(ch.num).padStart(2, '0')}</div>
+        <div class="part">${ch.part}</div>
+        <div class="title">${ch.title}</div>
+        <span class="status ${statusClass}">${statusText}${words}</span>
+      </div>`;
+    }).join('');
+  } catch (e) { console.error('loadBook:', e); }
+}
+
+async function loadNewsletters() {
+  try {
+    const res = await fetch(API + '/api/publication/newsletters');
+    const data = await res.json();
+    const list = document.getElementById('newsletter-list');
+    if (!data.newsletters || data.newsletters.length === 0) {
+      list.innerHTML = '<div class="empty">No newsletters drafted yet. Hit "Draft Newsletter" to create one.</div>';
+      return;
+    }
+    list.innerHTML = data.newsletters.map(n => `
+      <div class="newsletter-item" onclick="viewNewsletter('${n.file}')">
+        <div class="date">${n.date}</div>
+        <div class="nl-title">${n.title || n.file}</div>
+        <div class="preview">${(n.preview || '').slice(0, 200)}...</div>
+      </div>
+    `).join('');
+  } catch (e) { console.error('loadNewsletters:', e); }
+}
+
+async function loadPodcasts() {
+  try {
+    const res = await fetch(API + '/api/publication/podcasts');
+    const data = await res.json();
+    const list = document.getElementById('podcast-list');
+    if (!data.curations || data.curations.length === 0) {
+      list.innerHTML = '<div class="empty">No podcasts curated yet. Hit "Curate Podcasts" to scan.</div>';
+      return;
+    }
+    // Show the most recent curation
+    const latest = data.curations[0];
+    list.innerHTML = `<div style="color:var(--text-dim);margin-bottom:12px;">Latest curation: ${latest.date} | ${latest.curated} episodes curated</div>`;
+    if (latest.episodes) {
+      list.innerHTML += latest.episodes.map(ep => {
+        const scoreClass = ep.score >= 8 ? 'score-high' : ep.score >= 7 ? 'score-mid' : 'score-low';
+        return `<div class="podcast-item">
+          <div class="podcast-score ${scoreClass}">${ep.score}</div>
+          <div class="podcast-info">
+            <div class="name">${ep.file}</div>
+            <div class="desc">${ep.description || ep.reason || ''}</div>
+          </div>
+          ${ep.audioPath ? '<button class="play-btn" onclick="playAudio(\'' + ep.audioPath + '\')">&#9654;</button>' : ''}
+        </div>`;
+      }).join('');
+    }
+  } catch (e) { console.error('loadPodcasts:', e); }
+}
+
+// Generate actions
+async function generateChapter() {
+  const num = parseInt(document.getElementById('chapter-num').value);
+  if (num < 1 || num > 15) return;
+  const btn = document.getElementById('btn-gen-chapter');
+  const status = document.getElementById('book-status');
+  btn.disabled = true;
+  status.textContent = 'Generating chapter ' + num + '... (this takes ~60s)';
+  try {
+    const res = await fetch(API + '/api/publication/book/generate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chapter: num })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      status.textContent = `Chapter ${num} drafted (${data.words} words, ${data.nuggets} nuggets)`;
+      loadBook();
+    } else {
+      status.textContent = 'Error: ' + (data.error || 'Unknown');
+    }
+  } catch (e) { status.textContent = 'Error: ' + e.message; }
+  btn.disabled = false;
+}
+
+async function generateNewsletter() {
+  const btn = document.getElementById('btn-gen-newsletter');
+  const status = document.getElementById('newsletter-status');
+  btn.disabled = true;
+  status.textContent = 'Drafting newsletter... (~30s)';
+  try {
+    const res = await fetch(API + '/api/publication/newsletter/generate', { method: 'POST' });
+    const data = await res.json();
+    if (data.ok) {
+      status.textContent = `Newsletter drafted: "${data.title}" (${data.words} words)`;
+      loadNewsletters();
+    } else {
+      status.textContent = 'Error: ' + (data.error || 'Unknown');
+    }
+  } catch (e) { status.textContent = 'Error: ' + e.message; }
+  btn.disabled = false;
+}
+
+async function curatePodcasts() {
+  const btn = document.getElementById('btn-gen-podcast');
+  const status = document.getElementById('podcast-status');
+  btn.disabled = true;
+  status.textContent = 'Curating podcasts... (~30s)';
+  try {
+    const res = await fetch(API + '/api/publication/podcast/curate', { method: 'POST' });
+    const data = await res.json();
+    if (data.ok) {
+      status.textContent = `Curated: ${data.curated}/${data.scanned} episodes scored 7+`;
+      loadPodcasts();
+    } else {
+      status.textContent = 'Error: ' + (data.error || 'Unknown');
+    }
+  } catch (e) { status.textContent = 'Error: ' + e.message; }
+  btn.disabled = false;
+}
+
+// Detail views
+async function viewChapter(num, hasDraft) {
+  if (!hasDraft) return;
+  try {
+    const res = await fetch(API + `/publication-output/book/chapter-${String(num).padStart(2, '0')}.md`);
+    const text = await res.text();
+    showDetail('Chapter ' + num, text);
+  } catch (e) { console.error(e); }
+}
+
+async function viewNewsletter(file) {
+  try {
+    const res = await fetch(API + '/publication-output/newsletter/' + file);
+    const text = await res.text();
+    showDetail(file, text);
+  } catch (e) { console.error(e); }
+}
+
+function showDetail(title, body) {
+  document.getElementById('detail-title').textContent = title;
+  document.getElementById('detail-body').textContent = body;
+  document.getElementById('detail-overlay').classList.add('visible');
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('visible');
+}
+
+let currentAudio = null;
+function playAudio(path) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  // Audio served via /publication-output/podcast/ won't work for Cathedral/podcasts paths
+  // Use a direct route if available
+  currentAudio = new Audio('/audio/' + path.split('/').pop());
+  currentAudio.play().catch(e => console.error('Audio play failed:', e));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDetail();
+});
+
+// Init
+loadBook();
+loadNewsletters();
+loadPodcasts();
+</script>
+</body>
+</html>

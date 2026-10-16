@@ -1,0 +1,55 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Fighter on the right is moving slightly, stepping in and out of range.",
+        "stance_width": "normal",
+        "guard": "High guard, hands up near face.",
+        "upper_body": "Throwing punches at the pad holder's targets.",
+        "distance": "Close, within striking range.",
+        "notable": "Two people present: pad holder on the left, fighter on the right."
+      }
+    },
+    {
+      "frames": "F6-F15",
+      "time": "1.7s-4.7s",
+      "observations": {
+        "footwork": "Fighter is moving around the ring, taking small steps and pivoting occasionally.",
+        "stance_width": "normal",
+        "guard": "Guard is up, though hands drop slightly between punches.",
+        "upper_body": "Shadowboxing, throwing jabs and crosses.",
+        "distance": "No opponent, moving in open space.",
+        "notable": "The pad holder has left the frame; fighter is training alone."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F5-F6",
+      "type": "distance_open",
+      "detail": "The pad holder moves out of the frame, leaving the fighter alone."
+    },
+    {
+      "frames": "F9-F10",
+      "type": "punch_extension",
+      "detail": "Fighter throws a shadowboxing combination, extending lead hand then rear hand."
+    },
+    {
+      "frames": "F12",
+      "type": "step",
+      "detail": "Fighter steps to the left, changing position."
+    },
+    {
+      "frames": "F13-F14",
+      "type": "punch_extension",
+      "detail": "Fighter continues with more punches."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

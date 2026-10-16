@@ -4,6 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 import { getTasteProfile, addAnchor, addRejection, getStats, getVoicePattern } from './taste-map-api.js';
+import { tasteHealth, getCrossCoherence, getCoreDimensions, getDrillDimensions, scoreDrill } from './taste-dimensions.js';
 
 const SESSIONS_DIR = path.join(process.env.HOME, 'nanoclaw', 'taste-sessions');
 const VAULT_TASTE_DIR = path.join(process.env.HOME, 'cathedral-vault', '09_Artifacts', 'taste-map');
@@ -15,7 +16,7 @@ if (!fs.existsSync(VAULT_TASTE_DIR)) fs.mkdirSync(VAULT_TASTE_DIR, { recursive: 
 // Active elicitation sessions (in-memory, one per chat)
 const activeSessions = new Map();
 
-const DOMAINS = ['music', 'visual_style', 'writing_voice', 'teaching_tone', 'class_energy'];
+const DOMAINS = ['music', 'visual_style', 'writing_voice', 'teaching_tone', 'class_energy', 'boxing_drills', 'research_style', 'decision_making', 'values', 'collaboration'];
 
 /**
  * Format taste map stats for display
@@ -72,6 +73,68 @@ export function formatProfile(domain) {
     msg += `\n💡 _${profile.taste_rule}_`;
   }
 
+  return msg;
+}
+
+/**
+ * Format taste health diagnostic
+ */
+export function formatHealth() {
+  const h = tasteHealth();
+  let msg = `Taste Map Health: ${h.health}\n`;
+  msg += `${h.healthAdvice}\n\n`;
+  msg += `Total: ${h.totalAnchors} anchors / ${h.totalRejections} rejections (${h.overallRatio}:1)\n`;
+  msg += `Core dimensions: ${h.coreDimensions}\n`;
+  msg += `Domains: ${h.domainCount}\n\n`;
+
+  for (const [name, s] of Object.entries(h.domainStats)) {
+    const ratio = s.rejections > 0 ? (s.anchors / s.rejections).toFixed(1) : 'inf';
+    let status;
+    if (s.rejections === 0 && s.anchors === 0) status = 'EMPTY';
+    else if (ratio === 'inf' || parseFloat(ratio) > 15) status = 'NO_BOUNDARY';
+    else if (parseFloat(ratio) > 8) status = 'DILUTED';
+    else if (parseFloat(ratio) >= 3) status = 'HEALTHY';
+    else status = 'RESTRICTIVE';
+    msg += `  ${name}: ${s.anchors}a/${s.rejections}r (${ratio}:1) — ${status}\n`;
+  }
+
+  if (h.weakestDomains.length > 0) {
+    msg += `\nNeeds work: ${h.weakestDomains.join(', ')}`;
+  }
+  return msg;
+}
+
+/**
+ * Format cross-domain coherence map
+ */
+export function formatCoherence() {
+  const coherence = getCrossCoherence();
+  let msg = `Cross-Domain Taste Coherence\n`;
+  msg += `Same frequency, different domains:\n\n`;
+
+  for (const c of coherence) {
+    msg += `${c.frequency}\n`;
+    for (const [domain, expr] of Object.entries(c)) {
+      if (domain !== 'frequency') msg += `  ${domain}: ${expr}\n`;
+    }
+    msg += '\n';
+  }
+  return msg;
+}
+
+/**
+ * Format core dimensions
+ */
+export function formatDimensions() {
+  const dims = getCoreDimensions();
+  let msg = `Core Taste Dimensions (the WHY)\n\n`;
+
+  for (const [name, dim] of Object.entries(dims)) {
+    msg += `${name.replace(/_/g, ' ').toUpperCase()}\n`;
+    msg += `  ${dim.description}\n`;
+    msg += `  Domains: ${dim.appears_in.join(', ')}\n`;
+    msg += `  Anti: ${dim.anti_pattern}\n\n`;
+  }
   return msg;
 }
 
@@ -174,6 +237,10 @@ export function getHelpText() {
 \`/taste add music <artist/track>\` — add music anchor
 \`/taste reject <domain> <reason>\` — add rejection
 \`/taste elicit <domain>\` — start interactive session
+\`/taste health\` — taste map health diagnostic
+\`/taste dimensions\` — core WHY dimensions
+\`/taste coherence\` — cross-domain frequency map
+\`/taste drills\` — boxing drill taste profile
 
 *Passive collection:*
 Taste map also learns from your daily actions — approving Reed images, rating playlists, rejecting AI output.`;
@@ -182,6 +249,9 @@ Taste map also learns from your daily actions — approving Reed images, rating 
 export default {
   formatStats,
   formatProfile,
+  formatHealth,
+  formatDimensions,
+  formatCoherence,
   startSession,
   processResponse,
   stopSession,

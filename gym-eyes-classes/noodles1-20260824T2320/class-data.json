@@ -1,0 +1,378 @@
+{
+  "id": "class-20260824T2320",
+  "date": "2026-08-24",
+  "video": "noodles1.MOV",
+  "duration": 3404.445,
+  "theme": null,
+  "students": null,
+  "type": "padwork",
+  "windowCount": 6,
+  "windows": [
+    {
+      "time": "5:12",
+      "observations": {
+        "people_detected": 1,
+        "activity_type": "movement",
+        "intensity": "low",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Moving laterally to the left with small, controlled steps.",
+              "stance_width": "normal",
+              "guard": "Hands up near the chin, elbows tucked in.",
+              "upper_body": "Slight forward lean, relaxed head movement.",
+              "distance": "No opponent; large empty space around the fighter.",
+              "notable": "Fighter is drifting leftward across the frame."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Continuing steady lateral steps to the left.",
+              "stance_width": "normal",
+              "guard": "Guard remains high and stable.",
+              "upper_body": "Maintaining torso orientation, no punches thrown.",
+              "distance": "Maintaining position relative to the gym background.",
+              "notable": "Movement is consistent and unhurried."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Completing the lateral shuffle to the far left side of the frame.",
+              "stance_width": "normal",
+              "guard": "Hands remain up in guard position.",
+              "upper_body": "Torso is stable, facing left.",
+              "distance": "Fighter is now positioned on the left side of the gym.",
+              "notable": "Continuous drill without stopping."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F15",
+            "type": "step",
+            "detail": "The fighter repeatedly steps laterally to the left, maintaining a consistent boxing stance throughout the entire sequence."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "9:42",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "padwork",
+        "intensity": "low",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Minimal movement, maintaining a static stance with small adjustments.",
+              "stance_width": "normal",
+              "guard": "Hands are held up in a high guard.",
+              "upper_body": "Body is angled facing the right side of the frame, mostly stationary.",
+              "distance": "Away from the partially visible figure on the left edge.",
+              "notable": "Standing in position, appears to be waiting or observing."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Continues to hold position with minor weight shifts and slight bouncing.",
+              "stance_width": "normal",
+              "guard": "Guard remains up.",
+              "upper_body": "Maintains a consistent stance and orientation.",
+              "distance": "Stays away from the left edge.",
+              "notable": "Sustained guard and stance."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Steps to the left, moving across the floor.",
+              "stance_width": "changing",
+              "guard": "Hands remain up while moving.",
+              "upper_body": "Turns slightly as they move towards the left side of the frame.",
+              "distance": "Closing the distance towards the figure on the left.",
+              "notable": "Begins to move and close distance."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F11-F15",
+            "type": "distance_close",
+            "detail": "Steps to the left, moving across the floor towards the partially visible partner on the left edge."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "14:12",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "padwork",
+        "intensity": "medium",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Static stance, feet planted, no significant movement visible",
+              "stance_width": "normal",
+              "guard": "Hands appear to be held up in a guard position",
+              "upper_body": "Upright posture, facing left toward the coach on the left edge",
+              "distance": "Moderate distance from the coach on the left edge",
+              "notable": "Coach visible on left edge holding pads; person stable in stance"
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Shifting position, appears to be stepping or moving toward the left",
+              "stance_width": "changing",
+              "guard": "Guard maintained, hands still up",
+              "upper_body": "Body leaning slightly forward or extending, engaged in activity",
+              "distance": "Distance appears to be closing with the coach",
+              "notable": "Person appears to be executing a movement or punch toward the pads"
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Settled back into a stance, feet planted",
+              "stance_width": "normal",
+              "guard": "Hands up in guard position",
+              "upper_body": "Upright posture, facing left toward the coach",
+              "distance": "Moderate distance from the coach",
+              "notable": "Person has reset after the previous movement"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F6-F8",
+            "type": "distance_close",
+            "detail": "Person appears to move toward the coach on the left edge, possibly throwing a punch"
+          },
+          {
+            "frames": "F9-F11",
+            "type": "reset",
+            "detail": "Person returns to a stable stance after the movement"
+          }
+        ],
+        "overall_rhythm": "burst_then_rest"
+      }
+    },
+    {
+      "time": "18:42",
+      "observations": {
+        "people_detected": 3,
+        "activity_type": "padwork",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Two boxers on the left remain in stationary stances. A third person on the right edge begins walking steadily from right to left.",
+              "stance_width": "normal",
+              "guard": "Red-shirted boxer's arms are initially low, then transition to a guard. Yellow-shirted boxer holds arms in a pad-holding position.",
+              "upper_body": "Red-shirted boxer's upper body remains relatively still as arms begin to raise. Yellow-shirted boxer stays in a fixed pad-holding posture.",
+              "distance": "Close range, consistent with padwork.",
+              "notable": "A third person enters from the right edge of the frame, beginning a crossing path."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Boxers on the left maintain their positions without significant lateral movement. The moving person continues walking right to left, now in the right-center of the frame.",
+              "stance_width": "normal",
+              "guard": "Both boxers keep their arms up in a guard/pad-holding position.",
+              "upper_body": "Red-shirted boxer appears to be in an active working position, possibly throwing or preparing punches.",
+              "distance": "Close.",
+              "notable": "The walking person is now clearly identifiable as an individual moving across the gym floor."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Boxers on the left hold their ground. The moving person continues their walk, now occupying the center-left of the frame.",
+              "stance_width": "normal",
+              "guard": "Both boxers remain in their stances with hands up.",
+              "upper_body": "Red-shirted boxer's arms settle back into a more neutral/guarded position.",
+              "distance": "Close.",
+              "notable": "The moving person has traversed most of the frame width and is now in the left-center."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F5",
+            "type": "punch_preparation",
+            "detail": "Red-shirted boxer raises their arms from a low position to a higher guard/ready position."
+          },
+          {
+            "frames": "F1-F15",
+            "type": "step",
+            "detail": "A person walks steadily from the right edge across the gym floor toward the left-center of the frame, maintaining a consistent pace."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "23:12",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "padwork",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Stationary with slight rhythmic bounce.",
+              "stance_width": "normal",
+              "guard": "Both hands held high near the chin.",
+              "upper_body": "Right hand extends in a straight punch.",
+              "distance": "Close, padwork range.",
+              "notable": "Right hand straight punch thrown and retracted."
+            }
+          },
+          {
+            "frames": "F6-F9",
+            "time": "1.7s-2.7s",
+            "observations": {
+              "footwork": "Maintains reactive stance.",
+              "stance_width": "normal",
+              "guard": "Hands are up, elbows in.",
+              "upper_body": "Left hand extends in a lead punch.",
+              "distance": "Close, consistent range.",
+              "notable": "Left hand straight punch thrown and retracted."
+            }
+          },
+          {
+            "frames": "F10-F15",
+            "time": "3.0s-4.7s",
+            "observations": {
+              "footwork": "Fighter steps forward to close distance.",
+              "stance_width": "changing",
+              "guard": "Guard maintained before and after punch.",
+              "upper_body": "Right hand extends in a straight punch.",
+              "distance": "Distance closed slightly, then back to normal.",
+              "notable": "Step-in right hand punch."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F3-F4",
+            "type": "punch_extension",
+            "detail": "Right hand extends toward the pads."
+          },
+          {
+            "frames": "F7-F8",
+            "type": "punch_extension",
+            "detail": "Left hand extends toward the pads."
+          },
+          {
+            "frames": "F11-F12",
+            "type": "step",
+            "detail": "Fighter steps forward."
+          },
+          {
+            "frames": "F13-F14",
+            "type": "punch_extension",
+            "detail": "Right hand extends toward the pads after stepping."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "27:42",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "low",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Lateral steps to the right, maintaining a boxing stance.",
+              "stance_width": "normal",
+              "guard": "High guard, hands held up near the face.",
+              "upper_body": "Slight bobbing and lateral drifting with the steps.",
+              "distance": "Moderate distance between the two individuals.",
+              "notable": "Both individuals in boxing stances; yellow fighter on the right, red partner on the left."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Continued lateral movement to the right, steady rhythmic steps.",
+              "stance_width": "normal",
+              "guard": "Guard maintained consistently.",
+              "upper_body": "Torso rotates slightly with the directional movement.",
+              "distance": "Distance maintained as the pair moves across the floor.",
+              "notable": "The pair moves together laterally across the gym."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Further steps to the right, reaching the boundary of the frame.",
+              "stance_width": "changing",
+              "guard": "Guard remains up through the end of the sequence.",
+              "upper_body": "Body starts to turn and settle as movement concludes.",
+              "distance": "Distance from partner begins to open slightly at the very end.",
+              "notable": "Yellow fighter reaches the far right side and begins to reset position."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F5",
+            "type": "step",
+            "detail": "Lateral stepping to the right in boxing stance."
+          },
+          {
+            "frames": "F6-F10",
+            "type": "step",
+            "detail": "Continued lateral movement to the right, maintaining rhythm."
+          },
+          {
+            "frames": "F11-F15",
+            "type": "reset",
+            "detail": "Fighter reaches the boundary and begins to reset position."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    }
+  ],
+  "recordPath": "/Users/basicclaw777/nanoclaw/gym-eyes-classes/noodles1-20260824T2320/class-record.md"
+}

@@ -1,0 +1,88 @@
+{
+  "marketId": "2371796",
+  "question": "Will Trump agree to withdraw troops from the Iranian region by June 30?",
+  "eventTitle": "What Iranian demands will Trump agree to by June 30?",
+  "marketYes": 0.64,
+  "marketNo": 0.36,
+  "volume24hr": 1153277.5929100006,
+  "daysToResolution": 12,
+  "analysis": {
+    "question": "Will Trump agree to withdraw troops from the Iranian region by June 30?",
+    "factors": [
+      {
+        "factor": "Trump's historical stance on Iran: Maximum pressure, no enrichment allowed",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Trump's 2018-2020 policy was 'maximum pressure' demanding zero enrichment. He withdrew from JCPOA precisely because it allowed limited enrichment. Reversing this core position would be a major political flip."
+      },
+      {
+        "factor": "Current negotiation status and time pressure",
+        "direction": "supports_no",
+        "weight": "high",
+        "evidence": "Only 12 days remain. No credible reports of a finalized deal. Negotiations between US and Iran have been indirect and stalled. Formal agreements of this magnitude typically require weeks or months of finalization."
+      },
+      {
+        "factor": "Domestic political costs for Trump",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "Agreeing to Iranian enrichment would be attacked by GOP hawks (e.g., Pompeo, Haley) as weakness. Trump faces primary challenges and values hawkish base. A deal would contradict his 'America First' narrative of not rewarding adversaries."
+      },
+      {
+        "factor": "Iran's nuclear progress and leverage",
+        "direction": "supports_yes",
+        "weight": "medium",
+        "evidence": "Iran now enriches at 60% and has near-weapons-grade capability. Some analysts argue Trump might accept limited enrichment to avoid military escalation or a nuclear breakout. But this is speculative."
+      },
+      {
+        "factor": "Market price deviation from base rate",
+        "direction": "supports_no",
+        "weight": "low",
+        "evidence": "Prediction markets often overprice dramatic diplomatic shifts in short windows. Base rate for US accepting enemy enrichment is extremely low (near zero historically). The 64% price seems inflated by recency bias or wishful thinking."
+      }
+    ],
+    "baseRate": {
+      "value": 0.05,
+      "reasoning": "Historically, the US has never formally accepted an adversary's right to enrich uranium. Even the JCPOA only 'acknowledged' Iran's enrichment program under strict limits. For a US president to explicitly agree to continued enrichment without time limit is unprecedented. Base rate for such a reversal in a 12-day window is ~5%."
+    },
+    "adjustments": [
+      {
+        "reason": "Iran's increased nuclear capability might create urgency for a deal, but Trump's aversion to appearing weak likely outweighs this.",
+        "delta": 0.02
+      },
+      {
+        "reason": "Market price at 64% suggests some informed traders see a path, but no concrete evidence of imminent agreement exists. Adjust slightly upward for possibility of last-minute surprise.",
+        "delta": 0.03
+      },
+      {
+        "reason": "Trump's unpredictability and desire for a 'deal' could theoretically lead to a framework agreement, but the specific condition (accepting enrichment) is a red line he has never crossed.",
+        "delta": 0.02
+      }
+    ],
+    "finalEstimate": 0.12,
+    "confidence": "medium",
+    "confidenceInterval": [
+      0.03,
+      0.3
+    ],
+    "keyUncertainties": [
+      "Could Trump announce a vague 'agreement in principle' that technically qualifies?",
+      "Is there a secret backchannel producing a deal not yet public?",
+      "Would Trump accept enrichment if tied to broader normalization (e.g., Saudi deal)?"
+    ],
+    "researchNeeded": [
+      "Check latest US-Iran negotiation updates from credible sources (e.g., Al-Monitor, Axios, NYT).",
+      "Analyze Trump's recent statements on Iran (Truth Social posts, interviews).",
+      "Look for any leaks from US or Iranian diplomatic sources about a potential framework."
+    ],
+    "reasoning": "The market question asks whether Trump will explicitly agree to continued Iranian uranium enrichment by June 30—just 12 days away. This is an extraordinarily high bar. Historically, the US has never accepted an adversary's enrichment rights, and Trump personally made zero enrichment a cornerstone of his Iran policy. The base rate for such a reversal in such a short timeframe is around 5%. While Iran's nuclear progress creates some pressure for a deal, Trump's political incentives (avoiding GOP backlash, maintaining 'maximum pressure' credibility) strongly push against acceptance. The current market price of 64% appears to be an overreaction to negotiation rumors without concrete evidence. I estimate a 12% probability, acknowledging that Trump's unpredictability and the possibility of a last-minute framework agreement create a non-trivial tail risk, but the evidence overwhelmingly points to 'No'."
+  },
+  "edge": {
+    "side": "NO",
+    "edge": 0.52,
+    "edgePct": "52.0%",
+    "ourEstimate": "12.0%",
+    "marketPrice": "64.0%",
+    "tradeable": true
+  },
+  "researchedAt": "2026-06-18T11:03:17.113Z"
+}

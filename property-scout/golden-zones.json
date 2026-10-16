@@ -1,0 +1,591 @@
+[
+  {
+    "rank": 1,
+    "area": "Yau Tong / Lam Tin",
+    "district": "Kwun Tong",
+    "score": 92,
+    "schools_within_500m": [
+      { "name": "St. Paul's School (Lam Tin)", "type": "primary", "students_approx": 900 },
+      { "name": "SKH Tak Tin Lee Shiu Keung Primary School", "type": "primary", "students_approx": 750 },
+      { "name": "Lam Tin Methodist Primary School", "type": "primary", "students_approx": 700 },
+      { "name": "Nord Anglia International School (Lam Tin Primary Campus)", "type": "international", "students_approx": 600 },
+      { "name": "SKH Lee Shiu Keung Primary School", "type": "primary", "students_approx": 650 },
+      { "name": "Bishop Paschang Catholic School", "type": "primary", "students_approx": 800 },
+      { "name": "Carmel Leung Sing Tak School", "type": "primary", "students_approx": 600 }
+    ],
+    "school_count": 7,
+    "student_estimate": 5000,
+    "industrial_units": {
+      "buildings": ["Yau Tong Industrial City Block A", "Yau Tong Industrial City Block B", "Mai Tong Industrial Building", "Yau Tong Industrial Building"],
+      "typical_rent_sqft": 10,
+      "typical_buy_sqft": 3000,
+      "rent_range_monthly": "HK$9,800-19,000 for 1,000-2,000sqft",
+      "buy_range": "HK$2.5-5M for 1,000-2,000sqft"
+    },
+    "residential": {
+      "estates_nearby": ["Yau Tong Estate", "Lei Yue Mun Estate", "Ko Yee Estate", "Yau Lai Estate", "Lam Tin Estate", "Tak Tin Estate", "Ping Tin Estate", "Sceneway Garden"],
+      "population_density": "high",
+      "household_estimate": 35000,
+      "demographic": "Massive public housing concentration + private estates. Lam Tin alone has 131,000 residents. Heavy concentration of families with school-age children."
+    },
+    "office_presence": {
+      "nearby_offices": ["Domain shopping mall offices", "Lam Tin commercial complex", "Kwun Tong commercial district (1 MTR stop)"],
+      "worker_estimate": 3000,
+      "industries": "Retail, services, logistics. Kwun Tong office hub 5-min MTR ride away adds 50,000+ workers."
+    },
+    "transport": {
+      "mtr": "Yau Tong Station (200-400m from industrial area) — interchange between Kwun Tong Line and Tseung Kwan O Line",
+      "bus": "Major bus interchange at Lam Tin, numerous routes to Kowloon East, HK Island, and New Territories",
+      "accessibility": "Excellent — dual MTR line coverage, parents from TKO, Kwun Tong, and HK Island East can reach easily"
+    },
+    "competition": {
+      "existing_gyms": 2,
+      "existing_kids_activities": ["Kumon centres in Lam Tin", "Eye Level in Lam Tin", "Various tutorial centres"],
+      "boxing_gyms_nearby": 0,
+      "gap": "ZERO dedicated boxing gyms in Yau Tong or Lam Tin. Nearest boxing gyms are in Kwun Tong proper (1 MTR stop) or Mong Kok (25+ min). Massive underserved market."
+    },
+    "pros": [
+      "7 schools within 500m of Yau Tong Industrial City — highest school density found",
+      "Yau Tong Industrial City has units from 1,848-3,880 sqft at just HK$9.8-10.5/sqft — cheapest per-sqft industrial rent in Kowloon",
+      "4-min walk to Yau Tong MTR (dual-line interchange)",
+      "35,000+ households in immediate public housing estates — captive afterschool market",
+      "Zero boxing competition within 1km",
+      "International school (Nord Anglia) nearby = premium-pricing parents",
+      "Kwun Tong office hub 1 MTR stop away for lunchtime adult classes",
+      "Yau Tong MTR connects to Tseung Kwan O (another 400k population) in 5-10 minutes"
+    ],
+    "cons": [
+      "Yau Tong area still somewhat industrial/warehouse feel — may need marketing to overcome perception",
+      "Some industrial buildings may have DMC restrictions on fitness/education use — must verify per building",
+      "Less 'destination' appeal than Kwun Tong town centre — fewer walk-by parents",
+      "Evening foot traffic in Yau Tong lower than Kwun Tong central"
+    ],
+    "golden_zone_thesis": "Yau Tong is the single highest-conviction golden zone. It combines the cheapest industrial rent in Kowloon ($9.8/sqft) with the densest school cluster (7 schools within 500m), massive public housing (35,000+ households), and a dual-line MTR interchange. No boxing gym exists within 1km. The business model is airtight: 3:30-6pm afterschool kids from 7 nearby schools + Lam Tin estates, 12-2pm office workers from Kwun Tong (5 min MTR), 6-9pm adults from the housing estates. Saturday family classes pull from TKO via the interchange line. This is a first-mover opportunity in a market with zero direct competition and captive demand.",
+    "example_units": [
+      { "address": "Yau Tong Industrial City Block A, 17 Ko Fai Road, Yau Tong", "sqft": 1848, "rent": 18000, "source": "LeasingHub / Sino Industrial — listed at ~$9.8/sqft" },
+      { "address": "Yau Tong Industrial City Block B, Yau Tong", "sqft": 1972, "rent": 19300, "source": "LeasingHub — $9.8-10.5/sqft range" },
+      { "address": "Mai Tong Industrial Building, Yau Tong", "sqft": 302, "rent": 6500, "source": "House730 — smaller unit, proof of area affordability" }
+    ],
+    "source_urls": [
+      "https://www.leasinghub.com/building/yau-tong-industrial-city-block-a/5612",
+      "https://en.wikipedia.org/wiki/Yau_Tong",
+      "https://en.wikipedia.org/wiki/Lam_Tin",
+      "https://www.28hse.com/en/rent/office/property-3807210",
+      "https://www.house730.com/en-us/rent-property-9098081/Yau-Tong-MAI-TONG-INDUSTRIAL-BUILDING/"
+    ]
+  },
+  {
+    "rank": 2,
+    "area": "Kwun Tong Town Centre",
+    "district": "Kwun Tong",
+    "score": 88,
+    "schools_within_500m": [
+      { "name": "Kwun Tong Government Secondary School", "type": "secondary", "students_approx": 900 },
+      { "name": "Kwun Tong Kung Lok Government Secondary School", "type": "secondary", "students_approx": 800 },
+      { "name": "CCC Kei Faat Primary School", "type": "primary", "students_approx": 750 },
+      { "name": "SKH Kei Hin Primary School", "type": "primary", "students_approx": 700 },
+      { "name": "Kwun Tong Maryknoll College", "type": "secondary", "students_approx": 1000 },
+      { "name": "St. Catherine's School for Girls", "type": "secondary", "students_approx": 800 }
+    ],
+    "school_count": 6,
+    "student_estimate": 4950,
+    "industrial_units": {
+      "buildings": ["Kwun Tong Industrial Centre (Phases 1-4)", "Camel Paint Building", "Cheung Fai Industrial Building", "Kwun Tong Harbour Industrial Centre"],
+      "typical_rent_sqft": 12,
+      "typical_buy_sqft": 3500,
+      "rent_range_monthly": "HK$12,000-25,000 for 800-1,500sqft",
+      "buy_range": "HK$3-6M for 800-1,500sqft"
+    },
+    "residential": {
+      "estates_nearby": ["Tsui Ping Estate", "Sau Mau Ping Estate", "Shun Lee Estate", "Yuet Wah Street area", "Laguna City", "Sceneway Garden"],
+      "population_density": "high",
+      "household_estimate": 40000,
+      "demographic": "Highest population density in HK at 59,000/km². Mix of massive public housing estates and private developments. Young family demographic in public estates, middle-class in private."
+    },
+    "office_presence": {
+      "nearby_offices": ["Millennium City (APM complex)", "Kwun Tong waterfront office cluster", "Kowloon Bay commercial district (1 MTR stop)", "Numerous converted industrial-to-office buildings"],
+      "worker_estimate": 80000,
+      "industries": "Finance back-office, IT, creative industries, trading, logistics. Major office hub with 30-40% lower rent than Central."
+    },
+    "transport": {
+      "mtr": "Kwun Tong Station (300-500m from industrial centre). Also Ngau Tau Kok Station covers the northern industrial belt.",
+      "bus": "Major bus interchange at Kwun Tong. Routes to all HK Island, Kowloon, and NT destinations. Multiple minibus routes.",
+      "accessibility": "Excellent — one of HK's busiest transport hubs"
+    },
+    "competition": {
+      "existing_gyms": 5,
+      "existing_kids_activities": ["Kumon", "Eye Level", "Numerous tutorial centres in Kwun Tong Plaza and APM"],
+      "boxing_gyms_nearby": 1,
+      "gap": "Limited boxing competition. Boxing gym at Kwun Tong Industrial Centre exists (gym + basketball court listing seen), but no dedicated kids boxing program. Gap is in afterschool structured boxing for kids — existing gyms are general fitness."
+    },
+    "pros": [
+      "6 schools within 500m walk of Kwun Tong Industrial Centre",
+      "MASSIVE office worker population (80,000+) for lunchtime classes — highest of any candidate",
+      "Established industrial-to-fitness conversion precedent — existing gym with 18ft ceilings in Kwun Tong Industrial Centre",
+      "Highest population density in HK (59,000/km²)",
+      "Kwun Tong MTR gives access to entire Kowloon East population",
+      "APM mall and Kwun Tong Plaza provide parent foot traffic while waiting for kids",
+      "Already a destination area — easier to attract walk-in customers"
+    ],
+    "cons": [
+      "Industrial rent higher than Yau Tong ($12 vs $9.8/sqft)",
+      "More gym competition than Yau Tong",
+      "Industrial area can feel gritty — some units in older buildings",
+      "Lunchtime market is huge but competitive with existing fitness options",
+      "Some areas (Sau Mau Ping, Shun Lee) are uphill — walking distance in reality but steep"
+    ],
+    "golden_zone_thesis": "Kwun Tong is the proven model. It already has fitness businesses operating in industrial buildings, proving the DMC/OC barrier is surmountable. The triple pipeline is strongest here: 80,000 office workers for lunch, 6 nearby schools for afterschool, 40,000 households for evening. The key differentiator vs Yau Tong is the office lunch crowd — Yau Tong doesn't have this. Kwun Tong's risk is slightly higher rent and existing competition. But the market is so large that even 1% capture rate = 4,000 potential customers. A dedicated kids boxing + adult boxing gym with no direct kids boxing competitor within 500m is a clear gap. The 18ft ceiling gym listing at Kwun Tong Industrial Centre suggests landlords are actively seeking fitness tenants.",
+    "example_units": [
+      { "address": "Kwun Tong Industrial Centre, 472-484 Kwun Tong Road", "sqft": 1200, "rent": 20000, "source": "28Hse #3659936 — ground floor suitable for gym" },
+      { "address": "Kwun Tong Industrial Centre", "sqft": 2150, "rent": 28000, "source": "28Hse #3647335 — existing gym setup, 18ft ceilings, basketball court, 2 shower rooms" },
+      { "address": "Kwun Tong Industrial Centre", "sqft": 800, "rent": 12000, "source": "28Hse — subdivided studio units, near MTR, with toilet + hot water" }
+    ],
+    "source_urls": [
+      "https://www.28hse.com/en/rent/office/property-3647335",
+      "https://www.28hse.com/en/rent/office/property-3659936",
+      "https://en.wikipedia.org/wiki/Kwun_Tong",
+      "https://www.aia.com.hk/en/health-and-wellness/healthy-living-with-aia/life-stages/population-ranking-hk-18-districts",
+      "https://officehongkong.com/hong-kong-office-guides/kwun-tong-office-hong-kong-location-guide"
+    ]
+  },
+  {
+    "rank": 3,
+    "area": "Tuen Mun Town Centre",
+    "district": "Tuen Mun",
+    "score": 85,
+    "schools_within_500m": [
+      { "name": "Tuen Mun Government Secondary School", "type": "secondary", "students_approx": 900 },
+      { "name": "CCC Hoh Fuk Tong College", "type": "secondary", "students_approx": 800 },
+      { "name": "Yan Oi Tong Tin Ka Ping Secondary School", "type": "secondary", "students_approx": 750 },
+      { "name": "Tuen Mun Catholic Secondary School", "type": "secondary", "students_approx": 850 },
+      { "name": "Hing Tak School", "type": "primary", "students_approx": 600 }
+    ],
+    "school_count": 5,
+    "student_estimate": 3900,
+    "industrial_units": {
+      "buildings": ["Tuen Mun Industrial Centre", "Hop Hing Industrial Building", "Tuen Mun industrial zone (area 14, 23, 38)"],
+      "typical_rent_sqft": 10,
+      "typical_buy_sqft": 2500,
+      "rent_range_monthly": "HK$9,000-15,000 for 800-1,200sqft",
+      "buy_range": "HK$1.8-3M for 800-1,200sqft"
+    },
+    "residential": {
+      "estates_nearby": ["Tai Hing Estate", "On Ting Estate", "Shan King Estate", "Leung King Estate", "Siu Hong Court", "Tuen Mun Town Plaza"],
+      "population_density": "high",
+      "household_estimate": 45000,
+      "demographic": "Massive public housing concentration. Tuen Mun district population ~500,000. Lower-income families with high demand for affordable afterschool activities. Parents work long hours in Kowloon/HK Island — need after-school supervision."
+    },
+    "office_presence": {
+      "nearby_offices": ["Tuen Mun Town Plaza commercial", "Tuen Mun Heung Sze Wui Road offices", "Limited office cluster"],
+      "worker_estimate": 5000,
+      "industries": "Retail, government services, logistics, SMEs. Limited white-collar office presence."
+    },
+    "transport": {
+      "mtr": "Tuen Mun Station (Tuen Ma Line) within 500m of industrial zone. Also Light Rail network connecting entire district.",
+      "bus": "Major bus interchange at Tuen Mun Town Centre. Long-distance routes to Kowloon and HK Island.",
+      "accessibility": "Good — but 45-60 min to Kowloon/HK Island. Strong intra-district connectivity via Light Rail."
+    },
+    "competition": {
+      "existing_gyms": 3,
+      "existing_kids_activities": ["Kumon", "Eye Level", "Various tutorial centres in housing estates"],
+      "boxing_gyms_nearby": 0,
+      "gap": "ZERO boxing gyms in Tuen Mun district (37 secondary + 36 primary schools, 500,000 population). Massive underserved market. First-mover advantage is absolute."
+    },
+    "pros": [
+      "5 schools within 500m of Tuen Mun industrial — strong afterschool pipeline",
+      "Cheapest rent outside Kwai Chung — ~$10/sqft, units under $12k/month feasible",
+      "Zero boxing competition in entire Tuen Mun district (population 500k)",
+      "45,000+ households in public housing — captive market, parents desperate for affordable afterschool",
+      "Parents commuting to Kowloon/HK Island NEED afterschool care until 7-8pm",
+      "Industrial units are among the cheapest to buy in HK ($2,500/sqft) — feasible to own",
+      "Light Rail network brings kids from entire Tuen Mun area to town centre"
+    ],
+    "cons": [
+      "Far from central HK — harder to recruit coaches who live on HK Island or Kowloon",
+      "Very limited lunchtime office worker market (only ~5,000 workers)",
+      "Lower household income — must price classes affordably",
+      "Evening adult classes may have lower uptake (parents too tired after long commute)",
+      "Perception issue: Tuen Mun seen as 'remote' by HK standards"
+    ],
+    "golden_zone_thesis": "Tuen Mun is the highest-volume, lowest-cost play. With zero boxing gyms serving 500,000 people and 73 schools, it's a blue ocean. The business model shifts: lower price point but massive volume. $100/kid/month × 100 kids = $100k/month revenue. Industrial rent at $10/sqft means a 1,000 sqft gym costs $10k/month — leaving huge margin. Risk is lower-income demographic and distance from central HK. But no competition means you own the market. This is the 'start cheap, dominate early' play. Saturday classes pull from entire Tuen Mun/Yuen Long/Tin Shui Wai corridor via Tuen Ma Line.",
+    "example_units": [
+      { "address": "Tuen Mun Industrial Centre area", "sqft": 1000, "rent": 10000, "source": "Estimated from average ~$10/sqft. 248+ office/industrial listings on 28Hse for Tuen Mun." }
+    ],
+    "source_urls": [
+      "https://en.wikipedia.org/wiki/List_of_schools_in_Tuen_Mun_District",
+      "https://www.oneday.com.hk/en_US/industrial/hong-kong-to-rent/tuen-mun/tuen-mun2/",
+      "https://www.schooland.hk/ss/tuen-mun"
+    ]
+  },
+  {
+    "rank": 4,
+    "area": "San Po Kong / Wong Tai Sin",
+    "district": "Wong Tai Sin",
+    "score": 83,
+    "schools_within_500m": [
+      { "name": "Buddhist Hung Sean Chau Memorial College", "type": "secondary", "students_approx": 750 },
+      { "name": "CCC Kei Tsz Primary School", "type": "primary", "students_approx": 650 },
+      { "name": "Choi Hung Estate Catholic Secondary School", "type": "secondary", "students_approx": 800 },
+      { "name": "Po Leung Kuk Celine Ho Yam Tong College", "type": "secondary", "students_approx": 700 },
+      { "name": "Wong Tai Sin Catholic Primary School", "type": "primary", "students_approx": 600 },
+      { "name": "Lung Cheung Government Secondary School", "type": "secondary", "students_approx": 800 }
+    ],
+    "school_count": 6,
+    "student_estimate": 4300,
+    "industrial_units": {
+      "buildings": ["New Tech Plaza", "Port 33", "Win Plaza", "San Po Kong industrial buildings along Tai Yau Street and Luk Hop Street"],
+      "typical_rent_sqft": 14,
+      "typical_buy_sqft": 4000,
+      "rent_range_monthly": "HK$14,000-22,000 for 800-1,500sqft",
+      "buy_range": "HK$3.5-6M for 800-1,500sqft"
+    },
+    "residential": {
+      "estates_nearby": ["Wong Tai Sin Estate", "Choi Hung Estate", "Chuk Yuen Estate", "Tsz Wan Shan estates", "Diamond Hill private housing"],
+      "population_density": "high",
+      "household_estimate": 30000,
+      "demographic": "Older public housing estates being redeveloped. Mix of elderly long-term residents and younger families. Choi Hung Estate is an iconic massive estate."
+    },
+    "office_presence": {
+      "nearby_offices": ["New Tech Plaza offices", "Kowloon Bay commercial district (10 min bus)", "Diamond Hill commercial"],
+      "worker_estimate": 8000,
+      "industries": "Creative industries, SMEs, tech startups (New Tech Plaza). Some office conversion happening."
+    },
+    "transport": {
+      "mtr": "Diamond Hill Station (Tuen Ma Line + Kwun Tong Line) ~700m from industrial area. Wong Tai Sin Station ~800m.",
+      "bus": "Major bus interchange at Choi Hung and Diamond Hill. Multiple cross-harbour routes.",
+      "accessibility": "Good but not great — 10-min walk to closest MTR. Bus connectivity is excellent."
+    },
+    "competition": {
+      "existing_gyms": 3,
+      "existing_kids_activities": ["Kumon", "Tutorial centres in Wong Tai Sin and Choi Hung"],
+      "boxing_gyms_nearby": 0,
+      "gap": "No boxing gyms in San Po Kong or Wong Tai Sin. Nearest in Mong Kok (3 MTR stops)."
+    },
+    "pros": [
+      "6 schools within 500m of San Po Kong industrial area",
+      "New Tech Plaza is a Grade A industrial building with modern facilities — ideal image for a gym",
+      "Wong Tai Sin and Choi Hung estates = 30,000+ households, young family demographic",
+      "Diamond Hill MTR is a dual-line interchange — access to both Kowloon East and Tuen Ma Line catchment",
+      "Near Kowloon Bay office hub for some lunchtime traffic",
+      "Zero boxing competition in area"
+    ],
+    "cons": [
+      "MTR is 10-min walk — not ideal for parents dropping kids on the way to work",
+      "Industrial rent higher than Yau Tong ($14 vs $9.8/sqft)",
+      "San Po Kong industrial area is gradually converting to commercial — rents may rise",
+      "Evening foot traffic in industrial area is low"
+    ],
+    "golden_zone_thesis": "San Po Kong is the 'professional image' play. New Tech Plaza offers a modern, Grade A industrial building environment that appeals to middle-class parents who want their kids in a 'nice' facility. The school density is excellent (6 schools within 500m), and Diamond Hill's dual MTR interchange means catchment extends to Ma On Shan, Tuen Mun via Tuen Ma Line, and Kowloon East via Kwun Tong Line. The downside is higher rent and a 10-min MTR walk. But for parents driving, parking in San Po Kong industrial buildings is easier than Kwun Tong. This is the premium positioning play within the golden zone strategy.",
+    "example_units": [
+      { "address": "New Tech Plaza, 34 Tai Yau Street, San Po Kong", "sqft": 1720, "rent": 24080, "source": "Value Properties / 28Hse — $14/sqft" },
+      { "address": "New Tech Plaza", "sqft": 1000, "rent": 14000, "source": "Estimated from $14/sqft average" }
+    ],
+    "source_urls": [
+      "https://www.leasinghub.com/building/new-tech-plaza/7922",
+      "https://www.28hse.com/en/rent/office/property-3647426",
+      "https://en.wikipedia.org/wiki/List_of_schools_in_Wong_Tai_Sin_District"
+    ]
+  },
+  {
+    "rank": 5,
+    "area": "Tsuen Wan",
+    "district": "Tsuen Wan",
+    "score": 82,
+    "schools_within_500m": [
+      { "name": "Tsuen Wan Government Secondary School", "type": "secondary", "students_approx": 850 },
+      { "name": "Tsuen Wan Public Ho Chuen Yiu Memorial College", "type": "secondary", "students_approx": 800 },
+      { "name": "Hoi Pa Street Government Primary School", "type": "primary", "students_approx": 700 },
+      { "name": "Chiu Yang Primary School", "type": "primary", "students_approx": 600 },
+      { "name": "Tsuen Wan Trade Association Primary School", "type": "primary", "students_approx": 650 }
+    ],
+    "school_count": 5,
+    "student_estimate": 3600,
+    "industrial_units": {
+      "buildings": ["Tsuen Wan Industrial Building", "Tsuen Wan Industrial Centre", "Wah Luen Industrial Building", "various along Castle Peak Road and Texaco Road"],
+      "typical_rent_sqft": 11,
+      "typical_buy_sqft": 3000,
+      "rent_range_monthly": "HK$9,000-16,000 for 800-1,200sqft",
+      "buy_range": "HK$2.5-4M for 800-1,200sqft"
+    },
+    "residential": {
+      "estates_nearby": ["Fuk Loi Estate", "Cheung Shan Estate", "Belvedere Garden", "Vision City", "Nina Tower residential", "Allway Gardens"],
+      "population_density": "high",
+      "household_estimate": 25000,
+      "demographic": "Mixed public + private housing. Tsuen Wan has undergone significant residential development. Young families in new private estates (Vision City, Bellagio). Older public estates with multi-generational families."
+    },
+    "office_presence": {
+      "nearby_offices": ["Nina Tower", "Tsuen Wan Plaza", "TML Tower", "Cable TV Tower"],
+      "worker_estimate": 15000,
+      "industries": "Media (TVB/Cable TV legacy), trading, logistics, SMEs. Decent lunchtime market."
+    },
+    "transport": {
+      "mtr": "Tsuen Wan Station (Tsuen Wan Line terminus) ~500-700m from industrial zone. Tsuen Wan West Station (Tuen Ma Line) ~500m from some industrial buildings.",
+      "bus": "Major bus terminus at Tsuen Wan. Routes to Kowloon, HK Island, and New Territories West.",
+      "accessibility": "Good — dual MTR line coverage. Bus network extensive."
+    },
+    "competition": {
+      "existing_gyms": 4,
+      "existing_kids_activities": ["Kumon", "Eye Level", "Tutorial centres in Tsuen Wan"],
+      "boxing_gyms_nearby": 0,
+      "gap": "No dedicated boxing gyms in Tsuen Wan. Nearest in Kwai Fong or Sham Shui Po."
+    },
+    "pros": [
+      "5 schools within 500m of industrial zone",
+      "Tsuen Wan is a self-contained urban centre with its own office district (15,000 workers)",
+      "Private housing estates (Belvedere Garden, Vision City) = middle-class parents with higher spend",
+      "Dual MTR access (Tsuen Wan Line + Tuen Ma Line)",
+      "Industrial rent affordable at ~$11/sqft",
+      "Zero boxing competition"
+    ],
+    "cons": [
+      "Industrial area somewhat separated from residential — some walking required",
+      "Less school density than Kwun Tong or Yau Tong",
+      "Tsuen Wan's industrial zone is more 'heavy' industrial (warehouses, logistics) — fewer creative/studio conversions",
+      "Some areas can feel unsafe at night for kids"
+    ],
+    "golden_zone_thesis": "Tsuen Wan is the balanced play — decent schools, decent offices, decent rent, decent transport. It doesn't dominate any single dimension but scores well across all. The presence of private housing with higher-income parents (Vision City, Bellagio) allows premium pricing for kids classes. The Tuen Ma Line connection means catchment extends to Tuen Mun/Yuen Long in 15-20 minutes. Less of a 'first-mover absolute monopoly' than Yau Tong or Tuen Mun, but a solid market with proven demand.",
+    "example_units": [
+      { "address": "Tsuen Wan Industrial Building area", "sqft": 1000, "rent": 11000, "source": "Estimated from ~$11/sqft average. 7 listings on 28Hse for Tsuen Wan Industrial Building." }
+    ],
+    "source_urls": [
+      "https://www.28hse.com/en/rent/a3/dg49/c20191",
+      "https://www.schooland.hk/ps/tsuen-wan",
+      "https://en.wikipedia.org/wiki/Tsuen_Wan"
+    ]
+  },
+  {
+    "rank": 6,
+    "area": "Kwai Chung / Kwai Fong",
+    "district": "Kwai Tsing",
+    "score": 77,
+    "schools_within_500m": [
+      { "name": "Kwai Chung Methodist College", "type": "secondary", "students_approx": 750 },
+      { "name": "Buddhist Sin Tak College", "type": "secondary", "students_approx": 700 },
+      { "name": "POH Chan Kai Memorial College", "type": "secondary", "students_approx": 650 },
+      { "name": "Kwai Chung Estate schools", "type": "primary", "students_approx": 600 }
+    ],
+    "school_count": 4,
+    "student_estimate": 2700,
+    "industrial_units": {
+      "buildings": ["Kwai Chung Industrial Building", "Kwai Hing Industrial Building", "Marvel Industrial Building", "Golden Industrial Building"],
+      "typical_rent_sqft": 7,
+      "typical_buy_sqft": 2000,
+      "rent_range_monthly": "HK$5,500-10,000 for 800-1,200sqft",
+      "buy_range": "HK$1.5-2.5M for 800-1,200sqft"
+    },
+    "residential": {
+      "estates_nearby": ["Kwai Chung Estate", "Kwai Fong Estate", "Kwai Shing East Estate", "High Prosperity Terrace"],
+      "population_density": "high",
+      "household_estimate": 20000,
+      "demographic": "Large public housing concentration. Working-class families. Kwai Chung Estate is one of HK's largest with ~35,000 residents."
+    },
+    "office_presence": {
+      "nearby_offices": ["Kwai Chung industrial offices", "Container port logistics offices"],
+      "worker_estimate": 5000,
+      "industries": "Logistics, warehousing, container port operations. Very limited white-collar lunch market."
+    },
+    "transport": {
+      "mtr": "Kwai Fong Station (Tsuen Wan Line) or Kwai Hing Station within 500m of most industrial buildings",
+      "bus": "Good bus coverage along Kwai Chung Road",
+      "accessibility": "Good — MTR accessible but less central than Kowloon areas"
+    },
+    "competition": {
+      "existing_gyms": 2,
+      "existing_kids_activities": ["Tutorial centres in Kwai Fong and Kwai Chung"],
+      "boxing_gyms_nearby": 0,
+      "gap": "No boxing gyms. Underserved working-class market."
+    },
+    "pros": [
+      "CHEAPEST industrial rent in Hong Kong at $6.6-7/sqft",
+      "4 schools within 500m of industrial area",
+      "Kwai Chung Estate = 35,000 residents alone — massive captive audience",
+      "MTR accessible (Kwai Fong/Kwai Hing)",
+      "Zero boxing competition",
+      "Buy option is viable — units from $1.5M"
+    ],
+    "cons": [
+      "Very limited office lunch market — blue-collar area",
+      "Lower household income — very price-sensitive",
+      "Industrial area is heavy logistics/warehouse — less suitable for fitness studio conversions",
+      "Evening foot traffic near industrial zone is poor",
+      "Perception as low-income, industrial area — harder to attract premium customers"
+    ],
+    "golden_zone_thesis": "Kwai Chung is the ultra-budget play. At $7/sqft, a 1,000 sqft gym costs only $7,000/month — making it viable even with very low class prices ($60-80/kid/session). The Kwai Chung Estate's 35,000 residents provide a built-in market. But the economics rely on volume and very tight margins. Limited lunchtime revenue. Best as a second location once the brand is established, or as a pure afterschool-only model. The buy option at $1.5-2.5M is genuinely interesting — owning the unit eliminates rent risk.",
+    "example_units": [
+      { "address": "Kwai Hing Industrial Building, Kwai Chung", "sqft": 1000, "rent": 6600, "source": "Estimated from ~$6.6/sqft — leasinghub.com listings" }
+    ],
+    "source_urls": [
+      "https://www.leasinghub.com/industrial/rent/kwai-chung",
+      "https://www.28hse.com.cn/en/rent/office/property-3540457"
+    ]
+  },
+  {
+    "rank": 7,
+    "area": "Sham Shui Po / Cheung Sha Wan Corridor",
+    "district": "Sham Shui Po",
+    "score": 74,
+    "schools_within_500m": [
+      { "name": "CCC Heep Woh College", "type": "secondary", "students_approx": 800 },
+      { "name": "Cheung Sha Wan Catholic Secondary School", "type": "secondary", "students_approx": 750 },
+      { "name": "Sham Shui Po Government Primary School", "type": "primary", "students_approx": 700 }
+    ],
+    "school_count": 3,
+    "student_estimate": 2250,
+    "industrial_units": {
+      "buildings": ["Cheung Sha Wan industrial corridor buildings", "D2 Place (revitalized)", "various along Cheung Sha Wan Road"],
+      "typical_rent_sqft": 13,
+      "typical_buy_sqft": 3500,
+      "rent_range_monthly": "HK$11,000-18,000 for 800-1,200sqft",
+      "buy_range": "HK$3-5M for 800-1,200sqft"
+    },
+    "residential": {
+      "estates_nearby": ["Cheung Sha Wan Estate", "So Uk Estate", "Lai Kok Estate", "various tenement buildings"],
+      "population_density": "high",
+      "household_estimate": 20000,
+      "demographic": "Older district with mix of public housing and tenement buildings. Some gentrification happening (D2 Place area). Younger creative crowd moving in."
+    },
+    "office_presence": {
+      "nearby_offices": ["D2 Place creative offices", "Lai Chi Kok commercial area (10 min walk)"],
+      "worker_estimate": 10000,
+      "industries": "Creative, fashion, design, startups (D2 Place cluster). Lai Chi Kok has growing office presence."
+    },
+    "transport": {
+      "mtr": "Cheung Sha Wan Station or Lai Chi Kok Station (Tsuen Wan Line) — some buildings 5-min, some 10-min walk",
+      "bus": "Cheung Sha Wan Road is a major bus corridor",
+      "accessibility": "Good — central Kowloon location"
+    },
+    "competition": {
+      "existing_gyms": 4,
+      "existing_kids_activities": ["Kumon", "Various tutorial centres"],
+      "boxing_gyms_nearby": 1,
+      "gap": "Some boxing/Muay Thai presence (Lai Chi Kok has Super Muay Thai Gym). Not a blue ocean."
+    },
+    "pros": [
+      "D2 Place model proves industrial-to-lifestyle conversion works in this corridor",
+      "Central Kowloon location — easy access from anywhere",
+      "Creative/startup crowd = potential evening adult class market",
+      "Cheung Sha Wan industrial corridor actively revitalizing"
+    ],
+    "cons": [
+      "Only 3 schools within 500m — meets minimum threshold but barely",
+      "Existing Muay Thai/boxing competition in Lai Chi Kok",
+      "Industrial rent higher than eastern Kowloon options",
+      "Area is less family-oriented than Kwun Tong or Tuen Mun",
+      "Older buildings may have access/ceiling height issues"
+    ],
+    "golden_zone_thesis": "Cheung Sha Wan scores lower because it has fewer schools and more competition. The D2 Place revitalization shows the industrial-to-lifestyle model works, but it also means rising rents and more competitors. This is more of a 'adult boxing gym with some kids classes' location than a pure kids-focused play. The upside is the creative/startup adult market for evening classes — higher per-class pricing possible.",
+    "example_units": [],
+    "source_urls": [
+      "https://en.wikipedia.org/wiki/Cheung_Sha_Wan"
+    ]
+  },
+  {
+    "rank": 8,
+    "area": "Fo Tan",
+    "district": "Sha Tin",
+    "score": 68,
+    "schools_within_500m": [
+      { "name": "Sha Tin Government Secondary School", "type": "secondary", "students_approx": 800 },
+      { "name": "Fo Tan area primary schools", "type": "primary", "students_approx": 500 }
+    ],
+    "school_count": 2,
+    "student_estimate": 1300,
+    "industrial_units": {
+      "buildings": ["Fo Tan Industrial Centre", "Wah Lik Industrial Centre", "various along Au Pui Wan Street"],
+      "typical_rent_sqft": 13,
+      "typical_buy_sqft": 3000,
+      "rent_range_monthly": "HK$13,000-20,000 for 800-1,500sqft",
+      "buy_range": "HK$2.5-5M"
+    },
+    "residential": {
+      "estates_nearby": ["Sui Wo Court", "Fo Tan Village (limited)", "Sha Tin residential (requires transport)"],
+      "population_density": "medium",
+      "household_estimate": 8000,
+      "demographic": "Limited residential in immediate Fo Tan. Most population in Sha Tin town centre (1 MTR stop away)."
+    },
+    "office_presence": {
+      "nearby_offices": ["Fo Tan industrial offices", "Science Park (bus ride)"],
+      "worker_estimate": 5000,
+      "industries": "Light industrial, logistics, some creative"
+    },
+    "transport": {
+      "mtr": "Fo Tan Station (East Rail Line) ~500m from industrial area",
+      "bus": "Limited bus routes. Most access via MTR.",
+      "accessibility": "Adequate — East Rail Line connects to Kowloon and mainland China border. Limited local bus network."
+    },
+    "competition": {
+      "existing_gyms": 2,
+      "existing_kids_activities": ["Limited"],
+      "boxing_gyms_nearby": 0,
+      "gap": "No boxing gyms in Fo Tan"
+    },
+    "pros": [
+      "Fo Tan industrial area has large floor plates suitable for gym use",
+      "No boxing competition",
+      "Science Park nearby = potential corporate wellness contracts",
+      "East Rail Line connects to Sha Tin (700k population) in 3 minutes"
+    ],
+    "cons": [
+      "FAILS minimum threshold — only 2 schools within 500m",
+      "Very limited residential in immediate Fo Tan — relies on Sha Tin catchment",
+      "Car-dependent for most parents",
+      "Industrial area has heavy vehicle traffic — not kid-friendly walking environment",
+      "Limited lunchtime office market"
+    ],
+    "golden_zone_thesis": "Fo Tan does not meet the minimum 3-school threshold and is rejected as a primary golden zone. It could work as a destination gym drawing from Sha Tin via MTR, but the lack of walkable schools and residential density makes the kids afterschool model non-viable. Consider only if targeting adult boxing + corporate wellness (Science Park)."
+  },
+  {
+    "rank": 9,
+    "area": "Chai Wan",
+    "district": "Eastern",
+    "score": 70,
+    "schools_within_500m": [
+      { "name": "Chai Wan area schools", "type": "mixed", "students_approx": 2000 }
+    ],
+    "school_count": 3,
+    "student_estimate": 2000,
+    "industrial_units": {
+      "buildings": ["Chai Wan industrial buildings", "Eastern Harbour area"],
+      "typical_rent_sqft": 14,
+      "typical_buy_sqft": 4000,
+      "rent_range_monthly": "HK$12,000-20,000 for 800-1,200sqft",
+      "buy_range": "HK$3-5M"
+    },
+    "residential": {
+      "estates_nearby": ["Heng Fa Chuen", "Siu Sai Wan Estate", "Wan Tsui Estate"],
+      "population_density": "medium",
+      "household_estimate": 15000,
+      "demographic": "Mixed. End-of-line location means older public housing + private estates like Heng Fa Chuen."
+    },
+    "office_presence": {
+      "nearby_offices": ["Chai Wan industrial/office conversions", "Eastern Harbour Crossing offices"],
+      "worker_estimate": 8000,
+      "industries": "Logistics, trading, some creative conversions"
+    },
+    "transport": {
+      "mtr": "Chai Wan Station (Island Line terminus) within 500m of industrial area",
+      "bus": "Bus terminus at Chai Wan. Routes along Island Eastern Corridor to Central.",
+      "accessibility": "Good — but 25-30 min to Central, end of line."
+    },
+    "competition": {
+      "existing_gyms": 3,
+      "existing_kids_activities": ["Tutorial centres"],
+      "boxing_gyms_nearby": 0,
+      "gap": "No boxing gyms in Chai Wan"
+    },
+    "pros": [
+      "Meets 3-school minimum threshold",
+      "Chai Wan MTR at doorstep of industrial area",
+      "No boxing competition",
+      "Island Line access to entire HK Island east corridor"
+    ],
+    "cons": [
+      "Industrial area limited in scale — fewer building options than Kwun Tong",
+      "End-of-line location limits catchment",
+      "Mixed residential density — not the housing estate concentration of Kowloon/NT",
+      "Higher rent than Kowloon industrial areas",
+      "Island Line access is good but Chai Wan is far from the action"
+    ],
+    "golden_zone_thesis": "Chai Wan meets the minimum threshold but lacks the density and volume of Kowloon candidates. It serves the HK Island east population (Heng Fa Chuen, Siu Sai Wan) which is a decent market, but the industrial area is small and options are limited. Rents are higher. Could work as a third/fourth location after establishing in Kowloon."
+  }
+]

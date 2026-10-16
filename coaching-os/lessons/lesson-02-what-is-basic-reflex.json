@@ -1,0 +1,186 @@
+{
+  "id": "lesson-02",
+  "position": 2,
+  "title": "What is Basic Reflex?",
+  "subtitle": "A practice space, not a fight club",
+  "slug": "what-is-basic-reflex",
+
+  "curriculum": {
+    "blocks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "pillars": ["skill", "sparring", "conditioning"],
+    "domains": ["strategy", "mindset"],
+    "engines": {
+      "body": "The gym as physical environment — small, intentional, every piece of equipment has a purpose",
+      "mind": "Diagnostic coaching — Coach Paul reads the student, not the syllabus",
+      "emotion": "Practice space, not fight club. Safe to fail. Community built on shared discipline"
+    }
+  },
+
+  "audience": {
+    "level": "all",
+    "hook": "Most gyms teach you to hit things. We teach you to think.",
+    "question": "What makes this gym different from every other boxing gym?"
+  },
+
+  "core": {
+    "thesis": "Basic Reflex is a practice space that teaches boxing as a thinking discipline — not a fight club that sells aggression.",
+    "keyPoints": [
+      "Practice space, not fight club — the distinction is the identity",
+      "Cuban method applied in Hong Kong: fundamentals, footwork, angles, counter-punching",
+      "Diagnostic coaching: Coach Paul reads each student individually — what they need, not what the schedule says",
+      "Small and intentional — not a factory. Every student is seen",
+      "Boxing as a vehicle for body, mind, and emotional development — the Three Engines",
+      "The 10-Block system: structured progression from awareness to mastery",
+      "Equipment serves the method, not the other way around — every bag, every drill has a purpose",
+      "You don't need to want to fight to train here. Most members never spar."
+    ],
+    "commonMisconceptions": [
+      "Boxing gyms are intimidating — BR is built for anyone willing to learn",
+      "You need to be fit first — the training makes you fit",
+      "It's about fighting — it's about mastering yourself through boxing fundamentals"
+    ],
+    "coachEye": {
+      "observe": "Watch a new student in their first session — what are they afraid of?",
+      "compare": "Compare their movement in week 1 vs week 4 — the stance tells you everything",
+      "predict": "The students who stay are the ones who feel SEEN, not just trained",
+      "diagnose": "If someone leaves early, it's usually because they felt like a number, not a student"
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["strategy", "mindset"],
+    "motions": ["expand", "pulse"],
+    "lines": ["solid", "glow"],
+    "diagnostics": ["gold-pulse"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "Not a Fight Club",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "This is not a fight club. There are no cage matches. No one screaming at you to push harder. This is a practice space.",
+      "components": ["CalloutLabel"],
+      "assets": ["gym-interior-calm"],
+      "learningObjective": "Establish identity: practice space, not fight club"
+    },
+    {
+      "id": "scene_02",
+      "title": "The Method",
+      "duration": "20s",
+      "visualMode": "blueprint",
+      "narration": "We teach the Cuban school of boxing. Fundamentals. Footwork. Angles. Counter-punching. A system that's been producing world-class boxers for decades — adapted for anyone willing to learn.",
+      "components": ["FootworkGrid", "GuardWindow", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Connect BR to Cuban method (lesson 1 bridge)"
+    },
+    {
+      "id": "scene_03",
+      "title": "Diagnostic Coaching",
+      "duration": "25s",
+      "visualMode": "noir",
+      "narration": "Every student is different. Different body. Different fears. Different goals. Coach Paul doesn't follow a script — he reads the student. What do you need right now? Not what does the schedule say.",
+      "components": ["CalloutLabel"],
+      "assets": ["coaching-footage"],
+      "learningObjective": "Diagnostic coaching — individual, not programmatic"
+    },
+    {
+      "id": "scene_04",
+      "title": "The Three Engines",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "Boxing trains three engines simultaneously. Body — stance, movement, coordination. Mind — timing, angles, reading your opponent. Emotion — composure under pressure, confidence through competence.",
+      "components": ["CalloutLabel", "ProgressStepper"],
+      "assets": [],
+      "learningObjective": "Introduce Three Engines framework"
+    },
+    {
+      "id": "scene_05",
+      "title": "The 10 Blocks",
+      "duration": "20s",
+      "visualMode": "isometric",
+      "narration": "Ten blocks. From awareness to mastery. Each one builds on the last. You don't skip ahead. You don't rush. You build — and every block you build gives you something that stays.",
+      "components": ["ProgressStepper", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Preview the 10-Block system (lesson 11 bridge)"
+    },
+    {
+      "id": "scene_06",
+      "title": "For Everyone",
+      "duration": "15s",
+      "visualMode": "noir",
+      "narration": "You don't need to be fit. You don't need to want to fight. You need to be willing to learn. That's the only entry requirement.",
+      "components": ["CalloutLabel"],
+      "assets": ["diverse-members"],
+      "learningObjective": "Remove barriers — this is for you"
+    },
+    {
+      "id": "scene_07",
+      "title": "Hong Kong",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "Cuban method. Hong Kong home. Basic Reflex.",
+      "components": ["CalloutLabel"],
+      "assets": ["br-logo", "hk-skyline"],
+      "learningObjective": "Close: location, identity, invitation"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_03", "scene_06"],
+      "hook": "This is not a fight club. This is a practice space.",
+      "cta": "Ready to learn? Link in bio."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "Not a Fight Club"},
+        {"time": "1:00", "title": "The Cuban Method in Hong Kong"},
+        {"time": "2:30", "title": "How Coach Paul Teaches"},
+        {"time": "4:00", "title": "Body, Mind, Emotion"},
+        {"time": "5:30", "title": "The 10-Block System"},
+        {"time": "7:00", "title": "Who Is This For?"},
+        {"time": "8:30", "title": "Basic Reflex"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "20s",
+      "sceneIds": ["scene_01", "scene_04"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "What is Basic Reflex?",
+        "The Cuban Method",
+        "The Three Engines: Body, Mind, Emotion",
+        "The 10-Block Progression",
+        "What to Expect in Your First Session"
+      ],
+      "diagrams": ["three-engines-triangle", "10-block-overview"],
+      "checkpoints": [
+        "What are the Three Engines?",
+        "Why is BR a practice space, not a fight club?",
+        "What is diagnostic coaching?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Use this content in first-session intros and trial class openings",
+        "The 'practice space' framing matters — it sets expectations for new students",
+        "When parents ask about kids classes, this lesson is the entry point"
+      ],
+      "regressions": [
+        "If a student comes from a 'tough gym' culture, the practice space framing might feel soft. Reframe: this is where Cuban Olympic champions trained. Discipline, not aggression."
+      ],
+      "observations": [
+        "Watch for students who relax visibly when they hear 'you don't need to want to fight' — they're your core demographic"
+      ],
+      "progressionTo": "lesson-03-the-stance"
+    }
+  }
+}

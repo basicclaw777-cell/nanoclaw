@@ -1,0 +1,193 @@
+{
+  "id": "lesson-11",
+  "position": 11,
+  "title": "The 10-Block System",
+  "subtitle": "The map — how it all connects",
+  "slug": "the-10-block-system",
+
+  "curriculum": {
+    "blocks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "pillars": ["skill", "sparring", "conditioning"],
+    "domains": ["strategy", "mindset"],
+    "engines": {
+      "body": "Physical progression: stance → guard → punches → combinations → defence → sparring",
+      "mind": "Understanding the map: where you are, where you're going, what each block gives you",
+      "emotion": "Ownership of your journey — the student sees the full path and chooses to walk it"
+    }
+  },
+
+  "audience": {
+    "level": "all",
+    "hook": "Ten blocks. From your first stance to your first fight. Every block builds on the last. Here's the map.",
+    "question": "How does a complete boxing education work?"
+  },
+
+  "core": {
+    "thesis": "The 10-Block System is Basic Reflex's complete curriculum — a structured progression from awareness to mastery, where every block builds on the previous one and nothing is skipped.",
+    "keyPoints": [
+      "Ten blocks, three pillars: Skill, Sparring, Conditioning. Each block lives in one or more pillars.",
+      "Sequential progression: you don't jump to block 5 because you're enthusiastic. Block 3 prepares you for block 4.",
+      "Each block has a clear focus, clear skills, and a clear gate — what must you demonstrate before moving on?",
+      "The system is designed so that every student, regardless of starting point, follows the same foundational path",
+      "Blocks 1-3: Awareness and fundamentals — stance, guard, basic punches, footwork",
+      "Blocks 4-6: Application — combinations, defensive integration, partner work",
+      "Blocks 7-9: Adaptation — sparring, tactical thinking, pressure management",
+      "Block 10: Mastery — everything integrates. You're not executing techniques, you're expressing the method.",
+      "The blocks aren't levels of difficulty — they're layers of understanding. Block 1 never stops being relevant.",
+      "The system teaches itself: each block reveals why the previous blocks matter"
+    ],
+    "commonMisconceptions": [
+      "Block 10 is the goal — block 10 is where everything INTEGRATES, but block 1 is where everything WORKS",
+      "You graduate from blocks — you accumulate them. Block 1 doesn't end when block 2 starts.",
+      "The system is rigid — the structure is fixed, but how long you spend in each block is individual",
+      "Blocks are about punches — blocks are about understanding. Punches are the vocabulary, understanding is the language."
+    ],
+    "coachEye": {
+      "observe": "Which block is the student actually AT vs which block they think they're at?",
+      "compare": "A block-3 student who trained sequentially vs a block-3 student who skipped block 2 — the gaps are obvious",
+      "predict": "A student who understands the map stays motivated through plateaus — they know the plateau is the block working",
+      "diagnose": "If a student is struggling at block N, the answer is almost always in block N-1. Go back one layer."
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["strategy", "mindset"],
+    "motions": ["expand", "pulse", "sweep"],
+    "lines": ["solid", "double-line", "glow"],
+    "diagnostics": ["gold-pulse"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "The Map",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "Ten blocks. One path. Every block builds on the last. Skip one, and the blocks above it are built on sand. Here's the map.",
+      "components": ["CalloutLabel", "ProgressStepper"],
+      "assets": [],
+      "learningObjective": "Introduce the system — the map metaphor"
+    },
+    {
+      "id": "scene_02",
+      "title": "Three Pillars",
+      "duration": "20s",
+      "visualMode": "isometric",
+      "narration": "Three pillars run through every block. Skill — the technique. Sparring — the application. Conditioning — the capacity to execute under fatigue. Every block balances all three.",
+      "components": ["ProgressStepper", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "The three pillars: skill, sparring, conditioning"
+    },
+    {
+      "id": "scene_03",
+      "title": "Foundation: Blocks 1-3",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "Blocks one to three: awareness and fundamentals. Stance. Guard. Jab. Footwork. Cross. Hook. The building blocks. These are lessons three through nine of this series — and they never stop being relevant, no matter how far you go.",
+      "components": ["FootworkGrid", "GuardWindow", "PunchTrajectory", "ProgressStepper"],
+      "assets": [],
+      "learningObjective": "Foundation blocks — connect to previous lessons"
+    },
+    {
+      "id": "scene_04",
+      "title": "Application: Blocks 4-6",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "Blocks four to six: application. Combinations become conversations. Defence becomes offence. You start working with partners — not against them, WITH them. This is where the method comes alive.",
+      "components": ["PunchTrajectory", "DistanceBands", "RhythmVisualizer", "ProgressStepper"],
+      "assets": [],
+      "learningObjective": "Application blocks — from technique to partnership"
+    },
+    {
+      "id": "scene_05",
+      "title": "Adaptation: Blocks 7-9",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "Blocks seven to nine: adaptation. Sparring. Live exchanges. Pressure. Making decisions when someone is trying to hit you. Everything you've built gets tested. What holds up is yours. What falls apart goes back to the foundation.",
+      "components": ["TimingPulse", "DistanceBands", "FootworkGrid", "ProgressStepper"],
+      "assets": [],
+      "learningObjective": "Adaptation blocks — live application under pressure"
+    },
+    {
+      "id": "scene_06",
+      "title": "Mastery: Block 10",
+      "duration": "20s",
+      "visualMode": "noir",
+      "narration": "Block ten. Everything integrates. You're not executing techniques — you're expressing the method. The punches are yours. The movement is yours. The decisions are yours. You're not following the system. You ARE the system.",
+      "components": ["CalloutLabel"],
+      "assets": ["mastery-footage"],
+      "learningObjective": "Mastery — integration, not complexity"
+    },
+    {
+      "id": "scene_07",
+      "title": "The Blocks Never End",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "You don't graduate from blocks. You accumulate them. Block one is still with you at block ten. The stance. The guard. The jab. They don't become obsolete. They become deeper. That's mastery.",
+      "components": ["ProgressStepper", "CalloutLabel"],
+      "assets": ["br-logo"],
+      "learningObjective": "Blocks accumulate, not expire — lifelong practice"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_06", "scene_07"],
+      "hook": "Ten blocks. One path. Every block builds on the last. Here's the map.",
+      "cta": "Start at block 1. There are no shortcuts."
+    },
+    "youtube": {
+      "duration": "10-12min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "The Map"},
+        {"time": "1:00", "title": "Three Pillars: Skill, Sparring, Conditioning"},
+        {"time": "2:30", "title": "Foundation — Blocks 1-3"},
+        {"time": "4:30", "title": "Application — Blocks 4-6"},
+        {"time": "6:30", "title": "Adaptation — Blocks 7-9"},
+        {"time": "8:30", "title": "Mastery — Block 10"},
+        {"time": "10:00", "title": "The Blocks Never End"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "20s",
+      "sceneIds": ["scene_02", "scene_03"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "The 10-Block System Overview",
+        "Three Pillars: Skill, Sparring, Conditioning",
+        "Foundation Blocks (1-3)",
+        "Application Blocks (4-6)",
+        "Adaptation Blocks (7-9)",
+        "Mastery (Block 10)",
+        "Why Blocks Accumulate, Not Expire"
+      ],
+      "diagrams": ["10-block-progression", "three-pillars", "block-dependency-graph"],
+      "checkpoints": [
+        "Can you name all three pillars?",
+        "What are the foundation blocks?",
+        "Why does block 1 never stop being relevant?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "This lesson works as both introduction (before lesson 1 for overview students) AND summary (after lesson 10 for reflection)",
+        "The block progression map is on the wall — point to it. Visual learners need to SEE the path.",
+        "When students ask 'how long does it take?' — 'Everyone's timeline is different. The blocks don't have a clock.'"
+      ],
+      "regressions": [
+        "If a student feels stuck, show them on the map where they are. Context beats motivation.",
+        "If a student wants to skip ahead, demonstrate: try this block-6 drill. Watch what breaks. That's why block 4 matters."
+      ],
+      "observations": [
+        "Students who understand the map become self-coaching — they can diagnose their own gaps",
+        "The map is also a retention tool — students who see progress on the blocks stay longer"
+      ],
+      "progressionTo": "The journey continues. Each block deepens. Each lesson compounds."
+    }
+  }
+}

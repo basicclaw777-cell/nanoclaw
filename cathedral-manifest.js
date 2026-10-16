@@ -73,8 +73,8 @@ const MANIFEST = {
   'eng-studio':          { intended: 'online', cron: null, reason: 'Engineering Studio' },
   'content-ideas':       { intended: 'online', cron: null, reason: 'Content idea engine' },
   'content-reviews':     { intended: 'online', cron: null, reason: 'Content review responder' },
-  'maya-social':         { intended: 'online', cron: null, reason: 'Maya internal social feed' },
-  'buzz-monitor':        { intended: 'online', cron: null, reason: 'Social buzz monitor' },
+  'maya-social':         { intended: 'disabled', cron: null, reason: 'TRIAGE 2026-10-13: unconsumed output, agents grading agents' },
+  'buzz-monitor':        { intended: 'disabled', cron: null, reason: 'TRIAGE 2026-10-13: kick quiet departments — no human consumer' },
   'hf-tester':           { intended: 'online', cron: null, reason: 'Higgsfield model tester (Mon/Wed/Fri)' },
 
   // ── RESEARCH (always online) ──
@@ -95,10 +95,10 @@ const MANIFEST = {
 
   // ── EMERGENCE PIPELINE (daily sequence: harvest → ingest → triage → reignite → produce → integrate) ──
   'emergence-harvester':     { intended: 'cron', cron: '30 20 * * *',  reason: 'Daily 04:30 HKT — scan agent DMs for emergence signals' },
-  'emergence-ingest':        { intended: 'cron', cron: '0 21 * * *',   reason: 'Daily 05:00 HKT — ingest captures+surprises → board incidents' },
-  'emergence-signal-router': { intended: 'cron', cron: '25 21 * * *',  reason: 'Daily 05:25 HKT — route signals between agents' },
-  'emergence-triage':        { intended: 'cron', cron: '35 21 * * *',  reason: 'Daily 05:35 HKT — DETECTED → WATCHING or DISMISSED' },
-  'emergence-reigniter':     { intended: 'cron', cron: '45 21 * * *',  reason: 'Daily 05:45 HKT — WATCHING cross-agent asks → concrete tasks' },
+  'emergence-ingest':        { intended: 'disabled', cron: '0 21 * * *',   reason: 'TRIAGE 2026-10-13: 183 alerts, 0 completed — output goes to unread JSON' },
+  'emergence-signal-router': { intended: 'disabled', cron: '25 21 * * *',  reason: 'TRIAGE 2026-10-13: part of unconsumed emergence pipeline' },
+  'emergence-triage':        { intended: 'disabled', cron: '35 21 * * *',  reason: 'TRIAGE 2026-10-13: 183 alerts, 0 completed' },
+  'emergence-reigniter':     { intended: 'disabled', cron: '45 21 * * *',  reason: 'TRIAGE 2026-10-13: 0 tasks completed from reigniter output' },
   'production-engine':       { intended: 'cron', cron: '0 22 * * *',   reason: 'Daily 06:00 HKT — execute tasks, ship deliverables, WATCHING → CONFIRMED' },
 
   // ── WEEKLY CRONS ──

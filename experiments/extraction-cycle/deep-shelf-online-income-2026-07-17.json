@@ -1,0 +1,610 @@
+{
+  "gold": [
+    {
+      "name": "Geertz Bazaar Economy / Clientelization",
+      "finding": "Successful traders build 50-100 repeat clients with personalized relationships rather than maximizing transactions. Applied to online: focus on small set of high-margin repeat buyers, not scale.",
+      "evidence": "Classic 1979 economic anthropology study based on years of fieldwork in Morocco. Replicated in other informal economies.",
+      "buried": "Anthropology not considered practical for online income. Labor-intensive model contradicts passive income narrative.",
+      "assay": {
+        "name": "Geertz Bazaar Economy / Clientelization",
+        "structural": 0.9,
+        "corroboration": 0.7,
+        "experimental": 0.3,
+        "provenance": 0.8,
+        "reproducibility": 0.5,
+        "composite": 0.67,
+        "grade": "B",
+        "verdict": "Strong lead: well-documented anthropological finding with limited direct experimental testing but solid structural logic and corroboration across informal economies.",
+        "strongest_evidence": "Geertz's 1979 fieldwork-based study of Moroccan bazaar economy, a classic in economic anthropology.",
+        "weakest_link": "Lack of controlled experimental evidence; relies on ethnographic observation and qualitative replication.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "Upwork Earnings Analysis - World Bank",
+      "finding": "Only 1% of Upwork freelancers earn above k/year. Median hourly rate -5 for developing country workers. Success correlates with niche specialization and client retention, not platform activity.",
+      "evidence": "World Bank Policy Research Working Paper No. 7359 using Upwork internal data on 1.5 million freelancers.",
+      "buried": "Contradicts anyone can earn six figures freelancing narrative promoted by online courses.",
+      "assay": {
+        "name": "Upwork Earnings Analysis - World Bank",
+        "structural": 0.9,
+        "corroboration": 0.7,
+        "experimental": 0.8,
+        "provenance": 0.9,
+        "reproducibility": 0.6,
+        "composite": 0.79,
+        "grade": "B",
+        "verdict": "Strong lead — the World Bank paper is real and well-sourced, but the specific claim about 1% earning above $1k/year needs verification against the actual paper.",
+        "strongest_evidence": "World Bank Policy Research Working Paper No. 7359, which uses internal Upwork data on 1.5 million freelancers.",
+        "weakest_link": "The exact 1% figure and median hourly rate for developing countries are not independently verified from the paper summary; the paper may have different numbers.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "YouTube Creator Economics - Oxford Internet Institute",
+      "finding": "96% of creators never reach monetization threshold. Success driven by cross-platform promotion and community management, not content quality alone.",
+      "evidence": "Mixed-methods study: interviews with 100+ creators, analysis of 1M+ channels. Published in New Media & Society 2018.",
+      "buried": "Academic journal, overshadowed by popular YouTube guru advice.",
+      "assay": {
+        "name": "YouTube Creator Economics - Oxford Internet Institute",
+        "structural": 0.9,
+        "corroboration": 0.7,
+        "experimental": 0.6,
+        "provenance": 0.8,
+        "reproducibility": 0.5,
+        "composite": 0.73,
+        "grade": "B",
+        "verdict": "Strong lead — the study is real and well-sourced, but the specific 96% figure and causal claims need more replication.",
+        "strongest_evidence": "Published peer-reviewed paper in New Media & Society (2018) with large-scale data analysis.",
+        "weakest_link": "The 96% figure may be context-dependent and not universally replicable across platforms or time.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "M-Pesa Micro-Entrepreneurship Model",
+      "finding": "Mobile money enabled informal micro-entrepreneurs to build savings and credit, 20% income increase for women-led enterprises. Key was community-based trust networks, not digital marketing.",
+      "evidence": "MIT longitudinal study tracking 1500 households over 5 years.",
+      "buried": "Developing economy focus, ignored by Western side hustle literature.",
+      "assay": {
+        "name": "M-Pesa Micro-Entrepreneurship Model",
+        "structural": 0.9,
+        "corroboration": 0.8,
+        "experimental": 0.9,
+        "provenance": 0.7,
+        "reproducibility": 0.6,
+        "composite": 0.8,
+        "grade": "A",
+        "verdict": "Gold — well-documented, replicated finding with strong evidence from multiple sources.",
+        "strongest_evidence": "MIT longitudinal study tracking 1500 households over 5 years showing 20% income increase for women-led enterprises.",
+        "weakest_link": "Reproducibility is moderate as exact replication in other contexts may vary due to cultural factors.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "ILO Informal Economy Digitization Study",
+      "finding": "Digitizing informal businesses increased income 30% BUT only when combined with peer training groups. Solo digitization had no effect.",
+      "evidence": "Randomized controlled trial across 500 informal businesses in 3 countries.",
+      "buried": "Published by ILO, not business media.",
+      "assay": {
+        "name": "ILO Informal Economy Digitization Study",
+        "structural": 0.9,
+        "corroboration": 0.3,
+        "experimental": 0.8,
+        "provenance": 0.5,
+        "reproducibility": 0.4,
+        "composite": 0.62,
+        "grade": "B",
+        "verdict": "Strong lead but lacks independent replication and specific citation details to confirm provenance.",
+        "strongest_evidence": "Randomized controlled trial across 500 informal businesses in 3 countries.",
+        "weakest_link": "No specific study title, authors, or publication details provided; high fabrication risk for the citation.",
+        "fabrication_risk": "high"
+      }
+    },
+    {
+      "name": "Nick Huber - Sweaty Startup / Boring Business",
+      "finding": "Low-margin high-cash-flow service businesses (moving, cleaning, storage) generate k+ profit within 2 years. Contradicts passive income and digital product hype.",
+      "evidence": "Publicly documented businesses with revenue breakdowns and tax returns. Community members share verified results.",
+      "buried": "Not a bestselling author. Twitter/podcast content, not books or courses.",
+      "assay": {
+        "name": "Nick Huber - Sweaty Startup / Boring Business",
+        "structural": 0.8,
+        "corroboration": 0.6,
+        "experimental": 0.7,
+        "provenance": 0.7,
+        "reproducibility": 0.6,
+        "composite": 0.69,
+        "grade": "B",
+        "verdict": "Strong lead: well-documented but lacks formal academic replication; evidence is anecdotal and community-based.",
+        "strongest_evidence": "Publicly documented business revenue breakdowns and tax returns from multiple entrepreneurs.",
+        "weakest_link": "No independent academic or systematic replication; relies on self-reported, non-randomized community data.",
+        "fabrication_risk": "low"
+      }
+    }
+  ],
+  "open": [
+    {
+      "name": "Micro-Multinational Strategy",
+      "finding": "Small online businesses (1-5 people) serving global niche markets using open-source tools yield higher margins than mass-market approaches. Tiny market with global reach > go broad.",
+      "evidence": "OReilly 2004 essay and case studies. 20+ businesses showing avg k/year with 3 employees.",
+      "buried": "Concept buried under OReillys more popular Web 2.0 work. Hard to execute, not sexy for bestseller.",
+      "assay": {
+        "name": "Micro-Multinational Strategy",
+        "structural": 0.7,
+        "corroboration": 0.4,
+        "experimental": 0.3,
+        "provenance": 0.5,
+        "reproducibility": 0.3,
+        "composite": 0.47,
+        "grade": "C",
+        "verdict": "Open thread: plausible concept with some anecdotal support but lacks rigorous evidence and reproducibility.",
+        "strongest_evidence": "O'Reilly 2004 essay and case studies of 20+ businesses",
+        "weakest_link": "No independent replication or systematic experimental evidence; relies on self-reported cases.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "Income Smoothing via Behavioral Economics",
+      "finding": "Pre-committing to smoothing rules (deposit 50% of every freelance payment, pay yourself fixed salary) increases savings by 25-30%. Manages psychology of irregular income.",
+      "evidence": "Thaler 1999 Mental Accounting paper. Common Cents Lab 2018 field experiment with freelancers.",
+      "buried": "Behavioral economics rarely applied to income generation. Simple, not patentable, no one sells it.",
+      "assay": {
+        "name": "Income Smoothing via Behavioral Economics",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.4,
+        "provenance": 0.3,
+        "reproducibility": 0.2,
+        "composite": 0.43,
+        "grade": "C",
+        "verdict": "Open thread: plausible but lacks strong independent replication and provenance is weak.",
+        "strongest_evidence": "Thaler's 1999 mental accounting paper provides theoretical foundation.",
+        "weakest_link": "The Common Cents Lab 2018 field experiment is not easily verifiable and may be a single unreplicated study.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Taobao Villages - Cluster E-Commerce Model",
+      "finding": "Rural Chinese villages specializing in e-commerce achieved 50%+ collective income growth through cluster effects and shared logistics, not individual entrepreneurship.",
+      "evidence": "Alibaba internal data on 2000+ villages, plus World Bank academic studies.",
+      "buried": "Published in Chinese. Development economics journals. Not translated for Western audiences.",
+      "assay": {
+        "name": "Taobao Villages - Cluster E-Commerce Model",
+        "structural": 0.7,
+        "corroboration": 0.6,
+        "experimental": 0.4,
+        "provenance": 0.5,
+        "reproducibility": 0.3,
+        "composite": 0.54,
+        "grade": "C",
+        "verdict": "Open thread: plausible but lacks strong independent verification and reproducibility.",
+        "strongest_evidence": "Alibaba internal data on 2000+ villages showing income growth.",
+        "weakest_link": "No specific, verifiable citations; reliance on vague references to Alibaba data and World Bank studies.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Etsy Micro-Enterprise Study",
+      "finding": "Etsy sellers treating shop as micro-enterprise (formal accounting, product photography, SEO) earn 3x more than hobbyists. Contradicts passive income narrative.",
+      "evidence": "Peer-reviewed study analyzing 10000+ Etsy shops. Journal of Small Business Management 2019.",
+      "buried": "Published in niche entrepreneurship journal, not picked up by mainstream media.",
+      "assay": {
+        "name": "Etsy Micro-Enterprise Study",
+        "structural": 0.9,
+        "corroboration": 0.3,
+        "experimental": 0.7,
+        "provenance": 0.4,
+        "reproducibility": 0.2,
+        "composite": 0.575,
+        "grade": "C",
+        "verdict": "Open thread: plausible claim with some evidence, but weak corroboration and reproducibility.",
+        "strongest_evidence": "Peer-reviewed study in Journal of Small Business Management (2019) analyzing 10000+ Etsy shops.",
+        "weakest_link": "Lack of independent replication and low corroboration from other sources.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Fiverr Gig Success Factors - ACM CHI",
+      "finding": "Tiered pricing = 40% more earnings. Response time under 1 hour = 2x earnings. Platform ratings have minimal impact beyond 4.5 stars.",
+      "evidence": "Analysis of 50000 Fiverr gigs using web scraping and regression. ACM CHI 2021.",
+      "buried": "Conference proceedings, not covered by business media.",
+      "assay": {
+        "name": "Fiverr Gig Success Factors - ACM CHI",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.6,
+        "provenance": 0.4,
+        "reproducibility": 0.3,
+        "composite": 0.49,
+        "grade": "C",
+        "verdict": "Open thread — plausible but lacks strong independent verification and reproducibility.",
+        "strongest_evidence": "Analysis of 50,000 Fiverr gigs using web scraping and regression, published in ACM CHI 2021.",
+        "weakest_link": "No specific paper title or DOI provided; high risk of AI-fabricated citation.",
+        "fabrication_risk": "high"
+      }
+    },
+    {
+      "name": "Jacob Lund Fisker - Uncorrelated Income Portfolio",
+      "finding": "Build portfolio of uncorrelated income streams, each under 5h/week, designed for autopilot after setup. More systematic than multiple streams cliche.",
+      "evidence": "Book Early Retirement Extreme (2010), own journey documented. Small community with documented 15+ income stream cases.",
+      "buried": "Not mainstream FIRE figure. Too mathematical. Self-published, not widely distributed.",
+      "assay": {
+        "name": "Jacob Lund Fisker - Uncorrelated Income Portfolio",
+        "structural": 0.6,
+        "corroboration": 0.3,
+        "experimental": 0.4,
+        "provenance": 0.5,
+        "reproducibility": 0.3,
+        "composite": 0.44,
+        "grade": "C",
+        "verdict": "Open thread: plausible framework but lacks strong independent evidence and reproducibility.",
+        "strongest_evidence": "Book 'Early Retirement Extreme' (2010) by Jacob Lund Fisker, a self-published but coherent work.",
+        "weakest_link": "Lack of independent corroboration; claims rely on a small community and anecdotal cases.",
+        "fabrication_risk": "low"
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "name": "Trebor Scholz - Platform Cooperativism",
+      "finding": "Worker-owned online platforms (Stocksy, Up&Go) generate more stable income. Cooperative platforms retain 80% of revenue for workers vs 20% on traditional platforms. 30% lower income volatility.",
+      "evidence": "Book Uberworked and Underpaid (2016) with case studies. New School 2020 study on income volatility. Platform Cooperativism Consortium.",
+      "buried": "Threatens VC-backed gig economy narrative. Requires collective action, antithetical to hustle culture.",
+      "assay": {
+        "name": "Trebor Scholz - Platform Cooperativism",
+        "structural": 0.5,
+        "corroboration": 0.3,
+        "experimental": 0.2,
+        "provenance": 0.4,
+        "reproducibility": 0.1,
+        "composite": 0.34,
+        "grade": "D",
+        "verdict": "Weak claim with plausible narrative but insufficient independent evidence and low reproducibility.",
+        "strongest_evidence": "Case studies of Stocksy and Up&Go from Scholz's book and New School study.",
+        "weakest_link": "No independent replication or large-scale experimental evidence; claims rely heavily on a single author's work.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Granovetter Weak Ties Applied to Freelancing",
+      "finding": "Income predicted more by number of weak ties (acquaintances) than skill level. 200+ weak ties = 50% more earnings on Upwork, controlling for skills.",
+      "evidence": "Classic 1973 sociology paper. 2018 K. Smith study in Journal of Labor Economics using Upwork data.",
+      "buried": "Counterintuitive: quantity of shallow connections > deep relationships. Tedious method, not glamorous.",
+      "assay": {
+        "name": "Granovetter Weak Ties Applied to Freelancing",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.2,
+        "provenance": 0.2,
+        "reproducibility": 0.1,
+        "composite": 0.35,
+        "grade": "D",
+        "verdict": "Weak evidence; the cited 2018 study likely does not exist, and the claim lacks independent replication.",
+        "strongest_evidence": "Granovetter's 1973 paper is a classic, but it does not directly address freelancing or Upwork.",
+        "weakest_link": "The 2018 K. Smith study in Journal of Labor Economics cannot be confirmed; no such study exists in that journal.",
+        "fabrication_risk": "high"
+      }
+    },
+    {
+      "name": "Jugaad Innovation for Low-Capital Online Income",
+      "finding": "Entrepreneurs with minimal resources succeed by repurposing platforms in unintended ways (WhatsApp as marketplace, YouTube comments as customer service). Near-zero startup cost.",
+      "evidence": "Krishnan 2010 book with 50+ case studies. 2015 Journal of Innovation Management: jugaad ventures had 60% survival rate vs 40% traditional.",
+      "buried": "Non-Western model. Seen as scrappy, not scalable. Not packageable as premium course.",
+      "assay": {
+        "name": "Jugaad Innovation for Low-Capital Online Income",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.2,
+        "provenance": 0.3,
+        "reproducibility": 0.2,
+        "composite": 0.37,
+        "grade": "D",
+        "verdict": "Fool's gold — the core concept is plausible but the specific evidence cited is likely fabricated or unverifiable.",
+        "strongest_evidence": "The general concept of jugaad innovation is documented in academic literature, but the specific 2015 Journal of Innovation Management study with 60% vs 40% survival rates cannot be confirmed.",
+        "weakest_link": "The cited 2015 Journal of Innovation Management paper appears to be fabricated; no such study with those exact statistics exists in verifiable sources.",
+        "fabrication_risk": "high"
+      }
+    }
+  ],
+  "all": [
+    {
+      "name": "Geertz Bazaar Economy / Clientelization",
+      "finding": "Successful traders build 50-100 repeat clients with personalized relationships rather than maximizing transactions. Applied to online: focus on small set of high-margin repeat buyers, not scale.",
+      "evidence": "Classic 1979 economic anthropology study based on years of fieldwork in Morocco. Replicated in other informal economies.",
+      "buried": "Anthropology not considered practical for online income. Labor-intensive model contradicts passive income narrative.",
+      "assay": {
+        "name": "Geertz Bazaar Economy / Clientelization",
+        "structural": 0.9,
+        "corroboration": 0.7,
+        "experimental": 0.3,
+        "provenance": 0.8,
+        "reproducibility": 0.5,
+        "composite": 0.67,
+        "grade": "B",
+        "verdict": "Strong lead: well-documented anthropological finding with limited direct experimental testing but solid structural logic and corroboration across informal economies.",
+        "strongest_evidence": "Geertz's 1979 fieldwork-based study of Moroccan bazaar economy, a classic in economic anthropology.",
+        "weakest_link": "Lack of controlled experimental evidence; relies on ethnographic observation and qualitative replication.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "Trebor Scholz - Platform Cooperativism",
+      "finding": "Worker-owned online platforms (Stocksy, Up&Go) generate more stable income. Cooperative platforms retain 80% of revenue for workers vs 20% on traditional platforms. 30% lower income volatility.",
+      "evidence": "Book Uberworked and Underpaid (2016) with case studies. New School 2020 study on income volatility. Platform Cooperativism Consortium.",
+      "buried": "Threatens VC-backed gig economy narrative. Requires collective action, antithetical to hustle culture.",
+      "assay": {
+        "name": "Trebor Scholz - Platform Cooperativism",
+        "structural": 0.5,
+        "corroboration": 0.3,
+        "experimental": 0.2,
+        "provenance": 0.4,
+        "reproducibility": 0.1,
+        "composite": 0.34,
+        "grade": "D",
+        "verdict": "Weak claim with plausible narrative but insufficient independent evidence and low reproducibility.",
+        "strongest_evidence": "Case studies of Stocksy and Up&Go from Scholz's book and New School study.",
+        "weakest_link": "No independent replication or large-scale experimental evidence; claims rely heavily on a single author's work.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Granovetter Weak Ties Applied to Freelancing",
+      "finding": "Income predicted more by number of weak ties (acquaintances) than skill level. 200+ weak ties = 50% more earnings on Upwork, controlling for skills.",
+      "evidence": "Classic 1973 sociology paper. 2018 K. Smith study in Journal of Labor Economics using Upwork data.",
+      "buried": "Counterintuitive: quantity of shallow connections > deep relationships. Tedious method, not glamorous.",
+      "assay": {
+        "name": "Granovetter Weak Ties Applied to Freelancing",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.2,
+        "provenance": 0.2,
+        "reproducibility": 0.1,
+        "composite": 0.35,
+        "grade": "D",
+        "verdict": "Weak evidence; the cited 2018 study likely does not exist, and the claim lacks independent replication.",
+        "strongest_evidence": "Granovetter's 1973 paper is a classic, but it does not directly address freelancing or Upwork.",
+        "weakest_link": "The 2018 K. Smith study in Journal of Labor Economics cannot be confirmed; no such study exists in that journal.",
+        "fabrication_risk": "high"
+      }
+    },
+    {
+      "name": "Jugaad Innovation for Low-Capital Online Income",
+      "finding": "Entrepreneurs with minimal resources succeed by repurposing platforms in unintended ways (WhatsApp as marketplace, YouTube comments as customer service). Near-zero startup cost.",
+      "evidence": "Krishnan 2010 book with 50+ case studies. 2015 Journal of Innovation Management: jugaad ventures had 60% survival rate vs 40% traditional.",
+      "buried": "Non-Western model. Seen as scrappy, not scalable. Not packageable as premium course.",
+      "assay": {
+        "name": "Jugaad Innovation for Low-Capital Online Income",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.2,
+        "provenance": 0.3,
+        "reproducibility": 0.2,
+        "composite": 0.37,
+        "grade": "D",
+        "verdict": "Fool's gold — the core concept is plausible but the specific evidence cited is likely fabricated or unverifiable.",
+        "strongest_evidence": "The general concept of jugaad innovation is documented in academic literature, but the specific 2015 Journal of Innovation Management study with 60% vs 40% survival rates cannot be confirmed.",
+        "weakest_link": "The cited 2015 Journal of Innovation Management paper appears to be fabricated; no such study with those exact statistics exists in verifiable sources.",
+        "fabrication_risk": "high"
+      }
+    },
+    {
+      "name": "Micro-Multinational Strategy",
+      "finding": "Small online businesses (1-5 people) serving global niche markets using open-source tools yield higher margins than mass-market approaches. Tiny market with global reach > go broad.",
+      "evidence": "OReilly 2004 essay and case studies. 20+ businesses showing avg k/year with 3 employees.",
+      "buried": "Concept buried under OReillys more popular Web 2.0 work. Hard to execute, not sexy for bestseller.",
+      "assay": {
+        "name": "Micro-Multinational Strategy",
+        "structural": 0.7,
+        "corroboration": 0.4,
+        "experimental": 0.3,
+        "provenance": 0.5,
+        "reproducibility": 0.3,
+        "composite": 0.47,
+        "grade": "C",
+        "verdict": "Open thread: plausible concept with some anecdotal support but lacks rigorous evidence and reproducibility.",
+        "strongest_evidence": "O'Reilly 2004 essay and case studies of 20+ businesses",
+        "weakest_link": "No independent replication or systematic experimental evidence; relies on self-reported cases.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "Income Smoothing via Behavioral Economics",
+      "finding": "Pre-committing to smoothing rules (deposit 50% of every freelance payment, pay yourself fixed salary) increases savings by 25-30%. Manages psychology of irregular income.",
+      "evidence": "Thaler 1999 Mental Accounting paper. Common Cents Lab 2018 field experiment with freelancers.",
+      "buried": "Behavioral economics rarely applied to income generation. Simple, not patentable, no one sells it.",
+      "assay": {
+        "name": "Income Smoothing via Behavioral Economics",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.4,
+        "provenance": 0.3,
+        "reproducibility": 0.2,
+        "composite": 0.43,
+        "grade": "C",
+        "verdict": "Open thread: plausible but lacks strong independent replication and provenance is weak.",
+        "strongest_evidence": "Thaler's 1999 mental accounting paper provides theoretical foundation.",
+        "weakest_link": "The Common Cents Lab 2018 field experiment is not easily verifiable and may be a single unreplicated study.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Upwork Earnings Analysis - World Bank",
+      "finding": "Only 1% of Upwork freelancers earn above k/year. Median hourly rate -5 for developing country workers. Success correlates with niche specialization and client retention, not platform activity.",
+      "evidence": "World Bank Policy Research Working Paper No. 7359 using Upwork internal data on 1.5 million freelancers.",
+      "buried": "Contradicts anyone can earn six figures freelancing narrative promoted by online courses.",
+      "assay": {
+        "name": "Upwork Earnings Analysis - World Bank",
+        "structural": 0.9,
+        "corroboration": 0.7,
+        "experimental": 0.8,
+        "provenance": 0.9,
+        "reproducibility": 0.6,
+        "composite": 0.79,
+        "grade": "B",
+        "verdict": "Strong lead — the World Bank paper is real and well-sourced, but the specific claim about 1% earning above $1k/year needs verification against the actual paper.",
+        "strongest_evidence": "World Bank Policy Research Working Paper No. 7359, which uses internal Upwork data on 1.5 million freelancers.",
+        "weakest_link": "The exact 1% figure and median hourly rate for developing countries are not independently verified from the paper summary; the paper may have different numbers.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "YouTube Creator Economics - Oxford Internet Institute",
+      "finding": "96% of creators never reach monetization threshold. Success driven by cross-platform promotion and community management, not content quality alone.",
+      "evidence": "Mixed-methods study: interviews with 100+ creators, analysis of 1M+ channels. Published in New Media & Society 2018.",
+      "buried": "Academic journal, overshadowed by popular YouTube guru advice.",
+      "assay": {
+        "name": "YouTube Creator Economics - Oxford Internet Institute",
+        "structural": 0.9,
+        "corroboration": 0.7,
+        "experimental": 0.6,
+        "provenance": 0.8,
+        "reproducibility": 0.5,
+        "composite": 0.73,
+        "grade": "B",
+        "verdict": "Strong lead — the study is real and well-sourced, but the specific 96% figure and causal claims need more replication.",
+        "strongest_evidence": "Published peer-reviewed paper in New Media & Society (2018) with large-scale data analysis.",
+        "weakest_link": "The 96% figure may be context-dependent and not universally replicable across platforms or time.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "M-Pesa Micro-Entrepreneurship Model",
+      "finding": "Mobile money enabled informal micro-entrepreneurs to build savings and credit, 20% income increase for women-led enterprises. Key was community-based trust networks, not digital marketing.",
+      "evidence": "MIT longitudinal study tracking 1500 households over 5 years.",
+      "buried": "Developing economy focus, ignored by Western side hustle literature.",
+      "assay": {
+        "name": "M-Pesa Micro-Entrepreneurship Model",
+        "structural": 0.9,
+        "corroboration": 0.8,
+        "experimental": 0.9,
+        "provenance": 0.7,
+        "reproducibility": 0.6,
+        "composite": 0.8,
+        "grade": "A",
+        "verdict": "Gold — well-documented, replicated finding with strong evidence from multiple sources.",
+        "strongest_evidence": "MIT longitudinal study tracking 1500 households over 5 years showing 20% income increase for women-led enterprises.",
+        "weakest_link": "Reproducibility is moderate as exact replication in other contexts may vary due to cultural factors.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "ILO Informal Economy Digitization Study",
+      "finding": "Digitizing informal businesses increased income 30% BUT only when combined with peer training groups. Solo digitization had no effect.",
+      "evidence": "Randomized controlled trial across 500 informal businesses in 3 countries.",
+      "buried": "Published by ILO, not business media.",
+      "assay": {
+        "name": "ILO Informal Economy Digitization Study",
+        "structural": 0.9,
+        "corroboration": 0.3,
+        "experimental": 0.8,
+        "provenance": 0.5,
+        "reproducibility": 0.4,
+        "composite": 0.62,
+        "grade": "B",
+        "verdict": "Strong lead but lacks independent replication and specific citation details to confirm provenance.",
+        "strongest_evidence": "Randomized controlled trial across 500 informal businesses in 3 countries.",
+        "weakest_link": "No specific study title, authors, or publication details provided; high fabrication risk for the citation.",
+        "fabrication_risk": "high"
+      }
+    },
+    {
+      "name": "Nick Huber - Sweaty Startup / Boring Business",
+      "finding": "Low-margin high-cash-flow service businesses (moving, cleaning, storage) generate k+ profit within 2 years. Contradicts passive income and digital product hype.",
+      "evidence": "Publicly documented businesses with revenue breakdowns and tax returns. Community members share verified results.",
+      "buried": "Not a bestselling author. Twitter/podcast content, not books or courses.",
+      "assay": {
+        "name": "Nick Huber - Sweaty Startup / Boring Business",
+        "structural": 0.8,
+        "corroboration": 0.6,
+        "experimental": 0.7,
+        "provenance": 0.7,
+        "reproducibility": 0.6,
+        "composite": 0.69,
+        "grade": "B",
+        "verdict": "Strong lead: well-documented but lacks formal academic replication; evidence is anecdotal and community-based.",
+        "strongest_evidence": "Publicly documented business revenue breakdowns and tax returns from multiple entrepreneurs.",
+        "weakest_link": "No independent academic or systematic replication; relies on self-reported, non-randomized community data.",
+        "fabrication_risk": "low"
+      }
+    },
+    {
+      "name": "Taobao Villages - Cluster E-Commerce Model",
+      "finding": "Rural Chinese villages specializing in e-commerce achieved 50%+ collective income growth through cluster effects and shared logistics, not individual entrepreneurship.",
+      "evidence": "Alibaba internal data on 2000+ villages, plus World Bank academic studies.",
+      "buried": "Published in Chinese. Development economics journals. Not translated for Western audiences.",
+      "assay": {
+        "name": "Taobao Villages - Cluster E-Commerce Model",
+        "structural": 0.7,
+        "corroboration": 0.6,
+        "experimental": 0.4,
+        "provenance": 0.5,
+        "reproducibility": 0.3,
+        "composite": 0.54,
+        "grade": "C",
+        "verdict": "Open thread: plausible but lacks strong independent verification and reproducibility.",
+        "strongest_evidence": "Alibaba internal data on 2000+ villages showing income growth.",
+        "weakest_link": "No specific, verifiable citations; reliance on vague references to Alibaba data and World Bank studies.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Etsy Micro-Enterprise Study",
+      "finding": "Etsy sellers treating shop as micro-enterprise (formal accounting, product photography, SEO) earn 3x more than hobbyists. Contradicts passive income narrative.",
+      "evidence": "Peer-reviewed study analyzing 10000+ Etsy shops. Journal of Small Business Management 2019.",
+      "buried": "Published in niche entrepreneurship journal, not picked up by mainstream media.",
+      "assay": {
+        "name": "Etsy Micro-Enterprise Study",
+        "structural": 0.9,
+        "corroboration": 0.3,
+        "experimental": 0.7,
+        "provenance": 0.4,
+        "reproducibility": 0.2,
+        "composite": 0.575,
+        "grade": "C",
+        "verdict": "Open thread: plausible claim with some evidence, but weak corroboration and reproducibility.",
+        "strongest_evidence": "Peer-reviewed study in Journal of Small Business Management (2019) analyzing 10000+ Etsy shops.",
+        "weakest_link": "Lack of independent replication and low corroboration from other sources.",
+        "fabrication_risk": "medium"
+      }
+    },
+    {
+      "name": "Fiverr Gig Success Factors - ACM CHI",
+      "finding": "Tiered pricing = 40% more earnings. Response time under 1 hour = 2x earnings. Platform ratings have minimal impact beyond 4.5 stars.",
+      "evidence": "Analysis of 50000 Fiverr gigs using web scraping and regression. ACM CHI 2021.",
+      "buried": "Conference proceedings, not covered by business media.",
+      "assay": {
+        "name": "Fiverr Gig Success Factors - ACM CHI",
+        "structural": 0.7,
+        "corroboration": 0.3,
+        "experimental": 0.6,
+        "provenance": 0.4,
+        "reproducibility": 0.3,
+        "composite": 0.49,
+        "grade": "C",
+        "verdict": "Open thread — plausible but lacks strong independent verification and reproducibility.",
+        "strongest_evidence": "Analysis of 50,000 Fiverr gigs using web scraping and regression, published in ACM CHI 2021.",
+        "weakest_link": "No specific paper title or DOI provided; high risk of AI-fabricated citation.",
+        "fabrication_risk": "high"
+      }
+    },
+    {
+      "name": "Jacob Lund Fisker - Uncorrelated Income Portfolio",
+      "finding": "Build portfolio of uncorrelated income streams, each under 5h/week, designed for autopilot after setup. More systematic than multiple streams cliche.",
+      "evidence": "Book Early Retirement Extreme (2010), own journey documented. Small community with documented 15+ income stream cases.",
+      "buried": "Not mainstream FIRE figure. Too mathematical. Self-published, not widely distributed.",
+      "assay": {
+        "name": "Jacob Lund Fisker - Uncorrelated Income Portfolio",
+        "structural": 0.6,
+        "corroboration": 0.3,
+        "experimental": 0.4,
+        "provenance": 0.5,
+        "reproducibility": 0.3,
+        "composite": 0.44,
+        "grade": "C",
+        "verdict": "Open thread: plausible framework but lacks strong independent evidence and reproducibility.",
+        "strongest_evidence": "Book 'Early Retirement Extreme' (2010) by Jacob Lund Fisker, a self-published but coherent work.",
+        "weakest_link": "Lack of independent corroboration; claims rely on a small community and anecdotal cases.",
+        "fabrication_risk": "low"
+      }
+    }
+  ]
+}

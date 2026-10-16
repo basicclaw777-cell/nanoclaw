@@ -1,0 +1,52 @@
+{
+  "people_detected": 1,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Moving laterally to the left with small, controlled steps.",
+        "stance_width": "normal",
+        "guard": "Hands up near the chin, elbows tucked in.",
+        "upper_body": "Slight forward lean, relaxed head movement.",
+        "distance": "No opponent; large empty space around the fighter.",
+        "notable": "Fighter is drifting leftward across the frame."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Continuing steady lateral steps to the left.",
+        "stance_width": "normal",
+        "guard": "Guard remains high and stable.",
+        "upper_body": "Maintaining torso orientation, no punches thrown.",
+        "distance": "Maintaining position relative to the gym background.",
+        "notable": "Movement is consistent and unhurried."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Completing the lateral shuffle to the far left side of the frame.",
+        "stance_width": "normal",
+        "guard": "Hands remain up in guard position.",
+        "upper_body": "Torso is stable, facing left.",
+        "distance": "Fighter is now positioned on the left side of the gym.",
+        "notable": "Continuous drill without stopping."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F15",
+      "type": "step",
+      "detail": "The fighter repeatedly steps laterally to the left, maintaining a consistent boxing stance throughout the entire sequence."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

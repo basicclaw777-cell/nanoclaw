@@ -1,0 +1,1699 @@
+{
+  "scan_date": "2026-09-13",
+  "listings_analyzed": 54,
+  "scored": [
+    {
+      "id": "https://www.28hse.com/buy/office/property-3999358",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "Kwun Tong industrial is a legacy industrial node with no emerging flow overlay; the 'gym' lane tag is a listing artifact, not a demand signal.",
+        "Hong Kong is in contraction per the brief: cheap capital reversing, belief narrative broken, believers thinning — four conditions reversing.",
+        "Asking HK$5.8M for 2,077 sqft (~HK$2,793/sqft) is not a deep-value hedge against the local income/rent base without verified yield."
+      ],
+      "falsification": "A verified lease at >4% net yield with a data-center or logistics tenant would falsify the 'no flow' thesis.",
+      "monitor_next_week": "Kwun Tong industrial vacancy and any Kowloon East CBD2 office conversion permits."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3638711",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "Yau Tong industrial is a declining container-adjacent node; no energy, information, or security flow overlay.",
+        "HK industrial strata is in a documented multi-year price and volume contraction.",
+        "No yield data provided; cannot establish misprice vs. rent."
+      ],
+      "falsification": "A confirmed Kai Tak / Kowloon East infrastructure permit that re-rates Yau Tong logistics demand.",
+      "monitor_next_week": "Yau Tong Industrial City transaction volume and any strata auction failures."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3951070",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "Cheapest unit in the Yau Tong cluster (HK$2,350/sqft) but '特平' discount language is a distress signal, not a flow signal.",
+        "No flow alignment beyond generic capital; HK capital flow is reversing.",
+        "Independent internal bathroom is a micro-feature, not a container or narrative."
+      ],
+      "falsification": "Evidence of a tenant pipeline (e.g., data-center, cold storage) signing above-market rents.",
+      "monitor_next_week": "Yau Tong strata asking-price cuts and days-on-market."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3936070",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "Duplicate Yau Tong Industrial City exposure at HK$2,903/sqft — no differentiation.",
+        "HK industrial is in contraction; four liminal conditions reversing.",
+        "No yield, no tenant, no flow."
+      ],
+      "falsification": "A signed institutional lease or government re-zoning announcement for the block.",
+      "monitor_next_week": "Yau Tong Industrial City listing count and price dispersion."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3887269",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "San Po Kong industrial at HK$2,888/sqft; Kai Tak sports park is nearby but the flow (events/tourism) does not transmit to strata industrial.",
+        "HK contraction phase; no flow overlay.",
+        "No yield data."
+      ],
+      "falsification": "Kai Tak Sports Park event calendar driving verified short-term industrial/storage demand.",
+      "monitor_next_week": "San Po Kong industrial rents and Kai Tak event permits."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3998988",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "Tsuen Wan industrial at HK$2,191/sqft; Tsuen Wan is a mature node with no emerging flow.",
+        "HK contraction; no energy/information/security overlay.",
+        "No yield data."
+      ],
+      "falsification": "A verified logistics or cold-chain tenant at >4% net yield.",
+      "monitor_next_week": "Tsuen Wan industrial vacancy and any Northern Metropolis spillover."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3920203",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "HK$2,621/sqft with explicit '業主劈價' (owner slashing price) — distress signal.",
+        "HK industrial contraction; no flow.",
+        "Small unit size limits tenant pool."
+      ],
+      "falsification": "Evidence the price cut reflects a motivated seller, not a falling market — e.g., a signed lease at prior asking.",
+      "monitor_next_week": "Tsuen Wan '劈價' listing frequency as a sentiment proxy."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-4000511",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "HK$2,430/sqft, '劈價求售' (price cut to sell) — distress language.",
+        "HK contraction; no flow overlay.",
+        "Near West Rail is a transport feature, not a flow."
+      ],
+      "falsification": "A verified tenant at >4% net yield.",
+      "monitor_next_week": "Tsuen Wan small-strata transaction volume."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3998748",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "HK$1,799/sqft is the cheapest in the HK set but '劈價' language confirms distress.",
+        "HK contraction; no flow.",
+        "Curved window is a micro-feature, not a container."
+      ],
+      "falsification": "A signed lease at market rent demonstrating the discount is idiosyncratic.",
+      "monitor_next_week": "Tsuen Wan industrial price floor formation."
+    },
+    {
+      "id": "https://www.28hse.com/buy/office/property-3980951",
+      "flows": [
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 2,
+        "stability": 3,
+        "belief": 1,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 11,
+      "contraction": true,
+      "score": {
+        "flow_alignment": 1,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 0,
+        "total": 3
+      },
+      "verdict": "discard",
+      "three_reasons": [
+        "HK$2,618/sqft; Tsuen Wan industrial with no flow overlay.",
+        "HK contraction.",
+        "No yield data."
+      ],
+      "falsification": "A verified tenant pipeline.",
+      "monitor_next_week": "Tsuen Wan industrial rents."
+    },
+    {
+      "id": "GL001",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 5
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Ari is a genuine working-class-to-creative transition node on the BTS with corporate migration north — a real container.",
+        "Yield 5.8% with foreign-quota availability gives a cash-flow floor.",
+        "Food/coffee/gym culture is a belief variable that is measurably attracting capital."
+      ],
+      "falsification": "If foreign-quota buildings in Ari show rising vacancy or if BTS ridership on the line stalls, the narrative is decoupling from physics.",
+      "monitor_next_week": "Ari condo asking rents, foreign-quota availability, and BTS ridership data."
+    },
+    {
+      "id": "GL002",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Bang Na is the earlier-stage version of Ari with a BTS extension as a physical catalyst.",
+        "7.5% yield at HK$489K for 700 sqft is a strong misprice vs. Bangkok income and rent.",
+        "International schools and BITEC anchor corporate and family rental demand."
+      ],
+      "falsification": "If the BTS extension slips or if projected 20-30% appreciation fails to materialize by 2028, the thesis is falsified.",
+      "monitor_next_week": "BTS extension construction milestones and Bang Na rental listings."
+    },
+    {
+      "id": "GL003",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 5
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Nimman is a mature lifestyle node with a strong expat-believer base.",
+        "6.5% yield at 60% of Ari pricing is a relative misprice.",
+        "Mountain air and slower pace are climate-flow attributes that are becoming scarcer in the region."
+      ],
+      "falsification": "If Chiang Mai's air-quality season worsens materially, the climate-flow attribute reverses.",
+      "monitor_next_week": "Chiang Mai PM2.5 readings and Nimman rental yields."
+    },
+    {
+      "id": "GL004",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 5
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Rawai/Chalong is a genuine fight-tourism container with a dense cluster of camps.",
+        "7% yield at HK$1M for 550 sqft is reasonable for Phuket.",
+        "The fight-tourism economy is a measurable flow (visa data, camp enrollment)."
+      ],
+      "falsification": "If fight-tourism visa issuance declines or camp enrollment drops, the container weakens.",
+      "monitor_next_week": "Phuket ED visa issuance and Tiger/AKA enrollment data."
+    },
+    {
+      "id": "GL005",
+      "flows": [
+        "capital",
+        "security",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 4,
+        "container": 3,
+        "believers": 4
+      },
+      "condition_total": 18,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 9
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Marvila is a genuine industrial-to-creative transition with the lowest entry price in Lisbon proper.",
+        "Portugal stacks security flow (rule of law, D7 path, EU citizenship after 5 years) with capital flow (yield-seeking) and climate flow (Atlantic resilience).",
+        "5.5% yield at €4,200/m² vs. €7,000+ city center is a measurable misprice."
+      ],
+      "falsification": "If Portugal tightens the D7 income threshold or NHR phase-out removes the tax advantage, the security-flow premium compresses.",
+      "monitor_next_week": "Portuguese D7 approval volumes, NHR application data, and Marvila transaction prices."
+    },
+    {
+      "id": "GL006",
+      "flows": [
+        "capital",
+        "security",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 4,
+        "container": 3,
+        "believers": 4
+      },
+      "condition_total": 18,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 9
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Bonfim yields 6-6.5% — the best in Portugal — with a working-class-to-creative transition narrative.",
+        "Porto is 10 years behind Lisbon on the same security/capital/climate flow stack.",
+        "€2,666/m² for 500 sqft is a deep misprice vs. Lisbon and vs. replacement cost."
+      ],
+      "falsification": "If Porto's rental yield compresses below 5% or if D7 processing slows materially, the thesis weakens.",
+      "monitor_next_week": "Porto Bonfim transaction prices, D7 processing times, and Porto immigration office throughput."
+    },
+    {
+      "id": "GL007",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 4,
+        "stability": 4,
+        "belief": 2,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Freehold land + house in Osaka for HK$421K is an extreme misprice vs. replacement cost.",
+        "Nishinari is a genuine working-class-to-artist transition node with real food culture.",
+        "Japan's cheap capital and stability are intact; the container is the Kansai metro."
+      ],
+      "falsification": "If the Business Manager visa path fails or if Nishinari's safety reputation deteriorates further, the narrative stalls.",
+      "monitor_next_week": "Nishinari akiya listings and Osaka Business Manager visa approval data."
+    },
+    {
+      "id": "GL008",
+      "flows": [
+        "capital",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 4,
+        "stability": 4,
+        "belief": 2,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "6% net yield on a freehold Osaka apartment at HK$632K is a strong cash-flow misprice.",
+        "Japan's tenant laws create long-tenancy stability — a measurable cash-flow attribute.",
+        "Tsuruhashi is a genuine Koreatown container with food culture and 3-minute access to Namba."
+      ],
+      "falsification": "If Japanese tenant vacancy rises or if the yen strengthens materially, the yield math breaks.",
+      "monitor_next_week": "Osaka Tsuruhashi rental listings and JPY/HKD FX."
+    },
+    {
+      "id": "GL009",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 4,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 9
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Georgia stacks security flow (1-year visa-free for HK, clean title, zero property tax, zero CGT after 2 years) with capital flow (8% yield).",
+        "Tbilisi Vera is an embassy/arts district with a measurable expat/NGO tenant base.",
+        "HK$800K for 700 sqft freehold in a capital city is a deep misprice vs. replacement cost."
+      ],
+      "falsification": "If Georgia's visa-free policy for HK passport holders is curtailed or if the lari destabilizes, the security-flow premium compresses.",
+      "monitor_next_week": "Georgian visa policy announcements, GEL/HKD FX, and Tbilisi rental listings."
+    },
+    {
+      "id": "GL010",
+      "flows": [
+        "security",
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 4,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 9
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Sololaki is a 19th-century merchant-house container with genuine architectural bones — a scarce asset class.",
+        "Freehold land + 900 sqft house under HK$1M in a capital historic district is an extreme misprice.",
+        "Georgia's security-flow stack (visa-free, clean title, tax regime) is intact."
+      ],
+      "falsification": "If renovation costs exceed GEL 80K or if Sololaki's heritage-protection rules block modernization, the thesis weakens.",
+      "monitor_next_week": "Sololaki listing prices, Georgian heritage-permit activity, and renovation cost data."
+    },
+    {
+      "id": "GL011",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "BNO visa is the cleanest passport pathway in the scan — a security-flow asset that is not priced into the property.",
+        "8%+ yield on Liverpool terraces is a strong cash-flow misprice.",
+        "The HK community in Liverpool (5,000+ BNO arrivals) is a measurable believer base."
+      ],
+      "falsification": "If the BNO visa route is closed or materially restricted, the security-flow premium collapses.",
+      "monitor_next_week": "UK BNO visa approval volumes and Liverpool auction clearance rates."
+    },
+    {
+      "id": "GL012",
+      "flows": [
+        "security",
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Salford/Chapel Street is a genuine industrial-to-creative transition with £1B+ infrastructure investment.",
+        "6.5% yield on MediaCityUK/Spinningfields tenants is a measurable cash-flow play.",
+        "BNO security flow stacks with Manchester's large HK community."
+      ],
+      "falsification": "If MediaCityUK or Spinningfields tenant demand softens, the rental thesis weakens.",
+      "monitor_next_week": "Salford Chapel Street transaction prices and MediaCityUK occupancy."
+    },
+    {
+      "id": "GL013",
+      "flows": [
+        "capital",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Mont Kiara is a genuine expat container with Japanese/Korean/European families — a stable tenant base.",
+        "HK$842K for 850 sqft is a deep misprice vs. HK and vs. regional peers.",
+        "MM2H Silver tier at RM 600K property minimum is accessible at this price point."
+      ],
+      "falsification": "If MM2H tiers are revised upward again or if Mont Kiara expat outflow accelerates, the thesis weakens.",
+      "monitor_next_week": "MM2H application volumes and Mont Kiara rental listings."
+    },
+    {
+      "id": "GL014",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Bangsar South is KL's tech/startup corridor — an information-flow node with young professional tenants.",
+        "6.5% yield at HK$737K for 750 sqft is a strong cash-flow misprice.",
+        "Kerinchi LRT connects to KL Sentral in 8 minutes — a real container."
+      ],
+      "falsification": "If the unit falls below the foreign purchase minimum and cannot be transacted, the thesis is falsified.",
+      "monitor_next_week": "Bangsar South rental listings and Malaysian foreign-purchase minimum rules."
+    },
+    {
+      "id": "GL015",
+      "flows": [
+        "security",
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 4,
+        "container": 4,
+        "believers": 3
+      },
+      "condition_total": 17,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 9
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Bay of Kotor is a genuine geographic container — a fjord-like bay with Venetian architecture and a superyacht marina.",
+        "€150K property purchase now qualifies for residency (Jan 2026 law) — a security-flow asset.",
+        "EU accession timeline (target ~2030) is an asymmetric re-rating catalyst."
+      ],
+      "falsification": "If Montenegro's EU accession stalls or if the residency-by-property law is reversed, the thesis collapses.",
+      "monitor_next_week": "Montenegro EU accession progress and residency-by-property application data."
+    },
+    {
+      "id": "GL016",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Laureles-Estadio is a genuine sports-anchored container with a middle-class community.",
+        "8% yield at HK$1.16M for 700 sqft is a strong cash-flow misprice.",
+        "Medellín's innovation-hub narrative is a measurable belief variable."
+      ],
+      "falsification": "If the COP 550M price falls below the M-10 visa threshold and cannot be combined, the visa angle fails.",
+      "monitor_next_week": "Colombia M-10 visa thresholds and Medellín rental yields."
+    },
+    {
+      "id": "GL017",
+      "flows": [
+        "capital",
+        "security",
+        "energy"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 4,
+        "container": 3,
+        "believers": 4
+      },
+      "condition_total": 18,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 1,
+        "narrative": 2,
+        "total": 8
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Dubai stacks capital flow (0% tax, freehold), security flow (absolute property rights), and energy flow (sovereign wealth, grid capacity).",
+        "7.5% net yield at AED 650K is a measurable cash-flow play.",
+        "The fitness culture is a genuine believer base, not just Instagram."
+      ],
+      "falsification": "If the AED 650K unit cannot be upgraded to the AED 750K visa threshold, the security-flow angle weakens.",
+      "monitor_next_week": "Dubai JVC transaction prices and DLD registration volumes."
+    },
+    {
+      "id": "GL018",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Blloku is a genuine post-communist-elite-to-hipster transition node with real café culture.",
+        "€1,500/m² in an EU candidate capital is a deep misprice vs. Sofia/Zagreb.",
+        "EU accession trajectory (negotiations opened 2022) is an asymmetric re-rating catalyst."
+      ],
+      "falsification": "If Albania's EU accession stalls or if the residency-by-property process becomes opaque, the thesis weakens.",
+      "monitor_next_week": "Albania EU accession progress and Tirana Blloku transaction prices."
+    },
+    {
+      "id": "GL019",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Rangsit is a student/commuter container anchored by two universities and a major mall.",
+        "7% yield at HK$523K for 640 sqft is a strong cash-flow misprice.",
+        "The northern rail-extension corridor is a physical catalyst."
+      ],
+      "falsification": "If the rail extension is delayed or if student enrollment declines, the thesis weakens.",
+      "monitor_next_week": "Rangsit rental listings and Thammasat/Rangsit University enrollment data."
+    },
+    {
+      "id": "GL020",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 4,
+        "container": 4,
+        "believers": 4
+      },
+      "condition_total": 18,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 1,
+        "narrative": 2,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Soi Ta-iad is the global Muay Thai training capital — a genuine geographic container with a dense camp cluster.",
+        "6.5% yield at HK$950K for 520 sqft is reasonable for a specialized rental niche.",
+        "The fighter long-stay rental niche is underserved and measurable via visa data."
+      ],
+      "falsification": "If ED visa issuance for Muay Thai training declines or if camp enrollment drops, the container weakens.",
+      "monitor_next_week": "Phuket ED visa issuance and Tiger/Dragon/AKA enrollment data."
+    },
+    {
+      "id": "GL021",
+      "flows": [
+        "capital",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 4,
+        "stability": 4,
+        "belief": 2,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Fukuoka is one of Japan's few net-population-gaining metros — a rare demographic container.",
+        "6% net yield at HK$483K for 420 sqft is a strong cash-flow misprice.",
+        "Japan's freehold ownership structure is the cleanest in the scan."
+      ],
+      "falsification": "If Fukuoka's population growth stalls or if the yen strengthens materially, the yield math breaks.",
+      "monitor_next_week": "Fukuoka population data and Hakata rental listings."
+    },
+    {
+      "id": "GL022",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Leeds undercuts Manchester on price while matching Liverpool on yield — a relative misprice.",
+        "7.5% gross on a 720 sqft terrace is a strong cash-flow play.",
+        "BNO security flow stacks with Leeds' two universities and tech/financial-services tenant base."
+      ],
+      "falsification": "If BNO visa rules tighten or if Leeds student enrollment declines, the thesis weakens.",
+      "monitor_next_week": "Leeds transaction prices and BNO arrival data."
+    },
+    {
+      "id": "GL023",
+      "flows": [
+        "capital",
+        "security",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "George Town is a UNESCO World Heritage container with a genuine food culture and shophouse bones.",
+        "HK$1.25M for 900 sqft near Gurney Drive is a reasonable misprice vs. KL and Singapore.",
+        "Penang's martial-arts culture is a measurable believer base."
+      ],
+      "falsification": "If MM2H tiers are revised upward again or if Penang's heritage-protection rules block renovation, the thesis weakens.",
+      "monitor_next_week": "MM2H current tiers and George Town transaction prices."
+    },
+    {
+      "id": "GL024",
+      "flows": [
+        "capital",
+        "security",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 8
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Setúbal is a working fishing port turned food town — a genuine container with authenticity Lisbon lost.",
+        "€180K for 700 sqft is ~40% cheaper than Lisbon's outer districts — a measurable misprice.",
+        "D7 passive-income visa path is well-established; EU citizenship after 5 years."
+      ],
+      "falsification": "If the D7 income threshold rises materially or if Lisbon spillover fails to materialize, the thesis weakens.",
+      "monitor_next_week": "Setúbal transaction prices and Portuguese D7 approval volumes."
+    },
+    {
+      "id": "GL025",
+      "flows": [
+        "security",
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Batumi is a Black Sea coastal container with a casino/port economy and a decade-long tourism build-out.",
+        "HK$541K for 750 sqft freehold coastal is ~1/10 of Mediterranean equivalents — an extreme misprice.",
+        "Georgia's zero property tax and zero CGT after 2 years preserve yield."
+      ],
+      "falsification": "If Georgia's visa-free policy for HK passport holders is curtailed or if Batumi's tourism build-out stalls, the thesis weakens.",
+      "monitor_next_week": "Batumi transaction prices and Georgian visa policy announcements."
+    },
+    {
+      "id": "GL026",
+      "flows": [
+        "capital",
+        "information",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 4,
+        "container": 4,
+        "believers": 4
+      },
+      "condition_total": 19,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 9
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Johor Bahru is the HK–Shenzhen arbitrage of Southeast Asia — a genuine geographic container with the RTS Link as a physical catalyst.",
+        "HK$1,200/sqft vs. Singapore's HK$1,600+/sqft is a measurable misprice.",
+        "Medini/Iskandar Puteri is foreigner-friendly with no minimum and no quota."
+      ],
+      "falsification": "If the RTS Link is delayed or if MM2H tiers are revised upward again, the thesis weakens.",
+      "monitor_next_week": "RTS Link construction milestones and Medini transaction prices."
+    },
+    {
+      "id": "GL027",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Wualai/Santitham is the actual old-bones Chiang Mai — moat-adjacent, temple-dense, still lived in by locals.",
+        "20-30% cheaper than Nimman for the same 15-minute walk — a measurable misprice.",
+        "5.8% yield at HK$815K for 620 sqft is reasonable for the lifestyle."
+      ],
+      "falsification": "If Chiang Mai's air-quality season worsens materially, the climate-flow attribute reverses.",
+      "monitor_next_week": "Chiang Mai PM2.5 readings and Wualai rental listings."
+    },
+    {
+      "id": "GL028",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 5
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Hua Hin is a royal-family beach town — clean, safe, family-oriented, not a Patong-style tourist trap.",
+        "5.5% yield at HK$767K for 640 sqft is reasonable for the lifestyle.",
+        "Genuine Muay Thai camp presence and a Scandinavian/expat retirement community."
+      ],
+      "falsification": "If the retirement/expat community shrinks or if Thai long-stay visa rules tighten, the thesis weakens.",
+      "monitor_next_week": "Hua Hin rental listings and Thai long-stay visa policy."
+    },
+    {
+      "id": "GL029",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 4,
+        "stability": 4,
+        "belief": 2,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Sapporo is one of Japan's few net-population-gaining metros — a rare demographic container.",
+        "30-40% cheaper per sqm than Osaka with Japan's build quality and freehold structure.",
+        "Winter-tourism boom (Niseko/Hokkaido) is spilling over."
+      ],
+      "falsification": "If Sapporo's population growth stalls or if the winter-tourism boom fades, the thesis weakens.",
+      "monitor_next_week": "Sapporo population data and Odori rental listings."
+    },
+    {
+      "id": "GL030",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Sheffield undercuts Leeds on price while matching on yield — a relative misprice.",
+        "7.5% gross on terraces at £110-150K is a strong cash-flow play.",
+        "BNO security flow stacks with Sheffield's two universities and working-class boxing identity."
+      ],
+      "falsification": "If BNO visa rules tighten or if Sheffield student enrollment declines, the thesis weakens.",
+      "monitor_next_week": "Sheffield transaction prices and BNO arrival data."
+    },
+    {
+      "id": "GL031",
+      "flows": [
+        "capital",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Coimbra is one of Europe's oldest university cities — a genuine container with stone facades and river bones.",
+        "€135K for 700 sqft is 40-50% cheaper than Lisbon or Porto — a measurable misprice.",
+        "D7 passive-income visa path is well-established; EU citizenship after 5 years."
+      ],
+      "falsification": "If the D7 income threshold rises materially or if Coimbra's student population declines, the thesis weakens.",
+      "monitor_next_week": "Coimbra transaction prices and Portuguese D7 approval volumes."
+    },
+    {
+      "id": "GL032",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Da Nang is Southeast Asia's most liveable beach city — a genuine lifestyle container.",
+        "HK$872K for 700 sqft two blocks from the beach is a strong lifestyle-per-dollar misprice.",
+        "Rising digital-nomad/expat scene and a growing Muay Thai/boxing presence."
+      ],
+      "falsification": "If Vietnam's leasehold structure for foreigners proves unworkable or if the visa regime tightens, the thesis weakens.",
+      "monitor_next_week": "Da Nang transaction prices and Vietnamese visa policy."
+    },
+    {
+      "id": "GL033",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 5
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "On Nut/Phra Khanong is the value end of Sukhumvit — working-class roots with BTS access.",
+        "5% yield at HK$1.16M for 650 sqft is modest but the transit and food culture are real.",
+        "Avoids the Thonglor 'digital nomad premium' the brief flagged."
+      ],
+      "falsification": "If BTS ridership on the line stalls or if On Nut rents compress, the thesis weakens.",
+      "monitor_next_week": "On Nut rental listings and BTS ridership data."
+    },
+    {
+      "id": "GL034",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Glasgow yields 7-9% gross — the highest in the UK — on tenements at a third of London prices.",
+        "BNO security flow is the cleanest passport pathway in the scan.",
+        "Glasgow is a genuine boxing city with a deep amateur tradition."
+      ],
+      "falsification": "If BNO visa rules tighten or if Glasgow's rental market softens, the thesis weakens.",
+      "monitor_next_week": "Glasgow transaction prices and BNO arrival data."
+    },
+    {
+      "id": "GL035",
+      "flows": [
+        "capital",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Ipoh is Malaysia's food capital — a genuine working-class container with real hawker culture.",
+        "HK$934K for 1,000 sqft is a deep misprice vs. KL and Penang.",
+        "MM2H covers it; kickboxing/Muay Thai gyms are part of the local fabric."
+      ],
+      "falsification": "If MM2H tiers are revised upward again or if Ipoh's rental demand softens, the thesis weakens.",
+      "monitor_next_week": "Ipoh transaction prices and MM2H current tiers."
+    },
+    {
+      "id": "GL036",
+      "flows": [
+        "capital",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Braga is Portugal's fastest-growing city — a genuine university-anchored container.",
+        "€165K for 750 sqft undercuts Porto by 40-50% — a measurable misprice.",
+        "D7 passive-income visa path is well-established; EU citizenship after 5 years."
+      ],
+      "falsification": "If the D7 income threshold rises materially or if Braga's growth stalls, the thesis weakens.",
+      "monitor_next_week": "Braga transaction prices and Portuguese D7 approval volumes."
+    },
+    {
+      "id": "GL037",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 4,
+        "stability": 4,
+        "belief": 2,
+        "container": 3,
+        "believers": 2
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Yuzawa is a ski-town container on the Joetsu Shinkansen with thousands of akiya.",
+        "HK$392K for 1,400 sqft freehold is an extreme misprice vs. replacement cost.",
+        "A gym/dojo conversion in a ski lodge is genuinely possible."
+      ],
+      "falsification": "If the akiya market is illiquid or if renovation costs exceed the asset value, the thesis weakens.",
+      "monitor_next_week": "Yuzawa akiya listings and Joetsu Shinkansen ridership."
+    },
+    {
+      "id": "GL038",
+      "flows": [
+        "capital",
+        "security"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 2,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Belgrade is cheap, freehold-friendly for foreigners, and has a genuine combat-sports culture.",
+        "€1,500-2,500/m² is a deep misprice vs. EU norms.",
+        "Pre-EU-accession trajectory is an asymmetric re-rating catalyst."
+      ],
+      "falsification": "If Serbia's EU accession stalls or if the residency-by-company process becomes opaque, the thesis weakens.",
+      "monitor_next_week": "Serbia EU accession progress and Belgrade transaction prices."
+    },
+    {
+      "id": "GL039",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 7
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Belfast is the cheapest region of the UK for property — a deep-value BNO entry.",
+        "7%+ gross on a three-bed terrace at ~£120K is a strong cash-flow play.",
+        "Belfast is a genuine boxing city with a deep amateur tradition."
+      ],
+      "falsification": "If BNO visa rules tighten or if Northern Ireland's rental market softens, the thesis weakens.",
+      "monitor_next_week": "Belfast transaction prices and BNO arrival data."
+    },
+    {
+      "id": "GL040",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 1,
+        "total": 5
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Ratchadaphisek is Bangkok's 'second CBD' — MRT-connected with office towers and the G-Land/Esplanade complexes.",
+        "Huai Khwang is a genuine working Chinese-Thai neighbourhood with night markets and street food.",
+        "5.3% yield at HK$1.1M for 550 sqft is modest but the MRT network fill-in is a physical catalyst."
+      ],
+      "falsification": "If MRT ridership on the Blue Line stalls or if Huai Khwang rents compress, the thesis weakens.",
+      "monitor_next_week": "Huai Khwang rental listings and MRT Blue Line ridership."
+    },
+    {
+      "id": "GL041",
+      "flows": [
+        "capital",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Chiang Rai is the quieter, cheaper, less-discovered version of the Chiang Mai Lanna play.",
+        "HK$763K for 1,200 sqft with land is a deep misprice vs. Chiang Mai.",
+        "UNESCO 'Design City' status and old-town bones are a measurable belief variable."
+      ],
+      "falsification": "If Chiang Rai's air-quality season worsens materially or if the Lanna narrative fails to attract capital, the thesis weakens.",
+      "monitor_next_week": "Chiang Rai transaction prices and PM2.5 readings."
+    },
+    {
+      "id": "GL042",
+      "flows": [
+        "capital",
+        "security",
+        "climate"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 4,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 16,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 3,
+        "macro_conditions": 2,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 8
+      },
+      "verdict": "surfaced",
+      "three_reasons": [
+        "Kuching is Malaysia's overlooked Borneo frontier — a clean, safe, riverfront container.",
+        "HK$1.0M for 1,100 sqft is a deep misprice vs. KL and Penang.",
+        "Sarawak's S-MM2H program has materially lower financial requirements than federal MM2H."
+      ],
+      "falsification": "If S-MM2H requirements are raised to federal levels or if Kuching's rental demand softens, the thesis weakens.",
+      "monitor_next_week": "S-MM2H current requirements and Kuching transaction prices."
+    },
+    {
+      "id": "GL043",
+      "flows": [
+        "capital",
+        "information"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 1,
+        "narrative": 2,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Roma/Condesa/Juárez is one of the best food-and-community neighbourhoods on earth — a genuine container.",
+        "6% yield at HK$2.4M for 900 sqft is modest but the fight-culture fit is deep.",
+        "Mexico City is overlooked because of a dated safety reputation — a narrative misprice."
+      ],
+      "falsification": "If Mexico City's safety reputation deteriorates materially or if the peso destabilizes, the thesis weakens.",
+      "monitor_next_week": "CDMX transaction prices and Mexican residency income thresholds."
+    },
+    {
+      "id": "GL044",
+      "flows": [
+        "security",
+        "capital"
+      ],
+      "conditions": {
+        "cheap_capital": 3,
+        "stability": 3,
+        "belief": 3,
+        "container": 3,
+        "believers": 3
+      },
+      "condition_total": 15,
+      "contraction": false,
+      "score": {
+        "flow_alignment": 2,
+        "macro_conditions": 1,
+        "misprice": 2,
+        "narrative": 1,
+        "total": 6
+      },
+      "verdict": "watchlist",
+      "three_reasons": [
+        "Kutaisi is one of the oldest continuously inhabited cities on earth — a genuine historic container.",
+        "HK$661K for 1,500 sqft freehold with land is the cheapest genuine freehold-plus-land play in the scan.",
+        "Georgia's tax-and-ownership regime is the draw, not the visa."
+      ],
+      "falsification": "If Kutaisi's rental demand fails to materialize or if Georgian visa policy tightens, the thesis weakens.",
+      "monitor_next_week": "Kutaisi transaction prices and Georgian visa policy announcements."
+    }
+  ],
+  "node_watch": {
+    "node": "Johor Bahru / Iskandar Puteri (Medini)",
+    "direction": "inflecting",
+    "conditions_shifting": [
+      "Physical container strengthening: RTS Link construction is a hard catalyst that will compress the Singapore–JB commute to ~5 minutes.",
+      "Belief system forming: 'JB is the Shenzhen to Singapore's Hong Kong' narrative is emerging but not yet consensus.",
+      "Capital flow: foreign-buyer-friendly zone with no minimum and no quota, unlike most of Malaysia.",
+      "Critical mass of believers: growing but not yet self-reinforcing — this is the inflection window."
+    ],
+    "primary_flows": [
+      "capital",
+      "information",
+      "security"
+    ],
+    "what_to_watch": "RTS Link construction milestones, Medini/Iskandar Puteri transaction prices and volumes, MM2H tier revisions, and Singapore–JB cross-border daily commuter data.",
+    "timeline": "RTS Link targeted for completion ~2026-2027; the re-rating window is the next 12-24 months before consensus recognizes the arbitrage."
+  }
+}

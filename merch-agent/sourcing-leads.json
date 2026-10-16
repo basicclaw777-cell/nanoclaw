@@ -1,0 +1,180 @@
+[
+  {
+    "id": "SRC001",
+    "category": "inner-gloves-basic",
+    "name": "Basic Inner Gloves (Slip-On)",
+    "description": "Gel padded knuckle, slip-on, NO elasticated fingers (cuts circulation), open palm or half-palm, velcro wrist closure",
+    "reference_products": [
+      {"name": "Decathlon Outshock 100", "url": "https://www.decathlon.sg/p/boxing-inner-gloves-100-black-outshock-8766117.html", "price": "~SGD$12"},
+      {"name": "Shein Boxing Inner Glove", "url": "https://sg.shein.com/goods-p-109388051.html", "price": "~SGD$8"}
+    ],
+    "spec": {
+      "material": "Lycra/cotton blend exterior, moisture-wicking",
+      "padding": "Gel-padded knuckle guard",
+      "closure": "Velcro wrist strap",
+      "fingers": "NO elasticated finger loops",
+      "sizes": ["S/M", "L/XL"],
+      "branding": "Basic Reflex logo — screen print or embroidery on wrist/back of hand"
+    },
+    "qty_target": "10-20 pairs",
+    "estimated_factory_price": "$3-6 USD/pair",
+    "status": "scouting",
+    "suppliers": [
+      {"name": "Infinitude Fight", "country": "Pakistan", "moq": "No minimum", "url": "https://www.infinitudefight.com/contact-us/", "notes": "Free design support, 4 gel wrap styles, no MOQ"},
+      {"name": "BMS Gear", "country": "Pakistan (Sialkot)", "moq": "Low", "url": "https://www.bmsgear.com/", "notes": "OEM/ODM specialist, 15+ years"},
+      {"name": "Reedot Sports", "country": "Pakistan (Sialkot)", "moq": "Low", "url": "https://reedotsports.com/", "contact": "WhatsApp +92 303 062 71 69", "notes": "WhatsApp-friendly"},
+      {"name": "RockyGears", "country": "Pakistan", "moq": "Low", "url": "https://rockygears.com/custom-gel-wraps-inner-gloves/", "notes": "Custom gel wraps specialist, free shipping"},
+      {"name": "Wavar", "country": "Pakistan", "moq": "10+", "url": "https://www.wavar.com/product/custom-boxing-gloves.html", "notes": "OEM factory direct"},
+      {"name": "Alibaba (various)", "country": "China/Pakistan", "moq": "20 pairs", "url": "https://www.alibaba.com/product-detail/Custom-Logo-Padded-Inner-Boxing-Gloves_10000027597902.html", "notes": "$4-10/pair, custom logo"}
+    ],
+    "next_action": "Message 2-3 Pakistan suppliers on WhatsApp with reference photos + logo + spec",
+    "added": "2026-05-26"
+  },
+  {
+    "id": "SRC002",
+    "category": "fastwraps-premium",
+    "name": "Premium Fastwraps (Gel + Wrist Strap)",
+    "description": "Gel shock knuckle padding, integrated long wrist wrap strap, neoprene or elastic blend body, thumb loop. Like Fortress T1 style.",
+    "reference_products": [
+      {"name": "Fortress Boxing T1 Fastwraps", "url": "https://fortressboxing.com/products/t1-fastwraps", "price": "~SGD$45"}
+    ],
+    "spec": {
+      "material": "Neoprene or elastic blend body",
+      "padding": "Gel shock knuckle padding",
+      "closure": "Integrated long wrist wrap strap with velcro",
+      "thumb_loop": true,
+      "sizes": ["S/M", "L/XL"],
+      "branding": "Basic Reflex logo on strap + knuckle area"
+    },
+    "qty_target": "10-20 pairs",
+    "estimated_factory_price": "$5-10 USD/pair",
+    "status": "scouting",
+    "suppliers": [
+      {"name": "Infinitude Fight", "country": "Pakistan", "moq": "No minimum", "url": "https://www.infinitudefight.com/contact-us/"},
+      {"name": "RockyGears", "country": "Pakistan", "moq": "Low", "url": "https://rockygears.com/custom-gel-wraps-inner-gloves/"},
+      {"name": "Combat Corner", "country": "USA", "moq": "Low", "url": "https://combatcorner.com/custom-hand-wraps", "notes": "3-5 week turnaround"},
+      {"name": "Kanong Wear", "country": "Thailand", "moq": "Flexible", "url": "https://www.kanongwear.com/Wholesale-Handwraps", "notes": "Made in Thailand, full OEM"}
+    ],
+    "next_action": "Bundle with inner glove enquiry to same Pakistan suppliers",
+    "added": "2026-05-26"
+  },
+  {
+    "id": "SRC003",
+    "category": "hand-wraps-regular",
+    "name": "Regular Hand Wraps (180 inch)",
+    "description": "Standard 180 inch semi-elastic cotton hand wraps with Basic Reflex logo along length and on velcro tab",
+    "reference_products": [],
+    "spec": {
+      "material": "Cotton/semi-elastic blend",
+      "length": "180 inches (4.5m)",
+      "closure": "Velcro tab",
+      "thumb_loop": true,
+      "branding": "Basic Reflex logo printed along wrap + velcro tab"
+    },
+    "qty_target": "20 pairs",
+    "estimated_factory_price": "$1.50-4 USD/pair",
+    "status": "scouting",
+    "suppliers": [
+      {"name": "Meister Elite", "country": "USA", "moq": "50 pairs", "url": "https://meisterelite.com/products/custom-logo-180-semi-elastic-hand-wraps-pair", "notes": "20+ colors, 8-10 week production"},
+      {"name": "Infinitude Fight", "country": "Pakistan", "moq": "No minimum", "url": "https://www.infinitudefight.com/custom/boxing/hand-wraps/", "notes": "10-14 day delivery"},
+      {"name": "RockyGears", "country": "Pakistan", "moq": "Low", "url": "https://rockygears.com/product/custom-boxing-print-hand-wraps/", "notes": "No setup cost, free design"},
+      {"name": "Reedot Sports", "country": "Pakistan (Sialkot)", "moq": "Low", "url": "https://reedotsports.com/product-category/boxing-mma/protective-gear/personalised-hand-wraps/custom-boxing-hand-wraps/", "contact": "WhatsApp +92 303 062 71 69"},
+      {"name": "Kanong Wear", "country": "Thailand", "moq": "Flexible", "url": "https://www.kanongwear.com/Wholesale-Handwraps", "notes": "Full OEM from fabric to packaging"}
+    ],
+    "next_action": "Bundle with glove enquiry",
+    "added": "2026-05-26"
+  },
+  {
+    "id": "SRC004",
+    "category": "tennis-balls",
+    "name": "Custom Logo Tennis Balls",
+    "description": "Tennis balls with Basic Reflex logo for reaction drills, hand-eye coordination training",
+    "reference_products": [],
+    "spec": {
+      "type": "Standard pressurised tennis ball",
+      "branding": "Basic Reflex logo printed on felt",
+      "color": "Standard yellow or custom"
+    },
+    "qty_target": "50-100 balls",
+    "estimated_factory_price": "$0.50-2.00 USD/ball",
+    "status": "scouting",
+    "suppliers": [
+      {"name": "PromoMission", "country": "Various", "moq": "50 balls", "url": "https://promomission.com/collections/tennis", "notes": "Hand-finished, exact Pantone, 4 week delivery"},
+      {"name": "Underabuck", "country": "USA", "moq": "Low", "url": "https://underabuck.com/categories/custom-printed-tennis-balls", "notes": "ASI distributor, free shipping"},
+      {"name": "Alibaba", "country": "China", "moq": "100", "url": "https://www.alibaba.com/showroom/custom-tennis-balls.html", "notes": "Cheapest option, 100 MOQ typical"},
+      {"name": "Accio", "country": "Various", "moq": "100", "url": "https://www.accio.com/plp/custom-tennis-ball", "notes": "Multiple manufacturers"}
+    ],
+    "next_action": "Get quotes from PromoMission (50 MOQ) and Alibaba",
+    "added": "2026-05-26"
+  },
+  {
+    "id": "SRC005",
+    "category": "athletic-socks",
+    "name": "Custom Athletic Socks",
+    "description": "Branded gym/training socks with Basic Reflex logo knitted in",
+    "reference_products": [],
+    "spec": {
+      "material": "Cotton/polyester/spandex athletic blend",
+      "style": "Crew or ankle length",
+      "branding": "Basic Reflex logo jacquard knit-in (not printed)",
+      "sizes": ["S/M", "L/XL"]
+    },
+    "qty_target": "100 pairs (typical MOQ)",
+    "estimated_factory_price": "$1.50-4 USD/pair",
+    "status": "scouting",
+    "suppliers": [
+      {"name": "B2Bsox", "country": "Various", "moq": "100 pairs", "url": "https://b2bsox.com/product-category/sport-socks/gym-socks/", "notes": "OEM/ODM, custom logos, 3-7 day sample turnaround"},
+      {"name": "DeadSoxy", "country": "USA", "moq": "100 pairs", "url": "https://deadsoxy.com/pages/custom-socks", "notes": "Knit-in custom socks specialist"},
+      {"name": "DIY Sock", "country": "Various", "moq": "Low", "url": "https://www.diysock.com/custom-sport-socks/", "notes": "Gym-specific custom socks"},
+      {"name": "Walt Technology", "country": "China", "moq": "180 pairs/SKU", "url": "https://walttec.shop/", "notes": "Good for growing brands"}
+    ],
+    "next_action": "Get samples from B2Bsox or DIY Sock — 100 pair MOQ standard",
+    "added": "2026-05-26"
+  },
+  {
+    "id": "SRC006",
+    "category": "boxer-underwear",
+    "name": "Custom Boxer Underwear",
+    "description": "Branded boxer briefs with Basic Reflex logo on waistband",
+    "reference_products": [],
+    "spec": {
+      "material": "Cotton-spandex blend, breathable, quick-dry",
+      "style": "Boxer brief",
+      "branding": "Basic Reflex logo on waistband (jacquard or print)",
+      "sizes": ["S", "M", "L", "XL"]
+    },
+    "qty_target": "20-50 pairs",
+    "estimated_factory_price": "$2-5 USD/pair",
+    "status": "scouting",
+    "suppliers": [
+      {"name": "Alibaba (custom logo boxers)", "country": "China/Pakistan", "moq": "20 pairs", "url": "https://www.alibaba.com/showroom/custom-logo-boxers.html", "notes": "From $0.80/pair, breathable quick-dry, custom waistband"},
+      {"name": "Alibaba (underwear manufacturer)", "country": "Various", "moq": "Varies", "url": "https://www.alibaba.com/showroom/underwear-manufacturer.html", "notes": "OEM service, private label"},
+      {"name": "Pakistan manufacturers", "country": "Pakistan", "moq": "Flexible", "url": "https://www.alibaba.com/showroom/men-underwear-pakistan.html", "notes": "Customizable, competitive pricing"}
+    ],
+    "next_action": "Search Alibaba for specific manufacturers with custom waistband capability at 20-50 MOQ",
+    "added": "2026-05-26"
+  },
+  {
+    "id": "SRC007",
+    "category": "mouthguards",
+    "name": "Custom Branded Mouthguards",
+    "description": "Boil-and-bite mouthguards with Basic Reflex branding on case or guard itself",
+    "reference_products": [],
+    "spec": {
+      "type": "Boil-and-bite (standard boxing)",
+      "branding": "Basic Reflex logo on case + optional guard print/laser",
+      "packaging": "Custom branded case or pouch"
+    },
+    "qty_target": "20-50 pieces",
+    "estimated_factory_price": "$0.45-3 USD/piece",
+    "status": "scouting",
+    "suppliers": [
+      {"name": "Infinitude Fight", "country": "Pakistan", "moq": "No minimum", "url": "https://www.infinitudefight.com/custom-mouthguard/", "notes": "Custom colors, logos, packaging. No MOQ."},
+      {"name": "Alibaba (custom mouthguard)", "country": "China", "moq": "Varies", "url": "https://www.alibaba.com/showroom/custom-mouthguard.html", "notes": "CE certified, from $0.45/piece, colors + logo"},
+      {"name": "Tide Sports", "country": "China", "moq": "500", "url": "https://tide-sports.com/custom-mouth-guard-manufacturer/", "notes": "10+ years, college teams + gyms. MOQ 500 may be too high."},
+      {"name": "Boxing Manufacturers", "country": "Pakistan", "moq": "Flexible", "url": "https://www.boxing-manufacturers.com/mouth-guard/", "notes": "Custom boxing mouthguard factory"}
+    ],
+    "next_action": "Infinitude Fight best bet — no MOQ, already sourcing gloves from them. Bundle order.",
+    "added": "2026-05-26"
+  }
+]

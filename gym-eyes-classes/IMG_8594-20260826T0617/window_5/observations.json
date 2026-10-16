@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "movement",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Lateral shuffles moving left to right across the gym floor.",
+        "stance_width": "normal",
+        "guard": "Hands up in a boxing guard, elbows tucked.",
+        "upper_body": "Slight lean in the direction of travel, otherwise stable and balanced.",
+        "distance": "A second person (likely a partner) is visible on the left edge in F1-F2.",
+        "notable": "The boxer covers significant lateral distance across the frame."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Lateral shuffles moving right to left, reversing direction.",
+        "stance_width": "normal",
+        "guard": "Hands stay up in a consistent high guard.",
+        "upper_body": "Torso remains squared, maintaining balance during the direction change.",
+        "distance": "Moving back towards the starting side of the frame.",
+        "notable": "Smooth reversal in direction without a visible pause."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Lateral shuffles moving left to right again.",
+        "stance_width": "normal",
+        "guard": "Guard remains high throughout.",
+        "upper_body": "Stable upper body, consistent athletic posture.",
+        "distance": "Crossing the frame in the opposite direction again.",
+        "notable": "The movement pattern repeats symmetrically."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "step",
+      "detail": "Continuous lateral shuffle movement from left to right."
+    },
+    {
+      "frames": "F6-F10",
+      "type": "step",
+      "detail": "Direction change, transitioning into lateral shuffle movement from right to left."
+    },
+    {
+      "frames": "F11-F15",
+      "type": "step",
+      "detail": "Another direction change, moving laterally from left to right."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

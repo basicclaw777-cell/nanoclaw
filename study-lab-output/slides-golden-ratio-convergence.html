@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study: golden ratio convergence</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root { --bg:#0A0A0A; --fg:#FAFAFA; --gold:#f7b408; --dim:#666; --card:#141414; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:'Epilogue',system-ui,sans-serif; }
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;600;700&display=swap');
+  .header { padding:2rem; text-align:center; border-bottom:1px solid #222; }
+  .header h1 { font-family:'Anton',sans-serif; font-size:2.5rem; color:var(--gold); text-transform:uppercase; letter-spacing:2px; }
+  .header .meta { color:var(--dim); margin-top:0.5rem; font-size:0.9rem; }
+  .controls { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; gap:1rem; z-index:100; }
+  .controls button { background:var(--card); border:1px solid #333; color:var(--fg); padding:0.6rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; }
+  .controls button:hover { border-color:var(--gold); }
+  .controls .counter { color:var(--dim); line-height:2.4rem; font-size:0.9rem; }
+  .slides { max-width:900px; margin:0 auto; padding:2rem 2rem 6rem; }
+  .slide { display:none; padding:3rem 2rem; min-height:60vh; }
+  .slide.active { display:block; animation:fadeIn 0.3s; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  .slide-num { font-family:'Anton',sans-serif; font-size:4rem; color:#1a1a1a; position:absolute; right:2rem; top:1rem; }
+  .slide { position:relative; }
+  .slide h2 { font-family:'Anton',sans-serif; font-size:2rem; color:var(--gold); margin-bottom:1.5rem; }
+  .slide ul { list-style:none; }
+  .slide li { padding:0.8rem 0; padding-left:1.5rem; border-left:2px solid #333; margin-bottom:0.5rem; font-size:1.1rem; line-height:1.6; }
+  .slide li:hover { border-color:var(--gold); }
+  .grade { display:inline-block; padding:0.1rem 0.5rem; border-radius:3px; font-size:0.75rem; color:#000; font-weight:700; margin-left:0.5rem; vertical-align:middle; }
+  .connection { margin-top:2rem; padding:1rem; background:#111; border-left:3px solid var(--gold); color:var(--dim); font-style:italic; font-size:0.9rem; }
+  .diagram { margin-top:1.5rem; background:#111; padding:1rem; border-radius:4px; }
+  .progress { position:fixed; top:0; left:0; height:3px; background:var(--gold); transition:width 0.3s; z-index:200; }
+  .nav-dots { display:flex; gap:0.5rem; }
+  .nav-dots .dot { width:8px; height:8px; border-radius:50%; background:#333; cursor:pointer; }
+  .nav-dots .dot.active { background:var(--gold); }
+</style>
+</head><body>
+<div class="progress" id="progress"></div>
+<div class="header">
+  <h1>golden ratio convergence</h1>
+  <div class="meta">2026-06-08 &middot; 9 slides &middot; Cathedral Study Lab</div>
+</div>
+<div class="slides" id="slides">
+    <section class="slide" id="slide-0">
+      <div class="slide-num">01</div>
+      <h2>What Is Golden Ratio Convergence? <span class="grade" style="background:#22c55e">A</span></h2>
+      <ul><li>Golden ratio convergence refers to the mathematical property where the ratio of consecutive Fibonacci numbers (F_n+1 / F_n) approaches φ ≈ 1.6180339887 as n → ∞</li><li>This convergence rate is linear with error decaying as O(1/φ^n) — exponentially fast due to φ > 1</li><li>The Fibonacci sequence itself is the simplest linear recurrence (F_n = F_n-1 + F_n-2) exhibiting this convergence, but any sequence following the same recurrence converges to φ regardless of initial conditions (except the trivial zero pair)</li><li>The convergence is a direct consequence of the characteristic equation x² = x + 1, whose dominant eigenvalue is φ and subdominant eigenvalue is -1/φ ≈ -0.618</li></ul>
+      <div class="diagram"><pre class="mermaid">graph TD
+    A[F_n+1 / F_n] -->|n→∞| B[φ ≈ 1.618]
+    C[Any F_n = F_n-1 + F_n-2] -->|Exponential decay of error| D[Converges to φ]
+    E[Characteristic roots] --> F[φ and -1/φ]</pre></div>
+      <div class="connection">This foundational convergence property extends far beyond pure number theory, appearing in optimization algorithms and signal processing methods in the vault material</div>
+    </section>
+
+    <section class="slide" id="slide-1">
+      <div class="slide-num">02</div>
+      <h2>Fibonacci as Universal Structuring Principle <span class="grade" style="background:#666">A (Devlin's work) / B (generative vs descriptive debate)</span></h2>
+      <ul><li>Keith Devlin (mathematician, 'The Golden Ratio: The Story of Phi') provides the most accessible mathematical treatment: φ appears across biological growth patterns, architecture, art, and acoustic resonance</li><li>The vault material explicitly questions whether φ is a generative mechanism (matter/energy self-organises along φ ratios) or merely a descriptive pattern (φ appears because it's mathematically inevitable under certain constraints)</li><li>Empirical evidence shows φ in phyllotaxis (leaf arrangement), nautilus shells, and the Parthenon — but the causal direction remains contested</li><li>The distinction matters: if generative, φ becomes a design principle; if descriptive, it's a statistical artifact of optimization under constraints</li></ul>
+      <div class="diagram"><pre class="mermaid">graph LR
+    A[Fibonacci sequence] --> B[Converges to φ]
+    B --> C[Generative mechanism?]
+    B --> D[Descriptive pattern?]
+    C --> E[Self-organisation principle]
+    D --> F[Mathematical inevitability]</pre></div>
+      <div class="connection">This generative-vs-descriptive tension directly parallels how convergence algorithms in signal processing either assume φ as a target or discover it through iterative refinement</div>
+    </section>
+
+    <section class="slide" id="slide-2">
+      <div class="slide-num">03</div>
+      <h2>Matching Pursuit: Gabor Dictionaries Converge via φ-Like Rates <span class="grade" style="background:#22c55e">A</span></h2>
+      <ul><li>Mallat & Zhang (1993, IEEE Trans. Signal Processing) introduced Matching Pursuit (MP) with Gabor time-frequency dictionaries — an iterative greedy algorithm that decomposes signals into atoms</li><li>Davis, Mallat & Avellaneda (1997, Constructive Approximation) provided the full convergence proof: MP converges exponentially fast, with the decay rate governed by the dictionary's coherence — a value that often relates to φ-like ratios in structured dictionaries</li><li>The convergence proof relies on the fact that the residual norm decays as ||R^n f|| ≤ (1 - α)^(n/2) ||f||, where α is the coherence parameter — analogous to the exponential decay of Fibonacci ratio errors</li><li>Gabor dictionaries (Gaussian-modulated sinusoids) achieve near-optimal time-frequency localization, making the convergence rate practically useful for audio and vibration analysis</li></ul>
+      <div class="diagram"><pre class="mermaid">graph TD
+    A[Signal f] -->|MP iteration| B[Atom selection]
+    B --> C[Residual R^n f]
+    C -->|Exponential decay| D[||R^n f|| ≤ (1-α)^(n/2) ||f||]
+    E[Gabor dictionary] --> F[Coherence α ~ φ-related]
+    D --> G[Convergence proof: Davis, Mallat, Avellaneda 1997]</pre></div>
+      <div class="connection">The exponential convergence of MP mirrors Fibonacci ratio convergence, but the vault also contains a different convergence method — Stochastic Meta-Descent — which adapts learning rates using curvature information</div>
+    </section>
+
+    <section class="slide" id="slide-3">
+      <div class="slide-num">04</div>
+      <h2>Stochastic Meta-Descent: Adaptive Convergence Acceleration <span class="grade" style="background:#666">A (Schraudolph's proofs) / B (empirical validation)</span></h2>
+      <ul><li>Nicol N. Schraudolph (2002, 'Fast Curvature Matrix-Vector Products') developed Stochastic Meta-Descent (SMD), which adapts per-parameter learning rates using a gain vector — effectively learning how to converge faster</li><li>SMD uses a gradient-based meta-learning update: g_t+1 = g_t ⊙ (1 - μ ∇_g L), where ⊙ is element-wise multiplication, μ is meta-step size, and ∇_g L is the gradient w.r.t. gains</li><li>The convergence of SMD is provably faster than standard stochastic gradient descent, with empirical results showing exponential error decay on ill-conditioned problems — analogous to φ convergence</li><li>Unlike Fibonacci convergence (fixed recurrence), SMD dynamically adjusts its 'recurrence relation' (gain adaptation) to track local curvature, making it a meta-convergence algorithm</li></ul>
+      
+      <div class="connection">SMD's adaptive gains connect to the next slide's Variance Ratio method, which also adaptively measures convergence strength — but in a financial context rather than optimization</div>
+    </section>
+
+    <section class="slide" id="slide-4">
+      <div class="slide-num">05</div>
+      <h2>Variance Ratio as Dynamic Mean-Reversion Meter <span class="grade" style="background:#666">A (Lo-MacKinlay foundation) / B (trading application)</span></h2>
+      <ul><li>Lo & MacKinlay (1988) introduced the Variance Ratio (VR) test, but the vault material specifies using the ratio itself — not the test — as a dynamic mean-reversion strength meter</li><li>The VR is defined as Var(r_t + r_t-1) / (2 * Var(r_t)), where r_t are log returns; VR < 1 indicates mean-reversion, VR > 1 indicates momentum, VR = 1 is random walk</li><li>When applied to spread portfolios (e.g., pairs or baskets), VR acts as a convergence speed indicator: low VR means strong mean-reversion, hence faster convergence to equilibrium</li><li>The ratio's dynamic nature (rolling window) allows real-time detection of regime changes in convergence behavior — useful for statistical arbitrage entry/exit timing</li></ul>
+      <div class="diagram"><pre class="mermaid">graph LR
+    A[Price spread] --> B[Variance Ratio calculation]
+    B --> C{VR < 1?}
+    C -->|Yes| D[Mean-reverting → convergence]
+    C -->|No| E[Momentum / random walk]
+    D --> F[Trade entry signal]
+    E --> G[No trade / exit]</pre></div>
+      <div class="connection">VR measures convergence strength for pairs, but the Johansen cointegration test extends this to baskets of assets — a higher-dimensional convergence framework</div>
+    </section>
+
+    <section class="slide" id="slide-5">
+      <div class="slide-num">06</div>
+      <h2>Johansen Cointegration: Convergence in Multi-Asset Baskets <span class="grade" style="background:#666">A (Nobel Prize work, Johansen's proofs)</span></h2>
+      <ul><li>Søren Johansen (1988, 'Statistical Analysis of Cointegration Vectors') developed the maximum likelihood framework for testing cointegration in multiple time series — not just pairs but baskets of N assets</li><li>The Johansen test produces trace statistics and max-eigenvalue statistics to determine the cointegration rank r (number of stationary linear combinations among N assets)</li><li>The Vector Error Correction Model (VECM) explicitly models convergence: ΔY_t = αβ'Y_t-1 + ΣΓ_i ΔY_t-i + ε_t, where β'Y_t-1 are the cointegrating vectors (long-run equilibria) and α measures the speed of adjustment toward those equilibria</li><li>Engle & Granger (1987, Nobel Prize) established the theoretical foundation: cointegration implies that non-stationary series share a common stochastic trend, and deviations from equilibrium are mean-reverting — a statistical form of convergence</li></ul>
+      <div class="diagram"><pre class="mermaid">graph TD
+    A[N assets time series] --> B[Johansen test]
+    B --> C[Cointegration rank r]
+    C --> D[VECM: ΔY = αβ'Y_t-1 + ...]
+    D --> E[α = convergence speed]
+    D --> F[β = cointegrating vectors]
+    E --> G[Statistical arbitrage signals]</pre></div>
+      <div class="connection">VECM's α coefficients are the convergence speeds — analogous to φ's exponential decay rate — and this connects to the next slide's Normalized Maximum Likelihood for model selection</div>
+    </section>
+
+    <section class="slide" id="slide-6">
+      <div class="slide-num">07</div>
+      <h2>Normalized Maximum Likelihood: Gold Standard Convergence Criterion <span class="grade" style="background:#666">A (Rissanen's foundational proofs, minimax optimality)</span></h2>
+      <ul><li>Jorma Rissanen (1989, 'Stochastic Complexity in Statistical Inquiry'; 1996, 'Fisher Information and Stochastic Complexity') developed Normalized Maximum Likelihood (NML) as the 'gold standard' for stochastic complexity</li><li>NML achieves the minimax optimal regret: it minimizes the worst-case log-loss when encoding data with a parametric model family, making it the theoretically optimal model selection criterion</li><li>The NML distribution is p_NML(x) = p_θ̂(x)(x) / ∫ p_θ̂(y)(y) dy, where θ̂(x) is the MLE — the normalization constant ensures the distribution sums to 1, but requires computing the Fisher information integral</li><li>Rissanen proved that NML converges to the true model order as n → ∞ at rate O(log n / n), which is optimal in the Kolmogorov complexity sense — a convergence guarantee stronger than AIC/BIC</li></ul>
+      <div class="diagram"><pre class="mermaid">graph LR
+    A[Data x] --> B[MLE θ̂(x)]
+    B --> C[NML: p_θ̂(x) / ∫ p_θ̂(y) dy]
+    C --> D[Minimax optimal regret]
+    D --> E[Convergence: O(log n / n)]
+    E --> F[Gold standard for model selection]</pre></div>
+      <div class="connection">NML's convergence guarantee is the theoretical benchmark against which all other convergence methods (MP, SMD, VR, VECM) are measured — it sets the 'gold standard' for convergence quality</div>
+    </section>
+
+    <section class="slide" id="slide-7">
+      <div class="slide-num">08</div>
+      <h2>Convergence in Physical Systems: Boxing Slip Angle <span class="grade" style="background:#666">C (open thread — intriguing but lacks formal proof)</span></h2>
+      <ul><li>The vault material reveals a surprising application: the 45-degree slip angle in Cuban boxing and the golden ratio spiral share the same structural logic — both achieve maximum efficiency through geometric proportion</li><li>The slip angle (≈45°) minimizes the energy required to evade a punch while maintaining counter-attack position; this is a convergence to an optimal angle through physical training, not mathematical calculation</li><li>The golden ratio spiral's angle (≈137.5° for phyllotaxis) and the boxing slip angle both represent convergent solutions to constrained optimization problems: one in biological growth, the other in combat biomechanics</li><li>This suggests φ-like convergence is a general principle of efficient systems under constraints, not limited to mathematics or finance</li></ul>
+      
+      <div class="connection">This physical convergence example opens the door to the final slide's open questions about whether φ-like convergence is a universal principle or a collection of independent phenomena</div>
+    </section>
+
+    <section class="slide" id="slide-8">
+      <div class="slide-num">09</div>
+      <h2>Open Questions: Toward a Unified Convergence Theory <span class="grade" style="background:#666">C (all open threads)</span></h2>
+      <ul><li>Is φ-like convergence a universal principle (like the Central Limit Theorem) or a family of independent phenomena that happen to share mathematical structure?</li><li>Can the Variance Ratio convergence speed be formally linked to VECM's α coefficients via spectral analysis of the cointegration matrix?</li><li>Does Matching Pursuit's exponential convergence rate have a precise φ-like bound for specific dictionaries (e.g., Gabor with optimal time-frequency tiling)?</li><li>Can NML's minimax optimality be extended to non-parametric settings where convergence rates are slower than O(log n / n)?</li><li>Research direction: Develop a unified convergence taxonomy that classifies algorithms by their error decay profile (exponential, polynomial, logarithmic) and maps them to underlying mathematical structures (recurrence relations, spectral gaps, information geometry)</li></ul>
+      <div class="diagram"><pre class="mermaid">graph TD
+    A[Unified Convergence Theory?] --> B[Mathematical: Fibonacci → φ]
+    A --> C[Algorithmic: MP, SMD, NML]
+    A --> D[Financial: VR, VECM]
+    A --> E[Physical: Boxing angle, phyllotaxis]
+    B --> F[Recurrence relations]
+    C --> G[Exponential decay proofs]
+    D --> H[Mean-reversion speeds]
+    E --> I[Optimization under constraints]</pre></div>
+      <div class="connection">These questions define the frontier: understanding convergence as a fundamental property of systems — mathematical, financial, biological, and physical — rather than isolated phenomena</div>
+    </section></div>
+<div class="controls">
+  <button onclick="prev()">&larr; Prev</button>
+  <div class="nav-dots" id="dots"></div>
+  <span class="counter" id="counter"></span>
+  <button onclick="next()">Next &rarr;</button>
+</div>
+<script>
+  mermaid.initialize({theme:'dark',startOnLoad:true});
+  const slides=document.querySelectorAll('.slide');
+  const dots=document.getElementById('dots');
+  const total=slides.length;
+  let cur=0;
+  for(let i=0;i<total;i++){const d=document.createElement('div');d.className='dot';d.onclick=()=>go(i);dots.appendChild(d)}
+  function go(n){slides[cur].classList.remove('active');cur=Math.max(0,Math.min(n,total-1));slides[cur].classList.add('active');
+    document.getElementById('counter').textContent=(cur+1)+'/'+total;
+    document.getElementById('progress').style.width=((cur+1)/total*100)+'%';
+    dots.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));}
+  function next(){go(cur+1)}function prev(){go(cur-1)}
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()});
+  go(0);
+</script>
+</body></html>

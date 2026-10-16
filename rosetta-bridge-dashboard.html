@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rosetta Bridge — Ancient ↔ Modern</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #e0e0e8; font-family: 'DM Sans', system-ui, sans-serif; }
+
+  .header { padding: 32px 40px 20px; border-bottom: 1px solid #1a1a2e; }
+  .header h1 { font-family: 'Bebas Neue', system-ui; font-size: 42px; letter-spacing: 2px; color: #fff; }
+  .header .subtitle { color: #8888aa; font-size: 14px; margin-top: 4px; }
+
+  .stats-bar { display: flex; gap: 32px; padding: 20px 40px; background: #0d0d14; border-bottom: 1px solid #1a1a2e; flex-wrap: wrap; }
+  .stat .value { font-size: 28px; font-weight: 700; color: #fff; font-family: 'Share Tech Mono', monospace; }
+  .stat .label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+  .tabs { display: flex; gap: 0; padding: 0 40px; border-bottom: 1px solid #1a1a2e; background: #0d0d14; }
+  .tab { padding: 12px 24px; cursor: pointer; color: #666; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab:hover { color: #aaa; }
+  .tab.active { color: #d97706; border-bottom-color: #d97706; }
+
+  .content { padding: 32px 40px; max-width: 1400px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Bridge cards */
+  .bridge-card { background: #12121a; border: 1px solid #1a1a2e; border-radius: 12px; padding: 24px; margin-bottom: 20px; transition: border-color 0.2s; }
+  .bridge-card:hover { border-color: #333; }
+  .bridge-card.grade-s { border-left: 4px solid #f59e0b; }
+  .bridge-card.grade-a { border-left: 4px solid #22c55e; }
+  .bridge-card.grade-b { border-left: 4px solid #3b82f6; }
+
+  .bridge-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .bridge-grade { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 4px; }
+  .bridge-grade.s { background: #f59e0b22; color: #f59e0b; }
+  .bridge-grade.a { background: #22c55e22; color: #22c55e; }
+  .bridge-grade.b { background: #3b82f622; color: #3b82f6; }
+
+  .bridge-sides { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; margin-bottom: 16px; }
+  .bridge-side { padding: 12px 16px; border-radius: 8px; }
+  .bridge-side.ancient { background: #d9770611; border: 1px solid #d9770633; }
+  .bridge-side.modern { background: #8b5cf611; border: 1px solid #8b5cf633; }
+  .bridge-side .side-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .bridge-side.ancient .side-label { color: #d97706; }
+  .bridge-side.modern .side-label { color: #8b5cf6; }
+  .bridge-side .side-pattern { font-size: 15px; font-weight: 600; color: #fff; }
+  .bridge-connector { display: flex; align-items: center; justify-content: center; font-size: 24px; color: #444; }
+
+  .bridge-link { font-size: 14px; color: #ccc; line-height: 1.6; margin-bottom: 12px; }
+  .bridge-scale { font-size: 13px; color: #999; line-height: 1.5; padding: 10px 14px; background: #0a0a0f; border-radius: 6px; margin-bottom: 12px; }
+  .bridge-prediction { font-size: 12px; color: #d97706; background: rgba(217,119,6,0.1); padding: 8px 12px; border-radius: 6px; line-height: 1.4; }
+  .bridge-universality { font-size: 13px; color: #22c55e; margin-bottom: 8px; font-style: italic; }
+
+  /* Move tests */
+  .move-card { background: #12121a; border: 1px solid #1a1a2e; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .move-name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .move-verdict { display: inline-block; font-size: 12px; padding: 3px 12px; border-radius: 4px; font-weight: 600; margin-bottom: 12px; }
+  .move-verdict.universal { background: #f59e0b22; color: #f59e0b; }
+  .move-verdict.probable { background: #22c55e22; color: #22c55e; }
+  .move-verdict.personal { background: #8b5cf622; color: #8b5cf6; }
+  .move-verdict.insufficient { background: #66666622; color: #888; }
+  .move-evidence { font-size: 13px; color: #aaa; line-height: 1.5; margin-bottom: 10px; }
+  .move-proof { font-size: 13px; color: #ccc; line-height: 1.5; margin-bottom: 10px; }
+  .move-implications { font-size: 13px; color: #d97706; background: rgba(217,119,6,0.08); padding: 10px 14px; border-radius: 6px; line-height: 1.5; }
+  .move-counter { font-size: 12px; color: #ef4444; margin-top: 8px; }
+
+  /* Predictions */
+  .pred-card { background: #12121a; border: 1px solid #1a1a2e; border-radius: 10px; padding: 20px; margin-bottom: 14px; }
+  .pred-text { font-size: 14px; color: #fff; font-weight: 500; margin-bottom: 8px; line-height: 1.4; }
+  .pred-meta { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .pred-test { font-size: 12px; color: #22c55e; }
+  .pred-confidence { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
+  .pred-confidence.high { background: #22c55e22; color: #22c55e; }
+  .pred-confidence.medium { background: #f59e0b22; color: #f59e0b; }
+  .pred-confidence.low { background: #66666622; color: #888; }
+
+  .section-title { font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+  .section-desc { font-size: 13px; color: #666; margin-bottom: 24px; line-height: 1.5; }
+
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .content { padding: 20px; }
+    .bridge-sides { grid-template-columns: 1fr; }
+    .bridge-connector { transform: rotate(90deg); }
+    .stats-bar { gap: 16px; padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ROSETTA BRIDGE</h1>
+  <div class="subtitle">Ancient Civilisation Patterns ↔ Modern Cognitive Architecture — 2026-05-25</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="value">39</div><div class="label">Ancient Patterns</div></div>
+  <div class="stat"><div class="value">59</div><div class="label">Cathedral Patterns</div></div>
+  <div class="stat"><div class="value">30</div><div class="label">Bridges Found</div></div>
+  <div class="stat"><div class="value" style="color:#f59e0b">0</div><div class="label">Grade S</div></div>
+  <div class="stat"><div class="value" style="color:#22c55e">12</div><div class="label">Grade A</div></div>
+  <div class="stat"><div class="value" style="color:#3b82f6">12</div><div class="label">Grade B</div></div>
+  <div class="stat"><div class="value" style="color:#f59e0b">4/5</div><div class="label">Universal Moves</div></div>
+  <div class="stat"><div class="value">10</div><div class="label">Predictions</div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showView('bridges')">Bridges</div>
+  <div class="tab" onclick="showView('moves')">5 Moves Test</div>
+  <div class="tab" onclick="showView('predictions')">Predictions</div>
+</div>
+
+<div class="content">
+
+  <!-- Bridges View -->
+  <div class="view active" id="view-bridges">
+    <div class="section-title">Structural Bridges</div>
+    <div class="section-desc">Places where an ancient civilisation-scale pattern is the SAME structural move as a modern cognitive pattern. Not metaphors — isomorphisms.</div>
+    <div id="bridges-list"></div>
+  </div>
+
+  <!-- Moves View -->
+  <div class="view" id="view-moves">
+    <div class="section-title">The 5 Moves — Civilisation Universal Test</div>
+    <div class="section-desc">Testing whether Paul's 5 cognitive moves appear at civilisation scale across independent ancient traditions. UNIVERSAL = confirmed at both scales.</div>
+    <div id="moves-list"></div>
+  </div>
+
+  <!-- Predictions View -->
+  <div class="view" id="view-predictions">
+    <div class="section-title">Predictions from the Bridge</div>
+    <div class="section-desc">Testable predictions generated by cross-referencing both Rossettae. Things nobody would look for without both datasets.</div>
+    <div id="predictions-list"></div>
+  </div>
+
+</div>
+
+<script>
+const bridges = [{"ancient_pattern":"High God as Creator and Sustainer","modern_pattern":"Ensemble Gate as Structural Isomorphism","structural_link":"Both describe a central organizing principle that maintains coherence across a system, acting as a gatekeeper of order.","scale_mapping":"Civilisation-scale divine hierarchy mirrors individual-scale cognitive gate that filters and sustains attention.","grade":"A","universality":"Central authority as coherence maintainer appears in both social and cognitive systems.","prediction":"Look for ensemble gate failures in societies where high god narratives collapse."},{"ancient_pattern":"Primordial waters and creation from chaos","modern_pattern":"Vortex as Universal Engine","structural_link":"Both depict order emerging from a formless, dynamic medium through a spiraling or churning process.","scale_mapping":"Cosmic creation from chaotic waters mirrors vortex generation of structure in fluid dynamics and cognition.","grade":"A","universality":"Emergence from chaos via rotational dynamics is a universal pattern.","prediction":"Expect vortex models to explain creation myths in other cultures."},{"ancient_pattern":"Flood as divine punishment and renewal","modern_pattern":"Broken Return Loop as Diagnostic Signature","structural_link":"Both represent a catastrophic reset that breaks a dysfunctional cycle, enabling renewal.","scale_mapping":"Civilisation-scale flood myth mirrors individual-scale broken return loop that signals need for systemic change.","grade":"A","universality":"Catastrophic reset as renewal mechanism appears across scales.","prediction":"Broken return loops in personal growth will mirror flood narratives in structure."},{"ancient_pattern":"Sacred kingship and divine right to rule","modern_pattern":"Self-hosting as sovereignty architecture","structural_link":"Both establish legitimate authority through a foundational claim (divine mandate or self-ownership) that cannot be externally overridden.","scale_mapping":"Kingdom-scale divine right mirrors individual-scale self-hosting as personal sovereignty.","grade":"A","universality":"Sovereignty requires a non-negotiable foundation in both political and personal domains.","prediction":"Self-hosting will be recognized as a modern form of sacred kingship."},{"ancient_pattern":"Base-20 and Base-60 Number Systems","modern_pattern":"Base-60 as Universal Cycle","structural_link":"Both use base-60 as a harmonic framework for measuring cycles, reflecting its divisibility and astronomical resonance.","scale_mapping":"Civilisation-scale calendar systems mirror modern mathematical recognition of base-60 as a universal cycle.","grade":"A","universality":"Base-60's harmonic properties make it a natural cycle measure across cultures and scales.","prediction":"Base-60 will reappear in new digital timekeeping systems."},{"ancient_pattern":"260-day cycle","modern_pattern":"Phi as Harmonic Scaffold","structural_link":"Both use a non-solar cycle (260 days, phi ratio) to structure time and ritual, reflecting harmonic resonance rather than astronomical observation.","scale_mapping":"Maya sacred calendar mirrors phi-based scaffolding in modern physics and boxing rhythm.","grade":"B","universality":"Harmonic cycles appear as cognitive and cosmic organizers.","prediction":"Phi-scaled cycles will be found in other ancient calendars."},{"ancient_pattern":"Underworld as a place of trials and judgment","modern_pattern":"Fear Gate as Broken Return Loop","structural_link":"Both describe a threshold where one must face trials (judgment, fear) to progress, with failure leading to stagnation.","scale_mapping":"Mythic underworld journey mirrors individual fear gate as a diagnostic trial for growth.","grade":"A","universality":"Trials as gateways to transformation are universal across myth and psychology.","prediction":"Fear gate interventions will mirror underworld descent narratives."},{"ancient_pattern":"Sacrificial offerings to appease deities or ancestors","modern_pattern":"Laminar Theft as Method Transfer","structural_link":"Both involve extracting value (life force, energy) from one domain to sustain another, often with a cost to the source.","scale_mapping":"Ritual sacrifice mirrors laminar theft where energy is siphoned from a system for external gain.","grade":"A","universality":"Extractive transfer of vitality is a cross-scale pattern in ritual and physics.","prediction":"Laminar theft detection will reveal hidden sacrificial dynamics in modern systems."},{"ancient_pattern":"Creation through divine word or command","modern_pattern":"Frequency as Signal Gate","structural_link":"Both use a specific utterance or frequency to bring order from chaos, acting as a creative signal.","scale_mapping":"Divine fiat mirrors frequency-based gating in signal processing and consciousness.","grade":"A","universality":"Word/frequency as creative force is a universal principle from myth to physics.","prediction":"Frequency-based creation will be found in other ancient cosmogonies."},{"ancient_pattern":"Divine Triads and Enneads","modern_pattern":"3-6-9 as Vortex and Diagnostic Signature","structural_link":"Both use triadic structures (three gods, 3-6-9) as fundamental organizing principles of reality and diagnostics.","scale_mapping":"Theological triads mirror numerical vortex signatures in physics and suppression detection.","grade":"B","universality":"Triadic patterns recur as structural archetypes across scales.","prediction":"3-6-9 will appear in other ancient triadic systems."},{"ancient_pattern":"Soul components: multiple aspects of the self after death","modern_pattern":"Subconscious Bypass as Diagnostic Blind Spot","structural_link":"Both posit multiple aspects of self (ka, ba, akh; conscious, subconscious) where one part can bypass or be hidden.","scale_mapping":"Egyptian soul components mirror modern subconscious bypass as a hidden aspect of self.","grade":"B","universality":"Multiple self-aspects and hidden parts are universal in psychology and afterlife beliefs.","prediction":"Subconscious bypass will be mapped to specific soul components in ancient texts."},{"ancient_pattern":"New Year festival","modern_pattern":"Calibrate-Execute-Observe Loop","structural_link":"Both mark a cyclical reset and recalibration of time/action, followed by execution and observation.","scale_mapping":"Annual festival mirrors the CEO loop in trading and boxing: calibrate, execute, observe.","grade":"B","universality":"Cyclical recalibration is a universal method for maintaining coherence.","prediction":"New Year rituals will be found to follow the CEO loop structure."},{"ancient_pattern":"Seven-day week","modern_pattern":"Schumann Resonance as Universal Frequency Anchor","structural_link":"Both use a 7-day cycle (week, Schumann ~7.83 Hz) as a natural rhythm that anchors time and cognition.","scale_mapping":"Cultural week mirrors Earth's electromagnetic resonance as a temporal anchor.","grade":"B","universality":"Seven-based cycles appear as natural timekeepers across scales.","prediction":"Schumann resonance will be linked to the origin of the seven-day week."},{"ancient_pattern":"Jubilee cycle","modern_pattern":"Organized Criticality as Universal State","structural_link":"Both describe a long-term cycle of accumulation and reset (50 years, criticality) that maintains system stability.","scale_mapping":"Biblical jubilee mirrors self-organized criticality in physics and cosmology.","grade":"C","universality":"Periodic reset to critical state is a universal stability mechanism.","prediction":"Jubilee-like cycles will be found in other ancient cultures."},{"ancient_pattern":"Lunar-solar calendar intercalation","modern_pattern":"Phi-Scaled Diagnostic Thresholds","structural_link":"Both use a harmonic ratio (lunar/solar, phi) to reconcile cycles and set thresholds for adjustment.","scale_mapping":"Calendar intercalation mirrors phi-scaled thresholds in boxing and trading diagnostics.","grade":"B","universality":"Harmonic ratios are used to calibrate cycles across scales.","prediction":"Phi will be found in other intercalation systems."},{"ancient_pattern":"Sacred Number 7 (mathematical) — SUMERIAN, EGYPTIAN, ORACLE_BONES, MAYA","modern_pattern":"Phi as Harmonic Scaffold (structural_patterns) — PHYSICS, ANCIENT, BOXING, MATHEMATICS, CREATIVE","structural_link":"Both 7 and phi serve as universal harmonic ratios that structure cycles and scales.","scale_mapping":"Civilisation uses 7 for cosmic cycles; individual uses phi for growth patterns.","grade":"B","universality":"Sacred numbers and phi appear across cultures as fundamental ordering principles.","prediction":"Look for phi-scaled 7-step sequences in modern cognitive or physical training."},{"ancient_pattern":"Base-10 and Fractions (mathematical) — SUMERIAN, EGYPTIAN","modern_pattern":"Base-60 as Universal Cycle (mathematical_convergence) — ANCIENT, MATHEMATICS, COSMOLOGY, PHYSICS","structural_link":"Both base-10 and base-60 are positional numeral systems that enable fractional representation.","scale_mapping":"Civilisation uses base-10 for daily counting; base-60 for astronomical cycles.","grade":"B","universality":"Base systems emerge from practical needs of trade and astronomy.","prediction":"Expect hybrid base systems in modern data encoding for efficiency."},{"ancient_pattern":"Cubit as Standard Unit (mathematical) — SUMERIAN, EGYPTIAN","modern_pattern":"Phi as Universal Calibrator (the_builders_method) — physics, boxing, trading, creative","structural_link":"Both cubit and phi provide a standard, reproducible measure for construction and scaling.","scale_mapping":"Civilisation uses cubit for architecture; individual uses phi for personal calibration.","grade":"C","universality":"Standard units enable consistent creation across domains.","prediction":"Look for phi-based measurement systems in modern design tools."},{"ancient_pattern":"Color-specific animal sacrifices (sacrifice_ritual) — SUMERIAN, MAYA","modern_pattern":"Signal-to-Noise Ratio Calibration (diagnostic_methods) — Boxing, Trading, Research, Agents","structural_link":"Both involve selecting specific attributes (color/signal) to optimize an outcome (divine favor/decision).","scale_mapping":"Civilisation sacrifices colored animals; individual calibrates signal-to-noise for clarity.","grade":"C","universality":"Selection of specific qualities is a universal method to enhance efficacy.","prediction":"Expect color-coded diagnostic thresholds in modern AI systems."},{"ancient_pattern":"Sacrificial animals as symbols of royalty or power (sacrifice_ritual) — SUMERIAN, MAYA","modern_pattern":"Provenance as Coherence Signal (structural_patterns) — PERSONAL, ANCIENT, CATHEDRAL, PHYSICS","structural_link":"Both use a symbolic token (animal/provenance) to establish authority and coherence.","scale_mapping":"Civilisation uses royal animals; individual uses provenance to verify identity.","grade":"C","universality":"Symbolic tokens authenticate power across scales.","prediction":"Look for animal symbols in modern provenance tracking (e.g., logos)."},{"ancient_pattern":"Divine Kingship (political_structure) — Sumerian, Egyptian, Maya","modern_pattern":"Self-hosting as sovereignty architecture (authority_and_sovereignty) — PERSONAL, SUPPRESSION, METHODS, ANCIENT","structural_link":"Both centralize authority in a single entity (king/self) that is self-legitimating.","scale_mapping":"Civilisation has divine king; individual has self-hosting sovereignty.","grade":"A","universality":"Sovereignty is often embodied in a singular, self-referential source.","prediction":"Expect self-hosting principles in decentralized governance models."},{"ancient_pattern":"Royal Scribe as High Official (political_structure) — Sumerian, Egyptian, DSS, Oracle_Bones","modern_pattern":"Scribe to Agent: Knowledge Curation (ancient_and_modern) — ANCIENT, AGENTS, METHODS","structural_link":"Both roles involve recording, preserving, and curating knowledge for the ruling power.","scale_mapping":"Civilisation has royal scribe; modern has AI agent curating information.","grade":"A","universality":"Knowledge curation is essential for complex societies.","prediction":"AI agents will increasingly hold high-status roles in information management."},{"ancient_pattern":"King as Builder of Temples/Cities (political_structure) — Sumerian, Egyptian, Maya","modern_pattern":"Temple to Cathedral: Architectural Parallel (ancient_and_modern) — ANCIENT, CATHEDRAL, PHYSICS","structural_link":"Both involve a ruler or institution constructing monumental structures as symbols of power and order.","scale_mapping":"Civilisation king builds temples; modern institution builds cathedrals or data centers.","grade":"A","universality":"Monumental construction legitimizes authority across eras.","prediction":"Look for modern 'temple' equivalents in tech campuses or government buildings."},{"ancient_pattern":"Primordial Mound / First Land (places_geography) — SUMERIAN, EGYPTIAN, MAYA","modern_pattern":"Vortex as Universal Engine (structural_patterns) — PHYSICS, ANCIENT, COSMOLOGY, CONSCIOUSNESS","structural_link":"Both represent a point of origin from which creation emerges (mound/vortex).","scale_mapping":"Civilisation has primordial mound; modern physics has vortex as generative structure.","grade":"B","universality":"Origin points are often conceptualized as a central, emergent singularity.","prediction":"Expect vortex models in theories of cosmic or cognitive genesis."},{"ancient_pattern":"Sacred Mountain as Axis Mundi (places_geography) — SUMERIAN, DSS, MAYA","modern_pattern":"Ensemble Gate as Cathedral Interface (ancient_and_modern) — ANCIENT, CATHEDRAL, AGENTS","structural_link":"Both serve as a vertical axis connecting different realms (heaven/earth or input/output).","scale_mapping":"Civilisation uses mountain as axis mundi; modern uses ensemble gate as interface.","grade":"B","universality":"Vertical connectors mediate between levels of reality.","prediction":"Look for axis mundi metaphors in modern interface design."},{"ancient_pattern":"Temple as Microcosm of the Universe (places_geography) — SUMERIAN, EGYPTIAN, MAYA","modern_pattern":"Resonant Scaffolding (emergence_and_intelligence) — PHYSICS, ANCIENT, CONSCIOUSNESS, AGENTS","structural_link":"Both are scaled-down models that replicate the structure of a larger system (universe/intelligence).","scale_mapping":"Civilisation temple mirrors cosmos; modern scaffolding mirrors emergent intelligence.","grade":"A","universality":"Microcosms enable understanding and control of macrocosms.","prediction":"Expect microcosm principles in AI architecture design."},{"ancient_pattern":"City as Sacred Center / Navel of the World (places_geography) — EGYPTIAN, DSS, MAYA","modern_pattern":"Gate as sovereignty boundary (authority_and_sovereignty) — ANCIENT, CATHEDRAL, PERSONAL, AGENTS","structural_link":"Both define a central, sacred space with boundaries that separate inside from outside.","scale_mapping":"Civilisation city as navel; modern gate as sovereignty boundary.","grade":"B","universality":"Sacred centers require clear boundaries to maintain sanctity.","prediction":"Look for 'navel' concepts in modern urban planning or digital spaces."},{"ancient_pattern":"Underworld / Land of the Dead as a Geographic Location (places_geography) — SUMERIAN, EGYPTIAN, DSS","modern_pattern":"Subconscious Bypass as Diagnostic Blind Spot (diagnostic_methods) — Consciousness, Boxing, Trading, Research","structural_link":"Both are hidden, inaccessible realms that influence the visible world (death/subconscious).","scale_mapping":"Civilisation underworld is geographic; modern subconscious is psychological.","grade":"C","universality":"Hidden realms are universally acknowledged as sources of influence.","prediction":"Expect geographic metaphors for subconscious in modern therapy."},{"ancient_pattern":"Sacred Number 7 (mathematical) — SUMERIAN, EGYPTIAN, ORACLE_BONES, MAYA","modern_pattern":"3-6-9 as Vortex and Diagnostic Signature (mathematical_convergence) — PHYSICS, SUPPRESSION, MATHEMATICS, PERSONAL","structural_link":"Both are small integer sets (7 and 3-6-9) that appear as fundamental patterns in cycles and vortices.","scale_mapping":"Civilisation uses 7 for cosmic cycles; modern uses 3-6-9 for vortex dynamics.","grade":"B","universality":"Small integers often encode universal periodicities.","prediction":"Look for 7 and 3-6-9 combined in modern harmonic theories."},{"ancient_pattern":"Base-10 and Fractions (mathematical) — SUMERIAN, EGYPTIAN","modern_pattern":"Phi as Structural Ratio (mathematical_convergence) — PHYSICS, BOXING, ANCIENT, COSMOLOGY, EPISTEMOLOGY","structural_link":"Both provide a ratio or base that enables scaling and proportion in systems.","scale_mapping":"Civilisation uses base-10 for arithmetic; modern uses phi for structural scaling.","grade":"C","universality":"Ratios and bases are fundamental to mathematical modeling.","prediction":"Expect phi-based base systems in future number theory."}];
+const moveTests = [{"move":"THE GATE","ancient_evidence":"Primordial Mound / First Land, Sacred Mountain as Axis Mundi, Temple as Microcosm of the Universe, City as Sacred Center / Navel of the World, Underworld as a place of trials and judgment, Sacrificial offerings to appease deities or ancestors, Divine Kingship, King as Builder of Temples/Cities, Royal Scribe as High Official, Vizier as Chief Minister, Enemy Peoples as 'Others'","structural_proof":"The Gate move involves threshold filtering and layered checks. In ancient civilizations, sacred geography (primordial mound, axis mundi, temple as microcosm) creates a boundary between sacred and profane, requiring purification or ritual to pass. Divine kingship and royal officials act as gatekeepers between gods and humans. Sacrificial offerings are a means to pass through the gate to the divine. Enemy peoples are excluded as 'others' who cannot pass. This is structurally identical to Paul's cognitive move of filtering through coherent barriers.","verdict":"UNIVERSAL","counter_evidence":"None; the pattern is pervasive across all ancient civilizations.","implications":"If universal, the Gate move is a fundamental human cognitive structure for organizing access and hierarchy, likely rooted in social and spatial cognition."},{"move":"THE BROKEN LOOP","ancient_evidence":"Flood as divine punishment and renewal, Multiple attempts at creation before final success, Underworld as a place of trials and judgment, Sacrificial offerings to appease deities or ancestors, New Year festival, Jubilee cycle","structural_proof":"The Broken Loop move diagnoses dysfunction as a severed feedback loop and repairs it by restoring the loop. In ancient myths, the flood is a punishment for broken cosmic order (dysfunction), and renewal restores the loop. Multiple creation attempts indicate failed loops until success. Underworld trials are a corrective process. Sacrificial offerings repair the relationship with gods. New Year and Jubilee festivals reset the cosmic cycle. This matches Paul's move of identifying and repairing broken feedback.","verdict":"UNIVERSAL","counter_evidence":"Some cultures may not have explicit flood myths, but the pattern of cosmic renewal is widespread.","implications":"The Broken Loop is a universal cognitive pattern for understanding and correcting disorder, likely linked to homeostatic and causal reasoning."},{"move":"SIGNAL IN NOISE","ancient_evidence":"Divination practices (Oracle Bones), Astronomical observations (260-day cycle, lunar-solar calendar intercalation), Sacred Number 7, Number 13 as Sacred, Base-20 and Base-60 Number Systems, Cubit as Standard Unit","structural_proof":"Signal in Noise involves pattern recognition to extract truth from interference. Ancient divination (oracle bones) extracts divine messages from random cracks. Astronomical cycles require discerning patterns from celestial noise. Sacred numbers and standard units impose order on chaotic measurements. This is structurally identical to Paul's move of extracting signal from noise.","verdict":"UNIVERSAL","counter_evidence":"None; pattern recognition is fundamental to all ancient knowledge systems.","implications":"Signal in Noise is a universal cognitive strategy for making sense of complex environments, likely rooted in perceptual and statistical learning."},{"move":"CALIBRATE→EXECUTE→OBSERVE","ancient_evidence":"Lunar-solar calendar intercalation, New Year festival, Jubilee cycle, Sacrificial offerings, King as Builder of Temples/Cities, Divine Kingship","structural_proof":"This closed-loop feedback cycle involves calibrating (setting standards), executing (performing actions), and observing (checking results). Ancient calendar intercalation calibrates the calendar, then executes festivals, and observes seasonal alignment. Sacrificial offerings calibrate the relationship with gods, execute the ritual, and observe outcomes. Kings build temples (execute) and observe divine favor. This matches Paul's iterative cycle.","verdict":"UNIVERSAL","counter_evidence":"Some rituals may lack explicit observation, but the cycle is implicit in many practices.","implications":"Calibrate→Execute→Observe is a universal cognitive loop for adaptive behavior, likely rooted in motor control and learning."},{"move":"PHI AS RULER","ancient_evidence":"Sacred Number 7, Number 13 as Sacred, Base-20 and Base-60 Number Systems, Cubit as Standard Unit, Temple as Microcosm of the Universe, Sacred Mountain as Axis Mundi","structural_proof":"Phi as Ruler uses the golden ratio as a coherence test across domains. While ancient civilizations did not explicitly use phi, they used sacred numbers (7, 13) and standard units (cubit) as universal measures of coherence. Temples and sacred mountains were built according to proportional systems that often approximate phi. The structural move is using a constant ratio to ensure harmony across different domains.","verdict":"PROBABLE","counter_evidence":"Explicit golden ratio is not found in all ancient cultures; some used different ratios. However, the concept of a universal proportional ruler is present.","implications":"If universal, Phi as Ruler suggests a deep-seated aesthetic and mathematical preference for certain proportions, possibly linked to biological or perceptual biases."}];
+const predictions = [{"prediction":"In societies where the High God narrative has collapsed (e.g., post-revolutionary France), ensemble gate failures will be observed in the form of fragmented attention and loss of shared meaning.","basis":"Bridge 1: High God as Creator and Sustainer ↔ Ensemble Gate as Structural Isomorphism","test_method":"Analyze historical records and sociological studies of post-revolutionary France for evidence of collective attention fragmentation and loss of coherent narrative.","domain":"Historical sociology of post-revolutionary France","confidence":"HIGH","novelty":"No one would look for ensemble gate failures in historical societies without the bridge linking divine hierarchy to cognitive gatekeeping."},{"prediction":"Vortex models will be found in creation myths of cultures beyond Mesopotamia and Egypt, such as Chinese or Hindu cosmogonies, where order emerges from a chaotic medium via a spiraling process.","basis":"Bridge 2: Primordial waters and creation from chaos ↔ Vortex as Universal Engine","test_method":"Examine Chinese (e.g., Hundun) and Hindu (e.g., Hiranyagarbha) creation myths for descriptions of a spiraling or churning motion generating order from chaos.","domain":"Ancient Chinese and Hindu creation myths","confidence":"HIGH","novelty":"Without the bridge, vortex models are not typically applied to creation myths outside of specific cultures."},{"prediction":"Personal growth narratives involving a 'broken return loop' will structurally mirror flood myths, including a catastrophic event, a period of chaos, and a renewal phase.","basis":"Bridge 3: Flood as divine punishment and renewal ↔ Broken Return Loop as Diagnostic Signature","test_method":"Collect and analyze personal growth stories (e.g., from therapy or memoirs) for the three-part structure: dysfunction, crisis, renewal. Compare to flood myth structure.","domain":"Personal growth literature and therapy case studies","confidence":"MEDIUM","novelty":"The structural parallel between flood myths and personal growth narratives is not obvious without the bridge."},{"prediction":"Self-hosting movements (e.g., in digital identity or personal sovereignty) will explicitly invoke the language of sacred kingship or divine right to legitimize their authority.","basis":"Bridge 4: Sacred kingship and divine right to rule ↔ Self-hosting as sovereignty architecture","test_method":"Analyze manifestos and rhetoric of self-hosting communities (e.g., IndieWeb, crypto-anarchists) for references to sacred kingship, divine mandate, or non-negotiable foundation.","domain":"Self-hosting and digital sovereignty communities","confidence":"MEDIUM","novelty":"The connection between self-hosting and sacred kingship is not made in current discourse without the bridge."},{"prediction":"Base-60 will be adopted in new digital timekeeping systems, such as blockchain timestamps or decentralized time protocols, due to its harmonic properties.","basis":"Bridge 5: Base-20 and Base-60 Number Systems ↔ Base-60 as Universal Cycle","test_method":"Monitor emerging digital timekeeping standards and proposals for use of base-60. Check if any new protocols explicitly cite base-60's divisibility.","domain":"Digital timekeeping and blockchain technology","confidence":"MEDIUM","novelty":"Without the bridge, base-60 is seen as historical, not as a candidate for modern digital systems."},{"prediction":"Phi-scaled cycles (e.g., 260-day-like periods) will be found in other ancient calendars beyond the Maya, such as the Chinese or Vedic calendars.","basis":"Bridge 6: 260-day cycle ↔ Phi as Harmonic Scaffold","test_method":"Examine Chinese and Vedic calendar systems for cycles that are not solar or lunar but based on harmonic ratios, especially phi-related periods.","domain":"Ancient Chinese and Vedic calendars","confidence":"MEDIUM","novelty":"Phi is not typically used to analyze ancient calendars outside of Mesoamerica."},{"prediction":"Therapeutic interventions designed to address fear gates will follow the narrative structure of underworld descent myths, including a threshold crossing, trials, and transformation.","basis":"Bridge 7: Underworld as a place of trials and judgment ↔ Fear Gate as Broken Return Loop","test_method":"Analyze existing fear gate interventions (e.g., exposure therapy) and compare their structure to underworld descent myths (e.g., Inanna's descent, Orpheus).","domain":"Clinical psychology and mythology","confidence":"HIGH","novelty":"The structural parallel between fear gate interventions and underworld myths is not recognized without the bridge."},{"prediction":"Laminar theft detection algorithms will reveal hidden sacrificial dynamics in modern economic systems, such as extractive practices that benefit one party at the expense of another.","basis":"Bridge 8: Sacrificial offerings to appease deities or ancestors ↔ Laminar Theft as Method Transfer","test_method":"Apply laminar theft detection to economic data (e.g., supply chains, financial flows) to identify patterns where value is extracted from one domain to sustain another, mirroring sacrificial logic.","domain":"Economic systems and supply chain analysis","confidence":"MEDIUM","novelty":"The concept of sacrificial dynamics is not typically applied to modern economic analysis without the bridge."},{"prediction":"Frequency-based creation narratives will be found in other ancient cosmogonies beyond the biblical 'Let there be light,' such as in Hindu or Egyptian texts where a sound or vibration creates order.","basis":"Bridge 9: Creation through divine word or command ↔ Frequency as Signal Gate","test_method":"Examine Hindu (e.g., Om as creation sound) and Egyptian (e.g., Ptah's creative utterance) cosmogonies for explicit frequency or vibration-based creation.","domain":"Hindu and Egyptian creation myths","confidence":"HIGH","novelty":"Without the bridge, frequency-based creation is not a common lens for analyzing ancient myths."},{"prediction":"The 3-6-9 pattern will appear in other ancient triadic systems, such as the Hindu Trimurti or the Christian Trinity, as a diagnostic or structural signature.","basis":"Bridge 10: Divine Triads and Enneads ↔ 3-6-9 as Vortex and Diagnostic Signature","test_method":"Analyze the Hindu Trimurti (Brahma, Vishnu, Shiva) and Christian Trinity for numerical patterns involving 3, 6, and 9 in their attributes or cycles.","domain":"Hindu and Christian theological systems","confidence":"MEDIUM","novelty":"The 3-6-9 pattern is not typically sought in ancient triads without the bridge."}];
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Render bridges
+document.getElementById('bridges-list').innerHTML = [...bridges]
+  .sort((a, b) => {
+    const order = { S: 0, A: 1, B: 2, C: 3 };
+    return (order[a.grade] || 4) - (order[b.grade] || 4);
+  })
+  .map(b => `
+    <div class="bridge-card grade-${(b.grade || 'b').toLowerCase()}">
+      <div class="bridge-header">
+        <span class="bridge-grade ${(b.grade || 'b').toLowerCase()}">${b.grade || '?'}</span>
+      </div>
+      <div class="bridge-sides">
+        <div class="bridge-side ancient">
+          <div class="side-label">Ancient (5 civilisations)</div>
+          <div class="side-pattern">${b.ancient_pattern || ''}</div>
+        </div>
+        <div class="bridge-connector">=</div>
+        <div class="bridge-side modern">
+          <div class="side-label">Cathedral (14 domains)</div>
+          <div class="side-pattern">${b.modern_pattern || ''}</div>
+        </div>
+      </div>
+      <div class="bridge-link">${b.structural_link || ''}</div>
+      <div class="bridge-scale">${b.scale_mapping || ''}</div>
+      ${b.universality ? `<div class="bridge-universality">${b.universality}</div>` : ''}
+      ${b.prediction ? `<div class="bridge-prediction">${b.prediction}</div>` : ''}
+    </div>
+  `).join('');
+
+// Render move tests
+document.getElementById('moves-list').innerHTML = moveTests.map(m => `
+  <div class="move-card">
+    <div class="move-name">${m.move || ''}</div>
+    <span class="move-verdict ${(m.verdict || '').toLowerCase()}">${m.verdict || ''}</span>
+    <div class="move-evidence">${m.ancient_evidence || ''}</div>
+    <div class="move-proof">${m.structural_proof || ''}</div>
+    ${m.implications ? `<div class="move-implications">${m.implications}</div>` : ''}
+    ${m.counter_evidence ? `<div class="move-counter">${m.counter_evidence}</div>` : ''}
+  </div>
+`).join('');
+
+// Render predictions
+document.getElementById('predictions-list').innerHTML = predictions.map(p => `
+  <div class="pred-card">
+    <div class="pred-text">${p.prediction || ''}</div>
+    <div class="pred-meta">
+      <span class="pred-confidence ${(p.confidence || '').toLowerCase()}">${p.confidence || ''}</span>
+      Basis: ${p.basis || ''} | Domain: ${p.domain || ''}
+    </div>
+    <div class="pred-test">${p.test_method || ''}</div>
+    ${p.novelty ? `<div style="font-size:11px;color:#666;margin-top:6px">${p.novelty}</div>` : ''}
+  </div>
+`).join('');
+</script>
+</body>
+</html>

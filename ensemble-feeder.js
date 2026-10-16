@@ -93,12 +93,18 @@ function getVaultFiles() {
 
 function parseNuggets(filePath) {
   const content = fs.readFileSync(filePath, 'utf8');
-  // Split on nugget headers
-  const parts = content.split(/## Nugget \d+/);
+  // Vault files are single-nugget markdown: YAML frontmatter + body text
+  // Strip frontmatter (between --- delimiters)
+  const stripped = content.replace(/^---[\s\S]*?---\s*/, '').trim();
+  if (stripped.length > 50 && stripped.length < 5000) {
+    return [stripped];
+  }
+  // Fallback: try splitting on ## headers for multi-nugget files
+  const parts = content.split(/## (?:Nugget \d+|[A-Z])/);
   return parts
-    .slice(1) // skip frontmatter
+    .slice(1)
     .map(p => p.trim())
-    .filter(p => p.length > 50 && p.length < 3000); // meaningful length
+    .filter(p => p.length > 50 && p.length < 3000);
 }
 
 // ── Send to Telegram ─────────────────────────────────────────────────────────
@@ -135,7 +141,9 @@ const CLAIMS_PER_RUN = 3; // Process 3 claims per nightly run (each takes ~90s)
 export async function runFeedCycle() {
   console.log('[feeder] Starting nightly feed cycle...');
   const tested = getTestedClaims();
+  console.log(`[feeder] ${tested.size} claims already tested`);
   const files = getVaultFiles();
+  console.log(`[feeder] ${files.length} vault files found`);
 
   // Shuffle files for variety
   for (let i = files.length - 1; i > 0; i--) {
@@ -144,16 +152,23 @@ export async function runFeedCycle() {
   }
 
   const candidateClaims = [];
+  let filesScanned = 0;
 
   for (const file of files) {
     if (candidateClaims.length >= CLAIMS_PER_RUN * 3) break; // Get 3x candidates, pick best
     const nuggets = parseNuggets(file);
+    if (nuggets.length === 0) continue;
+    filesScanned++;
+    if (filesScanned <= 3 || filesScanned % 10 === 0) {
+      console.log(`[feeder] Scanning file ${filesScanned}: ${path.basename(file)} (${nuggets.length} nuggets)`);
+    }
     for (const nugget of nuggets) {
       if (candidateClaims.length >= CLAIMS_PER_RUN * 3) break;
       const claims = await extractClaims(nugget);
       for (const claim of claims) {
         if (!tested.has(claim.toLowerCase().trim())) {
           candidateClaims.push({ claim, source: path.basename(file) });
+          console.log(`[feeder] Candidate: "${claim.slice(0, 60)}..." from ${path.basename(file)}`);
         }
       }
     }

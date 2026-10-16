@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Lateral movement from the right side of the floor towards the center, using small, deliberate steps.",
+        "stance_width": "normal",
+        "guard": "Hands are held up in a guard position.",
+        "upper_body": "Upper body is upright and moves in sync with the lower body steps.",
+        "distance": "No opponent present. A second person is visible in the background on the far left.",
+        "notable": "The second person in white is present in the background for this sequence."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Movement around the center mark, shifting weight and adjusting position before moving to the right.",
+        "stance_width": "normal",
+        "guard": "Hands remain up in a guard position.",
+        "upper_body": "Slight twisting and turning of the torso during the footwork.",
+        "distance": "No opponent present. The second person has left the frame.",
+        "notable": "The dark line on the floor is used as a reference point for movement."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Movement towards the right side of the floor, followed by a return towards the center.",
+        "stance_width": "normal",
+        "guard": "Hands are held up throughout the movement.",
+        "upper_body": "Torso remains stable while navigating around the space.",
+        "distance": "No opponent present.",
+        "notable": "The fighter appears to be working on lateral footwork and positioning."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F4",
+      "type": "step",
+      "detail": "Lateral movement stepping from the right towards the center."
+    },
+    {
+      "frames": "F5-F6",
+      "type": "stance_change",
+      "detail": "Settling and shifting weight, adjusting the stance."
+    },
+    {
+      "frames": "F10-F12",
+      "type": "step",
+      "detail": "Lateral movement stepping from the center towards the right."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "reset",
+      "detail": "Returning to a central position on the floor."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

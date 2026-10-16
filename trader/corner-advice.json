@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-10-16T16:00:11.752Z",
+  "multipliers": {
+    "historical_cycles": 1,
+    "gann_geometry": 0.21,
+    "sexagesimal_cycles": 0.35,
+    "fibonacci_time": 0.1,
+    "harmonic_year": 0.21,
+    "lunar_cycles": 0.1
+  },
+  "reasoning": {
+    "historical_cycles": "",
+    "gann_geometry": "PS declining; 4-loss streak — BENCHING",
+    "sexagesimal_cycles": "cold streak (0/3 recent); weak PF (0.0)",
+    "fibonacci_time": "low WR (0%); cold streak (0/5 recent); 5-loss streak — BENCHING; weak PF (0.0)",
+    "harmonic_year": "losing ($-92); cold streak (0/3 recent); weak PF (0.0)",
+    "lunar_cycles": "losing ($-215); low WR (11%); cold streak (1/9 recent); 6-loss streak — BENCHING; strong PF (2.2)"
+  },
+  "direction_locks": {},
+  "strategy_rankings": [
+    {
+      "strategy": "historical_cycles",
+      "total": 12,
+      "wins": 7,
+      "losses": 5,
+      "pnl": 15.08,
+      "win_rate": 58.3,
+      "avg_hold_days": 11.2,
+      "profit_factor": 0.78,
+      "corner_multiplier": 1
+    },
+    {
+      "strategy": "gann_geometry",
+      "total": 8,
+      "wins": 4,
+      "losses": 4,
+      "pnl": 9.51,
+      "win_rate": 50,
+      "avg_hold_days": 11.1,
+      "profit_factor": 1.27,
+      "corner_multiplier": 0.21
+    },
+    {
+      "strategy": "sexagesimal_cycles",
+      "total": 3,
+      "wins": 0,
+      "losses": 3,
+      "pnl": -11.21,
+      "win_rate": 0,
+      "avg_hold_days": 7.1,
+      "profit_factor": 0,
+      "corner_multiplier": 0.35
+    },
+    {
+      "strategy": "fibonacci_time",
+      "total": 5,
+      "wins": 0,
+      "losses": 5,
+      "pnl": -35.86,
+      "win_rate": 0,
+      "avg_hold_days": 2.4,
+      "profit_factor": 0,
+      "corner_multiplier": 0.1
+    },
+    {
+      "strategy": "harmonic_year",
+      "total": 3,
+      "wins": 0,
+      "losses": 3,
+      "pnl": -91.58,
+      "win_rate": 0,
+      "avg_hold_days": 9.8,
+      "profit_factor": 0,
+      "corner_multiplier": 0.21
+    },
+    {
+      "strategy": "lunar_cycles",
+      "total": 9,
+      "wins": 1,
+      "losses": 8,
+      "pnl": -215.45,
+      "win_rate": 11.1,
+      "avg_hold_days": 8.4,
+      "profit_factor": 2.16,
+      "corner_multiplier": 0.1
+    }
+  ]
+}

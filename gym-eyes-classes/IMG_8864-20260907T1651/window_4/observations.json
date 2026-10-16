@@ -1,0 +1,116 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "The fighter on the left moves in with a forward step, closing the distance to his partner.",
+        "stance_width": "normal",
+        "guard": "Both fighters maintain a high guard with gloved hands positioned near the chin.",
+        "upper_body": "The fighter on the left extends his lead arm (jab) at F4, then extends the rear arm (cross) at F5. The partner raises his gloves to defend.",
+        "distance": "closes from medium to close range",
+        "notable": "Initial engagement initiated by the fighter on the left."
+      }
+    },
+    {
+      "frames": "F6-F7",
+      "time": "1.7s-2.0s",
+      "observations": {
+        "footwork": "The left fighter steps back, re-establishing a wider distance.",
+        "stance_width": "normal",
+        "guard": "Both fighters return to a tight defensive guard.",
+        "upper_body": "The left fighter recovers to an upright posture.",
+        "distance": "opens to medium range",
+        "notable": "Short reset period."
+      }
+    },
+    {
+      "frames": "F8-F10",
+      "time": "2.3s-3.0s",
+      "observations": {
+        "footwork": "The left fighter steps in again, closing the distance.",
+        "stance_width": "normal",
+        "guard": "The left fighter keeps his hands up while moving in.",
+        "upper_body": "The left fighter extends his lead arm (jab), then leans forward and down in a slipping or ducking motion at F10.",
+        "distance": "closes to close range",
+        "notable": "Second exchange; the left fighter evades after punching."
+      }
+    },
+    {
+      "frames": "F11-F14",
+      "time": "3.3s-4.3s",
+      "observations": {
+        "footwork": "The left fighter steps in for another exchange.",
+        "stance_width": "normal",
+        "guard": "Both fighters maintain a high guard.",
+        "upper_body": "The left fighter extends his lead arm (jab) at F14 while the partner reacts defensively.",
+        "distance": "closes to close range",
+        "notable": "Third exchange of the sequence."
+      }
+    },
+    {
+      "frames": "F15",
+      "time": "4.7s",
+      "observations": {
+        "footwork": "The fighters separate by stepping back.",
+        "stance_width": "normal",
+        "guard": "Both fighters have their guard up in a ready stance.",
+        "upper_body": "The left fighter is upright and in posture.",
+        "distance": "medium range",
+        "notable": "Reset or end of the sequence."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F4",
+      "type": "punch_extension",
+      "detail": "The fighter on the left extends his lead hand in a jab."
+    },
+    {
+      "frames": "F5",
+      "type": "punch_extension",
+      "detail": "The fighter on the left extends his rear hand in a cross."
+    },
+    {
+      "frames": "F6-F7",
+      "type": "distance_open",
+      "detail": "The left fighter steps back, creating space."
+    },
+    {
+      "frames": "F8-F9",
+      "type": "distance_close",
+      "detail": "The left fighter steps in to close the distance."
+    },
+    {
+      "frames": "F9",
+      "type": "punch_extension",
+      "detail": "The left fighter throws a jab."
+    },
+    {
+      "frames": "F10",
+      "type": "slip",
+      "detail": "The left fighter ducks or slips underneath."
+    },
+    {
+      "frames": "F11-F12",
+      "type": "distance_close",
+      "detail": "The left fighter moves in again."
+    },
+    {
+      "frames": "F14",
+      "type": "punch_extension",
+      "detail": "The left fighter extends his arm in a jab."
+    },
+    {
+      "frames": "F15",
+      "type": "reset",
+      "detail": "The fighters return to a neutral distance."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

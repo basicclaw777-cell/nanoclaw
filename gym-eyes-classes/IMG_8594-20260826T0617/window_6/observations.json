@@ -1,0 +1,62 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "One person in black 'BASIC' shirt moves away from camera and toward the right edge; second person with red gloves enters the frame from the right.",
+        "stance_width": "changing",
+        "guard": "Unclear on first person; partially visible for second person.",
+        "upper_body": "Black-shirt person has their back to the camera, showing slight movement; second person beginning to face toward the right side of the frame.",
+        "distance": "Distance opening as the first person moves away and out of frame.",
+        "notable": "Two people clearly present; first person exits view as camera focus shifts to the second person."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Focus is now on the second person (red gloves, dark shirt) who is in a stationary boxing stance facing right; the legs of the first person are partially visible on the left edge.",
+        "stance_width": "normal",
+        "guard": "Hands are held up with red boxing gloves positioned near the chin in a defensive guard.",
+        "upper_body": "Slightly crouched, shoulders rounded forward, in an engaged defensive posture.",
+        "distance": "Single-person focus; maintains personal space, no pad contact occurring.",
+        "notable": "Transition to the primary subject holding a ready stance."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Stationary holding stance, minimal foot movement, weight balanced on both feet.",
+        "stance_width": "normal",
+        "guard": "Guard remains high with red gloves near chin, elbows tucked.",
+        "upper_body": "Practically unchanged, maintaining the same crouched, ready posture.",
+        "distance": "No change in distance or position.",
+        "notable": "Very little to no movement; person appears to be holding a defensive stance or waiting for instruction."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "reset",
+      "detail": "Person in black shirt moves away from camera, transitioning out of frame while the focus shifts to the incoming training partner."
+    },
+    {
+      "frames": "F6-F7",
+      "type": "stance_change",
+      "detail": "The red-gloved person settles into a clear boxing stance facing right, establishing guard and footing."
+    },
+    {
+      "frames": "F8-F15",
+      "type": "instruction_pause",
+      "detail": "Red-gloved person maintains a stationary defensive stance; no active punching, stepping, or pivoting occurs."
+    }
+  ],
+  "overall_rhythm": "inactive"
+}

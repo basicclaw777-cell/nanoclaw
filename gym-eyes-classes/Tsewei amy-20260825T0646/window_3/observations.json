@@ -1,0 +1,82 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Fighter on right maintains an active stance, stepping slightly forward and back while throwing punches. Coach on left stays planted, providing a stable base.",
+        "stance_width": "normal",
+        "guard": "Fighter keeps hands up in a tight guard between punches, with left shoulder slightly forward. Coach holds pads high and close to the chest.",
+        "upper_body": "Fighter rotates the torso to throw straight punches; shoulders engage. Coach stays relatively stationary, only moving arms slightly to catch the strikes.",
+        "distance": "Fighter is at striking distance from the coach's pads, closing in for combination work.",
+        "notable": "Frames show a jab followed by a right hand, initiating a combination close to the coach's pads."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Fighter pivots and adjusts angle, moving laterally to create a new striking angle. Coach adjusts foot position to maintain pad placement.",
+        "stance_width": "changing",
+        "guard": "Fighter's guard remains high, hand position varies slightly with the punch output. Coach's pad guard remains fixed.",
+        "upper_body": "More dynamic torso rotation; fighter throws a power hook. Coach absorbs the impact with the pads.",
+        "distance": "Distance closes as fighter steps in, then reopens slightly after the exchange.",
+        "notable": "This segment shows a clear angle change via footwork, creating an opening for a hook."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Fighter continues lateral movement and occasional reset steps. Coach takes a small step back to reset the distance.",
+        "stance_width": "normal",
+        "guard": "Stable guard maintained by fighter. Coach's hands stay up, ready to receive the next punch.",
+        "upper_body": "Fighter throws straight punches and a hook combination, back to a rhythmical flow. Coach keeps a consistent receiving motion.",
+        "distance": "Boxing distance is maintained; both fighters appear to settle into a cadence.",
+        "notable": "A noticeable reset and re-engagement from the coach's side; movement becomes more rhythmic."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F3",
+      "type": "punch_extension",
+      "detail": "Fighter extends a lead jab and a rear cross at the pads."
+    },
+    {
+      "frames": "F4-F5",
+      "type": "punch_recovery",
+      "detail": "Fighter brings hands back to high guard after the initial combination."
+    },
+    {
+      "frames": "F6-F8",
+      "type": "pivot",
+      "detail": "Fighter pivots the lead foot to change the angle, opening up a hooking lane."
+    },
+    {
+      "frames": "F9-F10",
+      "type": "punch_extension",
+      "detail": "Fighter throws a rear hook or power shot, fully rotating the hips."
+    },
+    {
+      "frames": "F11-F12",
+      "type": "distance_close",
+      "detail": "Fighter steps in closer to the coach to initiate the next combination."
+    },
+    {
+      "frames": "F13-F14",
+      "type": "punch_extension",
+      "detail": "Fighter throws another flurry of punches, maintaining the rhythm."
+    },
+    {
+      "frames": "F15",
+      "type": "guard_drop",
+      "detail": "Fighter briefly lowers the guard slightly after the sequence ends, signaling a pause or reset."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

@@ -1,0 +1,92 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Fighters are moving laterally, crossing paths. The fighter on the left steps to the right while the fighter on the right steps to the left.",
+        "stance_width": "changing",
+        "guard": "Both maintain a guard with hands up.",
+        "upper_body": "Torsos are upright; minimal arm movement, mostly footwork.",
+        "distance": "Start in opposite corners, close the distance as they pass.",
+        "notable": "They swap positions by F5."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "One fighter steps forward to close the gap. After the punch, they remain in position.",
+        "stance_width": "normal",
+        "guard": "Guard is maintained, with the attacking fighter briefly opening the lead hand.",
+        "upper_body": "At F10, a punch is thrown from the fighter on the left, with the arm extended toward the opponent.",
+        "distance": "Close range; the fighters are within striking distance.",
+        "notable": "The first punch exchange occurs (F10)."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Fighters reset and continue with short, controlled steps.",
+        "stance_width": "normal",
+        "guard": "Both keep their hands up.",
+        "upper_body": "At F14, another punch is thrown by the same fighter on the left.",
+        "distance": "Close-medium range.",
+        "notable": "A second punch attempt occurs (F14); the sequence ends with both returning to guard."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F2",
+      "type": "step",
+      "detail": "The fighter on the left moves across the frame toward the right."
+    },
+    {
+      "frames": "F5-F6",
+      "type": "pivot",
+      "detail": "Fighters pivot and swap positions."
+    },
+    {
+      "frames": "F8-F9",
+      "type": "distance_close",
+      "detail": "The fighter on the right steps in, reducing the distance."
+    },
+    {
+      "frames": "F10",
+      "type": "punch_extension",
+      "detail": "The fighter on the left extends a punch toward the opponent."
+    },
+    {
+      "frames": "F11",
+      "type": "punch_recovery",
+      "detail": "The punch is retracted back to guard."
+    },
+    {
+      "frames": "F12",
+      "type": "reset",
+      "detail": "Fighters reset to their starting stances."
+    },
+    {
+      "frames": "F13",
+      "type": "punch_preparation",
+      "detail": "The fighter on the left begins to load a punch."
+    },
+    {
+      "frames": "F14",
+      "type": "punch_extension",
+      "detail": "The fighter on the left extends a punch again."
+    },
+    {
+      "frames": "F15",
+      "type": "punch_recovery",
+      "detail": "The punch is retracted as the sequence ends."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

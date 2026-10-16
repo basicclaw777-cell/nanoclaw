@@ -1,0 +1,62 @@
+{
+  "people_detected": 1,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Lateral movement to the left across the gym floor, maintaining a steady rhythm.",
+        "stance_width": "normal",
+        "guard": "Hands held up in a boxing guard near the face.",
+        "upper_body": "Relaxed and upright with a slight forward lean, facing the direction of movement.",
+        "distance": "Staying at a consistent distance from the camera while moving laterally.",
+        "notable": "No punches thrown; the focus is on footwork movement."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Continues lateral stepping to the left, keeping feet shoulder-width apart.",
+        "stance_width": "normal",
+        "guard": "Guard remains up and stable.",
+        "upper_body": "Torso remains composed, turning slightly to track the movement direction.",
+        "distance": "Distance from camera remains constant.",
+        "notable": "Continuous, uninterrupted movement."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Further lateral movement to the left, with a slight shift in body position.",
+        "stance_width": "normal",
+        "guard": "Guard maintained.",
+        "upper_body": "Posture remains stable.",
+        "distance": "Constant distance from camera.",
+        "notable": "Movement continues to the end of the sequence."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "step",
+      "detail": "Moving left with a sequence of lateral steps."
+    },
+    {
+      "frames": "F6-F10",
+      "type": "step",
+      "detail": "Continuing the lateral stepping to the left."
+    },
+    {
+      "frames": "F11-F15",
+      "type": "step",
+      "detail": "Sustaining the movement drill, stepping leftward."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

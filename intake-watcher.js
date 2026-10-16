@@ -559,7 +559,10 @@ export function handleIntakeCallback(update) {
 // ── File Watcher ────────────────────────────────────────────────────────────
 
 function startWatcher() {
-  ensureDirs();
+  try { ensureDirs(); } catch (e) {
+    console.error(`[intake] Cannot create dirs (drive missing?): ${e.message}`);
+    return;
+  }
   initDb();
 
   console.log(`[intake] ═══════════════════════════════════════`);

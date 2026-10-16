@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Foreground fighter is mostly stationary; background fighter shifts weight and moves laterally.",
+        "stance_width": "changing",
+        "guard": "Both fighters maintain a raised boxing guard.",
+        "upper_body": "Foreground fighter extends left arm in F1 and right arm in F2-F5; background fighter keeps hands close to face.",
+        "distance": "medium",
+        "notable": "Background fighter is circling and adjusting position."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Background fighter steps forward, closing the distance to the foreground fighter.",
+        "stance_width": "wide",
+        "guard": "Guard remains up for both fighters.",
+        "upper_body": "Foreground fighter lowers right arm slightly; background fighter stays engaged with hands up.",
+        "distance": "closing",
+        "notable": "Background fighter takes several small, deliberate steps forward."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Background fighter steps backward, opening the distance and returning to the initial relative position.",
+        "stance_width": "normal",
+        "guard": "Hands remain up; foreground fighter extends right arm to the side in F15.",
+        "upper_body": "Foreground fighter extends right arm outward; background fighter moves into a defensive stance.",
+        "distance": "opening",
+        "notable": "Fighters reset to a neutral relative position."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F3-F5",
+      "type": "step",
+      "detail": "Background fighter adjusts position laterally."
+    },
+    {
+      "frames": "F6-F9",
+      "type": "distance_close",
+      "detail": "Background fighter steps forward, closing the distance."
+    },
+    {
+      "frames": "F11-F13",
+      "type": "distance_open",
+      "detail": "Background fighter moves backward, opening the distance."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "reset",
+      "detail": "Fighters return to relative starting positions."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

@@ -65,7 +65,55 @@
   },
   "researchLog": {
     "notes": "Fringe's domain. Papers read, models tested, capabilities mapped.",
-    "entries": []
+    "entries": [
+      {
+        "name": "DATLAB Classified — TouchDesigner MediaPipe Classifier",
+        "source": "datlabnyc.com/classified",
+        "authors": "Torin (blankensmithing) & Lyell (dotsimulate)",
+        "presented": "DATLAB XIII, 12/2025",
+        "tools": [
+          "TouchDesigner",
+          "MediaPipe",
+          "Teachable Machine"
+        ],
+        "relevance": "Train custom punch classifiers on MediaPipe pose data. Visual PCA clustering. Could replace velocity-threshold classification for hooks/uppercuts.",
+        "status": "investigating",
+        "questions": [
+          "Can trained model export to Python/ONNX for detector.py integration?",
+          "Does it work with pre-recorded pose data or only live?",
+          "What format does MediaPipe CHOP data need to be in?",
+          "Could this solve southpaw classification edge case too?"
+        ],
+        "date": "2026-05-17T08:16:25.043Z"
+      },
+      {
+        "name": "datlab-classified-investigation",
+        "result": "completed — method extracted, tool rejected",
+        "notes": "TouchDesigner plugin is locked to .tox format. No export, no API, no GitHub source. No documentation beyond landing page. BUT: the methodology (KNN on pose landmark sequences + PCA visualization) is trivially buildable in Python via scikit-learn. Build path: pose-classifier.py using KNeighborsClassifier on labeled MediaPipe landmark time-series. Solves: punch type classification, southpaw detection, fast hook detection. Next: build native Python classifier, skip TouchDesigner entirely.",
+        "date": "2026-05-17T08:16:25.044Z",
+        "completedDate": "2026-05-17T09:00:00.000Z"
+      },
+      {
+        "name": "KNN Pose Classifier — Native Python Build",
+        "source": "Inspired by DATLAB Classified methodology",
+        "tools": ["scikit-learn", "MediaPipe", "numpy"],
+        "relevance": "Replace velocity-threshold punch detection with learned classifier. Train on labeled punch clips. PCA to verify cluster separation. Handles: punch type (jab/cross/hook/uppercut), stance (orthodox/southpaw), guard position.",
+        "status": "ready-to-build",
+        "architecture": {
+          "training": "labeled video clips → MediaPipe landmarks per frame → feature vectors (joint angles, velocities, positions) → KNeighborsClassifier.fit()",
+          "inference": "new frames → same feature extraction → classifier.predict() → punch type + confidence",
+          "visualization": "PCA 2D projection of all labeled samples, colored by class — shows separation quality",
+          "integration": "detector.py calls classifier instead of velocity threshold for punch type determination"
+        },
+        "questions": [
+          "How many labeled clips per punch type needed? (estimate: 20-50 per class)",
+          "Feature vector: raw landmarks vs joint angles vs both?",
+          "Window size: single frame or sliding window of N frames?",
+          "Where to get ground truth labels? Paul labels via Telegram or use existing session timestamps?"
+        ],
+        "date": "2026-05-17T09:00:00.000Z"
+      }
+    ]
   },
   "ratedOutcomes": [
     {

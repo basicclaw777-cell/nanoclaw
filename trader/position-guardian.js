@@ -40,7 +40,8 @@ async function fetchPrices(assets) {
     BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana',
     AVAX: 'avalanche-2', ARB: 'arbitrum', LINK: 'chainlink',
     DOT: 'polkadot', MATIC: 'matic-network', DOGE: 'dogecoin',
-    ADA: 'cardano', ATOM: 'cosmos', UNI: 'uniswap'
+    ADA: 'cardano', ATOM: 'cosmos', UNI: 'uniswap',
+    NEAR: 'near', SUI: 'sui', APT: 'aptos',
   };
 
   const needed = [...new Set(assets.map(a => ids[a]).filter(Boolean))];

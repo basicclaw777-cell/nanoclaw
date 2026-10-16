@@ -1,0 +1,87 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Fighter steps laterally with short, controlled movements while maintaining a boxing stance",
+        "stance_width": "normal",
+        "guard": "Hands held up near the face in a boxing guard",
+        "upper_body": "Slight upper body movement with steps, staying in a ready posture",
+        "distance": "Medium distance from trainer, maintaining striking range",
+        "notable": "Trainer holds a green pool noodle raised at shoulder height as a target"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Fighter continues lateral stepping with a consistent rhythm",
+        "stance_width": "normal",
+        "guard": "Guard maintained throughout this period",
+        "upper_body": "Upper body moves in rhythm with lateral footwork",
+        "distance": "Distance maintained between fighter and trainer",
+        "notable": "Trainer adjusts the green noodle position, lowering it to waist height"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Fighter continues stepping laterally, maintaining a steady rhythm",
+        "stance_width": "normal",
+        "guard": "Guard maintained",
+        "upper_body": "Slight movement with steps, boxer stays in ready position",
+        "distance": "Distance maintained",
+        "notable": "Trainer continues holding green noodle out as a point of focus"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F2",
+      "type": "step",
+      "detail": "Fighter steps laterally, shifting position to the left"
+    },
+    {
+      "frames": "F4-F5",
+      "type": "step",
+      "detail": "Fighter steps again, continuing lateral movement"
+    },
+    {
+      "frames": "F6",
+      "type": "distance_open",
+      "detail": "Trainer adjusts position, lowering the green noodle"
+    },
+    {
+      "frames": "F7-F8",
+      "type": "step",
+      "detail": "Fighter steps, maintaining stance"
+    },
+    {
+      "frames": "F9-F10",
+      "type": "step",
+      "detail": "Fighter continues stepping laterally"
+    },
+    {
+      "frames": "F11-F12",
+      "type": "step",
+      "detail": "Fighter steps, maintaining guard"
+    },
+    {
+      "frames": "F13-F14",
+      "type": "step",
+      "detail": "Fighter steps, staying in a ready position"
+    },
+    {
+      "frames": "F15",
+      "type": "step",
+      "detail": "Fighter completes a step, ending in stance"
+    }
+  ],
+  "overall_rhythm": "steady"
+}

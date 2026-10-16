@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Fighter bounces on feet, circling laterally while maintaining position in the center-left of the frame",
+        "stance_width": "normal",
+        "guard": "Both hands held high in a boxing guard, elbows tucked, protecting the head and body",
+        "upper_body": "Slight bobbing and weaving motion, maintaining visual focus on the partner",
+        "distance": "Close to partner, within striking range, partner partially visible on left edge",
+        "notable": "Initial preparatory movement, bouncing rhythm, looking for openings"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Aggressive lunge forward, establishing a wide dominant stance during the extension",
+        "stance_width": "wide",
+        "guard": "Left lead hand extends forward, right hand remains back near chin as a counterbalance",
+        "upper_body": "Leaning into a forward punch, driving through the hips, torso rotates towards the target",
+        "distance": "Closing distance with partner, reaching out for contact",
+        "notable": "Explosive burst of action, throwing what appears to be a straight punch or combination"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Recovery step, pulling back weight to reset into a stable neutral stance",
+        "stance_width": "normal",
+        "guard": "Returning to high guard, bringing hands back up to protect the face",
+        "upper_body": "Recovering from the strike, straightening upright, re-engaging with the partner",
+        "distance": "Back to normal working distance, moving out of close contact",
+        "notable": "Transition from aggressive action back to a composed stance, guard reset"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F8",
+      "type": "punch_extension",
+      "detail": "Lunging forward, leading hand extends for a strike, torso rotates into the punch"
+    },
+    {
+      "frames": "F9-F10",
+      "type": "distance_close",
+      "detail": "Continuing forward momentum, closing the gap between fighter and partner"
+    },
+    {
+      "frames": "F11-F13",
+      "type": "punch_recovery",
+      "detail": "Retracting the extended hand, pulling back weight to a more defensive crouch"
+    },
+    {
+      "frames": "F14-F15",
+      "type": "reset",
+      "detail": "Returning to a full upright guard, reestablishing the base stance and ready position"
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

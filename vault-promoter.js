@@ -8,6 +8,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { injectProvenanceFrontmatter } from './provenance-stamp.js';
 
 const HOME = process.env.HOME;
 const VAULT = path.join(HOME, 'cathedral-vault');
@@ -163,6 +164,8 @@ export function executePromotions(candidates, dryRun = false) {
             /^---\n/,
             `---\npromoted_from: ${c.relativePath}\npromoted_date: ${promotionDate}\n`
           );
+          // Stamp provenance (Archivist's suggestion)
+          content = injectProvenanceFrontmatter(content, 'vault-promoter', 'vault-promoter');
         }
 
         fs.writeFileSync(targetPath, content);

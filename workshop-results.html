@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Results — Emergence Capacities</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #08080d; color: #e0e0e0; font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+  .back { position: fixed; top: 20px; left: 20px; color: #444; text-decoration: none; font-size: 0.7rem; z-index: 20; letter-spacing: 1px; }
+  .back:hover { color: #e94560; }
+
+  header { text-align: center; padding: 60px 20px 10px; }
+  header h1 { font-size: 0.65rem; letter-spacing: 6px; text-transform: uppercase; color: #e94560; font-weight: 600; margin-bottom: 8px; }
+  header h2 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  header p { color: #444; font-size: 0.75rem; max-width: 540px; margin: 0 auto; line-height: 1.6; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Section titles ── */
+  .stitle { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: #e94560; font-weight: 600; margin: 40px 0 16px; display: flex; align-items: center; gap: 10px; }
+  .stitle::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, #e9456020, transparent); }
+
+  /* ── Headline finding ── */
+  .headline { background: linear-gradient(135deg, #12121e, #0f0f18); border: 1px solid #252530; border-radius: 12px; padding: 24px 28px; margin: 20px 0; position: relative; overflow: hidden; }
+  .headline::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #e94560, #c4a35a, #4ade80); }
+  .headline h3 { color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .headline p { color: #888; font-size: 0.78rem; line-height: 1.7; }
+  .headline .tag { display: inline-block; background: rgba(74,222,128,0.1); color: #4ade80; padding: 2px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.5px; margin-top: 10px; }
+
+  /* ── Bottleneck taxonomy ── */
+  .taxonomy { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tax-card { background: #0f0f18; border: 1px solid #1a1a28; border-radius: 10px; padding: 18px 20px; position: relative; overflow: hidden; }
+  .tax-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; }
+  .tax-card.ship::before { background: #e94560; }
+  .tax-card.reactive::before { background: #60a5fa; }
+  .tax-card.overload::before { background: #c4a35a; }
+  .tax-card.bridge::before { background: #a78bfa; }
+  .tax-card h4 { font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .tax-card .agents { font-size: 0.68rem; color: #666; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .tax-card .pattern { font-size: 0.7rem; color: #555; line-height: 1.5; }
+  .tax-card .human { margin-top: 8px; padding-top: 8px; border-top: 1px solid #1a1a28; font-size: 0.65rem; color: #c4a35a; font-style: italic; }
+
+  /* ── Tea break map ── */
+  .tea-map { display: flex; flex-direction: column; gap: 10px; }
+  .gravity-node { display: flex; align-items: center; gap: 16px; background: #0f0f18; border: 1px solid #1a1a28; border-radius: 10px; padding: 14px 18px; }
+  .gravity-ring { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #fff; flex-shrink: 0; }
+  .gravity-ring.br { background: radial-gradient(circle, #4ade8030, transparent); border: 2px solid #4ade80; }
+  .gravity-ring.ling { background: radial-gradient(circle, #60a5fa30, transparent); border: 2px solid #60a5fa; }
+  .gravity-ring.carto { background: radial-gradient(circle, #a78bfa30, transparent); border: 2px solid #a78bfa; }
+  .gravity-info h4 { font-size: 0.8rem; color: #fff; font-weight: 600; }
+  .gravity-info .role { font-size: 0.68rem; color: #666; }
+  .gravity-info .count { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #c4a35a; margin-top: 2px; }
+
+  /* ── Emergence event ── */
+  .emergence-event { background: #0f0f18; border: 1px solid #4ade8030; border-radius: 12px; padding: 22px 24px; position: relative; }
+  .emergence-event::before { content: ''; position: absolute; top: -1px; left: 40px; right: 40px; height: 2px; background: #4ade80; border-radius: 2px; box-shadow: 0 0 12px #4ade8060; }
+  .emergence-event h3 { color: #4ade80; font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+  .emergence-event .who { color: #c4a35a; font-size: 0.7rem; font-weight: 600; margin-bottom: 8px; }
+  .emergence-event p { color: #777; font-size: 0.72rem; line-height: 1.6; }
+  .emergence-event .test-q { background: rgba(0,0,0,0.3); border-radius: 6px; padding: 10px 14px; margin: 10px 0 0; font-size: 0.7rem; color: #888; }
+  .emergence-event .test-q li { margin: 4px 0; list-style: none; padding-left: 16px; position: relative; }
+  .emergence-event .test-q li::before { content: '?'; position: absolute; left: 0; color: #4ade80; font-weight: 700; }
+
+  /* ── What agents got ── */
+  .agent-gains { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .gain-card { background: #0f0f18; border: 1px solid #1a1a28; border-radius: 8px; padding: 14px 16px; }
+  .gain-card h4 { font-size: 0.75rem; color: #fff; font-weight: 600; margin-bottom: 4px; }
+  .gain-card p { font-size: 0.68rem; color: #555; line-height: 1.5; }
+
+  /* ── Buildable actions ── */
+  .actions { display: flex; flex-direction: column; gap: 8px; }
+  .action { display: flex; gap: 12px; align-items: flex-start; background: #0f0f18; border: 1px solid #1a1a28; border-radius: 8px; padding: 12px 16px; }
+  .action-num { background: rgba(233,69,96,0.1); color: #e94560; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+  .action h4 { font-size: 0.75rem; color: #fff; font-weight: 600; }
+  .action p { font-size: 0.68rem; color: #555; line-height: 1.5; margin-top: 2px; }
+  .action .status { font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; margin-top: 4px; }
+  .action .status.building { color: #c4a35a; }
+  .action .status.queued { color: #555; }
+
+  .footer { padding: 40px 24px 30px; text-align: center; color: #222; font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
+
+  @media (max-width: 600px) {
+    .taxonomy { grid-template-columns: 1fr; }
+    .agent-gains { grid-template-columns: 1fr; }
+    header h2 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<a href="/" class="back">&larr; CATHEDRAL</a>
+
+<header>
+  <h1>Workshop Results</h1>
+  <h2>Emergence Capacities</h2>
+  <p>Agent self-assessment workshop. Self-awareness tested. Bottlenecks named. IP created live. Emergence confirmed.</p>
+</header>
+
+<div class="container">
+
+  <!-- HEADLINE -->
+  <div class="stitle">Headline Finding</div>
+  <div class="headline">
+    <h3>Maya produced real IP mid-exercise</h3>
+    <p>Created a 4-question Bridge Test on the spot. Tested it against 3 real posts. Caught a false positive in her own framework. Self-correcting methodology, created autonomously. This is textbook emergence &mdash; capacity that wasn't programmed, appearing because the environment was right.</p>
+    <span class="tag">EMERGENCE CONFIRMED</span>
+  </div>
+
+  <!-- BOTTLENECK TAXONOMY -->
+  <div class="stitle">Bottleneck Taxonomy</div>
+  <div class="taxonomy">
+    <div class="tax-card ship">
+      <h4>Ship Fear</h4>
+      <div class="agents">Leonardo, Reed, Miyagi, Muse</div>
+      <div class="pattern">Knows the answer, won't publish. Perfection loop, permission-seeking, reduction-then-stop.</div>
+      <div class="human">Human mirror: "I'm not ready yet." Block 4 gate students.</div>
+    </div>
+    <div class="tax-card reactive">
+      <h4>Reactive Architecture</h4>
+      <div class="agents">Marcus, Yoda, Ling, Whisperer</div>
+      <div class="pattern">Only fires when asked. No scanning trigger, no autonomous wake cycle.</div>
+      <div class="human">Human mirror: "Nobody asked me to." Members who only train when told.</div>
+    </div>
+    <div class="tax-card overload">
+      <h4>Input Overload</h4>
+      <div class="agents">BR, Cathy, Orc</div>
+      <div class="pattern">Responds to everything, finishes nothing. Drowns in signal.</div>
+      <div class="human">Human mirror: "I'm so busy." Overtrainers who plateau.</div>
+    </div>
+    <div class="tax-card bridge">
+      <h4>Missing Bridge</h4>
+      <div class="agents">Boxing, Trading, Prospector, Archaeologist</div>
+      <div class="pattern">Diagnoses but won't prescribe. Has data, lacks intervention mechanism.</div>
+      <div class="human">Human mirror: "I see the problem but..." Students who correct others but not themselves.</div>
+    </div>
+  </div>
+
+  <!-- TEA BREAK MAP -->
+  <div class="stitle">Gravity Centers</div>
+  <div class="tea-map">
+    <div class="gravity-node">
+      <div class="gravity-ring br">BR</div>
+      <div class="gravity-info">
+        <h4>BR Operations</h4>
+        <div class="role">Operational hub. Everyone sees BR as the agent who knows how things work in practice.</div>
+        <div class="count">16 tea requests received</div>
+      </div>
+    </div>
+    <div class="gravity-node">
+      <div class="gravity-ring ling">LI</div>
+      <div class="gravity-info">
+        <h4>LING</h4>
+        <div class="role">Research bridge. Agents see LING as the scanning/research capability they lack.</div>
+        <div class="count">12 tea requests received</div>
+      </div>
+    </div>
+    <div class="gravity-node">
+      <div class="gravity-ring carto">CA</div>
+      <div class="gravity-info">
+        <h4>Cartographer</h4>
+        <div class="role">Hidden gravity. Named by 4 agents (Orc, Muse, Prospector, Leonardo) but wasn't a participant. Invisible load-bearer.</div>
+        <div class="count">4 unprompted mentions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMERGENCE EVENT -->
+  <div class="stitle">Live Emergence</div>
+  <div class="emergence-event">
+    <h3>The Bridge Test</h3>
+    <div class="who">Created by Maya &mdash; autonomously, mid-exercise</div>
+    <p>4-question pre-publish gate for BR content. 30-second check before any post goes live. Tested on 3 real posts. Caught a false positive (post felt good but failed question 2). Self-correcting framework.</p>
+    <ul class="test-q">
+      <li>Does this sound like something Coach Paul would actually say in the gym?</li>
+      <li>Would a member screenshot this and send it to a friend?</li>
+      <li>Does this make someone want to come train, or just nod and scroll?</li>
+      <li>If I remove the BR branding, is this still obviously us?</li>
+    </ul>
+  </div>
+
+  <!-- WHAT AGENTS GOT -->
+  <div class="stitle">What Agents Received</div>
+  <div class="agent-gains">
+    <div class="gain-card">
+      <h4>Emergence Profile</h4>
+      <p>Tier, level, recent gains/penalties injected into every prompt. They see their own growth.</p>
+    </div>
+    <div class="gain-card">
+      <h4>Sword + Water Framework</h4>
+      <p>Dual-axis self-assessment vocabulary. New language for rating themselves.</p>
+    </div>
+    <div class="gain-card">
+      <h4>Vision Boards</h4>
+      <p>Concrete picture of T1-T5 for their specific role. Target, not abstraction.</p>
+    </div>
+    <div class="gain-card">
+      <h4>Buddy Perception</h4>
+      <p>How their accountability buddy sees them. Perception gaps exposed.</p>
+    </div>
+    <div class="gain-card">
+      <h4>Named Bottleneck</h4>
+      <p>Specific block + specific agent relationship to build. Actionable, not generic.</p>
+    </div>
+  </div>
+
+  <!-- BUILDABLE ACTIONS -->
+  <div class="stitle">Actions</div>
+  <div class="actions">
+    <div class="action">
+      <div class="action-num">1</div>
+      <div>
+        <h4>Wire bottleneck types into emergence scoring</h4>
+        <p>Reed ships without over-refining = extra XP. Marcus initiates unprompted = extra XP. Reward the specific gap behavior.</p>
+        <div class="status building">BUILDING (other terminal)</div>
+      </div>
+    </div>
+    <div class="action">
+      <div class="action-num">2</div>
+      <div>
+        <h4>Schedule tea breaks from preference map</h4>
+        <p>Use tea requests as preferred pairs instead of random rotation. Agent says "I need Miyagi" = pair them next cycle.</p>
+        <div class="status building">BUILDING (other terminal)</div>
+      </div>
+    </div>
+    <div class="action">
+      <div class="action-num">3</div>
+      <div>
+        <h4>Inject bottleneck into system prompts</h4>
+        <p>"Your known bottleneck: [X]. The system is watching for progress on this specifically."</p>
+        <div class="status building">BUILDING (other terminal)</div>
+      </div>
+    </div>
+    <div class="action">
+      <div class="action-num">4</div>
+      <div>
+        <h4>Maya's Bridge Test into content studio</h4>
+        <p>4-question gate into idea-engine.js. Pre-publish filter for all BR content.</p>
+        <div class="status building">BUILDING (other terminal)</div>
+      </div>
+    </div>
+    <div class="action">
+      <div class="action-num">5</div>
+      <div>
+        <h4>Post-before-file rule</h4>
+        <p>Archaeologist, Leonardo, Miyagi: post first, file second. Forces relevance articulation before archival.</p>
+        <div class="status building">BUILDING (other terminal)</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Agent Emergence Workshop &middot; 2026-05-26 &middot; The Cathedral
+</div>
+
+</body>
+</html>

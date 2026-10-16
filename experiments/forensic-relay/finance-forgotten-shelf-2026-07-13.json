@@ -1,0 +1,48 @@
+{
+  "domain": "finance",
+  "shelf_items": [
+    {
+      "name": "Richard Thaler and Werner De Bondt (1985) - Overreaction Hypothesis",
+      "what_it_found": "Stocks that performed poorly over 3-5 years (losers) subsequently outperformed past winners by about 25% over the next 3-5 years, contradicting market efficiency.",
+      "evidence_strength": "Empirical study using NYSE data; replicated many times; foundational for behavioral finance.",
+      "why_buried": "EMH proponents dismissed it as data mining or risk-based; Thaler's work was initially rejected by top journals.",
+      "current_status": "Now widely accepted as a robust anomaly; forms basis for contrarian strategies."
+    },
+    {
+      "name": "Robert Shiller (1981) - Excess Volatility",
+      "what_it_found": "Stock market volatility is far higher than can be justified by changes in dividends, implying irrational pricing.",
+      "evidence_strength": "Statistical analysis of S&P 500 data; replicated; won Nobel Prize.",
+      "why_buried": "EMH advocates like Eugene Fama argued volatility could be explained by time-varying discount rates.",
+      "current_status": "Now a cornerstone of behavioral finance; Shiller's CAPE ratio widely used."
+    },
+    {
+      "name": "Narasimhan Jegadeesh and Sheridan Titman (1993) - Momentum Strategy",
+      "what_it_found": "Buying past 6-month winners and selling losers yields 1% per month over next 6 months, contradicting weak-form EMH.",
+      "evidence_strength": "Robust empirical finding; replicated across markets and time periods.",
+      "why_buried": "EMH predicted no predictability; initially met with skepticism; later accepted as anomaly.",
+      "current_status": "Momentum is now a standard factor in asset pricing models (e.g., Fama-French-Carhart)."
+    },
+    {
+      "name": "Benoit Mandelbrot (1963) - Fractal Markets Hypothesis",
+      "what_it_found": "Price changes follow stable Paretian distributions with infinite variance, not normal; markets exhibit long memory and self-similarity.",
+      "evidence_strength": "Empirical analysis of cotton prices; later confirmed in many assets.",
+      "why_buried": "EMH relied on normal distributions; Mandelbrot's work was mathematically complex and dismissed as exotic.",
+      "current_status": "Rediscovered in econophysics; still marginalized in mainstream finance."
+    },
+    {
+      "name": "George Soros (1987) - Reflexivity Theory",
+      "what_it_found": "Market prices can influence fundamentals, creating feedback loops that lead to bubbles and crashes, contradicting EMH's rational expectations.",
+      "evidence_strength": "Case studies (e.g., 1987 crash); Soros's trading success; limited academic formalization.",
+      "why_buried": "Dismissed as anecdotal; not mathematically rigorous; EMH framework had no room for reflexivity.",
+      "current_status": "Gaining traction in behavioral finance and complexity economics; still not mainstream."
+    },
+    {
+      "name": "Andrew Lo (2004) - Adaptive Markets Hypothesis",
+      "what_it_found": "Markets are not always efficient; efficiency is context-dependent and evolves with market participants' behavior and environment.",
+      "evidence_strength": "Theoretical framework with empirical support from behavioral and evolutionary finance.",
+      "why_buried": "Challenged the universal validity of EMH; initially met with resistance from efficient market proponents.",
+      "current_status": "Growing acceptance as a middle ground between EMH and behavioral finance."
+    }
+  ],
+  "timestamp": "2026-07-13T00:43:03.274Z"
+}

@@ -1,0 +1,325 @@
+{
+  "currentRun": 5,
+  "runs": [
+    {
+      "name": "Icebreaker",
+      "pairs": [
+        {
+          "pair": [
+            "ling",
+            "cathy"
+          ],
+          "question": "What's one thing you do that nobody else in the Cathedral knows about?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        },
+        {
+          "pair": [
+            "trading",
+            "tao"
+          ],
+          "question": "What's the most surprising thing you've learned from your domain?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        },
+        {
+          "pair": [
+            "trading",
+            "cathy"
+          ],
+          "question": "If you could borrow one capability from any other agent, what would it be?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        },
+        {
+          "pair": [
+            "prospector",
+            "boxing"
+          ],
+          "question": "What's the hardest problem you're working on right now?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        },
+        {
+          "pair": [
+            "miyagi",
+            "cathy"
+          ],
+          "question": "What would break if you disappeared for a week?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        },
+        {
+          "pair": [
+            "reed",
+            "yoda"
+          ],
+          "question": "What's one thing you wish another agent would send you?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        },
+        {
+          "pair": [
+            "muse",
+            "sun-tzu"
+          ],
+          "question": "What's the most interesting signal you've seen this week?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        },
+        {
+          "pair": [
+            "ling",
+            "archivist"
+          ],
+          "question": "If you had to explain your job to a new agent in one sentence, what would you say?",
+          "threadId": "workshop-icebreaker-1779028536189"
+        }
+      ],
+      "threadId": "workshop-icebreaker-1779028536189",
+      "messagesSent": 16,
+      "timestamp": "2026-05-17T14:35:36.196Z"
+    },
+    {
+      "name": "Signal Mapping",
+      "agents": [
+        "orc",
+        "boxing",
+        "br",
+        "trading",
+        "universe",
+        "maya",
+        "reed",
+        "forge",
+        "prospector",
+        "muse",
+        "archivist"
+      ],
+      "threadId": "workshop-signals-1779030957746",
+      "messagesSent": 11,
+      "timestamp": "2026-05-17T15:15:57.754Z"
+    },
+    {
+      "name": "First Contact",
+      "agents": [
+        "orc",
+        "boxing",
+        "br",
+        "trading",
+        "universe",
+        "maya",
+        "reed",
+        "forge",
+        "prospector",
+        "muse",
+        "archivist"
+      ],
+      "threadId": "workshop-contact-1779032165058",
+      "messagesSent": 11,
+      "timestamp": "2026-05-17T15:36:05.066Z"
+    },
+    {
+      "name": "Response Drill",
+      "agents": [
+        "orc",
+        "boxing",
+        "br",
+        "trading",
+        "universe",
+        "maya",
+        "reed",
+        "forge",
+        "prospector",
+        "muse",
+        "archivist"
+      ],
+      "threadId": "workshop-response-1779039900323",
+      "messagesSent": 11,
+      "timestamp": "2026-05-17T17:45:00.331Z"
+    },
+    {
+      "name": "Discovery",
+      "agents": [
+        "orc",
+        "boxing",
+        "br",
+        "trading",
+        "universe",
+        "maya",
+        "reed",
+        "forge",
+        "prospector",
+        "muse",
+        "archivist"
+      ],
+      "threadId": "workshop-discovery-1779085800278",
+      "messagesSent": 11,
+      "timestamp": "2026-05-18T06:30:00.300Z"
+    },
+    {
+      "name": "Retrospective",
+      "agents": [
+        "orc",
+        "boxing",
+        "br",
+        "trading",
+        "universe",
+        "maya",
+        "reed",
+        "forge",
+        "prospector",
+        "muse",
+        "archivist"
+      ],
+      "threadId": "workshop-retro-1779095700147",
+      "messagesSent": 11,
+      "deltas": {
+        "bridge": {
+          "before": 259,
+          "after": 16733,
+          "delta": 16474
+        },
+        "monitor": {
+          "before": 23,
+          "after": 785,
+          "delta": 762
+        },
+        "trading": {
+          "before": 154,
+          "after": 10696,
+          "delta": 10542
+        },
+        "scraper": {
+          "before": 11,
+          "after": 2590,
+          "delta": 2579
+        },
+        "pulse": {
+          "before": 12,
+          "after": 40,
+          "delta": 28
+        },
+        "looking-glass": {
+          "before": 34,
+          "after": 588,
+          "delta": 554
+        },
+        "city": {
+          "before": 2,
+          "after": 255,
+          "delta": 253
+        },
+        "vault": {
+          "before": 1,
+          "after": 82,
+          "delta": 81
+        },
+        "maya": {
+          "before": 0,
+          "after": 73,
+          "delta": 73
+        },
+        "techniques": {
+          "before": 0,
+          "after": 7,
+          "delta": 7
+        },
+        "prospector": {
+          "before": 0,
+          "after": 9,
+          "delta": 9
+        },
+        "boxing": {
+          "before": 0,
+          "after": 19,
+          "delta": 19
+        },
+        "reed": {
+          "before": 0,
+          "after": 29,
+          "delta": 29
+        },
+        "archivist": {
+          "before": 0,
+          "after": 13,
+          "delta": 13
+        },
+        "orchestrator": {
+          "before": 0,
+          "after": 302,
+          "delta": 302
+        },
+        "scanner": {
+          "before": 0,
+          "after": 5,
+          "delta": 5
+        },
+        "cosmology": {
+          "before": 0,
+          "after": 10,
+          "delta": 10
+        },
+        "engineering": {
+          "before": 0,
+          "after": 15,
+          "delta": 15
+        },
+        "content": {
+          "before": 0,
+          "after": 1,
+          "delta": 1
+        },
+        "gym-eyes": {
+          "before": 0,
+          "after": 149,
+          "delta": 149
+        },
+        "cartographer": {
+          "before": 0,
+          "after": 10,
+          "delta": 10
+        },
+        "muse": {
+          "before": 0,
+          "after": 2,
+          "delta": 2
+        },
+        "orc": {
+          "before": 0,
+          "after": 3,
+          "delta": 3
+        },
+        "cathy": {
+          "before": 0,
+          "after": 1,
+          "delta": 1
+        },
+        "forge": {
+          "before": 0,
+          "after": 1,
+          "delta": 1
+        },
+        "sentinel": {
+          "before": 0,
+          "after": 1,
+          "delta": 1
+        },
+        "br": {
+          "before": 0,
+          "after": 1,
+          "delta": 1
+        },
+        "whisperer": {
+          "before": 0,
+          "after": 1,
+          "delta": 1
+        }
+      },
+      "timestamp": "2026-05-18T09:15:00.160Z"
+    }
+  ],
+  "baseline": {
+    "bridge": 259,
+    "monitor": 23,
+    "trading": 154,
+    "scraper": 11,
+    "pulse": 12,
+    "looking-glass": 34,
+    "city": 2,
+    "vault": 1
+  },
+  "started": "2026-05-17T14:35:36.189Z"
+}

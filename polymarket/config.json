@@ -1,0 +1,29 @@
+{
+  "gammaApi": "https://gamma-api.polymarket.com",
+  "clobApi": "https://clob.polymarket.com",
+  "chainId": 137,
+
+  "scanner": {
+    "categories": ["geopolitics", "world-events", "regulation", "science", "crypto"],
+    "excludeCategories": ["sports", "entertainment", "culture"],
+    "minVolume24hr": 10000,
+    "maxResolutionDays": 90,
+    "minEdgeThreshold": 0.15,
+    "scanLimit": 50
+  },
+
+  "risk": {
+    "maxSinglePositionPct": 0.05,
+    "maxTotalExposurePct": 0.25,
+    "kellyFraction": 0.5,
+    "minEdge": 0.15
+  },
+
+  "mode": "paper",
+  "paperBankroll": 1000,
+
+  "cron": {
+    "scan": "0 6,20 * * *",
+    "monitor": "0 */2 * * *"
+  }
+}

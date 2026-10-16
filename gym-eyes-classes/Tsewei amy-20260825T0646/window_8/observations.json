@@ -1,0 +1,67 @@
+{
+  "people_detected": 1,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Stable stance, feet planted, knees bent, slight weight shift onto back leg as right hand extends",
+        "stance_width": "normal",
+        "guard": "Hands held up near chin and cheeks, elbows tucked in",
+        "upper_body": "Slight forward lean, torso rotates counter-clockwise to drive the right straight punch at F4-F5",
+        "distance": "No opponent in frame; person positioned in center, heavy bags visible in background",
+        "notable": "First right straight punch thrown at F4-F5"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Stance maintained, subtle bounce in legs, feet remain planted",
+        "stance_width": "normal",
+        "guard": "Right hand returns to guard position at F6-F8, then extends again for second punch",
+        "upper_body": "Torso rotates again at F9-F10 as second right straight punch is thrown",
+        "distance": "No opponent in frame; position stable in center of gym",
+        "notable": "Second right straight punch thrown at F9-F10"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Stance stable, feet planted, weight distributed evenly",
+        "stance_width": "normal",
+        "guard": "Hands held up in guard position, protecting chin",
+        "upper_body": "Upright posture, shoulders relaxed in guard stance",
+        "distance": "No opponent in frame; person standing centered",
+        "notable": "Person holds guard stance with no punch thrown"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F4-F5",
+      "type": "punch_extension",
+      "detail": "Right straight punch fully extended, arm out from shoulder, torso rotated"
+    },
+    {
+      "frames": "F6-F8",
+      "type": "punch_recovery",
+      "detail": "Right hand retracts back to guard position near face"
+    },
+    {
+      "frames": "F9-F10",
+      "type": "punch_extension",
+      "detail": "Second right straight punch thrown, arm extended fully"
+    },
+    {
+      "frames": "F11-F14",
+      "type": "punch_recovery",
+      "detail": "Right hand returns to guard position and holds stable stance"
+    }
+  ],
+  "overall_rhythm": "steady"
+}

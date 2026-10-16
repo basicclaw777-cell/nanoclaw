@@ -419,12 +419,54 @@
       "method": "deepseek",
       "status": "pending",
       "scannedAt": "2026-05-31T01:18:32.608Z"
+    },
+    {
+      "id": "gen-1781020103875-0",
+      "source": "generated",
+      "domain": "boxing_drills",
+      "status": "pending",
+      "drillName": "Duck & Drive",
+      "principle": "The duck is not the finish — it's the entry. The body shot is the reward for staying low and committing.",
+      "isPartner": true,
+      "how": "Partner holds focus mitts at body height, drifts forward/back/side. Student must duck under an imaginary hook (partner raises elbow), then immediately step in and land a body shot. If they hesitate or rise too early, partner taps their head. Loop continuously, swapping roles every 2 minutes.",
+      "category": "entries_exits",
+      "block": 5,
+      "dimensions": [
+        "partner_flow",
+        "loopability",
+        "consciousness_forcing",
+        "principle_embodiment",
+        "diagnostic_revealing"
+      ],
+      "why_taste": "Forces the student to feel the timing of duck-to-punch transition, not just duck for survival. The partner's movement makes it flow like a real exchange.",
+      "goal": "land a body shot off the duck"
+    },
+    {
+      "id": "gen-1781020103875-1",
+      "source": "generated",
+      "domain": "boxing_drills",
+      "status": "pending",
+      "drillName": "Floor Touch Body Hunt",
+      "principle": "Depth of duck determines quality of body shot — rushing ruins both. Patience to go all the way down creates power and accuracy.",
+      "isPartner": true,
+      "how": "Partner circles with a pool noodle or padded stick at head height. Student must touch the floor with both hands (simulating a deep duck), then rise and throw a body hook to partner's midsection. Partner can tap student's head if they rise too fast or don't go low enough. Score: clean body shot = 1 point, head tap = -1, reset to zero at 5 points.",
+      "category": "entries_exits",
+      "block": 5,
+      "dimensions": [
+        "self_regulating",
+        "rhythm_agility",
+        "patience_reward",
+        "principle_teaching",
+        "loopability"
+      ],
+      "why_taste": "The floor touch mechanic forces a real duck, not a half-bend. The scoring system makes it self-regulating and reveals who rushes under pressure.",
+      "goal": "land a body shot off the duck"
     }
   ],
   "lastScan": "2026-05-31T01:18:35.790Z",
   "stats": {
     "scanned": 25,
-    "queued": 14,
+    "queued": 16,
     "accepted": 0,
     "rejected": 0
   }

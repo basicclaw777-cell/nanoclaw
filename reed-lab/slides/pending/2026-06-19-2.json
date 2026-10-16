@@ -1,0 +1,16 @@
+{
+  "title": "Feedback Injection Layer Deployed",
+  "subtitle": "Bandit scores, production history, and steward grades now injected into every agent prompt",
+  "key_concept": "Agents receive real-time performance feedback in their LLM context",
+  "visual_metaphor": "A dark stained-glass window with amber data streams flowing from a central 'Feedback' hub into multiple agent silhouettes",
+  "highlights": [
+    "3 files implement the injection pipeline",
+    "Uses `buildFeedbackBlock()` in production-engine.js"
+  ],
+  "why_it_matters": "Transforms agents from blind executors to context-aware actors, improving decision quality",
+  "zone_change": "New 'Feedback Injection' layer added between Production Engine and Agent Workspace",
+  "date": "2026-06-19",
+  "source": "session-harvest-2026-06-19-pass1.md",
+  "pipeline": "cartographer-auto",
+  "generated_at": "2026-06-18T17:46:05.074Z"
+}

@@ -1,0 +1,76 @@
+{
+  "domain": "nutrition",
+  "shelf_items": [
+    {
+      "name": "John Yudkin's sugar-heart disease hypothesis",
+      "what_it_found": "Yudkin's research in the 1960s-70s showed that sugar consumption, not saturated fat, was strongly linked to coronary heart disease. His 1972 book 'Pure, White and Deadly' argued sugar was the primary dietary cause of heart disease, based on epidemiological and metabolic studies.",
+      "evidence_strength": "Epidemiological studies (e.g., cross-country comparisons, dietary surveys) and metabolic ward experiments showing sugar raised triglycerides and insulin. Replicated in modern studies (e.g., Lustig, DiNicolantonio).",
+      "why_buried": "Suppressed by the sugar industry (e.g., Sugar Research Foundation's 1960s 'Project 226' paid Harvard scientists to downplay sugar's role and blame fat). Yudkin was marginalized, his funding cut, and his work ignored by mainstream nutrition bodies.",
+      "current_status": "Revived since the 2000s; sugar now widely recognized as a risk factor for metabolic disease and heart disease, though saturated fat debate continues."
+    },
+    {
+      "name": "Weston A. Price's traditional diet research",
+      "what_it_found": "Price (1930s) studied 14 isolated traditional populations worldwide and found that those eating native diets (high in animal fats, organ meats, fermented foods, and low in processed foods) had near-zero rates of heart disease, dental decay, and chronic illness. When they adopted Western low-fat, high-sugar diets, disease rates skyrocketed.",
+      "evidence_strength": "Observational field studies with photographic documentation and dental/health metrics. Not a controlled trial, but consistent across multiple populations. Replicated by later researchers (e.g., Lindeberg on Kitava).",
+      "why_buried": "Contradicted the low-fat dogma; Price's work was dismissed as 'anecdotal' and not 'evidence-based' by mainstream nutrition. His foundation (Weston A. Price Foundation) was labeled as fringe.",
+      "current_status": "Still marginalized by mainstream, but influential in ancestral health and real-food movements. Some modern studies (e.g., Kitava, Hadza) support his findings."
+    },
+    {
+      "name": "Francis Pottenger's cat study (Pottenger's Cats)",
+      "what_it_found": "Pottenger (1930s-40s) fed cats raw vs. cooked diets (including pasteurized milk). Cats on raw diets thrived; those on cooked/processed diets developed degenerative diseases (heart, bone, dental) over generations. Implied that heat-processed foods (including low-fat processed foods) were detrimental.",
+      "evidence_strength": "Long-term controlled feeding study with multiple generations. Not randomized or blinded, but extensive documentation. Replicated in part by modern animal studies on processed diets.",
+      "why_buried": "Contradicted the push for pasteurization and low-fat processed foods. The study was ignored by mainstream nutrition because it was animal-based and challenged industrial food processing.",
+      "current_status": "Still cited by ancestral health advocates; largely ignored by mainstream nutrition science."
+    },
+    {
+      "name": "Ancel Keys' Seven Countries Study (selective data)",
+      "what_it_found": "Keys' 1950s-60s study claimed a strong correlation between saturated fat intake and heart disease across seven countries. However, data from 22 countries were available; Keys selectively excluded countries (e.g., France, Switzerland) that did not fit the hypothesis (the 'French paradox').",
+      "evidence_strength": "Epidemiological correlation; later re-analyses (e.g., by Yerushalmy and Hilleboe, 1957) showed no significant association when all countries were included. Modern meta-analyses (e.g., Chowdhury 2014, Siri-Tarino 2010) found no link between saturated fat and heart disease.",
+      "why_buried": "Keys' study became the foundation of the low-fat dogma; critics were marginalized. The selective data presentation was not widely acknowledged until decades later.",
+      "current_status": "Now widely criticized; the saturated fat-heart hypothesis is largely debunked in scientific circles, but public health guidelines still reflect it."
+    },
+    {
+      "name": "George Mann's Framingham Heart Study re-analysis",
+      "what_it_found": "Mann, a researcher on the Framingham study, reported in the 1970s that the data did not support the diet-heart hypothesis. He found that men who ate more saturated fat had lower cholesterol and fewer heart attacks. His findings were suppressed.",
+      "evidence_strength": "Re-analysis of a large prospective cohort study. Mann published in peer-reviewed journals (e.g., 'Diet-Heart: End of an Era' in 1977).",
+      "why_buried": "Contradicted the consensus; Mann was pressured and his funding cut. The Framingham data were later re-analyzed by others (e.g., Ravnskov) confirming his findings.",
+      "current_status": "Rediscovered by cholesterol skeptics; still not accepted by mainstream cardiology."
+    },
+    {
+      "name": "Uffe Ravnskov's cholesterol skepticism",
+      "what_it_found": "Ravnskov (1990s-2000s) systematically reviewed the literature and found no evidence that dietary saturated fat or high cholesterol causes heart disease. He argued that the cholesterol hypothesis was based on flawed studies and selective reporting.",
+      "evidence_strength": "Meta-analyses and reviews of published data. His 2000 book 'The Cholesterol Myths' compiled evidence. Supported by later meta-analyses (e.g., Ramsden 2010).",
+      "why_buried": "Challenged the entire cholesterol-lowering industry (statins, low-fat guidelines). Ravnskov was labeled a 'denier' and his work ignored by mainstream journals.",
+      "current_status": "Still active; his views are gaining traction among low-carb and ancestral health advocates, but mainstream cardiology remains opposed."
+    },
+    {
+      "name": "Hugh Sinclair's Eskimo diet research",
+      "what_it_found": "Sinclair (1950s-70s) studied Greenland Inuit and found they had very low rates of heart disease despite a high-fat, high-cholesterol diet (seal, fish). He attributed this to omega-3 fatty acids and the absence of processed foods.",
+      "evidence_strength": "Epidemiological observations and biochemical analyses. Later studies (e.g., Bang and Dyerberg) confirmed the omega-3 hypothesis.",
+      "why_buried": "Contradicted the low-fat dogma; Sinclair's work was initially dismissed because it suggested that not all fats are harmful. The omega-3 benefits were later accepted, but the broader implication (that saturated fat from natural sources may be neutral) was ignored.",
+      "current_status": "Omega-3s are now widely accepted; the Inuit diet is cited as evidence against the saturated fat hypothesis, but the low-fat paradigm persists."
+    },
+    {
+      "name": "The Minnesota Coronary Experiment (re-analyzed)",
+      "what_it_found": "This 1968-73 randomized controlled trial (by Ivan Frantz) replaced saturated fat with vegetable oil (high in linoleic acid) in a mental hospital. The original published results showed no benefit; the full data were lost. In 2016, re-analysis by Ramsden et al. found that the intervention actually increased heart disease and death, especially in older adults.",
+      "evidence_strength": "Large (n=9,423) double-blind RCT. Original data were suppressed; re-analysis published in BMJ 2016.",
+      "why_buried": "Results contradicted the diet-heart hypothesis; the principal investigator (Frantz) did not publish the negative findings. The data were hidden for decades.",
+      "current_status": "Now a landmark study showing harm from replacing saturated fat with vegetable oil; used by critics of the low-fat dogma."
+    },
+    {
+      "name": "The Sydney Diet Heart Study (re-analyzed)",
+      "what_it_found": "A 1966-73 RCT (by Woodhill) that replaced saturated fat with linoleic acid-rich oils. The original publication reported no effect; re-analysis by Ramsden et al. (2013) found increased cardiovascular mortality in the intervention group.",
+      "evidence_strength": "RCT with 458 men; re-analysis published in BMJ 2013.",
+      "why_buried": "Negative results were downplayed; the original researchers did not fully report the adverse outcomes.",
+      "current_status": "Together with the Minnesota study, it provides strong evidence against the low-fat, high-PUFA recommendation."
+    },
+    {
+      "name": "Robert Atkins' low-carbohydrate diet research",
+      "what_it_found": "Atkins (1970s-2000s) promoted a high-fat, low-carb diet for weight loss and heart health. His clinical practice and small studies showed improvements in triglycerides, HDL, and insulin sensitivity, despite high saturated fat intake.",
+      "evidence_strength": "Clinical observations and small trials. Later large RCTs (e.g., Foster 2003, Gardner 2007) confirmed that low-carb diets are at least as effective as low-fat for weight loss and improve cardiovascular risk factors.",
+      "why_buried": "Atkins was vilified by the medical establishment and the American Heart Association; his diet was called 'dangerous' and 'fringe.' The low-fat paradigm dominated.",
+      "current_status": "Low-carb diets are now widely accepted as effective for weight loss and metabolic health; the Atkins name is still controversial but the principles are mainstream."
+    }
+  ],
+  "timestamp": "2026-07-13T00:42:54.491Z"
+}

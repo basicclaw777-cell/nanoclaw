@@ -222,7 +222,7 @@ function renderLibrary() {
   el.innerHTML = Object.entries(STYLES).map(([key, style]) => {
     const count = catalogue.stats.by_style?.[key] || 0;
     const lastGen = catalogue.generations.filter(g => g.style === key).pop();
-    const imgSrc = lastGen ? `/reed-lab/image?path=${encodeURIComponent(lastGen.output)}` : '';
+    const imgSrc = lastGen ? `/reed-lab/image?path=${encodeURIComponent(lastGen.path || lastGen.output)}` : '';
     return `<div class="style-card">
       ${imgSrc ? `<img src="${imgSrc}" onerror="this.style.display='none'" loading="lazy">` : '<div style="aspect-ratio:16/9;background:#111"></div>'}
       <div class="info">
@@ -258,7 +258,7 @@ function renderGalleryItems(filter) {
     .reverse();
 
   grid.innerHTML = items.map(g => {
-    const imgSrc = `/reed-lab/image?path=${encodeURIComponent(g.output)}`;
+    const imgSrc = `/reed-lab/image?path=${encodeURIComponent(g.path || g.output)}`;
     const styleName = STYLES[g.style]?.name || g.style;
     const date = g.date?.slice(0, 10) || '';
     return `<div class="gallery-item" onclick="openLightbox('${imgSrc}', '${styleName} — ${date}')">

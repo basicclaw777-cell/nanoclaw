@@ -223,7 +223,7 @@ function generateBrief(event) {
   } else {
     visualType = 'concept';
     model = 'nano_banana_2';
-    prompt = `Visual concept for "${topic}". Dark moody style, cinematic lighting, Basic Reflex brand palette (black, burgundy #8B2020, gold #c9a84c).`;
+    prompt = `Visual concept for "${topic}". Dark moody style, cinematic lighting, Basic Reflex brand palette (black #000000, gold #f7b408, white #ffffff).`;
   }
 
   return {

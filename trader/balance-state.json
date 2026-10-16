@@ -1,0 +1,34 @@
+{
+  "balanced": false,
+  "score": 50,
+  "positions": 1,
+  "long_count": 0,
+  "short_count": 1,
+  "long_pct": 0,
+  "short_pct": 100,
+  "blocks": [
+    {
+      "type": "direction",
+      "block": "short",
+      "reason": "100% of book is short — block new shorts"
+    },
+    {
+      "type": "asset",
+      "block": "BTC",
+      "reason": "BTC is 100% of book — block new BTC entries"
+    }
+  ],
+  "analysis": {
+    "direction": "CRITICAL: 100% short",
+    "asset": "CONCENTRATED: BTC at 100%",
+    "correlation": "OK",
+    "strategy": "OK"
+  },
+  "asset_exposure": {
+    "BTC": 100
+  },
+  "group_exposure": {
+    "major": 100
+  },
+  "timestamp": "2026-10-12T04:00:00.960Z"
+}

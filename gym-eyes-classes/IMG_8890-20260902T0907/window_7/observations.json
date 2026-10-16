@@ -1,0 +1,45 @@
+{
+  "people_detected": 1,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F10",
+      "time": "0.0s-3.0s",
+      "observations": {
+        "footwork": "Steady walk from left to right across the gym floor",
+        "stance_width": "normal",
+        "guard": "Not visible, upper body mostly out of frame",
+        "upper_body": "Torso out of frame, only legs visible",
+        "distance": "N/A",
+        "notable": "Jump rope coiled on the floor in the center; background shows punching bags and a mirrored wall"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Decelerates and stops walking, turns towards the jump rope",
+        "stance_width": "normal",
+        "guard": "Arms at sides, not in a boxing guard",
+        "upper_body": "Fully visible, leaning forward slightly, head turned down towards the jump rope",
+        "distance": "N/A",
+        "notable": "Person is on the right side of the frame, wearing black shorts with white stripes"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F10",
+      "type": "step",
+      "detail": "Continuous walking from left to right across the gym"
+    },
+    {
+      "frames": "F11-F15",
+      "type": "reset",
+      "detail": "Stops walking and turns to look down at the jump rope on the floor"
+    }
+  ],
+  "overall_rhythm": "decelerating"
+}

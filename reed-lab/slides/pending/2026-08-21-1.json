@@ -1,0 +1,17 @@
+{
+  "title": "Pose Reset Grounds Logan",
+  "subtitle": "Stripping fcurves and resetting pose bones fixes floating model.",
+  "key_concept": "Pose bone reset after fcurve removal ensures correct rest position.",
+  "visual_metaphor": "A cathedral floor with a statue sinking into its pedestal, amber light outlining the corrected alignment.",
+  "highlights": [
+    "Removed 246 location/scale fcurves",
+    "Reset all pose bones to (0,0,0) and (1,1,1)",
+    "Binary verification shows exact hip translation match"
+  ],
+  "why_it_matters": "Eliminates floating artifacts in retargeted GLBs, ensuring accurate animations.",
+  "zone_change": "Fixed Logan model in retargeted GLBs; all 5 GLBs re-exported with correct grounding.",
+  "date": "2026-08-21",
+  "source": "session-harvest-2026-08-21-pass1.md",
+  "pipeline": "cartographer-auto",
+  "generated_at": "2026-08-21T12:23:02.813Z"
+}

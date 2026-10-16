@@ -1,0 +1,62 @@
+{
+  "people_detected": 1,
+  "activity_type": "movement",
+  "intensity": "low",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Light, subtle stepping in place while maintaining a boxing stance",
+        "stance_width": "normal",
+        "guard": "Hands held up in a boxing guard position",
+        "upper_body": "Relatively still with slight swaying or bobbing",
+        "distance": "Far from camera, positioned in the center-right area of the gym",
+        "notable": "Fighter is in an open space, no pad holder or opponent visible in immediate proximity"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Moving across the gym floor with shuffling steps",
+        "stance_width": "normal",
+        "guard": "Guard remains raised throughout the movement",
+        "upper_body": "Slight rotation and translation as the fighter travels",
+        "distance": "Far from camera, progressing laterally or forward across the floor",
+        "notable": "Continuous, rhythmic movement observed"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Continuing to move, possible turning or adjustment of direction",
+        "stance_width": "normal",
+        "guard": "Guard maintained, hands still positioned near face",
+        "upper_body": "Slight directional change in body orientation",
+        "distance": "Far from camera, still in the central gym area",
+        "notable": "Movement remains fluid across the sequence"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F5",
+      "type": "footwork",
+      "detail": "Stepping and adjusting feet in place while maintaining a boxing stance"
+    },
+    {
+      "frames": "F6-F10",
+      "type": "distance_close",
+      "detail": "Moving across the gym floor, covering ground with shuffling steps"
+    },
+    {
+      "frames": "F11-F15",
+      "type": "stance_change",
+      "detail": "Adjusting body orientation and direction while continuing to move"
+    }
+  ],
+  "overall_rhythm": "steady"
+}

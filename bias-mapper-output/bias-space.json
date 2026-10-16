@@ -1,0 +1,707 @@
+{
+  "biases": [
+    {
+      "name": "Attentional Bias",
+      "stage": "attention",
+      "errorType": "overweight",
+      "desc": "Recurring thoughts direct attention to emotionally dominant stimuli",
+      "cathedral": "Agents over-attend to domains with recent activity"
+    },
+    {
+      "name": "Inattentional Blindness",
+      "stage": "attention",
+      "errorType": "delete",
+      "desc": "Failure to notice unexpected stimulus in plain sight",
+      "cathedral": "Vault orphans — 191 principles nobody sees"
+    },
+    {
+      "name": "Change Blindness",
+      "stage": "attention",
+      "errorType": "delete",
+      "desc": "Failure to detect changes in visual scene",
+      "cathedral": "Slow drift in agent behavior goes unnoticed"
+    },
+    {
+      "name": "Cocktail Party Effect",
+      "stage": "attention",
+      "errorType": "overweight",
+      "desc": "Selective attention to personally relevant stimuli",
+      "cathedral": "Taste map anchors create tunnel vision"
+    },
+    {
+      "name": "Frequency Illusion (Baader-Meinhof)",
+      "stage": "attention",
+      "errorType": "overweight",
+      "desc": "Recently learned concept seems to appear everywhere",
+      "cathedral": "New vault topics get over-detected in subsequent sessions"
+    },
+    {
+      "name": "Salience Bias",
+      "stage": "attention",
+      "errorType": "overweight",
+      "desc": "Prominent features receive disproportionate weight",
+      "cathedral": "Loud agents (Muse) get more attention than quiet ones (Groundskeeper)"
+    },
+    {
+      "name": "Selective Perception",
+      "stage": "attention",
+      "errorType": "substitute",
+      "desc": "Expectations shape what is perceived",
+      "cathedral": "Searching vault for confirmation of existing theory"
+    },
+    {
+      "name": "Attention Tunneling",
+      "stage": "attention",
+      "errorType": "delete",
+      "desc": "Narrow focus causes peripheral blindness",
+      "cathedral": "Deep research sessions miss cross-domain signals"
+    },
+    {
+      "name": "Anchoring",
+      "stage": "encoding",
+      "errorType": "anchor",
+      "desc": "First piece of information dominates subsequent judgments",
+      "cathedral": "First agent response anchors roundtable consensus"
+    },
+    {
+      "name": "Framing Effect",
+      "stage": "encoding",
+      "errorType": "substitute",
+      "desc": "Decision changes based on how information is presented",
+      "cathedral": "Same finding framed as discovery vs warning gets different treatment"
+    },
+    {
+      "name": "Availability Heuristic",
+      "stage": "encoding",
+      "errorType": "overweight",
+      "desc": "Easily recalled events seem more probable",
+      "cathedral": "Recent session harvests dominate morning briefing"
+    },
+    {
+      "name": "Representativeness Heuristic",
+      "stage": "encoding",
+      "errorType": "substitute",
+      "desc": "Judging probability by similarity to prototype",
+      "cathedral": "Classifying new techniques by surface similarity to known ones"
+    },
+    {
+      "name": "Primacy Effect",
+      "stage": "encoding",
+      "errorType": "anchor",
+      "desc": "First items in sequence weighted more heavily",
+      "cathedral": "First strategy in trading roundtable sets the frame"
+    },
+    {
+      "name": "Recency Effect",
+      "stage": "encoding",
+      "errorType": "overweight",
+      "desc": "Most recent information weighted more heavily",
+      "cathedral": "Latest session harvest overweights older but richer findings"
+    },
+    {
+      "name": "Halo Effect",
+      "stage": "encoding",
+      "errorType": "overweight",
+      "desc": "One positive trait colors perception of everything else",
+      "cathedral": "High-scoring strategy gets benefit of doubt on bad trades"
+    },
+    {
+      "name": "Stereotyping",
+      "stage": "encoding",
+      "errorType": "substitute",
+      "desc": "Categorization replaces individual assessment",
+      "cathedral": "Domain labels prevent cross-domain discovery"
+    },
+    {
+      "name": "Contrast Effect",
+      "stage": "encoding",
+      "errorType": "invert",
+      "desc": "Judgment distorted by comparison to adjacent stimulus",
+      "cathedral": "Mediocre finding looks great after a run of noise"
+    },
+    {
+      "name": "Clustering Illusion",
+      "stage": "encoding",
+      "errorType": "overweight",
+      "desc": "Seeing patterns in random sequences",
+      "cathedral": "Trading strategies finding signal in random price movements"
+    },
+    {
+      "name": "Illusion of Validity",
+      "stage": "encoding",
+      "errorType": "overweight",
+      "desc": "Confidence in judgment exceeds accuracy",
+      "cathedral": "High-convergence roundtable score doesnt mean the call is right"
+    },
+    {
+      "name": "Conjunction Fallacy",
+      "stage": "encoding",
+      "errorType": "overweight",
+      "desc": "Specific conditions judged more probable than general ones",
+      "cathedral": "Complex multi-strategy confluence feels more reliable than it is"
+    },
+    {
+      "name": "Hindsight Bias",
+      "stage": "retrieval",
+      "errorType": "substitute",
+      "desc": "Past events seem predictable after the fact",
+      "cathedral": "Meta-watcher counterfactuals look obvious in retrospect"
+    },
+    {
+      "name": "Recall Bias",
+      "stage": "retrieval",
+      "errorType": "overweight",
+      "desc": "Certain memories are more accessible, distorting recall",
+      "cathedral": "Vault search returns recent over historical nuggets"
+    },
+    {
+      "name": "Mood-Congruent Memory",
+      "stage": "retrieval",
+      "errorType": "overweight",
+      "desc": "Current mood biases which memories surface",
+      "cathedral": "Cath-state affects what vault context is retrieved"
+    },
+    {
+      "name": "Source Confusion",
+      "stage": "retrieval",
+      "errorType": "substitute",
+      "desc": "Misattributing the origin of a memory",
+      "cathedral": "Agent attributing insight to wrong vault note or wrong session"
+    },
+    {
+      "name": "Misinformation Effect",
+      "stage": "retrieval",
+      "errorType": "substitute",
+      "desc": "Post-event information alters memory of original event",
+      "cathedral": "Session harvests rewrite what actually happened in conversation"
+    },
+    {
+      "name": "Cryptomnesia",
+      "stage": "retrieval",
+      "errorType": "delete",
+      "desc": "Failing to recognize a memory as a memory — thinking its new",
+      "cathedral": "Muse re-discovering something already in vault as novel"
+    },
+    {
+      "name": "Telescoping Effect",
+      "stage": "retrieval",
+      "errorType": "substitute",
+      "desc": "Recent events feel further away, distant events feel closer",
+      "cathedral": "Misjudging when a build was completed or principle was filed"
+    },
+    {
+      "name": "Spacing Effect",
+      "stage": "retrieval",
+      "errorType": "underweight",
+      "desc": "Spaced repetition aids memory but massed practice feels productive",
+      "cathedral": "Daily agent pulses vs weekly deep dives — daily feels more productive"
+    },
+    {
+      "name": "Confirmation Bias",
+      "stage": "update",
+      "errorType": "overweight",
+      "desc": "Seeking/interpreting info that confirms existing beliefs",
+      "cathedral": "Bandit exploiting known-good domains, ignoring cold ones"
+    },
+    {
+      "name": "Anchoring in Update",
+      "stage": "update",
+      "errorType": "anchor",
+      "desc": "Insufficient adjustment from initial value",
+      "cathedral": "Strategy P&L anchors future confidence regardless of new evidence"
+    },
+    {
+      "name": "Conservatism Bias",
+      "stage": "update",
+      "errorType": "underweight",
+      "desc": "Insufficient updating when new evidence arrives",
+      "cathedral": "Slow to demote eliminated strategies even with bad data"
+    },
+    {
+      "name": "Base Rate Neglect",
+      "stage": "update",
+      "errorType": "delete",
+      "desc": "Ignoring prior probability in favor of specific evidence",
+      "cathedral": "Individual trade outcome overweights base rate of strategy performance"
+    },
+    {
+      "name": "Belief Perseverance",
+      "stage": "update",
+      "errorType": "anchor",
+      "desc": "Maintaining belief after evidence is discredited",
+      "cathedral": "Keeping faith in Cymatics strategy despite weak results"
+    },
+    {
+      "name": "Bandwagon Effect",
+      "stage": "update",
+      "errorType": "overweight",
+      "desc": "Adopting beliefs because many others hold them",
+      "cathedral": "Roundtable convergence reinforcing groupthink"
+    },
+    {
+      "name": "Reactance",
+      "stage": "update",
+      "errorType": "invert",
+      "desc": "Adopting opposite position when freedom is threatened",
+      "cathedral": "Contrarian signals in trading — healthy or reactive?"
+    },
+    {
+      "name": "Dunning-Kruger Effect",
+      "stage": "update",
+      "errorType": "overweight",
+      "desc": "Low competence paired with high confidence",
+      "cathedral": "New strategies with few trades showing inflated win rates"
+    },
+    {
+      "name": "Sunk Cost Fallacy",
+      "stage": "update",
+      "errorType": "anchor",
+      "desc": "Continuing because of past investment, not future value",
+      "cathedral": "Keeping a failing PM2 process running because it was hard to build"
+    },
+    {
+      "name": "Status Quo Bias",
+      "stage": "update",
+      "errorType": "anchor",
+      "desc": "Preferring current state of affairs",
+      "cathedral": "Resistance to eliminating underperforming strategies"
+    },
+    {
+      "name": "Omission Bias",
+      "stage": "update",
+      "errorType": "delete",
+      "desc": "Preferring inaction over action even when action is better",
+      "cathedral": "Not wiring vault-dig because existing tools feel sufficient"
+    },
+    {
+      "name": "Normalcy Bias",
+      "stage": "update",
+      "errorType": "underweight",
+      "desc": "Underestimating probability of unprecedented events",
+      "cathedral": "Assuming trading experiment will continue in current regime"
+    },
+    {
+      "name": "Zero-Risk Bias",
+      "stage": "update",
+      "errorType": "overweight",
+      "desc": "Preferring complete elimination of one risk over larger overall reduction",
+      "cathedral": "Over-engineering one safety net while leaving bigger gaps"
+    },
+    {
+      "name": "Endowment Effect",
+      "stage": "update",
+      "errorType": "overweight",
+      "desc": "Overvaluing what you already own",
+      "cathedral": "Overvaluing existing vault content vs new external findings"
+    },
+    {
+      "name": "Overconfidence Effect",
+      "stage": "output",
+      "errorType": "overweight",
+      "desc": "Confidence intervals too narrow",
+      "cathedral": "Strategy validator confidence exceeds actual prediction accuracy"
+    },
+    {
+      "name": "Planning Fallacy",
+      "stage": "output",
+      "errorType": "underweight",
+      "desc": "Underestimating time/cost/risk for future tasks",
+      "cathedral": "Build estimates always shorter than reality"
+    },
+    {
+      "name": "Optimism Bias",
+      "stage": "output",
+      "errorType": "overweight",
+      "desc": "Overestimating probability of positive outcomes",
+      "cathedral": "Paper trading profits assumed to transfer to real money"
+    },
+    {
+      "name": "Pessimism Bias",
+      "stage": "output",
+      "errorType": "overweight",
+      "desc": "Overestimating probability of negative outcomes",
+      "cathedral": "WHY.md wound — assuming investment will always lose"
+    },
+    {
+      "name": "Curse of Knowledge",
+      "stage": "output",
+      "errorType": "delete",
+      "desc": "Assuming others know what you know",
+      "cathedral": "Agent system prompts assuming context that isnt loaded"
+    },
+    {
+      "name": "Illusory Superiority",
+      "stage": "output",
+      "errorType": "overweight",
+      "desc": "Overestimating own abilities relative to others",
+      "cathedral": "Cathedral assuming it has better architecture than it does"
+    },
+    {
+      "name": "Projection Bias",
+      "stage": "output",
+      "errorType": "substitute",
+      "desc": "Projecting current preferences onto future self",
+      "cathedral": "Taste map anchors assumed stable when they evolve"
+    },
+    {
+      "name": "Impact Bias",
+      "stage": "output",
+      "errorType": "overweight",
+      "desc": "Overestimating emotional impact of future events",
+      "cathedral": "Imagining Phase 1 real-money trading as scarier than it will be"
+    },
+    {
+      "name": "Denomination Effect",
+      "stage": "output",
+      "errorType": "substitute",
+      "desc": "Spending patterns change with denomination size",
+      "cathedral": "DeepSeek at $0.001/call feels free — $20 bill shows its not"
+    },
+    {
+      "name": "Decoy Effect",
+      "stage": "output",
+      "errorType": "substitute",
+      "desc": "Adding a dominated option changes preference between others",
+      "cathedral": "Strategy comparisons shift when a weak benchmark is added"
+    },
+    {
+      "name": "IKEA Effect",
+      "stage": "output",
+      "errorType": "overweight",
+      "desc": "Overvaluing things you built yourself",
+      "cathedral": "Valuing Cathedral agents more than off-the-shelf tools that might work better"
+    },
+    {
+      "name": "Not Invented Here",
+      "stage": "output",
+      "errorType": "delete",
+      "desc": "Rejecting external solutions in favor of internal builds",
+      "cathedral": "Building instead of using existing open-source when it fits"
+    },
+    {
+      "name": "Narrative Fallacy",
+      "stage": "output",
+      "errorType": "substitute",
+      "desc": "Creating explanatory stories for random events",
+      "cathedral": "Trading post-hoc explanations for why a strategy won or lost"
+    },
+    {
+      "name": "Survivorship Bias",
+      "stage": "output",
+      "errorType": "delete",
+      "desc": "Drawing conclusions from survivors, ignoring failures",
+      "cathedral": "Strategy leaderboard shows winners — eliminated strategies forgotten"
+    },
+    {
+      "name": "Automation Bias",
+      "stage": "output",
+      "errorType": "overweight",
+      "desc": "Over-trusting automated system output",
+      "cathedral": "Trusting roundtable convergence score as ground truth"
+    }
+  ],
+  "grid": {
+    "attention": {
+      "overweight": [
+        "Attentional Bias",
+        "Cocktail Party Effect",
+        "Frequency Illusion (Baader-Meinhof)",
+        "Salience Bias"
+      ],
+      "underweight": [],
+      "substitute": [
+        "Selective Perception"
+      ],
+      "delete": [
+        "Inattentional Blindness",
+        "Change Blindness",
+        "Attention Tunneling"
+      ],
+      "invert": [],
+      "anchor": []
+    },
+    "encoding": {
+      "overweight": [
+        "Availability Heuristic",
+        "Recency Effect",
+        "Halo Effect",
+        "Clustering Illusion",
+        "Illusion of Validity",
+        "Conjunction Fallacy"
+      ],
+      "underweight": [],
+      "substitute": [
+        "Framing Effect",
+        "Representativeness Heuristic",
+        "Stereotyping"
+      ],
+      "delete": [],
+      "invert": [
+        "Contrast Effect"
+      ],
+      "anchor": [
+        "Anchoring",
+        "Primacy Effect"
+      ]
+    },
+    "retrieval": {
+      "overweight": [
+        "Recall Bias",
+        "Mood-Congruent Memory"
+      ],
+      "underweight": [
+        "Spacing Effect"
+      ],
+      "substitute": [
+        "Hindsight Bias",
+        "Source Confusion",
+        "Misinformation Effect",
+        "Telescoping Effect"
+      ],
+      "delete": [
+        "Cryptomnesia"
+      ],
+      "invert": [],
+      "anchor": []
+    },
+    "update": {
+      "overweight": [
+        "Confirmation Bias",
+        "Bandwagon Effect",
+        "Dunning-Kruger Effect",
+        "Zero-Risk Bias",
+        "Endowment Effect"
+      ],
+      "underweight": [
+        "Conservatism Bias",
+        "Normalcy Bias"
+      ],
+      "substitute": [],
+      "delete": [
+        "Base Rate Neglect",
+        "Omission Bias"
+      ],
+      "invert": [
+        "Reactance"
+      ],
+      "anchor": [
+        "Anchoring in Update",
+        "Belief Perseverance",
+        "Sunk Cost Fallacy",
+        "Status Quo Bias"
+      ]
+    },
+    "output": {
+      "overweight": [
+        "Overconfidence Effect",
+        "Optimism Bias",
+        "Pessimism Bias",
+        "Illusory Superiority",
+        "Impact Bias",
+        "IKEA Effect",
+        "Automation Bias"
+      ],
+      "underweight": [
+        "Planning Fallacy"
+      ],
+      "substitute": [
+        "Projection Bias",
+        "Denomination Effect",
+        "Decoy Effect",
+        "Narrative Fallacy"
+      ],
+      "delete": [
+        "Curse of Knowledge",
+        "Not Invented Here",
+        "Survivorship Bias"
+      ],
+      "invert": [],
+      "anchor": []
+    }
+  },
+  "gaps": [
+    {
+      "stage": "attention",
+      "errorType": "underweight",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "attention",
+      "errorType": "substitute",
+      "count": 1,
+      "existing": [
+        "Selective Perception"
+      ]
+    },
+    {
+      "stage": "attention",
+      "errorType": "invert",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "attention",
+      "errorType": "anchor",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "encoding",
+      "errorType": "underweight",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "encoding",
+      "errorType": "delete",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "encoding",
+      "errorType": "invert",
+      "count": 1,
+      "existing": [
+        "Contrast Effect"
+      ]
+    },
+    {
+      "stage": "retrieval",
+      "errorType": "underweight",
+      "count": 1,
+      "existing": [
+        "Spacing Effect"
+      ]
+    },
+    {
+      "stage": "retrieval",
+      "errorType": "delete",
+      "count": 1,
+      "existing": [
+        "Cryptomnesia"
+      ]
+    },
+    {
+      "stage": "retrieval",
+      "errorType": "invert",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "retrieval",
+      "errorType": "anchor",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "update",
+      "errorType": "substitute",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "update",
+      "errorType": "invert",
+      "count": 1,
+      "existing": [
+        "Reactance"
+      ]
+    },
+    {
+      "stage": "output",
+      "errorType": "underweight",
+      "count": 1,
+      "existing": [
+        "Planning Fallacy"
+      ]
+    },
+    {
+      "stage": "output",
+      "errorType": "invert",
+      "count": 0,
+      "existing": []
+    },
+    {
+      "stage": "output",
+      "errorType": "anchor",
+      "count": 0,
+      "existing": []
+    }
+  ],
+  "susceptibility": [
+    {
+      "bias": "Confirmation Bias",
+      "system": "Bandit Brain",
+      "evidence": "Thompson sampling exploitation bias — 73% allocation to external mining before vault-dig rewire",
+      "severity": "HIGH"
+    },
+    {
+      "bias": "Inattentional Blindness",
+      "system": "Knowledge Graph",
+      "evidence": "88% orphan rate — 485/554 clustered nuggets have zero cross-domain links",
+      "severity": "HIGH"
+    },
+    {
+      "bias": "Survivorship Bias",
+      "system": "Strategy Leaderboard",
+      "evidence": "Eliminated strategies disappear from view — their lessons lost",
+      "severity": "MEDIUM"
+    },
+    {
+      "bias": "Anchoring",
+      "system": "Roundtable",
+      "evidence": "First speaker in sequential roundtable sets the frame for subsequent agents",
+      "severity": "MEDIUM"
+    },
+    {
+      "bias": "Automation Bias",
+      "system": "Convergence Score",
+      "evidence": "STRONG_LONG (10/10) treated as high-confidence signal — but convergence doesnt equal accuracy",
+      "severity": "MEDIUM"
+    },
+    {
+      "bias": "Cryptomnesia",
+      "system": "Muse",
+      "evidence": "Muse occasionally re-surfaces findings already in vault as novel discoveries",
+      "severity": "LOW"
+    },
+    {
+      "bias": "Sunk Cost Fallacy",
+      "system": "PM2 Manifest",
+      "evidence": "Processes kept running because they were hard to build, not because theyre useful",
+      "severity": "MEDIUM"
+    },
+    {
+      "bias": "IKEA Effect",
+      "system": "Cathedral Architecture",
+      "evidence": "Preferring custom builds over existing open-source tools (QuantMind parked, but should it be?)",
+      "severity": "LOW"
+    },
+    {
+      "bias": "Denomination Effect",
+      "system": "DeepSeek Spend",
+      "evidence": "$0.001/call feels free until $20 bill arrives. Archaeologist 6019-call burn.",
+      "severity": "HIGH"
+    },
+    {
+      "bias": "Planning Fallacy",
+      "system": "Build Estimates",
+      "evidence": "Phase 1 consistently expands. Every \"quick wire\" takes a session.",
+      "severity": "MEDIUM"
+    },
+    {
+      "bias": "Recency Effect",
+      "system": "Morning Briefing",
+      "evidence": "Latest session harvest dominates briefing, older richer findings decay",
+      "severity": "MEDIUM"
+    },
+    {
+      "bias": "Not Invented Here",
+      "system": "Infrastructure",
+      "evidence": "Building custom scrapers/tools when mature open-source exists",
+      "severity": "LOW"
+    }
+  ],
+  "generated": "2026-06-04T08:50:59.426Z"
+}

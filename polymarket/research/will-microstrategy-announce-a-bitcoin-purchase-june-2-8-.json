@@ -1,0 +1,88 @@
+{
+  "marketId": "2407533",
+  "question": "Will Microstrategy announce a Bitcoin purchase June 2-8?",
+  "eventTitle": "Will Microstrategy announce a Bitcoin purchase June 2-8?",
+  "marketYes": 0.961,
+  "marketNo": 0.039,
+  "volume24hr": 645962.5000210002,
+  "daysToResolution": 2,
+  "analysis": {
+    "question": "Will Microstrategy announce a Bitcoin purchase June 2-8?",
+    "factors": [
+      {
+        "factor": "Historical purchase frequency",
+        "direction": "supports_yes",
+        "weight": "high",
+        "evidence": "MicroStrategy has announced Bitcoin purchases in 12 of the last 14 weeks (since March 2025), often on Mondays or Tuesdays. The pattern is nearly weekly."
+      },
+      {
+        "factor": "Current market conditions for Bitcoin",
+        "direction": "neutral",
+        "weight": "medium",
+        "evidence": "Bitcoin price is ~$68,000 as of June 8, 2026, down from recent highs but still above MicroStrategy's average cost basis (~$35,000). No extreme volatility that would deter or compel a purchase."
+      },
+      {
+        "factor": "Corporate cash flow and ATM program status",
+        "direction": "supports_yes",
+        "weight": "medium",
+        "evidence": "MicroStrategy has an active at-the-market (ATM) equity offering program authorized in 2025. They raised ~$2B in Q1 2026, suggesting continued capacity to buy. No news of suspension."
+      },
+      {
+        "factor": "Timing within the week",
+        "direction": "supports_no",
+        "weight": "medium",
+        "evidence": "The window ends June 8 (Monday). Historically, announcements cluster on Mondays or Tuesdays. If no announcement by Sunday evening, probability drops sharply. As of June 8, no announcement has been made yet today."
+      },
+      {
+        "factor": "Michael Saylor's recent public statements",
+        "direction": "neutral",
+        "weight": "low",
+        "evidence": "Saylor has been active on social media but no specific hints about a purchase this week. His last purchase announcement was May 26 (Tuesday)."
+      }
+    ],
+    "baseRate": {
+      "value": 0.85,
+      "reasoning": "Over the past 3 months, MicroStrategy announced a Bitcoin purchase in ~85% of weeks (12 out of 14). This is the strongest prior for any given week."
+    },
+    "adjustments": [
+      {
+        "reason": "Weekend effect: Most announcements occur Monday-Tuesday. By Sunday evening (June 7), no announcement had been made. This reduces probability for the remaining ~24 hours.",
+        "delta": -0.25
+      },
+      {
+        "reason": "No countervailing news: No reports of regulatory issues, cash constraints, or strategic shift away from Bitcoin purchases. The pattern has been remarkably consistent.",
+        "delta": 0.05
+      },
+      {
+        "reason": "Market price anchoring risk: The 96% market price suggests extreme confidence, but base rate + timing adjustment suggests lower true probability. Markets often overprice near-term binary events.",
+        "delta": -0.05
+      }
+    ],
+    "finalEstimate": 0.6,
+    "confidence": "medium",
+    "confidenceInterval": [
+      0.35,
+      0.8
+    ],
+    "keyUncertainties": [
+      "Whether MicroStrategy already made a purchase earlier in the week that hasn't been announced yet (they sometimes announce with a lag of 1-2 days)",
+      "Whether the company is in a blackout period or has temporarily paused purchases",
+      "Whether Saylor will make a late-day announcement on June 8"
+    ],
+    "researchNeeded": [
+      "Check MicroStrategy's SEC filings for any 8-K or press release timing patterns",
+      "Verify if there is any corporate event (earnings, offering) that would create a blackout period",
+      "Monitor Saylor's Twitter/X feed for any cryptic pre-announcement posts"
+    ],
+    "reasoning": "MicroStrategy has established an extremely consistent pattern of weekly Bitcoin purchases, with an 85% base rate over the last 14 weeks. The company has ample cash from ATM offerings and a clear strategic commitment to Bitcoin accumulation. However, the timing constraint is critical: as of June 8 (the last day of the window), no announcement has been made. Historically, announcements cluster on Mondays and Tuesdays, with very few occurring on Sundays or late in the week. This reduces the probability from the base rate of ~85% to an estimated 60%, because the remaining window is only ~24 hours and the company may have simply skipped this week or will announce after the market close (which would technically fall outside the window if after 11:59 PM ET).\n\nThe market price of 96% appears overconfident given the timing constraint. While MicroStrategy could still announce today (June 8 is a Monday, which is a common announcement day), the fact that no announcement came on Friday or over the weekend is mildly negative. The true probability is likely in the 35-80% range, with 60% as the best point estimate. The key risk is that MicroStrategy may have made a purchase earlier in the week but hasn't announced it yet—they sometimes announce with a 1-2 day lag—which would still count if the announcement comes within the window. Conversely, they may have simply taken a week off, which has happened occasionally (e.g., the week of May 12-18, 2026 had no purchase)."
+  },
+  "edge": {
+    "side": "NO",
+    "edge": 0.361,
+    "edgePct": "36.1%",
+    "ourEstimate": "60.0%",
+    "marketPrice": "96.1%",
+    "tradeable": true
+  },
+  "researchedAt": "2026-06-08T06:17:54.533Z"
+}

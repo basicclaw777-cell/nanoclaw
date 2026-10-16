@@ -1,0 +1,177 @@
+{
+  "id": "lesson-07",
+  "position": 7,
+  "title": "The Cross",
+  "subtitle": "Power from the ground up",
+  "slug": "the-cross",
+
+  "curriculum": {
+    "blocks": [2, 3],
+    "pillars": ["skill"],
+    "domains": ["combos"],
+    "engines": {
+      "body": "Kinetic chain: ground → legs → hips → torso → shoulder → fist. Full-body mechanics.",
+      "mind": "Understanding that power is sequential, not muscular. Technique generates force.",
+      "emotion": "The first power punch — the moment a student feels mechanical advantage, not just effort"
+    }
+  },
+
+  "audience": {
+    "level": "beginner",
+    "hook": "The cross is not an arm punch. It starts at the floor.",
+    "question": "Where does power actually come from in a punch?"
+  },
+
+  "core": {
+    "thesis": "The cross teaches the kinetic chain — power transferred from the ground through the body in sequence. It's the first punch where students learn that technique IS power.",
+    "keyPoints": [
+      "The kinetic chain: ground reaction force → rear leg drive → hip rotation → torso rotation → shoulder extension → fist. Sequential, not simultaneous.",
+      "The cross starts at the FLOOR — the rear foot pushes into the ground, and that force travels up",
+      "Hip rotation is where the power lives — not the arm, not the shoulder, the hips",
+      "The rear foot pivots — heel comes up, ball of foot drives. This is the engine.",
+      "Full extension: the punch reaches maximum power at full stretch, not at the shoulder",
+      "Weight transfers from rear to front during the cross — then must return for the next action",
+      "The cross follows the jab — the jab finds range, the cross uses that information",
+      "Return: the hand comes back to guard. The cross without a return is a gamble."
+    ],
+    "commonMisconceptions": [
+      "Power comes from the arm/shoulder — it comes from the ground through the chain",
+      "Hit harder = use more muscle — hit harder = better mechanics. Relax, rotate, extend.",
+      "The cross is separate from the jab — the jab-cross is one continuous action",
+      "Lean into the cross for more power — leaning breaks your stance and kills your balance"
+    ],
+    "coachEye": {
+      "observe": "Watch the rear heel — does it pivot, or does it stay flat? Flat heel = arm punch.",
+      "compare": "Cross with rear heel pivot vs without — the student will FEEL the difference in power",
+      "predict": "A student who leans into the cross will be off-balance after impact. They can't follow up.",
+      "diagnose": "If the cross has no pop, check the hip rotation. If hips are square, the chain is broken."
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["combos"],
+    "motions": ["expand", "snap", "rotate"],
+    "lines": ["solid", "thick"],
+    "diagnostics": ["gold-pulse", "red-flash"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "Not an Arm Punch",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "The cross is the first power punch. And the first lesson in where power actually comes from. Hint: it's not your arm.",
+      "components": ["CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Reframe: power = mechanics, not muscle"
+    },
+    {
+      "id": "scene_02",
+      "title": "The Kinetic Chain",
+      "duration": "30s",
+      "visualMode": "blueprint",
+      "narration": "Ground. Legs. Hips. Torso. Shoulder. Fist. That's the chain. Force starts at the floor and travels up through every link. Skip a link and the power drops. This is physics, not effort.",
+      "components": ["ForceVector", "HipRotation", "PunchTrajectory", "CenterLine"],
+      "assets": [],
+      "learningObjective": "The kinetic chain — sequential force transfer"
+    },
+    {
+      "id": "scene_03",
+      "title": "The Rear Foot",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "The engine is here. The rear foot pushes into the ground. The heel comes up. The ball of the foot drives the rotation. If this foot doesn't move, nothing above it generates real power.",
+      "components": ["PivotIndicator", "ForceVector", "FootworkGrid"],
+      "assets": [],
+      "learningObjective": "Rear foot pivot as the power source"
+    },
+    {
+      "id": "scene_04",
+      "title": "Hip Rotation",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "The hips rotate. The torso follows. The shoulder extends. This is where the power multiplies. Your arm weighs a few kilograms. Your torso weighs forty. Rotate the big mass, not the small one.",
+      "components": ["HipRotation", "ForceVector", "WeightTransfer"],
+      "assets": [],
+      "learningObjective": "Hip rotation as the power multiplier"
+    },
+    {
+      "id": "scene_05",
+      "title": "Jab-Cross",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "The jab finds the range. The cross uses it. One-two. The most fundamental combination in boxing. The jab is the question. The cross is the answer.",
+      "components": ["PunchTrajectory", "DistanceBands", "TimingPulse"],
+      "assets": [],
+      "learningObjective": "Jab-cross as one continuous action"
+    },
+    {
+      "id": "scene_06",
+      "title": "Return",
+      "duration": "15s",
+      "visualMode": "blueprint",
+      "narration": "Full extension. Then straight back to guard. The cross without a return is a bet — you're gambling that you won't get countered. At Basic Reflex, we don't gamble.",
+      "components": ["PunchTrajectory", "GuardWindow", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "The return — guard recovery after the cross"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_02", "scene_03"],
+      "hook": "The cross is not an arm punch. It starts at the floor.",
+      "cta": "Power is technique, not muscle."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "Not an Arm Punch"},
+        {"time": "1:30", "title": "The Kinetic Chain"},
+        {"time": "3:30", "title": "The Rear Foot Engine"},
+        {"time": "5:00", "title": "Hip Rotation"},
+        {"time": "6:30", "title": "Jab-Cross: Question and Answer"},
+        {"time": "8:00", "title": "The Return"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "15s",
+      "sceneIds": ["scene_02", "scene_04"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "The Kinetic Chain",
+        "Rear Foot Mechanics",
+        "Hip Rotation — The Power Multiplier",
+        "The Jab-Cross Connection",
+        "Common Cross Errors"
+      ],
+      "diagrams": ["kinetic-chain-sequence", "rear-foot-pivot", "hip-rotation-overhead"],
+      "checkpoints": [
+        "Does your rear heel come up when you throw the cross?",
+        "Can you feel the rotation starting at your hips?",
+        "Does your hand return to guard after every cross?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Drill the rear foot pivot in isolation first — students often skip it and arm-punch",
+        "Use the phrase 'rotate, don't reach' — reaching breaks the chain",
+        "Have students throw the cross at 50% speed to feel the chain. Speed comes after mechanics."
+      ],
+      "regressions": [
+        "If the student leans into the cross, they're reaching. Go back to stance (lesson 3) and weight distribution.",
+        "If no hip rotation, isolate: stand square, hands on hips, rotate. Once they feel the rotation, add the arm."
+      ],
+      "observations": [
+        "The 'aha moment' for the cross is when a student throws it relaxed and feels it land harder than when they muscle it"
+      ],
+      "progressionTo": "lesson-08-the-hook"
+    }
+  }
+}

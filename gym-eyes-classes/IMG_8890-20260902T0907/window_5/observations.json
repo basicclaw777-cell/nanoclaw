@@ -1,0 +1,89 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F3",
+      "time": "0.0s-0.7s",
+      "observations": {
+        "footwork": "Fighter in white moves forward in small, controlled steps toward the fighter in dark.",
+        "stance_width": "normal",
+        "guard": "Both fighters maintain a high guard with hands up.",
+        "upper_body": "Torsos remain upright, slight forward lean from the fighter moving.",
+        "distance": "Distance between the two closes.",
+        "notable": "Smooth, deliberate forward footwork drill."
+      }
+    },
+    {
+      "frames": "F4-F7",
+      "time": "1.0s-2.0s",
+      "observations": {
+        "footwork": "Fighter in white steps back and then shuffles laterally to the right.",
+        "stance_width": "normal",
+        "guard": "Hands remain in a high guard.",
+        "upper_body": "Minimal upper body movement, focus remains on foot placement.",
+        "distance": "Distance opens as the fighter in white retreats.",
+        "notable": "Lateral stepping to create angles."
+      }
+    },
+    {
+      "frames": "F8-F11",
+      "time": "2.3s-3.3s",
+      "observations": {
+        "footwork": "Fighter in white moves forward again, finishing with a wider stance.",
+        "stance_width": "changing to wide",
+        "guard": "Guard stays high throughout.",
+        "upper_body": "Slight rotation accompanies the forward movement.",
+        "distance": "Distance closes significantly.",
+        "notable": "Forward step into a wider, more stable stance."
+      }
+    },
+    {
+      "frames": "F12-F15",
+      "time": "3.7s-4.7s",
+      "observations": {
+        "footwork": "Fighter in white recovers, stepping back to a normal stance and returning to initial position.",
+        "stance_width": "changing back to normal",
+        "guard": "Hands remain up.",
+        "upper_body": "Body realigns to a neutral position.",
+        "distance": "Distance between the fighters returns to the initial spacing.",
+        "notable": "Reset to the starting position."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F3",
+      "type": "distance_close",
+      "detail": "Fighter in white steps forward."
+    },
+    {
+      "frames": "F4-F6",
+      "type": "step",
+      "detail": "Backward step away from partner."
+    },
+    {
+      "frames": "F7-F8",
+      "type": "step",
+      "detail": "Lateral shuffle to the right."
+    },
+    {
+      "frames": "F9-F11",
+      "type": "distance_close",
+      "detail": "Forward step into a wider stance."
+    },
+    {
+      "frames": "F12",
+      "type": "stance_change",
+      "detail": "Wide stance assumed."
+    },
+    {
+      "frames": "F13-F15",
+      "type": "reset",
+      "detail": "Recovery steps returning to the original stance and position."
+    }
+  ],
+  "overall_rhythm": "steady"
+}

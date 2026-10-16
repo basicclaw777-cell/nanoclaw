@@ -1,0 +1,558 @@
+{
+  "id": "class-20260902T0907",
+  "date": "2026-09-02",
+  "video": "IMG_8890.MOV",
+  "duration": 3214.418333,
+  "theme": null,
+  "students": null,
+  "type": "group",
+  "windowCount": 8,
+  "windows": [
+    {
+      "time": "3:18",
+      "observations": {
+        "people_detected": 1,
+        "activity_type": "movement",
+        "intensity": "low",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Light, subtle stepping in place while maintaining a boxing stance",
+              "stance_width": "normal",
+              "guard": "Hands held up in a boxing guard position",
+              "upper_body": "Relatively still with slight swaying or bobbing",
+              "distance": "Far from camera, positioned in the center-right area of the gym",
+              "notable": "Fighter is in an open space, no pad holder or opponent visible in immediate proximity"
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Moving across the gym floor with shuffling steps",
+              "stance_width": "normal",
+              "guard": "Guard remains raised throughout the movement",
+              "upper_body": "Slight rotation and translation as the fighter travels",
+              "distance": "Far from camera, progressing laterally or forward across the floor",
+              "notable": "Continuous, rhythmic movement observed"
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Continuing to move, possible turning or adjustment of direction",
+              "stance_width": "normal",
+              "guard": "Guard maintained, hands still positioned near face",
+              "upper_body": "Slight directional change in body orientation",
+              "distance": "Far from camera, still in the central gym area",
+              "notable": "Movement remains fluid across the sequence"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F5",
+            "type": "footwork",
+            "detail": "Stepping and adjusting feet in place while maintaining a boxing stance"
+          },
+          {
+            "frames": "F6-F10",
+            "type": "distance_close",
+            "detail": "Moving across the gym floor, covering ground with shuffling steps"
+          },
+          {
+            "frames": "F11-F15",
+            "type": "stance_change",
+            "detail": "Adjusting body orientation and direction while continuing to move"
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "10:00",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "movement",
+        "intensity": "low",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "light lateral shuffling in the background",
+              "stance_width": "normal",
+              "guard": "hands held high but relaxed",
+              "upper_body": "upright with slight bobbing",
+              "distance": "far from camera",
+              "notable": "subject is positioned in the background"
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "continuous lateral movement across the background",
+              "stance_width": "normal",
+              "guard": "hands held high",
+              "upper_body": "moving laterally with the feet",
+              "distance": "far to mid-range",
+              "notable": "green training bag visible in the background"
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "walking across the foreground",
+              "stance_width": "changing",
+              "guard": "hands down at sides",
+              "upper_body": "relaxed, walking posture",
+              "distance": "close to camera",
+              "notable": "new person enters the frame from the left"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F5",
+            "type": "step",
+            "detail": "lateral shuffling in the background"
+          },
+          {
+            "frames": "F6-F10",
+            "type": "step",
+            "detail": "continued lateral movement"
+          },
+          {
+            "frames": "F11-F15",
+            "type": "distance_close",
+            "detail": "new subject enters the foreground"
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "16:42",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "movement",
+        "intensity": "low",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Lateral movement from the right side of the floor towards the center, using small, deliberate steps.",
+              "stance_width": "normal",
+              "guard": "Hands are held up in a guard position.",
+              "upper_body": "Upper body is upright and moves in sync with the lower body steps.",
+              "distance": "No opponent present. A second person is visible in the background on the far left.",
+              "notable": "The second person in white is present in the background for this sequence."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Movement around the center mark, shifting weight and adjusting position before moving to the right.",
+              "stance_width": "normal",
+              "guard": "Hands remain up in a guard position.",
+              "upper_body": "Slight twisting and turning of the torso during the footwork.",
+              "distance": "No opponent present. The second person has left the frame.",
+              "notable": "The dark line on the floor is used as a reference point for movement."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Movement towards the right side of the floor, followed by a return towards the center.",
+              "stance_width": "normal",
+              "guard": "Hands are held up throughout the movement.",
+              "upper_body": "Torso remains stable while navigating around the space.",
+              "distance": "No opponent present.",
+              "notable": "The fighter appears to be working on lateral footwork and positioning."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F4",
+            "type": "step",
+            "detail": "Lateral movement stepping from the right towards the center."
+          },
+          {
+            "frames": "F5-F6",
+            "type": "stance_change",
+            "detail": "Settling and shifting weight, adjusting the stance."
+          },
+          {
+            "frames": "F10-F12",
+            "type": "step",
+            "detail": "Lateral movement stepping from the center towards the right."
+          },
+          {
+            "frames": "F14-F15",
+            "type": "reset",
+            "detail": "Returning to a central position on the floor."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "23:23",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Continuous lateral steps to the right",
+              "stance_width": "normal",
+              "guard": "Hands held up in a loose boxing guard",
+              "upper_body": "Upright, oriented towards the right",
+              "distance": "Moving across the gym floor, near a long rope laid on the ground",
+              "notable": "Rope on the floor appears to serve as a boundary/guide for footwork"
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Pivot and lateral steps to the left",
+              "stance_width": "normal",
+              "guard": "Hands held up in a loose boxing guard",
+              "upper_body": "Upright, turning to move left",
+              "distance": "Moving back across the gym floor",
+              "notable": "Change of direction in the drill"
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Continues left, then steps back to the right",
+              "stance_width": "normal",
+              "guard": "Hands held up in a loose boxing guard",
+              "upper_body": "Upright, changing orientation",
+              "distance": "Reaches the left boundary, then moves right",
+              "notable": "Drill continues with side-to-side movement"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F3",
+            "type": "step",
+            "detail": "Lateral shuffle to the right"
+          },
+          {
+            "frames": "F6-F7",
+            "type": "pivot",
+            "detail": "Change of direction from right to left"
+          },
+          {
+            "frames": "F8-F13",
+            "type": "step",
+            "detail": "Lateral shuffle to the left"
+          },
+          {
+            "frames": "F14-F15",
+            "type": "step",
+            "detail": "Lateral shuffle back to the right"
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "30:05",
+      "observations": {
+        "people_detected": 2,
+        "activity_type": "drilling",
+        "intensity": "low",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F3",
+            "time": "0.0s-0.7s",
+            "observations": {
+              "footwork": "Fighter in white moves forward in small, controlled steps toward the fighter in dark.",
+              "stance_width": "normal",
+              "guard": "Both fighters maintain a high guard with hands up.",
+              "upper_body": "Torsos remain upright, slight forward lean from the fighter moving.",
+              "distance": "Distance between the two closes.",
+              "notable": "Smooth, deliberate forward footwork drill."
+            }
+          },
+          {
+            "frames": "F4-F7",
+            "time": "1.0s-2.0s",
+            "observations": {
+              "footwork": "Fighter in white steps back and then shuffles laterally to the right.",
+              "stance_width": "normal",
+              "guard": "Hands remain in a high guard.",
+              "upper_body": "Minimal upper body movement, focus remains on foot placement.",
+              "distance": "Distance opens as the fighter in white retreats.",
+              "notable": "Lateral stepping to create angles."
+            }
+          },
+          {
+            "frames": "F8-F11",
+            "time": "2.3s-3.3s",
+            "observations": {
+              "footwork": "Fighter in white moves forward again, finishing with a wider stance.",
+              "stance_width": "changing to wide",
+              "guard": "Guard stays high throughout.",
+              "upper_body": "Slight rotation accompanies the forward movement.",
+              "distance": "Distance closes significantly.",
+              "notable": "Forward step into a wider, more stable stance."
+            }
+          },
+          {
+            "frames": "F12-F15",
+            "time": "3.7s-4.7s",
+            "observations": {
+              "footwork": "Fighter in white recovers, stepping back to a normal stance and returning to initial position.",
+              "stance_width": "changing back to normal",
+              "guard": "Hands remain up.",
+              "upper_body": "Body realigns to a neutral position.",
+              "distance": "Distance between the fighters returns to the initial spacing.",
+              "notable": "Reset to the starting position."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F3",
+            "type": "distance_close",
+            "detail": "Fighter in white steps forward."
+          },
+          {
+            "frames": "F4-F6",
+            "type": "step",
+            "detail": "Backward step away from partner."
+          },
+          {
+            "frames": "F7-F8",
+            "type": "step",
+            "detail": "Lateral shuffle to the right."
+          },
+          {
+            "frames": "F9-F11",
+            "type": "distance_close",
+            "detail": "Forward step into a wider stance."
+          },
+          {
+            "frames": "F12",
+            "type": "stance_change",
+            "detail": "Wide stance assumed."
+          },
+          {
+            "frames": "F13-F15",
+            "type": "reset",
+            "detail": "Recovery steps returning to the original stance and position."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "36:47",
+      "observations": {
+        "people_detected": 1,
+        "activity_type": "movement",
+        "intensity": "low",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F5",
+            "time": "0.0s-1.3s",
+            "observations": {
+              "footwork": "Lateral movement to the left across the gym floor, maintaining a steady rhythm.",
+              "stance_width": "normal",
+              "guard": "Hands held up in a boxing guard near the face.",
+              "upper_body": "Relaxed and upright with a slight forward lean, facing the direction of movement.",
+              "distance": "Staying at a consistent distance from the camera while moving laterally.",
+              "notable": "No punches thrown; the focus is on footwork movement."
+            }
+          },
+          {
+            "frames": "F6-F10",
+            "time": "1.7s-3.0s",
+            "observations": {
+              "footwork": "Continues lateral stepping to the left, keeping feet shoulder-width apart.",
+              "stance_width": "normal",
+              "guard": "Guard remains up and stable.",
+              "upper_body": "Torso remains composed, turning slightly to track the movement direction.",
+              "distance": "Distance from camera remains constant.",
+              "notable": "Continuous, uninterrupted movement."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Further lateral movement to the left, with a slight shift in body position.",
+              "stance_width": "normal",
+              "guard": "Guard maintained.",
+              "upper_body": "Posture remains stable.",
+              "distance": "Constant distance from camera.",
+              "notable": "Movement continues to the end of the sequence."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F5",
+            "type": "step",
+            "detail": "Moving left with a sequence of lateral steps."
+          },
+          {
+            "frames": "F6-F10",
+            "type": "step",
+            "detail": "Continuing the lateral stepping to the left."
+          },
+          {
+            "frames": "F11-F15",
+            "type": "step",
+            "detail": "Sustaining the movement drill, stepping leftward."
+          }
+        ],
+        "overall_rhythm": "steady"
+      }
+    },
+    {
+      "time": "43:29",
+      "observations": {
+        "people_detected": 1,
+        "activity_type": "movement",
+        "intensity": "low",
+        "fighter_stance": "unclear",
+        "segments": [
+          {
+            "frames": "F1-F10",
+            "time": "0.0s-3.0s",
+            "observations": {
+              "footwork": "Steady walk from left to right across the gym floor",
+              "stance_width": "normal",
+              "guard": "Not visible, upper body mostly out of frame",
+              "upper_body": "Torso out of frame, only legs visible",
+              "distance": "N/A",
+              "notable": "Jump rope coiled on the floor in the center; background shows punching bags and a mirrored wall"
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Decelerates and stops walking, turns towards the jump rope",
+              "stance_width": "normal",
+              "guard": "Arms at sides, not in a boxing guard",
+              "upper_body": "Fully visible, leaning forward slightly, head turned down towards the jump rope",
+              "distance": "N/A",
+              "notable": "Person is on the right side of the frame, wearing black shorts with white stripes"
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F10",
+            "type": "step",
+            "detail": "Continuous walking from left to right across the gym"
+          },
+          {
+            "frames": "F11-F15",
+            "type": "reset",
+            "detail": "Stops walking and turns to look down at the jump rope on the floor"
+          }
+        ],
+        "overall_rhythm": "decelerating"
+      }
+    },
+    {
+      "time": "50:11",
+      "observations": {
+        "people_detected": 6,
+        "activity_type": "drilling",
+        "intensity": "medium",
+        "fighter_stance": "orthodox",
+        "segments": [
+          {
+            "frames": "F1-F7",
+            "time": "0.0s-2.0s",
+            "observations": {
+              "footwork": "Shuffling laterally across the gym floor from left to right, maintaining an athletic base.",
+              "stance_width": "wide",
+              "guard": "Hands held high in a boxing guard, elbows tucked in.",
+              "upper_body": "Torso slightly rotated right, moving smoothly with the feet.",
+              "distance": "Maintaining distance from background people and heavy bags.",
+              "notable": "Continuous rhythmic movement covering ground."
+            }
+          },
+          {
+            "frames": "F8-F10",
+            "time": "2.3s-3.0s",
+            "observations": {
+              "footwork": "Feet plant firmly on the ground, weight shifts to support the punch.",
+              "stance_width": "normal",
+              "guard": "Right hand extends for the punch, left hand remains up guarding the chin.",
+              "upper_body": "Right arm extends fully straight, torso rotates into the strike.",
+              "distance": "Fighter in a striking posture within the middle of the gym.",
+              "notable": "Punch thrown while moving, maintaining balance and rhythm."
+            }
+          },
+          {
+            "frames": "F11-F15",
+            "time": "3.3s-4.7s",
+            "observations": {
+              "footwork": "Resuming lateral movement to the right, shuffling across the gym.",
+              "stance_width": "wide",
+              "guard": "Hands return to a high guard position.",
+              "upper_body": "Torso faces the direction of travel, relaxed but alert.",
+              "distance": "Continuing to move across the open gym floor.",
+              "notable": "Smooth transition back to footwork after the punch."
+            }
+          }
+        ],
+        "movement_events": [
+          {
+            "frames": "F1-F7",
+            "type": "step",
+            "detail": "Lateral shuffle movement across the gym from left to right."
+          },
+          {
+            "frames": "F8-F8",
+            "type": "punch_extension",
+            "detail": "Right straight punch fully extended, thrown while moving."
+          },
+          {
+            "frames": "F9-F10",
+            "type": "punch_recovery",
+            "detail": "Punch retracted back to the guard, returning to a neutral stance."
+          },
+          {
+            "frames": "F11-F15",
+            "type": "step",
+            "detail": "Continuing lateral movement across the gym."
+          }
+        ],
+        "overall_rhythm": "burst_then_rest"
+      }
+    }
+  ],
+  "recordPath": "/Users/basicclaw777/nanoclaw/gym-eyes-classes/IMG_8890-20260902T0907/class-record.md"
+}

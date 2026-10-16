@@ -1,23 +1,97 @@
 [
   {
     "id": "print-house-hk",
-    "name": "Print House HK",
-    "website": "www.print-house.hk",
+    "name": "Print House Ltd",
+    "tradeName": "Print House",
+    "website": "https://www.print-house.hk",
+    "instagram": "@printhousehk",
     "contact": null,
-    "email": null,
-    "phone": null,
+    "email": "info@print-house.hk",
+    "phone": "+852 5332 2429",
     "capabilities": [
       "screen printing",
-      "DTG",
+      "DTG (direct to garment)",
+      "DTF (direct to film)",
       "embroidery",
       "sublimation"
     ],
     "sample_cost": 285,
     "quality_rating": "approved",
-    "notes": "Paul approved quality. Good for poster tees and standard runs.",
-    "turnaround": "7-14 days for samples, 14-21 days for bulk",
+    "notes": "Paul approved quality. Used for both standard BR tees and poster tees. Clara visited warehouse in person multiple times. They suggested switching from DTG to DTF (cheaper, looks better, lasts as long). Always get a DTF sample before committing to bulk.",
+    "turnaround": "7-14 days for samples, 14-21 days for bulk. DTF orders can be ready 'by next week'.",
     "minimum_order": null,
-    "location": "Hong Kong",
-    "addedAt": "2026-05-14"
+    "location": "Wong Chuk Hang, Hong Kong",
+    "hours": "Mon-Fri 09:00-18:00",
+    "addedAt": "2026-05-14",
+    "relationship": "established",
+    "history": {
+      "first_contact": "2022-05-03",
+      "invoices": [
+        "Invoice_2205031 (May 2022 — first samples)",
+        "Invoice_2205061 (May 2022 — new samples)",
+        "Invoice_2206032 (Jun 2022 — additional)",
+        "Invoice_2209048 (Sep 2022 — poster tee samples)",
+        "Invoice_2210044 (Oct 2022 — bulk poster tee order)"
+      ],
+      "orders_completed": [
+        {
+          "date": "2022-05",
+          "items": "Standard BR tees (screen print, 100% cotton)",
+          "qty": "100 standard + 50 poster",
+          "method": "screen printing (standard), DTG (poster)"
+        },
+        {
+          "date": "2022-10",
+          "items": "Poster tees — full batch",
+          "qty": "60 (S/M/L/XL breakdown, 5x XL)",
+          "method": "DTF (direct to film)",
+          "note": "Switched from DTG to DTF at Print House recommendation. $107/tee (DTF) vs $151/tee (DTG black)."
+        }
+      ],
+      "total_spend_approx": "HK$8,675+ (confirmed Sept payment)",
+      "key_events": [
+        "Clara visited warehouse multiple times for sample pickup",
+        "Off-centre poster print on one sample — quality inconsistency flagged",
+        "Henry's custom tee was comped (Print House felt bad about poster error)",
+        "Print House proactively suggested DTF switch — good partner behaviour"
+      ]
+    },
+    "pricing": {
+      "sample": "HK$285 per sample",
+      "dtg_black_tee": "HK$151 per unit (2022 rate)",
+      "dtf_2022": "HK$107 per unit at 60 pcs (2022 rate)",
+      "dtf_current_sliding_scale": {
+        "20_pcs": "HK$121 each",
+        "40_pcs": "HK$112 each",
+        "60_pcs": "HK$94 each",
+        "100_pcs": "HK$76 each"
+      },
+      "note": "Current pricing is LOWER than 2022. DTF recommended. Sliding scale — more units = cheaper. No minimum order per website. Bulk pricing from 50+."
+    },
+    "retail_pricing_history": {
+      "poster_tee": "HK$300",
+      "poster_plus_standard_bundle": "HK$450",
+      "two_poster_bundle": "HK$500",
+      "clearance_standard": "HK$125"
+    },
+    "material": "100% cotton (non-negotiable — Paul's rule)",
+    "design_variants_on_file": {
+      "front_colours": [
+        "Yellow (logo black)",
+        "Black (logo pink/white)",
+        "Red (logo white)",
+        "White (logo black)"
+      ],
+      "back_options": [
+        "Colourful picture (poster tee)",
+        "Text only"
+      ],
+      "sizes": ["Kids", "S", "M", "L", "XL"],
+      "note": "Children's sizes available, same price as adult. Good for summer camps."
+    },
+    "missing_info": [
+      "CONTACT NAME — not found in any source. Ask Print House directly.",
+      "MINIMUM ORDER — website says 'no minimum, print from single piece'. Bulk pricing from 50+."
+    ]
   }
 ]

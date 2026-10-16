@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>COP — Common Operating Picture</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#222;
+  --gold:#f7b408;--gold-dim:rgba(247,180,8,.15);
+  --white:#fafafa;--muted:#777;--dim:#444;
+  --green:#1D9E75;--green-dim:rgba(29,158,117,.12);
+  --purple:#534AB7;--purple-dim:rgba(83,74,183,.12);
+  --yellow:#f7b408;--yellow-dim:rgba(247,180,8,.12);
+  --cyan:#06b6d4;--cyan-dim:rgba(6,182,212,.12);
+  --red:#ef4444;--red-dim:rgba(239,68,68,.12);
+  --amber:#EF9F27;
+  --font:'Share Tech Mono','SF Mono','Fira Code',monospace;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--font);font-size:13px;min-height:100vh;overflow-x:hidden}
+
+/* TOP BAR */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 24px 12px;border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,#111 0%,var(--bg) 100%);
+  position:sticky;top:0;z-index:100;
+}
+.topbar h1{font-size:15px;letter-spacing:3px;color:var(--gold);font-weight:400}
+.topbar-right{display:flex;align-items:center;gap:18px;font-size:11px;color:var(--muted)}
+.topbar-right a{color:var(--muted);text-decoration:none;transition:color .15s}
+.topbar-right a:hover{color:var(--white)}
+.refresh-toggle{cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px}
+.refresh-dot{width:8px;height:8px;border-radius:50%;transition:background .2s}
+.refresh-dot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
+.refresh-dot.off{background:var(--red)}
+#last-refresh{color:var(--dim)}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:1px;
+  padding:1px;
+  height:calc(100vh - 50px);
+  background:var(--border);
+}
+.section{
+  background:var(--bg);
+  padding:18px 20px;
+  overflow-y:auto;
+  position:relative;
+  display:flex;flex-direction:column;
+}
+.section::-webkit-scrollbar{width:4px}
+.section::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.section.span2{grid-column:span 2}
+
+/* SECTION HEADER */
+.sec-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;user-select:none;
+}
+.sec-bar{width:4px;height:28px;border-radius:2px;flex-shrink:0}
+.sec-title{font-size:13px;letter-spacing:1.5px;font-weight:400}
+.sec-question{font-size:10px;color:var(--muted);margin-left:auto;letter-spacing:.5px}
+.sec-chevron{color:var(--muted);font-size:14px;transition:transform .2s;margin-left:6px}
+.sec-head.collapsed .sec-chevron{transform:rotate(-90deg)}
+
+/* METRICS */
+.metrics{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.metric{flex:1;min-width:80px}
+.metric .val{font-size:28px;font-weight:400;letter-spacing:-1px;line-height:1.1}
+.metric .lbl{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+
+/* DETAIL */
+.detail{flex:1;font-size:11px;line-height:1.7;color:var(--muted)}
+.detail.hidden{display:none}
+.detail-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #1a1a1a}
+.detail-row:last-child{border-bottom:none}
+.detail-label{color:var(--muted)}
+.detail-value{color:var(--white);text-align:right}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;letter-spacing:.5px}
+.badge-green{background:var(--green-dim);color:var(--green)}
+.badge-red{background:var(--red-dim);color:var(--red)}
+.badge-amber{background:rgba(239,159,39,.15);color:var(--amber)}
+.badge-cyan{background:var(--cyan-dim);color:var(--cyan)}
+.badge-purple{background:var(--purple-dim);color:var(--purple)}
+.badge-gold{background:var(--yellow-dim);color:var(--gold)}
+
+/* BARS */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar-label{width:80px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.bar-track{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.bar-count{font-size:10px;color:var(--dim);width:30px;text-align:right;flex-shrink:0}
+
+/* PROCESS LIST */
+.proc-row{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11px}
+.proc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.proc-dot.online{background:var(--green)}
+.proc-dot.stopped{background:var(--red)}
+.proc-dot.errored{background:var(--amber)}
+.proc-name{flex:1;color:var(--muted)}
+.proc-status{color:var(--dim);font-size:10px}
+
+/* UNAVAILABLE */
+.unavailable{color:var(--dim);font-style:italic;padding:12px 0;font-size:11px;letter-spacing:.5px}
+
+/* LUCY EXCERPT */
+.lucy-excerpt{
+  background:var(--surface2);border:1px solid var(--border);border-radius:6px;
+  padding:10px 12px;margin-top:8px;font-size:11px;line-height:1.6;
+  color:var(--muted);max-height:120px;overflow-y:auto;
+}
+
+/* INTENT CARD */
+.intent-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:6px;
+  padding:10px 12px;margin-bottom:8px;
+}
+.intent-name{color:var(--gold);font-size:12px;margin-bottom:4px}
+.intent-meta{font-size:10px;color:var(--dim)}
+
+/* MOBILE */
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr;grid-template-rows:auto;height:auto}
+  .section{min-height:200px}
+  .section.span2{grid-column:span 1}
+  .topbar h1{font-size:12px;letter-spacing:2px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>COMMON OPERATING PICTURE</h1>
+  <div class="topbar-right">
+    <span id="last-refresh"></span>
+    <div class="refresh-toggle" onclick="toggleRefresh()" title="Toggle auto-refresh (30s)">
+      <div class="refresh-dot on" id="refresh-dot"></div>
+      <span id="refresh-label">LIVE</span>
+    </div>
+    <a href="/">&larr; LOBBY</a>
+  </div>
+</div>
+
+<div class="grid">
+  <!-- 1. BELIEF STATE -->
+  <div class="section" id="s-belief">
+    <div class="sec-head" onclick="toggleSection('belief')">
+      <div class="sec-bar" style="background:var(--green)"></div>
+      <div class="sec-title" style="color:var(--green)">BELIEF STATE</div>
+      <div class="sec-question">What changed?</div>
+      <div class="sec-chevron" id="chev-belief">&#9660;</div>
+    </div>
+    <div class="metrics" id="m-belief">
+      <div class="metric"><div class="val" style="color:var(--green)" id="belief-total">--</div><div class="lbl">Total Claims</div></div>
+      <div class="metric"><div class="val" style="color:var(--green)" id="belief-primary">--</div><div class="lbl">Primary</div></div>
+      <div class="metric"><div class="val" style="color:var(--green)" id="belief-derived">--</div><div class="lbl">Derived</div></div>
+      <div class="metric"><div class="val" style="color:var(--cyan, #67e8f9)" id="outcome-total">--</div><div class="lbl">Outcomes</div></div>
+      <div class="metric"><div class="val" style="color:var(--cyan, #67e8f9)" id="outcome-month">--</div><div class="lbl">This Month</div></div>
+    </div>
+    <div class="detail" id="d-belief"></div>
+  </div>
+
+  <!-- 2. ATTENTION STATE -->
+  <div class="section" id="s-attention">
+    <div class="sec-head" onclick="toggleSection('attention')">
+      <div class="sec-bar" style="background:var(--purple)"></div>
+      <div class="sec-title" style="color:var(--purple)">ATTENTION STATE</div>
+      <div class="sec-question">What consumed resources?</div>
+      <div class="sec-chevron" id="chev-attention">&#9660;</div>
+    </div>
+    <div class="metrics" id="m-attention">
+      <div class="metric"><div class="val" style="color:var(--purple)" id="attn-total">--</div><div class="lbl">Events 24h</div></div>
+      <div class="metric"><div class="val" style="color:var(--purple)" id="attn-critical">--</div><div class="lbl">Critical</div></div>
+      <div class="metric"><div class="val" style="color:var(--purple)" id="attn-important">--</div><div class="lbl">Important</div></div>
+    </div>
+    <div class="detail" id="d-attention"></div>
+  </div>
+
+  <!-- 3. INTENT STATE -->
+  <div class="section" id="s-intent">
+    <div class="sec-head" onclick="toggleSection('intent')">
+      <div class="sec-bar" style="background:var(--gold)"></div>
+      <div class="sec-title" style="color:var(--gold)">INTENT STATE</div>
+      <div class="sec-question">What advanced?</div>
+      <div class="sec-chevron" id="chev-intent">&#9660;</div>
+    </div>
+    <div class="metrics" id="m-intent">
+      <div class="metric"><div class="val" style="color:var(--gold)" id="intent-active">--</div><div class="lbl">Active</div></div>
+      <div class="metric"><div class="val" style="color:var(--gold)" id="intent-advancing">--</div><div class="lbl">Advancing</div></div>
+      <div class="metric"><div class="val" style="color:var(--amber)" id="intent-dormant">--</div><div class="lbl">Dormant</div></div>
+    </div>
+    <div class="detail" id="d-intent"></div>
+  </div>
+
+  <!-- 4. EMERGENCE STATE -->
+  <div class="section" id="s-emergence">
+    <div class="sec-head" onclick="toggleSection('emergence')">
+      <div class="sec-bar" style="background:var(--cyan)"></div>
+      <div class="sec-title" style="color:var(--cyan)">EMERGENCE STATE</div>
+      <div class="sec-question">What's forming?</div>
+      <div class="sec-chevron" id="chev-emergence">&#9660;</div>
+    </div>
+    <div class="metrics" id="m-emergence">
+      <div class="metric"><div class="val" style="color:var(--cyan)" id="em-watching">--</div><div class="lbl">Watching</div></div>
+      <div class="metric"><div class="val" style="color:var(--cyan)" id="em-confirmed">--</div><div class="lbl">Confirmed</div></div>
+      <div class="metric"><div class="val" style="color:var(--dim)" id="em-dismissed">--</div><div class="lbl">Dismissed</div></div>
+    </div>
+    <div class="detail" id="d-emergence"></div>
+  </div>
+
+  <!-- 5. HEALTH STATE -->
+  <div class="section span2" id="s-health">
+    <div class="sec-head" onclick="toggleSection('health')">
+      <div class="sec-bar" style="background:var(--green)"></div>
+      <div class="sec-title" id="health-title" style="color:var(--green)">HEALTH STATE</div>
+      <div class="sec-question">What's degrading?</div>
+      <div class="sec-chevron" id="chev-health">&#9660;</div>
+    </div>
+    <div class="metrics" id="m-health">
+      <div class="metric"><div class="val" id="health-procs-up" style="color:var(--green)">--</div><div class="lbl">Procs Online</div></div>
+      <div class="metric"><div class="val" id="health-procs-down" style="color:var(--red)">--</div><div class="lbl">Down/Stopped</div></div>
+      <div class="metric"><div class="val" id="health-vault" style="color:var(--green)">--</div><div class="lbl">Vault Notes</div></div>
+      <div class="metric"><div class="val" id="health-senses" style="color:var(--green)">--</div><div class="lbl">Senses Online</div></div>
+      <div class="metric"><div class="val" id="health-lucy" style="color:var(--purple)">--</div><div class="lbl">Lucy Pulse</div></div>
+    </div>
+    <div class="detail" id="d-health"></div>
+  </div>
+</div>
+
+<script>
+const API = '';
+const HDR = {'x-api-key':'cathedral-mcp-2026'};
+let autoRefresh = true;
+let refreshTimer = null;
+const collapsed = {};
+
+function toggleSection(id) {
+  collapsed[id] = !collapsed[id];
+  const d = document.getElementById('d-' + id);
+  const c = document.getElementById('chev-' + id);
+  if (collapsed[id]) {
+    d.classList.add('hidden');
+    c.parentElement.classList.add('collapsed');
+  } else {
+    d.classList.remove('hidden');
+    c.parentElement.classList.remove('collapsed');
+  }
+}
+
+function toggleRefresh() {
+  autoRefresh = !autoRefresh;
+  const dot = document.getElementById('refresh-dot');
+  const lbl = document.getElementById('refresh-label');
+  if (autoRefresh) {
+    dot.className = 'refresh-dot on';
+    lbl.textContent = 'LIVE';
+    scheduleRefresh();
+  } else {
+    dot.className = 'refresh-dot off';
+    lbl.textContent = 'PAUSED';
+    if (refreshTimer) clearTimeout(refreshTimer);
+  }
+}
+
+function scheduleRefresh() {
+  if (refreshTimer) clearTimeout(refreshTimer);
+  if (!autoRefresh) return;
+  refreshTimer = setTimeout(() => { loadAll(); scheduleRefresh(); }, 30000);
+}
+
+async function safeFetch(url) {
+  try {
+    const r = await fetch(API + url, {headers: HDR});
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
+}
+
+function fmt(n) {
+  if (n === null || n === undefined) return '--';
+  if (typeof n === 'number') return n.toLocaleString();
+  return String(n);
+}
+
+function timeAgo(ts) {
+  if (!ts) return 'unknown';
+  const d = typeof ts === 'string' ? new Date(ts) : new Date(ts);
+  const s = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+// ─── BELIEF ───
+async function loadBelief() {
+  const d = await safeFetch('/api/claim-ledger/stats');
+  if (!d) {
+    document.getElementById('belief-total').textContent = '--';
+    document.getElementById('d-belief').innerHTML = '<div class="unavailable">Claim ledger unavailable</div>';
+    return;
+  }
+  document.getElementById('belief-total').textContent = fmt(d.total);
+  document.getElementById('belief-primary').textContent = fmt(d.byType?.PRIMARY || 0);
+  document.getElementById('belief-derived').textContent = fmt(d.byType?.DERIVED || 0);
+
+  let html = '';
+  // Grade distribution
+  if (d.byGrade && Object.keys(d.byGrade).length) {
+    html += '<div style="margin-bottom:10px;color:var(--white);font-size:11px;letter-spacing:1px">CONFIDENCE</div>';
+    const grades = ['A','B','C','D','F'];
+    const total = d.total || 1;
+    for (const g of grades) {
+      const c = d.byGrade[g] || 0;
+      if (c === 0) continue;
+      const pct = Math.round(c / total * 100);
+      html += `<div class="bar-row">
+        <div class="bar-label">Grade ${g}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:var(--green)"></div></div>
+        <div class="bar-count">${c}</div>
+      </div>`;
+    }
+  }
+  // Type distribution
+  if (d.byType) {
+    html += '<div style="margin-top:12px">';
+    for (const [k,v] of Object.entries(d.byType)) {
+      html += `<div class="detail-row"><span class="detail-label">${k}</span><span class="detail-value">${v}</span></div>`;
+    }
+    if (d.promoted?.ledger !== undefined) {
+      html += `<div class="detail-row"><span class="detail-label">In Ledger</span><span class="detail-value">${d.promoted.ledger}</span></div>`;
+    }
+    if (d.blockedEvents !== undefined) {
+      html += `<div class="detail-row"><span class="detail-label">Blocked Events</span><span class="detail-value badge badge-amber">${d.blockedEvents}</span></div>`;
+    }
+    html += '</div>';
+  }
+  // Outcome ledger stats (graceful 404)
+  const outStats = await safeFetch('/api/outcomes/stats');
+  if (outStats) {
+    document.getElementById('outcome-total').textContent = fmt(outStats.total);
+    document.getElementById('outcome-month').textContent = fmt(outStats.thisMonth || 0);
+    html += '<div style="margin-top:12px;color:var(--white);font-size:11px;letter-spacing:1px">OUTCOMES</div>';
+    if (outStats.byResult && Object.keys(outStats.byResult).length) {
+      for (const [k,v] of Object.entries(outStats.byResult)) {
+        html += `<div class="detail-row"><span class="detail-label">${k}</span><span class="detail-value">${v}</span></div>`;
+      }
+    }
+    if (outStats.avgMagnitude) {
+      html += `<div class="detail-row"><span class="detail-label">Avg Magnitude</span><span class="detail-value">${outStats.avgMagnitude}</span></div>`;
+    }
+  }
+
+  document.getElementById('d-belief').innerHTML = html;
+}
+
+// ─── ATTENTION ───
+async function loadAttention() {
+  // Try attention API first (may not exist yet)
+  const attn = await safeFetch('/api/attention/stats');
+  const prio = await safeFetch('/api/priority/stats');
+
+  if (!attn && !prio) {
+    document.getElementById('attn-total').textContent = '--';
+    document.getElementById('d-attention').innerHTML = '<div class="unavailable">Priority and attention APIs unavailable</div>';
+    return;
+  }
+
+  // Use priority stats as primary (always available)
+  const src = prio?.last24h || {};
+  document.getElementById('attn-total').textContent = fmt(src.total || 0);
+  document.getElementById('attn-critical').textContent = fmt(src.byTier?.CRITICAL || 0);
+  document.getElementById('attn-important').textContent = fmt(src.byTier?.IMPORTANT || 0);
+
+  let html = '';
+
+  // Tier bars
+  if (src.byTier) {
+    html += '<div style="margin-bottom:10px;color:var(--white);font-size:11px;letter-spacing:1px">EVENTS BY TIER (24H)</div>';
+    const tiers = [
+      {k:'CRITICAL', c:'var(--red)'},
+      {k:'IMPORTANT', c:'var(--amber)'},
+      {k:'ROUTINE', c:'var(--purple)'},
+      {k:'BACKGROUND', c:'var(--dim)'}
+    ];
+    const maxT = Math.max(...Object.values(src.byTier), 1);
+    for (const t of tiers) {
+      const v = src.byTier[t.k] || 0;
+      const pct = Math.round(v / maxT * 100);
+      html += `<div class="bar-row">
+        <div class="bar-label">${t.k}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${t.c}"></div></div>
+        <div class="bar-count">${v}</div>
+      </div>`;
+    }
+  }
+
+  // Top event types
+  if (src.topTypes?.length) {
+    html += '<div style="margin-top:12px;color:var(--white);font-size:11px;letter-spacing:1px;margin-bottom:6px">TOP CONSUMERS</div>';
+    for (const t of src.topTypes.slice(0, 8)) {
+      html += `<div class="detail-row"><span class="detail-label">${t.type.replace(/_/g,' ')}</span><span class="detail-value">${t.count}</span></div>`;
+    }
+  }
+
+  // Attention learnings (if available)
+  if (attn) {
+    html += '<div style="margin-top:12px"><span class="badge badge-purple">Attention API live</span></div>';
+    const learnings = await safeFetch('/api/attention/learnings');
+    if (learnings?.length) {
+      html += '<div style="margin-top:8px;color:var(--white);font-size:11px;letter-spacing:1px;margin-bottom:4px">LEARNINGS</div>';
+      for (const l of learnings.slice(0, 3)) {
+        html += `<div style="color:var(--muted);font-size:10px;margin-bottom:4px">- ${l.summary || l.text || JSON.stringify(l).slice(0,120)}</div>`;
+      }
+    }
+  }
+
+  document.getElementById('d-attention').innerHTML = html;
+}
+
+// ─── INTENT ───
+async function loadIntent() {
+  const intents = await safeFetch('/api/intents');
+  const health = await safeFetch('/api/intents/health');
+
+  if (!intents) {
+    document.getElementById('intent-active').textContent = '--';
+    document.getElementById('intent-advancing').textContent = '--';
+    document.getElementById('intent-dormant').textContent = '--';
+    document.getElementById('d-intent').innerHTML = '<div class="unavailable">Intent Registry: pending parallel build</div>';
+    return;
+  }
+
+  const list = Array.isArray(intents) ? intents : (intents.intents || []);
+  const now = Date.now();
+  const DORMANT_DAYS = 7;
+  let advancing = 0, dormant = 0;
+
+  let html = '';
+  for (const intent of list) {
+    const lastSignal = intent.lastSignal ? new Date(intent.lastSignal).getTime() : 0;
+    const daysSince = lastSignal ? Math.floor((now - lastSignal) / 86400000) : 999;
+    const isDormant = daysSince > DORMANT_DAYS;
+    if (isDormant) dormant++; else advancing++;
+
+    const statusBadge = isDormant
+      ? '<span class="badge badge-amber">DORMANT ' + daysSince + 'd</span>'
+      : '<span class="badge badge-gold">ACTIVE</span>';
+
+    html += `<div class="intent-card">
+      <div class="intent-name">${intent.name || intent.id || 'unnamed'}</div>
+      <div class="intent-meta">
+        ${statusBadge}
+        ${intent.velocity !== undefined ? ' &middot; ' + intent.velocity + ' signals/wk' : ''}
+        ${intent.signals !== undefined ? ' &middot; ' + intent.signals + ' total signals' : ''}
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('intent-active').textContent = fmt(list.length);
+  document.getElementById('intent-advancing').textContent = fmt(advancing);
+  document.getElementById('intent-dormant').textContent = fmt(dormant);
+  document.getElementById('d-intent').innerHTML = html || '<div class="unavailable">No intents registered</div>';
+}
+
+// ─── EMERGENCE ───
+async function loadEmergence() {
+  const d = await safeFetch('/api/emergence');
+  if (!d) {
+    document.getElementById('em-watching').textContent = '--';
+    document.getElementById('d-emergence').innerHTML = '<div class="unavailable">Emergence board unavailable</div>';
+    return;
+  }
+
+  const counts = d.counts || {};
+  document.getElementById('em-watching').textContent = fmt(counts.WATCHING || 0);
+  document.getElementById('em-confirmed').textContent = fmt(counts.CONFIRMED || 0);
+  document.getElementById('em-dismissed').textContent = fmt(counts.DISMISSED || 0);
+
+  let html = '';
+
+  // Status bars
+  const statuses = [
+    {k:'DETECTED', c:'var(--dim)'},
+    {k:'WATCHING', c:'var(--cyan)'},
+    {k:'CONFIRMED', c:'var(--green)'},
+    {k:'INTEGRATED', c:'var(--gold)'},
+    {k:'DISMISSED', c:'var(--muted)'}
+  ];
+  const maxS = Math.max(...statuses.map(s => counts[s.k] || 0), 1);
+  html += '<div style="margin-bottom:10px;color:var(--white);font-size:11px;letter-spacing:1px">BY STATUS</div>';
+  for (const s of statuses) {
+    const v = counts[s.k] || 0;
+    const pct = Math.round(v / maxS * 100);
+    html += `<div class="bar-row">
+      <div class="bar-label">${s.k}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${s.c}"></div></div>
+      <div class="bar-count">${v}</div>
+    </div>`;
+  }
+
+  // Stale count
+  if (counts.stale) {
+    html += `<div style="margin-top:8px"><span class="badge badge-amber">${counts.stale} stale watchers</span></div>`;
+  }
+
+  // Top initiators
+  if (d.analytics?.topInitiators?.length) {
+    html += '<div style="margin-top:12px;color:var(--white);font-size:11px;letter-spacing:1px;margin-bottom:6px">TOP INITIATORS</div>';
+    for (const a of d.analytics.topInitiators.slice(0, 5)) {
+      html += `<div class="detail-row"><span class="detail-label">${a.agent}</span><span class="detail-value">${a.count}</span></div>`;
+    }
+  }
+
+  // Recent confirmed
+  if (d.incidents?.length) {
+    const confirmed = d.incidents.filter(i => i.status === 'CONFIRMED').slice(0, 3);
+    if (confirmed.length) {
+      html += '<div style="margin-top:12px;color:var(--white);font-size:11px;letter-spacing:1px;margin-bottom:6px">RECENT CONFIRMED</div>';
+      for (const c of confirmed) {
+        html += `<div style="color:var(--cyan);font-size:10px;margin-bottom:4px;line-height:1.5">
+          <span style="color:var(--dim)">${c.agent || '?'}</span> ${(c.summary || '').slice(0, 100)}
+        </div>`;
+      }
+    }
+  }
+
+  // Re-emerged
+  if (d.analytics?.reEmerged?.length) {
+    html += `<div style="margin-top:8px"><span class="badge badge-cyan">${d.analytics.reEmerged.length} re-emerged</span></div>`;
+  }
+
+  document.getElementById('d-emergence').innerHTML = html;
+}
+
+// ─── HEALTH ───
+async function loadHealth() {
+  const snap = await safeFetch('/villa/snapshot');
+  const lucy = await safeFetch('/api/lucy-heartbeat');
+  const status = await safeFetch('/status');
+
+  if (!snap && !status) {
+    document.getElementById('health-procs-up').textContent = '--';
+    document.getElementById('d-health').innerHTML = '<div class="unavailable">Villa snapshot unavailable</div>';
+    return;
+  }
+
+  // Process health from /status
+  let procsUp = 0, procsDown = 0, procsList = [];
+  if (status?.processes) {
+    for (const p of status.processes) {
+      if (p.status === 'online') procsUp++;
+      else procsDown++;
+      procsList.push(p);
+    }
+  }
+
+  document.getElementById('health-procs-up').textContent = fmt(procsUp);
+  document.getElementById('health-procs-up').style.color = procsDown > 3 ? 'var(--amber)' : 'var(--green)';
+  document.getElementById('health-procs-down').textContent = fmt(procsDown);
+  document.getElementById('health-procs-down').style.color = procsDown > 0 ? 'var(--red)' : 'var(--green)';
+
+  // Vault
+  const vaultTotal = snap?.vault?.total || '--';
+  document.getElementById('health-vault').textContent = fmt(vaultTotal);
+
+  // Senses
+  const sensesOnline = (snap?.senses || []).filter(s => s.online).length;
+  const sensesTotal = (snap?.senses || []).length;
+  document.getElementById('health-senses').textContent = sensesOnline + '/' + sensesTotal;
+  document.getElementById('health-senses').style.color = sensesOnline < sensesTotal ? 'var(--amber)' : 'var(--green)';
+
+  // Lucy
+  if (lucy?.state?.lastPulse) {
+    document.getElementById('health-lucy').textContent = '#' + (lucy.state.pulseNumber || '?');
+  }
+
+  // Overall health color
+  const degrading = procsDown > 5 || sensesOnline < 3;
+  const titleEl = document.getElementById('health-title');
+  const barEl = titleEl.previousElementSibling;
+  if (degrading) {
+    titleEl.style.color = 'var(--red)';
+    barEl.style.background = 'var(--red)';
+  } else if (procsDown > 0) {
+    titleEl.style.color = 'var(--amber)';
+    barEl.style.background = 'var(--amber)';
+  } else {
+    titleEl.style.color = 'var(--green)';
+    barEl.style.background = 'var(--green)';
+  }
+
+  let html = '<div style="display:flex;gap:24px;flex-wrap:wrap">';
+
+  // Left: processes
+  html += '<div style="flex:1;min-width:280px">';
+  html += '<div style="color:var(--white);font-size:11px;letter-spacing:1px;margin-bottom:8px">PROCESSES</div>';
+
+  // Show down/errored first
+  const downProcs = procsList.filter(p => p.status !== 'online');
+  const onlineProcs = procsList.filter(p => p.status === 'online');
+
+  for (const p of downProcs) {
+    html += `<div class="proc-row">
+      <div class="proc-dot ${p.status}"></div>
+      <div class="proc-name" style="color:var(--red)">${p.name}</div>
+      <div class="proc-status">${p.status}</div>
+    </div>`;
+  }
+  if (downProcs.length && onlineProcs.length) {
+    html += '<div style="border-top:1px solid var(--border);margin:6px 0"></div>';
+  }
+  // Show top 10 online procs (by memory)
+  const topOnline = onlineProcs.sort((a,b) => (b.memory||0) - (a.memory||0)).slice(0, 10);
+  for (const p of topOnline) {
+    const mem = p.memory ? Math.round(p.memory / 1048576) + 'MB' : '';
+    html += `<div class="proc-row">
+      <div class="proc-dot online"></div>
+      <div class="proc-name">${p.name}</div>
+      <div class="proc-status">${mem}</div>
+    </div>`;
+  }
+  if (onlineProcs.length > 10) {
+    html += `<div style="color:var(--dim);font-size:10px;margin-top:4px">+ ${onlineProcs.length - 10} more online</div>`;
+  }
+  html += '</div>';
+
+  // Right: vault + senses + Lucy
+  html += '<div style="flex:1;min-width:280px">';
+
+  // Vault breakdown
+  if (snap?.vault) {
+    html += '<div style="color:var(--white);font-size:11px;letter-spacing:1px;margin-bottom:8px">VAULT</div>';
+    const v = snap.vault;
+    html += `<div class="detail-row"><span class="detail-label">Total</span><span class="detail-value">${fmt(v.total)}</span></div>`;
+    html += `<div class="detail-row"><span class="detail-label">Staging</span><span class="detail-value">${fmt(v.staging)}</span></div>`;
+    html += `<div class="detail-row"><span class="detail-label">Refined Gold</span><span class="detail-value">${fmt(v.refined)}</span></div>`;
+    html += `<div class="detail-row"><span class="detail-label">Methods</span><span class="detail-value">${fmt(v.methods)}</span></div>`;
+  }
+
+  // Senses
+  if (snap?.senses?.length) {
+    html += '<div style="color:var(--white);font-size:11px;letter-spacing:1px;margin-top:12px;margin-bottom:8px">SENSES</div>';
+    for (const s of snap.senses) {
+      const color = s.online ? 'var(--green)' : (s.status === 'planned' ? 'var(--dim)' : 'var(--red)');
+      html += `<div class="proc-row">
+        <div class="proc-dot" style="background:${color}"></div>
+        <div class="proc-name">${s.sense}</div>
+        <div class="proc-status">${s.status}</div>
+      </div>`;
+    }
+  }
+
+  // Lucy excerpt
+  if (lucy?.latestContent) {
+    html += '<div style="color:var(--white);font-size:11px;letter-spacing:1px;margin-top:12px;margin-bottom:6px">LUCY PULSE #' + (lucy.state?.pulseNumber || '?') + ' <span style="color:var(--dim)">' + (lucy.state?.lastPulse || '') + '</span></div>';
+    // Extract first meaningful section
+    const lines = lucy.latestContent.split('\n');
+    let excerpt = '';
+    let capturing = false;
+    for (const line of lines) {
+      if (line.startsWith('## ') || line.startsWith('### ')) {
+        if (excerpt.length > 200) break;
+        capturing = true;
+      }
+      if (capturing) excerpt += line + '\n';
+      if (excerpt.length > 400) break;
+    }
+    html += `<div class="lucy-excerpt">${excerpt.replace(/[#*]/g,'').trim().slice(0, 500)}</div>`;
+  }
+
+  html += '</div></div>';
+  document.getElementById('d-health').innerHTML = html;
+}
+
+// ─── LOAD ALL ───
+async function loadAll() {
+  const now = new Date();
+  document.getElementById('last-refresh').textContent = now.toLocaleTimeString();
+  await Promise.all([
+    loadBelief(),
+    loadAttention(),
+    loadIntent(),
+    loadEmergence(),
+    loadHealth()
+  ]);
+}
+
+// Boot
+loadAll();
+scheduleRefresh();
+</script>
+</body>
+</html>

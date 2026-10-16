@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Small bouncing motions, maintaining a stable orthodox stance",
+        "stance_width": "normal",
+        "guard": "Both hands held high, elbows tucked, protecting the face",
+        "upper_body": "No significant movement; relaxed ready posture",
+        "distance": "Fighting distance from the pads held by the trainer on the right",
+        "notable": "Trainer holding green focus mitts, waiting for the exchange"
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Lead foot steps in, rear foot pivots, then step back to reset",
+        "stance_width": "changing",
+        "guard": "Right hand extends forward during the strike, left hand remains in guard",
+        "upper_body": "Torso rotates left, shoulders turn significantly as right arm punches out",
+        "distance": "Closes distance quickly to strike, then retreats away from the pads",
+        "notable": "Fighter throws a straight right punch (cross), full extension visible"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Small shuffles to reset and re-establish stance",
+        "stance_width": "normal",
+        "guard": "Both hands returned to the high guard position",
+        "upper_body": "Slight sway, back to a calm ready position",
+        "distance": "Distance maintained, slightly larger than the striking range earlier",
+        "notable": "End of the exchange, fighter returns to a neutral fighting stance"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F7",
+      "type": "punch_preparation",
+      "detail": "Fighter steps forward and loads the right hand before throwing"
+    },
+    {
+      "frames": "F7-F8",
+      "type": "punch_extension",
+      "detail": "Fighter extends the right arm forward, rotating the torso to deliver a straight punch"
+    },
+    {
+      "frames": "F9-F10",
+      "type": "punch_recovery",
+      "detail": "Fighter retracts the right hand back to guard and steps back to reset"
+    },
+    {
+      "frames": "F14-F15",
+      "type": "distance_open",
+      "detail": "Fighter creates space from the trainer after the combination"
+    }
+  ],
+  "overall_rhythm": "steady"
+}

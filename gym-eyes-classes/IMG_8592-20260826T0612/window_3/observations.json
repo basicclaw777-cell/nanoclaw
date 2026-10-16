@@ -1,0 +1,67 @@
+{
+  "people_detected": 2,
+  "activity_type": "drilling",
+  "intensity": "medium",
+  "fighter_stance": "unclear",
+  "segments": [
+    {
+      "frames": "F1-F6",
+      "time": "0.0s-1.7s",
+      "observations": {
+        "footwork": "Both fighters moving laterally across the gym floor, with forward and backward shuffling steps",
+        "stance_width": "changing",
+        "guard": "Hands held up in a boxing guard throughout",
+        "upper_body": "Slight bobbing and weaving, torso rotating with movement",
+        "distance": "Medium range, maintaining distance with light footwork",
+        "notable": "Moving as a pair, one stepping in as the other steps back"
+      }
+    },
+    {
+      "frames": "F7-F10",
+      "time": "2.0s-3.0s",
+      "observations": {
+        "footwork": "Lead foot steps forward to generate power for the punch",
+        "stance_width": "normal",
+        "guard": "Lead hand extends while rear hand remains up in guard",
+        "upper_body": "Torso rotation visible, punching arm fully extended towards the target",
+        "distance": "Medium range, punch is thrown as the other fighter shifts back",
+        "notable": "A left hand punch is extended and then recovered"
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Backpedaling and resetting, taking smaller steps",
+        "stance_width": "normal",
+        "guard": "Both hands return to a high guard position",
+        "upper_body": "Recovery and slight reset, less upper body movement",
+        "distance": "Distance opens slightly as they reset",
+        "notable": "A brief pause or slow-down in the action"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F6",
+      "type": "step",
+      "detail": "Lateral shuffling and footwork as the pair moves around the area"
+    },
+    {
+      "frames": "F7-F9",
+      "type": "punch_extension",
+      "detail": "Left hand punch is extended towards the target"
+    },
+    {
+      "frames": "F10",
+      "type": "punch_recovery",
+      "detail": "Punch is retracted back to the guard position"
+    },
+    {
+      "frames": "F11-F15",
+      "type": "reset",
+      "detail": "Fighters reset their position and backpedal"
+    }
+  ],
+  "overall_rhythm": "steady"
+}

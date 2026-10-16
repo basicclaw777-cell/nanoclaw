@@ -1,0 +1,177 @@
+{
+  "id": "lesson-05",
+  "position": 5,
+  "title": "The Jab",
+  "subtitle": "Not a punch — a measuring tool",
+  "slug": "the-jab",
+
+  "curriculum": {
+    "blocks": [1, 2],
+    "pillars": ["skill"],
+    "domains": ["combos", "strategy"],
+    "engines": {
+      "body": "Lead hand extension, shoulder rotation, weight shift forward",
+      "mind": "Range finding, distance management, setting up what comes next",
+      "emotion": "First offensive action — the moment a student feels 'I can do this'"
+    }
+  },
+
+  "audience": {
+    "level": "beginner",
+    "hook": "The jab is the most important punch in boxing. And it's not really a punch.",
+    "question": "Why is the jab a measuring tool, not a weapon?"
+  },
+
+  "core": {
+    "thesis": "The jab is boxing's measuring tool — it finds range, controls distance, disrupts timing, and sets up everything else. Power is secondary to precision.",
+    "keyPoints": [
+      "The jab finds range — it tells you how far away your opponent is without committing",
+      "The jab controls distance — it keeps the opponent where YOU want them",
+      "The jab disrupts timing — a well-timed jab breaks whatever the opponent was planning",
+      "The jab sets up everything — cross, hook, angle change, exit. Nothing happens without the jab first.",
+      "Mechanics: lead hand extends straight, shoulder rotates to protect chin, weight shifts slightly forward, hand returns FAST",
+      "Speed over power — a fast jab that lands beats a hard jab that misses",
+      "The jab is the most thrown punch in boxing and the most underestimated",
+      "A good jab makes your opponent respect your range — that respect creates openings for everything else"
+    ],
+    "commonMisconceptions": [
+      "The jab is weak / just a range finder — it can score, stun, and control an entire fight",
+      "You jab with your arm — the jab starts from the stance, through the shoulder",
+      "One type of jab — there are many: probing, snapping, stepping, power jab, flicking",
+      "Jab is boring to drill — it's the punch that makes you better at everything else"
+    ],
+    "coachEye": {
+      "observe": "Watch the shoulder — does it rotate to cover the chin, or does the arm just extend?",
+      "compare": "Jab from stance vs jab while moving forward — does the student's balance change?",
+      "predict": "A student who pulls their jab back slowly will get timed with a counter. Always.",
+      "diagnose": "If the jab has no snap, check the wrist — it's usually limp at impact"
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["combos", "strategy"],
+    "motions": ["snap", "pulse"],
+    "lines": ["solid", "dashed", "thin"],
+    "diagnostics": ["gold-pulse", "red-flash"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "Not a Punch",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "The jab is the most important punch in boxing. But it's not really a punch. It's a measuring tool. A question you ask with your lead hand.",
+      "components": ["CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Reframe: jab as tool, not weapon"
+    },
+    {
+      "id": "scene_02",
+      "title": "Finding Range",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "Extend your lead hand. That's your range. Everything inside it is yours. Everything outside it is safe. The jab tells you exactly where the boundary is — without committing your body.",
+      "components": ["PunchTrajectory", "DistanceBands", "CenterLine", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Range finding — the jab as distance sensor"
+    },
+    {
+      "id": "scene_03",
+      "title": "The Mechanics",
+      "duration": "30s",
+      "visualMode": "blueprint",
+      "narration": "Straight line from the guard. Shoulder rotates to protect the chin. Weight shifts forward — just enough. And the hand comes back FAST. Faster than it went out. Because the return is where you're vulnerable.",
+      "components": ["PunchTrajectory", "GuardWindow", "HipRotation", "ForceVector"],
+      "assets": [],
+      "learningObjective": "Jab mechanics — extension, rotation, return"
+    },
+    {
+      "id": "scene_04",
+      "title": "What It Sets Up",
+      "duration": "20s",
+      "visualMode": "hud",
+      "narration": "The jab sets up the cross. The jab sets up the angle. The jab sets up the exit. Nothing in boxing happens without the jab going first. It's the key that opens every door.",
+      "components": ["PunchTrajectory", "FootworkGrid", "DistanceBands"],
+      "assets": [],
+      "learningObjective": "The jab as setup for everything else"
+    },
+    {
+      "id": "scene_05",
+      "title": "Speed Over Power",
+      "duration": "15s",
+      "visualMode": "blueprint",
+      "narration": "A fast jab that lands beats a hard jab that misses. Speed first. Accuracy second. Power last. That's the order.",
+      "components": ["TimingPulse", "PunchTrajectory", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Priority: speed > accuracy > power"
+    },
+    {
+      "id": "scene_06",
+      "title": "Respect",
+      "duration": "15s",
+      "visualMode": "noir",
+      "narration": "When your jab is good, your opponent respects your range. That respect changes everything. They hesitate. They adjust. They react to YOU. And that's when the real boxing begins.",
+      "components": ["CalloutLabel"],
+      "assets": ["sparring-jab-footage"],
+      "learningObjective": "Jab creates respect → respect creates openings"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_02", "scene_05"],
+      "hook": "The jab is the most important punch in boxing. And it's not really a punch.",
+      "cta": "Learn the fundamentals first."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "Not a Punch — A Measuring Tool"},
+        {"time": "1:30", "title": "Finding Range"},
+        {"time": "3:00", "title": "The Mechanics"},
+        {"time": "5:00", "title": "What the Jab Sets Up"},
+        {"time": "6:30", "title": "Speed Over Power"},
+        {"time": "8:00", "title": "When They Respect Your Jab"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "15s",
+      "sceneIds": ["scene_02", "scene_03"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "The Jab as a Measuring Tool",
+        "Mechanics: Extension, Rotation, Return",
+        "Types of Jab",
+        "What the Jab Sets Up",
+        "Common Errors"
+      ],
+      "diagrams": ["jab-trajectory", "shoulder-rotation", "range-bands"],
+      "checkpoints": [
+        "Does your shoulder cover your chin when you jab?",
+        "Is your return faster than your extension?",
+        "Can you jab without shifting your weight too far forward?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Don't teach the cross until the jab is clean — the jab teaches the mechanics the cross relies on",
+        "Use the phrase 'the jab is a question' — it makes students think about purpose, not power",
+        "Drill the return separately: jab out slow, snap back fast. They always neglect the return."
+      ],
+      "regressions": [
+        "If the jab arcs or loops, the student is trying to hit hard. Reset: 'straight line, fast back'",
+        "If the shoulder doesn't rotate, go back to stance (lesson 3) — the rotation comes from the base"
+      ],
+      "observations": [
+        "The student who asks 'what do I do after the jab?' is ready for combinations (lesson 9)"
+      ],
+      "progressionTo": "lesson-06-footwork-fundamentals"
+    }
+  }
+}

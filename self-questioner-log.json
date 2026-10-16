@@ -1,0 +1,75 @@
+[
+  {
+    "id": "sq-2026-07-03-mr3vqyo01",
+    "date": "2026-07-03",
+    "question": "What real-world outcomes have been measured to validate the confidence of each coaching rule?",
+    "type": "coaching_gap",
+    "domain": "Basic Reflex coachability techniques",
+    "source": "The coaching rules themselves list their confidence level and note they've never been validated by outcomes.",
+    "action": "elicitation",
+    "priority": 1,
+    "reasoning": "Validating our core coaching methodology would be a major step forward. This question cuts to the heart of whether it works in practice vs theory alone.",
+    "suggested_sources": [
+      "Paul's fight logs",
+      "coaching outcomes from the gym this month"
+    ],
+    "status": "pending",
+    "response": null,
+    "respondedDate": null
+  },
+  {
+    "id": "sq-2026-07-03-mr3vr5dh2",
+    "date": "2026-07-03",
+    "question": "Why is the coaching rules folder (06_Methods) so much larger than the actual low confidence and unvalidated rules (27 total low confidence/rules, 0 commits in the last 14 days)?",
+    "type": "coaching_gap",
+    "domain": "Basic Reflex coaching rules",
+    "source": "Current state of folders and recent activity",
+    "action": "conversation",
+    "priority": 3,
+    "reasoning": "The large discrepancy between the number of stated coaching rules and the actual validated ones suggests there may be many more low confidence or unvalidated rules that are not being tracked properly. This question could help uncover what is causing this disconnect and whether any of these rules should be prioritized for validation.",
+    "suggested_sources": [
+      "Paul",
+      "review of all low confidence rules and their context in the coaching program"
+    ],
+    "status": "pending",
+    "response": null,
+    "respondedDate": null
+  },
+  {
+    "id": "sq-2026-07-03-mr3vre1l3",
+    "date": "2026-07-03",
+    "question": "What connections can be made between the coaching rules and the four mind-body-emotion engines? Specifically, which rules fit into which engine's repair architecture?",
+    "type": "connection",
+    "domain": "Coaching Rules improvement",
+    "source": "The low confidence (0.6) coaching rules are all based on a hypothesis about organizing around different types of \"engines\" (mind, emotion, body), but no specific connections between the rules and those engines are spelled out.",
+    "action": "research",
+    "priority": 3,
+    "reasoning": "Connecting each rule to its target engine would greatly increase confidence in this system of coaching rules. The questions would make it clear when a given intervention is appropriate, as it matches up with the type of leaky \"engine\" that needs repair work.",
+    "suggested_sources": [
+      "Refine Gold transcripts from sessions where Paul worked through these coaching principles",
+      "knowledge graph linking rules to engine types",
+      "conversation with Paul on which rules seem most aligned with each engine based on his experience using them."
+    ],
+    "status": "pending",
+    "response": null,
+    "respondedDate": null
+  },
+  {
+    "id": "sq-2026-07-03-mr3vslry4",
+    "date": "2026-07-03",
+    "question": "What is the underlying assumption that all coaching rules should be applied equally across different types of emotional wounds?",
+    "type": "challenge",
+    "domain": "Coaching Rules",
+    "source": "The existence of 27 low confidence (<0.7) and never validated by outcomes rules in the coaching methods folder.",
+    "action": "conversation",
+    "priority": 3,
+    "reasoning": "Asking Paul to examine and articulate the assumption that all his coaching rules apply equally across different types of emotional wounds could reveal blind spots or missed nuance in how he conceptualizes and treats the mind-body-emotion engines. This would improve the intelligence and specificity of his coaching methodology.",
+    "suggested_sources": [
+      "Vault folder 06_Methods",
+      "conversation with Paul about his theory and assumptions behind each rule"
+    ],
+    "status": "pending",
+    "response": null,
+    "respondedDate": null
+  }
+]

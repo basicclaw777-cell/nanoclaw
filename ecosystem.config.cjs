@@ -261,5 +261,26 @@ module.exports = {
         PAUL_CHAT_ID:   '1912121485',
       },
     },
+    // ── Taste Practice ──────────────────────────────────────────────────────
+    {
+      name:           'taste-practice',
+      script:         'taste-practice-cron.js',
+      cwd:            '/Users/basicclaw777/nanoclaw',
+      interpreter:    'node',
+      // Cron: daily at 21:00 HKT (13:00 UTC)
+      cron_restart:   '0 13 * * *',
+      autorestart:    false,
+      error_file:     '/Users/basicclaw777/nanoclaw/taste-practice-error.log',
+      out_file:       '/Users/basicclaw777/nanoclaw/taste-practice.log',
+      merge_logs:     true,
+      log_date_format: 'YYYY-MM-DD HH:mm:ss HKT',
+      env: {
+        NODE_ENV:       'production',
+        HOME:           '/Users/basicclaw777',
+        TZ:             'Asia/Hong_Kong',
+        TELEGRAM_TOKEN: '8284790243:AAHocCsFhjkzmRsGPI0t1I_NMF4ZcPV--v4',
+        PAUL_CHAT_ID:   '1912121485',
+      },
+    },
   ],
 };

@@ -1,36 +1,36 @@
 {
-  "balance_cash": 49700,
+  "balance_cash": 43400,
   "initial_balance": 50000,
   "positions": {
     "BTC": {
-      "qty": 0.0024725852114678504,
-      "total_cost": 200,
-      "avg_price": 80887,
+      "qty": 0.06121724304558352,
+      "total_cost": 4400,
+      "avg_price": 71875.17407021542,
       "first_buy": "2026-05-10",
-      "current_value": 200,
-      "unrealised_pnl": 0,
-      "unrealised_pct": 0
+      "current_value": 5068.18,
+      "unrealised_pnl": 668.18,
+      "unrealised_pct": 15.19
     },
     "ETH": {
-      "qty": 0.04305297237721293,
-      "total_cost": 100,
-      "avg_price": 2322.72,
+      "qty": 1.0607455424174788,
+      "total_cost": 2200,
+      "avg_price": 2074.0129578919727,
       "first_buy": "2026-05-10",
-      "current_value": 100,
-      "unrealised_pnl": 0,
-      "unrealised_pct": 0
+      "current_value": 2650.78,
+      "unrealised_pnl": 450.78,
+      "unrealised_pct": 20.49
     }
   },
   "dca_schedule": {
     "btc_weekly": 200,
     "eth_weekly": 100
   },
-  "total_invested": 300,
-  "total_value": 50000,
-  "unrealised_pnl": 0,
+  "total_invested": 6600,
+  "total_value": 51118.96,
+  "unrealised_pnl": 1118.96,
   "realised_pnl": 0,
   "started": "2026-05-10",
-  "last_dca": "2026-05-10",
+  "last_dca": "2026-10-11",
   "last_rebalance": null,
   "history": [
     {
@@ -63,6 +63,184 @@
       "unrealised_pnl": 0,
       "btc_price": 80887,
       "eth_price": 2322.72
+    },
+    {
+      "date": "2026-05-16",
+      "total_value": 49987.17,
+      "unrealised_pnl": -12.83,
+      "btc_price": 78203,
+      "eth_price": 2178.93
+    },
+    {
+      "date": "2026-05-17",
+      "total_value": 49986.2,
+      "unrealised_pnl": -13.8,
+      "btc_price": 77980,
+      "eth_price": 2180.57
+    },
+    {
+      "date": "2026-05-17",
+      "total_value": 49986.2,
+      "unrealised_pnl": -13.8,
+      "btc_price": 77980,
+      "eth_price": 2180.57
+    },
+    {
+      "date": "2026-05-24",
+      "total_value": 49967.84,
+      "unrealised_pnl": -32.16,
+      "btc_price": 76696,
+      "eth_price": 2116.76
+    },
+    {
+      "date": "2026-05-24",
+      "total_value": 49967.33,
+      "unrealised_pnl": -32.67,
+      "btc_price": 76645,
+      "eth_price": 2116.81
+    },
+    {
+      "date": "2026-05-31",
+      "total_value": 49922.08,
+      "unrealised_pnl": -77.92,
+      "btc_price": 73863,
+      "eth_price": 2024.15
+    },
+    {
+      "date": "2026-06-07",
+      "total_value": 49665.07,
+      "unrealised_pnl": -334.93,
+      "btc_price": 61665,
+      "eth_price": 1594.13
+    },
+    {
+      "date": "2026-06-14",
+      "total_value": 49736.55,
+      "unrealised_pnl": -263.45,
+      "btc_price": 64511,
+      "eth_price": 1680.82
+    },
+    {
+      "date": "2026-06-21",
+      "total_value": 49752.8,
+      "unrealised_pnl": -247.2,
+      "btc_price": 64342,
+      "eth_price": 1735.96
+    },
+    {
+      "date": "2026-06-28",
+      "total_value": 49591.24,
+      "unrealised_pnl": -408.76,
+      "btc_price": 60119,
+      "eth_price": 1572.75
+    },
+    {
+      "date": "2026-07-05",
+      "total_value": 49749.23,
+      "unrealised_pnl": -250.77,
+      "btc_price": 62751,
+      "eth_price": 1763.08
+    },
+    {
+      "date": "2026-07-12",
+      "total_value": 49814.24,
+      "unrealised_pnl": -185.76,
+      "btc_price": 64156,
+      "eth_price": 1809.06
+    },
+    {
+      "date": "2026-07-19",
+      "total_value": 49862.91,
+      "unrealised_pnl": -137.09,
+      "btc_price": 64634,
+      "eth_price": 1865.93
+    },
+    {
+      "date": "2026-07-26",
+      "total_value": 46400,
+      "unrealised_pnl": 0
+    },
+    {
+      "date": "2026-08-02",
+      "total_value": 49829.1,
+      "unrealised_pnl": -170.9,
+      "btc_price": 63457,
+      "eth_price": 1877.62
+    },
+    {
+      "date": "2026-08-09",
+      "total_value": 49903.32,
+      "unrealised_pnl": -96.68,
+      "btc_price": 64756,
+      "eth_price": 1913.01
+    },
+    {
+      "date": "2026-08-16",
+      "total_value": 45800,
+      "unrealised_pnl": 0
+    },
+    {
+      "date": "2026-08-23",
+      "total_value": 50779.55,
+      "unrealised_pnl": 779.55,
+      "btc_price": 76920,
+      "eth_price": 2413.71
+    },
+    {
+      "date": "2026-08-30",
+      "total_value": 50843.7,
+      "unrealised_pnl": 843.7,
+      "btc_price": 77838,
+      "eth_price": 2443.96
+    },
+    {
+      "date": "2026-09-06",
+      "total_value": 50999.8,
+      "unrealised_pnl": 999.8,
+      "btc_price": 80027,
+      "eth_price": 2509.53
+    },
+    {
+      "date": "2026-09-13",
+      "total_value": 50869.65,
+      "unrealised_pnl": 869.65,
+      "btc_price": 77188,
+      "eth_price": 2519.85
+    },
+    {
+      "date": "2026-09-13",
+      "total_value": 50869.65,
+      "unrealised_pnl": 869.65,
+      "btc_price": 77188,
+      "eth_price": 2519.85
+    },
+    {
+      "date": "2026-09-20",
+      "total_value": 51098.22,
+      "unrealised_pnl": 1098.22,
+      "btc_price": 80447,
+      "eth_price": 2586.43
+    },
+    {
+      "date": "2026-09-27",
+      "total_value": 51414.86,
+      "unrealised_pnl": 1414.86,
+      "btc_price": 84391,
+      "eth_price": 2695.64
+    },
+    {
+      "date": "2026-10-04",
+      "total_value": 51439.42,
+      "unrealised_pnl": 1439.42,
+      "btc_price": 84833,
+      "eth_price": 2695.24
+    },
+    {
+      "date": "2026-10-11",
+      "total_value": 51118.96,
+      "unrealised_pnl": 1118.96,
+      "btc_price": 82790,
+      "eth_price": 2498.98
     }
   ]
 }

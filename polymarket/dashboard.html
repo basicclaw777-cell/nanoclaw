@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polymarket Scanner</title>
+<style>
+  :root { --bg: #0a0a0a; --surface: #141414; --border: #222; --text: #e0e0e0; --dim: #888; --green: #22c55e; --red: #ef4444; --gold: #f7b408; --blue: #3b82f6; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Share Tech Mono', monospace; padding: 20px; }
+  h1 { font-size: 1.4rem; color: var(--gold); margin-bottom: 4px; }
+  .meta { color: var(--dim); font-size: 0.8rem; margin-bottom: 20px; }
+  .stats { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; min-width: 120px; }
+  .stat-val { font-size: 1.6rem; font-weight: bold; color: var(--gold); }
+  .stat-label { font-size: 0.7rem; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
+  .section-title { font-size: 1rem; color: var(--gold); margin: 20px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  .market-grid { display: grid; gap: 10px; }
+  .market-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+  .market-card:hover { border-color: var(--gold); }
+  .market-question { font-size: 0.85rem; line-height: 1.4; }
+  .market-meta { display: flex; gap: 12px; font-size: 0.7rem; color: var(--dim); margin-top: 4px; }
+  .market-event { font-size: 0.7rem; color: var(--blue); margin-top: 2px; }
+  .price-block { text-align: right; min-width: 80px; }
+  .price-yes { font-size: 1.4rem; font-weight: bold; }
+  .price-yes.low { color: var(--red); }
+  .price-yes.mid { color: var(--gold); }
+  .price-yes.high { color: var(--green); }
+  .price-no { font-size: 0.7rem; color: var(--dim); }
+  .relevance { display: inline-block; background: var(--gold); color: #000; font-size: 0.65rem; padding: 1px 6px; border-radius: 3px; font-weight: bold; }
+  .tag-expired { color: var(--red); font-weight: bold; }
+  .controls { margin-bottom: 16px; display: flex; gap: 10px; align-items: center; }
+  .controls button { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 0.75rem; }
+  .controls button:hover { border-color: var(--gold); }
+  .controls button.active { border-color: var(--gold); color: var(--gold); }
+  .back-btn { position: fixed; top: 12px; right: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--dim); padding: 4px 10px; border-radius: 4px; text-decoration: none; font-size: 0.7rem; font-family: inherit; }
+  .back-btn:hover { border-color: var(--gold); color: var(--text); }
+  @media (max-width: 600px) { .stats { flex-direction: column; } .market-card { grid-template-columns: 1fr; } .price-block { text-align: left; } }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+<a href="/lobby" class="back-btn">Lobby</a>
+<h1>POLYMARKET SCANNER</h1>
+<div class="meta" id="scanMeta">Loading...</div>
+
+<div class="stats" id="statsBar"></div>
+
+<div class="controls">
+  <button class="active" onclick="showSection('candidates')">Candidates</button>
+  <button onclick="showSection('estimates')">Estimates</button>
+  <button onclick="showSection('sizing')">Kelly Sizing</button>
+  <button onclick="showSection('ledger')">Ledger</button>
+  <button onclick="showSection('other')">Other</button>
+  <button onclick="rescan()">Rescan</button>
+  <button onclick="runResearch()">Research Top 5</button>
+</div>
+
+<div id="candidates">
+  <div class="section-title">Research Candidates <span id="candCount"></span></div>
+  <div class="market-grid" id="candGrid"></div>
+</div>
+
+<div id="estimates" style="display:none">
+  <div class="section-title">Research Estimates</div>
+  <div class="market-grid" id="estGrid"></div>
+</div>
+
+<div id="sizing" style="display:none">
+  <div class="section-title">Kelly Position Sizing</div>
+  <div id="kellyInfo" style="color:var(--dim);font-size:0.8rem;margin-bottom:12px"></div>
+  <div class="market-grid" id="kellyGrid"></div>
+</div>
+
+<div id="ledger" style="display:none">
+  <div class="section-title">Paper Trading Ledger</div>
+  <div id="ledgerStats" class="stats" style="margin-bottom:16px"></div>
+  <div class="market-grid" id="ledgerGrid"></div>
+</div>
+
+<div id="other" style="display:none">
+  <div class="section-title">Other Active Markets</div>
+  <div class="market-grid" id="otherGrid"></div>
+</div>
+
+<script>
+let data = null;
+let estimates = {};
+
+async function load() {
+  try {
+    const [mRes, eRes] = await Promise.all([
+      fetch('/api/polymarket/markets'),
+      fetch('/api/polymarket/estimates')
+    ]);
+    data = await mRes.json();
+    estimates = await eRes.json();
+    render();
+  } catch (e) {
+    document.getElementById('scanMeta').textContent = 'Failed to load data: ' + e.message;
+  }
+}
+
+function render() {
+  if (!data) return;
+  const d = new Date(data.scannedAt);
+  document.getElementById('scanMeta').textContent =
+    `Last scan: ${d.toLocaleString()} | ${data.totalEvents} events | ${data.totalMarkets} markets`;
+
+  document.getElementById('statsBar').innerHTML = [
+    stat(data.candidates, 'Candidates'),
+    stat(data.filteredMarkets, 'Filtered'),
+    stat(data.totalMarkets, 'Total Markets'),
+    stat(data.totalEvents, 'Events'),
+  ].join('');
+
+  document.getElementById('candCount').textContent = `(${data.markets.candidates.length})`;
+  document.getElementById('candGrid').innerHTML = data.markets.candidates.map(cardHTML).join('');
+  document.getElementById('otherGrid').innerHTML = data.markets.other.map(cardHTML).join('');
+  renderEstimates();
+}
+
+function cardHTML(m) {
+  const pct = m.yesPrice ? (m.yesPrice * 100).toFixed(0) : '?';
+  const cls = m.yesPrice < 0.3 ? 'low' : m.yesPrice < 0.7 ? 'mid' : 'high';
+  const days = m.daysToResolution !== null ? (m.daysToResolution < 0 ? `<span class="tag-expired">${m.daysToResolution}d</span>` : `${m.daysToResolution}d`) : '?';
+  const vol = m.volume24hr >= 1000 ? `$${(m.volume24hr / 1000).toFixed(0)}K` : `$${m.volume24hr}`;
+  const liq = m.liquidity >= 1000 ? `$${(m.liquidity / 1000).toFixed(0)}K` : `$${m.liquidity.toFixed(0)}`;
+  const rel = m.relevanceScore > 0 ? `<span class="relevance">R${m.relevanceScore}</span> ` : '';
+
+  return `<div class="market-card">
+    <div>
+      <div class="market-question">${rel}${esc(m.question)}</div>
+      <div class="market-event">${esc(m.eventTitle)}</div>
+      <div class="market-meta">
+        <span>Vol: ${vol}</span>
+        <span>Liq: ${liq}</span>
+        <span>Ends: ${days}</span>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-yes ${cls}">${pct}c</div>
+      <div class="price-no">NO ${m.noPrice ? (m.noPrice * 100).toFixed(0) + 'c' : '?'}</div>
+    </div>
+  </div>`;
+}
+
+function stat(val, label) {
+  return `<div class="stat"><div class="stat-val">${val}</div><div class="stat-label">${label}</div></div>`;
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function renderEstimates() {
+  const entries = Object.entries(estimates);
+  if (!entries.length) {
+    document.getElementById('estGrid').innerHTML = '<div style="color:var(--dim);padding:20px">No estimates yet. Click "Research Top 5" to analyze markets.</div>';
+    return;
+  }
+  // Sort by edge descending
+  entries.sort((a, b) => (b[1].edge?.edge || 0) - (a[1].edge?.edge || 0));
+
+  document.getElementById('estGrid').innerHTML = entries.map(([id, e]) => {
+    const edgeColor = e.edge?.tradeable ? 'var(--green)' : 'var(--dim)';
+    const confColor = e.confidence === 'high' ? 'var(--green)' : e.confidence === 'medium' ? 'var(--gold)' : 'var(--red)';
+    const ago = timeAgo(e.researchedAt);
+    return `<div class="market-card" style="border-left: 3px solid ${edgeColor}">
+      <div>
+        <div class="market-question">${e.edge?.tradeable ? '<span class="relevance">EDGE</span> ' : ''}${esc(e.question)}</div>
+        <div class="market-meta">
+          <span>Side: <b>${e.edge?.side || '?'}</b></span>
+          <span>Edge: <b style="color:${edgeColor}">${e.edge?.edgePct || '?'}</b></span>
+          <span>Confidence: <b style="color:${confColor}">${e.confidence || '?'}</b></span>
+          <span>${ago}</span>
+        </div>
+      </div>
+      <div class="price-block">
+        <div style="font-size:0.7rem;color:var(--dim)">Our</div>
+        <div class="price-yes mid">${e.edge?.ourEstimate || '?'}</div>
+        <div style="font-size:0.7rem;color:var(--dim);margin-top:4px">Market</div>
+        <div class="price-no">${e.edge?.marketPrice || '?'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const ms = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(ms / 60000);
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  return Math.floor(hrs / 24) + 'd ago';
+}
+
+async function loadKelly() {
+  try {
+    const res = await fetch('/api/polymarket/kelly');
+    const sized = await res.json();
+    const grid = document.getElementById('kellyGrid');
+    if (!sized.length) { grid.innerHTML = '<div style="color:var(--dim);padding:20px">No tradeable positions. Run research first.</div>'; return; }
+    document.getElementById('kellyInfo').textContent = `Half-Kelly sizing | Max single position: 5% | Max total exposure: 25%`;
+    grid.innerHTML = sized.map(s => {
+      const blocked = s.blocked ? ' style="opacity:0.5"' : '';
+      return `<div class="market-card"${blocked}>
+        <div>
+          <div class="market-question"><span class="relevance">${s.side}</span> ${esc(s.question)}</div>
+          <div class="market-meta">
+            <span>Edge: <b style="color:var(--green)">${s.edgePct}</b></span>
+            <span>Kelly: ${s.fullKelly} → ${s.halfKelly}</span>
+            <span>Conf: ${s.confidence}</span>
+          </div>
+          <div class="market-meta" style="margin-top:2px">
+            <span>${s.shares} shares @ $${s.sharePrice}</span>
+            <span>Cost: <b>$${s.cost}</b></span>
+            <span>EV: <b style="color:${s.expectedValue >= 0 ? 'var(--green)' : 'var(--red)'}">${s.evRatio}</b></span>
+            <span>Profit: $${s.potentialProfit} / Loss: $${s.potentialLoss}</span>
+          </div>
+          ${s.blockReason ? `<div style="color:var(--red);font-size:0.7rem;margin-top:4px">${s.blockReason}</div>` : ''}
+        </div>
+        <div class="price-block">
+          <div class="price-yes mid">${s.allocPct}</div>
+          <div class="price-no">of bankroll</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { document.getElementById('kellyGrid').innerHTML = `<div style="color:var(--red)">${e.message}</div>`; }
+}
+
+async function loadLedger() {
+  try {
+    const res = await fetch('/api/polymarket/ledger');
+    const l = await res.json();
+    const pnlColor = l.stats.totalPnl >= 0 ? 'var(--green)' : 'var(--red)';
+    const winRate = (l.stats.wins + l.stats.losses) > 0
+      ? ((l.stats.wins / (l.stats.wins + l.stats.losses)) * 100).toFixed(0) + '%' : 'N/A';
+    document.getElementById('ledgerStats').innerHTML = [
+      stat('$' + l.bankroll, 'Bankroll'),
+      stat((l.stats.totalPnl >= 0 ? '+$' : '-$') + Math.abs(l.stats.totalPnl), 'Total PnL'),
+      stat(l.stats.totalTrades, 'Trades'),
+      stat(winRate, 'Win Rate'),
+      stat('$' + (l.exposure || 0), 'Exposure'),
+    ].join('');
+    const open = (l.positions || []).filter(p => p.status === 'open');
+    const grid = document.getElementById('ledgerGrid');
+    if (!open.length) { grid.innerHTML = '<div style="color:var(--dim);padding:20px">No open positions. Use Kelly Sizing to identify trades.</div>'; return; }
+    grid.innerHTML = open.map(p => {
+      const days = Math.floor((Date.now() - new Date(p.openedAt)) / 86400000);
+      return `<div class="market-card">
+        <div>
+          <div class="market-question"><span class="relevance">${p.side}</span> ${esc(p.question)}</div>
+          <div class="market-meta">
+            <span>${p.shares} shares @ $${p.sharePrice}</span>
+            <span>Cost: $${p.cost}</span>
+            <span>Edge: ${(p.edge * 100).toFixed(1)}%</span>
+            <span>${days}d open</span>
+          </div>
+        </div>
+        <div class="price-block">
+          <div class="price-yes mid">$${p.cost}</div>
+          <div class="price-no">at risk</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { document.getElementById('ledgerGrid').innerHTML = `<div style="color:var(--red)">${e.message}</div>`; }
+}
+
+function showSection(name) {
+  ['candidates', 'estimates', 'sizing', 'ledger', 'other'].forEach(s => {
+    document.getElementById(s).style.display = s === name ? '' : 'none';
+  });
+  const tabs = ['candidates', 'estimates', 'sizing', 'ledger', 'other'];
+  document.querySelectorAll('.controls button').forEach((b, i) => {
+    b.classList.toggle('active', tabs[i] === name);
+  });
+  if (name === 'sizing') loadKelly();
+  if (name === 'ledger') loadLedger();
+}
+
+async function rescan() {
+  const btn = document.querySelectorAll('.controls button')[2];
+  btn.textContent = 'Scanning...';
+  btn.disabled = true;
+  try {
+    await fetch('/api/polymarket/scan', { method: 'POST' });
+    await load();
+  } catch (e) {
+    alert('Scan failed: ' + e.message);
+  }
+  btn.textContent = 'Rescan Now';
+  btn.disabled = false;
+}
+
+async function runResearch() {
+  const btn = document.querySelectorAll('.controls button')[4];
+  btn.textContent = 'Researching...';
+  btn.disabled = true;
+  showSection('estimates');
+  try {
+    const res = await fetch('/api/polymarket/research', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ count: 5 })
+    });
+    estimates = await res.json();
+    renderEstimates();
+  } catch (e) {
+    alert('Research failed: ' + e.message);
+  }
+  btn.textContent = 'Research Top 5';
+  btn.disabled = false;
+}
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+{
+  "id": "lesson-06",
+  "position": 6,
+  "title": "Footwork Fundamentals",
+  "subtitle": "How to move without losing your structure",
+  "slug": "footwork-fundamentals",
+
+  "curriculum": {
+    "blocks": [1, 2, 3],
+    "pillars": ["skill"],
+    "domains": ["footwork"],
+    "engines": {
+      "body": "Step-drag, pivot, lateral movement, directional changes while maintaining stance",
+      "mind": "Angle creation, distance management, positioning — moving with purpose not panic",
+      "emotion": "Freedom of movement — the moment a student realises they can control where they are"
+    }
+  },
+
+  "audience": {
+    "level": "beginner",
+    "hook": "You don't punch your way out of trouble. You move your way out.",
+    "question": "Why is footwork the most Cuban thing about Cuban boxing?"
+  },
+
+  "core": {
+    "thesis": "Footwork is not moving your feet — it's controlling space. Every step creates or removes angles, changes distance, and repositions for the next action.",
+    "keyPoints": [
+      "Step-drag: the fundamental movement. Lead foot steps, rear foot follows. Never cross your feet.",
+      "The stance moves WITH you — footwork is relocating your stance, not leaving it behind",
+      "Lateral movement: side to side, creating angles. This is where the salsa heritage lives.",
+      "Pivoting: rotating on the lead foot to change angle without moving position. The smallest movement with the biggest effect.",
+      "Distance management: stepping in to range, stepping out to safety. The jab told you where the range is (lesson 5).",
+      "Moving with purpose vs moving from panic — every step should have a reason",
+      "The circle vs the straight line: Cuban footwork uses angles, not retreat. You step AROUND, not just back.",
+      "Footwork under fatigue: when your feet stop, your boxing stops. Footwork endurance is real cardio."
+    ],
+    "commonMisconceptions": [
+      "Footwork is just moving around — it's precise distance and angle control",
+      "Fast feet = good footwork — controlled feet = good footwork. Speed is a bonus.",
+      "Footwork is separate from punching — footwork IS punching. Power comes from the ground.",
+      "Bouncing = footwork — bouncing wastes energy and telegraphs movement"
+    ],
+    "coachEye": {
+      "observe": "Watch the width between the feet during movement — does it stay consistent or collapse?",
+      "compare": "Same student moving right vs moving left — is one direction awkward? That's the training gap.",
+      "predict": "A student who crosses their feet will lose balance mid-combination. Always.",
+      "diagnose": "If punches lose power during movement, the stance is collapsing — feet are too close together"
+    }
+  },
+
+  "visualGrammar": {
+    "domains": ["footwork"],
+    "motions": ["sweep", "rotate", "pulse"],
+    "lines": ["solid", "dashed", "ghost"],
+    "diagnostics": ["gold-pulse", "red-flash"]
+  },
+
+  "scenes": [
+    {
+      "id": "scene_01",
+      "title": "Controlling Space",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "Boxing is a fight for space. Not who hits hardest — who controls where the fight happens. That's footwork.",
+      "components": ["CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Footwork as space control"
+    },
+    {
+      "id": "scene_02",
+      "title": "Step-Drag",
+      "duration": "25s",
+      "visualMode": "blueprint",
+      "narration": "Lead foot steps. Rear foot follows. Same distance. Same width. Your stance travels with you — you never leave it behind. Cross your feet and you lose your base. Lose your base and you lose everything.",
+      "components": ["FootworkGrid", "BalanceIndicator", "CenterLine", "CalloutLabel"],
+      "assets": [],
+      "learningObjective": "Step-drag mechanics — relocating the stance"
+    },
+    {
+      "id": "scene_03",
+      "title": "Lateral Movement",
+      "duration": "25s",
+      "visualMode": "hud",
+      "narration": "Side to side. Creating angles. This is where the salsa lives — weight transfer, rhythm, balance in motion. A straight line is predictable. An angle is a question your opponent can't answer.",
+      "components": ["FootworkGrid", "DistanceBands", "RhythmVisualizer"],
+      "assets": [],
+      "learningObjective": "Lateral movement — angles over straight lines"
+    },
+    {
+      "id": "scene_04",
+      "title": "The Pivot",
+      "duration": "20s",
+      "visualMode": "blueprint",
+      "narration": "The pivot. The smallest movement with the biggest effect. Rotate on your lead foot. Your opponent was in front of you — now they're not. And you didn't take a single step.",
+      "components": ["PivotIndicator", "FootworkGrid", "CenterLine"],
+      "assets": [],
+      "learningObjective": "Pivot mechanics — changing angle without changing position"
+    },
+    {
+      "id": "scene_05",
+      "title": "Purpose Not Panic",
+      "duration": "20s",
+      "visualMode": "noir",
+      "narration": "Every step has a reason. Moving forward to close distance. Moving lateral to create an angle. Pivoting to reset. Moving back to reset distance. If you're moving because you're scared, your opponent is in control. If you're moving with purpose, you are.",
+      "components": ["FootworkGrid", "DistanceBands", "CalloutLabel"],
+      "assets": ["footwork-drill-footage"],
+      "learningObjective": "Intentional movement vs reactive movement"
+    },
+    {
+      "id": "scene_06",
+      "title": "When the Feet Stop",
+      "duration": "15s",
+      "visualMode": "brutalist",
+      "narration": "When your feet stop, your boxing stops. Footwork isn't a warm-up drill. It's the engine running under everything you do. Keep it moving.",
+      "components": ["CalloutLabel", "TimingPulse"],
+      "assets": [],
+      "learningObjective": "Footwork as continuous — never stops"
+    }
+  ],
+
+  "formats": {
+    "reel": {
+      "duration": "30s",
+      "sceneIds": ["scene_01", "scene_04", "scene_06"],
+      "hook": "You don't punch your way out of trouble. You move your way out.",
+      "cta": "Footwork is the foundation. Learn Cuban movement."
+    },
+    "youtube": {
+      "duration": "8-10min",
+      "sceneIds": "all",
+      "chapters": [
+        {"time": "0:00", "title": "Boxing is a Fight for Space"},
+        {"time": "1:30", "title": "Step-Drag: Relocating Your Stance"},
+        {"time": "3:00", "title": "Lateral Movement — Where the Salsa Lives"},
+        {"time": "5:00", "title": "The Pivot"},
+        {"time": "6:30", "title": "Purpose, Not Panic"},
+        {"time": "8:00", "title": "When the Feet Stop"}
+      ]
+    },
+    "websiteLoop": {
+      "duration": "15s",
+      "sceneIds": ["scene_03", "scene_04"],
+      "autoplay": true,
+      "noNarration": true
+    },
+    "studentPdf": {
+      "sections": [
+        "Footwork as Space Control",
+        "Step-Drag Mechanics",
+        "Lateral Movement and Angles",
+        "The Pivot",
+        "Common Footwork Errors"
+      ],
+      "diagrams": ["step-drag-overhead", "lateral-angles", "pivot-diagram", "crossed-feet-error"],
+      "checkpoints": [
+        "Can you move in all 4 directions without crossing your feet?",
+        "Does your stance width stay consistent during movement?",
+        "Can you pivot without losing your guard?"
+      ]
+    },
+    "coachNotes": {
+      "teachingCues": [
+        "Footwork drills can use music — rhythm is the teaching tool. Cuban heritage in action.",
+        "The floor grid/cross in the gym is specifically for footwork training — use it every session",
+        "Shadow boxing with ONLY footwork (no punches) for 2 rounds is the best warm-up drill"
+      ],
+      "regressions": [
+        "If student bounces instead of steps — 'feet flat, steps deliberate'. Bouncing hides bad mechanics.",
+        "If pivot doesn't stick, have them hold a wall with one hand and pivot — isolates the movement"
+      ],
+      "observations": [
+        "Students who improve footwork fastest often have dance or martial arts background — the body already knows rhythm"
+      ],
+      "progressionTo": "lesson-07-the-cross"
+    }
+  }
+}

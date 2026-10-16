@@ -1,0 +1,132 @@
+{
+  "timestamp": "2026-09-01T04:00:24.992Z",
+  "regimes": {
+    "BTC": {
+      "symbol": "BTC",
+      "regime": "TRENDING_UP",
+      "confidence": 76,
+      "metrics": {
+        "trend_slope_pct_per_day": 1.0012,
+        "trend_r2": 0.764,
+        "annualized_vol_pct": 43.2,
+        "vol_ratio_short_long": 0.67,
+        "range_pct": 24.8,
+        "range_containment": 0.07,
+        "days_analyzed": 30
+      },
+      "strategy_multipliers": {
+        "historical_cycles": 0.3,
+        "lunar_cycles": 0.3,
+        "gann_geometry": 0.7,
+        "fibonacci_time": 0.8,
+        "harmonic_year": 0.5,
+        "harmonic_432": 0.5,
+        "sexagesimal_cycles": 0.6,
+        "range_trader": 0
+      }
+    },
+    "ETH": {
+      "symbol": "ETH",
+      "regime": "TRENDING_UP",
+      "confidence": 77,
+      "metrics": {
+        "trend_slope_pct_per_day": 1.3203,
+        "trend_r2": 0.774,
+        "annualized_vol_pct": 71.4,
+        "vol_ratio_short_long": 0.42,
+        "range_pct": 30.6,
+        "range_containment": 0.07,
+        "days_analyzed": 30
+      },
+      "strategy_multipliers": {
+        "historical_cycles": 0.3,
+        "lunar_cycles": 0.3,
+        "gann_geometry": 0.7,
+        "fibonacci_time": 0.8,
+        "harmonic_year": 0.5,
+        "harmonic_432": 0.5,
+        "sexagesimal_cycles": 0.6,
+        "range_trader": 0
+      }
+    },
+    "SOL": {
+      "symbol": "SOL",
+      "regime": "TRENDING_UP",
+      "confidence": 85,
+      "metrics": {
+        "trend_slope_pct_per_day": 1.5589,
+        "trend_r2": 0.849,
+        "annualized_vol_pct": 60.8,
+        "vol_ratio_short_long": 1.2,
+        "range_pct": 42.5,
+        "range_containment": 0.27,
+        "days_analyzed": 30
+      },
+      "strategy_multipliers": {
+        "historical_cycles": 0.3,
+        "lunar_cycles": 0.3,
+        "gann_geometry": 0.7,
+        "fibonacci_time": 0.8,
+        "harmonic_year": 0.5,
+        "harmonic_432": 0.5,
+        "sexagesimal_cycles": 0.6,
+        "range_trader": 0
+      }
+    },
+    "AVAX": {
+      "symbol": "AVAX",
+      "regime": "TRENDING_UP",
+      "confidence": 55,
+      "metrics": {
+        "trend_slope_pct_per_day": 0.6219,
+        "trend_r2": 0.55,
+        "annualized_vol_pct": 55.4,
+        "vol_ratio_short_long": 0.66,
+        "range_pct": 22.2,
+        "range_containment": 0.43,
+        "days_analyzed": 30
+      },
+      "strategy_multipliers": {
+        "historical_cycles": 0.3,
+        "lunar_cycles": 0.3,
+        "gann_geometry": 0.7,
+        "fibonacci_time": 0.8,
+        "harmonic_year": 0.5,
+        "harmonic_432": 0.5,
+        "sexagesimal_cycles": 0.6,
+        "range_trader": 0
+      }
+    },
+    "LINK": {
+      "symbol": "LINK",
+      "regime": "TRENDING_UP",
+      "confidence": 86,
+      "metrics": {
+        "trend_slope_pct_per_day": 1.5538,
+        "trend_r2": 0.863,
+        "annualized_vol_pct": 67.8,
+        "vol_ratio_short_long": 0.67,
+        "range_pct": 38.7,
+        "range_containment": 0.27,
+        "days_analyzed": 30
+      },
+      "strategy_multipliers": {
+        "historical_cycles": 0.3,
+        "lunar_cycles": 0.3,
+        "gann_geometry": 0.7,
+        "fibonacci_time": 0.8,
+        "harmonic_year": 0.5,
+        "harmonic_432": 0.5,
+        "sexagesimal_cycles": 0.6,
+        "range_trader": 0
+      }
+    }
+  },
+  "summary": {
+    "BTC": "TRENDING_UP",
+    "ETH": "TRENDING_UP",
+    "SOL": "TRENDING_UP",
+    "AVAX": "TRENDING_UP",
+    "LINK": "TRENDING_UP"
+  }
+}

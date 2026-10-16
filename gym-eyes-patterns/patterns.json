@@ -1,0 +1,191 @@
+[
+  {
+    "id": "pat-tsewei-guard_drop-1787719634025",
+    "member_id": "member-tsewei",
+    "member_name": "Tsewei",
+    "name": "Guard drop at end of punching sequences",
+    "category": "guard_drop",
+    "block": 1,
+    "block_name": "Foundation",
+    "block_reason": "Guard position is Block 1 core",
+    "status": "DETECTED",
+    "status_changed": "2026-08-25",
+    "first_seen": "2026-08-25",
+    "last_seen": "2026-08-25",
+    "sessions_seen": 1,
+    "total_member_sessions": 1,
+    "frequency": 1,
+    "trend": "new",
+    "priority": 0.18,
+    "observations": [
+      {
+        "date": "2026-08-25",
+        "classId": "class-20260825T0646",
+        "detail": "The fighter occasionally lowered the guard after the final punch — evidence at 4:05 F15 guard drop and 14:02 where the high guard began to drop with extended reach."
+      }
+    ],
+    "interventions": []
+  },
+  {
+    "id": "pat-tsewei-punch_variety-1787719634025",
+    "member_id": "member-tsewei",
+    "member_name": "Tsewei",
+    "name": "Over-reliance on rear-hand straight",
+    "category": "punch_variety",
+    "block": 4,
+    "block_name": "Inside",
+    "block_reason": "Hooks, body work, combo variety = Block 4",
+    "status": "DETECTED",
+    "status_changed": "2026-08-25",
+    "first_seen": "2026-08-25",
+    "last_seen": "2026-08-25",
+    "sessions_seen": 1,
+    "total_member_sessions": 1,
+    "frequency": 1,
+    "trend": "new",
+    "priority": 0.08,
+    "observations": [
+      {
+        "date": "2026-08-25",
+        "classId": "class-20260825T0646",
+        "detail": "Most striking windows featured the right cross; hooks appeared only at 4:05. This could be drill design, but it may limit combination variety."
+      }
+    ],
+    "interventions": []
+  },
+  {
+    "id": "pat-tsewei-stance_clarity-1787719634025",
+    "member_id": "member-tsewei",
+    "member_name": "Tsewei",
+    "name": "Stance clarity in non-padwork phases",
+    "category": "stance_clarity",
+    "block": 1,
+    "block_name": "Foundation",
+    "block_reason": "Stance fundamentals = Block 1",
+    "status": "DETECTED",
+    "status_changed": "2026-08-25",
+    "first_seen": "2026-08-25",
+    "last_seen": "2026-08-25",
+    "sessions_seen": 1,
+    "total_member_sessions": 1,
+    "frequency": 1,
+    "trend": "new",
+    "priority": 0.1,
+    "observations": [
+      {
+        "date": "2026-08-25",
+        "classId": "class-20260825T0646",
+        "detail": "The 0:47 window had no defined stance, and the 9:04 window included stance switching; while useful, this creates an inconsistent technical thread within a session labeled as padwork."
+      }
+    ],
+    "interventions": []
+  },
+  {
+    "id": "pat-alen-guard_drop-1787725337891",
+    "member_id": "member-alen",
+    "member_name": "Alen",
+    "name": "Guard drop between punches",
+    "category": "guard_drop",
+    "block": 1,
+    "block_name": "Foundation",
+    "block_reason": "Guard position is Block 1 core",
+    "status": "DETECTED",
+    "status_changed": "2026-08-26",
+    "first_seen": "2026-08-26",
+    "last_seen": "2026-08-26",
+    "sessions_seen": 1,
+    "total_member_sessions": 1,
+    "frequency": 1,
+    "trend": "new",
+    "priority": 0.23,
+    "observations": [
+      {
+        "date": "2026-08-26",
+        "classId": "class-20260826T0612",
+        "detail": "At 0:31, hands drop slightly between punches; at 1:39, the rear hand drops momentarily when throwing the cross. This does not show clear correction across the sampled windows and should be monitored."
+      }
+    ],
+    "interventions": []
+  },
+  {
+    "id": "pat-alen-default-1787725337913",
+    "member_id": "member-alen",
+    "member_name": "Alen",
+    "name": "No actual pad-strike sequence observed",
+    "category": "default",
+    "block": null,
+    "block_name": null,
+    "block_reason": "Unmapped — needs manual block assignment",
+    "status": "DETECTED",
+    "status_changed": "2026-08-26",
+    "first_seen": "2026-08-26",
+    "last_seen": "2026-08-26",
+    "sessions_seen": 1,
+    "total_member_sessions": 2,
+    "frequency": 1,
+    "trend": "new",
+    "priority": 0.05,
+    "observations": [
+      {
+        "date": "2026-08-26",
+        "classId": "class-20260826T0617",
+        "detail": "0:59 is only footwork, 2:22 has punches without a described target contact, and 3:45 is a stationary hold. The session is labeled padwork, but no clean pad-contact moment is captured."
+      }
+    ],
+    "interventions": []
+  },
+  {
+    "id": "pat-alen-guard_drop-1787725337913",
+    "member_id": "member-alen",
+    "member_name": "Alen",
+    "name": "Guard drops during transition/rest",
+    "category": "guard_drop",
+    "block": 1,
+    "block_name": "Foundation",
+    "block_reason": "Guard position is Block 1 core",
+    "status": "DETECTED",
+    "status_changed": "2026-08-26",
+    "first_seen": "2026-08-26",
+    "last_seen": "2026-08-26",
+    "sessions_seen": 1,
+    "total_member_sessions": 2,
+    "frequency": 1,
+    "trend": "new",
+    "priority": 0.12,
+    "observations": [
+      {
+        "date": "2026-08-26",
+        "classId": "class-20260826T0617",
+        "detail": "At 0:18 the foreground person drops their guard at F6-F10 before resetting. This may be intentional, but it is worth confirming that rest breaks do not become a loss of defensive posture."
+      }
+    ],
+    "interventions": []
+  },
+  {
+    "id": "pat-alen-default-1787725337913",
+    "member_id": "member-alen",
+    "member_name": "Alen",
+    "name": "Instructional inactivity at 3:45",
+    "category": "default",
+    "block": null,
+    "block_name": null,
+    "block_reason": "Unmapped — needs manual block assignment",
+    "status": "DETECTED",
+    "status_changed": "2026-08-26",
+    "first_seen": "2026-08-26",
+    "last_seen": "2026-08-26",
+    "sessions_seen": 1,
+    "total_member_sessions": 2,
+    "frequency": 1,
+    "trend": "new",
+    "priority": 0.05,
+    "observations": [
+      {
+        "date": "2026-08-26",
+        "classId": "class-20260826T0617",
+        "detail": "The red-gloved fighter holds a stance for the entire window with no movement. This is likely an instruction pause, but it could also indicate a fighter disengaging during a slower moment."
+      }
+    ],
+    "interventions": []
+  }
+]

@@ -20,9 +20,13 @@ import Database from 'better-sqlite3';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HOME = process.env.HOME;
 const DB_PATH = path.join(HOME, 'nanoclaw', 'vortex_data', 'archaeologist.db');
-const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || (() => {
-  try { return fs.readFileSync(path.join(HOME, 'nanoclaw', '.env'), 'utf8').match(/DEEPSEEK_API_KEY=(.+)/)?.[1]?.trim(); } catch { return null; }
-})();
+const envFile = (() => { try { return fs.readFileSync(path.join(HOME, 'nanoclaw', '.env'), 'utf8'); } catch { return ''; } })();
+const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || envFile.match(/DEEPSEEK_API_KEY=(.+)/)?.[1]?.trim() || null;
+// Second grader (multi-model cross-check — reduces single-model bias). Fail-safe: DeepSeek-only if absent.
+const GLM_KEY = process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || process.env.Z_AI_API_KEY
+  || envFile.match(/(?:GLM|ZHIPU|Z_AI)_API_KEY=(.+)/)?.[1]?.trim() || null;
+const GLM_MODEL = process.env.GLM_MODEL || 'glm-4.6';
+const GLM_ENDPOINT = process.env.GLM_ENDPOINT || 'https://api.z.ai/api/paas/v4/chat/completions';
 
 const args = process.argv.slice(2);
 const GRADE_MAX = parseInt(args[args.indexOf('--max') + 1], 10) || 20;
@@ -33,6 +37,17 @@ async function callDeepSeek(system, prompt) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_KEY}` },
     body: JSON.stringify({ model: 'deepseek-chat', temperature: 0.2, max_tokens: 350,
+      messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }),
+  });
+  const j = await res.json();
+  return j.choices?.[0]?.message?.content || '';
+}
+
+async function callGLM(system, prompt) {
+  const res = await fetch(GLM_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GLM_KEY}` },
+    body: JSON.stringify({ model: GLM_MODEL, temperature: 0.2, max_tokens: 350,
       messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }),
   });
   const j = await res.json();
@@ -69,14 +84,24 @@ async function main() {
     let unver = [];
     try { unver = JSON.parse(r.unverified_citations || '[]'); } catch {}
     const prompt = `TECHNIQUE (${r.domain}): ${r.technique}\nORIGIN: ${(r.origin || '').slice(0, 200)}\nVALUE: ${(r.valid_reason || '').slice(0, 250)}\nUNVERIFIED CITATIONS: ${unver.length} ${unver.length ? '(' + unver.slice(0, 3).join('; ').slice(0, 150) + ')' : '(none flagged)'}\nGrade it.`;
-    let j; try { j = parse(await callDeepSeek(SYSTEM, prompt)); } catch (e) { tally.error++; continue; }
-    if (!j || !j.verdict) { tally.error++; continue; }
-    // Provenance override: 2+ unverified citations → cannot be VERIFIED
-    let verdict = j.verdict;
-    if (unver.length >= 2 && verdict === 'VERIFIED') verdict = 'REJECTED';
-    upd.run(verdict, typeof j.score === 'number' ? j.score : null, r.id);
+    let j1; try { j1 = parse(await callDeepSeek(SYSTEM, prompt)); } catch (e) { tally.error++; continue; }
+    if (!j1 || !j1.verdict) { tally.error++; continue; }
+    let j2 = null;
+    if (GLM_KEY) { try { j2 = parse(await callGLM(SYSTEM, prompt)); } catch {} }
+    // Combine — cross-model consensus (the multi-model-judge: only VERIFY on agreement):
+    const v1 = j1.verdict, v2 = j2 && j2.verdict;
+    let score = typeof j1.score === 'number' ? j1.score : 0;
+    if (j2 && typeof j2.score === 'number') score = Math.round((score + j2.score) / 2);
+    let verdict, note;
+    if (!j2) { verdict = v1; note = ' [DS-only]'; }
+    else if (v1 === v2) { verdict = v1; note = ' [DS+GLM agree]'; }
+    else if (v1 === 'REJECTED' || v2 === 'REJECTED') { verdict = 'REJECTED'; note = ' [split→reject]'; }
+    else { verdict = 'WATCH'; note = ' [split→watch]'; }
+    // Provenance override last: 2+ externally-unverified citations → cannot be VERIFIED
+    if (unver.length >= 2 && verdict === 'VERIFIED') { verdict = 'REJECTED'; note += ' [prov-fail]'; }
+    upd.run(verdict, score, r.id);
     tally[verdict] = (tally[verdict] || 0) + 1;
-    console.log(`  ${verdict === 'VERIFIED' ? '✅' : verdict === 'REJECTED' ? '❌' : '🟡'} ${verdict} ${j.score}/10 — ${r.technique.slice(0, 55)}${unver.length ? ' [' + unver.length + ' unverified cite]' : ''}`);
+    console.log(`  ${verdict === 'VERIFIED' ? '✅' : verdict === 'REJECTED' ? '❌' : '🟡'} ${verdict} ${score}/10 — ${r.technique.slice(0, 50)}${unver.length ? ' [' + unver.length + ' uncite]' : ''}${note}`);
     await new Promise(r => setTimeout(r, 250));
   }
   db.close();

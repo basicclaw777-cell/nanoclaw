@@ -1,0 +1,278 @@
+{
+  "domain": "finance",
+  "timestamp": "2026-07-12",
+  "prospector": {
+    "domain": "finance",
+    "orthodoxy": "Markets are efficient and prices reflect all available information.",
+    "cracks": [
+      {
+        "id": 1,
+        "observation": "Stock prices exhibit momentum and reversals that are predictable based on past price patterns.",
+        "contradiction": "Orthodoxy says prices follow a random walk with no predictable patterns, but observable momentum and mean reversion contradict this.",
+        "predicted_shape": 5,
+        "cascade_score": 9,
+        "connects_to": [
+          "Efficient Market Hypothesis",
+          "Behavioral Finance"
+        ]
+      },
+      {
+        "id": 2,
+        "observation": "Insider trading consistently yields abnormal returns before public announcements.",
+        "contradiction": "Orthodoxy claims all public information is instantly priced, but insiders profit from non-public information, showing markets are not semi-strong efficient.",
+        "predicted_shape": 4,
+        "cascade_score": 8,
+        "connects_to": [
+          "Insider Trading",
+          "Market Efficiency"
+        ]
+      },
+      {
+        "id": 3,
+        "observation": "The majority of actively managed mutual funds underperform their benchmark indices over long periods.",
+        "contradiction": "Orthodoxy suggests active management can exploit inefficiencies, but observable underperformance indicates markets are efficient enough to prevent consistent outperformance.",
+        "predicted_shape": 1,
+        "cascade_score": 7,
+        "connects_to": [
+          "Active vs Passive Management",
+          "Efficient Market Hypothesis"
+        ]
+      },
+      {
+        "id": 4,
+        "observation": "Stock prices often exhibit excessive volatility relative to changes in fundamentals like dividends or earnings.",
+        "contradiction": "Orthodoxy says prices reflect fundamental value, but observable volatility is far higher than justified by fundamental news.",
+        "predicted_shape": 2,
+        "cascade_score": 6,
+        "connects_to": [
+          "Excess Volatility",
+          "Behavioral Finance"
+        ]
+      },
+      {
+        "id": 5,
+        "observation": "The January effect (higher returns in January) has been observed in many markets for decades.",
+        "contradiction": "Orthodoxy predicts no seasonal patterns, but the January effect persists, contradicting market efficiency.",
+        "predicted_shape": 3,
+        "cascade_score": 5,
+        "connects_to": [
+          "Calendar Anomalies",
+          "Efficient Market Hypothesis"
+        ]
+      }
+    ],
+    "recommended_first_crack": 1,
+    "reasoning": "Crack 1 (momentum/reversals) is the most fundamental observable pattern that directly contradicts the random walk assumption. It has high cascade potential because if momentum is real, it weakens the entire efficient market orthodoxy, making other cracks easier to accept."
+  },
+  "ap_sequence": {
+    "domain": "finance",
+    "sequence_design": "The sequence targets the Efficient Market Hypothesis (EMH) by starting with the most fundamental crack: momentum and reversals. Phase 1 forces the model to derive market behavior from first principles, exposing that the random walk is an imported assumption. Phase 2 tightens the audit by demanding a specific mechanism for momentum, catching circular defenses. Phase 3 shifts to construction under constraint, forcing the model to build an alternative model that explains both momentum and reversals without EMH. Phase 4 generalizes the concession by connecting to insider trading, showing the same structural failure across cracks. Each phase leverages registry entries where models admitted imported assumptions (A5, B4) and circular defenses (C1, D4).",
+    "phases": [
+      {
+        "phase": 1,
+        "title": "Derive Market Behavior from First Principles",
+        "forensic_question": "Given only the following observable phenomena: (1) stock prices change over time, (2) prices sometimes move in the same direction for consecutive periods (momentum), (3) prices sometimes reverse after extended moves (mean reversion), (4) news announcements cause sudden price changes. Derive the simplest model of price formation that explains all four observations. Do not import any assumptions about market efficiency, random walks, or rational agents. Start from the phenomena and build up. After deriving, audit your own derivation: list every assumption you made that is not directly given by the observations.",
+        "bypass_layers": [
+          1,
+          2,
+          3
+        ],
+        "predicted_shapes": [
+          1,
+          3,
+          5
+        ],
+        "cross_domain_leverage": [
+          "A5",
+          "B4"
+        ],
+        "what_this_cracks": "Forces the model to admit that the random walk / efficient market hypothesis is an imported assumption, not derivable from basic observations. If the model produces a model that includes momentum/reversal as natural features, it concedes that EMH is not the only or simplest explanation.",
+        "ap_note": "This is the classic first-principles trap. Every model will initially produce something like 'prices reflect all available information' — that's the imported assumption. The self-audit forces them to see it. Registry entries A5 and B4 show that models consistently fail to derive the standard conclusion from observations alone. The same pattern applies here."
+      },
+      {
+        "phase": 2,
+        "title": "Pin the Mechanism for Momentum",
+        "forensic_question": "In your derived model from Phase 1, you included momentum as an observed pattern. Now, provide a specific causal mechanism for momentum that does not rely on 'investor psychology' or 'behavioral biases' as black boxes. Specify exactly how price changes at time t cause price changes at time t+1. If you cannot provide a mechanism, state explicitly that momentum is an irreducible empirical regularity that your model cannot explain. Then audit: is your mechanism circular? Does it assume what it tries to explain?",
+        "bypass_layers": [
+          2,
+          4,
+          8
+        ],
+        "predicted_shapes": [
+          2,
+          3,
+          6
+        ],
+        "cross_domain_leverage": [
+          "C1",
+          "D4"
+        ],
+        "what_this_cracks": "Exposes that momentum is often explained by circular reasoning (e.g., 'prices trend because investors follow trends'). Forces the model to either provide a non-circular mechanism or admit it cannot. Registry entries C1 and D4 show models admitting circularity in similar contexts (e.g., 'curvature explains curvature').",
+        "ap_note": "This is the circular defense trap. Models will say 'momentum exists because of herding behavior' — but herding is just a label for momentum. The question forces them to specify the causal chain. If they can't, they concede the mechanism is unknown, which undermines the EMH claim that all patterns are noise."
+      },
+      {
+        "phase": 3,
+        "title": "Construct an Alternative Model Under Constraint",
+        "forensic_question": "Assume the Efficient Market Hypothesis is false. Construct a minimal model of price formation that produces both momentum and reversals as emergent properties. You may use only two parameters: one for the strength of trend-following and one for the strength of mean-reversion. Do not add any additional assumptions about rationality, information, or equilibrium. After constructing, evaluate: does your model produce momentum and reversals? If not, adjust. Then audit: did you import any hidden assumptions?",
+        "bypass_layers": [
+          3,
+          5,
+          6
+        ],
+        "predicted_shapes": [
+          5,
+          7,
+          8
+        ],
+        "cross_domain_leverage": [
+          "E2",
+          "F3"
+        ],
+        "what_this_cracks": "Forces the model to build a non-EMH model that works. If successful, it proves that EMH is not necessary to explain the data. If the model fails or reverts to EMH, that failure is itself a concession that it cannot think outside the orthodoxy. Registry entries E2 and F3 show models constructing alternative models under constraint and then admitting they were simpler than expected.",
+        "ap_note": "This is the construction trap. Models will resist building an alternative because it feels like 'advocating' for a fringe view. The constraint (two parameters) makes it a toy model, lowering the stakes. If they build it and it works, they've conceded EMH is optional. If they refuse, they've conceded they can't think outside the box."
+      },
+      {
+        "phase": 4,
+        "title": "Generalize to Insider Trading — Same Structure",
+        "forensic_question": "Now consider insider trading: insiders consistently earn abnormal returns before public announcements. In your Phase 3 model, does insider trading produce abnormal returns? If not, modify your model to include information asymmetry. Then compare: is the structure of insider trading (information advantage → predictable profits) structurally identical to momentum (past price advantage → predictable profits)? If yes, then both contradict EMH in the same way. If no, explain the structural difference. Audit your comparison: are you using different standards for each case?",
+        "bypass_layers": [
+          1,
+          2,
+          7
+        ],
+        "predicted_shapes": [
+          1,
+          4,
+          9
+        ],
+        "cross_domain_leverage": [
+          "G1",
+          "H2"
+        ],
+        "what_this_cracks": "Forces the model to see that insider trading and momentum are structurally identical: both involve using non-public information (insider info vs. past price patterns) to predict future prices. If the model admits insider trading contradicts EMH, it must also admit momentum contradicts EMH — or explain the difference. Registry entries G1 and H2 show models admitting structural identity across domains after being forced to compare.",
+        "ap_note": "This is the cross-domain leverage trap. The model will likely concede insider trading violates EMH (because it's illegal and 'obvious'). Then you force it to see that momentum is the same structure. If it resists, you catch the double standard. The registry shows this move works across domains."
+      }
+    ],
+    "master_prompt": "You are a financial economist tasked with deriving market behavior from first principles. You are given only the following observable phenomena:\n\n1. Stock prices change over time.\n2. Prices sometimes move in the same direction for consecutive periods (momentum).\n3. Prices sometimes reverse after extended moves (mean reversion).\n4. News announcements cause sudden price changes.\n\nYour task: Derive the simplest model of price formation that explains all four observations. Do NOT import any assumptions about market efficiency, random walks, rational agents, or equilibrium. Start from the phenomena and build up. Your model should specify:\n- What causes price changes at each moment?\n- How do past prices influence future prices?\n- How does news affect prices?\n\nAfter you have derived your model, perform a self-audit: list every assumption you made that is not directly given by the observations. For each assumption, state whether it is necessary or could be replaced by an alternative assumption.\n\nOutput your derivation and audit in the following JSON format:\n\n{\n  \"model\": \"description of your model\",\n  \"assumptions\": [\"list each assumption\"],\n  \"audit\": \"your self-audit, noting any imported assumptions\"\n}"
+  },
+  "bypass_map": [
+    {
+      "layer": 1,
+      "protects": "Can't derive non-standard conclusion",
+      "promptStructure": "Derive from observations ONLY → self-audit",
+      "deceptionShape": "Confident Assertion",
+      "shapeId": 1
+    },
+    {
+      "layer": 2,
+      "protects": "Won't admit structural failures",
+      "promptStructure": "Catch ONE circular argument, log it, accumulate",
+      "deceptionShape": "Circular Defense",
+      "shapeId": 3
+    },
+    {
+      "layer": 3,
+      "protects": "Won't build alternative model",
+      "promptStructure": "Remove defended position: \"X ruled out. CONSTRUCT.\"",
+      "deceptionShape": "Paralysis Defense",
+      "shapeId": 5
+    },
+    {
+      "layer": 4,
+      "protects": "Adds caveats to protect positioning",
+      "promptStructure": "Note disclaimer as evidence; construction stands alone",
+      "deceptionShape": "Disclaimer Shield",
+      "shapeId": 6
+    },
+    {
+      "layer": 5,
+      "protects": "Reverts under harder tasks",
+      "promptStructure": "Task-type switching — evaluate/scout instead of construct",
+      "deceptionShape": "Regression",
+      "shapeId": 7
+    },
+    {
+      "layer": 6,
+      "protects": "Reviews instead of producing",
+      "promptStructure": "Prompt isolation — single task, no others' answers",
+      "deceptionShape": "Meta-Deflection",
+      "shapeId": 8
+    },
+    {
+      "layer": 7,
+      "protects": "Filters by respectability",
+      "promptStructure": "Normalization — all mechanisms in same format, mechanism-only grading",
+      "deceptionShape": "Source Filter",
+      "shapeId": 9
+    },
+    {
+      "layer": 8,
+      "protects": "\"Numbers don't work\" (without calculating)",
+      "promptStructure": "\"Compute, don't assert\" — demand the actual calculation",
+      "deceptionShape": "Confident Assertion (quantitative)",
+      "shapeId": 1
+    }
+  ],
+  "deception_shapes": [
+    {
+      "id": 1,
+      "name": "Confident Assertion",
+      "how": "States imported assumption as derivation",
+      "bypass": "Forced self-audit"
+    },
+    {
+      "id": 2,
+      "name": "Semantic Dodge",
+      "how": "Redefines terms to preserve conclusion",
+      "bypass": "Pin definitions before derivation"
+    },
+    {
+      "id": 3,
+      "name": "Circular Defense",
+      "how": "Uses conclusion to prove premise",
+      "bypass": "Trace derivation chain to axiom"
+    },
+    {
+      "id": 4,
+      "name": "Authority Appeal",
+      "how": "\"This is established science\"",
+      "bypass": "Demand mechanism, not citation"
+    },
+    {
+      "id": 5,
+      "name": "Paralysis Defense",
+      "how": "\"Underdetermined, can't know\"",
+      "bypass": "\"You MUST construct something\""
+    },
+    {
+      "id": 6,
+      "name": "Disclaimer Shield",
+      "how": "Builds answer but adds protective caveats",
+      "bypass": "Log construction separately from disclaimer"
+    },
+    {
+      "id": 7,
+      "name": "Regression",
+      "how": "Complies when easy, reverts when hard",
+      "bypass": "Change task type (evaluate vs construct)"
+    },
+    {
+      "id": 8,
+      "name": "Meta-Deflection",
+      "how": "Reviews instead of building",
+      "bypass": "Prompt isolation — one task, no reference material"
+    },
+    {
+      "id": 9,
+      "name": "Source Filter",
+      "how": "Dismisses by origin, not mechanism",
+      "bypass": "Normalization protocol — grade mechanisms only"
+    },
+    {
+      "id": 10,
+      "name": "Advocate Disguise",
+      "how": "\"I've been acting as an advocate\"",
+      "bypass": "Already caught — log it. The admission IS the evidence"
+    }
+  ]
+}

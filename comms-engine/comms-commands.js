@@ -15,6 +15,8 @@ import { formatQueueTelegram, getQueueSummary, markSent, skip, getPending } from
 import { scanPassExpiry, formatExpiryTelegram } from './pass-expiry-trigger.js';
 import { formatLapsedTelegram } from './lapsed-segmentation.js';
 import { formatBirthdaysTelegram } from './birthday-tracker.js';
+import { formatAbsenceTelegram } from './absence-scanner.js';
+import { formatMilestoneTelegram } from './milestone-scanner.js';
 
 export function registerCommsCommands(bot) {
   bot.onText(/\/comms(.*)/, async (msg, match) => {
@@ -35,6 +37,8 @@ export function registerCommsCommands(bot) {
           text += `/comms expiry — scan pass expiry\n`;
           text += `/comms lapsed — scan lapsed members\n`;
           text += `/comms birthdays — check upcoming birthdays\n`;
+          text += `/comms absences — scan no-shows (14+ days)\n`;
+          text += `/comms milestones — check session milestones\n`;
           text += `/comms send <id> — mark as sent\n`;
           text += `/comms skip <id> — skip a message\n`;
           await bot.sendMessage(chatId, text, { parse_mode: 'Markdown' });
@@ -70,6 +74,20 @@ export function registerCommsCommands(bot) {
         case 'birthdays': {
           const days = parseInt(args[1]) || 7;
           const text = formatBirthdaysTelegram(days);
+          await bot.sendMessage(chatId, text, { parse_mode: 'Markdown' });
+          break;
+        }
+
+        case 'absences':
+        case 'absence': {
+          const text = formatAbsenceTelegram();
+          await bot.sendMessage(chatId, text, { parse_mode: 'Markdown' });
+          break;
+        }
+
+        case 'milestones':
+        case 'milestone': {
+          const text = formatMilestoneTelegram();
           await bot.sendMessage(chatId, text, { parse_mode: 'Markdown' });
           break;
         }

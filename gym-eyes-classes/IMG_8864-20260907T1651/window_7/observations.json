@@ -1,0 +1,28 @@
+{
+  "people_detected": 1,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F15",
+      "time": "0.0s-4.7s",
+      "observations": {
+        "footwork": "boxer maintains a stable stance with minimal foot movement across all frames; feet remain planted in roughly the same position",
+        "stance_width": "normal",
+        "guard": "both hands held raised near the chin, elbows tucked in, maintaining a defensive guard throughout",
+        "upper_body": "slightly hunched forward, shoulders rounded, head lowered behind the guard",
+        "distance": "no sparring partner or training pads visible; boxer stands alone in the gym",
+        "notable": "boxer holds a consistent defensive stance with no punches thrown; pose shows very little variation across the entire 15-frame sequence"
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F15",
+      "type": "reset",
+      "detail": "boxer holds a stable defensive stance for the entire sequence, with no visible punches, steps, or footwork movements"
+    }
+  ],
+  "overall_rhythm": "inactive"
+}

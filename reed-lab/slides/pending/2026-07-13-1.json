@@ -1,0 +1,17 @@
+{
+  "title": "Four-Layer Cathedral Schema",
+  "subtitle": "Knowledge, Planning, Teaching, Learning layers unified in 13 tables",
+  "key_concept": "A relational schema that models the entire coaching workflow from raw knowledge to student learning",
+  "visual_metaphor": "A cathedral cross-section with four distinct levels: crypt (Knowledge), nave (Planning), choir (Teaching), spire (Learning), connected by amber-lit staircases",
+  "highlights": [
+    "13 tables covering all four layers",
+    "Foreign keys linking layers end-to-end",
+    "Designed for both drill banks and coaching sessions"
+  ],
+  "why_it_matters": "First time the entire coaching domain is captured in a single, coherent data model",
+  "zone_change": "New territory: Unified Schema — previously separate drill banks now connected under one roof",
+  "date": "2026-07-13",
+  "source": "session-harvest-2026-07-13-pass1.md",
+  "pipeline": "cartographer-auto",
+  "generated_at": "2026-07-13T00:53:00.817Z"
+}

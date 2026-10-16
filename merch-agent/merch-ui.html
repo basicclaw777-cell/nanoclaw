@@ -58,18 +58,28 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
     <button class="tab" onclick="showTab('suppliers')">Suppliers</button>
     <button class="tab" onclick="showTab('ideas')">Ideas</button>
     <button class="tab" onclick="showTab('history')">History</button>
+    <button class="tab" onclick="showTab('sourcing')">Sourcing</button>
     <button class="tab" onclick="showTab('rules')">Rules</button>
   </div>
 
   <div class="panel active" id="panel-runs"></div>
   <div class="panel" id="panel-suppliers"></div>
   <div class="panel" id="panel-ideas"></div>
+  <div class="panel" id="panel-sourcing"></div>
   <div class="panel" id="panel-history"></div>
   <div class="panel" id="panel-rules"></div>
 </div>
 
 <script>
 let DATA = {};
+const CAT_ICONS = {
+  'inner-gloves-basic': '🥊', 'fastwraps-premium': '🥊', 'hand-wraps-regular': '🥊',
+  'tennis-balls': '🎾', 'athletic-socks': '🧦', 'boxer-underwear': '🩲', 'mouthguards': '🦷'
+};
+const STATUS_COLORS = {
+  scouting: 'var(--amber)', sampling: 'var(--blue)', quoted: 'var(--purple)',
+  ordered: 'var(--pink)', received: 'var(--green)', rejected: 'var(--red)'
+};
 
 function showTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -82,13 +92,14 @@ function esc(s) { const d=document.createElement('div'); d.textContent=s; return
 
 async function load() {
   try {
-    const [stateRes, suppRes] = await Promise.all([
-      fetch('/merch/state'), fetch('/merch/suppliers')
+    const [stateRes, suppRes, srcRes] = await Promise.all([
+      fetch('/merch/state'), fetch('/merch/suppliers'), fetch('/merch/sourcing')
     ]);
     const stateData = await stateRes.json();
     const suppData = await suppRes.json();
     DATA.state = stateData.ok ? stateData.state : { runs: [], ideas: [] };
     DATA.suppliers = suppData.ok ? suppData.suppliers : [];
+    try { DATA.sourcing = await srcRes.json(); } catch { DATA.sourcing = []; }
     render();
   } catch(e) { console.error(e); }
 }
@@ -147,6 +158,49 @@ function render() {
         <div class="card-meta">${r.id} | Created: ${(r.createdAt||'').split('T')[0]}${r.total_cost ? ' | HK$' + r.total_cost : ''}</div>
       </div>
     `).join('');
+
+  // Sourcing
+  const srcEl = document.getElementById('panel-sourcing');
+  const leads = DATA.sourcing || [];
+  if (leads.length === 0) {
+    srcEl.innerHTML = '<div class="empty">No sourcing leads yet.</div>';
+  } else {
+    srcEl.innerHTML = leads.map(l => {
+      const icon = CAT_ICONS[l.category] || '📦';
+      const stColor = STATUS_COLORS[l.status] || 'var(--text-dim)';
+      const suppHtml = (l.suppliers || []).map(s => `
+        <div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px">
+          <strong>${esc(s.name)}</strong> <span style="color:var(--text-dim)">${esc(s.country)}</span>
+          ${s.moq ? `<span class="supplier-cap">MOQ: ${esc(String(s.moq))}</span>` : ''}
+          ${s.url ? `<a href="${s.url}" target="_blank" style="color:var(--blue);font-size:11px;margin-left:6px">visit</a>` : ''}
+          ${s.contact ? `<span style="color:var(--green);font-size:11px;margin-left:6px">${esc(s.contact)}</span>` : ''}
+          ${s.notes ? `<div style="color:var(--text-dim);font-size:11px;margin-top:2px">${esc(s.notes)}</div>` : ''}
+        </div>
+      `).join('');
+      const refsHtml = (l.reference_products || []).map(r =>
+        `<a href="${r.url}" target="_blank" style="color:var(--blue);font-size:11px;margin-right:10px">${esc(r.name)} ${r.price || ''}</a>`
+      ).join('');
+      const specHtml = l.spec ? Object.entries(l.spec).map(([k,v]) =>
+        `<span class="supplier-cap">${k}: ${typeof v === 'boolean' ? (v ? 'Yes' : 'No') : (Array.isArray(v) ? v.join(', ') : v)}</span>`
+      ).join(' ') : '';
+      return `
+        <div class="card" style="border-left:3px solid ${stColor}">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="font-size:18px">${icon}</span>
+            <span class="card-title">${esc(l.name)}</span>
+            <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,0.05);color:${stColor};font-weight:600;text-transform:uppercase">${l.status}</span>
+            <span style="font-size:11px;color:var(--text-dim);margin-left:auto">${l.qty_target || ''}</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">${esc(l.description)}</div>
+          ${l.estimated_factory_price ? `<div style="font-size:12px;margin-bottom:6px"><strong style="color:var(--gold)">Est. factory price:</strong> ${esc(l.estimated_factory_price)}</div>` : ''}
+          ${refsHtml ? `<div style="margin-bottom:8px">Ref: ${refsHtml}</div>` : ''}
+          ${specHtml ? `<div style="margin-bottom:8px">${specHtml}</div>` : ''}
+          ${suppHtml ? `<details style="margin-top:8px"><summary style="cursor:pointer;color:var(--text-muted);font-size:12px">Suppliers (${l.suppliers.length})</summary><div style="margin-top:6px">${suppHtml}</div></details>` : ''}
+          ${l.next_action ? `<div style="margin-top:8px;font-size:12px;color:var(--green);font-style:italic">Next: ${esc(l.next_action)}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
 
   // Rules
   document.getElementById('panel-rules').innerHTML = `

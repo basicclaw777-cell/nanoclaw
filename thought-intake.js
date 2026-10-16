@@ -31,6 +31,7 @@
 import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
+import { injectProvenanceFrontmatter } from './provenance-stamp.js';
 
 const HOME = process.env.HOME;
 const PLANNER = join(HOME, 'Cathedral', 'emergence', 'planner-tasks.json');
@@ -139,7 +140,8 @@ export async function routeThought(text, { dry = false } = {}) {
       '',
       `> Routed: ${routing.rationale || '—'}`,
     ].join('\n');
-    writeFileSync(vaultPath, frontmatter);
+    const stamped = injectProvenanceFrontmatter(frontmatter, routing.agent || 'paul', 'thought-intake');
+    writeFileSync(vaultPath, stamped);
     result.deposited = vaultPath;
   } catch (err) {
     result.depositError = err.message;

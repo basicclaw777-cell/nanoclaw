@@ -1,0 +1,310 @@
+{
+  "date": "2026-07-26",
+  "windowDays": 30,
+  "sessionCount": 28,
+  "totalSessions": 128,
+  "typeCounts": {
+    "relay": 3,
+    "build": 6,
+    "mixed": 19,
+    "conversation": 0
+  },
+  "vaultRate": 57,
+  "cupOfTeaRate": 57,
+  "avgBuildsPerSession": 4.3,
+  "highLoadSessions": 21,
+  "topTopics": [
+    {
+      "topic": "decisions and builds",
+      "count": 7
+    },
+    {
+      "topic": "builds and decisions",
+      "count": 3
+    },
+    {
+      "topic": "vault entry",
+      "count": 2
+    },
+    {
+      "topic": "built the 33-card boxing operating system data model and 5 visual views from it",
+      "count": 1
+    },
+    {
+      "topic": "built the guard defensive intelligence system (3 layers)",
+      "count": 1
+    },
+    {
+      "topic": "the questions onboarding page",
+      "count": 1
+    },
+    {
+      "topic": "and the prospector decision-exhaust scanner",
+      "count": 1
+    },
+    {
+      "topic": "vault brain visual graph",
+      "count": 1
+    }
+  ],
+  "avgSharpByType": {
+    "mixed": 2.1,
+    "build": 1,
+    "relay": 1
+  },
+  "patternAnalysis": "1. The highest-value output seems to come from \"mixed\" type sessions, which combine building with other activities like vault entries or relay work. This likely allows Paul to synthesize ideas and insights more effectively than focusing solely on construction.\n\n2. High-load sessions (>3 builds) are common, but they don't always correlate with the sharpest observations. Some of the most insightful moments came from lower-load mixed sessions focused on things other than just building.\n\n3. Paul has been neglecting sustained deep work on a single core topic or system without frequent context switching. He tends to jump around and get distracted easily.\n\n4. Paul's most wasteful habit is starting many sessions but not finishing them. He often gets sidetracked or loses focus before reaching his intended conclusion.\n\n5. Paul's most productive habit is when he asks himself a simple, clarifying question that forces him to think at 30,000 feet and explain something in genuine detail without getting lost in technicalities.\n\n6. For the next session, I would suggest Paul pick one core topic or system to deeply focus on for an extended period, perhaps even scheduling it as dedicated deep work time away from other distractions. He should aim to finish whatever he starts, and try to synthesize a few sharp, insightful observations rather than many shallow ones.",
+  "sessions": [
+    {
+      "id": "2026-06-27",
+      "date": "2026-06-27",
+      "type": "mixed",
+      "builds": 6,
+      "vault": false,
+      "tea": false,
+      "topics": "Built the 33-card boxing operating system data model and 5 visual views from it"
+    },
+    {
+      "id": "2026-06-27b",
+      "date": "2026-06-27",
+      "type": "mixed",
+      "builds": 4,
+      "vault": false,
+      "tea": true,
+      "topics": "Decisions and builds"
+    },
+    {
+      "id": "2026-06-27c",
+      "date": "2026-06-27",
+      "type": "build",
+      "builds": 0,
+      "vault": false,
+      "tea": true,
+      "topics": "Decisions and builds"
+    },
+    {
+      "id": "2026-07-01",
+      "date": "2026-07-01",
+      "type": "mixed",
+      "builds": 4,
+      "vault": false,
+      "tea": true,
+      "topics": "Built The Guard defensive intelligence system (3 layers), The Questions onboarding page, and The Prospector decision-exhaust scanner"
+    },
+    {
+      "id": "2026-07-01b",
+      "date": "2026-07-01",
+      "type": "build",
+      "builds": 4,
+      "vault": true,
+      "tea": true,
+      "topics": "Vault Brain Visual Graph + BR Boxing Shoe Product Research"
+    },
+    {
+      "id": "2026-07-01c",
+      "date": "2026-07-01",
+      "type": "build",
+      "builds": 4,
+      "vault": false,
+      "tea": false,
+      "topics": "Visual environment layer for The Guard, branding polish, front door wiring"
+    },
+    {
+      "id": "2026-07-02",
+      "date": "2026-07-02",
+      "type": "mixed",
+      "builds": 4,
+      "vault": true,
+      "tea": true,
+      "topics": "DeepSeek Relay Harvest + Tool Stack Assessment"
+    },
+    {
+      "id": "2026-07-02b",
+      "date": "2026-07-02",
+      "type": "mixed",
+      "builds": 3,
+      "vault": true,
+      "tea": false,
+      "topics": "Fight prep coaching audio, mind map visualization, Gym Eyes connection mapping"
+    },
+    {
+      "id": "2026-07-03",
+      "date": "2026-07-03",
+      "type": "mixed",
+      "builds": 4,
+      "vault": false,
+      "tea": true,
+      "topics": "Decisions and builds"
+    },
+    {
+      "id": "2026-07-05",
+      "date": "2026-07-05",
+      "type": "mixed",
+      "builds": 4,
+      "vault": true,
+      "tea": false,
+      "topics": "decisions and builds"
+    },
+    {
+      "id": "2026-07-06",
+      "date": "2026-07-06",
+      "type": "mixed",
+      "builds": 8,
+      "vault": true,
+      "tea": true,
+      "topics": "builds and decisions"
+    },
+    {
+      "id": "2026-07-07",
+      "date": "2026-07-07",
+      "type": "mixed",
+      "builds": 6,
+      "vault": true,
+      "tea": true,
+      "topics": "Trading pipeline completion, Autonomy Constitution spec, governance contract code, Reed chassis, 92-agent audit"
+    },
+    {
+      "id": "2026-07-08",
+      "date": "2026-07-08",
+      "type": "relay",
+      "builds": 0,
+      "vault": true,
+      "tea": false,
+      "topics": "Decisions and builds"
+    },
+    {
+      "id": "2026-07-13",
+      "date": "2026-07-13",
+      "type": "mixed",
+      "builds": 4,
+      "vault": false,
+      "tea": true,
+      "topics": "Coaching OS Phases 0-5: schema, import, planner, teach mode, workout cards, intelligence, series graph"
+    },
+    {
+      "id": "2026-07-14",
+      "date": "2026-07-14",
+      "type": "relay",
+      "builds": 0,
+      "vault": true,
+      "tea": true,
+      "topics": "Source Principle adversarial review, Pretta protocol promotion, I Ching structural reading"
+    },
+    {
+      "id": "2026-07-15",
+      "date": "2026-07-15",
+      "type": "mixed",
+      "builds": 0,
+      "vault": true,
+      "tea": true,
+      "topics": "builds, methods, products, content format"
+    },
+    {
+      "id": "2026-07-16",
+      "date": "2026-07-16",
+      "type": "mixed",
+      "builds": 7,
+      "vault": true,
+      "tea": true,
+      "topics": "Resonant Audit relay, vault entry, content pipeline (NotebookLM + Idiot"
+    },
+    {
+      "id": "2026-07-16b",
+      "date": "2026-07-16",
+      "type": "mixed",
+      "builds": 6,
+      "vault": false,
+      "tea": false,
+      "topics": "Built SEO site architecture from 4-model synthesis, generated 39,550-page static site from Sumerian tablet corpus"
+    },
+    {
+      "id": "2026-07-17",
+      "date": "2026-07-17",
+      "type": "mixed",
+      "builds": 6,
+      "vault": false,
+      "tea": false,
+      "topics": "Phone bridge, mobile Court, Gym Eyes pipeline, Fable use cases completion"
+    },
+    {
+      "id": "2026-07-19",
+      "date": "2026-07-19",
+      "type": "mixed",
+      "builds": 4,
+      "vault": false,
+      "tea": false,
+      "topics": "PT Tracker build, phone bridge UX brainstorm"
+    },
+    {
+      "id": "2026-07-19b",
+      "date": "2026-07-19",
+      "type": "build",
+      "builds": 7,
+      "vault": false,
+      "tea": true,
+      "topics": "builds and decisions"
+    },
+    {
+      "id": "2026-07-19c",
+      "date": "2026-07-19",
+      "type": "build",
+      "builds": 4,
+      "vault": true,
+      "tea": false,
+      "topics": "builds and decisions"
+    },
+    {
+      "id": "2026-07-20",
+      "date": "2026-07-20",
+      "type": "mixed",
+      "builds": 7,
+      "vault": true,
+      "tea": true,
+      "topics": "decisions and builds"
+    },
+    {
+      "id": "2026-07-21",
+      "date": "2026-07-21",
+      "type": "mixed",
+      "builds": 4,
+      "vault": true,
+      "tea": true,
+      "topics": "Discernment Inversion relay intake, vault entry, NotebookLM source, prior session-closer completion"
+    },
+    {
+      "id": "2026-07-21b",
+      "date": "2026-07-21",
+      "type": "relay",
+      "builds": 0,
+      "vault": true,
+      "tea": false,
+      "topics": "Decisions and builds"
+    },
+    {
+      "id": "2026-07-22",
+      "date": "2026-07-22",
+      "type": "mixed",
+      "builds": 11,
+      "vault": true,
+      "tea": true,
+      "topics": "Hybrid Intelligence relay + Stress Battery + Pattern Tracker + Corpus Diagnostic + Identity Threshold"
+    },
+    {
+      "id": "2026-07-24",
+      "date": "2026-07-24",
+      "type": "mixed",
+      "builds": 3,
+      "vault": true,
+      "tea": false,
+      "topics": "Parametric Architecture broadened from StudentState to 6 Cathedral entity types"
+    },
+    {
+      "id": "2026-07-25",
+      "date": "2026-07-25",
+      "type": "build",
+      "builds": 5,
+      "vault": false,
+      "tea": false,
+      "topics": "Coaching OS taste wiring, drill formats, SYSTEM_MAP, Property Scout fix"
+    }
+  ]
+}

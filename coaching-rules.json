@@ -1,0 +1,1134 @@
+[
+  {
+    "id": "seed_de_1_safety_without_announcing",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Create safety without announcing it — through tempo, humour and genuine curiosity, never by saying \"this is a safe space\".",
+    "confidence": 0.6,
+    "sourceTags": [
+      "diagnostic",
+      "safety"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/diagnostic-empathy-with-surgical-naming.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "student_guarded",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "diagnostic",
+        "safety"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Match their energy, keep it light, stay genuinely curious — the student relaxes because nothing feels clinical.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_de_2_wound_under_words",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Hear the wound underneath the words — the surface complaint is never the real signal; listen for the flinch: energy shift, speed change, misplaced laugh.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "diagnostic",
+      "listening"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/diagnostic-empathy-with-surgical-naming.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "surface_complaint",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "diagnostic",
+        "listening"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Listen for the sentence beneath the sentence — the moment their energy shifts, where they speed up or slow down, where they laugh at something that isn't funny.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_de_3_collapsing_question",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Ask the collapsing question — one simple, almost casual question that makes the whole defence structure fold before the guard can intervene.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "diagnostic",
+      "questioning"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/diagnostic-empathy-with-surgical-naming.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "defence_structure_detected",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "diagnostic",
+        "questioning"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Skip the surface, find the load-bearing assumption, and ask about it directly — simple, casual, no therapeutic jargon.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_de_4_naming_precisely",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Name precisely — the wound gets a specific concrete name drawn from THEIR own language, not a category, not a diagnosis.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "diagnostic",
+      "naming"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/diagnostic-empathy-with-surgical-naming.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "wound_identified",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "diagnostic",
+        "naming"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Name the exact thing, in the exact words the person would use themselves, at the exact moment they're ready to hear it.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_de_5_match_intervention_to_wound",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Match intervention to wound type — same diagnostic path can require completely different repair architectures (external-authority wound vs self-abandonment wound).",
+    "confidence": 0.6,
+    "sourceTags": [
+      "diagnostic",
+      "intervention_matching"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/diagnostic-empathy-with-surgical-naming.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "wound_named",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "diagnostic",
+        "intervention_matching"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Different wounds, different interventions: reconnect them to who they were before the wound, or build the bridge between adult self and the part that gave up.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_de_6_know_when_to_stop",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Know when to stop — let the conversation end naturally; no homework, no follow-up framework, no referral speech.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "diagnostic",
+      "stopping"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/diagnostic-empathy-with-surgical-naming.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "breakthrough_reached",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "diagnostic",
+        "stopping"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Stop when it lands. No homework. No framework. The person should feel genuinely changed, not managed.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_te_energy_currency",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Diagnose which engine is leaking before prescribing — mind, emotion, body share one currency: how well you organize, cultivate, and protect ENERGY.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "three_engines",
+      "energy"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/the-three-engines.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "plateau_or_underperformance",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "three_engines",
+        "energy"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Before any drill change, read which engine is leaking: the body-only fighter is running one engine and leaking from the other two.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_te_mind_engine",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "The mind engine is the installed OS — peaceful, clear, able to make good decisions quickly vs tricked, distracted, gaslit.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "three_engines",
+      "mind"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/the-three-engines.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "mental_leak",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "three_engines",
+        "mind"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Check the install: is the inner environment peaceful, clear, decisive — or easily tricked, distracted, gaslit? Coach the OS, not just the technique.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_te_emotion_engine",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "The emotion engine is composure — either composed and in control of emotional energy, or fearful, tense, panicked, reactive and therefore leaking energy.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "three_engines",
+      "emotion"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/the-three-engines.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "emotional_leak",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "three_engines",
+        "emotion"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Don't suppress the emotion engine — organize it. Composed and in control of emotional energy is the gate passed.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_te_body_engine",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "The body is the machine — the one everyone trains. Train it, but never let it hide the two neglected engines.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "three_engines",
+      "body"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/the-three-engines.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "physical_focus_only",
+      "student_level": "any",
+      "engine": "body",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "three_engines",
+        "body"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Everyone trains the body. The edge is the two engines everyone forgets — if body metrics are fine but performance stalls, the leak is elsewhere.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_fg_4to5_wall",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "The 4→5 wall (Defense Basics → Sparring Entry) is an EMOTION-engine event, not a physical one — it's where pressure and fear start leaking energy and composure has to be installed.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "fear_gate",
+      "block_progression"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/the-fear-gate-model.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "block_4_to_5_transition",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        4,
+        5
+      ],
+      "tags": [
+        "fear_gate",
+        "block_progression"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "The student \"knows the punches\" but can't flow. Don't prescribe more technique — this is the fear gate. Which floor element is missing?",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_fg_floor_elements",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "At a fear gate, check the four floor elements: healthy routine (the floor beneath the trap door), journal/evidence of problems overcome, supportive community, and accumulated evidence of character at previous gates.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "fear_gate",
+      "floor_elements"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/the-fear-gate-model.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "fear_gate_stall",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "fear_gate",
+        "floor_elements"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Which floor element is missing? Routine holds you while the fear passes. The journal says \"you've handled worse.\" Peers pull toward the positive outcome. Data overwhelms the fear.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_fg_alarm_not_trapdoor",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Reframe the gate: alarm, not trap door — the fear gate never disappears, it becomes useful; an alarm tells you something important is happening.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "fear_gate",
+      "reframe"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "02_Refined_Gold/cathedral/the-fear-gate-model.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "fear_response",
+      "student_level": "any",
+      "engine": "emotion",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "fear_gate",
+        "reframe"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Each gate survived is a data point. \"I've been here 7 times and survived all 7.\" The spiral goes up.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_compression_concrete_image",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Compression through concrete image: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_compression_concrete_image",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Give the student one concrete image that holds the whole correction — the image does the work, not a list of pointers.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_cross_domain_bridge",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Cross-domain bridge-building: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_cross_domain_bridge",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Bridge the correction to something the student already does well in another domain — structural identity, not analogy.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_reflexive_rigour",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Reflexive rigour: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_reflexive_rigour",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Apply the same standard to your own coaching that you apply to the student — if a cue keeps failing, the cue is wrong, not the student.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_lens_on_instrument",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Turning the lens on the instrument: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_lens_on_instrument",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Treat the coaching itself as data — when a session goes flat, diagnose the coaching, not just the student.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_hold_until_pattern",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Hold-until-pattern: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_hold_until_pattern",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Wait for three data points before naming a pattern — hold the first observation, note the second, name at the third.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_live_forensic",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Forensic diagnosis in real time: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_live_forensic",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Name the mechanism while still inside the round — live diagnosis, not retrospective analysis.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_governance_instinct",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — The governance instinct: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_governance_instinct",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "After prescribing, ask who/what watches the prescription — a drill without a check is incomplete.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_four_to_eight",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — The 4-to-8 Question: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_four_to_eight",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "When a student is stuck at a 4, ask what takes them to an 8 — force the new idea, not the refinement.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_trojan_horse",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Trojan Horse Principle: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_trojan_horse",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "The skill is never the offer — they came for boxing; deliver the deeper work through the boxing, never announce it.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_audit_before_build",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Audit Before Build + Speak Freely: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_audit_before_build",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Diagnose fully before changing anything, and remove the pressure for a positive assessment before asking what is wrong.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_accumulation_vessel",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Identity as accumulation vessel: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_accumulation_vessel",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "The student's logged history IS their identity as a fighter — read the accumulation before coaching the day.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_diagnostic_inversion",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — Diagnostic Inversion: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_diagnostic_inversion",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "Never fix the reported symptom — test the actual mechanism underneath the complaint.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_cs_four_step_interrogation",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Meta-skill — The Four-Step Interrogation: informs HOW the engine reasons, not WHAT it prescribes.",
+    "confidence": 0.6,
+    "sourceTags": [
+      "cognitive_signature",
+      "meta_skill"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "06_Methods/pauls-cognitive-signature.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "meta_four_step_interrogation",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "cognitive_signature",
+        "meta_skill"
+      ]
+    },
+    "prescription": {
+      "type": "meta_skill",
+      "instruction": "When a student's story about their block doesn't hold, strip it with simple concrete questions until the real block is visible.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  },
+  {
+    "id": "seed_blocks_progression",
+    "version": "1.0",
+    "status": "hypothesis",
+    "rule": "Progression runs through 10 gated blocks: Stance & Guard → Basic Punches → Combinations → Defense Basics → FEAR GATE → Sparring Entry → Ring Craft → Counter Fighting → Style Development → Competition Prep → Teaching. Each gate asks \"which engine is still leaking\", not just \"can you do the technique\".",
+    "confidence": 0.6,
+    "sourceTags": [
+      "block_progression"
+    ],
+    "evidence": {
+      "source": "vault_seed",
+      "file": "/Users/basicclaw777/nanoclaw/scaffolds/5b-coach-paul-engine.md",
+      "observation_count": 0,
+      "supporting_interventions": [],
+      "outcomes": []
+    },
+    "conditions": {
+      "trigger": "block_transition",
+      "student_level": "any",
+      "engine": "mind",
+      "block_range": [
+        1,
+        10
+      ],
+      "tags": [
+        "block_progression"
+      ]
+    },
+    "prescription": {
+      "type": "diagnostic_method",
+      "instruction": "Blocks 1-4 train the body, block 5 is the emotion gate, 6-8 train the mind, 9 tests emotion under stakes, 10 is mind (teaching). Read the gate, not just the technique.",
+      "duration": null,
+      "escalation": null
+    },
+    "created": "2026-07-02",
+    "approved": null,
+    "approvedBy": null,
+    "changelog": [],
+    "note": "Vault seed — hypothesis. Needs outcome validation before becoming a confirmed rule."
+  }
+]

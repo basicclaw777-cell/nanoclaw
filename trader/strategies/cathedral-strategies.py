@@ -31,7 +31,8 @@ OUTPUT_DIR = Path.home() / "nanoclaw" / "trader" / "signals"
 COIN_IDS = {
     "BTC": "bitcoin", "ETH": "ethereum", "SOL": "solana",
     "AVAX": "avalanche-2", "LINK": "chainlink", "DOT": "polkadot",
-    "MATIC": "matic-network", "ARB": "arbitrum",
+    "ARB": "arbitrum", "DOGE": "dogecoin", "ADA": "cardano",
+    "ATOM": "cosmos", "UNI": "uniswap",
 }
 
 COINGECKO_BASE = "https://api.coingecko.com/api/v3"
@@ -831,6 +832,354 @@ def cymatics_schumann(prices, history):
     return signals
 
 
+# ── Strategy 13: Harmonic Year (360-day Division) ─────────────────────────────
+
+def harmonic_year_gann(price):
+    """Gann Square of Nine using 360-degree division instead of calendar days.
+
+    The resonant enclosure model: every ancient civilization used 360-day year first,
+    then corrected to 365.25. If Gann's geometry was built on the original tuning,
+    360-degree division may produce cleaner price levels.
+
+    Same algorithm as gann_square_of_nine but offsets are in 360ths, not arbitrary.
+    Cardinal cross at 90/180/270/360 degrees = exact quarter turns.
+    """
+    root = math.sqrt(price)
+    levels = []
+
+    # 360-degree offsets: each unit = 1 degree of the square
+    # Cardinal: 90 (0.25 turn), 180 (0.5), 270 (0.75), 360 (1.0)
+    # Ordinal: 45 (0.125), 135 (0.375), 225 (0.625), 315 (0.875)
+    for degrees in [45, 90, 135, 180, 225, 270, 315, 360]:
+        offset = degrees / 360.0  # Normalize to fraction of full turn
+        for sign in [-1, 1]:
+            level = (root + sign * offset) ** 2
+            if level > 0:
+                distance_pct = (level - price) / price
+                levels.append({
+                    "level": round(level, 2),
+                    "distance_pct": round(distance_pct * 100, 2),
+                    "cardinal": degrees % 90 == 0,
+                    "degrees": degrees,
+                })
+
+    return levels
+
+
+def harmonic_year(prices, history, now=None):
+    """360-day year division applied to market timing and Gann geometry.
+
+    Two tests running simultaneously:
+    1. Gann levels computed with 360-degree offsets (vs arbitrary sqrt offsets)
+    2. Cycle timing using 360-day year (30-day months, 12 exact months)
+
+    The detuning finding: sun's circuit changed from 360 to 365.25 days.
+    If markets respond to the cavity's native math, 360-based signals > 365-based.
+    """
+    now = now or datetime.utcnow()
+    signals = []
+
+    # Part 1: 360-degree Gann levels
+    for sym, price_data in prices.items():
+        price = price_data.get("price")
+        if not price:
+            continue
+
+        levels = harmonic_year_gann(price)
+
+        # Find nearest level
+        nearest = min(levels, key=lambda l: abs(l["distance_pct"]))
+
+        # Signal when price within 1.5% of a 360-degree Gann level
+        if abs(nearest["distance_pct"]) < 1.5:
+            is_cardinal = nearest["cardinal"]
+            direction = "long" if nearest["distance_pct"] > 0 else "short"
+            strength = 0.7 if is_cardinal else 0.55
+
+            if price < nearest["level"]:
+                direction = "long"
+                reasoning = (f"{sym} at 360-degree Gann level ${nearest['level']:.0f} "
+                           f"({nearest['degrees']}deg, {nearest['distance_pct']:.1f}% away) "
+                           f"— cavity's native geometry support")
+            else:
+                direction = "short"
+                reasoning = (f"{sym} at 360-degree Gann level ${nearest['level']:.0f} "
+                           f"({nearest['degrees']}deg, {nearest['distance_pct']:.1f}% away) "
+                           f"— cavity's native geometry resistance")
+
+            signals.append({
+                "source": "harmonic_year",
+                "asset": sym,
+                "direction": direction,
+                "strength": strength,
+                "reasoning": reasoning,
+                "type": "harmonic_year",
+            })
+
+    # Part 2: 30-day month cycle timing (360/12 = 30 exact)
+    # Check if we're at a harmonic month boundary
+    day_of_year = now.timetuple().tm_yday
+    # Map 365-day calendar to 360-degree position
+    degree_position = (day_of_year / 365.25) * 360
+
+    # Cardinal month boundaries: 30, 60, 90, 120... (every 30 degrees)
+    nearest_boundary = round(degree_position / 30) * 30
+    distance_from_boundary = abs(degree_position - nearest_boundary)
+
+    # Signal at month boundaries (within 2 degrees = ~2 calendar days)
+    if distance_from_boundary < 2:
+        # At a harmonic month boundary — potential turning point
+        for sym in ["BTC", "ETH", "SOL"]:
+            if sym in prices and prices[sym].get("price"):
+                hist = history.get(sym, [])
+                if len(hist) >= 7:
+                    recent_trend = (hist[-1] - hist[-3]) / hist[-3] if hist[-3] > 0 else 0
+                    # Fade the trend at boundaries (turning point hypothesis)
+                    direction = "short" if recent_trend > 0.01 else "long" if recent_trend < -0.01 else "long"
+                    signals.append({
+                        "source": "harmonic_year",
+                        "asset": sym,
+                        "direction": direction,
+                        "strength": 0.55,
+                        "reasoning": (f"360-degree calendar: day {day_of_year} = {degree_position:.0f}deg, "
+                                    f"near {nearest_boundary}deg month boundary. "
+                                    f"Harmonic turning point — fading recent {'up' if recent_trend > 0 else 'down'}trend."),
+                        "type": "harmonic_year",
+                    })
+
+    return signals
+
+
+# ── Strategy 14: Harmonic 432 ────────────────────────────────────────────────
+
+# 432 Hz harmonic series — pre-1939 concert pitch, connected to Schumann
+# Schumann (7.83 Hz) x 55 = 430.65 ≈ 432
+# 432 / 2^n gives octave divisions; mapped to market cycle periods in days
+HARMONIC_432_SERIES = [
+    432,     # Root
+    216,     # Octave below
+    108,     # 2 octaves below
+    54,      # 3 octaves below
+    27,      # 4 octaves below — close to Schumann 4th harmonic (27.3)
+    13.5,    # 5 octaves below — close to Schumann 2nd harmonic (14.3)
+    6.75,    # 6 octaves below — close to Schumann fundamental (7.83)
+]
+
+# Cross-reference: 432 / 55 = 7.854... ≈ 7.83 Hz (Schumann fundamental)
+# The 432 web connects Schumann to Fibonacci:
+# 7.83 x 55 (Fibonacci number) = 430.65
+# Tolerance for resonance matching
+HARMONIC_432_TOLERANCE = 0.12  # 12% — wider than Schumann (15%) because octave divisions
+
+
+def harmonic_432(prices, history):
+    """432 Hz harmonic series mapped to market oscillation periods.
+
+    The resonant enclosure finding: 432 was the cavity's concert pitch before
+    1939 (Rockefeller Foundation standardized 440 Hz same year Rife's frequency
+    healing was destroyed). If the cavity has a native pitch, markets operating
+    inside it may oscillate at octave divisions of that pitch.
+
+    Test: do market oscillation periods cluster around 432/2^n day cycles
+    more than random? Compare with Schumann harmonics (Strategy 11).
+    """
+    signals = []
+
+    for sym, price_list in history.items():
+        if len(price_list) < 14:
+            continue
+
+        current_price = prices.get(sym, {}).get("price")
+        if not current_price:
+            continue
+
+        # Compute dominant oscillation period (reuse cymatics method)
+        period, freq = compute_dominant_frequency(price_list)
+
+        if not period:
+            continue
+
+        # Check resonance with 432 harmonic series
+        for harmonic in HARMONIC_432_SERIES:
+            if harmonic > 60:  # Skip harmonics longer than our data window
+                continue
+
+            if abs(period - harmonic) / harmonic < HARMONIC_432_TOLERANCE:
+                # Resonance with 432 Hz octave division
+                recent_trend = (price_list[-1] - price_list[-7]) / price_list[-7] if price_list[-7] > 0 else 0
+                direction = "long" if recent_trend > 0 else "short" if recent_trend < -0.01 else "long"
+
+                # Higher strength for harmonics that also align with Schumann
+                schumann_overlap = any(
+                    abs(harmonic - sh) / sh < 0.15
+                    for sh in [7.83, 14.3, 20.8, 27.3, 33.8]
+                )
+                strength = 0.75 if schumann_overlap else 0.65
+
+                signals.append({
+                    "source": "harmonic_432",
+                    "asset": sym,
+                    "direction": direction,
+                    "strength": strength,
+                    "reasoning": (f"{sym} oscillation period {period:.1f} days resonates with "
+                                f"432 Hz octave division ({harmonic} days). "
+                                f"{'ALSO aligns with Schumann harmonic — dual resonance. ' if schumann_overlap else ''}"
+                                f"Cavity's native pitch × market oscillation. "
+                                f"Trend: {'up' if recent_trend > 0 else 'down'} {abs(recent_trend)*100:.1f}%."),
+                    "type": "harmonic_432",
+                })
+                break  # One 432 signal per asset
+
+    return signals
+
+
+# ── Strategy 15: Sexagesimal Cycles ──────────────────────────────────────────
+
+# Base-60 time windows in days — every factor of 60
+# Sumerian insight: base-60 = dividing system, optimized for proportions
+# 71% of medical corpus fractions use 1/3 or 2/3 — exact in base-60 (20/60, 40/60)
+SEXAGESIMAL_WINDOWS = [3, 5, 6, 10, 12, 15, 20, 30]
+
+# Sexagesimal retracement levels — exact fractions in base-60
+SEXAGESIMAL_RETRACEMENTS = {
+    '1/6': 1/6,    # 10/60
+    '1/5': 1/5,    # 12/60
+    '1/4': 1/4,    # 15/60
+    '1/3': 1/3,    # 20/60 — dominant in Sumerian corpus
+    '2/5': 2/5,    # 24/60
+    '1/2': 1/2,    # 30/60
+    '3/5': 3/5,    # 36/60
+    '2/3': 2/3,    # 40/60 — second most common
+    '3/4': 3/4,    # 45/60
+    '5/6': 5/6,    # 50/60
+}
+
+
+def sexagesimal_cycles(prices, history):
+    """Base-60 aligned time windows applied to market cycle detection.
+
+    Three tests:
+    1. Proportional convergence — do sexagesimal time windows agree on direction?
+       Uses the 1/3 rule: bottom third of range = long, top third = short.
+    2. Sexagesimal retracement — are 1/3 and 2/3 levels acting as support/resistance?
+    3. Cycle resonance — does the dominant oscillation align with a base-60 period?
+    """
+    signals = []
+
+    for sym, price_list in history.items():
+        if len(price_list) < 15:
+            continue
+
+        current_price = prices.get(sym, {}).get("price")
+        if not current_price:
+            continue
+
+        # ── Test 1: Proportional convergence ──
+        votes = {'long': 0, 'short': 0, 'neutral': 0}
+        details = []
+
+        for window in SEXAGESIMAL_WINDOWS:
+            if window >= len(price_list):
+                continue
+
+            window_slice = price_list[-window:]
+            w_high = max(window_slice)
+            w_low = min(window_slice)
+            w_range = w_high - w_low
+
+            if w_range > 0:
+                position = (current_price - w_low) / w_range
+                if position < 1/3:
+                    votes['long'] += 1
+                    details.append(f"{window}d:{position:.0%}")
+                elif position > 2/3:
+                    votes['short'] += 1
+                    details.append(f"{window}d:{position:.0%}")
+                else:
+                    votes['neutral'] += 1
+
+        total = votes['long'] + votes['short'] + votes['neutral']
+        if total >= 3:
+            long_pct = votes['long'] / total
+            short_pct = votes['short'] / total
+
+            if long_pct >= 0.6 or short_pct >= 0.6:
+                direction = 'long' if long_pct > short_pct else 'short'
+                convergence = max(long_pct, short_pct)
+                strength = round(0.5 + (convergence - 0.6) * 1.25, 2)
+                strength = min(max(strength, 0.5), 0.85)
+
+                signals.append({
+                    "source": "sexagesimal_cycles",
+                    "asset": sym,
+                    "direction": direction,
+                    "strength": strength,
+                    "reasoning": (f"{sym} sexagesimal convergence: "
+                                f"{votes['long']}L/{votes['short']}S/{votes['neutral']}N "
+                                f"across {total} base-60 windows ({convergence:.0%} agree). "
+                                f"{'; '.join(details[:4])}."),
+                    "type": "sexagesimal_cycles",
+                })
+
+        # ── Test 2: Sexagesimal retracement ──
+        if len(price_list) >= 30:
+            r_high = max(price_list[-30:])
+            r_low = min(price_list[-30:])
+            r_range = r_high - r_low
+
+            if r_range > 0:
+                for label, fraction in SEXAGESIMAL_RETRACEMENTS.items():
+                    level = r_low + r_range * fraction
+                    dist_pct = abs(current_price - level) / current_price * 100
+
+                    if dist_pct < 1.5:
+                        is_corpus = label in ('1/3', '2/3')
+                        lev_str = 0.7 if is_corpus else 0.55
+
+                        if current_price < level:
+                            ret_dir = "long"
+                            note = f"support — exact in base-60"
+                        else:
+                            ret_dir = "short"
+                            note = f"resistance — exact in base-60"
+
+                        corpus_tag = "Corpus-dominant fraction. " if is_corpus else ""
+
+                        signals.append({
+                            "source": "sexagesimal_cycles",
+                            "asset": sym,
+                            "direction": ret_dir,
+                            "strength": lev_str,
+                            "reasoning": (f"{sym} at sexagesimal {label} retracement "
+                                        f"${level:.0f} ({dist_pct:.1f}% away). "
+                                        f"{corpus_tag}{note}."),
+                            "type": "sexagesimal_cycles",
+                        })
+                        break
+
+        # ── Test 3: Cycle resonance at base-60 periods ──
+        period, freq = compute_dominant_frequency(price_list)
+        if period:
+            for window in SEXAGESIMAL_WINDOWS:
+                if abs(period - window) / window < 0.15:
+                    trend = (price_list[-1] - price_list[-3]) / price_list[-3] if price_list[-3] > 0 else 0
+                    c_dir = "long" if trend > 0 else "short" if trend < -0.01 else "long"
+
+                    signals.append({
+                        "source": "sexagesimal_cycles",
+                        "asset": sym,
+                        "direction": c_dir,
+                        "strength": 0.65,
+                        "reasoning": (f"{sym} dominant period {period:.1f}d resonates with "
+                                    f"sexagesimal {window}d window (factor of 60). "
+                                    f"Base-60 cycle alignment."),
+                        "type": "sexagesimal_cycles",
+                    })
+                    break
+
+    return signals
+
+
 # ── Strategy 12: Range Trader ─────────────────────────────────────────────────
 
 def range_trader(prices, history):
@@ -914,7 +1263,7 @@ def range_trader(prices, history):
 
 def run(prices=None, news=None):
     """Run all 10 cathedral strategies. Returns combined signal list."""
-    print("[cathedral-strategies] Running 10 strategies...")
+    print("[cathedral-strategies] Running 12 strategies...")
 
     # Load current prices from existing signals file if not provided
     if not prices:
@@ -985,10 +1334,25 @@ def run(prices=None, news=None):
     print(f"  Range Trader: {len(sigs)} signals")
     all_signals.extend(sigs)
 
+    # Strategy 13: Harmonic Year (360-day division — resonant enclosure)
+    sigs = harmonic_year(prices, history)
+    print(f"  Harmonic Year: {len(sigs)} signals")
+    all_signals.extend(sigs)
+
+    # Strategy 14: Harmonic 432 (432 Hz octave series — cavity pitch)
+    sigs = harmonic_432(prices, history)
+    print(f"  Harmonic 432: {len(sigs)} signals")
+    all_signals.extend(sigs)
+
+    # Strategy 15: Sexagesimal Cycles (base-60 time windows — corpus-backed)
+    sigs = sexagesimal_cycles(prices, history)
+    print(f"  Sexagesimal Cycles: {len(sigs)} signals")
+    all_signals.extend(sigs)
+
     # Save output
     output = {
         "timestamp": datetime.now().isoformat(),
-        "strategy_count": 10,
+        "strategy_count": 13,
         "total_signals": len(all_signals),
         "signals": all_signals,
     }

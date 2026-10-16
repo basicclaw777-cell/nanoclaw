@@ -1,0 +1,77 @@
+{
+  "people_detected": 2,
+  "activity_type": "padwork",
+  "intensity": "medium",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "The fighter on the right steps forward to close the distance while the fighter on the left adjusts slightly, keeping their base stable.",
+        "stance_width": "normal",
+        "guard": "The pad-holder on the left maintains hands up with pads raised. The striker on the right keeps a high guard as he moves in.",
+        "upper_body": "The right fighter throws a left jab (F4-F5) as he steps in towards the pads.",
+        "distance": "Closing from mid-range to close range.",
+        "notable": "The striker initiates the exchange with a long step and a sharp lead-hand jab."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "The right fighter presses forward with small adjustment steps; the left fighter backs up slightly to maintain space.",
+        "stance_width": "normal",
+        "guard": "The striker's rear hand drops momentarily to throw a punch, then returns to a defensive position. The pad-holder keeps pads up.",
+        "upper_body": "The right fighter throws a right cross (F6-F7), then retracts to a compact, slightly crouched stance (F8-F9).",
+        "distance": "Close range throughout, with a brief pause in activity.",
+        "notable": "A powerful right cross is landed, followed by a momentary reset where the striker regains a lower, ready posture."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "The right fighter steps in once more to throw another punch, then both fighters settle into a stable stance at the end.",
+        "stance_width": "normal",
+        "guard": "Both keep hands up between strikes; the striker raises his guard again as the sequence ends.",
+        "upper_body": "The right fighter throws a left hook (F11-F13), then both fighters relax into their stances (F14-F15).",
+        "distance": "Close range during the strike, then opening slightly as they reset.",
+        "notable": "A continuous combination pattern is visible, ending with both fighters in a neutral standoff."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F1-F3",
+      "type": "step",
+      "detail": "The striker on the right steps forward to close the distance."
+    },
+    {
+      "frames": "F4-F5",
+      "type": "punch_extension",
+      "detail": "Striker throws a lead-hand jab."
+    },
+    {
+      "frames": "F6-F7",
+      "type": "punch_extension",
+      "detail": "Striker throws a rear-hand cross."
+    },
+    {
+      "frames": "F8-F10",
+      "type": "punch_recovery",
+      "detail": "Striker retracts the punch and resets to a defensive/ready position."
+    },
+    {
+      "frames": "F11-F13",
+      "type": "punch_extension",
+      "detail": "Striker throws a left hook, continuing the combination."
+    },
+    {
+      "frames": "F14-F15",
+      "type": "reset",
+      "detail": "Both fighters return to a neutral stance, ending the exchange."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

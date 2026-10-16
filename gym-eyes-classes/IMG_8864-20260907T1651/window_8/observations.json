@@ -1,0 +1,72 @@
+{
+  "people_detected": 3,
+  "activity_type": "drilling",
+  "intensity": "low",
+  "fighter_stance": "orthodox",
+  "segments": [
+    {
+      "frames": "F1-F5",
+      "time": "0.0s-1.3s",
+      "observations": {
+        "footwork": "Light bouncing on the balls of the feet, staying in a stable stance.",
+        "stance_width": "normal",
+        "guard": "High guard, hands up near the chin.",
+        "upper_body": "Slight forward lean, torso rotating slightly with small movements.",
+        "distance": "Standing at the heavy bag, at striking distance.",
+        "notable": "Person on the far left is stationary."
+      }
+    },
+    {
+      "frames": "F6-F10",
+      "time": "1.7s-3.0s",
+      "observations": {
+        "footwork": "Steps in closer to the bag, then steps back out to reset.",
+        "stance_width": "normal",
+        "guard": "Guard drops slightly during the punch sequence, then returns to high guard.",
+        "upper_body": "Throws a short combination (jab-cross) into the heavy bag, then retracts.",
+        "distance": "Closes distance to the bag, then opens it again.",
+        "notable": "Person on the far left begins walking to the right."
+      }
+    },
+    {
+      "frames": "F11-F15",
+      "time": "3.3s-4.7s",
+      "observations": {
+        "footwork": "Resetting to a neutral stance with a small bounce.",
+        "stance_width": "normal",
+        "guard": "Back to a high guard.",
+        "upper_body": "Resetting posture, preparing for the next sequence.",
+        "distance": "Back to the original striking distance.",
+        "notable": "Person on the left continues walking across the background."
+      }
+    }
+  ],
+  "movement_events": [
+    {
+      "frames": "F6-F7",
+      "type": "punch_extension",
+      "detail": "Subject throws a combination into the heavy bag."
+    },
+    {
+      "frames": "F8-F9",
+      "type": "punch_recovery",
+      "detail": "Subject retracts arms and resets guard."
+    },
+    {
+      "frames": "F10-F11",
+      "type": "distance_open",
+      "detail": "Subject steps back away from the bag, opening distance."
+    },
+    {
+      "frames": "F10-F15",
+      "type": "step",
+      "detail": "Person on the far left walks from left to right."
+    },
+    {
+      "frames": "F11-F15",
+      "type": "reset",
+      "detail": "Subject resets their stance and rhythm."
+    }
+  ],
+  "overall_rhythm": "burst_then_rest"
+}

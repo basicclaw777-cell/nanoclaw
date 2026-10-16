@@ -1,0 +1,304 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-05-30",
+  "coreDimensions": {
+    "competence_without_ego": {
+      "description": "Skill expressed through restraint. Never performed, always present.",
+      "appears_in": [
+        "music",
+        "visual_style",
+        "writing_voice",
+        "teaching_tone",
+        "values",
+        "collaboration",
+        "boxing_drills"
+      ],
+      "anchors": [
+        "Miyagi substance, zero Miyagi performance",
+        "mate who happens to know deep things",
+        "confidence / swagger — never desperate or try-hard",
+        "drills that reward patience and correct technique"
+      ],
+      "anti_pattern": "guru performance, showmanship, try-hard energy"
+    },
+    "principle_over_technique": {
+      "description": "The WHY survives. The HOW expires. Teach the mechanism, not the recipe.",
+      "appears_in": [
+        "teaching_tone",
+        "research_style",
+        "decision_making",
+        "values",
+        "boxing_drills"
+      ],
+      "anchors": [
+        "principles survive techniques expire",
+        "forensic standard — does it hold when stripped of narrative?",
+        "teach the WHY not just the WHAT",
+        "drills that teach a principle in unexpected and unignorable way"
+      ],
+      "anti_pattern": "memorisation without understanding, shortcuts that skip fundamentals"
+    },
+    "authenticity_over_polish": {
+      "description": "Real over perfect. Visible substance, invisible processing.",
+      "appears_in": [
+        "music",
+        "visual_style",
+        "writing_voice",
+        "class_energy",
+        "values"
+      ],
+      "anchors": [
+        "must not look AI-generated",
+        "authentic — not AI-generated sounding",
+        "high-end photography look on ORDINARY photos",
+        "rawness dimension in music (0.5-0.95 range)",
+        "integrity over popularity"
+      ],
+      "anti_pattern": "corporate, hedging, over-produced, visible AI artifacts"
+    },
+    "rhythm_and_flow": {
+      "description": "Loopable patterns. Getting into the zone. Head-nodding energy.",
+      "appears_in": [
+        "music",
+        "class_energy",
+        "boxing_drills",
+        "collaboration"
+      ],
+      "anchors": [
+        "bumping your head energy",
+        "cool and in the flow > frantic and intense",
+        "sequences that loop — you can get into a rhythm",
+        "partner drills that loop and flow",
+        "match energy — execute when he executes, think when he thinks"
+      ],
+      "anti_pattern": "frantic, chaotic, unpredictable without resolution"
+    },
+    "surprise_within_structure": {
+      "description": "Unexpected moments within a predictable framework. The wildcard slot.",
+      "appears_in": [
+        "music",
+        "teaching_tone",
+        "boxing_drills",
+        "class_energy"
+      ],
+      "anchors": [
+        "Sweet Home Alabama as class closer — genre rules bend when energy + surprise factor is right",
+        "tennis ball left/right — makes people conscious of their thinking",
+        "medicine ball balance + tennis ball catch — unexpected, unignorable",
+        "dancing occasionally instead of boxing = peak energy sign"
+      ],
+      "anti_pattern": "predictable-only or random-only (needs both)"
+    },
+    "chunking_and_composition": {
+      "description": "Break into segments, master each, combine. The build-up is the method.",
+      "appears_in": [
+        "boxing_drills",
+        "teaching_tone",
+        "decision_making",
+        "collaboration"
+      ],
+      "anchors": [
+        "jab-slip → slip-1-2-slip → slip-cross → put together",
+        "build to peak, dont start at 10",
+        "diagnosis before prescription",
+        "cross-domain bridge-building — single question → five concepts"
+      ],
+      "anti_pattern": "everything at once, no progression, no segmentation"
+    },
+    "fair_exchange": {
+      "description": "Mutual benefit. Size is not everything. Patience rewarded.",
+      "appears_in": [
+        "values",
+        "boxing_drills",
+        "collaboration",
+        "teaching_tone"
+      ],
+      "anchors": [
+        "fair exchange — the only system worth playing",
+        "push hands — balance, size is not everything",
+        "drills that reward patience and correct technique",
+        "creative tension over agreement — The Counter",
+        "two-way street — learning is teaching and vice versa"
+      ],
+      "anti_pattern": "authority-based, one-directional, power-over"
+    },
+    "consciousness_forcing": {
+      "description": "Makes you aware of what you're doing while you're doing it. Meta-cognition through action.",
+      "appears_in": [
+        "boxing_drills",
+        "teaching_tone",
+        "research_style",
+        "values"
+      ],
+      "anchors": [
+        "throwing tennis ball — left or right hand — forces conscious catching",
+        "learn from mistakes — mistakes are data, not failure",
+        "friction as epistemological tool",
+        "the student who asks why > the student who memorises what"
+      ],
+      "anti_pattern": "autopilot, mindless repetition, unconscious compliance"
+    }
+  },
+  "drillDimensions": {
+    "principle_teaching": {
+      "description": "Teaches a principle in an unexpected and unignorable way",
+      "examples": [
+        "medicine ball balance + tennis ball catch = foot awareness",
+        "push hands = balance, size not everything"
+      ],
+      "score_question": "Does this drill teach a principle the student can FEEL, not just hear?"
+    },
+    "loopability": {
+      "description": "Sequence can loop — you get into a rhythm",
+      "examples": [
+        "partner flow drills",
+        "slip-counter-slip patterns"
+      ],
+      "score_question": "Can this drill loop without stopping? Does it have a natural cycle?"
+    },
+    "consciousness_forcing": {
+      "description": "Makes people conscious of their thinking",
+      "examples": [
+        "tennis ball: say left or right, they catch with that hand",
+        "call-and-response drills with decision points"
+      ],
+      "score_question": "Does this drill force the student to THINK, not just react?"
+    },
+    "chunkability": {
+      "description": "Can break into segments and reassemble",
+      "examples": [
+        "jab-slip → slip-1-2-slip → slip-cross → full combo",
+        "footwork pattern → add punches → add defence → full sequence"
+      ],
+      "score_question": "Can this drill be taught in 3+ segments that combine into something bigger?"
+    },
+    "partner_flow": {
+      "description": "Partner drills that loop and flow naturally",
+      "examples": [
+        "push hands",
+        "attack-defend loops",
+        "mirror drills"
+      ],
+      "score_question": "Do both partners have active roles? Does it flow without stopping?"
+    },
+    "patience_reward": {
+      "description": "Rewards patience and correct technique over speed/power",
+      "examples": [
+        "form scoring over speed",
+        "slow-motion technique work",
+        "balance challenges"
+      ],
+      "score_question": "Does rushing this drill make it worse? Does patience make it better?"
+    },
+    "principle_embodiment": {
+      "description": "Teaches abstract principle through physical experience",
+      "examples": [
+        "balance on unstable surface = body awareness",
+        "size-mismatch partner work = technique beats strength"
+      ],
+      "score_question": "After this drill, does the student UNDERSTAND a principle they couldn't articulate before?"
+    }
+  },
+  "coherenceMap": [
+    {
+      "frequency": "Competence through restraint",
+      "music": "confidence/swagger — never desperate or try-hard",
+      "visual": "high-end look on ordinary photos — not over-processed",
+      "writing": "mate who knows deep things — never a guru",
+      "teaching": "principle hidden in action — wax on wax off",
+      "drills": "rewards patience and correct technique",
+      "research": "evidence-first, narrative-second"
+    },
+    {
+      "frequency": "Structured surprise",
+      "music": "Sweet Home Alabama closing a hip-hop boxing class",
+      "visual": "ippo style breaking the B&W rejection rule",
+      "teaching": "tennis ball left/right — unexpected cognitive load",
+      "drills": "medicine ball + tennis ball = unexpected awareness",
+      "research": "cross-domain convergence — finding same pattern in unrelated fields"
+    },
+    {
+      "frequency": "Build-up composition",
+      "music": "transition from modern to old school IS the cooldown arc",
+      "teaching": "build to peak, don't start at 10",
+      "drills": "jab-slip → slip-1-2-slip → full combo",
+      "research": "forensic standard → triage → synthesis → convergence",
+      "collaboration": "trust earned through results — Bandwidth principle"
+    },
+    {
+      "frequency": "Flow state looping",
+      "music": "head-nodding in breaks — never dead silence",
+      "teaching": "cool and in the flow > frantic and intense",
+      "drills": "partner drills that loop and flow",
+      "collaboration": "compound on previous sessions — Continuity principle"
+    },
+    {
+      "frequency": "Consciousness through friction",
+      "music": "two modes force selection — never autopilot",
+      "teaching": "the student who asks why > memorises what",
+      "drills": "left or right hand catch — forces conscious thinking",
+      "research": "friction as epistemological tool — names the category error"
+    }
+  ],
+  "health": {
+    "totalAnchors": 96,
+    "totalRejections": 32,
+    "overallRatio": 3,
+    "health": "SWEET_SPOT",
+    "healthAdvice": "Healthy discrimination. Anchors and rejections in balance.",
+    "domainStats": {
+      "music": {
+        "anchors": 64,
+        "rejections": 2,
+        "ratio": 32
+      },
+      "visual_style": {
+        "anchors": 6,
+        "rejections": 6,
+        "ratio": 1
+      },
+      "writing_voice": {
+        "anchors": 2,
+        "rejections": 4,
+        "ratio": 0.5
+      },
+      "teaching_tone": {
+        "anchors": 2,
+        "rejections": 4,
+        "ratio": 0.5
+      },
+      "class_energy": {
+        "anchors": 0,
+        "rejections": 0,
+        "ratio": null
+      },
+      "research_style": {
+        "anchors": 5,
+        "rejections": 4,
+        "ratio": 1.25
+      },
+      "decision_making": {
+        "anchors": 5,
+        "rejections": 4,
+        "ratio": 1.25
+      },
+      "values": {
+        "anchors": 6,
+        "rejections": 4,
+        "ratio": 1.5
+      },
+      "collaboration": {
+        "anchors": 6,
+        "rejections": 4,
+        "ratio": 1.5
+      }
+    },
+    "coreDimensions": 8,
+    "domainCount": 9,
+    "strongestDomains": [],
+    "weakestDomains": [
+      "music",
+      "class_energy"
+    ]
+  }
+}
