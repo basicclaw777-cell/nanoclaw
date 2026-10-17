@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-17T00:00:39.027571",
+  "timestamp": "2026-10-17T12:00:28.240154",
   "strategy_count": 13,
   "total_signals": 7,
   "signals": [
@@ -8,7 +8,7 @@
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC approaching Gann ordinal level $81212 from above (-0.2% away) \u2014 geometric resistance",
+      "reasoning": "BTC approaching Gann ordinal level $81349 from above (-0.2% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
@@ -16,7 +16,7 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH approaching Gann ordinal level $2407 from above (-1.0% away) \u2014 geometric resistance",
+      "reasoning": "ETH approaching Gann ordinal level $2401 from above (-1.0% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
@@ -48,7 +48,7 @@
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC at 360-degree Gann level $81284 (45deg, -0.1% away) \u2014 cavity's native geometry resistance",
+      "reasoning": "BTC at 360-degree Gann level $81421 (45deg, -0.1% away) \u2014 cavity's native geometry resistance",
       "type": "harmonic_year"
     },
     {
@@ -56,7 +56,7 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH at 360-degree Gann level $2419 (45deg, -0.5% away) \u2014 cavity's native geometry resistance",
+      "reasoning": "ETH at 360-degree Gann level $2414 (45deg, -0.5% away) \u2014 cavity's native geometry resistance",
       "type": "harmonic_year"
     }
   ]

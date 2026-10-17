@@ -1,77 +1,77 @@
 {
-  "timestamp": "2026-10-17T00:00:35.828148",
+  "timestamp": "2026-10-17T12:00:26.233918",
   "prices": {
     "BTC": {
-      "price": 81355,
-      "change_24h": -1.2586241657746076,
-      "volume_24h": 26977676733.354427,
-      "market_cap": 1635255811303.5374
+      "price": 81492,
+      "change_24h": -0.6659687114875642,
+      "volume_24h": 26443201497.12856,
+      "market_cap": 1637881754964.151
     },
     "ETH": {
-      "price": 2431.78,
-      "change_24h": -0.3037661187499729,
-      "volume_24h": 12083327949.034443,
-      "market_cap": 296992230176.95294
+      "price": 2425.95,
+      "change_24h": -0.47798951818044527,
+      "volume_24h": 11898784400.149612,
+      "market_cap": 296305890564.34076
     },
     "SOL": {
-      "price": 103.87,
-      "change_24h": -1.9610217451175467,
-      "volume_24h": 2662976099.530488,
-      "market_cap": 61214958775.83677
+      "price": 104.92,
+      "change_24h": -0.2730084949637516,
+      "volume_24h": 2772919018.8894687,
+      "market_cap": 61829857207.14972
     },
     "AVAX": {
-      "price": 10.09,
-      "change_24h": 0.9454014196462304,
-      "volume_24h": 337848151.1414101,
-      "market_cap": 4473240446.550993
+      "price": 9.98,
+      "change_24h": -0.6687555120155078,
+      "volume_24h": 344681679.50930023,
+      "market_cap": 4428313931.113962
     },
     "LINK": {
       "price": 12.33,
-      "change_24h": -1.775831829288037,
-      "volume_24h": 252327421.90437698,
-      "market_cap": 9456792406.919245
+      "change_24h": -0.6558211589042856,
+      "volume_24h": 263393433.66185376,
+      "market_cap": 9458794019.414837
     },
     "DOT": {
-      "price": 1.17,
-      "change_24h": 5.0953511116569254,
-      "volume_24h": 206630527.59813583,
-      "market_cap": 1997804505.607497
+      "price": 1.18,
+      "change_24h": 2.834497406109467,
+      "volume_24h": 203427457.91186377,
+      "market_cap": 2023392222.5089629
     },
     "ARB": {
-      "price": 0.195131,
-      "change_24h": 2.864190877887055,
-      "volume_24h": 210039502.80745867,
-      "market_cap": 1324030187.512083
+      "price": 0.189599,
+      "change_24h": -1.6074020412641141,
+      "volume_24h": 185543892.17415428,
+      "market_cap": 1306871070.3119068
     },
     "DOGE": {
-      "price": 0.08044,
-      "change_24h": -1.2400589968683502,
-      "volume_24h": 595714640.1343576,
-      "market_cap": 12575888910.937485
+      "price": 0.080443,
+      "change_24h": -1.4191886961296767,
+      "volume_24h": 651443293.5041225,
+      "market_cap": 12577340508.31182
     },
     "ADA": {
-      "price": 0.224674,
-      "change_24h": -2.574073403895602,
-      "volume_24h": 290899988.91905856,
-      "market_cap": 8437093461.627768
+      "price": 0.22474,
+      "change_24h": -1.8591100766829787,
+      "volume_24h": 275542777.21631384,
+      "market_cap": 8442311297.382573
     },
     "ATOM": {
-      "price": 1.74,
-      "change_24h": 0.9088690426368797,
-      "volume_24h": 49585718.53623654,
-      "market_cap": 934407177.3640476
+      "price": 1.76,
+      "change_24h": 1.4862848729412907,
+      "volume_24h": 47618473.76567864,
+      "market_cap": 943852650.845464
     },
     "UNI": {
-      "price": 7.24,
-      "change_24h": -3.967252479983501,
-      "volume_24h": 455352752.2897374,
-      "market_cap": 4524828317.892639
+      "price": 7.33,
+      "change_24h": -0.852188576816845,
+      "volume_24h": 410926206.29100215,
+      "market_cap": 4578403488.706159
     }
   },
   "fear_greed": {
-    "value": 63,
+    "value": 55,
     "label": "Greed",
-    "week_avg": 61.3,
+    "week_avg": 60.0,
     "trend": "falling"
   },
   "reddit_sentiment": null,
@@ -132,47 +132,23 @@
       "source": "technical",
       "asset": "DOT",
       "direction": "long",
-      "strength": 0.6369188889571157,
-      "reasoning": "DOT up 5.1% in 24h \u2014 momentum continuation",
-      "type": "momentum"
-    },
-    {
-      "source": "technical",
-      "asset": "UNI",
-      "direction": "long",
-      "strength": 0.39672524799835013,
-      "reasoning": "UNI down -4.0% in 24h \u2014 potential oversold bounce",
-      "type": "mean_reversion"
-    },
-    {
-      "source": "technical",
-      "asset": "DOT",
-      "direction": "long",
-      "strength": 0.9,
-      "reasoning": "DOT is top performer (+5.1%) \u2014 relative strength leader",
+      "strength": 0.5668994812218935,
+      "reasoning": "DOT is top performer (+2.8%) \u2014 relative strength leader",
       "type": "relative_strength"
-    },
-    {
-      "source": "deep_data",
-      "asset": "BTC",
-      "direction": "short",
-      "strength": 0.404,
-      "reasoning": "BTC put/call ratio 0.60 \u2014 extreme call dominance, complacency. Contrarian bearish (no one hedging = top signal)",
-      "type": "options_flow"
     },
     {
       "source": "deep_data",
       "asset": "BTC",
       "direction": "neutral",
       "strength": 0.4,
-      "reasoning": "BTC max options OI at BTC-30OCT26-95000-C (25571 contracts) \u2014 price gravitates here at expiry",
+      "reasoning": "BTC max options OI at BTC-30OCT26-95000-C (25570 contracts) \u2014 price gravitates here at expiry",
       "type": "options_magnet"
     },
     {
       "source": "deep_data",
       "asset": "ETH",
       "direction": "short",
-      "strength": 0.484,
+      "strength": 0.482,
       "reasoning": "ETH put/call ratio 0.52 \u2014 extreme call dominance, complacency. Contrarian bearish (no one hedging = top signal)",
       "type": "options_flow"
     },
@@ -236,8 +212,8 @@
       "source": "deep_data",
       "asset": "ARB",
       "direction": "short",
-      "strength": 0.5333333333333333,
-      "reasoning": "ARB last GitHub commit 48d ago (OffchainLabs/nitro) \u2014 development stalling, fundamental weakness",
+      "strength": 0.5444444444444444,
+      "reasoning": "ARB last GitHub commit 49d ago (OffchainLabs/nitro) \u2014 development stalling, fundamental weakness",
       "type": "dev_activity"
     },
     {
@@ -252,9 +228,9 @@
   "deep_data": {
     "liquidation_levels": {
       "BTC": {
-        "perp_open_interest": 837767450,
-        "perp_mark_price": 81283.46,
-        "perp_funding": 3.963e-05
+        "perp_open_interest": 841372270,
+        "perp_mark_price": 81473.88,
+        "perp_funding": 3.63e-06
       }
     },
     "exchange_reserves": {
@@ -264,42 +240,42 @@
     },
     "stablecoin_flows": {
       "USDT": {
-        "circulating": 183473410414.59225,
+        "circulating": 183363971784.5502,
         "name": "Tether",
-        "chain_total": 183473410414.59216
+        "chain_total": 183363971784.55002
       },
       "USDC": {
-        "circulating": 72647745002.12549,
+        "circulating": 72714362967.13875,
         "name": "USD Coin",
-        "chain_total": 72647745002.12543
+        "chain_total": 72714362967.1388
       },
       "DAI": {
-        "circulating": 4725699518.800088,
+        "circulating": 4732037524.843814,
         "name": "Dai",
-        "chain_total": 4725699518.80009
+        "chain_total": 4732037524.843819
       },
       "BUSD": {
-        "circulating": 7653000.58846709,
+        "circulating": 7647537.884384875,
         "name": "Bera USD",
-        "chain_total": 7653000.58846709
+        "chain_total": 7647537.884384875
       }
     },
     "options_flow": {
       "BTC": {
-        "put_call_ratio": 0.596,
-        "calls_oi": 244146.70000000004,
-        "puts_oi": 145528.50000000006,
-        "calls_volume": 9968.6,
-        "puts_volume": 12767.80000000001,
-        "total_oi": 389675.20000000007,
+        "put_call_ratio": 0.603,
+        "calls_oi": 245153.80000000002,
+        "puts_oi": 147802.19999999998,
+        "calls_volume": 9774.500000000004,
+        "puts_volume": 16047.800000000003,
+        "total_oi": 392956.0,
         "max_oi_strike": "BTC-30OCT26-95000-C",
-        "max_oi": 25570.8
+        "max_oi": 25570.4
       },
       "ETH": {
-        "put_call_ratio": 0.516,
-        "calls_oi": 988196.0,
-        "puts_oi": 510366.0,
-        "total_oi": 1498562.0
+        "put_call_ratio": 0.518,
+        "calls_oi": 998515.0,
+        "puts_oi": 517412.0,
+        "total_oi": 1515927.0
       }
     },
     "github_activity": {
@@ -310,17 +286,17 @@
       },
       "ETH": {
         "repo": "ethereum/go-ethereum",
-        "last_commit": "2026-10-16T13:21:01Z",
+        "last_commit": "2026-10-16T20:38:09Z",
         "days_since_commit": 0
       },
       "SOL": {
         "repo": "anza-xyz/agave",
-        "last_commit": "2026-10-16T14:19:15Z",
+        "last_commit": "2026-10-17T00:30:21Z",
         "days_since_commit": 0
       },
       "DOT": {
         "repo": "paritytech/polkadot-sdk",
-        "last_commit": "2026-10-15T21:22:28Z",
+        "last_commit": "2026-10-16T20:15:45Z",
         "days_since_commit": 0
       },
       "ATOM": {
@@ -330,7 +306,7 @@
       },
       "AVAX": {
         "repo": "ava-labs/avalanchego",
-        "last_commit": "2026-10-15T21:04:35Z",
+        "last_commit": "2026-10-16T18:30:08Z",
         "days_since_commit": 0
       },
       "ADA": {
@@ -341,7 +317,7 @@
       "ARB": {
         "repo": "OffchainLabs/nitro",
         "last_commit": "2026-08-28T19:36:32Z",
-        "days_since_commit": 48
+        "days_since_commit": 49
       },
       "UNI": {
         "repo": "Uniswap/v3-core",
@@ -350,7 +326,7 @@
       },
       "LINK": {
         "repo": "smartcontractkit/chainlink",
-        "last_commit": "2026-10-15T21:14:55Z",
+        "last_commit": "2026-10-16T18:58:34Z",
         "days_since_commit": 0
       }
     }
