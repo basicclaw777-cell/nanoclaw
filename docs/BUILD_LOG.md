@@ -1088,7 +1088,7 @@ If any process is down: `pm2 start [name]`. After changes: `pm2 save`.
 - Three states: Lapis Mode (measurement, GI.SHID), Black Light Mode (truth detection), Fluorescent Mode (creation, 3-5s max)
 - 14 story seeds from 6 Cathedral research sources, protocol for organic growth
 - Real Cast: 5 real people (Paul, Pedrosso, Man On Li, LY, Daikichi) with Five Pillars, story arcs, echo table
-- Story Arcs: 4 arcs (Lineage/Ernesto, Cross-Domain/Jun, Scholar's Paralysis/Lau, Honour Wound/Kenji) with frequency-state beats
+- Story Arcs: 4 arcs (Lineage/Pedroso, Cross-Domain/Jun, Scholar's Paralysis/Lau, Honour Wound/Kenji) with frequency-state beats
 - Content Pipelines: universal principles map, 4 pipelines, weekly calendar, taglines
 - Content universe doc: ~/cathedral-vault/09_Artifacts/branding/basic-reflex/basic-reflex-content-universe.md
 - Two-layer architecture: fiction (logan-story-map.md) + content (basic-reflex-content-universe.md). Same principles, two doors.

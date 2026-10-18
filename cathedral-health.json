@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-11T04:15:17.428Z",
-  "score": 80,
+  "timestamp": "2026-10-18T04:01:41.695Z",
+  "score": 78,
   "max": 100,
-  "percentage": "80%",
+  "percentage": "78%",
   "dimensions": {
     "revenue_flow": {
       "score": 16,
@@ -17,13 +17,13 @@
         {
           "name": "Active trading (paper)",
           "status": "running",
-          "pnl": -40.394684966144,
+          "pnl": -104.7360980424601,
           "score": 2
         },
         {
           "name": "Long-term portfolio (paper)",
           "status": "accumulating",
-          "invested": 6300,
+          "invested": 6600,
           "score": 5
         },
         {
@@ -40,19 +40,19 @@
       "raw": 32
     },
     "project_liveness": {
-      "score": 16,
+      "score": 14,
       "max": 25,
       "projects": [
         {
           "name": "PM2 processes",
-          "online": 27,
-          "stopped": 101,
-          "total": 128
+          "online": 13,
+          "stopped": 112,
+          "total": 125
         },
         {
           "name": "Trading cron",
           "status": "stale",
-          "hours_since": "12.2"
+          "hours_since": "12.0"
         },
         {
           "name": "Cathedral Deck",
@@ -64,7 +64,7 @@
           "live": false
         }
       ],
-      "live": 18,
+      "live": 16,
       "total": 28
     },
     "compound_rate": {
@@ -73,7 +73,7 @@
       "indicators": [
         {
           "name": "Vault nuggets",
-          "count": 13685
+          "count": 14155
         },
         {
           "name": "Deck cards",
@@ -365,6 +365,14 @@
     {
       "date": "2026-10-11",
       "score": 80
+    },
+    {
+      "date": "2026-10-17",
+      "score": 77
+    },
+    {
+      "date": "2026-10-18",
+      "score": 78
     }
   ]
 }

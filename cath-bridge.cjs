@@ -23,6 +23,16 @@ app.use('/course-engine', express.static(path.join(NANOCLAW, 'course-engine')));
 app.use('/gym-eyes', express.static(path.join(HOME, 'basic-reflex', 'gym-eyes')));
 app.use('/property-scout', express.static(path.join(NANOCLAW, 'property-scout')));
 
+// Image gallery — serve basic-reflex and visual-studio images
+app.use('/basic-reflex', express.static(path.join(HOME, 'basic-reflex'), { maxAge: '1h' }));
+app.use('/visual-studio', express.static(path.join(CATH, 'visual-studio'), { maxAge: '1h' }));
+app.use('/cathedral-artifacts', express.static(path.join(CATH, 'artifacts'), { maxAge: '1h' }));
+
+// Serve gallery sub-tools
+app.use('/reed-lab', express.static(path.join(NANOCLAW, 'reed-lab')));
+app.use('/study-lab-output', express.static(path.join(NANOCLAW, 'study-lab-output')));
+app.use('/architect-output', express.static(path.join(NANOCLAW, 'architect-output')));
+
 // Mount Coaching OS write API
 require('./coaching-os/coaching-api.cjs')(app);
 require('./coaching-os/capture-api.cjs')(app);
@@ -6284,6 +6294,23 @@ app.get('/mega-surgery-viz.html', (req, res) => {
 app.get('/lorenz-attractor.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'lorenz-attractor.html'));
 });
+
+app.get('/illustration-gallery.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'illustration-gallery.html'));
+});
+app.get('/illustration-gallery-manifest.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'illustration-gallery-manifest.json'));
+});
+
+// Dashboards that were invisible — added 2026-10-17
+app.get('/active-learning-dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'active-learning-dashboard.html')));
+app.get('/ensemble-dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'ensemble-dashboard.html')));
+app.get('/knowledge-graph-dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'knowledge-graph-dashboard.html')));
+app.get('/causal-net-dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'causal-net-dashboard.html')));
+app.get('/openings-leverage-map.html', (req, res) => res.sendFile(path.join(__dirname, 'openings-leverage-map.html')));
+app.get('/documentary-director.html', (req, res) => res.sendFile(path.join(__dirname, 'documentary-director.html')));
+app.get('/pro-photo-dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'pro-photo-dashboard.html')));
+app.get('/boxing-gym-cameras.html', (req, res) => res.sendFile(path.join(__dirname, 'boxing-gym-cameras.html')));
 
 app.get(['/pandamericano', '/pandamericano-framework.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'pandamericano-framework.html'));

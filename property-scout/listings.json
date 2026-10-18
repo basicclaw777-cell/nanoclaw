@@ -1,13 +1,506 @@
 [
   {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-wayson-commercial-building/detail/8d46e3e2-b0f2-4f0d-8595-26fc53aff52c/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Wayson Commercial Building — Sheung Wan 28 Connaught Road West",
+    "district": "Sheung Wan",
+    "sqft": 307,
+    "asking": 1800000,
+    "price_per_sqft": 5863,
+    "floor": "Middle Floor",
+    "source": "Centaline [Hot Listing]",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-wayson-commercial-building/detail/8d46e3e2-b0f2-4f0d-8595-26fc53aff52c/?logging=D",
+    "agent_name": "Virginia Wu",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-lee-kee-commercial-building/detail/9a2bb7f4-b262-4a79-9267-56397803d51b/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Lee Kee Commercial Building — Sheung Wan 221-227 Queen's Road Central",
+    "district": "Sheung Wan",
+    "sqft": 954,
+    "asking": 6200000,
+    "price_per_sqft": 6500,
+    "floor": "High Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-lee-kee-commercial-building/detail/9a2bb7f4-b262-4a79-9267-56397803d51b/?logging=D",
+    "agent_name": "Albert Au",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-golden-sun-centre/detail/9daec0c6-57c9-40e0-923c-3ac6840de1d8/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Golden Sun Centre — Sheung Wan 59-67 Bonham Strand West",
+    "district": "Sheung Wan",
+    "sqft": 434,
+    "asking": 4000000,
+    "price_per_sqft": 9217,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-golden-sun-centre/detail/9daec0c6-57c9-40e0-923c-3ac6840de1d8/?logging=D",
+    "agent_name": "Leslie Cheng",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-yick-fung-building/detail/9cc8eb4a-fbbc-4337-bc01-c63ada3e1e32/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Yick Fung Building — Sheung Wan 94-96 Des Voeux Road West",
+    "district": "Sheung Wan",
+    "sqft": 788,
+    "asking": 7500000,
+    "price_per_sqft": 9518,
+    "floor": "Middle Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-yick-fung-building/detail/9cc8eb4a-fbbc-4337-bc01-c63ada3e1e32/?logging=D",
+    "agent_name": "Frank Cheung",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/retail/hk-island-sheung-wan-sheung-wan-mee-lun-street/detail/6ce3ad11-c38b-481d-8535-edfbb6fa6d27/?logging=D",
+    "lane": "coffee",
+    "status": "watch",
+    "address": "Sheung Wan Mee Lun Street — - Sheung Wan Station",
+    "district": "Sheung Wan",
+    "sqft": 600,
+    "asking": 7500000,
+    "price_per_sqft": 12500,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/retail/hk-island-sheung-wan-sheung-wan-mee-lun-street/detail/6ce3ad11-c38b-481d-8535-edfbb6fa6d27/?logging=D",
+    "agent_name": "Candy Lee",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-centre-mark-ii/detail/cbc69adc-820e-4bb8-9ef7-2691d8623a64/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Centre Mark II — Sheung Wan 313 Queen's Road Central",
+    "district": "Sheung Wan",
+    "sqft": 819,
+    "asking": 5300000,
+    "price_per_sqft": 6471,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-centre-mark-ii/detail/cbc69adc-820e-4bb8-9ef7-2691d8623a64/?logging=D",
+    "agent_name": "Brian Lo",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-arion-commercial-centre/detail/4d85940b-7335-4856-8ced-8c49105ecb3f/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Arion Commercial Centre — Sheung Wan 2-12 Queen's Road West",
+    "district": "Sheung Wan",
+    "sqft": 1521,
+    "asking": 10000000,
+    "price_per_sqft": 6575,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-arion-commercial-centre/detail/4d85940b-7335-4856-8ced-8c49105ecb3f/?logging=D",
+    "agent_name": "Karmen Wong",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-unionway-commercial-centre/detail/27a21e29-b5b5-467e-b650-b3163c007ab7/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Unionway Commercial Centre — Sheung Wan 283 Queen's Road Central",
+    "district": "Sheung Wan",
+    "sqft": 700,
+    "asking": 4550000,
+    "price_per_sqft": 6500,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-unionway-commercial-centre/detail/27a21e29-b5b5-467e-b650-b3163c007ab7/?logging=D",
+    "agent_name": "Sam Ho",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-6-wilmer-street/detail/8f2d7eaf-5144-4202-b7a5-39e413b2ae93/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "6 Wilmer Street",
+    "district": "Sheung Wan",
+    "sqft": 522,
+    "asking": 4860000,
+    "price_per_sqft": 9301,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-6-wilmer-street/detail/8f2d7eaf-5144-4202-b7a5-39e413b2ae93/?logging=D",
+    "agent_name": "Bunny Koo",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-kam-tak-building/detail/f70dc842-ec2f-411b-bdf3-530a1e549ff2/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Kam Tak Building — Sheung Wan 20-24 Mercer Street",
+    "district": "Sheung Wan",
+    "sqft": 1180,
+    "asking": 10000000,
+    "price_per_sqft": 8475,
+    "floor": "High Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-kam-tak-building/detail/f70dc842-ec2f-411b-bdf3-530a1e549ff2/?logging=D",
+    "agent_name": "Leslie Cheng",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-arion-commercial-centre/detail/d4de50fb-fb84-4579-88a8-6068b49e50f1/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Arion Commercial Centre — Sheung Wan 2-12 Queen's Road West",
+    "district": "Sheung Wan",
+    "sqft": 602,
+    "asking": 4300000,
+    "price_per_sqft": 7143,
+    "floor": "Middle Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-arion-commercial-centre/detail/d4de50fb-fb84-4579-88a8-6068b49e50f1/?logging=D",
+    "agent_name": "Brian Lo",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/retail/hk-island-sheung-wan-sheung-wan-wing-kut-street/detail/27882a03-7829-46f7-8940-d7a94b127334/?logging=D",
+    "lane": "coffee",
+    "status": "watch",
+    "address": "Sheung Wan Wing Kut Street — - Sheung Wan Station",
+    "district": "Sheung Wan",
+    "sqft": 200,
+    "asking": 5000000,
+    "price_per_sqft": 25000,
+    "floor": null,
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/retail/hk-island-sheung-wan-sheung-wan-wing-kut-street/detail/27882a03-7829-46f7-8940-d7a94b127334/?logging=D",
+    "agent_name": "Jackson Lam",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-harbour-commercial-building/detail/35401903-0d26-487f-aefc-e9109a3ed9e8/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Harbour Commercial Building — Sheung Wan 122-124 Connaught Road Central",
+    "district": "Sheung Wan",
+    "sqft": 1100,
+    "asking": 7280000,
+    "price_per_sqft": 6618,
+    "floor": "Middle Floor",
+    "source": "Centaline [Hot Listing]",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-harbour-commercial-building/detail/35401903-0d26-487f-aefc-e9109a3ed9e8/?logging=D",
+    "agent_name": "Kristi Buxton",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-wing-yee-commercial-building/detail/9d910156-e5f0-4ecc-80cd-e67484688af2/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Wing Yee Commercial Building — Sheung Wan 5 Wing Kut Street",
+    "district": "Sheung Wan",
+    "sqft": 706,
+    "asking": 4500000,
+    "price_per_sqft": 6374,
+    "floor": "High Floor",
+    "source": "Centaline [Hot Listing]",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-wing-yee-commercial-building/detail/9d910156-e5f0-4ecc-80cd-e67484688af2/?logging=D",
+    "agent_name": "Winnie Chat",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-crawford-tower/detail/19cf3dff-f1de-44d9-b3de-faaf8c154109/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Crawford Tower — Sheung Wan 99-101 Jervois Street",
+    "district": "Sheung Wan",
+    "sqft": 1190,
+    "asking": 8350000,
+    "price_per_sqft": 7013,
+    "floor": "Low Floor",
+    "source": "Centaline [Hot Listing]",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-crawford-tower/detail/19cf3dff-f1de-44d9-b3de-faaf8c154109/?logging=D",
+    "agent_name": "Shirley Chan",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/retail/hk-island-sheung-wan-sheung-wan-shing-wong-street/detail/0f795b4e-256b-4938-bed8-5b4df02e7afe/?logging=D",
+    "lane": "coffee",
+    "status": "watch",
+    "address": "Sheung Wan Shing Wong Street — - Sheung Wan Station",
+    "district": "Sheung Wan",
+    "sqft": 600,
+    "asking": 10000000,
+    "price_per_sqft": 16667,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/retail/hk-island-sheung-wan-sheung-wan-shing-wong-street/detail/0f795b4e-256b-4938-bed8-5b4df02e7afe/?logging=D",
+    "agent_name": "Philip Lo",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-centre-mark-ii/detail/e61c376a-c1cd-48db-be8f-ab63a054753e/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Centre Mark II — Sheung Wan 313 Queen's Road Central",
+    "district": "Sheung Wan",
+    "sqft": 819,
+    "asking": 5900000,
+    "price_per_sqft": 7204,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-sheung-wan-centre-mark-ii/detail/e61c376a-c1cd-48db-be8f-ab63a054753e/?logging=D",
+    "agent_name": "Ricky Hung",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-lloyds-commercial-centre/detail/8d0e1e84-9afe-44d8-8802-4cac5f29f16f/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Lloyds Commercial Centre — Sheung Wan 8 Wing Lok Street",
+    "district": "Sheung Wan",
+    "sqft": 902,
+    "asking": 7040000,
+    "price_per_sqft": 7800,
+    "floor": "Middle Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-sheung-wan-lloyds-commercial-centre/detail/8d0e1e84-9afe-44d8-8802-4cac5f29f16f/?logging=D",
+    "agent_name": "Doris Wong",
+    "photos": 0,
+    "confidence": 55,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-central-khuan-ying-commercial-building/detail/7fefd538-631b-44c4-b7fe-32f4d33a3bd5/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Khuan Ying Commercial Building — Central 85-89 Wellington Street",
+    "district": "Sai Ying Pun",
+    "sqft": 1017,
+    "asking": 6100000,
+    "price_per_sqft": 6000,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-central-khuan-ying-commercial-building/detail/7fefd538-631b-44c4-b7fe-32f4d33a3bd5/?logging=D",
+    "agent_name": "Albert Au",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-central-tak-woo-house/detail/71c054b8-8659-4f58-b28a-1b3bcba5cac9/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Tak Woo House — Central 1 Wo On Lane",
+    "district": "Sai Ying Pun",
+    "sqft": 420,
+    "asking": 2950000,
+    "price_per_sqft": 7024,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-central-tak-woo-house/detail/71c054b8-8659-4f58-b28a-1b3bcba5cac9/?logging=D",
+    "agent_name": "Zoe Tung",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-central-world-wide-commercial-building/detail/0172a40b-8345-4cee-a9f4-b14990a9033e/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "World-Wide Commercial Building — Central 34 Wyndham Street",
+    "district": "Sai Ying Pun",
+    "sqft": 666,
+    "asking": 4800000,
+    "price_per_sqft": 7207,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-central-world-wide-commercial-building/detail/0172a40b-8345-4cee-a9f4-b14990a9033e/?logging=D",
+    "agent_name": "Sam Ho",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-central-fai-man-building/detail/33149155-7a97-4904-af4f-f212060e3598/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Fai Man Building — Central 9-13 Li Yuen Street West",
+    "district": "Sai Ying Pun",
+    "sqft": 700,
+    "asking": 4200000,
+    "price_per_sqft": 6000,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-central-fai-man-building/detail/33149155-7a97-4904-af4f-f212060e3598/?logging=D",
+    "agent_name": "Sam Ho",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/retail/hk-island-central-world-wide-house/detail/53f3d688-cfca-451c-9b05-4f2ad7575bfc/?logging=D",
+    "lane": "coffee",
+    "status": "watch",
+    "address": "World-Wide House — Central 19 Des Voeux Road Central",
+    "district": "Sai Ying Pun",
+    "sqft": 180,
+    "asking": 6880000,
+    "price_per_sqft": 38222,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/retail/hk-island-central-world-wide-house/detail/53f3d688-cfca-451c-9b05-4f2ad7575bfc/?logging=D",
+    "agent_name": "Jackson Lam",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/retail/hk-island-central-world-wide-house/detail/ab29e9bc-a323-4b9d-9b19-06e6421c7b5a/?logging=D",
+    "lane": "coffee",
+    "status": "watch",
+    "address": "World-Wide House — Central 19 Des Voeux Road Central",
+    "district": "Sai Ying Pun",
+    "sqft": 220,
+    "asking": 8000000,
+    "price_per_sqft": 36364,
+    "floor": "Low Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/retail/hk-island-central-world-wide-house/detail/ab29e9bc-a323-4b9d-9b19-06e6421c7b5a/?logging=D",
+    "agent_name": "Jackson Lam",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-central-waga-commercial-centre/detail/349bb4bb-b2db-46ca-9961-0e2ac8594828/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Waga Commercial Centre — Central 99 Wellington Street",
+    "district": "Sai Ying Pun",
+    "sqft": 695,
+    "asking": 4800000,
+    "price_per_sqft": 6906,
+    "floor": "Middle Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-central-waga-commercial-centre/detail/349bb4bb-b2db-46ca-9961-0e2ac8594828/?logging=D",
+    "agent_name": "Sam Ho",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-central-waga-commercial-centre/detail/3878de1a-35c9-4b06-9ee1-a1e8d13a2b0e/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Waga Commercial Centre — Central 99 Wellington Street",
+    "district": "Sai Ying Pun",
+    "sqft": 695,
+    "asking": 5800000,
+    "price_per_sqft": 8345,
+    "floor": "High Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-central-waga-commercial-centre/detail/3878de1a-35c9-4b06-9ee1-a1e8d13a2b0e/?logging=D",
+    "agent_name": "Zoe Tung",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-central-grand-progress-building/detail/04bd276c-264d-4613-a8c0-4fb3b3ff62ec/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Grand Progress Building — Central 58-62 D'Aguilar Street",
+    "district": "Sai Ying Pun",
+    "sqft": 558,
+    "asking": 4500000,
+    "price_per_sqft": 8065,
+    "floor": "Middle Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-central-grand-progress-building/detail/04bd276c-264d-4613-a8c0-4fb3b3ff62ec/?logging=D",
+    "agent_name": "Leslie Cheng",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/all/office/hk-island-central-chung-hing-commercial-building/detail/ba00d5cc-2607-4bf6-9767-6ce29851319a/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Chung Hing Commercial Building — Central 62-63 Connaught Road Central",
+    "district": "Sai Ying Pun",
+    "sqft": 592,
+    "asking": 5210000,
+    "price_per_sqft": 8801,
+    "floor": "Low Floor",
+    "source": "Centaline [Hot Listing]",
+    "source_url": "https://oir.centanet.com/en/all/office/hk-island-central-chung-hing-commercial-building/detail/ba00d5cc-2607-4bf6-9767-6ce29851319a/?logging=D",
+    "agent_name": "Connie Man",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://oir.centanet.com/en/sale/office/hk-island-admiralty-lippo-centre-tower-1/detail/67655a01-f76c-4e44-a1e5-36b5dbfd6b50/?logging=D",
+    "lane": "gym",
+    "status": "watch",
+    "address": "Lippo Centre Tower 1 — Admiralty 89 Queensway",
+    "district": "Kennedy Town",
+    "sqft": 531,
+    "asking": 8500000,
+    "price_per_sqft": 16000,
+    "floor": "Middle Floor",
+    "source": "Centaline",
+    "source_url": "https://oir.centanet.com/en/sale/office/hk-island-admiralty-lippo-centre-tower-1/detail/67655a01-f76c-4e44-a1e5-36b5dbfd6b50/?logging=D",
+    "agent_name": "Kristi Buxton",
+    "photos": 0,
+    "confidence": 45,
+    "scan_date": "2026-10-17"
+  },
+  {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-replay-residence-pool-villa-in-bo-phut-surat-thani-u6833332",
     "lane": "thai_condo",
     "status": "watch",
     "address": "Replay Residence & Pool Villa — Bo Phut, Koh Samui",
     "district": "samui",
     "sqft": 279,
-    "asking": 441960,
-    "price_per_sqft": 1584,
+    "asking": 443120,
+    "price_per_sqft": 1590,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-replay-residence-pool-villa-in-bo-phut-surat-thani-u6833332",
@@ -15,8 +508,8 @@
     "photos": 0,
     "confidence": 60,
     "thai_data": {
-      "price_sgd": 76200,
-      "price_thb": 1943100,
+      "price_sgd": 76400,
+      "price_thb": 1948200,
       "sqm": 25.9,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -27,10 +520,10 @@
       "beach_km": 0.63,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 783,
+      "est_rent_sgd": 786,
       "year_built": 2011
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-avanta-condominium-in-maenam-surat-thani-u6756374",
@@ -39,8 +532,8 @@
     "address": "Avanta Condominium — Maenam, Koh Samui",
     "district": "samui",
     "sqft": 459,
-    "asking": 486040,
-    "price_per_sqft": 1056,
+    "asking": 487780,
+    "price_per_sqft": 1062,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-avanta-condominium-in-maenam-surat-thani-u6756374",
@@ -48,8 +541,8 @@
     "photos": 0,
     "confidence": 65,
     "thai_data": {
-      "price_sgd": 83800,
-      "price_thb": 2136900,
+      "price_sgd": 84100,
+      "price_thb": 2144550,
       "sqm": 42.68,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -62,10 +555,10 @@
       "beach_km": 1.73,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 713,
+      "est_rent_sgd": 785,
       "year_built": 2009
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-saint-condo-in-bo-phut-surat-thani-u1018438",
@@ -74,8 +567,8 @@
     "address": "Bo Phut, Koh Samui",
     "district": "samui",
     "sqft": 347,
-    "asking": 508080,
-    "price_per_sqft": 1466,
+    "asking": 509820,
+    "price_per_sqft": 1471,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-saint-condo-in-bo-phut-surat-thani-u1018438",
@@ -83,8 +576,8 @@
     "photos": 0,
     "confidence": 70,
     "thai_data": {
-      "price_sgd": 87600,
-      "price_thb": 2233800,
+      "price_sgd": 87900,
+      "price_thb": 2241450,
       "sqm": 32.22,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -101,7 +594,43 @@
       "est_rent_sgd": null,
       "year_built": 2018
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-avanta-condominium-in-maenam-surat-thani-u6756411",
+    "lane": "thai_condo",
+    "status": "watch",
+    "address": "Avanta Condominium — Maenam, Koh Samui",
+    "district": "samui",
+    "sqft": 490,
+    "asking": 531860,
+    "price_per_sqft": 1088,
+    "floor": null,
+    "source": "FazWaz [condo]",
+    "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-avanta-condominium-in-maenam-surat-thani-u6756411",
+    "agent_name": null,
+    "photos": 0,
+    "confidence": 65,
+    "thai_data": {
+      "price_sgd": 91700,
+      "price_thb": 2338350,
+      "sqm": 45.48,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "property_type": "condo",
+      "tags": [
+        "Freehold",
+        "Year Built",
+        "Mountain View",
+        "Private Pool"
+      ],
+      "beach_km": 1.73,
+      "roi_pct": null,
+      "price_drop_pct": null,
+      "est_rent_sgd": 856,
+      "year_built": 2009
+    },
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-ville-condo-phase-1-in-bo-phut-surat-thani-u6239205",
@@ -110,8 +639,8 @@
     "address": "The Ville Condo Phase 1 — Bo Phut, Koh Samui",
     "district": "samui",
     "sqft": 312,
-    "asking": 544620,
-    "price_per_sqft": 1746,
+    "asking": 546360,
+    "price_per_sqft": 1751,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-ville-condo-phase-1-in-bo-phut-surat-thani-u6239205",
@@ -119,8 +648,8 @@
     "photos": 0,
     "confidence": 55,
     "thai_data": {
-      "price_sgd": 93900,
-      "price_thb": 2394450,
+      "price_sgd": 94200,
+      "price_thb": 2402100,
       "sqm": 29,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -135,42 +664,7 @@
       "est_rent_sgd": null,
       "year_built": null
     },
-    "scan_date": "2026-10-14"
-  },
-  {
-    "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u5563616",
-    "lane": "thai_condo",
-    "status": "watch",
-    "address": "The Terraza Samui — Maret, Koh Samui",
-    "district": "samui",
-    "sqft": 334,
-    "asking": 597400,
-    "price_per_sqft": 1789,
-    "floor": null,
-    "source": "FazWaz [condo -8%]",
-    "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u5563616",
-    "agent_name": null,
-    "photos": 0,
-    "confidence": 60,
-    "thai_data": {
-      "price_sgd": 103000,
-      "price_thb": 2626500,
-      "sqm": 31,
-      "bedrooms": 0,
-      "bathrooms": 1,
-      "property_type": "condo",
-      "tags": [
-        "Year Built",
-        "Mountain View",
-        "Pool Access"
-      ],
-      "beach_km": null,
-      "roi_pct": null,
-      "price_drop_pct": 8,
-      "est_rent_sgd": 1210,
-      "year_built": 2024
-    },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u5810990",
@@ -180,7 +674,7 @@
     "district": "samui",
     "sqft": 312,
     "asking": 597400,
-    "price_per_sqft": 1913,
+    "price_per_sqft": 1918,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u5810990",
@@ -205,7 +699,7 @@
       "est_rent_sgd": 1210,
       "year_built": 2024
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u6839963",
@@ -215,7 +709,7 @@
     "district": "samui",
     "sqft": 463,
     "asking": 1061400,
-    "price_per_sqft": 2290,
+    "price_per_sqft": 2301,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u6839963",
@@ -241,7 +735,7 @@
       "est_rent_sgd": 2150,
       "year_built": 2024
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-apartment-for-sale-at-tropical-seaview-residence-in-maret-surat-thani-u6817744",
@@ -250,8 +744,8 @@
     "address": "Tropical Seaview Residence — Maret, Koh Samui",
     "district": "samui",
     "sqft": 700,
-    "asking": 794600,
-    "price_per_sqft": 1137,
+    "asking": 800400,
+    "price_per_sqft": 1142,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-apartment-for-sale-at-tropical-seaview-residence-in-maret-surat-thani-u6817744",
@@ -259,8 +753,8 @@
     "photos": 0,
     "confidence": 45,
     "thai_data": {
-      "price_sgd": 137000,
-      "price_thb": 3493500,
+      "price_sgd": 138000,
+      "price_thb": 3519000,
       "sqm": 65,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -276,7 +770,7 @@
       "est_rent_sgd": null,
       "year_built": 2013
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/1-bedroom-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u6811908",
@@ -285,8 +779,8 @@
     "address": "The Terraza Samui — Maret, Koh Samui",
     "district": "samui",
     "sqft": 409,
-    "asking": 1102000,
-    "price_per_sqft": 2700,
+    "asking": 1107800,
+    "price_per_sqft": 2710,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/1-bedroom-condo-for-sale-at-the-terraza-samui-in-maret-surat-thani-u6811908",
@@ -294,8 +788,8 @@
     "photos": 0,
     "confidence": 75,
     "thai_data": {
-      "price_sgd": 190000,
-      "price_thb": 4845000,
+      "price_sgd": 191000,
+      "price_thb": 4870500,
       "sqm": 38,
       "bedrooms": 1,
       "bathrooms": 1,
@@ -311,7 +805,7 @@
       "est_rent_sgd": 1610,
       "year_built": 2024
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-apartment-for-sale-at-baan-ua-athorn-thalang-1-in-si-sunthon-phuket-u5673911",
@@ -320,8 +814,8 @@
     "address": "Baan Ua-Athorn Thalang 1 — Si Sunthon, Thalang, Phuket",
     "district": "phuket",
     "sqft": 366,
-    "asking": 211700,
-    "price_per_sqft": 577,
+    "asking": 212280,
+    "price_per_sqft": 582,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/2-bedroom-apartment-for-sale-at-baan-ua-athorn-thalang-1-in-si-sunthon-phuket-u5673911",
@@ -329,8 +823,8 @@
     "photos": 0,
     "confidence": 55,
     "thai_data": {
-      "price_sgd": 36500,
-      "price_thb": 930750,
+      "price_sgd": 36600,
+      "price_thb": 933300,
       "sqm": 34,
       "bedrooms": 2,
       "bathrooms": 1,
@@ -345,7 +839,7 @@
       "est_rent_sgd": null,
       "year_built": 2014
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-777-beach-condo-in-mai-khao-phuket-u6805140",
@@ -354,8 +848,8 @@
     "address": "777 Beach Condo — Mai Khao, Thalang, Phuket",
     "district": "phuket",
     "sqft": 222,
-    "asking": 212280,
-    "price_per_sqft": 954,
+    "asking": 212860,
+    "price_per_sqft": 959,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-777-beach-condo-in-mai-khao-phuket-u6805140",
@@ -363,8 +857,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 36600,
-      "price_thb": 933300,
+      "price_sgd": 36700,
+      "price_thb": 935850,
       "sqm": 20.65,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -378,10 +872,10 @@
       "beach_km": 1.25,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 289,
+      "est_rent_sgd": 290,
       "year_built": 2021
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-777-beach-condo-in-mai-khao-phuket-u6805079",
@@ -390,7 +884,7 @@
     "address": "777 Beach Condo — Mai Khao, Thalang, Phuket",
     "district": "phuket",
     "sqft": 222,
-    "asking": 214020,
+    "asking": 215180,
     "price_per_sqft": 965,
     "floor": null,
     "source": "FazWaz [condo]",
@@ -399,8 +893,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 36900,
-      "price_thb": 940950,
+      "price_sgd": 37100,
+      "price_thb": 946050,
       "sqm": 20.65,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -413,10 +907,10 @@
       "beach_km": 1.25,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 292,
+      "est_rent_sgd": 293,
       "year_built": 2021
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-777-beach-condo-in-mai-khao-phuket-u6805148",
@@ -425,7 +919,7 @@
     "address": "777 Beach Condo — Mai Khao, Thalang, Phuket",
     "district": "phuket",
     "sqft": 222,
-    "asking": 216340,
+    "asking": 216920,
     "price_per_sqft": 975,
     "floor": null,
     "source": "FazWaz [condo]",
@@ -434,8 +928,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 37300,
-      "price_thb": 951150,
+      "price_sgd": 37400,
+      "price_thb": 953700,
       "sqm": 20.65,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -450,10 +944,10 @@
       "beach_km": 1.25,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 295,
+      "est_rent_sgd": 296,
       "year_built": 2021
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-777-beach-condo-in-mai-khao-phuket-u6805154",
@@ -462,7 +956,7 @@
     "address": "777 Beach Condo — Mai Khao, Thalang, Phuket",
     "district": "phuket",
     "sqft": 222,
-    "asking": 218660,
+    "asking": 219240,
     "price_per_sqft": 986,
     "floor": null,
     "source": "FazWaz [condo]",
@@ -471,8 +965,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 37700,
-      "price_thb": 961350,
+      "price_sgd": 37800,
+      "price_thb": 963900,
       "sqm": 20.65,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -486,10 +980,10 @@
       "beach_km": 1.25,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 298,
+      "est_rent_sgd": 299,
       "year_built": 2021
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-777-beach-condo-in-mai-khao-phuket-u1384512",
@@ -498,7 +992,7 @@
     "address": "777 Beach Condo — Mai Khao, Thalang, Phuket",
     "district": "phuket",
     "sqft": 215,
-    "asking": 265060,
+    "asking": 266220,
     "price_per_sqft": 1234,
     "floor": null,
     "source": "FazWaz [condo]",
@@ -507,8 +1001,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 45700,
-      "price_thb": 1165350,
+      "price_sgd": 45900,
+      "price_thb": 1170450,
       "sqm": 20,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -522,114 +1016,80 @@
       "beach_km": 1.25,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 361,
+      "est_rent_sgd": 362,
       "year_built": 2021
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
-    "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-skypark-aurora-laguna-phuket-in-choeng-thale-phuket-u6855186",
-    "lane": "thai_condo",
-    "status": "hot",
-    "address": "Skypark Aurora Laguna Phuket — Skypark Aurora Laguna Phuket",
-    "district": "phuket",
-    "sqft": 312,
-    "asking": 928000,
-    "price_per_sqft": 2974,
-    "floor": null,
-    "source": "FazWaz [condo]",
-    "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-skypark-aurora-laguna-phuket-in-choeng-thale-phuket-u6855186",
-    "agent_name": null,
-    "photos": 0,
-    "confidence": 75,
-    "thai_data": {
-      "price_sgd": 160000,
-      "price_thb": 4080000,
-      "sqm": 29,
-      "bedrooms": 0,
-      "bathrooms": 1,
-      "property_type": "condo",
-      "tags": [
-        "Foreign Quota",
-        "Year Built"
-      ],
-      "beach_km": 2.97,
-      "roi_pct": null,
-      "price_drop_pct": null,
-      "est_rent_sgd": 944,
-      "year_built": 2022
-    },
-    "scan_date": "2026-10-14"
-  },
-  {
-    "id": "https://www.fazwaz.com/property-sales/2-bedroom-condo-for-sale-at-supalai-park-at-downtown-phuket-in-talat-yai-phuket-u6855062",
+    "id": "https://www.fazwaz.com/property-sales/1-bedroom-apartment-for-sale-at-the-title-coralina-kamala-in-kamala-phuket-u6870061",
     "lane": "thai_condo",
     "status": "watch",
-    "address": "Supalai Park at Downtown Phuket — Supalai Park at Downtown Phuket",
+    "address": "The Title Coralina Kamala — Kamala, Kathu, Phuket",
     "district": "phuket",
-    "sqft": 710,
-    "asking": 794600,
-    "price_per_sqft": 1121,
+    "sqft": 291,
+    "asking": 951200,
+    "price_per_sqft": 3265,
     "floor": null,
     "source": "FazWaz [condo]",
-    "source_url": "https://www.fazwaz.com/property-sales/2-bedroom-condo-for-sale-at-supalai-park-at-downtown-phuket-in-talat-yai-phuket-u6855062",
+    "source_url": "https://www.fazwaz.com/property-sales/1-bedroom-apartment-for-sale-at-the-title-coralina-kamala-in-kamala-phuket-u6870061",
     "agent_name": null,
     "photos": 0,
-    "confidence": 55,
+    "confidence": 60,
     "thai_data": {
-      "price_sgd": 137000,
-      "price_thb": 3493500,
-      "sqm": 66,
-      "bedrooms": 2,
+      "price_sgd": 164000,
+      "price_thb": 4182000,
+      "sqm": 27,
+      "bedrooms": 1,
       "bathrooms": 1,
       "property_type": "condo",
       "tags": [
-        "Year Built",
-        "City View"
+        "Off Plan",
+        "Garden View"
       ],
-      "beach_km": null,
-      "roi_pct": null,
-      "price_drop_pct": null,
-      "est_rent_sgd": 1100,
-      "year_built": 2012
-    },
-    "scan_date": "2026-10-14"
-  },
-  {
-    "id": "https://www.fazwaz.com/property-sales/1-bedroom-condo-for-sale-at-6th-avenue-surin-in-choeng-thale-phuket-u6854949",
-    "lane": "thai_condo",
-    "status": "hot",
-    "address": "6th Avenue Surin — Choeng Thale, Thalang, Phuket",
-    "district": "phuket",
-    "sqft": 323,
-    "asking": 730800,
-    "price_per_sqft": 2258,
-    "floor": null,
-    "source": "FazWaz [condo]",
-    "source_url": "https://www.fazwaz.com/property-sales/1-bedroom-condo-for-sale-at-6th-avenue-surin-in-choeng-thale-phuket-u6854949",
-    "agent_name": null,
-    "photos": 0,
-    "confidence": 75,
-    "thai_data": {
-      "price_sgd": 126000,
-      "price_thb": 3213000,
-      "sqm": 30,
-      "bedrooms": 0,
-      "bathrooms": 1,
-      "property_type": "condo",
-      "tags": [
-        "Foreign Quota",
-        "Year Built",
-        "Garden View",
-        "Pool Access"
-      ],
-      "beach_km": 0.97,
+      "beach_km": 0.63,
       "roi_pct": null,
       "price_drop_pct": null,
       "est_rent_sgd": null,
-      "year_built": 2016
+      "year_built": null
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
+  },
+  {
+    "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-art-at-patong-in-patong-phuket-u6863465",
+    "lane": "thai_condo",
+    "status": "hot",
+    "address": "The Art At Patong — Patong, Kathu, Phuket",
+    "district": "phuket",
+    "sqft": 305,
+    "asking": 667000,
+    "price_per_sqft": 2188,
+    "floor": null,
+    "source": "FazWaz [condo]",
+    "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-the-art-at-patong-in-patong-phuket-u6863465",
+    "agent_name": null,
+    "photos": 0,
+    "confidence": 70,
+    "thai_data": {
+      "price_sgd": 115000,
+      "price_thb": 2932500,
+      "sqm": 28.31,
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "property_type": "condo",
+      "tags": [
+        "Foreign Quota",
+        "Year Built",
+        "Pool View",
+        "Pool Access"
+      ],
+      "beach_km": 2.03,
+      "roi_pct": null,
+      "price_drop_pct": null,
+      "est_rent_sgd": null,
+      "year_built": 2011
+    },
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-apartment-for-sale-at-baan-ua-athorn-chao-mae-kuan-im-in-pa-daet-chiang-mai-u6075559",
@@ -638,8 +1098,8 @@
     "address": "Baan Ua-Athorn Chao Mae Kuan-Im — Pa Daet, Mueang Chiang Mai, Chiang Mai",
     "district": "chiang_mai",
     "sqft": 344,
-    "asking": 147900,
-    "price_per_sqft": 430,
+    "asking": 148480,
+    "price_per_sqft": 431,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/2-bedroom-apartment-for-sale-at-baan-ua-athorn-chao-mae-kuan-im-in-pa-daet-chiang-mai-u6075559",
@@ -647,8 +1107,8 @@
     "photos": 0,
     "confidence": 55,
     "thai_data": {
-      "price_sgd": 25500,
-      "price_thb": 650250,
+      "price_sgd": 25600,
+      "price_thb": 652800,
       "sqm": 32,
       "bedrooms": 2,
       "bathrooms": 1,
@@ -662,7 +1122,7 @@
       "est_rent_sgd": null,
       "year_built": 2015
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-condo-for-sale-at-baan-ua-athorn-san-phi-suea-in-san-phisuea-chiang-mai-u1658754",
@@ -672,7 +1132,7 @@
     "district": "chiang_mai",
     "sqft": 388,
     "asking": 154860,
-    "price_per_sqft": 399,
+    "price_per_sqft": 400,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/2-bedroom-condo-for-sale-at-baan-ua-athorn-san-phi-suea-in-san-phisuea-chiang-mai-u1658754",
@@ -696,7 +1156,7 @@
       "est_rent_sgd": null,
       "year_built": 2016
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-nha-chiang-mai-nhong-hoi-in-nong-hoi-chiang-mai-u1842364",
@@ -705,8 +1165,8 @@
     "address": "NHA Chiang Mai (Nhong Hoi) — NHA Chiang Mai (Nhong Hoi)",
     "district": "chiang_mai",
     "sqft": 377,
-    "asking": 156600,
-    "price_per_sqft": 417,
+    "asking": 157180,
+    "price_per_sqft": 418,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-nha-chiang-mai-nhong-hoi-in-nong-hoi-chiang-mai-u1842364",
@@ -714,8 +1174,8 @@
     "photos": 0,
     "confidence": 55,
     "thai_data": {
-      "price_sgd": 27000,
-      "price_thb": 688500,
+      "price_sgd": 27100,
+      "price_thb": 691050,
       "sqm": 35,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -729,7 +1189,7 @@
       "est_rent_sgd": null,
       "year_built": 2013
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-angket-pavillian-condo-in-nong-pa-khrang-chiang-mai-u6566626",
@@ -738,8 +1198,8 @@
     "address": "Angket Pavillian Condo — Nong Pa Khrang, Mueang Chiang Mai, Chiang Mai",
     "district": "chiang_mai",
     "sqft": 409,
-    "asking": 158920,
-    "price_per_sqft": 389,
+    "asking": 159500,
+    "price_per_sqft": 390,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-angket-pavillian-condo-in-nong-pa-khrang-chiang-mai-u6566626",
@@ -747,8 +1207,8 @@
     "photos": 0,
     "confidence": 70,
     "thai_data": {
-      "price_sgd": 27400,
-      "price_thb": 698700,
+      "price_sgd": 27500,
+      "price_thb": 701250,
       "sqm": 38,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -763,7 +1223,7 @@
       "est_rent_sgd": null,
       "year_built": 2014
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-angket-pavillian-condo-in-nong-pa-khrang-chiang-mai-u6564323",
@@ -772,8 +1232,8 @@
     "address": "Angket Pavillian Condo — Nong Pa Khrang, Mueang Chiang Mai, Chiang Mai",
     "district": "chiang_mai",
     "sqft": 409,
-    "asking": 158920,
-    "price_per_sqft": 389,
+    "asking": 159500,
+    "price_per_sqft": 390,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-angket-pavillian-condo-in-nong-pa-khrang-chiang-mai-u6564323",
@@ -781,8 +1241,8 @@
     "photos": 0,
     "confidence": 70,
     "thai_data": {
-      "price_sgd": 27400,
-      "price_thb": 698700,
+      "price_sgd": 27500,
+      "price_thb": 701250,
       "sqm": 38,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -797,7 +1257,7 @@
       "est_rent_sgd": null,
       "year_built": 2014
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-angket-pavillian-condo-in-nong-pa-khrang-chiang-mai-u6566792",
@@ -806,8 +1266,8 @@
     "address": "Angket Pavillian Condo — Nong Pa Khrang, Mueang Chiang Mai, Chiang Mai",
     "district": "chiang_mai",
     "sqft": 409,
-    "asking": 158920,
-    "price_per_sqft": 389,
+    "asking": 159500,
+    "price_per_sqft": 390,
     "floor": null,
     "source": "FazWaz [condo]",
     "source_url": "https://www.fazwaz.com/property-sales/studio-condo-for-sale-at-angket-pavillian-condo-in-nong-pa-khrang-chiang-mai-u6566792",
@@ -815,8 +1275,8 @@
     "photos": 0,
     "confidence": 70,
     "thai_data": {
-      "price_sgd": 27400,
-      "price_thb": 698700,
+      "price_sgd": 27500,
+      "price_thb": 701250,
       "sqm": 38,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -831,7 +1291,7 @@
       "est_rent_sgd": null,
       "year_built": 2014
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/3-bedroom-villa-for-sale-at-paragon-villas-in-bo-phut-surat-thani-u5937975",
@@ -840,7 +1300,7 @@
     "address": "Paragon Villas — Bo Phut, Koh Samui",
     "district": "samui",
     "sqft": 3767,
-    "asking": 3735200,
+    "asking": 3746800,
     "price_per_sqft": 991,
     "floor": null,
     "source": "FazWaz [villa]",
@@ -849,8 +1309,8 @@
     "photos": 0,
     "confidence": 55,
     "thai_data": {
-      "price_sgd": 644000,
-      "price_thb": 16422000,
+      "price_sgd": 646000,
+      "price_thb": 16473000,
       "sqm": 350,
       "bedrooms": 3,
       "bathrooms": 3.5,
@@ -867,10 +1327,10 @@
       "beach_km": 1.54,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 4950,
+      "est_rent_sgd": 4960,
       "year_built": 2025
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-villa-for-sale-at-five-islands-beach-villa-in-lipa-noi-surat-thani-u6094243",
@@ -904,10 +1364,10 @@
       "beach_km": null,
       "roi_pct": null,
       "price_drop_pct": null,
-      "est_rent_sgd": 3240,
+      "est_rent_sgd": 3250,
       "year_built": 2012
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-house-for-sale-in-maret-surat-thani-u6262727",
@@ -917,7 +1377,7 @@
     "district": "samui",
     "sqft": 700,
     "asking": 609000,
-    "price_per_sqft": 868,
+    "price_per_sqft": 873,
     "floor": null,
     "source": "FazWaz [villa -34.4%]",
     "source_url": "https://www.fazwaz.com/property-sales/2-bedroom-house-for-sale-in-maret-surat-thani-u6262727",
@@ -943,7 +1403,7 @@
       "est_rent_sgd": null,
       "year_built": 2026
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/3-bedroom-townhouse-for-sale-at-supalai-bella-vichit-phuket-in-wichit-phuket-u6380817",
@@ -952,7 +1412,7 @@
     "address": "Supalai Bella Vichit Phuket — Supalai Bella Vichit Phuket",
     "district": "phuket",
     "sqft": 1615,
-    "asking": 1989400,
+    "asking": 1995200,
     "price_per_sqft": 1234,
     "floor": null,
     "source": "FazWaz [villa]",
@@ -961,8 +1421,8 @@
     "photos": 0,
     "confidence": 55,
     "thai_data": {
-      "price_sgd": 343000,
-      "price_thb": 8746500,
+      "price_sgd": 344000,
+      "price_thb": 8772000,
       "sqm": 150,
       "bedrooms": 3,
       "bathrooms": 3,
@@ -977,7 +1437,7 @@
       "est_rent_sgd": null,
       "year_built": 2022
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/1-bedroom-villa-for-sale-in-ko-kaeo-phuket-u154899",
@@ -986,8 +1446,8 @@
     "address": "Ko Kaeo, Phuket Town, Phuket",
     "district": "phuket",
     "sqft": 538,
-    "asking": 1102000,
-    "price_per_sqft": 2053,
+    "asking": 1107800,
+    "price_per_sqft": 2058,
     "floor": null,
     "source": "FazWaz [villa -66.7%]",
     "source_url": "https://www.fazwaz.com/property-sales/1-bedroom-villa-for-sale-in-ko-kaeo-phuket-u154899",
@@ -995,8 +1455,8 @@
     "photos": 0,
     "confidence": 60,
     "thai_data": {
-      "price_sgd": 190000,
-      "price_thb": 4845000,
+      "price_sgd": 191000,
+      "price_thb": 4870500,
       "sqm": 50,
       "bedrooms": 1,
       "bathrooms": 1,
@@ -1013,7 +1473,7 @@
       "est_rent_sgd": null,
       "year_built": 2018
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/6-bedroom-house-for-sale-at-ban-don-garden-home-in-thep-krasattri-phuket-u6627887",
@@ -1022,8 +1482,8 @@
     "address": "Ban Don Garden Home — Thep Krasattri, Thalang, Phuket",
     "district": "phuket",
     "sqft": 2045,
-    "asking": 1989400,
-    "price_per_sqft": 970,
+    "asking": 1995200,
+    "price_per_sqft": 975,
     "floor": null,
     "source": "FazWaz [villa -55%]",
     "source_url": "https://www.fazwaz.com/property-sales/6-bedroom-house-for-sale-at-ban-don-garden-home-in-thep-krasattri-phuket-u6627887",
@@ -1031,8 +1491,8 @@
     "photos": 0,
     "confidence": 60,
     "thai_data": {
-      "price_sgd": 343000,
-      "price_thb": 8746500,
+      "price_sgd": 344000,
+      "price_thb": 8772000,
       "sqm": 190,
       "bedrooms": 6,
       "bathrooms": 4,
@@ -1048,7 +1508,7 @@
       "est_rent_sgd": null,
       "year_built": 2018
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/6-bedroom-house-for-sale-in-sakhu-phuket-u6042343",
@@ -1057,17 +1517,17 @@
     "address": "Turnkey Boutique Resort for Sale in Sakhu Phuket 1000sqm",
     "district": "phuket",
     "sqft": 1615,
-    "asking": 3532200,
-    "price_per_sqft": 2188,
+    "asking": 3543800,
+    "price_per_sqft": 2198,
     "floor": null,
-    "source": "FazWaz [villa -52.8%]",
+    "source": "FazWaz [villa -52.6%]",
     "source_url": "https://www.fazwaz.com/property-sales/6-bedroom-house-for-sale-in-sakhu-phuket-u6042343",
     "agent_name": null,
     "photos": 0,
     "confidence": 60,
     "thai_data": {
-      "price_sgd": 609000,
-      "price_thb": 15529500,
+      "price_sgd": 611000,
+      "price_thb": 15580500,
       "sqm": 150,
       "bedrooms": 6,
       "bathrooms": 6,
@@ -1077,11 +1537,11 @@
       ],
       "beach_km": null,
       "roi_pct": null,
-      "price_drop_pct": 52.8,
+      "price_drop_pct": 52.6,
       "est_rent_sgd": null,
       "year_built": null
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-townhouse-for-sale-in-lipa-noi-surat-thani-u5362771",
@@ -1090,8 +1550,8 @@
     "address": "Lipa Noi, Koh Samui",
     "district": "samui",
     "sqft": 1055,
-    "asking": 397300,
-    "price_per_sqft": 377,
+    "asking": 399040,
+    "price_per_sqft": 378,
     "floor": null,
     "source": "FazWaz [villa]",
     "source_url": "https://www.fazwaz.com/property-sales/2-bedroom-townhouse-for-sale-in-lipa-noi-surat-thani-u5362771",
@@ -1099,8 +1559,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 68500,
-      "price_thb": 1746750,
+      "price_sgd": 68800,
+      "price_thb": 1754400,
       "sqm": 98,
       "bedrooms": 2,
       "bathrooms": 2,
@@ -1114,7 +1574,7 @@
       "est_rent_sgd": null,
       "year_built": 2012
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-house-for-sale-in-na-mueang-surat-thani-u6803785",
@@ -1123,17 +1583,17 @@
     "address": "Na Mueang, Koh Samui",
     "district": "samui",
     "sqft": 565,
-    "asking": 464000,
-    "price_per_sqft": 819,
+    "asking": 440800,
+    "price_per_sqft": 781,
     "floor": null,
-    "source": "FazWaz [villa]",
+    "source": "FazWaz [villa -5.2%]",
     "source_url": "https://www.fazwaz.com/property-sales/2-bedroom-house-for-sale-in-na-mueang-surat-thani-u6803785",
     "agent_name": null,
     "photos": 0,
     "confidence": 55,
     "thai_data": {
-      "price_sgd": 80000,
-      "price_thb": 2040000,
+      "price_sgd": 76000,
+      "price_thb": 1938000,
       "sqm": 52.5,
       "bedrooms": 2,
       "bathrooms": 2,
@@ -1145,11 +1605,11 @@
       ],
       "beach_km": null,
       "roi_pct": null,
-      "price_drop_pct": null,
+      "price_drop_pct": 5.2,
       "est_rent_sgd": null,
       "year_built": 2026
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/3-bedroom-townhouse-for-sale-in-taling-ngam-surat-thani-u6089182",
@@ -1158,17 +1618,17 @@
     "address": "Taling Ngam, Koh Samui",
     "district": "samui",
     "sqft": 1184,
-    "asking": 552160,
-    "price_per_sqft": 467,
+    "asking": 553900,
+    "price_per_sqft": 468,
     "floor": null,
-    "source": "FazWaz [villa -26.2%]",
+    "source": "FazWaz [villa -26.5%]",
     "source_url": "https://www.fazwaz.com/property-sales/3-bedroom-townhouse-for-sale-in-taling-ngam-surat-thani-u6089182",
     "agent_name": null,
     "photos": 0,
     "confidence": 65,
     "thai_data": {
-      "price_sgd": 95200,
-      "price_thb": 2427600,
+      "price_sgd": 95500,
+      "price_thb": 2435250,
       "sqm": 110,
       "bedrooms": 3,
       "bathrooms": 3,
@@ -1179,11 +1639,11 @@
       ],
       "beach_km": null,
       "roi_pct": null,
-      "price_drop_pct": 26.2,
+      "price_drop_pct": 26.5,
       "est_rent_sgd": null,
       "year_built": 2025
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/1-bedroom-villa-for-sale-at-beausoleil-in-maenam-surat-thani-u5649758",
@@ -1193,7 +1653,7 @@
     "district": "samui",
     "sqft": 291,
     "asking": 597400,
-    "price_per_sqft": 2053,
+    "price_per_sqft": 2058,
     "floor": null,
     "source": "FazWaz [villa -15.6%]",
     "source_url": "https://www.fazwaz.com/property-sales/1-bedroom-villa-for-sale-at-beausoleil-in-maenam-surat-thani-u5649758",
@@ -1216,7 +1676,7 @@
       "est_rent_sgd": null,
       "year_built": null
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/2-bedroom-house-for-sale-in-maenam-surat-thani-u6091697",
@@ -1251,7 +1711,7 @@
       "est_rent_sgd": null,
       "year_built": null
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/studio-house-for-sale-in-thep-krasattri-phuket-u1912460",
@@ -1260,7 +1720,7 @@
     "address": "Thep Krasattri, Thalang, Phuket",
     "district": "phuket",
     "sqft": 219254,
-    "asking": 3509000,
+    "asking": 3526400,
     "price_per_sqft": 16,
     "floor": null,
     "source": "FazWaz [villa]",
@@ -1269,8 +1729,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 605000,
-      "price_thb": 15427500,
+      "price_sgd": 608000,
+      "price_thb": 15504000,
       "sqm": 20369.2,
       "bedrooms": 0,
       "bathrooms": 1,
@@ -1286,7 +1746,7 @@
       "est_rent_sgd": null,
       "year_built": null
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/5-bedroom-villa-for-sale-in-patong-phuket-u6671731",
@@ -1295,17 +1755,17 @@
     "address": "Patong, Kathu, Phuket",
     "district": "phuket",
     "sqft": 32292,
-    "asking": 3288600,
+    "asking": 3300200,
     "price_per_sqft": 102,
     "floor": null,
-    "source": "FazWaz [villa -17.2%]",
+    "source": "FazWaz [villa -17.3%]",
     "source_url": "https://www.fazwaz.com/property-sales/5-bedroom-villa-for-sale-in-patong-phuket-u6671731",
     "agent_name": null,
     "photos": 0,
     "confidence": 60,
     "thai_data": {
-      "price_sgd": 567000,
-      "price_thb": 14458500,
+      "price_sgd": 569000,
+      "price_thb": 14509500,
       "sqm": 3000,
       "bedrooms": 5,
       "bathrooms": 5,
@@ -1315,11 +1775,11 @@
       ],
       "beach_km": null,
       "roi_pct": null,
-      "price_drop_pct": 17.2,
+      "price_drop_pct": 17.3,
       "est_rent_sgd": null,
       "year_built": null
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "https://www.fazwaz.com/property-sales/6-bedroom-house-for-sale-in-talat-nuea-phuket-u1948683",
@@ -1328,7 +1788,7 @@
     "address": "171 SQ.M. Plot on Mae Luan Road Phuket City",
     "district": "phuket",
     "sqft": 7363,
-    "asking": 1525400,
+    "asking": 1531200,
     "price_per_sqft": 207,
     "floor": null,
     "source": "FazWaz [villa]",
@@ -1337,8 +1797,8 @@
     "photos": 0,
     "confidence": 50,
     "thai_data": {
-      "price_sgd": 263000,
-      "price_thb": 6706500,
+      "price_sgd": 264000,
+      "price_thb": 6732000,
       "sqm": 684,
       "bedrooms": 6,
       "bathrooms": 6,
@@ -1353,7 +1813,7 @@
       "est_rent_sgd": null,
       "year_built": null
     },
-    "scan_date": "2026-10-14"
+    "scan_date": "2026-10-17"
   },
   {
     "id": "A016",
@@ -1401,7 +1861,7 @@
     "agent_phone": "9234 5732",
     "agent_name": "Mr. Chan — AA Property Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1450,7 +1910,7 @@
     "agent_phone": "6754 6753",
     "agent_name": "Mr. Chu — AA Property Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1501,7 +1961,7 @@
     "agent_phone": "6999 9469 / 6844 7223",
     "agent_name": "Mr. Chan / Ms. Tse — AA Property Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1550,7 +2010,7 @@
     "agent_phone": "9132 1651",
     "agent_name": "Mr. Lau — AA Property Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1592,7 +2052,7 @@
     "agent_phone": null,
     "agent_name": null,
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1641,7 +2101,7 @@
     "agent_phone": "5409 3618",
     "agent_name": "Mr. Chiu — Memfus Wong",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1688,7 +2148,7 @@
     "agent_phone": "See individual lot contacts",
     "agent_name": "AA Property Auctioneers Ltd.",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1731,7 +2191,7 @@
     "agent_phone": "Check silverhouse.hk for Memfus Wong contact",
     "agent_name": "Memfus Wong Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1773,7 +2233,7 @@
     "agent_phone": "2543 1999",
     "agent_name": "Chung Sen Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1823,7 +2283,7 @@
     "agent_phone": "6754 6753 / 9123 7786",
     "agent_name": "Mr. Chu / Ms. Wong — AA Property Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1872,7 +2332,7 @@
     "agent_phone": "9132 1651",
     "agent_name": "Mr. Lau — AA Property Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1920,7 +2380,7 @@
     "agent_phone": "6754 6753 / 9123 7786",
     "agent_name": "Mr. Chu / Ms. Wong — AA Property Auctioneers",
     "photos_url": null,
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   },
   {
@@ -1971,7 +2431,7 @@
     "agent_phone": "Multiple — see individual listings",
     "agent_name": "AA Property Auctioneers Ltd. — www.aaproperty.com.hk",
     "photos_url": "https://www.aaproperty.com.hk/aa/bid_list.php",
-    "scan_date": "2026-10-14",
+    "scan_date": "2026-10-17",
     "manual": true
   }
 ]

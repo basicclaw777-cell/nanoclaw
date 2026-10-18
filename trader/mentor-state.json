@@ -1,7 +1,16 @@
 {
-  "lessonIndex": 10,
-  "weekNumber": 22,
+  "lessonIndex": 11,
+  "weekNumber": 23,
   "alerts": [],
-  "lastDigest": "2026-10-10T18:31:34.113Z",
-  "lastAlerts": []
+  "lastDigest": "2026-10-17T18:30:04.443Z",
+  "lastAlerts": [
+    {
+      "severity": "warning",
+      "msg": "Asia ex-Japan down -11.1% — significant loss territory."
+    },
+    {
+      "severity": "alert",
+      "msg": "Asia ex-Japan dropped -6.4% THIS WEEK — sharp move."
+    }
+  ]
 }

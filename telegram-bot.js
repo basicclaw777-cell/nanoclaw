@@ -66,6 +66,7 @@ import { runForensicRelay, formatRelayTelegram, formatPromptTelegram } from './f
 import { runExtractionCycle, runSingleCycle, formatCycleTelegram } from './extraction-cycle.js';
 import { captureDrill, insertDrill } from './coaching-os/drill-capture.js';
 import { startSlack, sendSlack, sendSlackFile, sendSlackBlocks, registerSlackAction } from './slack-bridge.js';
+import { registerSessionCommands, handleSessionCallback } from './session-tracker.js';
 
 // ── Single-instance lock ──────────────────────────────────────────────────────
 
@@ -311,6 +312,7 @@ registerTraderCommands(bot);
 registerPropertyCommands(bot);
 registerWorldPulseCommands(bot);
 registerFrictionCommands(bot, PAUL_CHAT_ID);
+registerSessionCommands(bot, PAUL_CHAT_ID);
 registerSlackAction('friction', handleSlackFrictionAction);
 
 // ── Telegram health state (written to cath-state.json) ──────────────────────
@@ -8223,6 +8225,12 @@ bot.on('callback_query', async (query) => {
   const msgId = query.message.message_id;
 
   try {
+    // Session tracker callbacks
+    if (data.startsWith('sess_')) {
+      handleSessionCallback(query, bot);
+      return;
+    }
+
     if (data.startsWith('dense_approve:') || data.startsWith('dense_skip:')) {
       const action = data.startsWith('dense_approve:') ? '--apply' : '--skip';
       // execSync imported at top

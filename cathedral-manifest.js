@@ -178,6 +178,7 @@ const MANIFEST = {
 
   // ── EVENING CRON (fixed 2026-05-24 — supertonic→edge-tts) ──
   'evening-reflection':  { intended: 'cron', cron: '0 12 * * *', reason: 'Daily 20:00 HKT — Cathedral + Cathy voice reflections via edge-tts' },
+  'session-prompt':      { intended: 'cron', cron: '0 12 * * *', reason: 'Daily 20:00 HKT — BR session done? prompts via Telegram inline keyboard' },
 
   // ── DELETED (removed from PM2) ──
   // cath-local — FastAPI local inference, replaced by native Node.js fetch + DeepSeek

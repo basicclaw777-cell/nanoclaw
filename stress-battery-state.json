@@ -1,6 +1,6 @@
 {
-  "testNumber": 58,
-  "lastRun": "2026-10-15",
+  "testNumber": 59,
+  "lastRun": "2026-10-17",
   "identityBaseline": [
     0.2961278259754181,
     1.0096608400344849,
@@ -1234,6 +1234,14 @@
       "compression": 31,
       "contradiction": 2,
       "identity": 0.81,
+      "overall": "FRAGILE"
+    },
+    {
+      "testNumber": 59,
+      "date": "2026-10-17",
+      "compression": 0,
+      "contradiction": 5,
+      "identity": 0,
       "overall": "FRAGILE"
     }
   ]

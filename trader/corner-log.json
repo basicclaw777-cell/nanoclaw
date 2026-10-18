@@ -1,43 +1,5 @@
 [
   {
-    "timestamp": "2026-09-18T04:00:22.532Z",
-    "multipliers": {
-      "historical_cycles": 1.15,
-      "gann_geometry": 0.3,
-      "sexagesimal_cycles": 0.35,
-      "fibonacci_time": 0.1,
-      "harmonic_year": 0.21,
-      "lunar_cycles": 0.1
-    },
-    "summary": {
-      "historical_cycles": "6W/4L $34",
-      "gann_geometry": "4W/4L $10",
-      "sexagesimal_cycles": "0W/3L $-11",
-      "fibonacci_time": "0W/5L $-36",
-      "harmonic_year": "0W/3L $-92",
-      "lunar_cycles": "1W/8L $-215"
-    }
-  },
-  {
-    "timestamp": "2026-09-18T16:00:06.135Z",
-    "multipliers": {
-      "historical_cycles": 1.15,
-      "gann_geometry": 0.3,
-      "sexagesimal_cycles": 0.35,
-      "fibonacci_time": 0.1,
-      "harmonic_year": 0.21,
-      "lunar_cycles": 0.1
-    },
-    "summary": {
-      "historical_cycles": "6W/4L $34",
-      "gann_geometry": "4W/4L $10",
-      "sexagesimal_cycles": "0W/3L $-11",
-      "fibonacci_time": "0W/5L $-36",
-      "harmonic_year": "0W/3L $-92",
-      "lunar_cycles": "1W/8L $-215"
-    }
-  },
-  {
     "timestamp": "2026-09-19T04:00:24.715Z",
     "multipliers": {
       "historical_cycles": 1.15,
@@ -1122,6 +1084,44 @@
   },
   {
     "timestamp": "2026-10-17T04:00:02.344Z",
+    "multipliers": {
+      "historical_cycles": 1,
+      "gann_geometry": 0.21,
+      "sexagesimal_cycles": 0.35,
+      "fibonacci_time": 0.1,
+      "harmonic_year": 0.21,
+      "lunar_cycles": 0.1
+    },
+    "summary": {
+      "historical_cycles": "7W/5L $15",
+      "gann_geometry": "4W/4L $10",
+      "sexagesimal_cycles": "0W/3L $-11",
+      "fibonacci_time": "0W/5L $-36",
+      "harmonic_year": "0W/3L $-92",
+      "lunar_cycles": "1W/8L $-215"
+    }
+  },
+  {
+    "timestamp": "2026-10-17T16:00:03.930Z",
+    "multipliers": {
+      "historical_cycles": 1,
+      "gann_geometry": 0.21,
+      "sexagesimal_cycles": 0.35,
+      "fibonacci_time": 0.1,
+      "harmonic_year": 0.21,
+      "lunar_cycles": 0.1
+    },
+    "summary": {
+      "historical_cycles": "7W/5L $15",
+      "gann_geometry": "4W/4L $10",
+      "sexagesimal_cycles": "0W/3L $-11",
+      "fibonacci_time": "0W/5L $-36",
+      "harmonic_year": "0W/3L $-92",
+      "lunar_cycles": "1W/8L $-215"
+    }
+  },
+  {
+    "timestamp": "2026-10-18T04:01:03.313Z",
     "multipliers": {
       "historical_cycles": 1,
       "gann_geometry": 0.21,

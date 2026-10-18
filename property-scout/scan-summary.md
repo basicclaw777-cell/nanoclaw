@@ -1,17 +1,50 @@
-# Property Scout — Scan 2026-10-14
+# Property Scout — Scan 2026-10-17
 
 ## Summary
-- **52 listings found** (18 HOT, 7 auction)
-- **8 new since last scan**
-- **1 price changes**
+- **80 listings found** (17 HOT, 7 auction)
+- **32 new since last scan**
+- **28 price changes**
 - Data freshness: Fresh scan
 
-### 🇹🇭 Thai_condo (Lane): 24 listings
+### 🥊 Gym (Lane): 24 listings
+- **Wayson Commercial Building — Sheung Wan 28 Connaught Road West** — HK$1.8M | Confidence: 55
+- **Lee Kee Commercial Building — Sheung Wan 221-227 Queen's Road Central** — HK$6.2M | Confidence: 55
+- **Golden Sun Centre — Sheung Wan 59-67 Bonham Strand West** — HK$4.0M | Confidence: 55
+- **Yick Fung Building — Sheung Wan 94-96 Des Voeux Road West** — HK$7.5M | Confidence: 55
+- **Centre Mark II — Sheung Wan 313 Queen's Road Central** — HK$5.3M | Confidence: 55
+- **Arion Commercial Centre — Sheung Wan 2-12 Queen's Road West** — HK$10.0M | Confidence: 55
+- **Unionway Commercial Centre — Sheung Wan 283 Queen's Road Central** — HK$4.5M | Confidence: 55
+- **6 Wilmer Street** — HK$4.9M | Confidence: 45
+- **Kam Tak Building — Sheung Wan 20-24 Mercer Street** — HK$10.0M | Confidence: 55
+- **Arion Commercial Centre — Sheung Wan 2-12 Queen's Road West** — HK$4.3M | Confidence: 55
+- **Harbour Commercial Building — Sheung Wan 122-124 Connaught Road Central** — HK$7.3M | Confidence: 55
+- **Wing Yee Commercial Building — Sheung Wan 5 Wing Kut Street** — HK$4.5M | Confidence: 55
+- **Crawford Tower — Sheung Wan 99-101 Jervois Street** — HK$8.3M | Confidence: 55
+- **Centre Mark II — Sheung Wan 313 Queen's Road Central** — HK$5.9M | Confidence: 55
+- **Lloyds Commercial Centre — Sheung Wan 8 Wing Lok Street** — HK$7.0M | Confidence: 55
+- **Khuan Ying Commercial Building — Central 85-89 Wellington Street** — HK$6.1M | Confidence: 45
+- **Tak Woo House — Central 1 Wo On Lane** — HK$3.0M | Confidence: 45
+- **World-Wide Commercial Building — Central 34 Wyndham Street** — HK$4.8M | Confidence: 45
+- **Fai Man Building — Central 9-13 Li Yuen Street West** — HK$4.2M | Confidence: 45
+- **Waga Commercial Centre — Central 99 Wellington Street** — HK$4.8M | Confidence: 45
+- **Waga Commercial Centre — Central 99 Wellington Street** — HK$5.8M | Confidence: 45
+- **Grand Progress Building — Central 58-62 D'Aguilar Street** — HK$4.5M | Confidence: 45
+- **Chung Hing Commercial Building — Central 62-63 Connaught Road Central** — HK$5.2M | Confidence: 45
+- **Lippo Centre Tower 1 — Admiralty 89 Queensway** — HK$8.5M | Confidence: 45
+
+### ☕ Coffee (Lane): 5 listings
+- **Sheung Wan Mee Lun Street — - Sheung Wan Station** — HK$7.5M | Confidence: 55
+- **Sheung Wan Wing Kut Street — - Sheung Wan Station** — HK$5.0M | Confidence: 55
+- **Sheung Wan Shing Wong Street — - Sheung Wan Station** — HK$10.0M | Confidence: 55
+- **World-Wide House — Central 19 Des Voeux Road Central** — HK$6.9M | Confidence: 45
+- **World-Wide House — Central 19 Des Voeux Road Central** — HK$8.0M | Confidence: 45
+
+### 🇹🇭 Thai_condo (Lane): 23 listings
 - **Replay Residence & Pool Villa — Bo Phut, Koh Samui** — HK$0.4M | Confidence: 60
 - **Avanta Condominium — Maenam, Koh Samui** — HK$0.5M | Confidence: 65
 - **Bo Phut, Koh Samui** — HK$0.5M | Confidence: 70
+- **Avanta Condominium — Maenam, Koh Samui** — HK$0.5M | Confidence: 65
 - **The Ville Condo Phase 1 — Bo Phut, Koh Samui** — HK$0.5M | Confidence: 55
-- **The Terraza Samui — Maret, Koh Samui** — HK$0.6M | Confidence: 60
 - **The Terraza Samui — Maret, Koh Samui** — HK$0.6M | Confidence: 60
 - **The Terraza Samui — Maret, Koh Samui** — HK$1.1M | Confidence: 85
 - **Tropical Seaview Residence — Maret, Koh Samui** — HK$0.8M | Confidence: 45
@@ -22,9 +55,8 @@
 - **777 Beach Condo — Mai Khao, Thalang, Phuket** — HK$0.2M | Confidence: 50
 - **777 Beach Condo — Mai Khao, Thalang, Phuket** — HK$0.2M | Confidence: 50
 - **777 Beach Condo — Mai Khao, Thalang, Phuket** — HK$0.3M | Confidence: 50
-- **Skypark Aurora Laguna Phuket — Skypark Aurora Laguna Phuket** — HK$0.9M | Confidence: 75
-- **Supalai Park at Downtown Phuket — Supalai Park at Downtown Phuket** — HK$0.8M | Confidence: 55
-- **6th Avenue Surin — Choeng Thale, Thalang, Phuket** — HK$0.7M | Confidence: 75
+- **The Title Coralina Kamala — Kamala, Kathu, Phuket** — HK$1.0M | Confidence: 60
+- **The Art At Patong — Patong, Kathu, Phuket** — HK$0.7M | Confidence: 70
 - **Baan Ua-Athorn Chao Mae Kuan-Im — Pa Daet, Mueang Chiang Mai, Chiang Mai** — HK$0.1M | Confidence: 55
 - **Baan Ua-Athorn San Phi Suea — San Phisuea, Mueang Chiang Mai, Chiang Mai** — HK$0.2M | Confidence: 55
 - **NHA Chiang Mai (Nhong Hoi) — NHA Chiang Mai (Nhong Hoi)** — HK$0.2M | Confidence: 55
@@ -41,7 +73,7 @@
 - **Ban Don Garden Home — Thep Krasattri, Thalang, Phuket** — HK$2.0M | Confidence: 60
 - **Turnkey Boutique Resort for Sale in Sakhu Phuket 1000sqm** — HK$3.5M | Confidence: 60
 - **Lipa Noi, Koh Samui** — HK$0.4M | Confidence: 50
-- **Na Mueang, Koh Samui** — HK$0.5M | Confidence: 55
+- **Na Mueang, Koh Samui** — HK$0.4M | Confidence: 55
 - **Taling Ngam, Koh Samui** — HK$0.6M | Confidence: 65
 - **Beausoleil — Maenam, Koh Samui** — HK$0.6M | Confidence: 65
 - **Maenam, Koh Samui** — HK$0.6M | Confidence: 50

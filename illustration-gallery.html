@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illustration Gallery</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', system-ui, -apple-system, sans-serif; padding: 24px; background: #fafaf8; color: #1a1a1a; }
+
+  h1 { font-size: 1.6em; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #888; font-size: 0.85em; margin-bottom: 24px; }
+
+  .stats-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .stat { background: #fff; border: 1px solid #e5e5e0; border-radius: 8px; padding: 10px 16px; min-width: 100px; }
+  .stat-val { font-size: 1.5em; font-weight: 700; color: #f7b408; }
+  .stat-label { font-size: 0.7em; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .controls { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+  .filter-btn { background: #fff; border: 1px solid #ddd; color: #666; padding: 6px 14px; border-radius: 16px; cursor: pointer; font-size: 0.8em; transition: all 0.15s; }
+  .filter-btn:hover { border-color: #f7b408; color: #1a1a1a; }
+  .filter-btn.active { background: #f7b408; color: #000; border-color: #f7b408; font-weight: 600; }
+  .search { padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85em; width: 200px; background: #fff; }
+  .search:focus { outline: none; border-color: #f7b408; }
+  .view-toggle { margin-left: auto; display: flex; gap: 4px; }
+  .view-btn { background: #fff; border: 1px solid #ddd; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9em; }
+  .view-btn.active { background: #f7b408; border-color: #f7b408; }
+
+  .grid { display: grid; gap: 12px; }
+  .grid.large { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .grid.small { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  .grid.list { grid-template-columns: 1fr; }
+
+  .card { background: #fff; border: 1px solid #e5e5e0; border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+  .card:hover { border-color: #f7b408; box-shadow: 0 2px 12px rgba(247,180,8,0.15); transform: translateY(-1px); }
+  .card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #f0f0ea; }
+  .grid.list .card { display: flex; flex-direction: row; }
+  .grid.list .card img { width: 80px; height: 80px; aspect-ratio: 1; flex-shrink: 0; }
+  .card-info { padding: 8px 10px; }
+  .card-name { font-size: 0.78em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-path { font-size: 0.65em; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-cat { display: inline-block; font-size: 0.6em; background: #f0f0ea; color: #666; padding: 2px 6px; border-radius: 4px; margin-top: 2px; }
+
+  .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 100; display: none; align-items: center; justify-content: center; flex-direction: column; padding: 24px; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 80vh; object-fit: contain; border-radius: 4px; }
+  .lightbox-info { color: #ccc; font-size: 0.85em; margin-top: 12px; text-align: center; max-width: 600px; }
+  .lightbox-close { position: absolute; top: 16px; right: 20px; color: #888; font-size: 1.8em; cursor: pointer; z-index: 101; }
+  .lightbox-close:hover { color: #fff; }
+  .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); color: #888; font-size: 2em; cursor: pointer; padding: 20px; }
+  .lightbox-nav:hover { color: #fff; }
+  .lightbox-nav.prev { left: 0; }
+  .lightbox-nav.next { right: 0; }
+
+  .empty { text-align: center; padding: 60px; color: #999; }
+  .loading { text-align: center; padding: 60px; color: #aaa; }
+
+  @media (max-width: 600px) {
+    body { padding: 16px; }
+    .grid.large { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .search { width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Illustration Gallery</h1>
+<p class="subtitle">All generated images across the Cathedral</p>
+
+<div class="stats-bar" id="stats"></div>
+
+<div class="controls">
+  <div id="filters"></div>
+  <input type="text" class="search" id="search" placeholder="Search filename...">
+  <div class="view-toggle">
+    <button class="view-btn active" data-view="large" title="Large grid">&#9638;</button>
+    <button class="view-btn" data-view="small" title="Small grid">&#9642;</button>
+    <button class="view-btn" data-view="list" title="List">&#9776;</button>
+  </div>
+</div>
+
+<div class="grid large" id="grid">
+  <div class="loading">Scanning filesystem...</div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" id="lb-close">&times;</span>
+  <span class="lightbox-nav prev" id="lb-prev">&#8249;</span>
+  <span class="lightbox-nav next" id="lb-next">&#8250;</span>
+  <img id="lb-img" src="" alt="">
+  <div class="lightbox-info" id="lb-info"></div>
+</div>
+
+<script>
+const API = '/api/gallery-scan';
+let allImages = [];
+let filtered = [];
+let activeCategory = 'all';
+let currentView = 'large';
+let lightboxIdx = -1;
+
+async function loadImages() {
+  try {
+    const resp = await fetch(API);
+    if (!resp.ok) throw new Error('Gallery API not available');
+    allImages = await resp.json();
+  } catch (e) {
+    // Fallback: try manifest file
+    try {
+      const resp2 = await fetch('/illustration-gallery-manifest.json');
+      if (resp2.ok) allImages = await resp2.json();
+      else throw new Error('No manifest');
+    } catch {
+      document.getElementById('grid').innerHTML = `<div class="empty">
+        <p><strong>Gallery needs a manifest.</strong></p>
+        <p style="margin-top:8px;font-size:0.85em;color:#aaa">
+          Run: <code style="background:#f0f0ea;padding:2px 6px;border-radius:4px">node ~/nanoclaw/gallery-scan.js</code><br>
+          This scans ~/basic-reflex/ + ~/Cathedral/visual-studio/ and writes the manifest.
+        </p>
+      </div>`;
+      return;
+    }
+  }
+
+  renderStats();
+  renderFilters();
+  applyFilter();
+}
+
+function renderStats() {
+  const cats = {};
+  allImages.forEach(img => { cats[img.category] = (cats[img.category] || 0) + 1; });
+  const catCount = Object.keys(cats).length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-val">${allImages.length}</div><div class="stat-label">Total Images</div></div>
+    <div class="stat"><div class="stat-val">${catCount}</div><div class="stat-label">Categories</div></div>
+    <div class="stat"><div class="stat-val">${cats['stick-logan'] || 0}</div><div class="stat-label">Stick Logan</div></div>
+    <div class="stat"><div class="stat-val">${cats['logan-universe'] || 0}</div><div class="stat-label">Logan Universe</div></div>
+  `;
+}
+
+function renderFilters() {
+  const cats = {};
+  allImages.forEach(img => { cats[img.category] = (cats[img.category] || 0) + 1; });
+  const sorted = Object.entries(cats).sort((a, b) => b[1] - a[1]);
+  let html = `<button class="filter-btn ${activeCategory === 'all' ? 'active' : ''}" onclick="setCategory('all')">All (${allImages.length})</button>`;
+  sorted.forEach(([cat, count]) => {
+    html += `<button class="filter-btn ${activeCategory === cat ? 'active' : ''}" onclick="setCategory('${cat}')">${cat} (${count})</button>`;
+  });
+  document.getElementById('filters').innerHTML = html;
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  renderFilters();
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = document.getElementById('search').value.toLowerCase();
+  filtered = allImages.filter(img => {
+    if (activeCategory !== 'all' && img.category !== activeCategory) return false;
+    if (q && !img.name.toLowerCase().includes(q) && !img.path.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty">No images match filter</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map((img, i) => `
+    <div class="card" onclick="openLightbox(${i})">
+      <img src="${img.url}" loading="lazy" alt="${img.name}" onerror="this.style.display='none'">
+      <div class="card-info">
+        <div class="card-name">${img.name}</div>
+        <div class="card-path">${img.shortPath}</div>
+        <span class="card-cat">${img.category}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Lightbox
+function openLightbox(idx) {
+  lightboxIdx = idx;
+  const img = filtered[idx];
+  document.getElementById('lb-img').src = img.url;
+  document.getElementById('lb-info').innerHTML = `<strong>${img.name}</strong><br><span style="color:#888">${img.path}</span>`;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+function navLightbox(dir) {
+  lightboxIdx = (lightboxIdx + dir + filtered.length) % filtered.length;
+  openLightbox(lightboxIdx);
+}
+
+document.getElementById('lb-close').onclick = closeLightbox;
+document.getElementById('lb-prev').onclick = () => navLightbox(-1);
+document.getElementById('lb-next').onclick = () => navLightbox(1);
+document.getElementById('lightbox').onclick = (e) => { if (e.target === e.currentTarget) closeLightbox(); };
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') navLightbox(-1);
+  if (e.key === 'ArrowRight') navLightbox(1);
+});
+
+// View toggle
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentView = btn.dataset.view;
+    const grid = document.getElementById('grid');
+    grid.className = `grid ${currentView}`;
+  };
+});
+
+// Search
+document.getElementById('search').oninput = applyFilter;
+
+loadImages();
+</script>
+</body>
+</html>
