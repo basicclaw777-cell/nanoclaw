@@ -3952,3 +3952,8 @@ Seeded data:
 - Interaction buttons (Act/Watch/Dismiss) wired to feedback API
 
 Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into existing strategies/agents, build significance scoring engine (L2 rules), test memory gravity hypothesis over 1 week
+
+## 2026-10-21 — Forge session 75af7cdc (Opus 5.5)
+- ~/.claude/hooks: validate-openart-cost.js, guard-claude-md-sed.js, backup-artifact.js, validate-illustration.js, log-illustration.js (+ settings.json entries). Tested.
+- ~/Cathedral/forge-backup.sh + PM2 forge-backup (15 3 * * *) → /Volumes/KINGSTON2/cathedral-backups/forge-DATE + mirrors. First run ok.
+- Known issue: telegram-bot.js keeps Ollama qwen3:14b (9.7GB) loaded → Mac swap thrash on 16GB.
