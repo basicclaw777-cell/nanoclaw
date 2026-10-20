@@ -135,6 +135,7 @@ const MANIFEST = {
   'skills-scout':        { intended: 'cron', cron: '0 23 * * *',    reason: 'Daily 07:00 HKT — finds new skills for Cathedral' },
   'tui-runner':          { intended: 'cron', cron: '0 3 * * *',     reason: 'Daily — DeepSeek background research' },
   'moon-daily':          { intended: 'cron', cron: '45 22 * * *',   reason: 'Daily 06:45 HKT — lunar data for Looking Glass' },
+  'next-machine-status': { intended: 'cron', cron: '50 22 * * *',   reason: 'Daily 06:50 HKT — derive Next Machine vision status from gap register' },
   'cross-project-pulse': { intended: 'cron', cron: '45 22 * * *',   reason: 'Daily 06:45 HKT — cross-project pattern detection' },
 
   // ── BR OPERATIONS ──
