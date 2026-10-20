@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class Journal</title>
+<style>
+/* Class Journal — every taught class from Coaching OS (coaching.db → class-journal-build.cjs → class-journal.json). */
+@font-face { font-family: 'Anton'; font-weight: 400; font-display: swap; src: url(/visual-studio/next-machine/fonts/anton-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Epilogue'; font-weight: 400 700; font-display: swap; src: url(/visual-studio/next-machine/fonts/epilogue-latin.woff2) format('woff2'); }
+:root { --bg: #faf9f6; --card: #fff; --ink: #111; --muted: #6b675f; --line: #e6e2d8; --gold: #f7b408; --gold-ink: #8a6200; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: Epilogue, system-ui, sans-serif; line-height: 1.55; }
+.wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 64px; }
+h1, h2 { font-family: Anton, Impact, sans-serif; font-weight: 400; letter-spacing: .02em; margin: 0; }
+h1 { font-size: clamp(32px, 6vw, 48px); }
+h1 span { background: var(--gold); padding: 0 8px; }
+.sub { color: var(--muted); margin: 6px 0 18px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.filters button { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--card); padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.filters button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+article { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; overflow: hidden; }
+.head { padding: 16px 18px; border-bottom: 1px solid var(--line); border-left: 6px solid var(--gold); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.meta b { color: var(--ink); }
+h2 { font-size: 24px; }
+.body { padding: 4px 18px 18px; }
+h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--gold-ink); margin: 16px 0 6px; }
+ol.segs { padding-left: 22px; margin: 0; }
+ol.segs li { padding: 4px 0; }
+.drill { font-size: 12px; background: #f3efe3; border-radius: 4px; padding: 1px 6px; margin-left: 4px; white-space: nowrap; }
+ul { margin: 0; padding-left: 20px; }
+.obs li { padding: 2px 0; }
+.sugg li { padding: 4px 0; }
+.empty { color: var(--muted); }
+details summary { cursor: pointer; color: var(--gold-ink); font-weight: 600; margin-top: 12px; }
+.foot { color: var(--muted); font-size: 13px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Class <span>Journal</span></h1>
+  <p class="sub">Every class taught, by day and group: what we did, what we saw, what to try next.</p>
+  <div class="filters" id="filters"></div>
+  <div id="list"><p class="empty">Loading&hellip;</p></div>
+  <p class="foot" id="foot">Source: Coaching OS <code>coaching.db</code>. Rebuild: <code>node ~/nanoclaw/coaching-os/class-journal-build.cjs</code></p>
+</div>
+<script>
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const day = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : 'Undated';
+let data, group = 'All';
+
+function draw() {
+  const groups = ['All', ...new Set(data.classes.map(c => c.group))];
+  document.getElementById('filters').innerHTML = groups.map(g =>
+    `<button class="${g === group ? 'on' : ''}" data-g="${esc(g)}">${esc(g)}</button>`).join('');
+  document.querySelectorAll('#filters button').forEach(b => b.onclick = () => { group = b.dataset.g; draw(); });
+
+  const list = data.classes.filter(c => group === 'All' || c.group === group);
+  document.getElementById('list').innerHTML = list.length ? list.map(c => `
+    <article>
+      <div class="head">
+        <div class="meta"><b>${esc(day(c.date))}</b><span>${esc(c.group)}</span>${c.athletes ? `<span>${c.athletes} athletes</span>` : ''}</div>
+        <h2>${esc(c.title)}</h2>
+      </div>
+      <div class="body">
+        ${c.summary ? `<h3>Summary</h3><p>${esc(c.summary)}</p>` : ''}
+        ${c.observations.length ? `<h3>What we saw</h3><ul class="obs">${c.observations.map(o => `<li>${esc(o.observation)}</li>`).join('')}</ul>` : ''}
+        ${c.suggestions.length ? `<h3>Suggestions for next time</h3><ul class="sugg">${c.suggestions.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+        <details${c.summary ? '' : ' open'}><summary>Class plan as taught (${c.segments.length} parts)</summary>
+          <ol class="segs">${c.segments.map(s => `<li><b>${esc(s.segment_name)}</b>${s.drill_name ? `<span class="drill">${esc(s.drill_name)}</span>` : ''}${s.drill_notes ? ` &mdash; ${esc(s.drill_notes)}` : ''}</li>`).join('')}</ol>
+        </details>
+      </div>
+    </article>`).join('') : '<p class="empty">No classes for this group yet.</p>';
+}
+
+fetch('class-journal.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
+  data = d; draw();
+  document.getElementById('foot').insertAdjacentHTML('beforeend', `<br>Built ${new Date(d.built_at).toLocaleString()}.`);
+}).catch(() => { document.getElementById('list').innerHTML = '<p class="empty">Open through the bridge: localhost:8080/coaching-os/class-journal.html</p>'; });
+</script>
+</body>
+</html>
