@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BR Coaching Whiteboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --wall: #111110;
+  --surface: #1a1a18;
+  --board-bg: #e8e2d4;
+  --board-line: #d0c8b8;
+  --border: #222220;
+  --gold: #f7b408;
+  --gold-dim: rgba(247,180,8,0.12);
+  --text: #e8e4dc;
+  --text-dim: #6b6560;
+  --text-muted: #3a3835;
+  --ink: #1a1815;
+  --ink-dim: #4a4640;
+  --ink-light: #8a8580;
+  --marker-red: #c0392b;
+  --marker-blue: #2471a3;
+  --marker-green: #27ae60;
+  --green: #34d399;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --card-shadow: rgba(0,0,0,0.15);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Epilogue', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Header ── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky; top: 0; z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 10px; }
+.br-mark {
+  width: 36px; height: 36px; border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-family: Impact, sans-serif; font-size: 16px; color: var(--gold);
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}
+.header h1 { font-size: 15px; font-weight: 600; }
+.header small { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+
+/* ── Mode tabs ── */
+.mode-tabs {
+  display: flex; gap: 0; background: var(--wall);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px; overflow-x: auto;
+}
+.mode-tab {
+  padding: 10px 16px; font-size: 12px; font-weight: 500;
+  color: var(--text-dim); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap; transition: all 0.2s; user-select: none;
+}
+.mode-tab:hover { color: var(--text); }
+.mode-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* ── Main layout ── */
+.planner {
+  display: flex; height: calc(100vh - 90px);
+  background: var(--wall);
+}
+
+/* ── Drill palette (left sidebar) ── */
+.palette {
+  width: 240px; min-width: 240px;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+}
+.palette-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.palette-header h3 {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); font-weight: 600;
+}
+.palette-search {
+  width: 100%; padding: 8px 12px; margin: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 4px; color: var(--text); font-size: 12px;
+  font-family: inherit; outline: none;
+}
+.palette-search::placeholder { color: var(--text-muted); }
+.palette-search:focus { border-color: var(--gold); }
+.palette-body {
+  flex: 1; overflow-y: auto; padding: 8px;
+}
+.palette-body::-webkit-scrollbar { width: 4px; }
+.palette-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.domain-group { margin-bottom: 12px; }
+.domain-label {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600; padding: 4px 6px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.domain-label .count { font-size: 9px; color: var(--text-muted); }
+
+.drill-card-mini {
+  padding: 6px 8px; margin: 2px 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 4px; cursor: grab; font-size: 11px;
+  color: var(--text); transition: all 0.15s;
+  display: flex; align-items: center; gap: 6px;
+  position: relative;
+}
+.drill-card-mini:hover {
+  border-color: var(--gold); background: rgba(247,180,8,0.04);
+}
+.drill-card-mini.used {
+  opacity: 0.45; border-style: dashed;
+}
+.drill-card-mini.used::after {
+  content: '✓'; position: absolute; right: 6px; top: 50%;
+  transform: translateY(-50%); font-size: 10px; color: var(--green);
+}
+.drill-card-mini .mode-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.mode-shadow { background: #9b59b6; }
+.mode-partner { background: #e67e22; }
+.mode-pads { background: var(--gold); }
+.mode-bag { background: var(--marker-red); }
+.mode-solo { background: var(--marker-blue); }
+.mode-group { background: var(--green); }
+
+.add-drill-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; margin: 8px;
+  background: var(--gold-dim); border: 1px dashed rgba(247,180,8,0.25);
+  border-radius: 4px; color: var(--gold); font-size: 11px;
+  cursor: pointer; font-family: inherit; width: calc(100% - 16px);
+  transition: all 0.2s;
+}
+.add-drill-btn:hover { background: rgba(247,180,8,0.15); }
+
+/* ── Board area ── */
+.board-area {
+  flex: 1; overflow-x: auto; overflow-y: hidden;
+  padding: 16px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0, transparent 199px, rgba(247,180,8,0.03) 199px, rgba(247,180,8,0.03) 200px),
+    var(--wall);
+}
+
+.template-picker {
+  display: flex; gap: 8px; margin-bottom: 12px; align-items: center;
+}
+.template-picker label {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-dim); font-weight: 600;
+}
+.template-btn {
+  padding: 4px 10px; font-size: 11px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text-dim); cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+}
+.template-btn.active { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
+
+/* ── Section columns ── */
+.sections-row {
+  display: flex; gap: 12px; height: calc(100% - 44px);
+  min-width: max-content;
+}
+
+.section-col {
+  width: 200px; min-width: 200px;
+  background: var(--board-bg);
+  border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.section-header {
+  padding: 10px 12px;
+  background: rgba(26,24,21,0.06);
+  border-bottom: 2px solid var(--board-line);
+  text-align: center;
+}
+.section-num {
+  font-size: 10px; font-weight: 700; color: var(--ink-light);
+  letter-spacing: 1px;
+}
+.section-name {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+}
+.section-purpose {
+  font-size: 10px; color: var(--ink-light); line-height: 1.3;
+  margin-top: 2px;
+}
+.section-time {
+  font-size: 9px; color: var(--ink-light); margin-top: 4px;
+  font-weight: 600;
+}
+
+.section-body {
+  flex: 1; padding: 8px; overflow-y: auto;
+  min-height: 120px;
+}
+.section-body::-webkit-scrollbar { width: 3px; }
+.section-body::-webkit-scrollbar-thumb { background: var(--board-line); border-radius: 2px; }
+
+/* Drop zone */
+.section-body.drag-over {
+  background: rgba(247,180,8,0.08);
+  outline: 2px dashed var(--gold);
+  outline-offset: -4px;
+}
+
+.section-empty {
+  display: flex; align-items: center; justify-content: center;
+  height: 100%; color: var(--ink-light); font-size: 11px;
+  font-style: italic; text-align: center; padding: 12px;
+}
+
+/* ── Placed drill card ── */
+.placed-card {
+  background: #fffdf5;
+  border: 1px solid var(--board-line);
+  border-left: 4px solid var(--gold);
+  border-radius: 3px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  box-shadow: 1px 2px 4px var(--card-shadow);
+  position: relative;
+  cursor: default;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.placed-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 2px 3px 8px var(--card-shadow);
+}
+.placed-card .card-name {
+  font-size: 12px; font-weight: 600; color: var(--ink);
+  margin-bottom: 2px;
+}
+.placed-card .card-mode {
+  font-size: 9px; color: var(--ink-light); text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.placed-card .card-block {
+  font-size: 9px; color: var(--ink-light);
+  margin-top: 4px;
+}
+.placed-card .card-actions {
+  display: flex; gap: 4px; margin-top: 6px;
+}
+.card-action-btn {
+  padding: 2px 6px; font-size: 9px; border-radius: 3px;
+  border: 1px solid var(--board-line); background: var(--board-bg);
+  color: var(--ink-dim); cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+}
+.card-action-btn:hover { border-color: var(--ink-dim); }
+.card-action-btn.progressive { color: var(--marker-green); border-color: rgba(39,174,96,0.3); }
+.card-action-btn.progressive:hover { background: rgba(39,174,96,0.08); }
+.card-action-btn.regressive { color: var(--marker-red); border-color: rgba(192,57,43,0.3); }
+.card-action-btn.regressive:hover { background: rgba(192,57,43,0.06); }
+.card-action-btn.remove { color: var(--ink-light); }
+
+/* Direction badge on card */
+.direction-badge {
+  position: absolute; top: 4px; right: 4px;
+  font-size: 8px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 1px 5px; border-radius: 2px; font-weight: 700;
+}
+.direction-badge.prog { background: rgba(39,174,96,0.12); color: var(--marker-green); }
+.direction-badge.reg { background: rgba(192,57,43,0.1); color: var(--marker-red); }
+
+/* ── Previous class overlay ── */
+.prev-overlay {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7); z-index: 200;
+  align-items: center; justify-content: center;
+}
+.prev-overlay.open { display: flex; }
+.prev-panel {
+  background: var(--board-bg); border-radius: 8px;
+  max-width: 800px; width: 90%; max-height: 85vh;
+  overflow-y: auto; padding: 24px; color: var(--ink);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.prev-panel h2 { font-size: 18px; margin-bottom: 4px; }
+.prev-panel .meta { font-size: 12px; color: var(--ink-dim); margin-bottom: 16px; }
+.prev-section { margin-bottom: 16px; }
+.prev-section h4 {
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--ink-light); font-weight: 600; margin-bottom: 6px;
+  border-bottom: 1px solid var(--board-line); padding-bottom: 4px;
+}
+.prev-segment {
+  padding: 4px 0; border-bottom: 1px dashed rgba(0,0,0,0.06);
+  font-size: 12px;
+}
+.prev-fault {
+  padding: 6px 10px; background: rgba(192,57,43,0.06);
+  border-left: 3px solid var(--marker-red); margin-bottom: 4px;
+  border-radius: 0 3px 3px 0; font-size: 12px;
+}
+.prev-suggestion {
+  padding: 6px 10px; background: rgba(39,174,96,0.06);
+  border-left: 3px solid var(--marker-green); margin-bottom: 4px;
+  border-radius: 0 3px 3px 0; font-size: 12px;
+}
+.close-prev {
+  position: absolute; top: 12px; right: 16px; background: none;
+  border: none; font-size: 20px; color: var(--ink-light); cursor: pointer;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .palette { display: none; }
+  .planner { height: auto; min-height: calc(100vh - 90px); }
+  .section-col { width: 170px; min-width: 170px; }
+}
+
+/* ── Soundboard (Combo Composer) ── */
+.soundboard-overlay {
+  display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,0.88); z-index:200;
+  align-items:center; justify-content:center;
+}
+.soundboard-overlay.open { display:flex; }
+.soundboard-panel {
+  background:var(--bg); border:1px solid var(--border); border-radius:8px;
+  max-width:720px; width:95%; max-height:90vh; overflow-y:auto;
+  padding:20px; box-shadow:0 8px 40px rgba(0,0,0,0.6);
+}
+.sb-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.sb-header h2 { font-size:15px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:2px; }
+.sb-close { background:none; border:none; color:var(--text-dim); font-size:22px; cursor:pointer; padding:4px 8px; }
+
+.sb-sequence {
+  background:var(--surface); border:2px solid var(--gold); border-radius:6px;
+  min-height:52px; padding:10px 14px; margin-bottom:14px;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.sb-sequence.empty { border-color:var(--border); }
+.sb-sequence-text {
+  font-size:14px; font-weight:700; color:var(--text);
+  letter-spacing:0.02em; line-height:1.8; flex:1; flex-wrap:wrap; display:flex; align-items:center; gap:4px;
+}
+.sb-sequence.empty .sb-sequence-text { color:var(--text-muted); font-size:12px; font-weight:400; letter-spacing:0.06em; }
+.seq-chip {
+  display:inline-block; padding:3px 8px; border-radius:4px; font-size:12px;
+  font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+  border:1.5px solid; line-height:1.3; vertical-align:middle;
+}
+.seq-chip.c-red { color:#ef4444; border-color:rgba(220,38,38,0.35); background:rgba(220,38,38,0.08); }
+.seq-chip.c-orange { color:#f97316; border-color:rgba(249,115,22,0.35); background:rgba(249,115,22,0.08); }
+.seq-chip.c-green { color:#4ade80; border-color:rgba(74,222,128,0.35); background:rgba(74,222,128,0.08); }
+.seq-chip.c-mod { color:#c87d3a; border-color:rgba(199,125,58,0.35); background:rgba(199,125,58,0.08); }
+.seq-chip.c-concept { color:#a855f7; border-color:rgba(168,85,247,0.35); background:rgba(168,85,247,0.08); }
+.seq-arrow { color:var(--text-muted); font-size:11px; margin:0 2px; vertical-align:middle; }
+
+/* Combo families */
+.combo-families { grid-column:1/-1; }
+.combo-families-toggle {
+  background:none; border:1px solid rgba(220,38,38,0.15); border-radius:4px;
+  color:rgba(220,38,38,0.5); font-family:inherit; font-size:9px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase; padding:6px 14px; cursor:pointer;
+  width:100%; margin-bottom:8px;
+}
+.combo-families-toggle:hover { border-color:rgba(220,38,38,0.3); color:rgba(220,38,38,0.7); }
+.combo-grid { display:none; gap:6px; }
+.combo-grid.open { display:flex; flex-wrap:wrap; gap:6px; }
+.combo-group-label {
+  width:100%; font-size:8px; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; color:rgba(220,38,38,0.3); margin-top:4px;
+}
+.combo-btn {
+  background:var(--surface); border:1.5px solid rgba(220,38,38,0.2);
+  border-radius:4px; color:#ef4444; font-family:inherit; font-size:9px;
+  font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+  padding:4px 10px; cursor:pointer; white-space:nowrap;
+  transition:background 0.1s, border-color 0.1s;
+}
+.combo-btn:hover { border-color:rgba(220,38,38,0.4); background:rgba(220,38,38,0.06); }
+.combo-btn.flash { background:#ef4444; border-color:#ef4444; color:var(--bg); }
+.sb-seq-actions { display:flex; gap:6px; flex-shrink:0; }
+.sb-seq-btn {
+  padding:5px 10px; background:var(--surface); border:1px solid var(--border);
+  border-radius:4px; color:var(--text-dim); cursor:pointer; font-family:inherit;
+  font-size:11px; transition:all 0.15s;
+}
+.sb-seq-btn:hover { border-color:var(--text-dim); color:var(--text); }
+
+.sb-sections { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+@media (max-width:600px) { .sb-sections { grid-template-columns:1fr; } }
+.sb-label {
+  font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text-muted); margin-bottom:5px; padding-left:2px;
+}
+.sb-label.c-punch { color:rgba(239,68,68,0.7); }
+.sb-label.c-body { color:rgba(232,228,220,0.5); }
+.sb-label.c-defense { color:rgba(249,115,22,0.7); }
+.sb-label.c-foot { color:rgba(107,142,90,0.7); }
+.sb-label.c-mod { color:rgba(199,125,58,0.7); }
+
+.sb-grid { display:grid; gap:5px; }
+.sb-grid.g6 { grid-template-columns:repeat(3,1fr); }
+.sb-grid.g4 { grid-template-columns:repeat(4,1fr); }
+
+.sb-btn {
+  background:var(--surface); border:2px solid var(--border); border-radius:6px;
+  padding:8px 4px; cursor:pointer; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1px;
+  transition:background 0.1s, border-color 0.1s, transform 0.08s;
+  min-height:48px; user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.sb-btn:active { transform:scale(0.94); }
+.sb-btn .sb-num { font-size:20px; font-weight:800; line-height:1; }
+.sb-btn .sb-name { font-size:9px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; text-align:center; line-height:1.2; }
+.sb-btn .sb-dir { font-size:8px; letter-spacing:0.04em; text-transform:uppercase; }
+
+.sb-btn.c-punch { border-color:rgba(247,180,8,0.2); }
+.sb-btn.c-punch .sb-num { color:var(--gold); }
+.sb-btn.c-punch .sb-name { color:var(--text-dim); }
+.sb-btn.c-punch.flash { background:var(--gold); border-color:var(--gold); }
+.sb-btn.c-punch.flash .sb-num, .sb-btn.c-punch.flash .sb-name { color:var(--bg); }
+
+.sb-btn.c-body { border-color:rgba(232,228,220,0.12); }
+.sb-btn.c-body .sb-name { color:var(--text); font-size:10px; }
+.sb-btn.c-body.flash { background:var(--text); border-color:var(--text); }
+.sb-btn.c-body.flash .sb-name { color:var(--bg); }
+
+.sb-btn.c-defense { border-color:rgba(91,123,138,0.2); }
+.sb-btn.c-defense .sb-name { color:#5B7B8A; font-size:11px; }
+.sb-btn.c-defense.flash { background:#5B7B8A; border-color:#5B7B8A; }
+.sb-btn.c-defense.flash .sb-name { color:#fff; }
+
+.sb-btn.c-foot { border-color:rgba(107,142,90,0.2); }
+.sb-btn.c-foot .sb-name { color:#6B8E5A; font-size:10px; }
+.sb-btn.c-foot .sb-dir { color:rgba(107,142,90,0.4); }
+.sb-btn.c-foot.flash { background:#6B8E5A; border-color:#6B8E5A; }
+.sb-btn.c-foot.flash .sb-name, .sb-btn.c-foot.flash .sb-dir { color:#fff; }
+
+.sb-btn.c-mod { border-color:rgba(199,125,58,0.2); }
+.sb-btn.c-mod .sb-name { color:#C77D3A; font-size:10px; }
+.sb-btn.c-mod.flash { background:#C77D3A; border-color:#C77D3A; }
+.sb-btn.c-mod.flash .sb-name { color:#fff; }
+
+.sb-save-row {
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+  padding-top:12px; border-top:1px solid var(--border);
+}
+.sb-name-input {
+  flex:1; min-width:120px; padding:7px 10px;
+  background:var(--surface); border:1px solid var(--border); border-radius:4px;
+  color:var(--text); font-size:12px; font-family:inherit; outline:none;
+}
+.sb-name-input:focus { border-color:var(--gold); }
+.sb-domain-select {
+  padding:7px 8px; background:var(--surface); border:1px solid var(--border);
+  border-radius:4px; color:var(--text); font-size:11px; font-family:inherit;
+}
+.sb-save-btn {
+  padding:7px 14px; border-radius:4px; font-size:10px; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase; cursor:pointer;
+  font-family:inherit; transition:all 0.15s; border:none; white-space:nowrap;
+}
+.sb-save-btn.primary { background:var(--gold); color:var(--bg); }
+.sb-save-btn.primary:hover { background:#e5a607; }
+.sb-save-btn.secondary { background:var(--surface); color:var(--gold); border:1px solid rgba(247,180,8,0.3); }
+.sb-save-btn.secondary:hover { background:var(--gold-dim); }
+.sb-quick-row {
+  display:flex; gap:8px; align-items:center; margin-top:8px;
+  padding-top:8px; border-top:1px dashed var(--border);
+}
+.sb-or { color:var(--text-muted); font-size:9px; letter-spacing:1px; text-transform:uppercase; flex-shrink:0; }
+
+/* ── Combo Card ── */
+.combo-card-row {
+  display:none; flex-direction:column; gap:10px; align-items:center;
+  padding-top:14px; border-top:1px solid var(--border); margin-top:10px;
+}
+.combo-card-row.has-card { display:flex; }
+.combo-card-actions { display:flex; gap:8px; }
+.combo-card-actions button {
+  padding:6px 14px; border-radius:4px; font-size:9px; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
+  font-family:inherit; transition:all 0.15s; border:none;
+}
+.combo-card-actions .card-btn-primary {
+  background:var(--gold); color:var(--bg);
+}
+.combo-card-actions .card-btn-primary:hover { background:#e5a607; }
+.combo-card-actions .card-btn-secondary {
+  background:var(--surface); color:var(--text-dim); border:1px solid var(--border);
+}
+.combo-card-actions .card-btn-secondary:hover { border-color:var(--text-dim); color:var(--text); }
+
+.combo-card {
+  width:320px; min-height:180px; border-radius:10px; overflow:hidden;
+  background:#ffffff; border:1.5px solid #e0e0e0;
+  box-shadow:0 4px 16px rgba(0,0,0,0.12);
+  font-family:'Epilogue', system-ui, sans-serif;
+  position:relative;
+}
+.combo-card-inner { padding:20px 22px 16px; position:relative; z-index:1; }
+.combo-card-watermark {
+  position:absolute; bottom:10px; right:14px;
+  font-size:48px; font-weight:800; color:rgba(0,0,0,0.04);
+  letter-spacing:2px; line-height:1; z-index:0; pointer-events:none;
+  font-family:Impact, sans-serif;
+}
+.combo-card-logo-row {
+  display:flex; align-items:center; gap:8px; margin-bottom:12px;
+}
+.combo-card-logo {
+  width:28px; height:28px; border:2px solid #1a1a1a;
+  display:flex; align-items:center; justify-content:center;
+  font-family:Impact, sans-serif; font-size:12px; color:#1a1a1a;
+  clip-path:polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
+  flex-shrink:0;
+}
+.combo-card-badge {
+  display:inline-block; padding:2px 8px; border-radius:3px;
+  font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  background:rgba(247,180,8,0.15); color:#b8860b;
+}
+.combo-card-name {
+  font-size:16px; font-weight:700; color:#1a1a1a;
+  margin-bottom:12px; line-height:1.3;
+}
+.combo-card-sequence {
+  display:flex; flex-wrap:wrap; align-items:center; gap:5px;
+  margin-bottom:14px;
+}
+.combo-card-chip {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:4px 10px; border-radius:5px; font-size:11px;
+  font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+  border:1.5px solid;
+}
+.combo-card-chip.cc-red { color:#dc2626; border-color:rgba(220,38,38,0.35); background:rgba(220,38,38,0.08); }
+.combo-card-chip.cc-orange { color:#ea580c; border-color:rgba(234,88,12,0.35); background:rgba(234,88,12,0.08); }
+.combo-card-chip.cc-green { color:#16a34a; border-color:rgba(22,163,74,0.35); background:rgba(22,163,74,0.08); }
+.combo-card-chip.cc-mod { color:#a16207; border-color:rgba(161,98,7,0.35); background:rgba(161,98,7,0.08); }
+.combo-card-chip.cc-concept { color:#7c3aed; border-color:rgba(124,58,237,0.35); background:rgba(124,58,237,0.08); }
+.combo-card-arrow { color:rgba(0,0,0,0.2); font-size:12px; }
+.combo-card-footer {
+  display:flex; justify-content:space-between; align-items:flex-end;
+}
+.combo-card-brand {
+  font-size:7px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
+  color:rgba(0,0,0,0.35);
+}
+.combo-card-count {
+  font-size:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  color:rgba(0,0,0,0.25);
+}
+.combo-card-divider {
+  height:1px; background:linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+  margin:10px 0;
+}
+
+/* ── Series Builder ── */
+.series-builder-row {
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+  padding-top:10px; border-top:1px dashed rgba(247,180,8,0.2); margin-top:8px;
+}
+.series-builder-row .sb-or { flex-shrink:0; }
+.series-count-badge {
+  display:inline-block; padding:2px 10px; border-radius:10px;
+  font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  background:rgba(247,180,8,0.12); color:var(--gold);
+}
+.series-items {
+  display:flex; flex-direction:column; gap:4px; width:100%; margin-top:6px;
+}
+.series-item {
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; color:var(--text-dim);
+}
+.series-item-num {
+  width:20px; height:20px; border-radius:50%;
+  background:rgba(247,180,8,0.15); color:var(--gold);
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:800; flex-shrink:0;
+}
+.series-item-text { font-weight:600; color:var(--text); font-size:10px; letter-spacing:0.03em; }
+.series-item-remove {
+  margin-left:auto; background:none; border:none;
+  color:var(--text-muted); cursor:pointer; font-size:14px; padding:0 4px;
+}
+.series-item-remove:hover { color:var(--red); }
+
+/* ── Series Presets ── */
+.series-presets-row {
+  display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:4px;
+}
+.series-presets-row .sb-or { flex-shrink:0; }
+.preset-btn {
+  padding:3px 10px; border-radius:6px; border:1px solid rgba(247,180,8,0.25);
+  background:rgba(247,180,8,0.06); color:var(--gold); cursor:pointer;
+  font-family:'Epilogue', system-ui, sans-serif; font-size:10px; font-weight:700;
+  letter-spacing:0.04em; text-transform:uppercase; transition:all 0.15s;
+}
+.preset-btn:hover { background:rgba(247,180,8,0.15); border-color:var(--gold); }
+.preset-btn.red { color:#ef4444; border-color:rgba(239,68,68,0.25); background:rgba(239,68,68,0.06); }
+.preset-btn.red:hover { background:rgba(239,68,68,0.15); border-color:#ef4444; }
+.preset-btn.orange { color:#f97316; border-color:rgba(249,115,22,0.25); background:rgba(249,115,22,0.06); }
+.preset-btn.orange:hover { background:rgba(249,115,22,0.15); border-color:#f97316; }
+.preset-btn.green { color:#4ade80; border-color:rgba(74,222,128,0.25); background:rgba(74,222,128,0.06); }
+.preset-btn.green:hover { background:rgba(74,222,128,0.15); border-color:#4ade80; }
+
+/* ── Series Card ── */
+.series-card {
+  width:280px; border-radius:10px; overflow:hidden;
+  background:#ffffff; border:1.5px solid #e0e0e0;
+  box-shadow:0 4px 16px rgba(0,0,0,0.12);
+  font-family:'Epilogue', system-ui, sans-serif;
+  position:relative;
+}
+.series-card-inner { padding:18px 16px 14px; position:relative; z-index:1; }
+.series-card-title-row {
+  display:flex; align-items:center; gap:8px; margin-bottom:14px;
+}
+.series-card-logo {
+  width:28px; height:28px; border:2px solid #1a1a1a;
+  display:flex; align-items:center; justify-content:center;
+  font-family:Impact, sans-serif; font-size:12px; color:#1a1a1a;
+  clip-path:polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
+  flex-shrink:0;
+}
+.series-card-badge {
+  display:inline-block; padding:2px 8px; border-radius:3px;
+  font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  background:rgba(22,163,74,0.12); color:#16a34a;
+}
+.series-card-name {
+  font-size:16px; font-weight:800; color:#1a1a1a;
+  margin-bottom:3px; line-height:1.2; text-transform:uppercase; letter-spacing:0.5px;
+}
+.series-card-subtitle {
+  font-size:9px; font-weight:500; color:rgba(0,0,0,0.4);
+  margin-bottom:12px; letter-spacing:0.5px; text-transform:uppercase;
+}
+.series-card-variants { display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+.series-card-variant {
+  display:flex; align-items:flex-start; gap:10px;
+}
+.series-card-num {
+  width:20px; height:20px; border-radius:50%;
+  background:#1a1a1a; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:800; flex-shrink:0; margin-top:1px;
+}
+.series-card-var-chips {
+  display:flex; flex-wrap:wrap; align-items:center; gap:3px;
+}
+.series-card-var-chips .combo-card-chip { font-size:8px; padding:2px 6px; }
+.series-card-var-chips .combo-card-arrow { font-size:9px; }
+.series-card-footer {
+  display:flex; justify-content:space-between; align-items:flex-end;
+  border-top:1px solid rgba(0,0,0,0.08); padding-top:10px;
+}
+.series-card-brand {
+  font-size:7px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
+  color:rgba(0,0,0,0.35);
+}
+.series-card-count {
+  font-size:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  color:rgba(0,0,0,0.25);
+}
+
+/* ── Dark Skin (Instagram) ── */
+.combo-card.dark, .series-card.dark {
+  background:#0a0a0a; border-color:#222;
+}
+.combo-card.dark .combo-card-watermark { color:rgba(247,180,8,0.06); }
+.combo-card.dark .combo-card-logo, .series-card.dark .series-card-logo {
+  border-color:#f7b408; color:#f7b408;
+}
+.combo-card.dark .combo-card-badge { background:rgba(247,180,8,0.2); color:#f7b408; }
+.series-card.dark .series-card-badge { background:rgba(247,180,8,0.2); color:#f7b408; }
+.combo-card.dark .combo-card-name, .series-card.dark .series-card-name { color:#f0ece4; }
+.series-card.dark .series-card-subtitle { color:rgba(240,236,228,0.4); }
+.combo-card.dark .combo-card-chip.cc-red { color:#f87171; border-color:rgba(248,113,113,0.4); background:rgba(248,113,113,0.12); }
+.combo-card.dark .combo-card-chip.cc-orange, .series-card.dark .combo-card-chip.cc-orange { color:#fb923c; border-color:rgba(251,146,60,0.4); background:rgba(251,146,60,0.12); }
+.combo-card.dark .combo-card-chip.cc-green, .series-card.dark .combo-card-chip.cc-green { color:#4ade80; border-color:rgba(74,222,128,0.4); background:rgba(74,222,128,0.12); }
+.combo-card.dark .combo-card-chip.cc-mod { color:#fbbf24; border-color:rgba(251,191,36,0.4); background:rgba(251,191,36,0.12); }
+.combo-card.dark .combo-card-chip.cc-concept { color:#a78bfa; border-color:rgba(167,139,250,0.4); background:rgba(167,139,250,0.12); }
+.series-card.dark .combo-card-chip.cc-red { color:#f87171; border-color:rgba(248,113,113,0.4); background:rgba(248,113,113,0.12); }
+.combo-card.dark .combo-card-arrow, .series-card.dark .combo-card-arrow { color:rgba(255,255,255,0.2); }
+.combo-card.dark .combo-card-divider { background:linear-gradient(90deg, transparent, rgba(247,180,8,0.15), transparent); }
+.combo-card.dark .combo-card-brand, .combo-card.dark .combo-card-count,
+.series-card.dark .series-card-brand, .series-card.dark .series-card-count { color:rgba(247,180,8,0.35); }
+.series-card.dark .series-card-num { background:#f7b408; color:#0a0a0a; }
+.series-card.dark .series-card-footer { border-top-color:rgba(247,180,8,0.12); }
+
+/* ── Cardback ── */
+.card-back {
+  padding:16px; font-size:10px; color:#1a1a1a; line-height:1.6;
+}
+.card-back.dark { color:#e0dcd4; }
+.card-back-title {
+  font-size:8px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:rgba(0,0,0,0.35); margin-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.08);
+  padding-bottom:6px;
+}
+.card-back.dark .card-back-title { color:rgba(247,180,8,0.4); border-bottom-color:rgba(247,180,8,0.12); }
+.card-back-field { margin-bottom:8px; }
+.card-back-label {
+  font-size:8px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  color:rgba(0,0,0,0.3); margin-bottom:2px;
+}
+.card-back.dark .card-back-label { color:rgba(247,180,8,0.3); }
+.card-back-value { font-weight:600; }
+
+/* ── Card Skin Toggle ── */
+.card-toggle-row {
+  display:flex; gap:6px; align-items:center; margin-top:4px;
+}
+.skin-btn {
+  padding:3px 10px; border-radius:6px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-dim); cursor:pointer;
+  font-family:'Epilogue', system-ui, sans-serif; font-size:10px; font-weight:600;
+  transition:all 0.15s;
+}
+.skin-btn.active { border-color:var(--gold); color:var(--gold); background:rgba(247,180,8,0.08); }
+.skin-btn:hover { border-color:var(--gold); }
+
+/* ── Compass Footwork Widget ── */
+.compass-wrap { grid-column:1/-1; overflow:visible; }
+.compass-container {
+  position:relative; width:100%; max-width:520px;
+  margin:8px auto 0; aspect-ratio:1; overflow:visible;
+  padding:10px;
+}
+.compass-radar {
+  position:absolute; inset:0; width:100%; height:100%;
+  pointer-events:none; opacity:0.9;
+}
+.compass-btn {
+  position:absolute; transform:translate(-50%,-50%);
+  background:var(--surface);
+  border:2px solid rgba(74,222,128,0.25);
+  border-radius:6px; color:#4ade80;
+  font-family:inherit; font-size:8px; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase;
+  padding:5px 8px; cursor:pointer; white-space:nowrap;
+  user-select:none; -webkit-tap-highlight-color:transparent;
+  transition:background 0.1s, border-color 0.1s, transform 0.08s, box-shadow 0.1s;
+  box-shadow:
+    0 2px 0 rgba(74,222,128,0.1),
+    0 3px 6px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  z-index:2;
+}
+.compass-btn:active { transform:translate(-50%,-50%) scale(0.9); }
+.compass-btn.flash {
+  background:#4ade80; border-color:#4ade80; color:var(--bg);
+  box-shadow:0 0 16px rgba(74,222,128,0.5), 0 2px 6px rgba(0,0,0,0.4);
+}
+.compass-btn.center {
+  width:62px; height:62px; border-radius:50%;
+  font-size:10px; font-weight:800; letter-spacing:1.5px;
+  display:flex; align-items:center; justify-content:center;
+  border-color:rgba(74,222,128,0.4);
+  box-shadow:
+    0 0 24px rgba(74,222,128,0.12),
+    0 3px 8px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  z-index:3;
+}
+.compass-btn.inner {
+  font-size:7px; padding:4px 6px;
+  border-color:rgba(74,222,128,0.15); opacity:0.85;
+}
+.compass-btn.pivot {
+  font-size:7px; padding:3px 7px;
+  border-radius:12px;
+  border-color:rgba(74,222,128,0.12); opacity:0.7;
+}
+.compass-dir-label {
+  position:absolute; transform:translate(-50%,-50%);
+  font-size:8px; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; color:rgba(74,222,128,0.25);
+  pointer-events:none; z-index:1;
+}
+@keyframes compass-scan {
+  from { transform:rotate(0deg); }
+  to { transform:rotate(360deg); }
+}
+.compass-scan-line {
+  transform-origin:200px 200px;
+  animation:compass-scan 8s linear infinite;
+}
+
+/* Color variants for widget buttons */
+.compass-btn.red { border-color:rgba(220,38,38,0.3); color:#ef4444;
+  box-shadow:0 2px 0 rgba(220,38,38,0.12),0 3px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04); }
+.compass-btn.red.flash { background:#ef4444; border-color:#ef4444; color:var(--bg);
+  box-shadow:0 0 16px rgba(239,68,68,0.5),0 2px 6px rgba(0,0,0,0.4); }
+.compass-btn.red.center { border-color:rgba(220,38,38,0.45);
+  box-shadow:0 0 24px rgba(220,38,38,0.15),0 3px 8px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.06); }
+.compass-btn.red .cb-num { font-size:16px; font-weight:800; line-height:1; }
+.compass-btn.red .cb-name { font-size:7px; }
+.compass-btn.orange { border-color:rgba(249,115,22,0.3); color:#f97316;
+  box-shadow:0 2px 0 rgba(249,115,22,0.12),0 3px 6px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04); }
+.compass-btn.orange.flash { background:#f97316; border-color:#f97316; color:var(--bg);
+  box-shadow:0 0 16px rgba(249,115,22,0.5),0 2px 6px rgba(0,0,0,0.4); }
+.compass-btn.orange.center { border-color:rgba(249,115,22,0.4);
+  box-shadow:0 0 20px rgba(249,115,22,0.12),0 3px 8px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.06); }
+.widget-portrait { max-width:340px; aspect-ratio:3/4; }
+.widget-tall { max-width:380px; aspect-ratio:2/3; }
+.widget-zone-label {
+  position:absolute; transform:translate(-50%,-50%);
+  font-size:7px; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; pointer-events:none; z-index:1; opacity:0.3;
+}
+
+/* Concept cards */
+.mode-concept { background:#a855f7; }
+.sb-btn.c-concept { border-color:rgba(168,85,247,0.2); }
+.sb-btn.c-concept .sb-name { color:#a855f7; font-size:10px; }
+.sb-btn.c-concept.flash { background:#a855f7; border-color:#a855f7; }
+.sb-btn.c-concept.flash .sb-name { color:#fff; }
+.sb-label.c-concept { color:rgba(168,85,247,0.7); }
+.placed-card[data-mode="concept"] { border-left-color:#a855f7; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="br-mark">BR</div>
+    <div>
+      <h1>The Whiteboard</h1>
+      <small>coaching cockpit</small>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button class="template-btn" id="prevBtn" style="color:var(--gold);border-color:rgba(247,180,8,0.3);">← Previous Class</button>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <div class="mode-tab active" data-mode="plan">Plan Next Class</div>
+  <div class="mode-tab" data-mode="review">Review</div>
+  <div class="mode-tab" data-mode="week">The Week</div>
+  <div class="mode-tab" data-mode="clients">Clients</div>
+</div>
+
+<div class="planner" id="planView">
+  <!-- Drill palette -->
+  <div class="palette">
+    <div class="palette-header">
+      <h3>Drills</h3>
+      <span style="font-size:10px;color:var(--text-muted)" id="drillCount">—</span>
+    </div>
+    <div style="padding:8px">
+      <input class="palette-search" placeholder="Search drills..." id="drillSearch">
+    </div>
+    <div class="palette-body" id="drillPalette"></div>
+    <button class="add-drill-btn" id="addDrillBtn" onclick="openSoundboard()">⚡ Compose</button>
+  </div>
+
+  <!-- Board area -->
+  <div class="board-area">
+    <div class="template-picker">
+      <label>Template:</label>
+      <button class="template-btn active" data-tmpl="paul_8">Paul 8</button>
+      <button class="template-btn" data-tmpl="standard_6">Standard 6</button>
+      <button class="template-btn" data-tmpl="kids_5">Kids 5</button>
+    </div>
+    <div class="sections-row" id="sectionsRow"></div>
+  </div>
+</div>
+
+<!-- Previous class overlay -->
+<div class="prev-overlay" id="prevOverlay">
+  <div class="prev-panel" style="position:relative;" id="prevPanel">
+    <button class="close-prev" id="closePrev">×</button>
+    <div id="prevContent">Loading...</div>
+  </div>
+</div>
+
+<!-- Soundboard (Combo Composer) -->
+<div class="soundboard-overlay" id="soundboardOverlay">
+  <div class="soundboard-panel">
+    <div class="sb-header">
+      <h2>Combo Composer</h2>
+      <button class="sb-close" onclick="closeSoundboard()">×</button>
+    </div>
+    <div class="sb-sequence empty" id="sbSequence">
+      <div class="sb-sequence-text" id="sbSequenceText">Tap atoms to compose</div>
+      <div class="sb-seq-actions">
+        <button class="sb-seq-btn" onclick="sbUndo()">← Undo</button>
+        <button class="sb-seq-btn" onclick="sbClear()">Clear</button>
+      </div>
+    </div>
+    <div class="sb-sections" id="sbSections"></div>
+    <div class="sb-save-row">
+      <input class="sb-name-input" id="sbDrillName" placeholder="Drill name (auto from sequence)" oninput="renderComboCard()">
+      <select class="sb-domain-select" id="sbDomain">
+        <option value="combos">Combos</option>
+        <option value="defense">Defense</option>
+        <option value="footwork">Footwork</option>
+        <option value="conditioning">Conditioning</option>
+        <option value="warm_up">Warm-Up</option>
+        <option value="concepts">Concepts</option>
+      </select>
+      <button class="sb-save-btn secondary" onclick="sbSave(false)">Save</button>
+      <button class="sb-save-btn primary" onclick="sbSave(true)">Save & Place</button>
+    </div>
+    <div class="sb-quick-row">
+      <span class="sb-or">or quick add:</span>
+      <input class="sb-name-input" id="sbQuickName" placeholder="Type a drill name..." style="flex:1">
+      <button class="sb-save-btn secondary" onclick="sbQuickAdd()">+ Add</button>
+    </div>
+    <div class="series-builder-row">
+      <span class="sb-or">series builder:</span>
+      <button class="sb-save-btn secondary" onclick="addToSeries()" id="addToSeriesBtn">+ Add to Series</button>
+      <button class="sb-save-btn secondary" onclick="clearSeries()" id="clearSeriesBtn" style="display:none">Clear Series</button>
+      <span class="series-count-badge" id="seriesCountBadge" style="display:none">0 variants</span>
+      <div class="series-items" id="seriesItems"></div>
+    </div>
+    <div class="series-presets-row">
+      <span class="sb-or">foundation:</span>
+      <button class="preset-btn red" onclick="loadPreset('jab')">Jab</button>
+      <button class="preset-btn red" onclick="loadPreset('cross')">Cross</button>
+      <button class="preset-btn red" onclick="loadPreset('hook')">Hook</button>
+      <button class="preset-btn red" onclick="loadPreset('uppercut')">Uppercut</button>
+      <button class="preset-btn orange" onclick="loadPreset('defense')">Defense</button>
+      <button class="preset-btn green" onclick="loadPreset('footwork')">Footwork</button>
+    </div>
+    <div class="series-presets-row">
+      <span class="sb-or">beginner week:</span>
+      <button class="preset-btn" onclick="loadPreset('bw_day1')">Day 1</button>
+      <button class="preset-btn" onclick="loadPreset('bw_day2')">Day 2</button>
+      <button class="preset-btn" onclick="loadPreset('bw_day3')">Day 3</button>
+      <button class="preset-btn" onclick="loadPreset('bw_day4')">Day 4</button>
+      <button class="preset-btn" onclick="loadPreset('bw_day5')">Day 5</button>
+    </div>
+    <div class="combo-card-row" id="comboCardRow">
+      <div id="comboCardPreview"></div>
+      <div class="combo-card-actions">
+        <button class="card-btn-primary" onclick="exportComboCard()">Download Card</button>
+        <button class="card-btn-secondary" onclick="copyComboCard()">Copy Image</button>
+        <div class="card-toggle-row">
+          <span class="sb-or">skin:</span>
+          <button class="skin-btn active" id="skinLight" onclick="setCardSkin('light')">Email</button>
+          <button class="skin-btn" id="skinDark" onclick="setCardSkin('dark')">Instagram</button>
+          <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-dim);margin-left:8px;cursor:pointer">
+            <input type="checkbox" id="cardbackToggle" onchange="renderComboCard()"> Back
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/api/coaching';
+let allDrills = [];
+let usedDrillIds = new Set();
+let templates = {};
+let currentTemplate = 'paul_8';
+let placedCards = {}; // sectionNum -> [drillId, ...]
+let journal = null;
+
+// ── Load data ──
+async function init() {
+  await Promise.all([loadDrills(), loadTemplates(), loadJournal(), loadUsedDrills()]);
+  renderPalette();
+  renderSections();
+}
+
+async function loadDrills() {
+  try {
+    const r = await fetch('/api/coaching/drills');
+    if (r.ok) { allDrills = await r.json(); return; }
+  } catch(e) {}
+  // Fallback: embedded drill data will be loaded from DB via API
+  // If API not available, we'll use the static list
+  allDrills = [];
+}
+
+async function loadTemplates() {
+  try {
+    const r = await fetch('/api/coaching/templates');
+    if (r.ok) { const t = await r.json(); t.forEach(x => templates[x.id] = JSON.parse(x.segments)); return; }
+  } catch(e) {}
+  // Hardcoded fallback
+  templates = {
+    paul_8: [
+      {num:1, name:"Warm-Up", purpose:"General movement, raise temperature", time_range:[5,8]},
+      {num:2, name:"Coordination", purpose:"Fun coordination challenge, names, energy", time_range:[5,10]},
+      {num:3, name:"Agility", purpose:"Footwork agility, line drills, reactions", time_range:[5,8]},
+      {num:4, name:"Footwork", purpose:"Boxing-specific footwork patterns", time_range:[5,10]},
+      {num:5, name:"Bagwork", purpose:"Technique on heavy bags", time_range:[10,15]},
+      {num:6, name:"Padwork", purpose:"Partner pads — combinations and timing", time_range:[8,12]},
+      {num:7, name:"Partner Drill", purpose:"Live partner work — defense, counters, pressure", time_range:[8,12]},
+      {num:8, name:"Conditioning", purpose:"Finisher — high intensity or cool-down", time_range:[5,10]}
+    ],
+    standard_6: [
+      {num:1, name:"Icebreaker", purpose:"Break tension, learn names, establish energy", time_range:[5,12]},
+      {num:2, name:"Warm-Up", purpose:"Raise heart rate, build coordination", time_range:[8,15]},
+      {num:3, name:"Main Drill", purpose:"Teaching block. Technique on bags or shadow", time_range:[12,20]},
+      {num:4, name:"Correction", purpose:"Self-correcting drills that expose bad habits", time_range:[8,15]},
+      {num:5, name:"Application", purpose:"Partner work. Live but controlled", time_range:[8,15]},
+      {num:6, name:"Finisher", purpose:"Fun, shared suffering, or cool-down", time_range:[5,10]}
+    ],
+    kids_5: [
+      {num:1, name:"Game", purpose:"High-energy game, set the tone", time_range:[8,12]},
+      {num:2, name:"Movement", purpose:"Coordination and agility through play", time_range:[8,10]},
+      {num:3, name:"Technique", purpose:"One thing. Keep it simple. Repetition.", time_range:[10,15]},
+      {num:4, name:"Challenge", purpose:"Partner or bag challenge with technique", time_range:[8,12]},
+      {num:5, name:"Finisher", purpose:"Team game or conditioning challenge", time_range:[5,8]}
+    ]
+  };
+}
+
+async function loadJournal() {
+  try {
+    const r = await fetch('/coaching-os/class-journal.json');
+    if (r.ok) journal = await r.json();
+  } catch(e) {}
+}
+
+async function loadUsedDrills() {
+  try {
+    const r = await fetch('/api/coaching/used-drills');
+    if (r.ok) { const ids = await r.json(); usedDrillIds = new Set(ids); return; }
+  } catch(e) {}
+  // Fallback: hardcoded from class_segments
+  usedDrillIds = new Set(['tennis-ball-foot-catch','fw-03','fw-08','df-02','df-01','cb-01','fw-07','line-drill-agility','cb-02']);
+}
+
+// ── Render palette ──
+function renderPalette() {
+  const palette = document.getElementById('drillPalette');
+  if (!allDrills.length) {
+    // Use hardcoded domain groups if API unavailable
+    renderHardcodedPalette();
+    return;
+  }
+  const byDomain = {};
+  allDrills.forEach(d => {
+    if (!byDomain[d.domain]) byDomain[d.domain] = [];
+    byDomain[d.domain].push(d);
+  });
+  palette.innerHTML = Object.entries(byDomain).sort().map(([domain, drills]) => `
+    <div class="domain-group" data-domain="${domain}">
+      <div class="domain-label" onclick="this.parentElement.classList.toggle('collapsed')">
+        ${domain.replace('_',' ')} <span class="count">${drills.length}</span>
+      </div>
+      ${drills.sort((a,b) => a.name.localeCompare(b.name)).map(d => drillMiniCard(d)).join('')}
+    </div>
+  `).join('');
+  document.getElementById('drillCount').textContent = allDrills.length;
+}
+
+function renderHardcodedPalette() {
+  const palette = document.getElementById('drillPalette');
+  const domains = {
+    combos: [{id:'cb-01',name:'1-2 (Jab-Cross)',mode:'pads',block_min:1,block_max:1},{id:'cb-02',name:'1-2-3 (Jab-Cross-Hook)',mode:'pads',block_min:1,block_max:1},{id:'cb-03',name:'1-1-2',mode:'pads',block_min:2,block_max:2},{id:'cb-04',name:'2-3-2',mode:'pads',block_min:3,block_max:3},{id:'cb-05',name:'1-2-3-2',mode:'pads',block_min:3,block_max:3},{id:'cb-06',name:'Body-Head Switch',mode:'pads',block_min:4,block_max:4},{id:'cb-07',name:'Jab-Body Cross',mode:'pads',block_min:3,block_max:3},{id:'cb-08',name:'3-2-1',mode:'pads',block_min:5,block_max:5},{id:'cb-09',name:'Counter 1-2 off Slip',mode:'partner',block_min:4,block_max:4},{id:'cb-10',name:'Uppercut Entry',mode:'pads',block_min:5,block_max:5},{id:'jab-defend-reset',name:'Jab → Defend → Reset',mode:'solo',block_min:1,block_max:10},{id:'one-two-defend-reset',name:'1-2 → Defend → Reset',mode:'solo',block_min:1,block_max:10},{id:'one-two-hook-defend',name:'1-2-3 → Defend → Reset',mode:'solo',block_min:1,block_max:10},{id:'partner-light-jab-defence',name:'Partner Light Jab + Defence',mode:'partner',block_min:1,block_max:10},{id:'shadow-boxing-free',name:'Shadow Boxing (Free)',mode:'solo',block_min:1,block_max:10}],
+    conditioning: [{id:'cn-01',name:'Tabata Bag Rounds',mode:'bag',block_min:1,block_max:1},{id:'cn-02',name:'Burpee-Punch Complex',mode:'solo',block_min:2,block_max:2},{id:'cn-03',name:'Rope Intervals',mode:'solo',block_min:1,block_max:1},{id:'cn-04',name:'Medicine Ball Relay',mode:'partner',block_min:3,block_max:3},{id:'cn-05',name:'Shadow Sprint Intervals',mode:'shadow',block_min:2,block_max:2},{id:'cn-06',name:'Plank-Guard Complex',mode:'solo',block_min:1,block_max:1},{id:'circle-punches-core',name:'Circle Sit-Up Punches',mode:'solo',block_min:1,block_max:10}],
+    defense: [{id:'df-01',name:'Slip Inside/Outside',mode:'partner',block_min:2,block_max:2},{id:'df-02',name:'Catch & Return',mode:'pads',block_min:1,block_max:1},{id:'df-03',name:'Roll Under Hook',mode:'partner',block_min:3,block_max:3},{id:'df-04',name:'Parry-Cross',mode:'pads',block_min:2,block_max:2},{id:'df-05',name:'Pull Counter',mode:'partner',block_min:5,block_max:5},{id:'df-06',name:'Shell Defense',mode:'partner',block_min:4,block_max:4},{id:'df-07',name:'Check Hook',mode:'pads',block_min:6,block_max:6},{id:'df-08',name:'Shoulder Roll',mode:'shadow',block_min:7,block_max:7},{id:'one-legged-bagwork',name:'One-Legged Bag Work',mode:'solo',block_min:1,block_max:10}],
+    footwork: [{id:'fw-01',name:'L-Step Entry',mode:'shadow',block_min:2,block_max:2},{id:'fw-02',name:'Pendulum Step',mode:'shadow',block_min:1,block_max:1},{id:'fw-03',name:'Lateral Pivot',mode:'shadow',block_min:3,block_max:3},{id:'fw-04',name:'Triangle Step',mode:'partner',block_min:4,block_max:4},{id:'fw-05',name:'Cut-Off Angles',mode:'partner',block_min:5,block_max:5},{id:'fw-06',name:'Ring Generalship',mode:'partner',block_min:7,block_max:7},{id:'fw-07',name:'Cone Weave',mode:'solo',block_min:1,block_max:1},{id:'fw-08',name:'Step-Drag Basics',mode:'shadow',block_min:1,block_max:1},{id:'tennis-ball-basketball',name:'Tennis Ball Basketball',mode:'solo',block_min:1,block_max:10},{id:'numbers-footwork',name:'Numbers Footwork',mode:'solo',block_min:1,block_max:10},{id:'gen-1781020103875-0',name:'Duck & Drive',mode:'partner',block_min:5,block_max:5},{id:'gen-1781020103875-1',name:'Floor Touch Body Hunt',mode:'partner',block_min:5,block_max:5}],
+    icebreaker: [{id:'tennis-ball-foot-catch',name:'Tennis Ball Foot Catch',mode:'solo',block_min:1,block_max:10},{id:'push-up-punishment',name:'Friendly Push-Up Tax',mode:'solo',block_min:1,block_max:10}],
+    mindset: [{id:'ms-01',name:'Breathing Rounds',mode:'solo',block_min:1,block_max:1},{id:'ms-02',name:'Pressure Comfort',mode:'partner',block_min:3,block_max:3},{id:'ms-03',name:'One Punch Only',mode:'partner',block_min:2,block_max:2},{id:'ms-04',name:'Eyes Open Drill',mode:'partner',block_min:2,block_max:2},{id:'ms-05',name:'Recovery Round',mode:'solo',block_min:3,block_max:3},{id:'ms-06',name:'Visualization',mode:'solo',block_min:1,block_max:1}],
+    strategy: [{id:'st-01',name:'Pressure Fighting',mode:'partner',block_min:6,block_max:6},{id:'st-02',name:'Counter Fighting',mode:'partner',block_min:5,block_max:5},{id:'st-03',name:'Range Control',mode:'partner',block_min:4,block_max:4},{id:'st-04',name:'Tempo Breaking',mode:'partner',block_min:7,block_max:7},{id:'st-05',name:'Feint Game',mode:'shadow',block_min:4,block_max:4},{id:'st-06',name:'Body Attack Plan',mode:'pads',block_min:5,block_max:5}],
+    warm_up: [{id:'line-drill-agility',name:'Line Drill Agility',mode:'solo',block_min:1,block_max:10},{id:'reaction-drop-drill',name:'Reaction Drop Drill',mode:'solo',block_min:1,block_max:10},{id:'skip-rope-recovery',name:'Skip Rope Recovery',mode:'solo',block_min:1,block_max:10}],
+    concepts: [{id:'con-balance',name:'Balance',mode:'concept',block_min:1,block_max:10},{id:'con-holding-line',name:'Holding the Line',mode:'concept',block_min:1,block_max:10},{id:'con-trapping',name:'Trapping',mode:'concept',block_min:3,block_max:10},{id:'con-clinching',name:'Clinching',mode:'concept',block_min:4,block_max:10},{id:'con-distance',name:'Distance Management',mode:'concept',block_min:2,block_max:10},{id:'con-timing',name:'Timing',mode:'concept',block_min:3,block_max:10},{id:'con-rhythm',name:'Rhythm',mode:'concept',block_min:2,block_max:10},{id:'con-body-mechanics',name:'Body Mechanics',mode:'concept',block_min:1,block_max:10},{id:'con-weight-transfer',name:'Weight Transfer',mode:'concept',block_min:1,block_max:10},{id:'con-guard',name:'Guard Position',mode:'concept',block_min:1,block_max:10},{id:'con-ring-iq',name:'Ring IQ',mode:'concept',block_min:5,block_max:10},{id:'con-pressure',name:'Pressure',mode:'concept',block_min:4,block_max:10},{id:'con-angles',name:'Angles',mode:'concept',block_min:3,block_max:10},{id:'con-recovery',name:'Recovery',mode:'concept',block_min:2,block_max:10}]
+  };
+
+  // Flatten for allDrills reference
+  allDrills = Object.values(domains).flat();
+
+  palette.innerHTML = Object.entries(domains).map(([domain, drills]) => `
+    <div class="domain-group" data-domain="${domain}">
+      <div class="domain-label" onclick="this.parentElement.classList.toggle('collapsed')">
+        ${domain.replace('_',' ')} <span class="count">${drills.length}</span>
+      </div>
+      ${drills.map(d => drillMiniCard(d)).join('')}
+    </div>
+  `).join('');
+  document.getElementById('drillCount').textContent = allDrills.length;
+}
+
+function drillMiniCard(d) {
+  const used = usedDrillIds.has(d.id);
+  return `
+    <div class="drill-card-mini ${used ? 'used' : ''}"
+         draggable="true"
+         data-drill-id="${d.id}"
+         data-name="${esc(d.name)}"
+         data-mode="${d.mode || 'solo'}"
+         data-block="${d.block_min || 1}-${d.block_max || 10}"
+         title="${esc(d.name)} (${d.mode || 'solo'}, Block ${d.block_min || 1}${d.block_max && d.block_max !== d.block_min ? '-'+d.block_max : ''})">
+      <span class="mode-dot mode-${d.mode || 'solo'}"></span>
+      ${esc(d.name)}
+    </div>
+  `;
+}
+
+// ── Render sections ──
+function renderSections() {
+  const row = document.getElementById('sectionsRow');
+  const segs = templates[currentTemplate] || [];
+  placedCards = {};
+  segs.forEach(s => placedCards[s.num] = []);
+
+  row.innerHTML = segs.map(s => `
+    <div class="section-col" data-section="${s.num}">
+      <div class="section-header">
+        <div class="section-num">${s.num}</div>
+        <div class="section-name">${esc(s.name)}</div>
+        <div class="section-purpose">${esc(s.purpose)}</div>
+        <div class="section-time">${s.time_range[0]}–${s.time_range[1]} min</div>
+      </div>
+      <div class="section-body" data-section="${s.num}">
+        <div class="section-empty">Drop a drill card here</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Setup drop zones
+  row.querySelectorAll('.section-body').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const drillId = e.dataTransfer.getData('text/plain');
+      if (drillId) placeDrill(drillId, parseInt(zone.dataset.section));
+    });
+  });
+}
+
+function placeDrill(drillId, sectionNum) {
+  const drill = allDrills.find(d => d.id === drillId);
+  if (!drill) return;
+  if (!placedCards[sectionNum]) placedCards[sectionNum] = [];
+  placedCards[sectionNum].push({ id: drillId, direction: null });
+
+  const zone = document.querySelector(`.section-body[data-section="${sectionNum}"]`);
+  const empty = zone.querySelector('.section-empty');
+  if (empty) empty.remove();
+
+  const card = document.createElement('div');
+  card.className = 'placed-card';
+  card.dataset.drillId = drillId;
+  card.dataset.mode = drill.mode || 'solo';
+  card.innerHTML = `
+    <div class="card-name">${esc(drill.name)}</div>
+    <div class="card-mode">${drill.mode || 'solo'}</div>
+    <div class="card-block">Block ${drill.block_min || 1}${drill.block_max && drill.block_max !== drill.block_min ? '–' + drill.block_max : ''}</div>
+    <div class="card-actions">
+      <button class="card-action-btn progressive" onclick="setDirection(this,'prog')" title="Progress: what comes next">▲ Next</button>
+      <button class="card-action-btn regressive" onclick="setDirection(this,'reg')" title="Regress: fundamentals needed">▼ Back</button>
+      <button class="card-action-btn remove" onclick="removeCard(this)" title="Remove">✕</button>
+    </div>
+  `;
+  zone.appendChild(card);
+
+  // Mark as used in palette
+  const palCard = document.querySelector(`.drill-card-mini[data-drill-id="${drillId}"]`);
+  if (palCard) palCard.classList.add('used');
+}
+
+function setDirection(btn, dir) {
+  const card = btn.closest('.placed-card');
+  const existing = card.querySelector('.direction-badge');
+  if (existing) {
+    if (existing.classList.contains(dir)) { existing.remove(); return; }
+    existing.remove();
+  }
+  const badge = document.createElement('span');
+  badge.className = `direction-badge ${dir}`;
+  badge.textContent = dir === 'prog' ? '▲ PROGRESS' : '▼ REGRESS';
+  card.appendChild(badge);
+}
+
+function removeCard(btn) {
+  const card = btn.closest('.placed-card');
+  const zone = card.parentElement;
+  const drillId = card.dataset.drillId;
+  card.remove();
+  if (!zone.children.length) {
+    zone.innerHTML = '<div class="section-empty">Drop a drill card here</div>';
+  }
+  // Un-mark in palette only if not in usedDrillIds (historical)
+  if (!usedDrillIds.has(drillId)) {
+    const palCard = document.querySelector(`.drill-card-mini[data-drill-id="${drillId}"]`);
+    if (palCard) palCard.classList.remove('used');
+  }
+}
+
+// ── Drag from palette ──
+document.addEventListener('dragstart', e => {
+  const card = e.target.closest('.drill-card-mini');
+  if (!card) return;
+  e.dataTransfer.setData('text/plain', card.dataset.drillId);
+  e.dataTransfer.effectAllowed = 'copy';
+});
+
+// ── Click to place (alternative to drag) ──
+document.addEventListener('click', e => {
+  const card = e.target.closest('.drill-card-mini');
+  if (!card || e.target.closest('.placed-card')) return;
+  // Find first empty section or section with fewest cards
+  const sections = templates[currentTemplate] || [];
+  let targetSection = sections[0]?.num || 1;
+  let minCards = Infinity;
+  sections.forEach(s => {
+    const count = (placedCards[s.num] || []).length;
+    if (count < minCards) { minCards = count; targetSection = s.num; }
+  });
+  placeDrill(card.dataset.drillId, targetSection);
+});
+
+// ── Template picker ──
+document.querySelector('.template-picker').addEventListener('click', e => {
+  const btn = e.target.closest('.template-btn');
+  if (!btn || !btn.dataset.tmpl) return;
+  currentTemplate = btn.dataset.tmpl;
+  document.querySelectorAll('.template-picker .template-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSections();
+});
+
+// ── Search ──
+document.getElementById('drillSearch').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll('.drill-card-mini').forEach(card => {
+    const name = card.dataset.name.toLowerCase();
+    const domain = card.closest('.domain-group')?.dataset.domain || '';
+    card.style.display = (!q || name.includes(q) || domain.includes(q)) ? '' : 'none';
+  });
+  document.querySelectorAll('.domain-group').forEach(g => {
+    const visible = g.querySelectorAll('.drill-card-mini:not([style*="display: none"])').length;
+    g.style.display = visible ? '' : 'none';
+  });
+});
+
+// ── Previous class overlay ──
+document.getElementById('prevBtn').addEventListener('click', () => {
+  renderPrevious();
+  document.getElementById('prevOverlay').classList.add('open');
+});
+document.getElementById('closePrev').addEventListener('click', () => {
+  document.getElementById('prevOverlay').classList.remove('open');
+});
+document.getElementById('prevOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('prevOverlay'))
+    document.getElementById('prevOverlay').classList.remove('open');
+});
+
+function renderPrevious() {
+  const panel = document.getElementById('prevContent');
+  if (!journal || !journal.classes || !journal.classes.length) {
+    panel.innerHTML = '<p style="color:var(--ink-light);text-align:center;padding:40px;">No previous class data yet.</p>';
+    return;
+  }
+  const classes = journal.classes.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  const cls = classes[0];
+  const faults = extractFaults(cls.summary);
+  const segments = (cls.segments || []).filter(s => s.drill_name || (s.drill_notes && s.drill_notes !== 'Skipped - started late.'));
+
+  panel.innerHTML = `
+    <h2>${esc(cls.title)}</h2>
+    <div class="meta">${cls.date || ''} · ${cls.group || ''} · ${cls.athletes || '?'} athletes</div>
+    ${cls.summary ? `<div class="prev-section"><h4>Summary</h4><p style="font-size:12px;line-height:1.5">${esc(cls.summary)}</p></div>` : ''}
+    ${segments.length ? `
+      <div class="prev-section"><h4>Segments (${segments.length})</h4>
+        ${segments.map((s,i) => `<div class="prev-segment"><strong>${i+1}. ${esc(s.drill_name || s.segment_name)}</strong>${s.drill_notes ? ' — <span style="color:var(--ink-dim)">'+esc(s.drill_notes)+'</span>' : ''}</div>`).join('')}
+      </div>` : ''}
+    ${faults.length ? `
+      <div class="prev-section"><h4>Faults</h4>
+        ${faults.map(f => `<div class="prev-fault">${esc(f)}</div>`).join('')}
+      </div>` : ''}
+    ${cls.suggestions?.length ? `
+      <div class="prev-section"><h4>Corrections / Next Steps</h4>
+        ${cls.suggestions.map(s => `<div class="prev-suggestion">${esc(s)}</div>`).join('')}
+      </div>` : ''}
+  `;
+}
+
+function extractFaults(summary) {
+  if (!summary) return [];
+  const m = summary.match(/(?:main\s+)?faults?:?\s*(.*?)$/i);
+  if (!m) return [];
+  return m[1].split(/,\s*/).map(f => f.trim()).filter(Boolean);
+}
+
+// ── Soundboard (Combo Composer) ──
+const SB_ATOMS = {
+  punches: {
+    label: 'Punches', color: 'punch', target: true
+  },
+  defense: {
+    label: 'Defense', color: 'defense', opponent: true
+  },
+  footwork: {
+    label: 'Footwork', color: 'foot', compass: true
+  },
+  modifiers: {
+    label: 'Modifiers', color: 'mod', cols: 'g4',
+    atoms: [
+      { name:'Double' }, { name:'Feint' }, { name:'Switch' }, { name:'Reset' }
+    ]
+  },
+  concepts: {
+    label: 'Concepts', color: 'concept', cols: 'g4',
+    atoms: [
+      { name:'Balance' }, { name:'Timing' }, { name:'Distance' }, { name:'Pressure' },
+      { name:'Rhythm' }, { name:'Angles' }, { name:'Ring IQ' }, { name:'Recovery' },
+      { name:'Trapping' }, { name:'Clinching' }, { name:'Guard' }, { name:'Body Mechanics' }
+    ]
+  }
+};
+
+const sbParts = [];
+
+function renderSoundboard() {
+  document.getElementById('sbSections').innerHTML = Object.entries(SB_ATOMS).map(([key, section]) => {
+    if (section.compass) return renderCompass();
+    if (section.target) return renderTarget();
+    if (section.opponent) return renderOpponent();
+    return `<div class="sb-section"${key === 'modifiers' ? ' style="grid-column:1/-1"' : ''}>
+      <div class="sb-label c-${section.color}">${section.label}</div>
+      <div class="sb-grid ${section.cols}">
+        ${section.atoms.map(a => `
+          <button class="sb-btn c-${section.color}" data-atom="${esc(a.name)}">
+            ${a.num ? `<span class="sb-num">${a.num}</span>` : ''}
+            <span class="sb-name">${esc(a.name)}</span>
+            ${a.dir ? `<span class="sb-dir">${a.dir}</span>` : ''}
+          </button>
+        `).join('')}
+      </div>
+    </div>`;
+  }).join('') + renderComboFamilies();
+}
+
+const COMBO_FAMILIES = {
+  doubles: [
+    { label:'1-1', atoms:['Jab','Jab'] },
+    { label:'1-2', atoms:['Jab','Cross'] },
+    { label:'1-3', atoms:['Jab','L Hook'] },
+    { label:'1-5', atoms:['Jab','L Upper'] },
+    { label:'2-3', atoms:['Cross','L Hook'] },
+    { label:'2-5', atoms:['Cross','L Upper'] },
+    { label:'2-6', atoms:['Cross','R Upper'] },
+    { label:'3-4', atoms:['L Hook','R Hook'] },
+    { label:'3-2', atoms:['L Hook','Cross'] },
+  ],
+  triples: [
+    { label:'1-2-3', atoms:['Jab','Cross','L Hook'] },
+    { label:'1-2-1', atoms:['Jab','Cross','Jab'] },
+    { label:'1-2-5', atoms:['Jab','Cross','L Upper'] },
+    { label:'1-2-6', atoms:['Jab','Cross','R Upper'] },
+    { label:'1-1-2', atoms:['Jab','Jab','Cross'] },
+    { label:'1-3-2', atoms:['Jab','L Hook','Cross'] },
+    { label:'2-3-2', atoms:['Cross','L Hook','Cross'] },
+    { label:'3-2-1', atoms:['L Hook','Cross','Jab'] },
+  ]
+};
+
+function renderComboFamilies() {
+  return `<div class="combo-families">
+    <button class="combo-families-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▾ Combo Families':'▸ Combo Families'">▸ Combo Families</button>
+    <div class="combo-grid" id="comboGrid">
+      <div class="combo-group-label">Doubles</div>
+      ${COMBO_FAMILIES.doubles.map(c => `<button class="combo-btn" data-combo='${JSON.stringify(c.atoms)}'>${c.label}</button>`).join('')}
+      <div class="combo-group-label">Triples</div>
+      ${COMBO_FAMILIES.triples.map(c => `<button class="combo-btn" data-combo='${JSON.stringify(c.atoms)}'>${c.label}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderCompass() {
+  const btns = [
+    { name:'Guard', cls:'center', x:50, y:50 },
+    { name:'Half Fwd', cls:'', x:50, y:38 },
+    { name:'Full Fwd', cls:'', x:50, y:27 },
+    { name:'Double Fwd', cls:'', x:50, y:18 },
+    { name:'Shuffle Fwd', cls:'', x:50, y:8 },
+    { name:'Half Back', cls:'', x:50, y:62 },
+    { name:'Full Back', cls:'', x:50, y:73 },
+    { name:'Double Back', cls:'', x:50, y:82 },
+    { name:'Shuffle Back', cls:'', x:50, y:92 },
+    { name:'Half L', cls:'', x:38, y:50 },
+    { name:'Full L', cls:'', x:27, y:50 },
+    { name:'Double L', cls:'', x:19, y:50 },
+    { name:'Shuffle L', cls:'', x:9, y:50 },
+    { name:'Half R', cls:'', x:62, y:50 },
+    { name:'Full R', cls:'', x:73, y:50 },
+    { name:'Double R', cls:'', x:81, y:50 },
+    { name:'Shuffle R', cls:'', x:91, y:50 },
+    { name:'Step In', cls:'inner', x:38, y:38 },
+    { name:'Step Out', cls:'inner', x:62, y:38 },
+    { name:'Pendulum', cls:'inner', x:38, y:62 },
+    { name:'Side-Side', cls:'inner', x:62, y:62 },
+    { name:'Pivot CW', cls:'pivot', x:22, y:22 },
+    { name:'Pivot CCW', cls:'pivot', x:78, y:22 },
+    { name:'Front Pivot', cls:'pivot', x:22, y:78 },
+    { name:'Rear Pivot', cls:'pivot', x:78, y:78 },
+  ];
+  return `<div class="compass-wrap">
+    <div class="sb-label c-foot">Footwork</div>
+    <div class="compass-container">
+      <svg class="compass-radar" viewBox="0 0 400 400">
+        <circle cx="200" cy="200" r="48" fill="none" stroke="rgba(74,222,128,0.07)" stroke-width="1"/>
+        <circle cx="200" cy="200" r="92" fill="none" stroke="rgba(74,222,128,0.09)" stroke-width="1"/>
+        <circle cx="200" cy="200" r="132" fill="none" stroke="rgba(74,222,128,0.07)" stroke-width="1"/>
+        <circle cx="200" cy="200" r="172" fill="none" stroke="rgba(74,222,128,0.05)" stroke-width="1"/>
+        <line x1="200" y1="8" x2="200" y2="392" stroke="rgba(74,222,128,0.07)" stroke-width="1"/>
+        <line x1="8" y1="200" x2="392" y2="200" stroke="rgba(74,222,128,0.07)" stroke-width="1"/>
+        <line x1="44" y1="44" x2="356" y2="356" stroke="rgba(74,222,128,0.03)" stroke-width="1" stroke-dasharray="4,8"/>
+        <line x1="356" y1="44" x2="44" y2="356" stroke="rgba(74,222,128,0.03)" stroke-width="1" stroke-dasharray="4,8"/>
+        <line class="compass-scan-line" x1="200" y1="200" x2="200" y2="12" stroke="rgba(74,222,128,0.1)" stroke-width="1"/>
+        <text x="200" y="18" text-anchor="middle" fill="rgba(74,222,128,0.2)" font-size="10" font-family="Epilogue,sans-serif" letter-spacing="3" font-weight="600">FWD</text>
+        <text x="200" y="394" text-anchor="middle" fill="rgba(74,222,128,0.2)" font-size="10" font-family="Epilogue,sans-serif" letter-spacing="3" font-weight="600">BACK</text>
+        <text x="14" y="204" text-anchor="start" fill="rgba(74,222,128,0.2)" font-size="10" font-family="Epilogue,sans-serif" letter-spacing="2" font-weight="600">L</text>
+        <text x="386" y="204" text-anchor="end" fill="rgba(74,222,128,0.2)" font-size="10" font-family="Epilogue,sans-serif" letter-spacing="2" font-weight="600">R</text>
+        <!-- Orthodox stance feet -->
+        <g opacity="0.15">
+          <ellipse cx="188" cy="212" rx="6" ry="11" fill="rgba(74,222,128,0.15)" stroke="rgba(74,222,128,0.4)" stroke-width="1" transform="rotate(-15 188 212)"/>
+          <ellipse cx="212" cy="188" rx="6" ry="11" fill="rgba(74,222,128,0.15)" stroke="rgba(74,222,128,0.4)" stroke-width="1" transform="rotate(-15 212 188)"/>
+          <text x="200" y="238" text-anchor="middle" fill="rgba(74,222,128,1)" font-size="7" font-family="Epilogue,sans-serif" letter-spacing="2" font-weight="600">ORTHODOX</text>
+        </g>
+      </svg>
+      ${btns.map(b => `<button class="compass-btn ${b.cls}" data-atom="${esc(b.name)}" style="left:${b.x}%;top:${b.y}%">${esc(b.name)}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderTarget() {
+  const btns = [
+    { name:'Jab', num:'1', x:38, y:18 },
+    { name:'Cross', num:'2', x:62, y:18 },
+    { name:'L Hook', num:'3', x:24, y:13 },
+    { name:'R Hook', num:'4', x:76, y:13 },
+    { name:'L Upper', num:'5', x:38, y:28 },
+    { name:'R Upper', num:'6', x:62, y:28 },
+    { name:'Jab Body', num:'7', x:40, y:52 },
+    { name:'Cross Body', num:'8', x:60, y:52 },
+    { name:'Hook Body L', num:'9', x:26, y:45 },
+    { name:'Hook Body R', num:'10', x:74, y:45 },
+    { name:'Upper Body L', num:'11', x:40, y:62 },
+    { name:'Upper Body R', num:'12', x:60, y:62 },
+  ];
+  return `<div class="sb-section">
+    <div class="sb-label c-punch">Punches &amp; Body</div>
+    <div class="compass-container widget-portrait" style="overflow:visible">
+      <svg class="compass-radar" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid meet">
+        <!-- Figure: head -->
+        <circle cx="150" cy="52" r="26" fill="rgba(220,38,38,0.04)" stroke="rgba(220,38,38,0.12)" stroke-width="1.5"/>
+        <!-- Neck -->
+        <line x1="150" y1="78" x2="150" y2="95" stroke="rgba(220,38,38,0.08)" stroke-width="4"/>
+        <!-- Shoulders -->
+        <line x1="90" y1="100" x2="210" y2="100" stroke="rgba(220,38,38,0.08)" stroke-width="3"/>
+        <!-- Torso -->
+        <path d="M105,100 L105,210 Q105,230 120,235 L150,240 L180,235 Q195,230 195,210 L195,100" fill="rgba(220,38,38,0.025)" stroke="rgba(220,38,38,0.07)" stroke-width="1.5"/>
+        <!-- Center line -->
+        <line x1="150" y1="78" x2="150" y2="240" stroke="rgba(220,38,38,0.03)" stroke-width="0.5" stroke-dasharray="4,6"/>
+        <!-- Arms -->
+        <path d="M90,100 L70,145 L85,180" fill="none" stroke="rgba(220,38,38,0.06)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M210,100 L230,145 L215,180" fill="none" stroke="rgba(220,38,38,0.06)" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Boxing gloves -->
+        <ellipse cx="83" cy="178" rx="10" ry="12" fill="rgba(220,38,38,0.06)" stroke="rgba(220,38,38,0.15)" stroke-width="1.5"/>
+        <line x1="83" y1="166" x2="83" y2="162" stroke="rgba(220,38,38,0.1)" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="217" cy="178" rx="10" ry="12" fill="rgba(220,38,38,0.06)" stroke="rgba(220,38,38,0.15)" stroke-width="1.5"/>
+        <line x1="217" y1="166" x2="217" y2="162" stroke="rgba(220,38,38,0.1)" stroke-width="3" stroke-linecap="round"/>
+        <!-- Waist line -->
+        <line x1="100" y1="195" x2="200" y2="195" stroke="rgba(220,38,38,0.04)" stroke-width="0.5"/>
+        <!-- Legs hint -->
+        <line x1="130" y1="240" x2="120" y2="320" stroke="rgba(220,38,38,0.04)" stroke-width="2"/>
+        <line x1="170" y1="240" x2="180" y2="320" stroke="rgba(220,38,38,0.04)" stroke-width="2"/>
+        <!-- Zone labels -->
+        <text x="150" y="16" text-anchor="middle" fill="rgba(220,38,38,0.2)" font-size="9" font-family="Epilogue,sans-serif" letter-spacing="3" font-weight="600">HEAD</text>
+        <text x="150" y="390" text-anchor="middle" fill="rgba(220,38,38,0.2)" font-size="9" font-family="Epilogue,sans-serif" letter-spacing="3" font-weight="600">BODY</text>
+        <!-- BR branding -->
+        <text x="150" y="355" text-anchor="middle" fill="rgba(220,38,38,0.06)" font-size="11" font-family="Anton,sans-serif" letter-spacing="4">BASIC REFLEX</text>
+      </svg>
+      ${btns.map(b => `<button class="compass-btn red${b.num ? '' : ' inner'}" data-atom="${esc(b.name)}" style="left:${b.x}%;top:${b.y}%">${b.num ? `<span class="cb-num">${b.num}</span><br>` : ''}${esc(b.name)}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderOpponent() {
+  const btns = [
+    // Top — Pull Back center, Front Blocks as horns
+    { name:'Pull Back', cls:'inner', x:50, y:4 },
+    { name:'Front Block L', cls:'', x:30, y:4 },
+    { name:'Front Block R', cls:'', x:70, y:4 },
+    // Head defense — Catch → Slip → Roll (L/R pairs)
+    { name:'L Catch', cls:'', x:26, y:12 },
+    { name:'R Catch', cls:'', x:74, y:12 },
+    { name:'L Slip', cls:'', x:26, y:20 },
+    { name:'R Slip', cls:'', x:74, y:20 },
+    { name:'Duck', cls:'', x:50, y:22 },
+    { name:'L Roll', cls:'', x:26, y:28 },
+    { name:'R Roll', cls:'', x:74, y:28 },
+    // Hook blocks — sides
+    { name:'Hook Block L', cls:'', x:10, y:22 },
+    { name:'Hook Block R', cls:'', x:90, y:22 },
+    // Body defense
+    { name:'L Elbow Check', cls:'inner', x:40, y:48 },
+    { name:'R Elbow Check', cls:'inner', x:60, y:48 },
+    { name:'L Body Block', cls:'', x:16, y:48 },
+    { name:'R Body Block', cls:'', x:84, y:48 },
+    // Clinch
+    { name:'Clinch L', cls:'', x:35, y:60 },
+    { name:'Clinch R', cls:'', x:65, y:60 },
+    // Steps
+    { name:'Step L', cls:'inner', x:28, y:74 },
+    { name:'Step R', cls:'inner', x:72, y:74 },
+    { name:'Step Back', cls:'', x:50, y:80 },
+  ];
+  return `<div class="sb-section">
+    <div class="sb-label c-defense">Defense</div>
+    <div class="compass-container widget-tall" style="overflow:visible">
+      <svg class="compass-radar" viewBox="0 0 300 450" preserveAspectRatio="xMidYMid meet">
+        <!-- Figure: head -->
+        <circle cx="150" cy="55" r="24" fill="rgba(249,115,22,0.035)" stroke="rgba(249,115,22,0.1)" stroke-width="1.5"/>
+        <!-- Boxing helmet -->
+        <path d="M126,55 Q126,30 150,28 Q174,30 174,55" fill="none" stroke="rgba(249,115,22,0.18)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M126,55 L124,62" fill="none" stroke="rgba(249,115,22,0.12)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M174,55 L176,62" fill="none" stroke="rgba(249,115,22,0.12)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="134" y1="68" x2="166" y2="68" stroke="rgba(249,115,22,0.08)" stroke-width="1.5"/>
+        <!-- Neck -->
+        <line x1="150" y1="79" x2="150" y2="92" stroke="rgba(249,115,22,0.07)" stroke-width="4"/>
+        <!-- Shoulders -->
+        <line x1="90" y1="97" x2="210" y2="97" stroke="rgba(249,115,22,0.07)" stroke-width="3"/>
+        <!-- Torso -->
+        <path d="M105,97 L105,220 Q105,240 120,245 L150,250 L180,245 Q195,240 195,220 L195,97" fill="rgba(249,115,22,0.02)" stroke="rgba(249,115,22,0.06)" stroke-width="1.5"/>
+        <!-- Arms in guard — fists up near chin -->
+        <path d="M90,97 L75,130 L95,115" fill="none" stroke="rgba(249,115,22,0.06)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M210,97 L225,130 L205,115" fill="none" stroke="rgba(249,115,22,0.06)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="95" cy="112" r="5" fill="rgba(249,115,22,0.035)" stroke="rgba(249,115,22,0.07)" stroke-width="1"/>
+        <circle cx="205" cy="112" r="5" fill="rgba(249,115,22,0.035)" stroke="rgba(249,115,22,0.07)" stroke-width="1"/>
+        <!-- Waist -->
+        <line x1="105" y1="195" x2="195" y2="195" stroke="rgba(249,115,22,0.04)" stroke-width="0.5"/>
+        <!-- Center line -->
+        <line x1="150" y1="79" x2="150" y2="250" stroke="rgba(249,115,22,0.025)" stroke-width="0.5" stroke-dasharray="4,6"/>
+        <!-- Legs hint -->
+        <line x1="130" y1="250" x2="118" y2="350" stroke="rgba(249,115,22,0.035)" stroke-width="2"/>
+        <line x1="170" y1="250" x2="182" y2="350" stroke="rgba(249,115,22,0.035)" stroke-width="2"/>
+        <!-- Zone labels -->
+        <text x="150" y="16" text-anchor="middle" fill="rgba(249,115,22,0.2)" font-size="8" font-family="Epilogue,sans-serif" letter-spacing="2" font-weight="600">HEAD</text>
+        <text x="150" y="210" text-anchor="middle" fill="rgba(249,115,22,0.12)" font-size="8" font-family="Epilogue,sans-serif" letter-spacing="2" font-weight="600">BODY</text>
+        <text x="150" y="440" text-anchor="middle" fill="rgba(249,115,22,0.2)" font-size="8" font-family="Epilogue,sans-serif" letter-spacing="2" font-weight="600">STEPS</text>
+        <!-- BR branding -->
+        <text x="150" y="385" text-anchor="middle" fill="rgba(249,115,22,0.05)" font-size="11" font-family="Anton,sans-serif" letter-spacing="4">BASIC REFLEX</text>
+      </svg>
+      ${btns.map(b => `<button class="compass-btn orange ${b.cls}" data-atom="${esc(b.name)}" style="left:${b.x}%;top:${b.y}%">${esc(b.name)}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function sbTap(name, btn) {
+  let color = 'green';
+  if (btn.classList.contains('red')) color = 'red';
+  else if (btn.classList.contains('orange')) color = 'orange';
+  else if (btn.classList.contains('c-mod')) color = 'mod';
+  else if (btn.classList.contains('c-concept')) color = 'concept';
+  sbParts.push({ name, color });
+  btn.classList.add('flash');
+  setTimeout(() => btn.classList.remove('flash'), 180);
+  if (navigator.vibrate) navigator.vibrate(30);
+  sbUpdateDisplay();
+}
+
+function sbUndo() { if (sbParts.length) { sbParts.pop(); sbUpdateDisplay(); } }
+function sbClear() { sbParts.length = 0; sbUpdateDisplay(); }
+
+function sbUpdateDisplay() {
+  const seq = document.getElementById('sbSequence');
+  const text = document.getElementById('sbSequenceText');
+  if (!sbParts.length) {
+    seq.classList.add('empty');
+    text.innerHTML = '';
+    text.textContent = 'Tap atoms to compose';
+  } else {
+    seq.classList.remove('empty');
+    text.innerHTML = sbParts.map((p, i) =>
+      (i > 0 ? '<span class="seq-arrow">→</span>' : '') +
+      `<span class="seq-chip c-${p.color}">${esc(p.name)}</span>`
+    ).join('');
+  }
+  renderComboCard();
+}
+
+const seriesVariants = [];
+let seriesName = '';
+
+function addToSeries() {
+  if (!sbParts.length) return;
+  seriesVariants.push(sbParts.map(p => ({ ...p })));
+  sbParts.length = 0;
+  sbUpdateDisplay();
+  updateSeriesUI();
+}
+
+function removeFromSeries(idx) {
+  seriesVariants.splice(idx, 1);
+  updateSeriesUI();
+}
+
+function clearSeries() {
+  seriesVariants.length = 0;
+  updateSeriesUI();
+}
+
+const SERIES_PRESETS = {
+  jab: {
+    name: 'Jab Series',
+    variants: [
+      [{ name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Jab', color: 'red' }],
+      [{ name: 'Jab Body', color: 'red' }],
+      [{ name: 'Jab Body', color: 'red' }, { name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'L Slip', color: 'orange' }, { name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Step Back', color: 'green' }, { name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }],
+    ]
+  },
+  cross: {
+    name: 'Cross Series',
+    variants: [
+      [{ name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Cross Body', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross Body', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'R Slip', color: 'orange' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'Step Back', color: 'green' }, { name: 'Step Fwd', color: 'green' }, { name: 'Cross', color: 'red' }],
+    ]
+  },
+  hook: {
+    name: 'Hook Series',
+    variants: [
+      [{ name: 'L Hook', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Hook', color: 'red' }],
+      [{ name: 'L Hook Body', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Hook Body', color: 'red' }],
+      [{ name: 'L Hook', color: 'red' }, { name: 'R Hook', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Hook', color: 'red' }, { name: 'Duck', color: 'orange' }, { name: 'L Hook Body', color: 'red' }],
+    ]
+  },
+  uppercut: {
+    name: 'Uppercut Series',
+    variants: [
+      [{ name: 'R Uppercut', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'R Uppercut', color: 'red' }],
+      [{ name: 'L Uppercut', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Uppercut', color: 'red' }],
+      [{ name: 'L Uppercut', color: 'red' }, { name: 'R Uppercut', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'R Uppercut', color: 'red' }, { name: 'L Hook', color: 'red' }, { name: 'Cross', color: 'red' }],
+    ]
+  },
+  defense: {
+    name: 'Defense Series',
+    variants: [
+      [{ name: 'L Slip', color: 'orange' }],
+      [{ name: 'L Slip', color: 'orange' }, { name: 'R Slip', color: 'orange' }],
+      [{ name: 'Duck', color: 'orange' }],
+      [{ name: 'L Roll', color: 'orange' }, { name: 'R Roll', color: 'orange' }],
+      [{ name: 'L Slip', color: 'orange' }, { name: 'Cross', color: 'red' }, { name: 'R Slip', color: 'orange' }, { name: 'L Hook', color: 'red' }],
+      [{ name: 'Pull Back', color: 'orange' }, { name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }],
+    ]
+  },
+  footwork: {
+    name: 'Footwork Series',
+    variants: [
+      [{ name: 'Step Fwd', color: 'green' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Step Back', color: 'green' }],
+      [{ name: 'Step L', color: 'green' }, { name: 'Step R', color: 'green' }],
+      [{ name: 'L Pivot', color: 'green' }, { name: 'R Pivot', color: 'green' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }, { name: 'Step Back', color: 'green' }],
+      [{ name: 'L Pivot', color: 'green' }, { name: 'Cross', color: 'red' }, { name: 'Step Back', color: 'green' }, { name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }],
+    ]
+  }
+};
+
+const BEGINNER_WEEK_PRESETS = {
+  bw_day1: {
+    name: 'Day 1 — Stance & Guard',
+    variants: [
+      [{ name: 'Stance', color: 'green' }],
+      [{ name: 'Guard Up', color: 'orange' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Step Back', color: 'green' }],
+      [{ name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Jab', color: 'red' }],
+      [{ name: 'Guard Up', color: 'orange' }, { name: 'Jab', color: 'red' }, { name: 'Guard Up', color: 'orange' }],
+    ]
+  },
+  bw_day2: {
+    name: 'Day 2 — The Jab',
+    variants: [
+      [{ name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Jab', color: 'red' }],
+      [{ name: 'Jab Body', color: 'red' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Step Back', color: 'green' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Jab', color: 'red' }, { name: 'Step Back', color: 'green' }],
+    ]
+  },
+  bw_day3: {
+    name: 'Day 3 — The Cross',
+    variants: [
+      [{ name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Cross Body', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'Step Back', color: 'green' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'Jab', color: 'red' }],
+    ]
+  },
+  bw_day4: {
+    name: 'Day 4 — Defense Basics',
+    variants: [
+      [{ name: 'L Slip', color: 'orange' }],
+      [{ name: 'R Slip', color: 'orange' }],
+      [{ name: 'L Slip', color: 'orange' }, { name: 'R Slip', color: 'orange' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'L Slip', color: 'orange' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Slip', color: 'orange' }],
+      [{ name: 'L Slip', color: 'orange' }, { name: 'Cross', color: 'red' }, { name: 'R Slip', color: 'orange' }, { name: 'L Hook', color: 'red' }],
+    ]
+  },
+  bw_day5: {
+    name: 'Day 5 — Putting It Together',
+    variants: [
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Hook', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Slip', color: 'orange' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'Step Back', color: 'green' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'Duck', color: 'orange' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Hook', color: 'red' }, { name: 'Step Back', color: 'green' }, { name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }],
+    ]
+  }
+};
+
+let cardSkin = 'light';
+
+function setCardSkin(skin) {
+  cardSkin = skin;
+  document.getElementById('skinLight').classList.toggle('active', skin === 'light');
+  document.getElementById('skinDark').classList.toggle('active', skin === 'dark');
+  renderComboCard();
+}
+
+function getCardbackHTML(name, parts, isDark) {
+  if (!document.getElementById('cardbackToggle')?.checked) return '';
+  const cls = isDark ? ' dark' : '';
+  return `<div class="${parts ? 'combo-card' : 'series-card'}${isDark ? ' dark' : ''}" style="margin-top:8px">
+    <div class="card-back${cls}">
+      <div class="card-back-title">Coaching Notes</div>
+      <div class="card-back-field"><div class="card-back-label">Purpose</div><div class="card-back-value" contenteditable="true" style="min-height:1.5em;outline:none;border-bottom:1px dashed ${isDark ? 'rgba(247,180,8,0.15)' : 'rgba(0,0,0,0.08)'};padding-bottom:4px">—</div></div>
+      <div class="card-back-field"><div class="card-back-label">Common Mistakes</div><div class="card-back-value" contenteditable="true" style="min-height:1.5em;outline:none;border-bottom:1px dashed ${isDark ? 'rgba(247,180,8,0.15)' : 'rgba(0,0,0,0.08)'};padding-bottom:4px">—</div></div>
+      <div class="card-back-field"><div class="card-back-label">Cues</div><div class="card-back-value" contenteditable="true" style="min-height:1.5em;outline:none">—</div></div>
+    </div>
+  </div>`;
+}
+
+function loadPreset(key) {
+  const allPresets = { ...SERIES_PRESETS, ...BEGINNER_WEEK_PRESETS };
+  const preset = allPresets[key];
+  if (!preset) return;
+  seriesVariants.length = 0;
+  preset.variants.forEach(v => seriesVariants.push(v.map(p => ({ ...p }))));
+  sbParts.length = 0;
+  sbUpdateDisplay();
+  document.getElementById('sbDrillName').value = preset.name;
+  updateSeriesUI();
+}
+
+function updateSeriesUI() {
+  const badge = document.getElementById('seriesCountBadge');
+  const clearBtn = document.getElementById('clearSeriesBtn');
+  const items = document.getElementById('seriesItems');
+  if (!seriesVariants.length) {
+    badge.style.display = 'none';
+    clearBtn.style.display = 'none';
+    items.innerHTML = '';
+    renderComboCard();
+    return;
+  }
+  badge.style.display = 'inline-block';
+  badge.textContent = seriesVariants.length + ' variant' + (seriesVariants.length > 1 ? 's' : '');
+  clearBtn.style.display = '';
+  items.innerHTML = seriesVariants.map((variant, i) =>
+    `<div class="series-item">
+      <span class="series-item-num">${i + 1}</span>
+      <span class="series-item-text">${variant.map(p => p.name).join(' → ')}</span>
+      <button class="series-item-remove" onclick="removeFromSeries(${i})">×</button>
+    </div>`
+  ).join('');
+  renderSeriesCard();
+}
+
+function renderSeriesCard() {
+  const row = document.getElementById('comboCardRow');
+  const preview = document.getElementById('comboCardPreview');
+  if (!seriesVariants.length) { row.classList.remove('has-card'); preview.innerHTML = ''; return; }
+  row.classList.add('has-card');
+  const name = document.getElementById('sbDrillName').value.trim() || guessSeriesName();
+  const totalSteps = seriesVariants.reduce((sum, v) => sum + v.length, 0);
+  const variantsHTML = seriesVariants.map((variant, i) => {
+    const chips = variant.map((p, j) =>
+      (j > 0 ? '<span class="combo-card-arrow">→</span>' : '') +
+      `<span class="combo-card-chip cc-${p.color}">${esc(p.name)}</span>`
+    ).join('');
+    return `<div class="series-card-variant">
+      <span class="series-card-num">${i + 1}</span>
+      <div class="series-card-var-chips">${chips}</div>
+    </div>`;
+  }).join('');
+
+  const dk = cardSkin === 'dark' ? ' dark' : '';
+  preview.innerHTML = `<div class="series-card${dk}" id="comboCardEl">
+    <div class="series-card-inner">
+      <div class="series-card-title-row">
+        <div class="series-card-logo">BR</div>
+        <div class="series-card-badge">Series Card</div>
+      </div>
+      <div class="series-card-name">${esc(name)}</div>
+      <div class="series-card-subtitle">${seriesVariants.length} variants · ${totalSteps} total steps</div>
+      <div class="series-card-variants">${variantsHTML}</div>
+      <div class="series-card-footer">
+        <span class="series-card-brand">Basic Reflex · Cuban School of Boxing</span>
+        <span class="series-card-count">${seriesVariants.length} level progression</span>
+      </div>
+    </div>
+  </div>` + getCardbackHTML(name, null, cardSkin === 'dark');
+}
+
+function guessSeriesName() {
+  if (!seriesVariants.length) return 'Series';
+  const first = seriesVariants[0];
+  if (first.length === 1) return first[0].name + ' Series';
+  return first.map(p => p.name).join('-') + ' Series';
+}
+
+function renderComboCard() {
+  if (seriesVariants.length) { renderSeriesCard(); return; }
+  const row = document.getElementById('comboCardRow');
+  const preview = document.getElementById('comboCardPreview');
+  if (!sbParts.length) { row.classList.remove('has-card'); preview.innerHTML = ''; return; }
+  row.classList.add('has-card');
+  const name = document.getElementById('sbDrillName').value.trim() || sbParts.map(p => p.name).join(' → ');
+  const domainCounts = {};
+  sbParts.forEach(p => { domainCounts[p.color] = (domainCounts[p.color] || 0) + 1; });
+  const countParts = [];
+  if (domainCounts.red) countParts.push(domainCounts.red + ' punch' + (domainCounts.red > 1 ? 'es' : ''));
+  if (domainCounts.orange) countParts.push(domainCounts.orange + ' defense');
+  if (domainCounts.green) countParts.push(domainCounts.green + ' footwork');
+  if (domainCounts.mod) countParts.push(domainCounts.mod + ' mod' + (domainCounts.mod > 1 ? 's' : ''));
+  const countText = sbParts.length + ' steps' + (countParts.length ? ' · ' + countParts.join(' · ') : '');
+  const chips = sbParts.map((p, i) =>
+    (i > 0 ? '<span class="combo-card-arrow">→</span>' : '') +
+    `<span class="combo-card-chip cc-${p.color}">${esc(p.name)}</span>`
+  ).join('');
+  const watermarkNum = sbParts.filter(p => p.color === 'red').length || sbParts.length;
+  const dk = cardSkin === 'dark' ? ' dark' : '';
+  preview.innerHTML = `<div class="combo-card${dk}" id="comboCardEl">
+    <div class="combo-card-watermark">${watermarkNum}</div>
+    <div class="combo-card-inner">
+      <div class="combo-card-logo-row">
+        <div class="combo-card-logo">BR</div>
+        <div class="combo-card-badge">Combo Card</div>
+      </div>
+      <div class="combo-card-name">${esc(name)}</div>
+      <div class="combo-card-sequence">${chips}</div>
+      <div class="combo-card-divider"></div>
+      <div class="combo-card-footer">
+        <span class="combo-card-brand">Basic Reflex · Cuban School of Boxing</span>
+        <span class="combo-card-count">${countText}</span>
+      </div>
+    </div>
+  </div>` + getCardbackHTML(name, sbParts, cardSkin === 'dark');
+}
+
+function exportComboCard() {
+  const card = document.getElementById('comboCardEl');
+  if (!card) return;
+  const bgColor = cardSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+  html2canvas(card, { scale: 3, backgroundColor: bgColor, useCORS: true }).then(canvas => {
+    canvas.toBlob(b => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      const drillName = document.getElementById('sbDrillName').value.trim() || sbParts.map(p => p.name).join('-');
+      const skinSuffix = cardSkin === 'dark' ? '-ig' : '';
+      a.download = 'combo-card-' + drillName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() + skinSuffix + '.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, 'image/png');
+  });
+}
+
+async function copyComboCard() {
+  const card = document.getElementById('comboCardEl');
+  if (!card) return;
+  try {
+    const bgColor = cardSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+    const canvas = await html2canvas(card, { scale: 3, backgroundColor: bgColor, useCORS: true });
+    canvas.toBlob(async b => {
+      await navigator.clipboard.write([new ClipboardItem({'image/png': b})]);
+    }, 'image/png');
+  } catch(e) { console.error('Copy failed', e); }
+}
+
+function openSoundboard() {
+  renderSoundboard();
+  sbClear();
+  clearSeries();
+  document.getElementById('sbDrillName').value = '';
+  document.getElementById('soundboardOverlay').classList.add('open');
+}
+
+function closeSoundboard() {
+  document.getElementById('soundboardOverlay').classList.remove('open');
+}
+
+function addDrillToPalette(drill, domain) {
+  let group = document.querySelector(`.domain-group[data-domain="${domain}"]`);
+  if (!group) {
+    group = document.createElement('div');
+    group.className = 'domain-group';
+    group.dataset.domain = domain;
+    group.innerHTML = `<div class="domain-label" onclick="this.parentElement.classList.toggle('collapsed')">${domain.replace('_',' ')} <span class="count">0</span></div>`;
+    document.getElementById('drillPalette').prepend(group);
+  }
+  group.insertAdjacentHTML('beforeend', drillMiniCard(drill));
+  group.querySelector('.count').textContent = group.querySelectorAll('.drill-card-mini').length;
+  document.getElementById('drillCount').textContent = allDrills.length;
+}
+
+function sbSave(andPlace) {
+  if (!sbParts.length) return;
+  const name = document.getElementById('sbDrillName').value.trim() || sbParts.map(p => p.name).join(' → ');
+  const domain = document.getElementById('sbDomain').value;
+  const id = 'sb-' + Date.now();
+  const drill = { id, name, mode: 'partner', block_min: 1, block_max: 10, domain };
+  allDrills.push(drill);
+  addDrillToPalette(drill, domain);
+  if (andPlace) {
+    const sections = templates[currentTemplate] || [];
+    let target = sections[0]?.num || 1, min = Infinity;
+    sections.forEach(s => { const c = (placedCards[s.num]||[]).length; if (c < min) { min = c; target = s.num; } });
+    placeDrill(id, target);
+  }
+  sbClear();
+  document.getElementById('sbDrillName').value = '';
+  closeSoundboard();
+}
+
+function sbQuickAdd() {
+  const input = document.getElementById('sbQuickName');
+  const name = input.value.trim();
+  if (!name) return;
+  const id = 'idea-' + Date.now();
+  const drill = { id, name, mode: 'solo', block_min: 1, block_max: 10, domain: 'ideas' };
+  allDrills.push(drill);
+  addDrillToPalette(drill, 'ideas');
+  input.value = '';
+  closeSoundboard();
+}
+
+// Soundboard event delegation
+document.getElementById('sbSections').addEventListener('click', e => {
+  const combo = e.target.closest('.combo-btn');
+  if (combo && combo.dataset.combo) {
+    const atoms = JSON.parse(combo.dataset.combo);
+    atoms.forEach(a => sbParts.push({ name: a, color: 'red' }));
+    combo.classList.add('flash');
+    setTimeout(() => combo.classList.remove('flash'), 180);
+    if (navigator.vibrate) navigator.vibrate(30);
+    sbUpdateDisplay();
+    return;
+  }
+  const btn = e.target.closest('.sb-btn') || e.target.closest('.compass-btn');
+  if (!btn || !btn.dataset.atom) return;
+  sbTap(btn.dataset.atom, btn);
+});
+
+document.getElementById('soundboardOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('soundboardOverlay')) closeSoundboard();
+});
+
+// ── Mode tabs (simple show/hide for now) ──
+document.querySelector('.mode-tabs').addEventListener('click', e => {
+  const tab = e.target.closest('.mode-tab');
+  if (!tab) return;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  // For now only plan view is built
+  if (tab.dataset.mode !== 'plan') {
+    document.getElementById('planView').querySelector('.board-area').innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:14px;">
+        ${tab.dataset.mode === 'review' ? 'Review mode — see Previous Class button ↑' :
+          tab.dataset.mode === 'week' ? 'Week view coming next — needs schedule data' :
+          'Client boards — needs student data in coaching.db'}
+      </div>
+    `;
+  } else {
+    renderSections();
+  }
+});
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+init();
+</script>
+</body>
+</html>
