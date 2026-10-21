@@ -313,6 +313,7 @@ module.exports = function mountCoachingApi(app) {
       const cls = db.prepare('SELECT * FROM classes WHERE id = ?').get(req.params.id);
       if (!cls) { db.close(); return res.status(404).json({ error: 'not found' }); }
       cls.segments = db.prepare('SELECT * FROM class_segments WHERE class_id = ? ORDER BY segment_num').all(req.params.id);
+      cls.observations = db.prepare('SELECT * FROM class_observations WHERE class_id = ? ORDER BY timestamp').all(req.params.id);
       db.close();
       res.json(cls);
     } catch (e) { res.status(500).json({ error: e.message }); }
@@ -585,6 +586,49 @@ module.exports = function mountCoachingApi(app) {
 
       db.close();
       res.json({ ok: true, id });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ── Client Progress — passport tracking ───────────────────────────
+  app.get('/coaching/progress', (req, res) => {
+    try {
+      const db = getDb();
+      const rows = db.prepare('SELECT * FROM client_progress ORDER BY student_name, series_key').all();
+      db.close();
+      const grouped = {};
+      for (const r of rows) {
+        if (!grouped[r.student_name]) grouped[r.student_name] = [];
+        grouped[r.student_name].push(r);
+      }
+      res.json(grouped);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  app.get('/coaching/progress/:name', (req, res) => {
+    try {
+      const db = getDb();
+      const rows = db.prepare('SELECT * FROM client_progress WHERE student_name = ? ORDER BY series_key').all(req.params.name);
+      db.close();
+      res.json(rows);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  app.post('/coaching/progress', express.json(), (req, res) => {
+    try {
+      const db = getDb();
+      const { student_name, series_key, level_completed, total_levels, notes } = req.body;
+      if (!student_name || !series_key) return res.status(400).json({ error: 'student_name, series_key required' });
+      const completed_date = (level_completed || 0) >= (total_levels || 6) ? new Date().toISOString().slice(0, 10) : null;
+      db.prepare(`INSERT INTO client_progress (student_name, series_key, level_completed, total_levels, completed_date, notes)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(student_name, series_key) DO UPDATE SET
+          level_completed = excluded.level_completed,
+          total_levels = excluded.total_levels,
+          completed_date = excluded.completed_date,
+          notes = excluded.notes`)
+        .run(student_name, series_key, level_completed || 0, total_levels || 6, completed_date, notes || null);
+      db.close();
+      res.json({ ok: true });
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class Summary Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111110;
+  --border: #222220;
+  --gold: #f7b408;
+  --gold-dim: rgba(247,180,8,0.12);
+  --text: #e8e4dc;
+  --text-dim: #6b6560;
+  --red: #ef4444;
+  --orange: #f97316;
+  --green: #4ade80;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Epilogue', system-ui, sans-serif;
+  min-height: 100vh;
+  padding:16px;
+}
+
+.header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:20px;
+}
+.header-title { font-size:18px; font-weight:700; color:var(--gold); }
+.header-sub { font-size:11px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+.back-btn {
+  padding:6px 14px; border-radius:6px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-dim); cursor:pointer;
+  font-family:'Epilogue', sans-serif; font-size:11px; text-decoration:none;
+}
+.back-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ── Class Picker ── */
+.picker {
+  display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;
+}
+.picker-btn {
+  padding:8px 14px; border-radius:6px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-dim); cursor:pointer;
+  font-family:'Epilogue', sans-serif; font-size:11px; font-weight:600;
+  transition:all 0.15s;
+}
+.picker-btn:hover { border-color:var(--gold); color:var(--gold); }
+.picker-btn.active { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+
+/* ── Actions ── */
+.actions {
+  display:flex; gap:8px; align-items:center; margin-bottom:20px; flex-wrap:wrap;
+}
+.action-btn {
+  padding:8px 16px; border-radius:6px; font-family:'Epilogue', sans-serif;
+  font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s;
+  border:1px solid var(--border); background:var(--surface); color:var(--text-dim);
+}
+.action-btn:hover { border-color:var(--gold); color:var(--gold); }
+.action-btn.primary { background:var(--gold); color:#0a0a0a; border:none; }
+.action-btn.primary:hover { background:#e5a607; }
+.skin-group { display:flex; gap:0; margin-left:auto; }
+.skin-btn {
+  padding:6px 12px; border:1px solid var(--border); background:var(--surface);
+  color:var(--text-dim); font-family:'Epilogue', sans-serif; font-size:10px;
+  font-weight:600; cursor:pointer; letter-spacing:0.5px;
+}
+.skin-btn:first-child { border-radius:6px 0 0 6px; }
+.skin-btn:last-child { border-radius:0 6px 6px 0; }
+.skin-btn.active { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+
+/* ── Card Container ── */
+.card-wrap { display:flex; justify-content:center; }
+
+/* ── Summary Card (light skin) ── */
+.summary-card {
+  width:380px; background:#ffffff; border-radius:12px; overflow:hidden;
+  font-family:'Epilogue', sans-serif; color:#1a1a1a;
+}
+.summary-card .card-header {
+  background:#1a1a1a; padding:16px 20px 12px; position:relative;
+}
+.summary-card .card-header .card-logo {
+  position:absolute; top:12px; right:16px; width:32px; height:32px;
+}
+.summary-card .card-title {
+  font-size:14px; font-weight:800; color:#ffffff; text-transform:uppercase;
+  letter-spacing:0.5px; margin-bottom:2px;
+}
+.summary-card .card-date {
+  font-size:10px; color:rgba(255,255,255,0.5); font-weight:500;
+}
+.summary-card .card-meta {
+  display:flex; gap:12px; padding:10px 20px; background:#f5f5f0;
+  border-bottom:1px solid #e8e4dc;
+}
+.summary-card .meta-item {
+  font-size:9px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
+  color:#6b6560;
+}
+.summary-card .meta-item span { color:#1a1a1a; font-weight:800; }
+
+.summary-card .card-section {
+  padding:12px 20px;
+}
+.summary-card .card-section:not(:last-child) {
+  border-bottom:1px solid #f0ece4;
+}
+.summary-card .section-label {
+  font-size:8px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  color:#b0a898; margin-bottom:6px;
+}
+.summary-card .drill-row {
+  display:flex; align-items:flex-start; gap:8px; margin-bottom:4px;
+  font-size:10px; line-height:1.4;
+}
+.summary-card .drill-num {
+  width:16px; height:16px; border-radius:50%; background:#f5f5f0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; font-weight:800; color:#6b6560; flex-shrink:0; margin-top:1px;
+}
+.summary-card .drill-text { font-weight:500; color:#2a2a2a; }
+.summary-card .obs-row {
+  display:flex; align-items:flex-start; gap:6px; margin-bottom:4px;
+  font-size:10px; line-height:1.4;
+}
+.summary-card .obs-dot {
+  width:6px; height:6px; border-radius:50%; background:var(--orange);
+  flex-shrink:0; margin-top:5px;
+}
+.summary-card .obs-text { font-weight:500; color:#2a2a2a; }
+.summary-card .card-summary {
+  font-size:10px; line-height:1.5; color:#4a4a4a; font-weight:400;
+}
+.summary-card .card-footer {
+  padding:10px 20px; background:#f5f5f0; text-align:right;
+  font-size:8px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  color:#b0a898;
+}
+
+/* ── Dark skin ── */
+.summary-card.dark {
+  background:#0a0a0a; color:#e8e4dc;
+  border:1px solid rgba(247,180,8,0.2);
+}
+.summary-card.dark .card-header { background:#111110; }
+.summary-card.dark .card-title { color:#f7b408; }
+.summary-card.dark .card-date { color:rgba(247,180,8,0.4); }
+.summary-card.dark .card-meta { background:#0f0f0e; border-color:rgba(247,180,8,0.1); }
+.summary-card.dark .meta-item { color:#6b6560; }
+.summary-card.dark .meta-item span { color:#f7b408; }
+.summary-card.dark .card-section:not(:last-child) { border-color:rgba(255,255,255,0.05); }
+.summary-card.dark .section-label { color:rgba(247,180,8,0.5); }
+.summary-card.dark .drill-num { background:rgba(255,255,255,0.06); color:#6b6560; }
+.summary-card.dark .drill-text { color:#c8c4bc; }
+.summary-card.dark .obs-text { color:#c8c4bc; }
+.summary-card.dark .card-summary { color:#8a8680; }
+.summary-card.dark .card-footer { background:#0f0f0e; color:rgba(247,180,8,0.3); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align:center; padding:60px 20px; color:var(--text-dim);
+}
+.empty-state .empty-icon { font-size:40px; margin-bottom:12px; opacity:0.3; }
+.empty-state .empty-text { font-size:13px; font-weight:500; }
+.empty-state .empty-sub { font-size:11px; margin-top:4px; color:var(--text-dim); opacity:0.6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Class Summary Card</div>
+    <div class="header-sub">Post-class cards from voice debrief</div>
+  </div>
+  <a href="/coaching-os/hub.html" class="back-btn">← Hub</a>
+</div>
+
+<div class="picker" id="classPicker">
+  <div class="empty-state" id="loadingState" style="width:100%">
+    <div class="empty-text">Loading classes...</div>
+  </div>
+</div>
+
+<div class="actions" id="actionsBar" style="display:none">
+  <button class="action-btn primary" onclick="downloadCard()">Download PNG</button>
+  <button class="action-btn" onclick="copyCard()">Copy Image</button>
+  <div class="skin-group">
+    <button class="skin-btn active" onclick="setSkin('light', this)">Email</button>
+    <button class="skin-btn" onclick="setSkin('dark', this)">Instagram</button>
+  </div>
+</div>
+
+<div class="card-wrap">
+  <div id="cardContainer"></div>
+</div>
+
+<script>
+const BR_LOGO = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="4" fill="none"/><text x="20" y="28" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="white">BR</text></svg>`);
+const BR_LOGO_DARK = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="4" fill="none"/><text x="20" y="28" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="#f7b408">BR</text></svg>`);
+
+let classes = [];
+let activeClass = null;
+let activeSkin = 'light';
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+async function init() {
+  try {
+    const res = await fetch('/coaching/classes');
+    classes = await res.json();
+    const taught = classes.filter(c => c.status === 'taught');
+    if (!taught.length) {
+      document.getElementById('classPicker').innerHTML = `
+        <div class="empty-state" style="width:100%">
+          <div class="empty-icon">📋</div>
+          <div class="empty-text">No taught classes yet</div>
+          <div class="empty-sub">Voice-debrief a class in the Class Journal first</div>
+        </div>`;
+      return;
+    }
+    document.getElementById('classPicker').innerHTML = taught.slice(0, 20).map(c =>
+      `<button class="picker-btn" data-id="${c.id}" onclick="loadClass('${c.id}')">${esc(c.title)}<br><span style="font-size:9px;opacity:0.5">${c.taught_date || ''}</span></button>`
+    ).join('');
+    loadClass(taught[0].id);
+  } catch (e) {
+    document.getElementById('classPicker').innerHTML = `
+      <div class="empty-state" style="width:100%">
+        <div class="empty-text">Could not load classes</div>
+        <div class="empty-sub">${esc(e.message)}</div>
+      </div>`;
+  }
+}
+
+async function loadClass(id) {
+  document.querySelectorAll('.picker-btn').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  try {
+    const res = await fetch(`/coaching/classes/${id}`);
+    activeClass = await res.json();
+    renderCard();
+    document.getElementById('actionsBar').style.display = 'flex';
+  } catch (e) {
+    document.getElementById('cardContainer').innerHTML = `<div class="empty-state"><div class="empty-text">Error: ${esc(e.message)}</div></div>`;
+  }
+}
+
+function parseNotes(notesStr) {
+  try { return JSON.parse(notesStr); } catch { return null; }
+}
+
+function renderCard() {
+  if (!activeClass) return;
+  const notes = parseNotes(activeClass.notes);
+  const isDark = activeSkin === 'dark';
+  const segments = activeClass.segments || [];
+  const observations = activeClass.observations || [];
+  const logo = isDark ? BR_LOGO_DARK : BR_LOGO;
+
+  const drillsFiltered = segments.filter(s => s.drill_notes && s.drill_notes.length > 5);
+  const groupName = notes?.group || '';
+  const athleteCount = notes?.athletes_present || '';
+  const summary = notes?.summary || '';
+  const suggestions = notes?.suggestions || [];
+
+  let html = `<div class="summary-card${isDark ? ' dark' : ''}" id="summaryCard">`;
+
+  html += `<div class="card-header">
+    <img class="card-logo" src="${logo}" alt="BR">
+    <div class="card-title">${esc(activeClass.title || 'Class Session')}</div>
+    <div class="card-date">${activeClass.taught_date || ''}</div>
+  </div>`;
+
+  html += `<div class="card-meta">`;
+  if (groupName) html += `<div class="meta-item">Group: <span>${esc(groupName)}</span></div>`;
+  if (athleteCount) html += `<div class="meta-item">Athletes: <span>${athleteCount}</span></div>`;
+  html += `<div class="meta-item">Drills: <span>${drillsFiltered.length}</span></div>`;
+  html += `</div>`;
+
+  if (drillsFiltered.length) {
+    html += `<div class="card-section">
+      <div class="section-label">Drills Covered</div>`;
+    drillsFiltered.slice(0, 8).forEach((s, i) => {
+      const label = s.drill_notes.length > 80 ? s.drill_notes.slice(0, 77) + '...' : s.drill_notes;
+      html += `<div class="drill-row">
+        <div class="drill-num">${i + 1}</div>
+        <div class="drill-text">${esc(label)}</div>
+      </div>`;
+    });
+    if (drillsFiltered.length > 8) {
+      html += `<div class="drill-row"><div class="drill-num">+</div><div class="drill-text" style="opacity:0.5">${drillsFiltered.length - 8} more</div></div>`;
+    }
+    html += `</div>`;
+  }
+
+  if (observations.length) {
+    html += `<div class="card-section">
+      <div class="section-label">Coach Observations</div>`;
+    observations.slice(0, 5).forEach(o => {
+      const label = o.observation.length > 90 ? o.observation.slice(0, 87) + '...' : o.observation;
+      html += `<div class="obs-row">
+        <div class="obs-dot"></div>
+        <div class="obs-text">${esc(label)}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (summary) {
+    html += `<div class="card-section">
+      <div class="section-label">Session Summary</div>
+      <div class="card-summary">${esc(summary.length > 200 ? summary.slice(0, 197) + '...' : summary)}</div>
+    </div>`;
+  }
+
+  html += `<div class="card-footer">Basic Reflex · Cuban School of Boxing</div>`;
+  html += `</div>`;
+
+  document.getElementById('cardContainer').innerHTML = html;
+}
+
+function setSkin(skin, btn) {
+  activeSkin = skin;
+  document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCard();
+}
+
+async function downloadCard() {
+  const el = document.getElementById('summaryCard');
+  if (!el) return;
+  const bg = activeSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+  const canvas = await html2canvas(el, { scale:3, backgroundColor:bg, useCORS:true });
+  canvas.toBlob(blob => {
+    const a = document.createElement('a');
+    const name = (activeClass?.title || 'class-summary').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    const suffix = activeSkin === 'dark' ? '-ig' : '';
+    a.href = URL.createObjectURL(blob);
+    a.download = `${name}${suffix}.png`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+}
+
+async function copyCard() {
+  const el = document.getElementById('summaryCard');
+  if (!el) return;
+  const bg = activeSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+  const canvas = await html2canvas(el, { scale:3, backgroundColor:bg, useCORS:true });
+  canvas.toBlob(async blob => {
+    try {
+      await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+    } catch (e) { console.error('Copy failed:', e); }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Progress Passport</title>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111110;
+  --border: #222220;
+  --gold: #f7b408;
+  --gold-dim: rgba(247,180,8,0.12);
+  --text: #e8e4dc;
+  --text-dim: #6b6560;
+  --red: #ef4444;
+  --orange: #f97316;
+  --green: #4ade80;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Epilogue',system-ui,sans-serif; min-height:100vh; padding:16px; }
+
+.header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.header-title { font-size:18px; font-weight:700; color:var(--gold); }
+.header-sub { font-size:11px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+.back-btn { padding:6px 14px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); cursor:pointer; font-family:'Epilogue',sans-serif; font-size:11px; text-decoration:none; }
+.back-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ── Client selector ── */
+.client-bar { display:flex; gap:8px; align-items:center; margin-bottom:20px; flex-wrap:wrap; }
+.client-input { padding:8px 14px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:'Epilogue',sans-serif; font-size:13px; font-weight:600; width:220px; }
+.client-input:focus { outline:none; border-color:var(--gold); }
+.client-chip { padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); cursor:pointer; font-family:'Epilogue',sans-serif; font-size:11px; font-weight:600; }
+.client-chip:hover, .client-chip.active { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+.action-btn { padding:8px 16px; border-radius:6px; font-family:'Epilogue',sans-serif; font-size:11px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); }
+.action-btn:hover { border-color:var(--gold); color:var(--gold); }
+.action-btn.primary { background:var(--gold); color:#0a0a0a; border:none; }
+.action-btn.primary:hover { background:#e5a607; }
+
+/* ── Passport card ── */
+.passport-wrap { display:flex; justify-content:center; margin-top:16px; }
+.passport {
+  width:400px; background:#ffffff; border-radius:12px; overflow:hidden;
+  font-family:'Epilogue',sans-serif; color:#1a1a1a;
+}
+.passport-header {
+  background:#1a1a1a; padding:20px 24px 16px; position:relative;
+}
+.passport-logo { position:absolute; top:16px; right:20px; width:36px; height:36px; }
+.passport-name { font-size:20px; font-weight:800; color:#ffffff; text-transform:uppercase; letter-spacing:0.5px; }
+.passport-subtitle { font-size:10px; color:rgba(255,255,255,0.4); font-weight:500; margin-top:2px; letter-spacing:1px; text-transform:uppercase; }
+
+.passport-stats {
+  display:flex; gap:16px; padding:12px 24px; background:#f5f5f0;
+  border-bottom:1px solid #e8e4dc;
+}
+.passport-stat { text-align:center; }
+.passport-stat-val { font-size:20px; font-weight:800; color:#1a1a1a; }
+.passport-stat-label { font-size:8px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#6b6560; }
+
+.passport-body { padding:16px 24px; }
+.series-row {
+  display:flex; align-items:center; gap:10px; margin-bottom:10px;
+  padding:8px 12px; border-radius:8px; background:#fafaf8; border:1px solid #f0ece4;
+}
+.series-icon {
+  width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:800; flex-shrink:0;
+}
+.series-icon.red { background:rgba(239,68,68,0.1); color:#ef4444; }
+.series-icon.orange { background:rgba(249,115,22,0.1); color:#f97316; }
+.series-icon.green { background:rgba(74,222,128,0.1); color:#4ade80; }
+.series-info { flex:1; min-width:0; }
+.series-name { font-size:11px; font-weight:700; color:#1a1a1a; }
+.series-sub { font-size:9px; color:#6b6560; }
+.level-dots { display:flex; gap:3px; }
+.level-dot {
+  width:18px; height:18px; border-radius:50%; border:2px solid #e0dcd4;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; font-weight:800; color:#c0bbb4; cursor:pointer;
+  transition:all 0.15s;
+}
+.level-dot.filled { border-color:#f7b408; background:#f7b408; color:#1a1a1a; }
+.level-dot.filled.complete { border-color:#4ade80; background:#4ade80; color:#1a1a1a; }
+
+.passport-footer {
+  padding:10px 24px; background:#f5f5f0; text-align:center;
+  font-size:8px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#b0a898;
+}
+
+/* ── Dark skin ── */
+.passport.dark { background:#0a0a0a; color:#e8e4dc; border:1px solid rgba(247,180,8,0.2); }
+.passport.dark .passport-header { background:#111110; }
+.passport.dark .passport-name { color:#f7b408; }
+.passport.dark .passport-subtitle { color:rgba(247,180,8,0.35); }
+.passport.dark .passport-stats { background:#0f0f0e; border-color:rgba(247,180,8,0.1); }
+.passport.dark .passport-stat-val { color:#f7b408; }
+.passport.dark .passport-stat-label { color:#6b6560; }
+.passport.dark .series-row { background:rgba(255,255,255,0.02); border-color:rgba(255,255,255,0.05); }
+.passport.dark .series-name { color:#e8e4dc; }
+.passport.dark .series-sub { color:#6b6560; }
+.passport.dark .level-dot { border-color:rgba(255,255,255,0.1); color:rgba(255,255,255,0.15); }
+.passport.dark .passport-footer { background:#0f0f0e; color:rgba(247,180,8,0.3); }
+
+.skin-group { display:flex; gap:0; margin-left:auto; }
+.skin-btn { padding:6px 12px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); font-family:'Epilogue',sans-serif; font-size:10px; font-weight:600; cursor:pointer; }
+.skin-btn:first-child { border-radius:6px 0 0 6px; }
+.skin-btn:last-child { border-radius:0 6px 6px 0; }
+.skin-btn.active { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Client Progress Passport</div>
+    <div class="header-sub">Visual "you are here" in the curriculum</div>
+  </div>
+  <a href="/coaching-os/hub.html" class="back-btn">← Hub</a>
+</div>
+
+<div class="client-bar">
+  <input class="client-input" id="clientInput" placeholder="Client name..." list="clientList">
+  <datalist id="clientList"></datalist>
+  <button class="action-btn primary" onclick="loadOrCreate()">Load / Create</button>
+  <button class="action-btn" onclick="downloadPassport()">Download PNG</button>
+  <button class="action-btn" onclick="copyPassport()">Copy Image</button>
+  <div class="skin-group">
+    <button class="skin-btn active" onclick="setSkin('light',this)">Email</button>
+    <button class="skin-btn" onclick="setSkin('dark',this)">Instagram</button>
+  </div>
+</div>
+
+<div id="clientChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;"></div>
+
+<div class="passport-wrap">
+  <div id="passportContainer"></div>
+</div>
+
+<script>
+const BR_LOGO = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><text x="20" y="28" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="white">BR</text></svg>');
+const BR_LOGO_DARK = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><text x="20" y="28" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="#f7b408">BR</text></svg>');
+
+const SERIES_DEF = [
+  { key:'jab', name:'Jab Series', icon:'J', cls:'red', levels:6 },
+  { key:'cross', name:'Cross Series', icon:'C', cls:'red', levels:6 },
+  { key:'hook', name:'Hook Series', icon:'H', cls:'red', levels:6 },
+  { key:'uppercut', name:'Uppercut Series', icon:'U', cls:'red', levels:6 },
+  { key:'defense', name:'Defense Series', icon:'D', cls:'orange', levels:6 },
+  { key:'footwork', name:'Footwork Series', icon:'F', cls:'green', levels:6 },
+];
+
+let activeSkin = 'light';
+let activeClient = '';
+let clientProgress = {};
+let allClients = {};
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+async function init() {
+  try {
+    const res = await fetch('/coaching/progress');
+    allClients = await res.json();
+    renderClientChips();
+  } catch(e) { console.error(e); }
+}
+
+function renderClientChips() {
+  const names = Object.keys(allClients);
+  document.getElementById('clientChips').innerHTML = names.map(n =>
+    `<button class="client-chip${n===activeClient?' active':''}" onclick="selectClient('${esc(n)}')">${esc(n)}</button>`
+  ).join('');
+  const dl = document.getElementById('clientList');
+  dl.innerHTML = names.map(n => `<option value="${esc(n)}">`).join('');
+}
+
+function selectClient(name) {
+  activeClient = name;
+  document.getElementById('clientInput').value = name;
+  clientProgress = {};
+  const rows = allClients[name] || [];
+  for (const r of rows) clientProgress[r.series_key] = r.level_completed;
+  renderClientChips();
+  renderPassport();
+}
+
+async function loadOrCreate() {
+  const name = document.getElementById('clientInput').value.trim();
+  if (!name) return;
+  activeClient = name;
+  if (allClients[name]) {
+    selectClient(name);
+  } else {
+    allClients[name] = [];
+    clientProgress = {};
+    renderClientChips();
+    renderPassport();
+  }
+}
+
+async function toggleLevel(seriesKey, level) {
+  if (!activeClient) return;
+  const current = clientProgress[seriesKey] || 0;
+  const newLevel = current >= level ? level - 1 : level;
+  clientProgress[seriesKey] = newLevel;
+  try {
+    await fetch('/coaching/progress', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ student_name: activeClient, series_key: seriesKey, level_completed: newLevel })
+    });
+  } catch(e) { console.error(e); }
+  renderPassport();
+}
+
+function renderPassport() {
+  if (!activeClient) {
+    document.getElementById('passportContainer').innerHTML = '<div style="text-align:center;padding:60px;color:#6b6560;font-size:13px">Enter a client name to create their passport</div>';
+    return;
+  }
+  const isDark = activeSkin === 'dark';
+  const logo = isDark ? BR_LOGO_DARK : BR_LOGO;
+  const totalCompleted = SERIES_DEF.filter(s => (clientProgress[s.key]||0) >= s.levels).length;
+  const totalLevels = SERIES_DEF.reduce((a,s) => a + s.levels, 0);
+  const levelsCompleted = SERIES_DEF.reduce((a,s) => a + (clientProgress[s.key]||0), 0);
+  const pct = Math.round((levelsCompleted / totalLevels) * 100);
+
+  let html = `<div class="passport${isDark?' dark':''}" id="passportCard">`;
+  html += `<div class="passport-header">
+    <img class="passport-logo" src="${logo}" alt="BR">
+    <div class="passport-name">${esc(activeClient)}</div>
+    <div class="passport-subtitle">Progress Passport · Basic Reflex</div>
+  </div>`;
+
+  html += `<div class="passport-stats">
+    <div class="passport-stat"><div class="passport-stat-val">${totalCompleted}</div><div class="passport-stat-label">Series Complete</div></div>
+    <div class="passport-stat"><div class="passport-stat-val">${levelsCompleted}</div><div class="passport-stat-label">Levels Passed</div></div>
+    <div class="passport-stat"><div class="passport-stat-val">${pct}%</div><div class="passport-stat-label">Overall</div></div>
+  </div>`;
+
+  html += `<div class="passport-body">`;
+  for (const s of SERIES_DEF) {
+    const completed = clientProgress[s.key] || 0;
+    const allDone = completed >= s.levels;
+    let dots = '';
+    for (let i = 1; i <= s.levels; i++) {
+      const filled = i <= completed;
+      dots += `<div class="level-dot${filled ? (allDone ? ' filled complete' : ' filled') : ''}" onclick="toggleLevel('${s.key}',${i})">${i}</div>`;
+    }
+    html += `<div class="series-row">
+      <div class="series-icon ${s.cls}">${s.icon}</div>
+      <div class="series-info">
+        <div class="series-name">${s.name}</div>
+        <div class="series-sub">${completed}/${s.levels}${allDone ? ' ✓ Complete' : ''}</div>
+      </div>
+      <div class="level-dots">${dots}</div>
+    </div>`;
+  }
+  html += `</div>`;
+  html += `<div class="passport-footer">Basic Reflex · Cuban School of Boxing · ${new Date().toISOString().slice(0,10)}</div>`;
+  html += `</div>`;
+  document.getElementById('passportContainer').innerHTML = html;
+}
+
+function setSkin(skin, btn) {
+  activeSkin = skin;
+  document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPassport();
+}
+
+async function downloadPassport() {
+  const el = document.getElementById('passportCard');
+  if (!el) return;
+  const bg = activeSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+  const canvas = await html2canvas(el, { scale:3, backgroundColor:bg, useCORS:true });
+  canvas.toBlob(blob => {
+    const a = document.createElement('a');
+    const name = (activeClient || 'passport').replace(/[^a-zA-Z0-9]/g,'-').toLowerCase();
+    a.href = URL.createObjectURL(blob);
+    a.download = `passport-${name}${activeSkin==='dark'?'-ig':''}.png`;
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+}
+
+async function copyPassport() {
+  const el = document.getElementById('passportCard');
+  if (!el) return;
+  const bg = activeSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+  const canvas = await html2canvas(el, { scale:3, backgroundColor:bg, useCORS:true });
+  canvas.toBlob(async blob => {
+    try { await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); } catch(e) { console.error(e); }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

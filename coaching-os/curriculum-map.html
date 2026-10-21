@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BR Curriculum Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111110;
+  --border: #222220;
+  --gold: #f7b408;
+  --gold-dim: rgba(247,180,8,0.12);
+  --text: #e8e4dc;
+  --text-dim: #6b6560;
+  --red: #ef4444;
+  --orange: #f97316;
+  --green: #4ade80;
+  --purple: #a78bfa;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Epilogue', system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: auto;
+}
+
+/* ── Header ── */
+.header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 20px; border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:var(--bg); z-index:100;
+}
+.header-title { font-size:18px; font-weight:700; color:var(--gold); }
+.header-sub { font-size:11px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+.back-btn {
+  padding:6px 14px; border-radius:6px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-dim); cursor:pointer;
+  font-family:'Epilogue', sans-serif; font-size:11px; text-decoration:none;
+  transition:all 0.15s;
+}
+.back-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ── Map Container ── */
+.map-container {
+  padding:40px 20px 80px;
+  display:flex; flex-direction:column; align-items:center;
+  min-width:fit-content;
+}
+
+/* ── Lanes ── */
+.lane {
+  display:flex; flex-direction:column; align-items:center;
+  margin-bottom:48px; width:100%; max-width:1100px;
+}
+.lane-label {
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  padding:4px 16px; border-radius:12px; margin-bottom:20px;
+}
+.lane-label.beginner { color:var(--gold); background:var(--gold-dim); }
+.lane-label.foundation { color:var(--red); background:rgba(239,68,68,0.1); }
+.lane-label.defense-lane { color:var(--orange); background:rgba(249,115,22,0.1); }
+.lane-label.footwork-lane { color:var(--green); background:rgba(74,222,128,0.1); }
+.lane-label.application { color:var(--purple); background:rgba(167,139,250,0.1); }
+
+.lane-content {
+  display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+  width:100%;
+}
+
+/* ── Nodes ── */
+.node {
+  width:160px; border-radius:10px; overflow:hidden;
+  border:1.5px solid var(--border); background:var(--surface);
+  cursor:pointer; transition:all 0.2s; position:relative;
+}
+.node:hover { border-color:var(--gold); transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(247,180,8,0.08);
+}
+.node.completed { border-color:rgba(74,222,128,0.4); }
+.node.completed::after {
+  content:'✓'; position:absolute; top:6px; right:8px;
+  font-size:12px; color:var(--green); font-weight:800;
+}
+.node-header {
+  padding:10px 12px 8px; display:flex; align-items:center; gap:8px;
+}
+.node-icon {
+  width:24px; height:24px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:800; flex-shrink:0;
+}
+.node-icon.red { background:rgba(239,68,68,0.15); color:var(--red); }
+.node-icon.orange { background:rgba(249,115,22,0.15); color:var(--orange); }
+.node-icon.green { background:rgba(74,222,128,0.15); color:var(--green); }
+.node-icon.gold { background:var(--gold-dim); color:var(--gold); }
+.node-icon.purple { background:rgba(167,139,250,0.15); color:var(--purple); }
+.node-name {
+  font-size:12px; font-weight:700; letter-spacing:0.3px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.node-body { padding:0 12px 10px; }
+.node-levels {
+  display:flex; flex-direction:column; gap:3px;
+}
+.node-level {
+  display:flex; align-items:center; gap:6px;
+  font-size:9px; color:var(--text-dim);
+}
+.level-num {
+  width:14px; height:14px; border-radius:50%;
+  background:rgba(255,255,255,0.06); color:var(--text-dim);
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; font-weight:800; flex-shrink:0;
+}
+.level-text {
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  font-weight:500;
+}
+.node-footer {
+  padding:6px 12px; border-top:1px solid rgba(255,255,255,0.04);
+  font-size:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  color:var(--text-dim);
+}
+
+/* ── Connectors ── */
+.connector-row {
+  display:flex; justify-content:center; align-items:center;
+  margin:-12px 0; position:relative; z-index:2;
+}
+.connector-arrow {
+  font-size:20px; color:rgba(247,180,8,0.25); margin:0 4px;
+}
+.connector-label {
+  font-size:8px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  color:rgba(247,180,8,0.3); padding:2px 10px; border-radius:8px;
+  background:rgba(247,180,8,0.04); border:1px solid rgba(247,180,8,0.08);
+}
+
+/* ── Detail Panel ── */
+.detail-panel {
+  position:fixed; right:-400px; top:0; bottom:0; width:380px;
+  background:var(--surface); border-left:1px solid var(--border);
+  z-index:200; transition:right 0.3s; overflow-y:auto; padding:24px;
+}
+.detail-panel.open { right:0; }
+.detail-close {
+  position:absolute; top:12px; right:12px; background:none; border:none;
+  color:var(--text-dim); cursor:pointer; font-size:20px; padding:4px 8px;
+}
+.detail-close:hover { color:var(--text); }
+.detail-title {
+  font-size:20px; font-weight:800; margin-bottom:4px; text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+.detail-subtitle {
+  font-size:11px; color:var(--text-dim); margin-bottom:20px;
+  font-weight:500; letter-spacing:0.5px;
+}
+.detail-variant {
+  display:flex; align-items:flex-start; gap:10px;
+  margin-bottom:12px; padding:10px; border-radius:8px;
+  background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);
+}
+.detail-var-num {
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:800; flex-shrink:0;
+}
+.detail-var-num.red { background:rgba(239,68,68,0.15); color:var(--red); }
+.detail-var-num.orange { background:rgba(249,115,22,0.15); color:var(--orange); }
+.detail-var-num.green { background:rgba(74,222,128,0.15); color:var(--green); }
+.detail-var-num.gold { background:var(--gold-dim); color:var(--gold); }
+.detail-chips {
+  display:flex; flex-wrap:wrap; gap:4px; align-items:center;
+}
+.detail-chip {
+  padding:3px 8px; border-radius:4px; font-size:9px;
+  font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+  border:1px solid;
+}
+.detail-chip.red { color:#f87171; border-color:rgba(248,113,113,0.3); background:rgba(248,113,113,0.08); }
+.detail-chip.orange { color:#fb923c; border-color:rgba(251,146,60,0.3); background:rgba(251,146,60,0.08); }
+.detail-chip.green { color:#4ade80; border-color:rgba(74,222,128,0.3); background:rgba(74,222,128,0.08); }
+.detail-arrow { color:rgba(255,255,255,0.15); font-size:10px; }
+.detail-actions { margin-top:20px; display:flex; gap:8px; }
+.detail-btn {
+  padding:8px 16px; border-radius:6px; font-family:'Epilogue', sans-serif;
+  font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s;
+  text-decoration:none;
+}
+.detail-btn.primary {
+  background:var(--gold); color:#0a0a0a; border:none;
+}
+.detail-btn.primary:hover { background:#e5a607; }
+.detail-btn.secondary {
+  background:none; border:1px solid var(--border); color:var(--text-dim);
+}
+.detail-btn.secondary:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ── Overlay ── */
+.overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.5);
+  z-index:199; display:none;
+}
+.overlay.open { display:block; }
+
+/* ── Legend ── */
+.legend {
+  display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+  margin-bottom:32px; padding:12px 20px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border);
+}
+.legend-item {
+  display:flex; align-items:center; gap:6px; font-size:10px;
+  font-weight:600; color:var(--text-dim); letter-spacing:0.5px;
+}
+.legend-dot {
+  width:8px; height:8px; border-radius:50%;
+}
+.legend-dot.red { background:var(--red); }
+.legend-dot.orange { background:var(--orange); }
+.legend-dot.green { background:var(--green); }
+.legend-dot.gold { background:var(--gold); }
+.legend-dot.purple { background:var(--purple); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Curriculum Map</div>
+    <div class="header-sub">Basic Reflex · Cuban School of Boxing</div>
+  </div>
+  <a href="/coaching-os/whiteboard/" class="back-btn">← Whiteboard</a>
+</div>
+
+<div class="map-container">
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot red"></div> Punches</div>
+    <div class="legend-item"><div class="legend-dot orange"></div> Defense</div>
+    <div class="legend-item"><div class="legend-dot green"></div> Footwork</div>
+    <div class="legend-item"><div class="legend-dot gold"></div> Beginner Week</div>
+    <div class="legend-item"><div class="legend-dot purple"></div> Application Combos</div>
+  </div>
+
+  <!-- BEGINNER WEEK LANE -->
+  <div class="lane">
+    <div class="lane-label beginner">Entry Point — Beginner Week ($500)</div>
+    <div class="lane-content" id="beginnerLane"></div>
+  </div>
+
+  <div class="connector-row">
+    <span class="connector-arrow">↓</span>
+    <span class="connector-label">Graduates into Foundation Series</span>
+    <span class="connector-arrow">↓</span>
+  </div>
+
+  <!-- FOUNDATION PUNCH LANE -->
+  <div class="lane">
+    <div class="lane-label foundation">Foundation — Punches</div>
+    <div class="lane-content" id="punchLane"></div>
+  </div>
+
+  <!-- DEFENSE LANE -->
+  <div class="lane">
+    <div class="lane-label defense-lane">Foundation — Defense</div>
+    <div class="lane-content" id="defenseLane"></div>
+  </div>
+
+  <!-- FOOTWORK LANE -->
+  <div class="lane">
+    <div class="lane-label footwork-lane">Foundation — Footwork</div>
+    <div class="lane-content" id="footworkLane"></div>
+  </div>
+
+  <div class="connector-row">
+    <span class="connector-arrow">↓</span>
+    <span class="connector-label">Series knowledge unlocks application combos</span>
+    <span class="connector-arrow">↓</span>
+  </div>
+
+  <!-- APPLICATION LANE -->
+  <div class="lane">
+    <div class="lane-label application">Application — Combo Cards</div>
+    <div class="lane-content" id="applicationLane"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+  <button class="detail-close" onclick="closeDetail()">×</button>
+  <div id="detailContent"></div>
+</div>
+
+<script>
+const PRESETS = {
+  jab: { name:'Jab Series', icon:'J', iconClass:'red', lane:'punch',
+    variants:[
+      [{n:'Jab',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Jab',c:'red'}],
+      [{n:'Jab Body',c:'red'}],
+      [{n:'Jab Body',c:'red'},{n:'Jab',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'L Slip',c:'orange'},{n:'Jab',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Step Back',c:'green'},{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'}]
+    ]},
+  cross: { name:'Cross Series', icon:'C', iconClass:'red', lane:'punch',
+    variants:[
+      [{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'}],
+      [{n:'Cross Body',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross Body',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'R Slip',c:'orange'},{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Step Back',c:'green'},{n:'Step Fwd',c:'green'},{n:'Cross',c:'red'}]
+    ]},
+  hook: { name:'Hook Series', icon:'H', iconClass:'red', lane:'punch',
+    variants:[
+      [{n:'L Hook',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Hook',c:'red'}],
+      [{n:'L Hook Body',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Hook Body',c:'red'}],
+      [{n:'L Hook',c:'red'},{n:'R Hook',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Hook',c:'red'},{n:'Duck',c:'orange'},{n:'L Hook Body',c:'red'}]
+    ]},
+  uppercut: { name:'Uppercut Series', icon:'U', iconClass:'red', lane:'punch',
+    variants:[
+      [{n:'R Uppercut',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'R Uppercut',c:'red'}],
+      [{n:'L Uppercut',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Uppercut',c:'red'}],
+      [{n:'L Uppercut',c:'red'},{n:'R Uppercut',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'R Uppercut',c:'red'},{n:'L Hook',c:'red'},{n:'Cross',c:'red'}]
+    ]},
+  defense: { name:'Defense Series', icon:'D', iconClass:'orange', lane:'defense',
+    variants:[
+      [{n:'L Slip',c:'orange'}],
+      [{n:'L Slip',c:'orange'},{n:'R Slip',c:'orange'}],
+      [{n:'Duck',c:'orange'}],
+      [{n:'L Roll',c:'orange'},{n:'R Roll',c:'orange'}],
+      [{n:'L Slip',c:'orange'},{n:'Cross',c:'red'},{n:'R Slip',c:'orange'},{n:'L Hook',c:'red'}],
+      [{n:'Pull Back',c:'orange'},{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'},{n:'Cross',c:'red'}]
+    ]},
+  footwork: { name:'Footwork Series', icon:'F', iconClass:'green', lane:'footwork',
+    variants:[
+      [{n:'Step Fwd',c:'green'}],
+      [{n:'Step Fwd',c:'green'},{n:'Step Back',c:'green'}],
+      [{n:'Step L',c:'green'},{n:'Step R',c:'green'}],
+      [{n:'L Pivot',c:'green'},{n:'R Pivot',c:'green'}],
+      [{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'},{n:'Step Back',c:'green'}],
+      [{n:'L Pivot',c:'green'},{n:'Cross',c:'red'},{n:'Step Back',c:'green'},{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'}]
+    ]}
+};
+
+const BEGINNER = {
+  bw_day1: { name:'Day 1 — Stance & Guard', icon:'1', iconClass:'gold',
+    variants:[
+      [{n:'Stance',c:'green'}],
+      [{n:'Guard Up',c:'orange'}],
+      [{n:'Step Fwd',c:'green'},{n:'Step Back',c:'green'}],
+      [{n:'Jab',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Jab',c:'red'}],
+      [{n:'Guard Up',c:'orange'},{n:'Jab',c:'red'},{n:'Guard Up',c:'orange'}]
+    ]},
+  bw_day2: { name:'Day 2 — The Jab', icon:'2', iconClass:'gold',
+    variants:[
+      [{n:'Jab',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Jab',c:'red'}],
+      [{n:'Jab Body',c:'red'}],
+      [{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Step Back',c:'green'}],
+      [{n:'Jab',c:'red'},{n:'Jab',c:'red'},{n:'Step Back',c:'green'}]
+    ]},
+  bw_day3: { name:'Day 3 — The Cross', icon:'3', iconClass:'gold',
+    variants:[
+      [{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'}],
+      [{n:'Cross Body',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Step Back',c:'green'}],
+      [{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'},{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Jab',c:'red'}]
+    ]},
+  bw_day4: { name:'Day 4 — Defense Basics', icon:'4', iconClass:'gold',
+    variants:[
+      [{n:'L Slip',c:'orange'}],
+      [{n:'R Slip',c:'orange'}],
+      [{n:'L Slip',c:'orange'},{n:'R Slip',c:'orange'}],
+      [{n:'Jab',c:'red'},{n:'L Slip',c:'orange'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Slip',c:'orange'}],
+      [{n:'L Slip',c:'orange'},{n:'Cross',c:'red'},{n:'R Slip',c:'orange'},{n:'L Hook',c:'red'}]
+    ]},
+  bw_day5: { name:'Day 5 — Putting It Together', icon:'5', iconClass:'gold',
+    variants:[
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Hook',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Slip',c:'orange'},{n:'Cross',c:'red'}],
+      [{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Step Back',c:'green'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Duck',c:'orange'},{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Hook',c:'red'},{n:'Step Back',c:'green'},{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'}]
+    ]}
+};
+
+const APPLICATION_COMBOS = [
+  { name:'Jab-Cross Basics', icon:'→', iconClass:'purple', prereqs:['Jab Series','Cross Series'],
+    variants:[
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Jab',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'Cross Body',c:'red'}]
+    ]},
+  { name:'Power Combinations', icon:'⚡', iconClass:'purple', prereqs:['Cross Series','Hook Series'],
+    variants:[
+      [{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'L Hook',c:'red'}],
+      [{n:'Cross',c:'red'},{n:'L Hook',c:'red'},{n:'Cross',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'R Uppercut',c:'red'},{n:'L Hook',c:'red'}]
+    ]},
+  { name:'Counter-Punch', icon:'↩', iconClass:'purple', prereqs:['Defense Series','Jab Series'],
+    variants:[
+      [{n:'L Slip',c:'orange'},{n:'Cross',c:'red'}],
+      [{n:'R Slip',c:'orange'},{n:'L Hook',c:'red'}],
+      [{n:'Pull Back',c:'orange'},{n:'Jab',c:'red'},{n:'Cross',c:'red'}]
+    ]},
+  { name:'In-Out Fighting', icon:'↔', iconClass:'purple', prereqs:['Footwork Series','Cross Series'],
+    variants:[
+      [{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Step Back',c:'green'}],
+      [{n:'L Pivot',c:'green'},{n:'Cross',c:'red'},{n:'L Hook',c:'red'}],
+      [{n:'Step Fwd',c:'green'},{n:'Jab',c:'red'},{n:'Cross',c:'red'},{n:'Duck',c:'orange'},{n:'Step Back',c:'green'}]
+    ]},
+  { name:'Body Work', icon:'▼', iconClass:'purple', prereqs:['Hook Series','Uppercut Series'],
+    variants:[
+      [{n:'Jab',c:'red'},{n:'Cross Body',c:'red'},{n:'L Hook',c:'red'}],
+      [{n:'L Hook Body',c:'red'},{n:'L Hook',c:'red'}],
+      [{n:'Jab',c:'red'},{n:'R Uppercut',c:'red'},{n:'L Hook Body',c:'red'}]
+    ]}
+];
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function renderNode(key, data) {
+  const levels = data.variants.slice(0, 4).map((v, i) =>
+    `<div class="node-level">
+      <span class="level-num">${i+1}</span>
+      <span class="level-text">${v.map(p => p.n).join(' → ')}</span>
+    </div>`
+  ).join('');
+  const extra = data.variants.length > 4 ? `<div class="node-level"><span class="level-num">+</span><span class="level-text">${data.variants.length - 4} more levels</span></div>` : '';
+  return `<div class="node" onclick="openDetail('${key}')">
+    <div class="node-header">
+      <div class="node-icon ${data.iconClass}">${data.icon}</div>
+      <div class="node-name">${esc(data.name)}</div>
+    </div>
+    <div class="node-body"><div class="node-levels">${levels}${extra}</div></div>
+    <div class="node-footer">${data.variants.length} levels · ${data.prereqs ? 'Requires: ' + data.prereqs.join(', ') : 'Foundation'}</div>
+  </div>`;
+}
+
+const allData = {};
+
+function init() {
+  const beginnerLane = document.getElementById('beginnerLane');
+  for (const [k, v] of Object.entries(BEGINNER)) {
+    allData[k] = v;
+    beginnerLane.innerHTML += renderNode(k, v);
+  }
+
+  const punchLane = document.getElementById('punchLane');
+  const defenseLane = document.getElementById('defenseLane');
+  const footworkLane = document.getElementById('footworkLane');
+  for (const [k, v] of Object.entries(PRESETS)) {
+    allData[k] = v;
+    if (v.lane === 'punch') punchLane.innerHTML += renderNode(k, v);
+    else if (v.lane === 'defense') defenseLane.innerHTML += renderNode(k, v);
+    else if (v.lane === 'footwork') footworkLane.innerHTML += renderNode(k, v);
+  }
+
+  const appLane = document.getElementById('applicationLane');
+  APPLICATION_COMBOS.forEach((combo, i) => {
+    const key = 'app_' + i;
+    allData[key] = combo;
+    appLane.innerHTML += renderNode(key, combo);
+  });
+}
+
+function openDetail(key) {
+  const data = allData[key];
+  if (!data) return;
+  const variantsHTML = data.variants.map((v, i) => {
+    const chips = v.map((p, j) =>
+      (j > 0 ? '<span class="detail-arrow">→</span>' : '') +
+      `<span class="detail-chip ${p.c}">${esc(p.n)}</span>`
+    ).join('');
+    return `<div class="detail-variant">
+      <div class="detail-var-num ${data.iconClass}">${i + 1}</div>
+      <div class="detail-chips">${chips}</div>
+    </div>`;
+  }).join('');
+
+  const prereqs = data.prereqs ? `<div class="detail-subtitle">Requires: ${data.prereqs.join(' + ')}</div>` : '<div class="detail-subtitle">Foundation Series</div>';
+  const totalSteps = data.variants.reduce((s, v) => s + v.length, 0);
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-title">${esc(data.name)}</div>
+    ${prereqs}
+    <div style="font-size:10px;color:var(--text-dim);margin-bottom:16px;letter-spacing:0.5px">${data.variants.length} levels · ${totalSteps} total steps</div>
+    ${variantsHTML}
+    <div class="detail-actions">
+      <a href="/coaching-os/whiteboard/" class="detail-btn primary">Open in Whiteboard</a>
+    </div>
+  `;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+init();
+</script>
+</body>
+</html>

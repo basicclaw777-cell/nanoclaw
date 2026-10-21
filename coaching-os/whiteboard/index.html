@@ -964,11 +964,19 @@ body {
       <button class="preset-btn" onclick="loadPreset('bw_day4')">Day 4</button>
       <button class="preset-btn" onclick="loadPreset('bw_day5')">Day 5</button>
     </div>
+    <div class="series-presets-row">
+      <span class="sb-or">kids:</span>
+      <button class="preset-btn red" onclick="loadPreset('kids_punch')">Punching</button>
+      <button class="preset-btn orange" onclick="loadPreset('kids_dodge')">Dodging</button>
+      <button class="preset-btn green" onclick="loadPreset('kids_move')">Moving</button>
+      <button class="preset-btn" onclick="loadPreset('kids_combo')">Combos</button>
+    </div>
     <div class="combo-card-row" id="comboCardRow">
       <div id="comboCardPreview"></div>
       <div class="combo-card-actions">
         <button class="card-btn-primary" onclick="exportComboCard()">Download Card</button>
         <button class="card-btn-secondary" onclick="copyComboCard()">Copy Image</button>
+        <button class="card-btn-secondary" onclick="batchExportPresets()" title="Download all Foundation + Beginner Week presets">Batch All</button>
         <div class="card-toggle-row">
           <span class="sb-or">skin:</span>
           <button class="skin-btn active" id="skinLight" onclick="setCardSkin('light')">Email</button>
@@ -1764,6 +1772,45 @@ const BEGINNER_WEEK_PRESETS = {
   }
 };
 
+const KIDS_PRESETS = {
+  kids_punch: {
+    name: 'Kids — Punching',
+    variants: [
+      [{ name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Jab', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'Jab', color: 'red' }],
+    ]
+  },
+  kids_dodge: {
+    name: 'Kids — Dodging',
+    variants: [
+      [{ name: 'Duck', color: 'orange' }],
+      [{ name: 'L Slip', color: 'orange' }],
+      [{ name: 'L Slip', color: 'orange' }, { name: 'R Slip', color: 'orange' }],
+      [{ name: 'Duck', color: 'orange' }, { name: 'Jab', color: 'red' }],
+    ]
+  },
+  kids_move: {
+    name: 'Kids — Moving',
+    variants: [
+      [{ name: 'Step Fwd', color: 'green' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Step Back', color: 'green' }],
+      [{ name: 'Step L', color: 'green' }, { name: 'Step R', color: 'green' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }, { name: 'Step Back', color: 'green' }],
+    ]
+  },
+  kids_combo: {
+    name: 'Kids — Combos',
+    variants: [
+      [{ name: 'Jab', color: 'red' }, { name: 'Duck', color: 'orange' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'Duck', color: 'orange' }],
+      [{ name: 'Step Fwd', color: 'green' }, { name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }],
+      [{ name: 'Jab', color: 'red' }, { name: 'Cross', color: 'red' }, { name: 'L Slip', color: 'orange' }, { name: 'Cross', color: 'red' }],
+    ]
+  }
+};
+
 let cardSkin = 'light';
 
 function setCardSkin(skin) {
@@ -1787,7 +1834,7 @@ function getCardbackHTML(name, parts, isDark) {
 }
 
 function loadPreset(key) {
-  const allPresets = { ...SERIES_PRESETS, ...BEGINNER_WEEK_PRESETS };
+  const allPresets = { ...SERIES_PRESETS, ...BEGINNER_WEEK_PRESETS, ...KIDS_PRESETS };
   const preset = allPresets[key];
   if (!preset) return;
   seriesVariants.length = 0;
@@ -1931,6 +1978,29 @@ async function copyComboCard() {
       await navigator.clipboard.write([new ClipboardItem({'image/png': b})]);
     }, 'image/png');
   } catch(e) { console.error('Copy failed', e); }
+}
+
+async function batchExportPresets() {
+  const allPresets = { ...SERIES_PRESETS, ...BEGINNER_WEEK_PRESETS, ...KIDS_PRESETS };
+  const keys = Object.keys(allPresets);
+  const savedSkin = cardSkin;
+  for (const key of keys) {
+    loadPreset(key);
+    renderSeriesCard();
+    await new Promise(r => setTimeout(r, 100));
+    const card = document.getElementById('comboCardEl');
+    if (!card) continue;
+    const bgColor = savedSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+    const canvas = await html2canvas(card, { scale: 3, backgroundColor: bgColor, useCORS: true });
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const skinSuffix = savedSkin === 'dark' ? '-ig' : '';
+    a.download = 'series-' + key.replace(/[^a-zA-Z0-9]/g, '-') + skinSuffix + '.png';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    await new Promise(r => setTimeout(r, 300));
+  }
 }
 
 function openSoundboard() {

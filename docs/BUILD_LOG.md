@@ -3957,3 +3957,19 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 - ~/.claude/hooks: validate-openart-cost.js, guard-claude-md-sed.js, backup-artifact.js, validate-illustration.js, log-illustration.js (+ settings.json entries). Tested.
 - ~/Cathedral/forge-backup.sh + PM2 forge-backup (15 3 * * *) → /Volumes/KINGSTON2/cathedral-backups/forge-DATE + mirrors. First run ok.
 - Known issue: telegram-bot.js keeps Ollama qwen3:14b (9.7GB) loaded → Mac swap thrash on 16GB.
+
+## 2026-10-22 — Coaching OS Platform Sprint
+
+**New files:**
+- `coaching-os/curriculum-map.html` — Game-style skill tree. 5 domain lanes (Beginner Week gold, Punches red, Defense orange, Footwork green, Application Combos purple). Clickable nodes show level preview, detail panel slides from right. "Open in Whiteboard" cross-link. Data mirrors SERIES_PRESETS from whiteboard.
+- `coaching-os/class-summary-card.html` — Pulls live data from coaching.db via `/coaching/classes` API. Class picker (taught classes only), renders drills/observations/summary. Email/Instagram skin toggle. Download PNG + Copy Image via html2canvas@1.4.1.
+- `coaching-os/progress-passport.html` — Per-client stamp card. 6 Foundation Series with clickable level dots (1-6). Stats bar (series complete, levels passed, overall %). Persists to coaching.db via 3 new API endpoints. Gold filled dots for progress, green for completed.
+- `coaching-os/block-card.html` — Session stamp cards (5-Block Beginner Week / 10-Block / 20-Block). 5×N clickable grid, progress bar with gradient fill, COMPLETE badge. Client-side stamps only.
+
+**Modified:**
+- `coaching-os/coaching-api.cjs` — 3 endpoints: GET /coaching/progress (all clients grouped), GET /coaching/progress/:name, POST /coaching/progress (upsert). client_progress table.
+- `coaching-os/hub.html` — 4 new door links: Curriculum Map (purple), Progress Passport (green), 10-Block Card (gold), Class Summary Card (orange).
+- `coaching-os/whiteboard/index.html` — KIDS_PRESETS object (4 series × 4 levels: punch, dodge, move, combo). 4 kids preset buttons. Merged into loadPreset() and batchExportPresets().
+
+**DB schema additions:**
+- `client_progress` table: id, student_name, series_key, level_completed, total_levels, started_date, completed_date, notes, UNIQUE(student_name, series_key)

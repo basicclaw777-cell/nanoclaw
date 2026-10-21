@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10-Block Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0a; --surface: #111110; --border: #222220;
+  --gold: #f7b408; --gold-dim: rgba(247,180,8,0.12);
+  --text: #e8e4dc; --text-dim: #6b6560;
+  --red: #ef4444; --orange: #f97316; --green: #4ade80;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Epilogue',system-ui,sans-serif; min-height:100vh; padding:16px; }
+
+.header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.header-title { font-size:18px; font-weight:700; color:var(--gold); }
+.header-sub { font-size:11px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+.back-btn { padding:6px 14px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); cursor:pointer; font-family:'Epilogue',sans-serif; font-size:11px; text-decoration:none; }
+.back-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+.controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:20px; }
+.ctrl-input { padding:8px 14px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:'Epilogue',sans-serif; font-size:13px; font-weight:600; width:200px; }
+.ctrl-input:focus { outline:none; border-color:var(--gold); }
+.ctrl-select { padding:8px 14px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:'Epilogue',sans-serif; font-size:11px; font-weight:600; }
+.ctrl-select:focus { outline:none; border-color:var(--gold); }
+.action-btn { padding:8px 16px; border-radius:6px; font-family:'Epilogue',sans-serif; font-size:11px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); }
+.action-btn:hover { border-color:var(--gold); color:var(--gold); }
+.action-btn.primary { background:var(--gold); color:#0a0a0a; border:none; }
+.action-btn.primary:hover { background:#e5a607; }
+.skin-group { display:flex; gap:0; margin-left:auto; }
+.skin-btn { padding:6px 12px; border:1px solid var(--border); background:var(--surface); color:var(--text-dim); font-family:'Epilogue',sans-serif; font-size:10px; font-weight:600; cursor:pointer; }
+.skin-btn:first-child { border-radius:6px 0 0 6px; }
+.skin-btn:last-child { border-radius:0 6px 6px 0; }
+.skin-btn.active { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
+
+/* ── Block Card ── */
+.card-wrap { display:flex; justify-content:center; margin-top:16px; }
+.block-card {
+  width:360px; background:#ffffff; border-radius:12px; overflow:hidden;
+  font-family:'Epilogue',sans-serif; color:#1a1a1a;
+}
+.block-header { background:#1a1a1a; padding:16px 20px 12px; position:relative; }
+.block-logo { position:absolute; top:12px; right:16px; width:32px; height:32px; }
+.block-title { font-size:16px; font-weight:800; color:#ffffff; text-transform:uppercase; }
+.block-sub { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; }
+.block-meta { display:flex; gap:12px; padding:10px 20px; background:#f5f5f0; border-bottom:1px solid #e8e4dc; }
+.block-meta-item { font-size:9px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:#6b6560; }
+.block-meta-item span { color:#1a1a1a; font-weight:800; }
+.block-body { padding:16px 20px; }
+.block-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+.block-cell {
+  aspect-ratio:1; border-radius:8px; border:2px solid #e8e4dc;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.15s; position:relative;
+}
+.block-cell .cell-num { font-size:14px; font-weight:800; color:#c0bbb4; }
+.block-cell .cell-date { font-size:6px; font-weight:600; color:#b0a898; margin-top:1px; }
+.block-cell.stamped { border-color:#f7b408; background:rgba(247,180,8,0.08); }
+.block-cell.stamped .cell-num { color:#f7b408; }
+.block-cell.stamped .cell-date { color:#d4a006; }
+.block-cell.stamped::after { content:'✓'; position:absolute; top:2px; right:4px; font-size:8px; color:#f7b408; font-weight:800; }
+.block-progress { margin-top:12px; }
+.block-bar-bg { height:6px; border-radius:3px; background:#f0ece4; overflow:hidden; }
+.block-bar-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,#f7b408,#4ade80); transition:width 0.3s; }
+.block-bar-label { display:flex; justify-content:space-between; margin-top:4px; font-size:8px; font-weight:700; color:#6b6560; text-transform:uppercase; letter-spacing:0.5px; }
+.block-footer { padding:10px 20px; background:#f5f5f0; text-align:center; font-size:8px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#b0a898; }
+
+/* ── Dark skin ── */
+.block-card.dark { background:#0a0a0a; color:#e8e4dc; border:1px solid rgba(247,180,8,0.2); }
+.block-card.dark .block-header { background:#111110; }
+.block-card.dark .block-title { color:#f7b408; }
+.block-card.dark .block-sub { color:rgba(247,180,8,0.35); }
+.block-card.dark .block-meta { background:#0f0f0e; border-color:rgba(247,180,8,0.1); }
+.block-card.dark .block-meta-item { color:#6b6560; }
+.block-card.dark .block-meta-item span { color:#f7b408; }
+.block-card.dark .block-cell { border-color:rgba(255,255,255,0.08); }
+.block-card.dark .block-cell .cell-num { color:rgba(255,255,255,0.15); }
+.block-card.dark .block-cell.stamped { border-color:#f7b408; background:rgba(247,180,8,0.06); }
+.block-card.dark .block-bar-bg { background:rgba(255,255,255,0.06); }
+.block-card.dark .block-bar-label { color:#6b6560; }
+.block-card.dark .block-footer { background:#0f0f0e; color:rgba(247,180,8,0.3); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">10-Block Card</div>
+    <div class="header-sub">Session tracking · Stamp cards for clients</div>
+  </div>
+  <a href="/coaching-os/hub.html" class="back-btn">← Hub</a>
+</div>
+
+<div class="controls">
+  <input class="ctrl-input" id="nameInput" placeholder="Client name...">
+  <select class="ctrl-select" id="blockType">
+    <option value="10">10-Block</option>
+    <option value="5">5-Block (Beginner Week)</option>
+    <option value="20">20-Block</option>
+  </select>
+  <button class="action-btn primary" onclick="renderCard()">Generate</button>
+  <button class="action-btn" onclick="downloadCard()">Download PNG</button>
+  <button class="action-btn" onclick="copyCard()">Copy Image</button>
+  <div class="skin-group">
+    <button class="skin-btn active" onclick="setSkin('light',this)">Email</button>
+    <button class="skin-btn" onclick="setSkin('dark',this)">Instagram</button>
+  </div>
+</div>
+
+<div class="card-wrap">
+  <div id="cardContainer">
+    <div style="text-align:center;padding:60px;color:#6b6560;font-size:13px">Enter client name, pick block size, generate</div>
+  </div>
+</div>
+
+<script>
+const BR_LOGO = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><text x="20" y="28" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="white">BR</text></svg>');
+const BR_LOGO_DARK = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><text x="20" y="28" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="#f7b408">BR</text></svg>');
+
+let activeSkin = 'light';
+let stamps = [];
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function toggleStamp(idx) {
+  if (stamps[idx]) {
+    stamps[idx] = null;
+  } else {
+    stamps[idx] = new Date().toISOString().slice(5,10);
+  }
+  renderCard();
+}
+
+function renderCard() {
+  const name = document.getElementById('nameInput').value.trim() || 'Client';
+  const total = parseInt(document.getElementById('blockType').value);
+  if (stamps.length !== total) stamps = new Array(total).fill(null);
+  const isDark = activeSkin === 'dark';
+  const logo = isDark ? BR_LOGO_DARK : BR_LOGO;
+  const stamped = stamps.filter(Boolean).length;
+  const pct = Math.round((stamped / total) * 100);
+  const cols = total <= 5 ? 5 : 5;
+  const blockLabel = total === 5 ? 'Beginner Week' : total === 20 ? '20-Block' : '10-Block';
+
+  let cells = '';
+  for (let i = 0; i < total; i++) {
+    const s = stamps[i];
+    cells += `<div class="block-cell${s ? ' stamped' : ''}" onclick="toggleStamp(${i})">
+      <div class="cell-num">${i+1}</div>
+      ${s ? `<div class="cell-date">${s}</div>` : ''}
+    </div>`;
+  }
+
+  let html = `<div class="block-card${isDark?' dark':''}" id="blockCard">
+    <div class="block-header">
+      <img class="block-logo" src="${logo}" alt="BR">
+      <div class="block-title">${esc(name)}</div>
+      <div class="block-sub">${blockLabel} · Basic Reflex</div>
+    </div>
+    <div class="block-meta">
+      <div class="block-meta-item">Sessions: <span>${stamped}/${total}</span></div>
+      <div class="block-meta-item">Progress: <span>${pct}%</span></div>
+      ${stamped === total ? '<div class="block-meta-item" style="color:#4ade80">✓ <span style="color:#4ade80">COMPLETE</span></div>' : ''}
+    </div>
+    <div class="block-body">
+      <div class="block-grid" style="grid-template-columns:repeat(${cols},1fr)">${cells}</div>
+      <div class="block-progress">
+        <div class="block-bar-bg"><div class="block-bar-fill" style="width:${pct}%"></div></div>
+        <div class="block-bar-label"><span>${stamped} done</span><span>${total - stamped} remaining</span></div>
+      </div>
+    </div>
+    <div class="block-footer">Basic Reflex · Cuban School of Boxing</div>
+  </div>`;
+
+  document.getElementById('cardContainer').innerHTML = html;
+}
+
+function setSkin(skin, btn) {
+  activeSkin = skin;
+  document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCard();
+}
+
+async function downloadCard() {
+  const el = document.getElementById('blockCard');
+  if (!el) return;
+  const bg = activeSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+  const canvas = await html2canvas(el, { scale:3, backgroundColor:bg, useCORS:true });
+  canvas.toBlob(blob => {
+    const a = document.createElement('a');
+    const n = (document.getElementById('nameInput').value.trim()||'block-card').replace(/[^a-zA-Z0-9]/g,'-').toLowerCase();
+    a.href = URL.createObjectURL(blob);
+    a.download = `block-${n}${activeSkin==='dark'?'-ig':''}.png`;
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+}
+
+async function copyCard() {
+  const el = document.getElementById('blockCard');
+  if (!el) return;
+  const bg = activeSkin === 'dark' ? '#0a0a0a' : '#ffffff';
+  const canvas = await html2canvas(el, { scale:3, backgroundColor:bg, useCORS:true });
+  canvas.toBlob(async blob => {
+    try { await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); } catch(e) { console.error(e); }
+  });
+}
+</script>
+</body>
+</html>
