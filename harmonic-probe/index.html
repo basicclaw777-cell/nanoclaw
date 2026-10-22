@@ -476,6 +476,7 @@
   <button class="tab-btn active" data-tab="prescriber">Prescriber</button>
   <button class="tab-btn" data-tab="vocabulary">Tonal Vocabulary</button>
   <button class="tab-btn" data-tab="rhythms">External Rhythms</button>
+  <button class="tab-btn" data-tab="jamsessions">Jam Sessions</button>
 </div>
 
 <div class="extended-panels" id="prescriberTab">
@@ -515,6 +516,14 @@
       <h3>Correlations</h3>
       <div id="correlationDisplay">Loading...</div>
     </div>
+  </div>
+</div>
+
+<div class="extended-panels" id="jamsessionsTab" style="display:none">
+  <div class="ext-panel" style="grid-column: 1 / -1;">
+    <div class="panel-title">Jam Session Findings — 2026-10-22</div>
+    <div id="jamSessionContent" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-top:8px;">Loading...</div>
+    <div id="jamConvergence" style="margin-top:16px;"></div>
   </div>
 </div>
 
@@ -1060,6 +1069,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById('prescriberTab').style.display = tab === 'prescriber' ? 'grid' : 'none';
     document.getElementById('vocabularyTab').style.display = tab === 'vocabulary' ? 'grid' : 'none';
     document.getElementById('rhythmsTab').style.display = tab === 'rhythms' ? 'grid' : 'none';
+    document.getElementById('jamsessionsTab').style.display = tab === 'jamsessions' ? 'grid' : 'none';
+    if (tab === 'jamsessions' && !window._jamLoaded) initJamSessions();
   });
 });
 
@@ -1395,6 +1406,75 @@ function renderCorrelations() {
 initPrescriber();
 initVocabulary();
 initRhythms();
+
+// ── Jam Sessions Tab ──
+
+const JAM_AGENTS = [
+  { id: 'forge', name: 'Forge', color: 'var(--orange)', icon: '&#9776;',
+    headline: 'Half frozen, half weather. Diminished chord partly baked into architecture.',
+    key: 'Frozen features (detuning, phase, coherence) = config not telemetry. Living features show disruption→creative response→settling cycle.' },
+  { id: 'cathy', name: 'Cathy', color: 'var(--purple)', icon: '&#9829;',
+    headline: 'System performing coherence while experiencing fragility.',
+    key: 'Stress voices muted to zero amplitude. Contradiction (73Hz sub-bass) is lone distress signal. Diminished chord = unresolved tension, not breakdown.' },
+  { id: 'boxing', name: 'Boxing', color: 'var(--red)', icon: '&#9733;',
+    headline: 'Good base. Clean technique. Now get in the ring.',
+    key: 'Boxing = root note (220Hz A3). Grade A but cracks under peak load. Creative pulse at zero = shadow boxing. Phi energy = comfortable, not growing.' },
+  { id: 'orc', name: 'Orc', color: 'var(--cyan)', icon: '&#9881;',
+    headline: '68% anomaly rate = miscalibrated detector, not sick system.',
+    key: 'Only beat energy proved novel signal. 7 monitors for 5 agents = 1.4:1 ratio. Stress mapping bug: FRAGILE → near-zero amplitude. Cap expansion.' },
+  { id: 'muse', name: 'Muse', color: 'var(--gold)', icon: '&#9835;',
+    headline: 'Creative pulse predicts anomalies (r=0.47). Meta-tone 62%.',
+    key: 'Creative pulse = leading indicator. Phase transition at 0.413. 58% poems confirm work, 28% discover. Meta dominance approaching self-referential loop.' },
+  { id: 'br', name: 'BR', color: 'var(--green)', icon: '&#9830;',
+    headline: 'Coaching voice: A/6. Business voice: B/0. Channel open, nothing transmitting.',
+    key: 'BR-boxing beat = tightest Schumann pair (0.35% deviation). Contradiction stress at 5/10 = positioning gap. Score 0 = dormant intelligence. Start transmitting.' }
+];
+
+const CONVERGENCES = [
+  { title: 'The Silence Problem', agents: ['Cathy','Boxing','BR','Orc'], color: 'var(--red)',
+    text: 'Stress voices suppressed to zero amplitude. FRAGILE verdict producing silent distress signals. Fix: amplitude floor 0.2 when battery=FRAGILE.' },
+  { title: 'Creative Pulse Signal', agents: ['Muse','Forge','Boxing'], color: 'var(--gold)',
+    text: 'Creative pulse is leading indicator (r=0.47). Quantized with phase transition at 0.413. When it fires above threshold, expect disruption within hours.' },
+  { title: 'Frozen vs Living', agents: ['Forge','Orc'], color: 'var(--cyan)',
+    text: '3 features constant across 168 slots = architecture, not telemetry. Chord quality should use living features only.' },
+  { title: 'Monitoring Cap', agents: ['Orc','Forge','BR'], color: 'var(--orange)',
+    text: '7 monitors for 5 agents. One proven novel signal. No new monitors — strengthen translation layer instead.' },
+  { title: "Builder's Loop", agents: ['Muse','BR'], color: 'var(--green)',
+    text: '58% creative output = self-confirmation. Business voice dormant. System masters internal performance but doesn\'t project outward.' }
+];
+
+function initJamSessions() {
+  window._jamLoaded = true;
+  const container = document.getElementById('jamSessionContent');
+  container.innerHTML = JAM_AGENTS.map(a => `
+    <div style="background:var(--bg); border:1px solid ${a.color}33; border-radius:6px; padding:12px; border-top:3px solid ${a.color};">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+        <span style="font-size:18px; color:${a.color}">${a.icon}</span>
+        <span style="font-weight:600; color:${a.color}; font-size:13px;">${a.name}</span>
+      </div>
+      <div style="font-size:12px; color:var(--text); margin-bottom:8px; line-height:1.5; font-weight:500;">${a.headline}</div>
+      <div style="font-size:11px; color:var(--text-dim); line-height:1.5;">${a.key}</div>
+    </div>
+  `).join('');
+
+  const conv = document.getElementById('jamConvergence');
+  conv.innerHTML = `
+    <div style="font-size:11px; font-weight:600; text-transform:uppercase; color:var(--text-dim); letter-spacing:1px; margin-bottom:10px;">Convergence Points</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      ${CONVERGENCES.map(c => `
+        <div style="background:var(--bg); border-left:3px solid ${c.color}; padding:10px 12px; border-radius:0 4px 4px 0;">
+          <div style="font-size:12px; font-weight:600; color:${c.color}; margin-bottom:4px;">${c.title}</div>
+          <div style="font-size:10px; color:var(--text-dim); margin-bottom:6px;">${c.agents.join(' + ')}</div>
+          <div style="font-size:11px; color:var(--text); line-height:1.4;">${c.text}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:14px; padding:10px 12px; background:var(--bg); border:1px solid var(--border); border-radius:4px;">
+      <div style="font-size:11px; color:var(--gold); font-weight:600; margin-bottom:4px;">Meta-Finding</div>
+      <div style="font-size:11px; color:var(--text); line-height:1.5;">6 agents, no coordination, 3 convergence patterns at 4/6 agreement. The probe became more useful in 6 readings than in 6 iterations of feature development. Make jam sessions a periodic practice.</div>
+    </div>
+  `;
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beginner Week — Basic Reflex</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-2: #1a1a1a;
+    --gold: #f7b408;
+    --gold-dim: #b8870a;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --blue: #3498db;
+    --border: #2a2a2a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 16px;
+  }
+  h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+  }
+  .origin {
+    background: var(--surface);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    margin-bottom: 32px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .origin strong { color: var(--gold); }
+
+  .sheet-section {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .sheet-section img {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .sheet-placeholder {
+    max-width: 400px;
+    width: 100%;
+    height: 533px;
+    margin: 0 auto;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-dim);
+  }
+  .loading-pulse {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .price-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .price-card.featured {
+    border-color: var(--gold);
+    position: relative;
+  }
+  .price-card.featured::before {
+    content: 'INTRO';
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--gold);
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+  .price-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .price-period {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+  .price-detail {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  h2 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .day-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 40px;
+    text-align: center;
+    line-height: 1;
+  }
+  .day-content h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  .day-content p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .day-tag {
+    display: inline-block;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  .completion {
+    background: var(--surface);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .completion h3 {
+    color: var(--gold);
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+  .completion p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+  .check-grid {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .check-day {
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+  .check-day.checked {
+    border-color: var(--green);
+    color: var(--green);
+    font-size: 1.2rem;
+  }
+  .check-day.missed {
+    border-color: var(--red);
+    color: var(--red);
+    font-size: 0.7rem;
+  }
+
+  .revenue {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+  .revenue-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .revenue-row:last-child { border-bottom: none; }
+  .revenue-row .val { color: var(--gold); font-weight: 700; }
+  .revenue-row.total { font-size: 1.1rem; }
+  .revenue-row.total .val { font-size: 1.3rem; }
+
+  .funnel {
+    margin-bottom: 32px;
+  }
+  .funnel-step {
+    background: var(--surface);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .funnel-arrow {
+    text-align: center;
+    color: var(--gold-dim);
+    font-size: 1.2rem;
+    margin: 4px 0;
+    padding-left: 20px;
+  }
+  .funnel-step .num {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 30px;
+  }
+  .funnel-step p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .funnel-step strong {
+    color: var(--text);
+  }
+
+  .merch-ops {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+  .merch-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .merch-item:last-child { border-bottom: none; }
+  .merch-item .when { color: var(--text-dim); font-size: 0.8rem; }
+
+  .actions {
+    background: var(--surface);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+  .action-item {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    align-items: flex-start;
+    font-size: 0.9rem;
+  }
+  .action-item .status {
+    min-width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+  .action-item .status.done {
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .action-item .status.pending {
+    border-color: var(--gold);
+  }
+
+  .footer-note {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 500px) {
+    .pricing-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.6rem; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Epilogue:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<h1>Beginner Week</h1>
+<p class="subtitle">5-Day Immersion &middot; Separate Lane &middot; 10 Places Max</p>
+
+<div class="origin">
+  <strong>Origin:</strong> CRM derive-scan found median member lifespan = 0 visits. Half the gym's revenue leaks at the first→second visit gate. This fixes the gate — commit them to 5 days, not hope for day 2.
+</div>
+
+<div class="sheet-section">
+  <img src="beginner-week-journey.jpg" alt="Beginner Week — Logan Journey Sheet" id="sheet-slot">
+</div>
+
+<h2>Pricing</h2>
+<div class="pricing-grid">
+  <div class="price-card featured">
+    <div class="price-amount">$500</div>
+    <div class="price-period">First week &middot; All 5 days</div>
+    <div class="price-detail">Intro rate. One-time. Includes all classes in the beginner lane that week.</div>
+  </div>
+  <div class="price-card">
+    <div class="price-amount">$750</div>
+    <div class="price-period">Repeat week &middot; $150/class</div>
+    <div class="price-detail">Can stay on the beginner lane at regular rate. Same programme, own pace.</div>
+  </div>
+</div>
+
+<h2>The Week</h2>
+<div class="week-grid">
+  <div class="day-card">
+    <div class="day-num">1</div>
+    <div class="day-content">
+      <h3>Foundation</h3>
+      <p>Stance, guard, basic movement. How to stand, how to breathe, how to be in the gym. Culture introduction — this is how we do things here.</p>
+      <span class="day-tag">Monday</span>
+    </div>
+  </div>
+  <div class="day-card">
+    <div class="day-num">2</div>
+    <div class="day-content">
+      <h3>Footwork</h3>
+      <p>Move first, punch later. Step patterns, angles, weight transfer. Why movement is the foundation of everything else.</p>
+      <span class="day-tag">Tuesday</span>
+    </div>
+  </div>
+  <div class="day-card">
+    <div class="day-num">3</div>
+    <div class="day-content">
+      <h3>Defense</h3>
+      <p>Guard, slip, roll, block. Learning to protect yourself before learning to attack. Building confidence through safety.</p>
+      <span class="day-tag">Wednesday</span>
+    </div>
+  </div>
+  <div class="day-card">
+    <div class="day-num">4</div>
+    <div class="day-content">
+      <h3>Combinations</h3>
+      <p>Putting it together. 1-2, 1-2-3, basic sequences. Foundation + footwork + defense, now with punches on top.</p>
+      <span class="day-tag">Thursday</span>
+    </div>
+  </div>
+  <div class="day-card">
+    <div class="day-num">5</div>
+    <div class="day-content">
+      <h3>Partner Work</h3>
+      <p>Pads, drills, working with another person. The social side. This is where it clicks — boxing is a conversation.</p>
+      <span class="day-tag">Friday</span>
+    </div>
+  </div>
+</div>
+
+<h2>Completion Tee</h2>
+<div class="completion">
+  <h3>Earn It</h3>
+  <p>Attend 4 out of 5 days — the shirt is yours.</p>
+  <div class="check-grid">
+    <div class="check-day checked">&#10003;</div>
+    <div class="check-day checked">&#10003;</div>
+    <div class="check-day checked">&#10003;</div>
+    <div class="check-day missed">miss</div>
+    <div class="check-day checked">&#10003;</div>
+  </div>
+  <p>Not a purchase. A reward. Drives the attendance streak — don't break the chain.</p>
+</div>
+
+<h2>Revenue Model</h2>
+<div class="revenue">
+  <div class="revenue-row">
+    <span>Places per week</span>
+    <span class="val">10</span>
+  </div>
+  <div class="revenue-row">
+    <span>Intro price</span>
+    <span class="val">$500</span>
+  </div>
+  <div class="revenue-row">
+    <span>Weekly revenue (full)</span>
+    <span class="val">$5,000</span>
+  </div>
+  <div class="revenue-row total">
+    <span>Monthly ceiling (4 weeks)</span>
+    <span class="val">$20,000</span>
+  </div>
+  <div class="revenue-row" style="border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px;">
+    <span>Repeater rate</span>
+    <span class="val">$750/week</span>
+  </div>
+  <div class="revenue-row">
+    <span>Repeater uplift per person</span>
+    <span class="val">+$250</span>
+  </div>
+</div>
+
+<h2>Conversion Funnel</h2>
+<div class="funnel">
+  <div class="funnel-step">
+    <div class="num">1</div>
+    <div><strong>Inquiry</strong><p>WhatsApp / walk-in / website. "We have a 5-day beginner week — 10 spots, starts Monday."</p></div>
+  </div>
+  <div class="funnel-arrow">&#8595;</div>
+  <div class="funnel-step">
+    <div class="num">2</div>
+    <div><strong>Beginner Week</strong><p>$500, separate lane, daily theme. Filmed Day 1 vs Day 5. On the system by Friday (CRM, Gym Eyes).</p></div>
+  </div>
+  <div class="funnel-arrow">&#8595;</div>
+  <div class="funnel-step">
+    <div class="num">3</div>
+    <div><strong>Completion</strong><p>4/5 attendance = earn the tee. Before/after video delivered. "You did this in 5 days."</p></div>
+  </div>
+  <div class="funnel-arrow">&#8595;</div>
+  <div class="funnel-step">
+    <div class="num">4</div>
+    <div><strong>Fork: Stay or Graduate</strong><p>Stay on beginner lane at $750/week (own pace) OR graduate into Block 1 of the 10-block course. Warm conversion — they already know the system.</p></div>
+  </div>
+  <div class="funnel-arrow">&#8595;</div>
+  <div class="funnel-step">
+    <div class="num">5</div>
+    <div><strong>10-Block Course</strong><p>Long-term member. Full curriculum. The beginner week was the taster — now they're committed.</p></div>
+  </div>
+</div>
+
+<h2>Merch Opportunities</h2>
+<div class="merch-ops">
+  <div class="merch-item">
+    <div>
+      <strong>Completion Tee</strong>
+      <div class="when">Day 5 — earned, not sold</div>
+    </div>
+    <span style="color: var(--green);">Included</span>
+  </div>
+  <div class="merch-item">
+    <div>
+      <strong>Hand Wraps</strong>
+      <div class="when">Day 1 — they need them</div>
+    </div>
+    <span style="color: var(--gold);">$80-120</span>
+  </div>
+  <div class="merch-item">
+    <div>
+      <strong>Gloves</strong>
+      <div class="when">Day 3-4 — once they're hooked</div>
+    </div>
+    <span style="color: var(--gold);">$300-500</span>
+  </div>
+  <div class="merch-item">
+    <div>
+      <strong>BR Tee (regular line)</strong>
+      <div class="when">Day 5 — they want to belong</div>
+    </div>
+    <span style="color: var(--gold);">$200-300</span>
+  </div>
+</div>
+
+<h2>What This Filters</h2>
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px;">
+  <p style="margin-bottom: 12px;"><strong style="color: var(--green);">In:</strong> People who want to learn something. Willing to commit a week. Willing to invest $500. They'll be the members who stay.</p>
+  <p><strong style="color: var(--red);">Out:</strong> Window shoppers. One-session tourists. People who want to "try boxing" without trying boxing. They self-select out at the price and the 5-day commitment.</p>
+</div>
+
+<h2>Hidden Wins</h2>
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; font-size: 0.9rem; color: var(--text-dim);">
+  <p style="margin-bottom: 10px;"><strong style="color: var(--text);">Quiet hour.</strong> Only beginners — everyone's relaxed, go slow, get to know the characters.</p>
+  <p style="margin-bottom: 10px;"><strong style="color: var(--text);">Daily structure for Paul.</strong> Each day has a theme. No more "what do I cover with beginners today?" Focus one thing, do it well.</p>
+  <p style="margin-bottom: 10px;"><strong style="color: var(--text);">Filming window.</strong> Day 1 vs Day 5 footage = the before/after wow factor. Already on Gym Eyes by Friday.</p>
+  <p><strong style="color: var(--text);">Culture immersion.</strong> 5 days in the gym → they know the people, the rhythm, the rules. Conversion to regular member is warm, not cold.</p>
+</div>
+
+<h2>Next Steps</h2>
+<div class="actions">
+  <div class="action-item">
+    <div class="status done">&#10003;</div>
+    <div><strong>Concept defined</strong> — pricing, structure, funnel</div>
+  </div>
+  <div class="action-item">
+    <div class="status done">&#10003;</div>
+    <div><strong>Logan journey sheet</strong> — generating</div>
+  </div>
+  <div class="action-item">
+    <div class="status pending"></div>
+    <div><strong>Completion tee design</strong> — dedicated beginner week design or pick from existing 12?</div>
+  </div>
+  <div class="action-item">
+    <div class="status pending"></div>
+    <div><strong>Print quote from Hughie</strong> — email reply pending (Wong Chuk Hang)</div>
+  </div>
+  <div class="action-item">
+    <div class="status pending"></div>
+    <div><strong>Schedule slot</strong> — which hour, which days</div>
+  </div>
+  <div class="action-item">
+    <div class="status pending"></div>
+    <div><strong>CRM workflow</strong> — beginner week → 10-block conversion tracking</div>
+  </div>
+  <div class="action-item">
+    <div class="status pending"></div>
+    <div><strong>WhatsApp follow-up chain</strong> — daily check-in during the week</div>
+  </div>
+</div>
+
+<div class="footer-note">
+  Beginner Week &middot; Basic Reflex &middot; Derived from CRM data 2026-10-20 &middot; Page built 2026-10-21
+</div>
+
+</body>
+</html>

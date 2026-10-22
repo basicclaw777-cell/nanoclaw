@@ -1,5 +1,5 @@
 # Global Property Scout — Summary Report
-**Scan Date:** 2026-10-07
+**Scan Date:** 2026-10-21
 **Prepared for:** Paul — HK-based boxing gym owner, Basic Reflex, Kennedy Town
 **Budget:** HK$1-4M (US$130K-$510K)
 
@@ -7,76 +7,68 @@
 
 ## Executive Summary
 
-This scan adds **5 new opportunities (GL057–GL061)**, bringing the running total to **61 across 17 countries**. Four new countries (Colombia, UAE, Albania, Indonesia) and five new cities (Medellín, Dubai, Tirana, Canggu, Koh Samui). But the headline is not a new deal — it is a **risk event that directly validates your Thailand thesis**.
+This scan adds **4 new entries (GL066–GL069)**, bringing the running total to **69 across 18 countries**. But this is not a "new deals" week. It is a **"the traps have moved" week** — and that is the more useful thing to tell you.
 
-**The Thailand nominee crackdown is the story this week.** The forum scrape (2026-10-04, three days ago) is saturated with it: police and the DBD/DSI dismantling Chinese and Russian nominee networks across Bangkok, Phuket, Pattaya, Samui and Koh Tao — 33 villas in Bangkok, 231 arrests in Phuket, 60 firms on Samui, 23 convictions and 60 busted companies. This is exactly the ownership structure the brief warned you about ("ownership structures that don't trap foreigners"), being prosecuted in real time.
+**The Thailand nominee crackdown has escalated and changed shape.** The fresh forum scrape (2026-10-18) shows two things the last summary didn't: (1) the crackdown has reached its **eighth phase** — 11 foreigners arrested in four Bangkok luxury estates on October 10, ~THB 6 billion (US$179M) seized — and (2) it has now landed **directly on Koh Samui**, with **20 arrest warrants issued for an Israeli nominee network** holding land, property and restricted businesses. The story is no longer "Phuket/Pattaya villas are toxic." It is "the nominee inventory is being dumped onto the portals at fire-sale prices, tagged 'Freehold.'"
 
-The lesson is not "avoid Thailand." It is the opposite: **the legal foreign-quota condo lane just got more valuable** because buyers are fleeing nominee villas into clean condos — and the tourist-island villa/land lane (where the crackdown is concentrated) is now toxic. Your instinct — foreign-quota condo only, never nominee, never land — is the correct read, and the crackdown is now doing the enforcement for you.
+That last detail is the point of this whole scan. The real FazWaz scrape (2026-10-18) surfaced a Samui house tagged **"Freehold"** — a legal impossibility for a foreigner in Thailand. So three of this week's four entries are **trap flags, not buys**: the mislabelled "freehold house," the government affordable-housing that looks like the cheapest condo on the portal, and the clean-but-wrong-neighborhood Patong title. The fourth closes a genuine gap in your coverage: **Ho Chi Minh City (Saigon)** — the one big Southeast Asian market you hadn't seen.
 
-This batch closes out the remaining wildcards in the brief: Colombia (the other boxing nation), Dubai (zero tax, flagged), Albania (pre-EU accession, flagged), Bali (leasehold, rejected honestly), and one grounded Thailand entry showing what this week's scrape actually surfaced.
+Your rule — foreign-quota condo only, never land, never nominee — is being vindicated in real time. The crackdown is now doing your due diligence for you, and it's surfacing the exact inventory to avoid.
 
 ---
 
 ## Top Picks (New This Scan)
 
-### 🥇 GL057 — Medellín, Colombia (Laureles / Estadio)
-**HK$717K | 700sqft | 7.5% yield | WILDCARD | mixed**
+### 🥇 GL069 — Ho Chi Minh City (Saigon), Vietnam (Bình Thạnh / District 3 fringe)
+**~HK$971K | 50sqm | ~4.5% yield | INTERESTING | mixed — LIFESTYLE/BUSINESS, NOT SOVEREIGNTY**
 
-The hemisphere's other great boxing nation, and you hadn't looked at it. Antioquia — the state Medellín anchors — produces world champions and a deep amateur pipeline; the city has real fight gyms, not fitness-brand boxing. Laureles is the barrio that fits your taste exactly: flat, walkable, tree-lined, a serious food culture (bandeja paisa, arepas on every corner), working-class roots gentrifying on their own terms. ~HK$717K for 700 sqft is a third of the equivalent CDMX price, a tenth of HK. It is the authenticity-per-dollar play Guadalajara was last scan, one country south. The honest caveats: safety is barrio-by-barrio, the peso is volatile, and the long-stay visa is a digital-nomad/rentista class, not a citizenship play.
+The one market you hadn't looked at, and the closest thing to Hong Kong energy in the region. Saigon is 14 million people (Wikipedia-verified: most populous city in Vietnam, formerly Saigon), a real and fast-growing fight scene (MMA/boxing gyms in District 1/3), and coffee is Vietnam's national religion — the world's #2 exporter, drunk at every street corner all day. Your boxing-plus-coffee model lands here harder than almost anywhere. Bình Thạnh is the working-class river district gentrifying the way Kennedy Town did. **The honest catch, stated flat:** foreigners can only own apartments on a 50-year leasehold (renewable, 30% foreign cap per building), never freehold. This is a lifestyle/business play, not a sovereignty play. It's here because it's the best new *business* opening in the whole set — not because it passes your ownership test.
 
-### 🥈 GL058 — Dubai, UAE (JVC / Al Quoz)
-**HK$1.82M | 700sqft | 7.0% yield | INTERESTING | investment**
+### 🥈 GL066 — Koh Samui, the "Freehold house" trap (Maret)
+**~HK$626K | 2-bed house | WATCH — DO NOT BUY**
 
-The zero-tax case is real, and so is the fitness culture — Dubai is a genuine combat-sports hub with real money in fitness/F&B, and foreign freehold in the designated zones is clean. But it is the opposite of your "authenticity over polish" taste: 92% expat, developer-driven, no old bones. Flagged as worth tracking, not a buy. The specific thing you'd miss: the golden-visa property route starts at AED 2M (~HK$4.3M, at/above your ceiling), so the real path is a self-sponsored or gym-business visa — and the market is under-supplied for an authentic, coach-led Cuban-school gym in a city of slick franchises.
+The single most important thing I found this week, and it's a warning, not a listing. A 2-bed house on Samui tagged **"Freehold"** on FazWaz. You cannot own a house freehold in Thailand — full stop. A "freehold house" is either a mislabelled lease or a nominee/company-holding structure, and the nominee structure is precisely what the Samui crackdown (20 Israeli warrants this month) is prosecuting. The bargain is the warning sign. A second unit in the same scrape is tagged **"Leasehold,Freehold" simultaneously** — the portal itself doesn't know what it's selling. The legal lane on Samui is foreign-quota *condo* only (GL061, GL065), never land, never a garden.
 
-### 🥉 GL059 — Tirana, Albania (Blloku)
-**HK$1.19M | 970sqft | 4.5% yield | WILDCARD | investment**
+### 🥉 GL067 — Chiang Mai, the "cheapest condo" trap (Pa Daet)
+**~HK$153K | 2-bed | WATCH — NOT BUYABLE BY YOU**
 
-The pre-EU-accession wildcard. Albania is an EU candidate with the cheapest capital city in Europe (~€1,300-1,700/sqm vs Lisbon's €4,000+), working-class energy, and a real street-food scene. But it is a 5-10 year accession thesis, not a cash-flow play: liquidity is thin, title/legalization diligence is essential, and the rental market is shallow outside the core. The structural demand floor is the diaspora sending money home, plus the fastest-growing tourism market in Europe pulling secondary demand into Tirana.
+The cheapest condos in Chiang Mai this week — HK$153K for a 2-bed — are **Baan Ua-Athorn**, Thailand's government affordable-housing scheme, restricted to Thai nationals. They will catch your eye as "the value play" and waste your time. The useful signal hiding underneath: the real foreign-quota floor (GL062, Angket Pavillian, HK$163K) sits only ~6% above the restricted stock. **The clean lane is barely more expensive than the lane you can't touch** — which means the clean lane is the best relative value in Chiang Mai right now, not a premium.
 
-### Rest of the batch — both "watch, don't rush," and that is the point
-- **GL060 — Canggu, Bali, Indonesia** (HK$1.54M, WATCH): you asked me to flag Bali honestly, so — you cannot own freehold in Indonesia, full stop. Leasehold/hak-pakai via a nominee is the exact structure Thailand is now prosecuting, and Indonesia has run the same crackdowns. Canggu is the definition of "digital nomad premium" pricing. This fails your sovereignty test; underwrite as "do not buy."
-- **GL061 — Bo Phut, Koh Samui, Thailand** (HK$520K, WATCH): the actual fresh data from this week's FazWaz scrape. A legal foreign-quota freehold studio (The Saint, 2018, 347 sqft). Legally clean — but on a tourist island in the exact geography of the crackdown. It passes your ownership test and fails your "no tourist trap" test on the demand side. That tension is the whole Thailand story: the tailwind is real, but it points at Bangkok/Chiang Mai, not Samui.
+### GL068 — Phuket, the clean-title-in-the-wrong-place marker (Patong)
+**~HK$686K | 28sqm studio | WATCH**
+
+A genuine foreign-quota title in Patong — the exact neighborhood you told me to skip. Shown only to make one point visible: the foreign-quota premium is **uniform across Phuket**. Patong and Rawai trade at nearly the same price per quota-sqm, so there is no "discount" for the tourist trap — you'd pay full price for a neighborhood you rejected on principle. The arbitrage is to buy the same title where the demand is real (GL063, Rawai/Soi Ta-iad fight corridor), not seasonal tourists.
 
 ---
 
-## Theme Recap — the wildcard list is now closed
+## Theme Recap — the crackdown has moved from "lane closure" to "trap surfacing"
 
-- **Thailand (14):** Bangkok (Ari, On Nut, Ratchada, Bang Na), Chiang Mai, Chiang Rai, Phuket (Rawai/Chalong/Soi Ta-iad), Hua Hin, Udon Thani, Khon Kaen, **Koh Samui (watch)**.
-- **Mexico:** Mexico City (Roma/Condesa), Guadalajara. **Colombia (new):** Medellín.
-- **UK:** Belfast, Newcastle, Sheffield, Liverpool, Manchester, Leeds, Glasgow, Birmingham.
-- **Japan:** Osaka, Fukuoka, Sapporo, Nagoya, Yuzawa, Naha/Okinawa.
-- **Sovereignty tier:** Japan, Georgia, Uruguay, Turkey, Mexico (inland), Portugal, UK, Serbia. **Now flagging:** Colombia (freehold, direct), UAE (freehold zones only), Albania (freehold, thin), **rejecting:** Indonesia (leasehold/nominee only).
+- **Thailand (now 18 entries):** Bangkok (Ari, On Nut, Ratchada, Bang Na, Rangsit), Chiang Mai, Chiang Rai, Phuket (Rawai/Chalong/Soi Ta-iad, Patong, Wichit), Hua Hin, Udon Thani, Khon Kaen, Koh Samui. The legal lane is foreign-quota condo only.
+- **Sovereignty tier (unchanged, reinforced):** Japan / Georgia / Uruguay / Mexico-inland / Colombia — freehold, direct, no nominee. Then Portugal / UK / Serbia / Albania / UAE (freehold zones). Thailand = foreign-quota condo only. **Vietnam = leasehold only (new, flagged honestly).** Rejecting: Indonesia (leasehold/nominee).
+- **New coverage:** Vietnam gains depth (Saigon joins Da Nang/GL032). 18 countries total.
 
-### 🏛️ Sovereignty — the crackdown sharpens the ranking
-The nominee crackdown reframes the whole "where can I actually own this cleanly" question:
-1. **Japan / Georgia / Uruguay / Mexico-inland / Colombia** — freehold, direct, no nominee.
-2. **Portugal / UK / Serbia / Albania / UAE (freehold zones)** — freehold with normal diligence.
-3. **Thailand** — foreign-quota condo only (never land, never nominee). Now more valuable *because* the nominee lane is being dismantled.
-4. ⚠️ **Vietnam / Indonesia / Philippines-land** — leasehold or quota-only; Indonesia is the hard no.
-
-### ☕ Coffee/Bagel F&B model — new fits
-- **Medellín (GL057)** — Laureles' cafe density; "boxing plus coffee" lands as heritage in a boxing nation.
-- **Dubai (GL058)** — Al Quoz warehouse "old bones, new fight" in a market of franchises (the one place the concept is a genuine gap).
-- **Tirana (GL059)** — first-mover gym in a fast-growing, low-rent fitness market.
-- **Standing:** Bangkok Ari/On Nut/Ratchada, Chiang Mai, Chiang Rai, Coimbra, Braga, Da Nang, Lisbon Marvila, Penang, Chalong, Belgrade, Ipoh, Glasgow, Belfast, Kuching, Mexico City, Istanbul/Kadıköy, Newcastle/Ouseburn, Caldas da Rainha, Kota Kinabalu, Cebu City, Guadalajara, Birmingham, Montevideo, Naha, Khon Kaen.
+### 🏛️ The crackdown, updated
+The nominee crackdown's eighth phase (Bangkok, Oct 10 — 11 arrested, THB 6bn seized) plus the Samui Israeli-nominee warrants mean two things for you, both favorable if you stay in your lane:
+1. **Clean foreign-quota condos get *more* valuable** — buyers fleeing nominee villas are moving into legal quota. Re-check quota availability in your Bangkok/Chiang Mai shortlist (GL001–GL003, GL052, GL062); demand for clean quota is firming.
+2. **The portal is now flooded with traps** — "Freehold" houses, leasehold micro-condos, and Thai-only government housing all look like bargains. Your "clean freehold only" rule is the filter that keeps you out of all of them.
 
 ---
 
 ## Verification Status (read before acting)
 
-- **Currency:** live and authoritative (fetched 2026-10-06, HKD base via er-api.com — 1 USD = 7.847 HKD, 1 GBP = 10.373 HKD, 1 THB = 0.2329 HKD, 1 COP = 0.002389 HKD, 1 AED = 2.137 HKD, 1 ALL = 0.0956 HKD, 1 IDR = 0.000439 HKD).
-- **Search backend:** DEGRADED again this scan — `web_search` returned zero results (identical failure to the prior two scans). Wikipedia REST *summary* API worked for clean geographic facts. **Verified this scan:** Medellín = 2nd-largest city in Colombia, capital of Antioquia, 2.43M (2018 census), metro >4M; Tirana = capital and largest city of Albania; Dubai = most populous UAE city, 4M (2025), 92% expatriate. **Listing-level asking prices are CALIBRATED ESTIMATES against established market context — NOT verified live listings — except GL061, which is a real FazWaz listing from this week's scrape (The Saint Condo, Bo Phut, foreign-quota, THB 2,233,800).** Treat every other asking price as a starting anchor. Verify against Fincaraiz/Properati (Medellín), Property Finder/Bayut (Dubai), Alaproperty (Tirana), Lamudi (Bali) before any offer.
-- **Flagged for confirmation (all have moved historically):** Colombia digital-nomad/rentista income thresholds and safety-by-barrio; UAE golden-visa threshold and freehold-zone map; Albania foreign-ownership registration and legalization history; Indonesia leasehold/hak-pakai terms and nominee enforcement; Thailand DTV vs Elite current terms. Re-confirm before any decision that leans on them.
-- This is intelligence, not advice.
+- **Currency:** live and authoritative (fetched 2026-10-20, HKD base via er-api.com). The request file's conversion table is stale — current: **1 HKD = 4.28 THB** (was 4.5), **0.114 EUR**, **20.18 JPY**, **0.331 GEL**, **0.0957 GBP**, **0.520 MYR**, **0.468 AED**, 404 COP, 2.35 MXN, 10.34 ALL, 2,299 IDR, **3,295 VND**, 8.03 PHP, 6.31 TRY, 13.34 RSD, 5.13 UYU, 0.1274 USD.
+- **Search backend:** still DEGRADED — `web_search` returned zero results (fourth consecutive scan). Wikipedia REST worked for geographic facts (Saigon = 14M, most populous city in Vietnam — verified).
+- **Listing-level grounding — a genuine upgrade this week:** **GL066, GL067, GL068 are REAL FazWaz listings** from the 2026-10-18 scrape, with live asking prices (converted at today's FX) and direct source URLs. These are not estimates. **GL069 is a CALIBRATED ESTIMATE** (no live portal verified — web_search is down); treat the HK$971K / 50sqm figure as a starting anchor, verify against Batdongsan/Muaban before any offer. The crackdown facts are scraped headlines (thethaiger + reddit, 2026-10-18) — real but not independently verified.
+- **Flagged for confirmation (all move historically):** Thailand foreign-quota caps and Samui nominee prosecutions; Vietnam's 50-year leasehold terms, 30% foreign cap, and pink-book process; Vietnam long-stay visa classes for HK/BNO.
+- This is intelligence, not advice. The trap flags (GL066–GL068) are exactly the "what the agents won't tell you" the brief asked for.
 
 ---
 
 ## What To Do Next
 
-1. **Act on the crackdown, not the fear.** The Thailand nominee crackdown is a tailwind for legal foreign-quota condos in Bangkok/Chiang Mai (GL001–GL003, GL052). If anything, this scan moves those up, not down. The move is to *re-check foreign-quota availability* in the Bangkok/Chiang Mai buildings you already shortlisted — demand for clean quota is about to firm.
-2. **Fight corridor — Colombia vs Khon Kaen.** GL057 (Medellín) and GL052 (Khon Kaen) are now the two cheapest authenticity-per-dollar plays in the whole set. If the corridor is about recruiting and building, Medellín is the boxing-nation entry point at ~HK$717K with freehold and a 7.5% yield; Khon Kaen is the Thai recruiting ground at HK$436K. Decide which hemisphere the thesis lives in.
-3. **Sovereignty — the crackdown is your proof of concept.** The nominee structure you already rejected is being prosecuted in Thailand and Indonesia this month. Your "clean freehold only" rule is vindicated; lean into Japan/Georgia/Uruguay/Colombia as the clean tier.
-4. **Re-confirm the shifted visa programs** — Colombia nomad/rentista, UAE golden visa, Albania residency, Indonesia leasehold terms, Thailand DTV/Elite. All have moved historically.
+1. **Ignore the fire-sale, keep the lane.** GL066 is the week's lesson in a single listing: when the market panics, the traps get cheap and get labelled "Freehold." Your rule is the filter. Don't touch houses/villas/land in Thailand no matter the tag.
+2. **Chiang Mai is the actionable value now.** GL067 shows the clean-lane floor (GL062, HK$163K) sits only 6% above the Thai-only stock. If you want a cheap, legal, Muay-Thai-city base, Chiang Mai foreign-quota is the best relative value in the whole set — re-check GL062's quota before it firms.
+3. **Decide if Vietnam is a business play, not an asset play.** GL069 is the strongest new *business* opening (coffee + combat sports in a 14M city), but it's leasehold. If the thesis is "replicate Basic Reflex abroad," Saigon is worth a site visit; if the thesis is "sovereign asset," it isn't.
+4. **Re-confirm the moving visa programs** — Vietnam long-stay classes, Thailand DTV/Elite, and the nominee-prosecution status on Samui before any decision that leans on them.
 
-*Scan conducted 2026-10-07. 61 properties total (GL001–GL061). Snapshot archived to global-history/global-2026-10-07.json.*
+*Scan conducted 2026-10-21. 69 properties total (GL001–GL069). Snapshot archived to global-history/global-2026-10-21.json. Note: this summary regenerates a stale copy (last full write was 2026-10-07 at 61 entries); GL062–GL065 had been added 2026-10-13/14 without a summary refresh.*

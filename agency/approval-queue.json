@@ -3248,5 +3248,200 @@
     "risk_notes": "Creates a NEW vault note only — additive, no edits to existing files, no spend, no external message, no code change. Fits whitelist (a) write_vault_note. The unresolved threshold question is captured as a flag inside the note rather than acted on, so no judgment is pre-empted.",
     "status": "pending",
     "ts": "2026-09-27T17:15:30.197Z"
+  },
+  {
+    "id": "b433d08b6609",
+    "a_item": {
+      "question": "How can the Ebbinghaus decay engine be integrated into the existing vault search system to weight results by retention, ensuring that the most stable and valuable nuggets are prioritized in search results?",
+      "domain": "cathedral"
+    },
+    "action": "Write a new vault note proposing retention as a multiplicative term inside the existing single search score, flagging the self-reinforcing access-reset trap, for Paul's review.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Additive new vault note only; no code change, no existing file edit, no spend, no external message. Design proposal is captured for human judgment rather than implemented, so it stays within the write_vault_note whitelist.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:10.846Z"
+  },
+  {
+    "id": "ec09d4b8f878",
+    "a_item": {
+      "question": "How can the patterns and insights from the most successful sessions, such as the one described in the session harvest, be codified and turned into a repeatable process or system that can be applied to future sessions?",
+      "domain": "cathedral"
+    },
+    "action": "Write a NEW vault note in 00_Staging reverse-engineering the pass1/pass2/pass3 definitions from the existing session-harvest files, documenting what enters and concludes at each pass.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Additive new vault note only; no edits to existing harvest files, no spend, no external message, no deletes, no code change. Fits whitelist (a) write_vault_note. Note: the answer's discriminator is marked [needs...] (incomplete), so the note should flag gaps rather than assert a spec — but creating a new capture is still reversible and internal.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:13.184Z"
+  },
+  {
+    "id": "958f276a60b6",
+    "a_item": {
+      "question": "What is the single most impactful correction we can make to the Ebbinghaus decay engine to ensure the long-term retention and stability of vault nuggets and profile items, and how can we integrate it into the Cathedral's daily operations?",
+      "domain": "cathedral"
+    },
+    "action": "Write a new vault note proposing that the decay engine key off sessions-since-last-vault-load rather than wall-clock days, and queue a task to review it.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note and remove the queued task",
+    "risk_notes": "Additive internal artifact only: creates a NEW vault note capturing a structural proposal, no code change, no money, no external message, no delete/overwrite. Fits whitelist (a) write_vault_note. Actual engine change remains for human review.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:14.639Z"
+  },
+  {
+    "id": "784f023d8818",
+    "a_item": {
+      "question": "What are the key factors that contribute to Paul's ability to trust and rely on the Cathedral's outputs and decisions during sessions, and how can we continue to foster and strengthen this trust?",
+      "domain": "cathedral"
+    },
+    "action": "Write a new vault note specifying the two-tag output convention (faithfulness-verified vs. fluent; self-audit blind spots) and queue a task to verify the scoring threshold against the faithful-GRPO note.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note (and remove the queued task)",
+    "risk_notes": "Creates a new internal vault note only — additive, no money, no external message, no delete/overwrite, no code change. The threshold-verification is deferred to a queued task rather than invented, per the answer's own caution. Fits whitelist item (a).",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:16.563Z"
+  },
+  {
+    "id": "02d4fa474031",
+    "a_item": {
+      "question": "How can we integrate the concepts and frameworks discussed in the UK relay threads, such as the Sovereign Decoder and the 1-bit Alignment Tax, into the Cathedral's existing architecture and decision-making processes?",
+      "domain": "cathedral"
+    },
+    "action": "Create a new vault note defining 'Sovereign Decoder' and '1-bit Alignment Tax' from UK relay source files, then map each to an existing artifact (Decoder→output stage, Alignment Tax→decision record field).",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Creates a NEW vault note only; additive, no edits to existing files, no spend, no external message, no code change. Fits whitelist (a) write_vault_note. Note: definitions must be sourced from UK relay files, not invented — the note should flag any unverified terms rather than assert semantics.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:18.109Z"
+  },
+  {
+    "id": "c806daf93068",
+    "a_item": {
+      "question": "What are the potential risks and challenges associated with the content sprint, and how can we mitigate these risks to ensure the quality and relevance of the output?",
+      "domain": "content"
+    },
+    "action": "Write a new vault note proposing a content-sprint risk register: pre-commit new-intent success metric, one kill-criterion, and audit whether analytics separates new vs returning viewers.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note",
+    "risk_notes": "Creates a NEW vault note only — additive, no edits to existing files, no spend, no external message, no code change. Fits whitelist (a) write_vault_note. The analytics-pipeline check is framed as a proposal inside the note, not an executed change.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:19.881Z"
+  },
+  {
+    "id": "c79e50f8c50f",
+    "a_item": {
+      "question": "How can we optimize the calibration phase of the content sprint to ensure that all output looks and feels like Paul and Logan, while also maintaining a high level of quality and relevance?",
+      "domain": "content"
+    },
+    "action": "Draft a pass/fail calibration checklist from the Pass 3 Calibration & Working Style note and save it as a new vault note for Paul's review before the sprint.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new checklist note",
+    "risk_notes": "Additive new vault note only; no money, no external message, no delete/overwrite, no code change. Fits whitelist (a) write_vault_note. Note: the answer also flags a gap (no Logan voice grounding) requiring Paul's judgment, but the concrete move itself is a safe new-note creation.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:21.747Z"
+  },
+  {
+    "id": "24e91d52daa0",
+    "a_item": {
+      "question": "If Paul were to fully commit to the Ebbinghaus decay engine and let it run on all of his content, what would it reveal about the long-term retention and relevance of his creative work?",
+      "domain": "content"
+    },
+    "action": "Write a new vault note documenting the proposed 're-reference edges' instrumentation design and the prediction that meta-material survives while generative artifacts decay, for Paul's review.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Creates a new vault note only; no existing data edited, no money spent, no external message, no code change. Falls under whitelist (a) write_vault_note. The note captures analysis and a design proposal, not execution of the decay engine.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:23.533Z"
+  },
+  {
+    "id": "dae4432e5572",
+    "a_item": {
+      "question": "If Paul were to fully embrace the 'Amazon for your work' status board system, what would it mean for his ability to outsource and delegate work to others in the system?",
+      "domain": "wealth"
+    },
+    "action": "Write a new vault note capturing the delegation-gap diagnostic: rewrite one repeated card type's done-condition as a verifiable checklist, reassign one instance, log each reach-in as a missing criterion.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note",
+    "risk_notes": "Additive internal capture only — creates a NEW note, edits nothing existing, no spend, no external message, no code change, no delete. Fits whitelist (a) write_vault_note. The actual reassignment of work to another person is NOT executed here (that would be external/ambiguous → propose); only the diagnostic note is written.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:25.227Z"
+  },
+  {
+    "id": "3cdd15f0a3f1",
+    "a_item": {
+      "question": "What is the single most impactful financial strategy Paul should adopt to maximize his wealth leverage and infrastructure ownership, and how can the Cathedral assist in implementing and monitoring this strategy?",
+      "domain": "wealth"
+    },
+    "action": "Create a new vault note proposing a 'Wealth' section: log capital decisions with action/omission/intention fields and track owned-asset vs rented-time income ratio.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note",
+    "risk_notes": "Additive new note only; no money spent, no external message, no delete/overwrite, no code change. Fits write_vault_note whitelist. Note is a proposal scaffold, not a financial decision or allocation.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:27.479Z"
+  },
+  {
+    "id": "5d7675f7e823",
+    "a_item": {
+      "question": "How can we translate the diagnostic empathy and fear gate models into shippable products or services that generate revenue and provide healing for others, and what would be the first steps in building and launching these offerings?",
+      "domain": "cathedral|wealth"
+    },
+    "action": "Draft a product concept brief for an Emotion Node Priming + Felt Sense digital platform and queue it as a task for Paul's review before any build or spend.",
+    "kind": "queue_task",
+    "reversible_via": "remove the queued task from the planner",
+    "risk_notes": "Involves product strategy, potential spend, marketing, and launch decisions requiring Paul's judgment; not a read-only analysis or new-note capture, so it falls outside the auto whitelist.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:29.154Z"
+  },
+  {
+    "id": "1e5ec63167c7",
+    "a_item": {
+      "question": "What are the key research findings from the other builders that are most relevant and applicable to the Cathedral's goals, and how can we integrate these insights into our architecture and strategy?",
+      "domain": "cathedral"
+    },
+    "action": "Queue a task for Paul to manually review 02_Refined_Gold Architect's Forensics and 06_Methods Forge notes to extract do-vs-think behavioral-grounding primitives.",
+    "kind": "queue_task",
+    "reversible_via": "remove the appended task from the planner/todo queue",
+    "risk_notes": "Additive internal task append only; no spend, no external message, no delete/overwrite, no code change. Fits whitelist (b) queue_task. The substantive research/judgment work is deferred to Paul, not auto-executed.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:30.696Z"
+  },
+  {
+    "id": "1e1157512f1e",
+    "a_item": {
+      "question": "How can we optimize and scale the ebbinghaus decay engine to improve the retention and accessibility of the Cathedral's knowledge base, and what impact would this have on the overall effectiveness and utility of the vault?",
+      "domain": "cathedral"
+    },
+    "action": "Write a new vault note capturing the finding that the decay engine must gate vault-loading prompt selection, plus the graph-propagation and retrieval-logging requirements, flagged for Paul's review.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Additive internal artifact only: creates a NEW vault note, no edits/deletes, no spend, no external message, no code change. Fits whitelist (a). The architectural change itself (wiring decay into prompt assembly, graph propagation) is NOT executed — it is captured as a proposal for human judgment.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:32.668Z"
+  },
+  {
+    "id": "5368ae658538",
+    "a_item": {
+      "question": "How can we integrate the use of prototypes and working builds into the Cathedral's creative process to improve the quality and effectiveness of the outputs, and what role should the agents play in this process?",
+      "domain": "cathedral"
+    },
+    "action": "Queue a task to locate the exact Orchestrator Core / real-time feedback revision point in build plan (nugget 7) and Nervous System Architecture (nugget 10), then scope a throwaway Emergence Engine prototype build against it.",
+    "kind": "queue_task",
+    "reversible_via": "Remove the appended task from the planner/todo queue",
+    "risk_notes": "Additive internal queue entry only; no spend, no external message, no delete/overwrite, no code change. Fits whitelist (b) queue_task. The actual prototype build (code, live-state execution) is deferred to human approval.",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:36.361Z"
+  },
+  {
+    "id": "f84136195e42",
+    "a_item": {
+      "question": "How can we leverage the DeepSeek relay threads from Paul's UK trip to inform and advance the Cathedral's research and architecture, particularly in the areas of truth finding, wealth creation, and AI systems development?",
+      "domain": "cathedral|wealth|ai"
+    },
+    "action": "Write a new vault note proposing a capped, transcript-by-transcript extraction session that fills a three-column relay ledger (survived / mutated-dropped / single-model-only) and flags that thread files, model chain, and trip dates must be ",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Additive new vault note only; no money, no external message, no delete/overwrite, no code change. The answer explicitly refuses to invent thread contents and defers verification to Paul, so capturing it as a note is safe. Actual mining of relay logs and any architecture decision remain for Paul (propose).",
+    "status": "pending",
+    "ts": "2026-10-18T17:15:39.686Z"
   }
 ]

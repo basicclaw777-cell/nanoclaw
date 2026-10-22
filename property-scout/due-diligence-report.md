@@ -1,6 +1,6 @@
 # Due Diligence Report — Golden Zone Industrial Units (Kids Boxing Gym)
 
-**Date:** 15 October 2026
+**Date:** 22 October 2026 (refreshed — prior run 15 Oct 2026)
 **Scope:** 32 for-sale industrial/office units across 21 buildings, 5 golden zones
 **Method:** Online sources only — no physical site visits
 
@@ -14,7 +14,7 @@ This run hit degraded tooling, so treat confidence scores accordingly:
 |--------|--------|------------------|
 | `golden-zone-units.json` (prior 28Hse scrape) | ✅ authoritative | 32 units: price, sqft, $/sf, agent, notes |
 | `_dd_base.json` (prior enrichment) | ✅ | Management fees, completion dates, nearby schools + walk times, Land Registry comparables (註冊處成交), price trends |
-| `oneday.com.hk` building pages | ✅ fetched directly | Addresses, school distances (metres), recent rental/sale transactions |
+| `oneday.com.hk` building pages | ✅ fetched directly | 11 building pages refreshed 22 Oct: exact addresses, MTR/LRT distances, school lists, 成交紀錄, rentals |
 | 28Hse live pages | ❌ Cloudflare 403 | — |
 | Web search (Bing / DuckDuckGo) | ❌ degraded — 0 / junk results | Could NOT retrieve: Google Maps "Popular Times", live competitor maps, government order lists |
 
@@ -22,6 +22,24 @@ This run hit degraded tooling, so treat confidence scores accordingly:
 - **DMCs are not publicly posted online.** "Unknown — DMC not found online" is a genuine finding, not a gap. Every industrial building here requires a Lands Department waiver / management consent check before signing. Budget for a solicitor's Land Registry + DMC search (~HK$2–4k per shortlisted unit).
 - **Google Maps "Popular Times" and per-zone competitor maps could not be pulled live.** Foot-traffic and competition notes are qualitative estimates from prior research + known MTR station character. Verify on the ground / in Google Maps before committing.
 - "Government records" reflect what is in the public domain + Land Registry comparables; a formal title search (encumbrance/caveat) is a solicitor task, not an online-search task.
+
+---
+
+## Refresh — 22 October 2026
+
+Second due-diligence pass. Outcome:
+
+- **Web search backend is still down** — Bing returns 0 results for both English and Chinese queries. Google Maps "Popular Times", live competitor maps, and government order lists remain unpullable (unchanged from the 15 Oct run).
+- **oneday.com.hk building pages freshly pulled for 11 of 21 buildings** (previously only ~6 had specific pages). Added verified exact addresses, MTR/LRT distances, richer school lists with distances, and fresh 成交紀錄 (transaction) + rental records. 16 report entries updated (11 unique buildings × duplicate units); `confidence` raised +5 where data was added; `last_verified` stamped.
+- **10 buildings still have no oneday page** — 油塘工業城, 豐利中心, 德雅工業中心, 泰力工業中心, 富德工業大廈, 興盛工業大廈, 生利工業中心, 新寶中心, 敬運工業大廈, 佳力工業大廈. DMC/permitted-use remains unverifiable online for these; flagged in JSON `risk_flags`.
+
+Key fresh data points:
+
+- **華成工商中心** (resolved the "null" unit) is the closest to MTR in the whole set — ~100m from Kwun Tong MTR (成業街11號).
+- **建發工業中心** densest school catchment confirmed — 9 schools listed within 500m (恩平工商會李琳明中學 180m, 道教青松小學 220m, 明愛屯門馬登基金中學 270m…).
+- **南豐工業城** rental records: ~$7–8/sf net (1,238–2,439sf units at $8,600–$11,000/mo).
+- **國際企業中心一期** sale records cluster April 2025 ($5.5–9.4M) — consistent with its $4,000+/sf office pricing.
+- **德豐工業中心** recent 2025 sales at $2,900–6,200/sf for 401–693sf units — supports the "5%+ tenanted yield, low psf" thesis.
 
 ---
 
@@ -102,5 +120,6 @@ This run hit degraded tooling, so treat confidence scores accordingly:
 - This summary: `due-diligence-report.md`
 - Source listings: `golden-zone-units.json`
 - Enrichment (mgmt fees / comparables / schools): `_dd_base.json`
+- Refresh script (22 Oct): `_dd_refresh_2026-10-22.py`
 
 **Confidence note:** scores are 30 (limited public data — 德雅工業中心, 敬運工業大廈, 京貿中心, 興盛工業大廈, 華成工商中心, 新科技廣場) to 68 (國際企業中心一期). Any unit under 40 should be treated as "needs a call to the agent + a physical viewing before it is a real option."

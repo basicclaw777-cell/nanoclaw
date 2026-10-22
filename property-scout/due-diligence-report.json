@@ -215,7 +215,7 @@
   },
   {
     "building": "南豐工業城",
-    "address": "18 Tin Hau Road, Tuen Mun",
+    "address": "天后路18號, Tuen Mun",
     "unit_size_sqft": 1209,
     "asking_price_hkd": 2300000,
     "price_per_sqft": 1902,
@@ -231,12 +231,12 @@
     "operating_hours": "Standard industrial hours; verify 24hr access for class times",
     "permitted_use": "Industrial (flatted factory, 5 blocks + central services building). 1989 Nan Fung Group development. Fitness/education use higher-risk here vs Kowloon (stricter enforcement).",
     "walking_distances": {
-      "mtr_to_building": "~12-15 min walk from Tuen Mun MTR (weak); LRT + Green Minibus 41 + Lung Mun Oasis interchange ~510m",
+      "mtr_to_building": "~800m from Tuen Mun MTR; LRT ~700m (oneday-measured)",
       "building_to_schools": [
-        "200m to Yan Chai Hospital No.2 Secondary",
-        "240m to Ju Ching Chu Secondary (Tuen Mun)",
-        "340m to CCC Hoh Fuk Tong Primary",
-        "450m to Islamic Primary"
+        "仁濟醫院第二中學 (200m)",
+        "裘錦秋中學 (240m)",
+        "中華基督教會何福堂小學 (340m)",
+        "伊斯蘭學校 (450m)"
       ]
     },
     "route_safety": "Flat walk but 12-15 min from MTR through Tin Hau Road industrial area — may concern parents for younger kids; consider shuttle/escort from Tuen Mun MTR.",
@@ -276,7 +276,7 @@
     "competition_note": "No dedicated kids boxing competitor - potential first-mover advantage.",
     "school_dismissal_times": "Primary ~3:15-3:30pm; secondary ~3:30-4:00pm. Dense school cluster around 山景邨 / 大興邨.",
     "comparable_sales": [],
-    "current_rentals": "HK$6-10/sf typical. Confirmed: 1,252sf @ HK$9,000 (May 2023); 1,838sf @ HK$11,000 (Mar 2023); 1,238sf @ HK$8,600 (Nov 2024); 1,069sf @ HK$10,000 (Aug 2023).",
+    "current_rentals": "Fresh oneday rent records: 1,252sf $9,000/mo (2023-05), 1,838sf $11,000/mo (2023-03), 1,238sf $8,600/mo (2024-11), 1,069sf $10,000/mo (2023-08), 2,439sf $11,000/mo (2021-04) — i.e. ~$7-8/sf net.",
     "price_trend": "Flat to slightly declining; wide HK$6-13/sf rental range depending on unit condition.",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
     "risk_flags": [
@@ -292,11 +292,13 @@
       "Low entry ($1,902/sf) and low mgmt fee ($0.64/sf confirmed)",
       "Professional Nan Fung management"
     ],
-    "confidence": 58,
+    "confidence": 63,
     "sources": [
       "https://www.oneday.com.hk/en_US/buildings/nan-fung-industrial-city/",
-      "https://www.nanfung.com/"
-    ]
+      "https://www.nanfung.com/",
+      "https://www.oneday.com.hk/zh_HK/buildings/nan-fung-industrial-city/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "德雅工業中心",
@@ -392,11 +394,13 @@
     "operating_hours": "24hr access noted in prior listing tags (verify)",
     "permitted_use": "Industrial. 交吉放售 (vacant possession) — clean fit-out start. Verify fitness/education use.",
     "walking_distances": {
-      "mtr_to_building": "Tuen Mun industrial belt (建發街) — LRT/bus served; ~10-15 min from Tuen Mun MTR",
+      "mtr_to_building": "~600m from Tuen Mun MTR; LRT 石排/山景 ~100-200m (oneday-measured)",
       "building_to_schools": [
-        "3 min to 道教青松小學",
-        "4 min to 仁濟醫院山景幼稚園",
-        "5 min to 仁愛堂田家炳中學"
+        "道教青松小學 (220m)",
+        "仁愛堂田家炳中學 (370m)",
+        "樂善堂梁黃蕙芳紀念學校 (440m)",
+        "恩平工商會李琳明中學 (480m)",
+        "浸信會永隆中學 (490m)"
       ]
     },
     "route_safety": "Flat Tuen Mun industrial streets; moderate vehicle traffic.",
@@ -483,10 +487,12 @@
       "$2,484/sf in-budget",
       "Nearby school cluster (道教青松小學 3min, 田家炳中學 5min)"
     ],
-    "confidence": 42,
+    "confidence": 47,
     "sources": [
-      "https://www.28hse.com/buy/office/property-3952699"
-    ]
+      "https://www.28hse.com/buy/office/property-3952699",
+      "https://www.oneday.com.hk/zh_HK/buildings/ming-fat-industrial-building/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "富德工業大廈",
@@ -1306,7 +1312,7 @@
   },
   {
     "building": "華成工商中心",
-    "address": "Kwun Tong (exact street unverified)",
+    "address": "成業街11號, Kwun Tong",
     "unit_size_sqft": 1021,
     "asking_price_hkd": 3680000,
     "price_per_sqft": 3604,
@@ -1322,8 +1328,13 @@
     "operating_hours": "Unknown",
     "permitted_use": "Industrial/office-style unit (5+ rooms, 3 toilets). Layout may already be subdivided — would need opening up for a gym. Verify permitted use.",
     "walking_distances": {
-      "mtr_to_building": "Kwun Tong area (exact walk unverified)",
-      "building_to_schools": []
+      "mtr_to_building": "~100m from Kwun Tong MTR (oneday-measured 0.1km — closest MTR in set)",
+      "building_to_schools": [
+        "中華基督教會基法小學 (200m)",
+        "地利亞修女紀念學校 (390m)",
+        "官塘雅麗斯英文幼稚園 (390m)",
+        "天主教佑華小學 (470m)"
+      ]
     },
     "route_safety": "Unverified.",
     "foot_traffic": "Kwun Tong MTR is one of the busiest on the line. Peaks 8-9am (office workers) and 5-7pm (commuters); APM mall drives steady weekend footfall.",
@@ -1367,7 +1378,48 @@
     ],
     "competition_note": "Crowded market validates demand; differentiate with dedicated kids-only boxing.",
     "school_dismissal_times": "Primary schools dismiss ~3:15-3:45pm; secondary ~3:30-4:00pm.",
-    "comparable_sales": [],
+    "comparable_sales": [
+      {
+        "unit": "12/3",
+        "date": "2023-08-14",
+        "price": 8200000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建1136呎",
+        "psf": 7218
+      },
+      {
+        "unit": "9/5",
+        "date": "2022-12-01",
+        "price": 7400000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建938呎",
+        "psf": 7889
+      },
+      {
+        "unit": "4/6",
+        "date": "2021-12-21",
+        "price": 7300000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建849呎",
+        "psf": 8598
+      },
+      {
+        "unit": "6/1",
+        "date": "2021-11-23",
+        "price": 12500000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建1631呎",
+        "psf": 7664
+      },
+      {
+        "unit": "10/6",
+        "date": "2021-11-19",
+        "price": 7200000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建849呎",
+        "psf": 8481
+      }
+    ],
     "current_rentals": "Not available — check Centaline/Midland for live rental comparables",
     "price_trend": "Insufficient data",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
@@ -1382,10 +1434,12 @@
       "1021sf in-budget ($3,604/sf)",
       "Renovated (雅緻裝修)"
     ],
-    "confidence": 28,
+    "confidence": 33,
     "sources": [
-      "https://www.28hse.com/buy/office/property-3402100"
-    ]
+      "https://www.28hse.com/buy/office/property-3402100",
+      "https://www.oneday.com.hk/zh_HK/buildings/wah-shing-centre/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "敬運工業大廈",
@@ -1471,7 +1525,7 @@
   },
   {
     "building": "京貿中心",
-    "address": "Kwun Tong (exact street unverified)",
+    "address": "駿業街62號, Kwun Tong",
     "unit_size_sqft": 1003,
     "asking_price_hkd": 3980000,
     "price_per_sqft": 3968,
@@ -1487,8 +1541,12 @@
     "operating_hours": "24hr access + CCTV noted (verify)",
     "permitted_use": "Industrial. 1003sf 連租約 (tenanted) — income while you plan. Verify permitted use + ceiling.",
     "walking_distances": {
-      "mtr_to_building": "Near MTR (近地鐵 per listing)",
-      "building_to_schools": []
+      "mtr_to_building": "~400m from Kwun Tong MTR (oneday-measured 0.4km)",
+      "building_to_schools": [
+        "聖若翰天主教小學 (440m)",
+        "中華基督教會基法小學 (440m)",
+        "地利亞修女紀念學校 (480m)"
+      ]
     },
     "route_safety": "Unverified.",
     "foot_traffic": "Kwun Tong MTR is one of the busiest on the line. Peaks 8-9am (office workers) and 5-7pm (commuters); APM mall drives steady weekend footfall.",
@@ -1532,7 +1590,48 @@
     ],
     "competition_note": "Crowded market validates demand; differentiate with dedicated kids-only boxing.",
     "school_dismissal_times": "Primary schools dismiss ~3:15-3:45pm; secondary ~3:30-4:00pm.",
-    "comparable_sales": [],
+    "comparable_sales": [
+      {
+        "unit": "23/B",
+        "date": "2023-03-16",
+        "price": 8100000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建984呎",
+        "psf": 8232
+      },
+      {
+        "unit": "8/D",
+        "date": "2023-03-10",
+        "price": 4300000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建495呎",
+        "psf": 8687
+      },
+      {
+        "unit": "15/E",
+        "date": "2022-08-19",
+        "price": 7322000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建721呎",
+        "psf": 10155
+      },
+      {
+        "unit": "13/E",
+        "date": "2021-03-25",
+        "price": 7080000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建723呎",
+        "psf": 9793
+      },
+      {
+        "unit": "2/D",
+        "date": "2020-07-07",
+        "price": 4570000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建495呎",
+        "psf": 9232
+      }
+    ],
     "current_rentals": "Not available — check Centaline/Midland for live rental comparables",
     "price_trend": "Insufficient data",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
@@ -1547,10 +1646,12 @@
       "24hr access",
       "1003sf in-budget ($3,968/sf)"
     ],
-    "confidence": 28,
+    "confidence": 33,
     "sources": [
-      "https://www.28hse.com/buy/office/property-4042657"
-    ]
+      "https://www.28hse.com/buy/office/property-4042657",
+      "https://www.oneday.com.hk/zh_HK/buildings/capital-trade-centre/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "建發工業中心",
@@ -1570,11 +1671,17 @@
     "operating_hours": "Typical Tuen Mun industrial hours",
     "permitted_use": "Industrial. Large 1949sf unit — good full-gym footprint. Verify ceiling + floor loading.",
     "walking_distances": {
-      "mtr_to_building": "山景/大興 industrial belt — LRT 河田站 ~0.6km; buses 66M/66X; ~10-15 min from Tuen Mun MTR",
+      "mtr_to_building": "~700m from Tuen Mun MTR; LRT 山景 ~100m, 石排 ~200m (oneday-measured)",
       "building_to_schools": [
-        "3 min to 恩平工商會李琳明中學",
-        "3 min to 東華三院李黃慶祥紀念幼稚園",
-        "3 min to 明愛屯門馬登基金中學"
+        "恩平工商會李琳明中學 (180m)",
+        "道教青松小學 (220m)",
+        "明愛屯門馬登基金中學 (270m)",
+        "仁愛堂陳黃淑芳紀念中學 (330m)",
+        "浸信會永隆中學 (360m)",
+        "崇真書院 (460m)",
+        "佛教沈香林紀念中學 (470m)",
+        "宣道中學 (480m)",
+        "台山商會學校 (490m)"
       ]
     },
     "route_safety": "Flat; near 山景邨 / 大興邨 residential edge (more families than pure industrial belt).",
@@ -1615,6 +1722,42 @@
     "school_dismissal_times": "Primary ~3:15-3:30pm; secondary ~3:30-4:00pm. Dense school cluster around 山景邨 / 大興邨.",
     "comparable_sales": [
       {
+        "unit": "13/1",
+        "date": "2024-11-08",
+        "price": 1500000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "5/1",
+        "date": "2024-02-08",
+        "price": 2900000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "12/1",
+        "date": "2023-11-20",
+        "price": 2900000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建709呎",
+        "psf": 4090
+      },
+      {
+        "unit": "10/7",
+        "date": "2023-10-10",
+        "price": 3470000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建886呎",
+        "psf": 3916
+      },
+      {
+        "unit": "14/9",
+        "date": "2023-07-24",
+        "price": 8800000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建1816呎",
+        "psf": 4846
+      },
+      {
         "unit": "建發工業中心 13/F樓 01室",
         "date": "2026-01-23",
         "price": 2300000,
@@ -1647,7 +1790,7 @@
         "kind": "市場成交"
       }
     ],
-    "current_rentals": "Not available — check Centaline/Midland for live rental comparables",
+    "current_rentals": "Current listings (oneday 2026-08): sale 887sf $2.30M (開揚L窗+內厠, 連租約); rent 909sf $11,000/mo (有冷氣, 即租即用); 100sf $2,500/mo.",
     "price_trend": "Flat",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
     "risk_flags": [
@@ -1661,11 +1804,12 @@
       "1949sf large footprint",
       "$1,898/sf low psf"
     ],
-    "confidence": 52,
+    "confidence": 57,
     "sources": [
       "https://www.28hse.com/buy/office/property-3650723",
       "https://www.oneday.com.hk/zh_HK/buildings/kin-fat-industrial-centre/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "泰力工業中心",
@@ -1848,7 +1992,7 @@
   },
   {
     "building": "新科技廣場",
-    "address": "San Po Kong / Wong Tai Sin (office; exact street unverified — likely 新科技廣場 New Tech Plaza)",
+    "address": "大有街34號, San Po Kong",
     "unit_size_sqft": 1732,
     "asking_price_hkd": 9990000,
     "price_per_sqft": 5768,
@@ -1864,8 +2008,14 @@
     "operating_hours": "24hr access noted (verify)",
     "permitted_use": "Office (寫字樓) with 特高樓底 (high ceiling). Office use is generally more flexible for a training studio than industrial. BUT both units are 3-5x over budget.",
     "walking_distances": {
-      "mtr_to_building": "Near Diamond Hill / Kai Tak MTR (listing says 半分鐘地鐵站 = 30 sec)",
-      "building_to_schools": []
+      "mtr_to_building": "~600m from Diamond Hill MTR (oneday-measured 0.6km)",
+      "building_to_schools": [
+        "保良局陳南昌夫人小學 (170m)",
+        "聖公會基德小學 (280m)",
+        "孔教學院大成小學 (340m)",
+        "嘉諾撒小學 (420m)",
+        "天主教伍華小學 (450m)"
+      ]
     },
     "route_safety": "Flat, near MTR; well-lit commercial area.",
     "foot_traffic": "Diamond Hill MTR is a busy interchange. San Po Kong industrial streets are quieter than Kwun Tong; footfall is office/workshop-driven 8am-6pm.",
@@ -1879,7 +2029,40 @@
     ],
     "competition_note": "Moderate martial arts presence; requires on-the-ground Google Maps verification (search backend unavailable this run).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
-    "comparable_sales": [],
+    "comparable_sales": [
+      {
+        "unit": "23/3",
+        "date": "2023-06-26",
+        "price": 4280000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建542呎",
+        "psf": 7897
+      },
+      {
+        "unit": "29/5-8",
+        "date": "2023-05-22",
+        "price": 18920000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建2456呎",
+        "psf": 7704
+      },
+      {
+        "unit": "7/11",
+        "date": "2023-03-10",
+        "price": 4600000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建546呎",
+        "psf": 8425
+      },
+      {
+        "unit": "22/13",
+        "date": "2023-01-09",
+        "price": 6236000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建709呎",
+        "psf": 8795
+      }
+    ],
     "current_rentals": "Not available — check Centaline/Midland for live rental comparables",
     "price_trend": "Insufficient data",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
@@ -1894,15 +2077,17 @@
       "High ceiling",
       "30 sec from MTR"
     ],
-    "confidence": 30,
+    "confidence": 35,
     "sources": [
       "https://www.28hse.com/buy/office/property-4009114",
-      "https://www.28hse.com/buy/office/property-4035513"
-    ]
+      "https://www.28hse.com/buy/office/property-4035513",
+      "https://www.oneday.com.hk/zh_HK/buildings/new-tech-plaza/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "新科技廣場",
-    "address": "San Po Kong / Wong Tai Sin (office; exact street unverified — likely 新科技廣場 New Tech Plaza)",
+    "address": "大有街34號, San Po Kong",
     "unit_size_sqft": 1722,
     "asking_price_hkd": 10680000,
     "price_per_sqft": 6202,
@@ -1918,8 +2103,14 @@
     "operating_hours": "24hr access noted (verify)",
     "permitted_use": "Office (寫字樓) with 特高樓底 (high ceiling). Office use is generally more flexible for a training studio than industrial. BUT both units are 3-5x over budget.",
     "walking_distances": {
-      "mtr_to_building": "Near Diamond Hill / Kai Tak MTR (listing says 半分鐘地鐵站 = 30 sec)",
-      "building_to_schools": []
+      "mtr_to_building": "~600m from Diamond Hill MTR (oneday-measured 0.6km)",
+      "building_to_schools": [
+        "保良局陳南昌夫人小學 (170m)",
+        "聖公會基德小學 (280m)",
+        "孔教學院大成小學 (340m)",
+        "嘉諾撒小學 (420m)",
+        "天主教伍華小學 (450m)"
+      ]
     },
     "route_safety": "Flat, near MTR; well-lit commercial area.",
     "foot_traffic": "Diamond Hill MTR is a busy interchange. San Po Kong industrial streets are quieter than Kwun Tong; footfall is office/workshop-driven 8am-6pm.",
@@ -1933,7 +2124,40 @@
     ],
     "competition_note": "Moderate martial arts presence; requires on-the-ground Google Maps verification (search backend unavailable this run).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
-    "comparable_sales": [],
+    "comparable_sales": [
+      {
+        "unit": "23/3",
+        "date": "2023-06-26",
+        "price": 4280000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建542呎",
+        "psf": 7897
+      },
+      {
+        "unit": "29/5-8",
+        "date": "2023-05-22",
+        "price": 18920000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建2456呎",
+        "psf": 7704
+      },
+      {
+        "unit": "7/11",
+        "date": "2023-03-10",
+        "price": 4600000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建546呎",
+        "psf": 8425
+      },
+      {
+        "unit": "22/13",
+        "date": "2023-01-09",
+        "price": 6236000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建709呎",
+        "psf": 8795
+      }
+    ],
     "current_rentals": "Not available — check Centaline/Midland for live rental comparables",
     "price_trend": "Insufficient data",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
@@ -1948,11 +2172,13 @@
       "High ceiling",
       "30 sec from MTR"
     ],
-    "confidence": 30,
+    "confidence": 35,
     "sources": [
       "https://www.28hse.com/buy/office/property-4009114",
-      "https://www.28hse.com/buy/office/property-4035513"
-    ]
+      "https://www.28hse.com/buy/office/property-4035513",
+      "https://www.oneday.com.hk/zh_HK/buildings/new-tech-plaza/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "興盛工業大廈",
@@ -2010,7 +2236,7 @@
   },
   {
     "building": "德豐工業中心",
-    "address": "德士古道, Tsuen Wan East",
+    "address": "德士古道168號, Tsuen Wan",
     "unit_size_sqft": 1080,
     "asking_price_hkd": 2280000,
     "price_per_sqft": 2111,
@@ -2026,11 +2252,10 @@
     "operating_hours": "Unknown",
     "permitted_use": "Industrial. 1080sf 連租約 (5%+ yield tenanted). Verify permitted use + ceiling.",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan East / Kwai Chung border (德士古道) — bus/LRT served; ~8-12 min to Tsuen Wan MTR",
+      "mtr_to_building": "~1.0km from Tai Wo Hau MTR (oneday-measured 1.0km)",
       "building_to_schools": [
-        "410m to 聖公會主恩小學",
-        "470m to 李一諤紀念學校",
-        "410m to 玫瑰蕾小學"
+        "聖公會主恩小學 (410m)",
+        "柏立基教育學院校友會李一諤紀念學校 (470m)"
       ]
     },
     "route_safety": "Flat, near Texaco Road; moderate industrial traffic.",
@@ -2045,7 +2270,64 @@
     ],
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
-    "comparable_sales": [],
+    "comparable_sales": [
+      {
+        "unit": "4/9",
+        "date": "2025-04-25",
+        "price": 2100000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建655呎",
+        "psf": 3206
+      },
+      {
+        "unit": "25/8",
+        "date": "2025-04-09",
+        "price": 3000000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建654呎",
+        "psf": 4587
+      },
+      {
+        "unit": "4/2",
+        "date": "2025-03-10",
+        "price": 2500000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建401呎",
+        "psf": 6234
+      },
+      {
+        "unit": "20/1",
+        "date": "2025-02-13",
+        "price": 2000000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建535呎",
+        "psf": 3738
+      },
+      {
+        "unit": "26/1",
+        "date": "2025-02-04",
+        "price": 2380000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建535呎",
+        "psf": 4449
+      },
+      {
+        "unit": "17/13",
+        "date": "2025-01-28",
+        "price": 2000000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建693呎",
+        "psf": 2886
+      },
+      {
+        "unit": "23/2",
+        "date": "2025-01-14",
+        "price": 2270000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建520呎",
+        "psf": 4365
+      }
+    ],
     "current_rentals": "Not available — check Centaline/Midland for live rental comparables",
     "price_trend": "Insufficient data",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
@@ -2060,11 +2342,12 @@
       "$2,111/sf in-budget",
       "Schools within 410-470m"
     ],
-    "confidence": 34,
+    "confidence": 39,
     "sources": [
       "https://www.28hse.com/buy/office/property-3831723",
       "https://www.oneday.com.hk/zh_HK/buildings/tak-fung-industrial-centre/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "豪力中心",
@@ -2084,11 +2367,10 @@
     "operating_hours": "24hr access noted (verify)",
     "permitted_use": "Industrial. 885sf units with 內廁 + 落地玻璃 (floor-to-ceiling windows). Good natural light for a studio. Verify ceiling.",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West / town centre area (沙咀道) — ~5-10 min walk",
+      "mtr_to_building": "~500-800m from Tsuen Wan West MTR (oneday-measured 0.5-0.8km)",
       "building_to_schools": [
-        "3 min to 寶安商會王少清中學",
-        "4 min to 救世軍荃灣幼兒學校",
-        "4 min to 滿樂幼稚園"
+        "寶安商會王少清中學 (200m)",
+        "荃灣官立中學 (410m)"
       ]
     },
     "route_safety": "Flat, central Tsuen Wan; well-lit; near retail/residential.",
@@ -2104,6 +2386,68 @@
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
     "comparable_sales": [
+      {
+        "unit": "21/6",
+        "date": "2024-12-18",
+        "price": 2260000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建501呎",
+        "psf": 4511
+      },
+      {
+        "unit": "9/4",
+        "date": "2024-12-12",
+        "price": 2500000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建557呎",
+        "psf": 4488
+      },
+      {
+        "unit": "21/3,4",
+        "date": "2024-10-08",
+        "price": 4110000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "16/2,3",
+        "date": "2024-07-05",
+        "price": 4550000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建1109呎",
+        "psf": 4103
+      },
+      {
+        "unit": "17/2",
+        "date": "2024-05-20",
+        "price": 3000000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建642呎",
+        "psf": 4673
+      },
+      {
+        "unit": "9/3",
+        "date": "2023-11-16",
+        "price": 2988000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建467呎",
+        "psf": 6398
+      },
+      {
+        "unit": "12/4",
+        "date": "2023-04-06",
+        "price": 3100000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建557呎",
+        "psf": 5566
+      },
+      {
+        "unit": "10/4",
+        "date": "2023-03-08",
+        "price": 3500000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建557呎",
+        "psf": 6284
+      },
       {
         "unit": "豪力中心 中層 1室",
         "date": "2026-06-05",
@@ -2151,11 +2495,13 @@
       "內廁 + floor-to-ceiling windows",
       "$2,621-2,689/sf in-budget"
     ],
-    "confidence": 44,
+    "confidence": 49,
     "sources": [
       "https://www.28hse.com/buy/office/property-3920203",
-      "https://www.28hse.com/buy/office/property-3803622"
-    ]
+      "https://www.28hse.com/buy/office/property-3803622",
+      "https://www.oneday.com.hk/zh_HK/buildings/ho-lik-centre/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "豪力中心",
@@ -2175,11 +2521,10 @@
     "operating_hours": "24hr access noted (verify)",
     "permitted_use": "Industrial. 885sf units with 內廁 + 落地玻璃 (floor-to-ceiling windows). Good natural light for a studio. Verify ceiling.",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West / town centre area (沙咀道) — ~5-10 min walk",
+      "mtr_to_building": "~500-800m from Tsuen Wan West MTR (oneday-measured 0.5-0.8km)",
       "building_to_schools": [
-        "3 min to 寶安商會王少清中學",
-        "4 min to 救世軍荃灣幼兒學校",
-        "4 min to 滿樂幼稚園"
+        "寶安商會王少清中學 (200m)",
+        "荃灣官立中學 (410m)"
       ]
     },
     "route_safety": "Flat, central Tsuen Wan; well-lit; near retail/residential.",
@@ -2195,6 +2540,68 @@
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
     "comparable_sales": [
+      {
+        "unit": "21/6",
+        "date": "2024-12-18",
+        "price": 2260000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建501呎",
+        "psf": 4511
+      },
+      {
+        "unit": "9/4",
+        "date": "2024-12-12",
+        "price": 2500000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建557呎",
+        "psf": 4488
+      },
+      {
+        "unit": "21/3,4",
+        "date": "2024-10-08",
+        "price": 4110000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "16/2,3",
+        "date": "2024-07-05",
+        "price": 4550000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建1109呎",
+        "psf": 4103
+      },
+      {
+        "unit": "17/2",
+        "date": "2024-05-20",
+        "price": 3000000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建642呎",
+        "psf": 4673
+      },
+      {
+        "unit": "9/3",
+        "date": "2023-11-16",
+        "price": 2988000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建467呎",
+        "psf": 6398
+      },
+      {
+        "unit": "12/4",
+        "date": "2023-04-06",
+        "price": 3100000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建557呎",
+        "psf": 5566
+      },
+      {
+        "unit": "10/4",
+        "date": "2023-03-08",
+        "price": 3500000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建557呎",
+        "psf": 6284
+      },
       {
         "unit": "豪力中心 中層 1室",
         "date": "2026-06-05",
@@ -2242,15 +2649,17 @@
       "內廁 + floor-to-ceiling windows",
       "$2,621-2,689/sf in-budget"
     ],
-    "confidence": 44,
+    "confidence": 49,
     "sources": [
       "https://www.28hse.com/buy/office/property-3920203",
-      "https://www.28hse.com/buy/office/property-3803622"
-    ]
+      "https://www.28hse.com/buy/office/property-3803622",
+      "https://www.oneday.com.hk/zh_HK/buildings/ho-lik-centre/"
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "裕豐工業大廈",
-    "address": "柴灣角街35-45號, Tsuen Wan West",
+    "address": "沙咀道26-38號, Tsuen Wan",
     "unit_size_sqft": 1464,
     "asking_price_hkd": 4300000,
     "price_per_sqft": 2937,
@@ -2266,11 +2675,11 @@
     "operating_hours": "24hr access noted (verify)",
     "permitted_use": "Industrial. 1464sf with 1500呎大平台 + 自建閣樓 (double usable area via podium + mezzanine) — good for split kids/adult zones. Verify mezzanine is DMC/building-compliant.",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West (柴灣角街) — ~5-10 min walk",
+      "mtr_to_building": "~700m from Tsuen Wan West MTR (oneday-measured 0.7km)",
       "building_to_schools": [
-        "410m to 寶安商會王少清中學",
-        "410m to 紡織學會美國商會胡漢輝中學",
-        "500m to 柴灣角天主教小學"
+        "寶安商會王少清中學 (410m)",
+        "紡織學會美國商會胡漢輝中學 (410m)",
+        "柴灣角天主教小學 (500m)"
       ]
     },
     "route_safety": "Flat, near Chai Wan Kok Street industrial cluster; well-lit.",
@@ -2285,7 +2694,16 @@
     ],
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
-    "comparable_sales": [],
+    "comparable_sales": [
+      {
+        "unit": "3/H",
+        "date": "2016-06-02",
+        "price": 4000000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建566呎",
+        "psf": 7067
+      }
+    ],
     "current_rentals": "Not available — check Centaline/Midland for live rental comparables",
     "price_trend": "Insufficient data",
     "government_records": "No outstanding Buildings Department orders identified in public-domain search (search backend limited this run). Rateable value not publicly posted. Land Registry comparables shown under comparable_sales.",
@@ -2300,15 +2718,16 @@
       "Schools within 410-500m",
       "$2,937/sf reasonable"
     ],
-    "confidence": 40,
+    "confidence": 45,
     "sources": [
       "https://www.28hse.com/buy/office/property-4041662",
       "https://www.oneday.com.hk/zh_HK/buildings/yue-fung-industrial-building/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "One Midtown",
-    "address": "海盛路11號, Tsuen Wan West",
+    "address": "海盛路11號, Tsuen Wan",
     "unit_size_sqft": 1962,
     "asking_price_hkd": 7820000,
     "price_per_sqft": 3986,
@@ -2324,11 +2743,9 @@
     "operating_hours": "Typical modern industrial-office hours (verify 24hr)",
     "permitted_use": "Industrial-office. 1962sf high-floor harbour-view unit. High mgmt fee but modern lifts/common areas. Verify ceiling.",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West MTR ~5-8 min walk",
+      "mtr_to_building": "~500m from Tsuen Wan West MTR (oneday-measured 0.5km)",
       "building_to_schools": [
-        "2 min to 救世軍荃灣幼兒學校",
-        "2 min to 救世軍吳國偉紀念幼稚園",
-        "3 min to 寶安商會王少清中學"
+        "寶安商會王少清中學 (360m)"
       ]
     },
     "route_safety": "Flat, modern riverside industrial-office cluster (海盛路); well-lit.",
@@ -2344,6 +2761,46 @@
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
     "comparable_sales": [
+      {
+        "unit": "25/6",
+        "date": "2025-04-25",
+        "price": 4000000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建779呎",
+        "psf": 5135
+      },
+      {
+        "unit": "18/5,6",
+        "date": "2025-03-05",
+        "price": 10880000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建1322呎",
+        "psf": 8230
+      },
+      {
+        "unit": "16/12",
+        "date": "2025-02-26",
+        "price": 4630000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建751呎",
+        "psf": 6165
+      },
+      {
+        "unit": "16/11",
+        "date": "2025-02-26",
+        "price": 4270000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建817呎",
+        "psf": 5226
+      },
+      {
+        "unit": "16/13",
+        "date": "2025-02-26",
+        "price": 3100000,
+        "kind": "oneday成交紀錄",
+        "sqft": "建748呎",
+        "psf": 4144
+      },
       {
         "unit": "One Midtown 45/F樓 W/F室",
         "date": "2026-07-08",
@@ -2391,15 +2848,16 @@
       "Harbour view / premium address",
       "Near 王少清中學 (360m)"
     ],
-    "confidence": 46,
+    "confidence": 51,
     "sources": [
       "https://www.28hse.com/buy/office/property-4026728",
       "https://www.oneday.com.hk/zh_HK/buildings/one-midtown/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "國際企業中心一期",
-    "address": "柴灣角街11-15號, Tsuen Wan West",
+    "address": "柴灣角街11號, Tsuen Wan",
     "unit_size_sqft": 1057,
     "asking_price_hkd": 4220000,
     "price_per_sqft": 3992,
@@ -2415,11 +2873,11 @@
     "operating_hours": "24hr access + CCTV noted (verify)",
     "permitted_use": "Office/retail-grade (not flatted factory). 送廁所 (toilet included), 鋪契用途廣泛 (wide-use shop deed). Best ceiling/floor-loading/compliance profile; four 1057sf units listed ($3,992-4,257/sf).",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West MTR ~5-8 min walk",
+      "mtr_to_building": "~800m from Tsuen Wan West MTR (oneday-measured 0.8km)",
       "building_to_schools": [
-        "4 min to 天主教領報幼稚園",
-        "4 min to 紡織學會美國商會胡漢輝中學",
-        "5 min to 保良局李城璧中學"
+        "紡織學會美國商會胡漢輝中學 (310m)",
+        "保良局李城璧中學 (400m)",
+        "柴灣角天主教小學 (410m)"
       ]
     },
     "route_safety": "Flat, modern riverside office cluster; well-lit; closest thing to a turnkey commercial gym space in the set.",
@@ -2435,6 +2893,54 @@
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
     "comparable_sales": [
+      {
+        "unit": "15/4",
+        "date": "2025-04-25",
+        "price": 7443000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/6",
+        "date": "2025-04-17",
+        "price": 5850000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/2",
+        "date": "2025-04-17",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "7/2",
+        "date": "2025-04-15",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "21/2",
+        "date": "2025-04-15",
+        "price": 7196000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "5/4",
+        "date": "2025-04-14",
+        "price": 5512000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/5",
+        "date": "2025-04-14",
+        "price": 9393000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "3/2",
+        "date": "2025-04-10",
+        "price": 6344000,
+        "kind": "oneday成交紀錄"
+      },
       {
         "unit": "國際企業中心一期 高層",
         "date": "2026-09-08",
@@ -2483,15 +2989,16 @@
       "Four units = flexibility to pick layout/floor",
       "Schools 310-410m (胡漢輝中學 310m, 李城璧中學 400m)"
     ],
-    "confidence": 68,
+    "confidence": 73,
     "sources": [
       "https://www.28hse.com/buy/office/property-4030378",
       "https://www.oneday.com.hk/zh_HK/buildings/international-enterprise-centre-i/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "國際企業中心一期",
-    "address": "柴灣角街11-15號, Tsuen Wan West",
+    "address": "柴灣角街11號, Tsuen Wan",
     "unit_size_sqft": 1057,
     "asking_price_hkd": 4220000,
     "price_per_sqft": 3992,
@@ -2507,11 +3014,11 @@
     "operating_hours": "24hr access + CCTV noted (verify)",
     "permitted_use": "Office/retail-grade (not flatted factory). 送廁所 (toilet included), 鋪契用途廣泛 (wide-use shop deed). Best ceiling/floor-loading/compliance profile; four 1057sf units listed ($3,992-4,257/sf).",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West MTR ~5-8 min walk",
+      "mtr_to_building": "~800m from Tsuen Wan West MTR (oneday-measured 0.8km)",
       "building_to_schools": [
-        "4 min to 天主教領報幼稚園",
-        "4 min to 紡織學會美國商會胡漢輝中學",
-        "5 min to 保良局李城璧中學"
+        "紡織學會美國商會胡漢輝中學 (310m)",
+        "保良局李城璧中學 (400m)",
+        "柴灣角天主教小學 (410m)"
       ]
     },
     "route_safety": "Flat, modern riverside office cluster; well-lit; closest thing to a turnkey commercial gym space in the set.",
@@ -2527,6 +3034,54 @@
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
     "comparable_sales": [
+      {
+        "unit": "15/4",
+        "date": "2025-04-25",
+        "price": 7443000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/6",
+        "date": "2025-04-17",
+        "price": 5850000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/2",
+        "date": "2025-04-17",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "7/2",
+        "date": "2025-04-15",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "21/2",
+        "date": "2025-04-15",
+        "price": 7196000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "5/4",
+        "date": "2025-04-14",
+        "price": 5512000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/5",
+        "date": "2025-04-14",
+        "price": 9393000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "3/2",
+        "date": "2025-04-10",
+        "price": 6344000,
+        "kind": "oneday成交紀錄"
+      },
       {
         "unit": "國際企業中心一期 高層",
         "date": "2026-09-08",
@@ -2575,15 +3130,16 @@
       "Four units = flexibility to pick layout/floor",
       "Schools 310-410m (胡漢輝中學 310m, 李城璧中學 400m)"
     ],
-    "confidence": 68,
+    "confidence": 73,
     "sources": [
       "https://www.28hse.com/buy/office/property-4030378",
       "https://www.oneday.com.hk/zh_HK/buildings/international-enterprise-centre-i/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "國際企業中心一期",
-    "address": "柴灣角街11-15號, Tsuen Wan West",
+    "address": "柴灣角街11號, Tsuen Wan",
     "unit_size_sqft": 1057,
     "asking_price_hkd": 4280000,
     "price_per_sqft": 4049,
@@ -2599,11 +3155,11 @@
     "operating_hours": "24hr access + CCTV noted (verify)",
     "permitted_use": "Office/retail-grade (not flatted factory). 送廁所 (toilet included), 鋪契用途廣泛 (wide-use shop deed). Best ceiling/floor-loading/compliance profile; four 1057sf units listed ($3,992-4,257/sf).",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West MTR ~5-8 min walk",
+      "mtr_to_building": "~800m from Tsuen Wan West MTR (oneday-measured 0.8km)",
       "building_to_schools": [
-        "4 min to 天主教領報幼稚園",
-        "4 min to 紡織學會美國商會胡漢輝中學",
-        "5 min to 保良局李城璧中學"
+        "紡織學會美國商會胡漢輝中學 (310m)",
+        "保良局李城璧中學 (400m)",
+        "柴灣角天主教小學 (410m)"
       ]
     },
     "route_safety": "Flat, modern riverside office cluster; well-lit; closest thing to a turnkey commercial gym space in the set.",
@@ -2619,6 +3175,54 @@
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
     "comparable_sales": [
+      {
+        "unit": "15/4",
+        "date": "2025-04-25",
+        "price": 7443000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/6",
+        "date": "2025-04-17",
+        "price": 5850000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/2",
+        "date": "2025-04-17",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "7/2",
+        "date": "2025-04-15",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "21/2",
+        "date": "2025-04-15",
+        "price": 7196000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "5/4",
+        "date": "2025-04-14",
+        "price": 5512000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/5",
+        "date": "2025-04-14",
+        "price": 9393000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "3/2",
+        "date": "2025-04-10",
+        "price": 6344000,
+        "kind": "oneday成交紀錄"
+      },
       {
         "unit": "國際企業中心一期 高層",
         "date": "2026-09-08",
@@ -2667,15 +3271,16 @@
       "Four units = flexibility to pick layout/floor",
       "Schools 310-410m (胡漢輝中學 310m, 李城璧中學 400m)"
     ],
-    "confidence": 68,
+    "confidence": 73,
     "sources": [
       "https://www.28hse.com/buy/office/property-4030378",
       "https://www.oneday.com.hk/zh_HK/buildings/international-enterprise-centre-i/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   },
   {
     "building": "國際企業中心一期",
-    "address": "柴灣角街11-15號, Tsuen Wan West",
+    "address": "柴灣角街11號, Tsuen Wan",
     "unit_size_sqft": 1057,
     "asking_price_hkd": 4500000,
     "price_per_sqft": 4257,
@@ -2691,11 +3296,11 @@
     "operating_hours": "24hr access + CCTV noted (verify)",
     "permitted_use": "Office/retail-grade (not flatted factory). 送廁所 (toilet included), 鋪契用途廣泛 (wide-use shop deed). Best ceiling/floor-loading/compliance profile; four 1057sf units listed ($3,992-4,257/sf).",
     "walking_distances": {
-      "mtr_to_building": "Tsuen Wan West MTR ~5-8 min walk",
+      "mtr_to_building": "~800m from Tsuen Wan West MTR (oneday-measured 0.8km)",
       "building_to_schools": [
-        "4 min to 天主教領報幼稚園",
-        "4 min to 紡織學會美國商會胡漢輝中學",
-        "5 min to 保良局李城璧中學"
+        "紡織學會美國商會胡漢輝中學 (310m)",
+        "保良局李城璧中學 (400m)",
+        "柴灣角天主教小學 (410m)"
       ]
     },
     "route_safety": "Flat, modern riverside office cluster; well-lit; closest thing to a turnkey commercial gym space in the set.",
@@ -2711,6 +3316,54 @@
     "competition_note": "Tsuen Wan has an established fitness market; specific competitor map requires live Google Maps (backend unavailable).",
     "school_dismissal_times": "Primary ~3:15-3:45pm; secondary ~3:30-4:00pm.",
     "comparable_sales": [
+      {
+        "unit": "15/4",
+        "date": "2025-04-25",
+        "price": 7443000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/6",
+        "date": "2025-04-17",
+        "price": 5850000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/2",
+        "date": "2025-04-17",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "7/2",
+        "date": "2025-04-15",
+        "price": 5883000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "21/2",
+        "date": "2025-04-15",
+        "price": 7196000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "5/4",
+        "date": "2025-04-14",
+        "price": 5512000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "10/5",
+        "date": "2025-04-14",
+        "price": 9393000,
+        "kind": "oneday成交紀錄"
+      },
+      {
+        "unit": "3/2",
+        "date": "2025-04-10",
+        "price": 6344000,
+        "kind": "oneday成交紀錄"
+      },
       {
         "unit": "國際企業中心一期 高層",
         "date": "2026-09-08",
@@ -2759,10 +3412,11 @@
       "Four units = flexibility to pick layout/floor",
       "Schools 310-410m (胡漢輝中學 310m, 李城璧中學 400m)"
     ],
-    "confidence": 68,
+    "confidence": 73,
     "sources": [
       "https://www.28hse.com/buy/office/property-4030378",
       "https://www.oneday.com.hk/zh_HK/buildings/international-enterprise-centre-i/"
-    ]
+    ],
+    "last_verified": "2026-10-22 (oneday.com.hk building-page refresh)"
   }
 ]

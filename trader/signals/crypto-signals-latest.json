@@ -1,78 +1,11 @@
 {
-  "timestamp": "2026-10-18T12:01:25.857973",
-  "prices": {
-    "BTC": {
-      "price": 81890,
-      "change_24h": 0.5162893482666494,
-      "volume_24h": 15120712896.187485,
-      "market_cap": 1645903097146.4114
-    },
-    "ETH": {
-      "price": 2423.66,
-      "change_24h": -0.05252168949264576,
-      "volume_24h": 6808495152.198572,
-      "market_cap": 296034292410.18134
-    },
-    "SOL": {
-      "price": 104.47,
-      "change_24h": -0.35123150882020554,
-      "volume_24h": 1794795245.263506,
-      "market_cap": 61570182493.07186
-    },
-    "AVAX": {
-      "price": 9.86,
-      "change_24h": -1.1951179696369665,
-      "volume_24h": 237758161.6446491,
-      "market_cap": 4375662696.951064
-    },
-    "LINK": {
-      "price": 12.05,
-      "change_24h": -2.1812249957754046,
-      "volume_24h": 230119580.82290253,
-      "market_cap": 9242364841.796335
-    },
-    "DOT": {
-      "price": 1.12,
-      "change_24h": -5.748929668830885,
-      "volume_24h": 136260185.54628465,
-      "market_cap": 1906060943.1910803
-    },
-    "ARB": {
-      "price": 0.1853,
-      "change_24h": -2.210519975571728,
-      "volume_24h": 108035783.02097191,
-      "market_cap": 1277149187.7857382
-    },
-    "DOGE": {
-      "price": 0.079795,
-      "change_24h": -0.7780136180897438,
-      "volume_24h": 439001911.43096346,
-      "market_cap": 12475504790.207386
-    },
-    "ADA": {
-      "price": 0.221516,
-      "change_24h": -1.3717849263133797,
-      "volume_24h": 225758149.38708293,
-      "market_cap": 8318996623.333947
-    },
-    "ATOM": {
-      "price": 1.7,
-      "change_24h": -3.225109814736123,
-      "volume_24h": 31667890.310049858,
-      "market_cap": 913661103.8205194
-    },
-    "UNI": {
-      "price": 7.29,
-      "change_24h": -0.44219228499472274,
-      "volume_24h": 274836315.64627427,
-      "market_cap": 4554964462.4500885
-    }
-  },
+  "timestamp": "2026-10-22T12:00:34.489953",
+  "prices": {},
   "fear_greed": {
-    "value": 53,
-    "label": "Neutral",
-    "week_avg": 58.9,
-    "trend": "falling"
+    "value": 68,
+    "label": "Greed",
+    "week_avg": 59.4,
+    "trend": "rising"
   },
   "reddit_sentiment": null,
   "news": [
@@ -83,12 +16,27 @@
     },
     {
       "source": "cointelegraph",
-      "title": "One platform for every move in finance: Bybit CEO Ben Zhou to deliver global keynote on October 13",
+      "title": "Gate &amp; Visa partner to launch crypto card across 40+ regions",
       "url": "https://cointelegraph.com/"
     },
     {
       "source": "cointelegraph",
-      "title": "Stablecoin industry comes of age: XREX Group hosts Stablecoin Summit 2026 in Singapore with Curve and Bridge",
+      "title": "RAFA to launch agentic fund management on Base for transparent on-chain funds",
+      "url": "https://cointelegraph.com/"
+    },
+    {
+      "source": "cointelegraph",
+      "title": "Bitunix increases its Care Fund to $50 million, further strengthening user protection",
+      "url": "https://cointelegraph.com/"
+    },
+    {
+      "source": "cointelegraph",
+      "title": "Beyond the prompt: Animas is leveling the playing field for everyday traders through real quant discipline",
+      "url": "https://cointelegraph.com/"
+    },
+    {
+      "source": "cointelegraph",
+      "title": "Experience Blockchain Life 2026 \u2014 Dubai awaits on December 1-2",
       "url": "https://cointelegraph.com/"
     },
     {
@@ -108,226 +56,123 @@
     },
     {
       "source": "cointelegraph",
-      "title": "Gate &amp; Visa partner to launch crypto card across 40+ regions",
-      "url": "https://cointelegraph.com/"
-    },
-    {
-      "source": "cointelegraph",
-      "title": "RAFA to launch agentic fund management on Base for transparent on-chain funds",
-      "url": "https://cointelegraph.com/"
-    },
-    {
-      "source": "cointelegraph",
-      "title": "Polygon Open Money Stack expands to TRON, extending network access to regulated U.S. payment rails",
-      "url": "https://cointelegraph.com/"
-    },
-    {
-      "source": "cointelegraph",
       "title": "Daily byte-sized crypto news for those on the move",
       "url": "https://cointelegraph.com/"
     }
   ],
   "signals": [
     {
-      "source": "technical",
-      "asset": "DOT",
-      "direction": "long",
-      "strength": 0.5748929668830886,
-      "reasoning": "DOT down -5.7% in 24h \u2014 potential oversold bounce",
-      "type": "mean_reversion"
-    },
-    {
-      "source": "technical",
-      "asset": "ATOM",
-      "direction": "long",
-      "strength": 0.3225109814736123,
-      "reasoning": "ATOM down -3.2% in 24h \u2014 potential oversold bounce",
-      "type": "mean_reversion"
-    },
-    {
-      "source": "deep_data",
-      "asset": "BTC",
-      "direction": "neutral",
-      "strength": 0.4,
-      "reasoning": "BTC max options OI at BTC-30OCT26-95000-C (25569 contracts) \u2014 price gravitates here at expiry",
-      "type": "options_magnet"
-    },
-    {
-      "source": "deep_data",
-      "asset": "ETH",
+      "source": "sentiment",
+      "asset": "MARKET",
       "direction": "short",
-      "strength": 0.485,
-      "reasoning": "ETH put/call ratio 0.52 \u2014 extreme call dominance, complacency. Contrarian bearish (no one hedging = top signal)",
-      "type": "options_flow"
-    },
-    {
-      "source": "deep_data",
-      "asset": "BTC",
-      "direction": "long",
-      "strength": 0.3,
-      "reasoning": "BTC active development \u2014 commit today on bitcoin/bitcoin",
-      "type": "dev_activity"
-    },
-    {
-      "source": "deep_data",
-      "asset": "ETH",
-      "direction": "long",
-      "strength": 0.3,
-      "reasoning": "ETH active development \u2014 commit today on ethereum/go-ethereum",
-      "type": "dev_activity"
-    },
-    {
-      "source": "deep_data",
-      "asset": "SOL",
-      "direction": "long",
-      "strength": 0.3,
-      "reasoning": "SOL active development \u2014 commit today on anza-xyz/agave",
-      "type": "dev_activity"
-    },
-    {
-      "source": "deep_data",
-      "asset": "DOT",
-      "direction": "long",
-      "strength": 0.3,
-      "reasoning": "DOT active development \u2014 commit today on paritytech/polkadot-sdk",
-      "type": "dev_activity"
-    },
-    {
-      "source": "deep_data",
-      "asset": "AVAX",
-      "direction": "long",
-      "strength": 0.3,
-      "reasoning": "AVAX active development \u2014 commit today on ava-labs/avalanchego",
-      "type": "dev_activity"
-    },
-    {
-      "source": "deep_data",
-      "asset": "ADA",
-      "direction": "long",
-      "strength": 0.3,
-      "reasoning": "ADA active development \u2014 commit today on IntersectMBO/cardano-node",
-      "type": "dev_activity"
-    },
-    {
-      "source": "deep_data",
-      "asset": "ARB",
-      "direction": "short",
-      "strength": 0.5555555555555556,
-      "reasoning": "ARB last GitHub commit 50d ago (OffchainLabs/nitro) \u2014 development stalling, fundamental weakness",
-      "type": "dev_activity"
-    },
-    {
-      "source": "deep_data",
-      "asset": "LINK",
-      "direction": "long",
-      "strength": 0.3,
-      "reasoning": "LINK active development \u2014 commit today on smartcontractkit/chainlink",
-      "type": "dev_activity"
+      "strength": 0.08571428571428572,
+      "reasoning": "Fear & Greed at 68 (Greed) \u2014 greed zone, contrarian caution",
+      "type": "contrarian"
     }
   ],
   "deep_data": {
     "liquidation_levels": {
       "BTC": {
-        "perp_open_interest": 839925980,
-        "perp_mark_price": 81837.65,
-        "perp_funding": 1.851e-05
+        "perp_open_interest": 836608410,
+        "perp_mark_price": 82859.02,
+        "perp_funding": 4.53e-06
       }
     },
     "exchange_reserves": {
       "BTC": {
-        "total_supply": 20098843.0
+        "total_supply": 20101743.0
       }
     },
     "stablecoin_flows": {
       "USDT": {
-        "circulating": 183420136370.54584,
+        "circulating": 182685294895.4489,
         "name": "Tether",
-        "chain_total": 183420136370.5455
+        "chain_total": 182685294895.44888
       },
       "USDC": {
-        "circulating": 72634401468.84987,
+        "circulating": 72668727416.13881,
         "name": "USD Coin",
-        "chain_total": 72634401468.84995
+        "chain_total": 72668727416.13884
       },
       "DAI": {
-        "circulating": 4732605282.56616,
+        "circulating": 4742946924.106594,
         "name": "Dai",
-        "chain_total": 4732605282.566163
+        "chain_total": 4742946924.106597
       },
       "BUSD": {
-        "circulating": 7771207.374092212,
+        "circulating": 7640959.698884735,
         "name": "Bera USD",
-        "chain_total": 7771207.374092212
+        "chain_total": 7640959.698884735
       }
     },
     "options_flow": {
       "BTC": {
-        "put_call_ratio": 0.6,
-        "calls_oi": 244517.29999999996,
-        "puts_oi": 146680.90000000008,
-        "calls_volume": 2498.0999999999985,
-        "puts_volume": 1871.8999999999992,
-        "total_oi": 391198.20000000007,
+        "put_call_ratio": 0.605,
+        "calls_oi": 243305.5000000001,
+        "puts_oi": 147298.79999999993,
+        "calls_volume": 20568.2,
+        "puts_volume": 16673.700000000004,
+        "total_oi": 390604.30000000005,
         "max_oi_strike": "BTC-30OCT26-95000-C",
-        "max_oi": 25569.3
+        "max_oi": 20036.2
       },
       "ETH": {
-        "put_call_ratio": 0.515,
-        "calls_oi": 989171.0,
-        "puts_oi": 509189.0,
-        "total_oi": 1498360.0
+        "put_call_ratio": 0.506,
+        "calls_oi": 1015851.0,
+        "puts_oi": 514463.0,
+        "total_oi": 1530314.0
       }
     },
     "github_activity": {
       "BTC": {
         "repo": "bitcoin/bitcoin",
-        "last_commit": "2026-10-16T14:12:11Z",
-        "days_since_commit": 1
+        "last_commit": "2026-10-21T19:16:50Z",
+        "days_since_commit": 0
       },
       "ETH": {
         "repo": "ethereum/go-ethereum",
-        "last_commit": "2026-10-16T20:38:09Z",
-        "days_since_commit": 1
+        "last_commit": "2026-10-21T16:41:43Z",
+        "days_since_commit": 0
       },
       "SOL": {
         "repo": "anza-xyz/agave",
-        "last_commit": "2026-10-17T04:14:14Z",
+        "last_commit": "2026-10-22T01:11:08Z",
         "days_since_commit": 0
       },
       "DOT": {
         "repo": "paritytech/polkadot-sdk",
-        "last_commit": "2026-10-17T06:07:15Z",
+        "last_commit": "2026-10-22T03:05:51Z",
         "days_since_commit": 0
       },
       "ATOM": {
         "repo": "cosmos/cosmos-sdk",
-        "last_commit": "2026-10-15T14:30:41Z",
-        "days_since_commit": 2
+        "last_commit": "2026-10-21T17:30:42Z",
+        "days_since_commit": 0
       },
       "AVAX": {
         "repo": "ava-labs/avalanchego",
-        "last_commit": "2026-10-17T15:35:38Z",
+        "last_commit": "2026-10-21T22:35:48Z",
         "days_since_commit": 0
       },
       "ADA": {
         "repo": "IntersectMBO/cardano-node",
         "last_commit": "2026-10-16T09:21:43Z",
-        "days_since_commit": 1
+        "days_since_commit": 5
       },
       "ARB": {
         "repo": "OffchainLabs/nitro",
         "last_commit": "2026-08-28T19:36:32Z",
-        "days_since_commit": 50
+        "days_since_commit": 54
       },
       "UNI": {
         "repo": "Uniswap/v3-core",
         "last_commit": "2026-10-14T13:56:17Z",
-        "days_since_commit": 3
+        "days_since_commit": 7
       },
       "LINK": {
         "repo": "smartcontractkit/chainlink",
-        "last_commit": "2026-10-16T18:58:34Z",
-        "days_since_commit": 1
+        "last_commit": "2026-10-21T21:39:43Z",
+        "days_since_commit": 0
       }
     }
   }

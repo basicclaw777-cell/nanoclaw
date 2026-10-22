@@ -22,6 +22,7 @@ app.use('/br-crm', express.static(path.join(HOME, 'basic-reflex', 'crm')));
 app.use('/course-engine', express.static(path.join(NANOCLAW, 'course-engine')));
 app.use('/gym-eyes', express.static(path.join(HOME, 'basic-reflex', 'gym-eyes')));
 app.use('/property-scout', express.static(path.join(NANOCLAW, 'property-scout')));
+app.use('/harmonic-probe', express.static(path.join(NANOCLAW, 'harmonic-probe')));
 
 // Image gallery — serve basic-reflex and visual-studio images
 app.use('/basic-reflex', express.static(path.join(HOME, 'basic-reflex'), { maxAge: '1h' }));

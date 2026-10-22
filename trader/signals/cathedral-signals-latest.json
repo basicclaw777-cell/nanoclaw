@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-10-18T12:01:27.746371",
+  "timestamp": "2026-10-22T00:00:31.017932",
   "strategy_count": 13,
-  "total_signals": 7,
+  "total_signals": 6,
   "signals": [
     {
       "source": "gann_geometry",
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC approaching Gann ordinal level $81747 from above (-0.2% away) \u2014 geometric resistance",
+      "reasoning": "BTC approaching Gann ordinal level $84361 from above (-0.2% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
@@ -16,16 +16,8 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH approaching Gann ordinal level $2399 from above (-1.0% away) \u2014 geometric resistance",
+      "reasoning": "ETH approaching Gann ordinal level $2487 from above (-1.0% away) \u2014 geometric resistance",
       "type": "gann_geometry"
-    },
-    {
-      "source": "historical_cycles",
-      "asset": "BTC",
-      "direction": "short",
-      "strength": 0.6,
-      "reasoning": "BTC halving cycle: 30 months post-halving. Post-peak zone. Previous cycles entered bear market by now.",
-      "type": "historical_cycles"
     },
     {
       "source": "historical_cycles",
@@ -48,7 +40,7 @@
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC at 360-degree Gann level $81818 (45deg, -0.1% away) \u2014 cavity's native geometry resistance",
+      "reasoning": "BTC at 360-degree Gann level $84433 (45deg, -0.1% away) \u2014 cavity's native geometry resistance",
       "type": "harmonic_year"
     },
     {
@@ -56,7 +48,7 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH at 360-degree Gann level $2411 (45deg, -0.5% away) \u2014 cavity's native geometry resistance",
+      "reasoning": "ETH at 360-degree Gann level $2499 (45deg, -0.5% away) \u2014 cavity's native geometry resistance",
       "type": "harmonic_year"
     }
   ]
