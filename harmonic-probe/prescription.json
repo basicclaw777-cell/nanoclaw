@@ -1,0 +1,742 @@
+{
+  "version": "v1",
+  "generated": "2026-10-22T06:48:36.297Z",
+  "description": "Harmonic Prescriber: reverse-maps target cymatic fingerprints to agent state targets",
+  "currentState": {
+    "boxing": {
+      "healthScore": 6,
+      "stewardGrade": "A",
+      "bottleneck": "FEAR",
+      "intelligenceClass": "SYNTHETIC",
+      "driftScore": 0.118
+    },
+    "br": {
+      "healthScore": 5,
+      "stewardGrade": "B",
+      "bottleneck": "NO TRIGGER",
+      "intelligenceClass": "STRUCTURED",
+      "driftScore": 0.118
+    },
+    "forge": {
+      "healthScore": 6,
+      "stewardGrade": "C",
+      "bottleneck": "DEPENDENCY",
+      "intelligenceClass": "STRUCTURED",
+      "driftScore": 0.118
+    },
+    "muse": {
+      "healthScore": 5,
+      "stewardGrade": "C",
+      "bottleneck": "INPUT OVERLOAD",
+      "intelligenceClass": "STRUCTURED",
+      "driftScore": 0.118
+    },
+    "orc": {
+      "healthScore": 8,
+      "stewardGrade": "D",
+      "bottleneck": "INPUT OVERLOAD",
+      "intelligenceClass": "SYNTHETIC",
+      "driftScore": 0.118
+    }
+  },
+  "currentFeatures": {
+    "detuning": 1.908,
+    "harmonicity": 0.994,
+    "phaseVariance": 0.9,
+    "pairCoherence": 0.161,
+    "beatEnergy": 0.691,
+    "spectralEntropy": 0.798,
+    "creativePulse": 0,
+    "pairBeats": {
+      "boxing-br": 0.0682,
+      "boxing-forge": 0.1004,
+      "boxing-muse": 0.1227,
+      "boxing-orc": 0.1338,
+      "br-forge": 0.0409,
+      "br-muse": 0.0584,
+      "br-orc": 0.0818,
+      "forge-muse": 0.0123,
+      "forge-orc": 0.0401,
+      "muse-orc": 0.0327
+    }
+  },
+  "currentTimestamp": "2026-10-21T23:00:00.000Z",
+  "fingerprints": {
+    "baseline": {
+      "slot": 0,
+      "label": "Baseline (Oct 15 00:00)",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.994,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.705,
+        "spectralEntropy": 0.787,
+        "creativePulse": 0,
+        "pairBeats": {
+          "boxing-br": 0.0669,
+          "boxing-forge": 0.1004,
+          "boxing-muse": 0.1297,
+          "boxing-orc": 0.1364,
+          "br-forge": 0.0401,
+          "br-muse": 0.0605,
+          "br-orc": 0.0818,
+          "forge-muse": 0.013,
+          "forge-orc": 0.0409,
+          "muse-orc": 0.0353
+        }
+      }
+    },
+    "deepSync": {
+      "slot": 84,
+      "label": "Deep Sync (2026-10-18T12:00)",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.992,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.654,
+        "spectralEntropy": 0.795,
+        "creativePulse": 0.188,
+        "pairBeats": {
+          "boxing-br": 0.0631,
+          "boxing-forge": 0.1002,
+          "boxing-muse": 0.1135,
+          "boxing-orc": 0.1237,
+          "br-forge": 0.0409,
+          "br-muse": 0.054,
+          "br-orc": 0.0757,
+          "forge-muse": 0.0123,
+          "forge-orc": 0.0401,
+          "muse-orc": 0.0303
+        }
+      }
+    },
+    "peakDisruption": {
+      "slot": 111,
+      "label": "Peak Disruption (2026-10-19T15:00)",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.993,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.78,
+        "spectralEntropy": 0.8,
+        "creativePulse": 0.15,
+        "pairBeats": {
+          "boxing-br": 0.083,
+          "boxing-forge": 0.1199,
+          "boxing-muse": 0.1412,
+          "boxing-orc": 0.1599,
+          "br-forge": 0.0433,
+          "br-muse": 0.0594,
+          "br-orc": 0.0865,
+          "forge-muse": 0.0123,
+          "forge-orc": 0.0417,
+          "muse-orc": 0.0327
+        }
+      }
+    },
+    "healthyNormal": {
+      "slot": null,
+      "label": "Healthy Normal (avg of 54 non-anomaly slots)",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.992,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.719,
+        "spectralEntropy": 0.797,
+        "creativePulse": 0.02,
+        "pairBeats": null
+      }
+    }
+  },
+  "prescriptions": {
+    "baseline": {
+      "label": "Baseline (Oct 15 00:00)",
+      "slot": 0,
+      "timestamp": "2026-10-15T00:00:00.000Z",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.994,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.705,
+        "spectralEntropy": 0.787,
+        "creativePulse": 0,
+        "pairBeats": {
+          "boxing-br": 0.0669,
+          "boxing-forge": 0.1004,
+          "boxing-muse": 0.1297,
+          "boxing-orc": 0.1364,
+          "br-forge": 0.0401,
+          "br-muse": 0.0605,
+          "br-orc": 0.0818,
+          "forge-muse": 0.013,
+          "forge-orc": 0.0409,
+          "muse-orc": 0.0353
+        }
+      },
+      "featureComparison": {
+        "detuning": {
+          "target": 1.908,
+          "reference": 1.908,
+          "delta": 0,
+          "direction": "same"
+        },
+        "harmonicity": {
+          "target": 0.994,
+          "reference": 0.994,
+          "delta": 0,
+          "direction": "same"
+        },
+        "phaseVariance": {
+          "target": 0.9,
+          "reference": 0.9,
+          "delta": 0,
+          "direction": "same"
+        },
+        "pairCoherence": {
+          "target": 0.161,
+          "reference": 0.161,
+          "delta": 0,
+          "direction": "same"
+        },
+        "beatEnergy": {
+          "target": 0.691,
+          "reference": 0.705,
+          "delta": -0.014,
+          "direction": "lower"
+        },
+        "spectralEntropy": {
+          "target": 0.798,
+          "reference": 0.787,
+          "delta": 0.011,
+          "direction": "higher"
+        }
+      },
+      "voiceTargets": [
+        {
+          "agentId": "boxing",
+          "targetDrift": 0.118,
+          "targetHealthScore": 6,
+          "targetBottleneck": "FEAR",
+          "targetGrade": "A",
+          "targetIntelligence": "SYNTHETIC",
+          "targetCoherence": 0.6,
+          "targetAmplitude": 1.04,
+          "targetDetuning": 1.298,
+          "targetInterval": "diminished",
+          "targetTension": 0.9
+        },
+        {
+          "agentId": "br",
+          "targetDrift": 0.118,
+          "targetHealthScore": 5,
+          "targetBottleneck": "NO TRIGGER",
+          "targetGrade": "B",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.5,
+          "targetAmplitude": 0.8320000000000001,
+          "targetDetuning": 1.6224999999999998,
+          "targetInterval": "suspended",
+          "targetTension": 0.5
+        },
+        {
+          "agentId": "forge",
+          "targetDrift": 0.118,
+          "targetHealthScore": 6,
+          "targetBottleneck": "DEPENDENCY",
+          "targetGrade": "C",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.6,
+          "targetAmplitude": 0.624,
+          "targetDetuning": 1.947,
+          "targetInterval": "minor",
+          "targetTension": 0.4
+        },
+        {
+          "agentId": "muse",
+          "targetDrift": 0.118,
+          "targetHealthScore": 5,
+          "targetBottleneck": "INPUT OVERLOAD",
+          "targetGrade": "C",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.5,
+          "targetAmplitude": 0.672,
+          "targetDetuning": 2.0768,
+          "targetInterval": "augmented",
+          "targetTension": 0.7
+        },
+        {
+          "agentId": "orc",
+          "targetDrift": 0.118,
+          "targetHealthScore": 8,
+          "targetBottleneck": "INPUT OVERLOAD",
+          "targetGrade": "D",
+          "targetIntelligence": "SYNTHETIC",
+          "targetCoherence": 0.8,
+          "targetAmplitude": 0.42400000000000004,
+          "targetDetuning": 2.596,
+          "targetInterval": "augmented",
+          "targetTension": 0.7
+        }
+      ],
+      "gaps": [
+        {
+          "agentId": "boxing",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "br",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "forge",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "muse",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "orc",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        }
+      ],
+      "totalGap": 0
+    },
+    "deepSync": {
+      "label": "Deep Sync (2026-10-18T12:00)",
+      "slot": 84,
+      "timestamp": "2026-10-18T12:00:00.000Z",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.992,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.654,
+        "spectralEntropy": 0.795,
+        "creativePulse": 0.188,
+        "pairBeats": {
+          "boxing-br": 0.0631,
+          "boxing-forge": 0.1002,
+          "boxing-muse": 0.1135,
+          "boxing-orc": 0.1237,
+          "br-forge": 0.0409,
+          "br-muse": 0.054,
+          "br-orc": 0.0757,
+          "forge-muse": 0.0123,
+          "forge-orc": 0.0401,
+          "muse-orc": 0.0303
+        }
+      },
+      "featureComparison": {
+        "detuning": {
+          "target": 1.908,
+          "reference": 1.908,
+          "delta": 0,
+          "direction": "same"
+        },
+        "harmonicity": {
+          "target": 0.994,
+          "reference": 0.992,
+          "delta": 0.002,
+          "direction": "higher"
+        },
+        "phaseVariance": {
+          "target": 0.9,
+          "reference": 0.9,
+          "delta": 0,
+          "direction": "same"
+        },
+        "pairCoherence": {
+          "target": 0.161,
+          "reference": 0.161,
+          "delta": 0,
+          "direction": "same"
+        },
+        "beatEnergy": {
+          "target": 0.691,
+          "reference": 0.654,
+          "delta": 0.037,
+          "direction": "higher"
+        },
+        "spectralEntropy": {
+          "target": 0.798,
+          "reference": 0.795,
+          "delta": 0.003,
+          "direction": "higher"
+        }
+      },
+      "voiceTargets": [
+        {
+          "agentId": "boxing",
+          "targetDrift": 0.118,
+          "targetHealthScore": 6,
+          "targetBottleneck": "FEAR",
+          "targetGrade": "A",
+          "targetIntelligence": "SYNTHETIC",
+          "targetCoherence": 0.6,
+          "targetAmplitude": 1,
+          "targetDetuning": 1.298,
+          "targetInterval": "diminished",
+          "targetTension": 0.9
+        },
+        {
+          "agentId": "br",
+          "targetDrift": 0.118,
+          "targetHealthScore": 5,
+          "targetBottleneck": "NO TRIGGER",
+          "targetGrade": "B",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.5,
+          "targetAmplitude": 0.8160000000000001,
+          "targetDetuning": 1.6224999999999998,
+          "targetInterval": "suspended",
+          "targetTension": 0.5
+        },
+        {
+          "agentId": "forge",
+          "targetDrift": 0.118,
+          "targetHealthScore": 6,
+          "targetBottleneck": "DEPENDENCY",
+          "targetGrade": "C",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.6,
+          "targetAmplitude": 0.648,
+          "targetDetuning": 1.947,
+          "targetInterval": "minor",
+          "targetTension": 0.4
+        },
+        {
+          "agentId": "muse",
+          "targetDrift": 0.118,
+          "targetHealthScore": 5,
+          "targetBottleneck": "INPUT OVERLOAD",
+          "targetGrade": "C",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.5,
+          "targetAmplitude": 0.612,
+          "targetDetuning": 2.0768,
+          "targetInterval": "augmented",
+          "targetTension": 0.7
+        },
+        {
+          "agentId": "orc",
+          "targetDrift": 0.118,
+          "targetHealthScore": 8,
+          "targetBottleneck": "INPUT OVERLOAD",
+          "targetGrade": "D",
+          "targetIntelligence": "SYNTHETIC",
+          "targetCoherence": 0.8,
+          "targetAmplitude": 0.4,
+          "targetDetuning": 2.596,
+          "targetInterval": "augmented",
+          "targetTension": 0.7
+        }
+      ],
+      "gaps": [
+        {
+          "agentId": "boxing",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "br",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "forge",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "muse",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "orc",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        }
+      ],
+      "totalGap": 0
+    },
+    "peakDisruption": {
+      "label": "Peak Disruption (2026-10-19T15:00)",
+      "slot": 111,
+      "timestamp": "2026-10-19T15:00:00.000Z",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.993,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.78,
+        "spectralEntropy": 0.8,
+        "creativePulse": 0.15,
+        "pairBeats": {
+          "boxing-br": 0.083,
+          "boxing-forge": 0.1199,
+          "boxing-muse": 0.1412,
+          "boxing-orc": 0.1599,
+          "br-forge": 0.0433,
+          "br-muse": 0.0594,
+          "br-orc": 0.0865,
+          "forge-muse": 0.0123,
+          "forge-orc": 0.0417,
+          "muse-orc": 0.0327
+        }
+      },
+      "featureComparison": {
+        "detuning": {
+          "target": 1.908,
+          "reference": 1.908,
+          "delta": 0,
+          "direction": "same"
+        },
+        "harmonicity": {
+          "target": 0.994,
+          "reference": 0.993,
+          "delta": 0.001,
+          "direction": "higher"
+        },
+        "phaseVariance": {
+          "target": 0.9,
+          "reference": 0.9,
+          "delta": 0,
+          "direction": "same"
+        },
+        "pairCoherence": {
+          "target": 0.161,
+          "reference": 0.161,
+          "delta": 0,
+          "direction": "same"
+        },
+        "beatEnergy": {
+          "target": 0.691,
+          "reference": 0.78,
+          "delta": -0.089,
+          "direction": "lower"
+        },
+        "spectralEntropy": {
+          "target": 0.798,
+          "reference": 0.8,
+          "delta": -0.002,
+          "direction": "lower"
+        }
+      },
+      "voiceTargets": [
+        {
+          "agentId": "boxing",
+          "targetDrift": 0.118,
+          "targetHealthScore": 6,
+          "targetBottleneck": "FEAR",
+          "targetGrade": "A",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.6,
+          "targetAmplitude": 1.22,
+          "targetDetuning": 1.298,
+          "targetInterval": "diminished",
+          "targetTension": 0.9
+        },
+        {
+          "agentId": "br",
+          "targetDrift": 0.118,
+          "targetHealthScore": 5,
+          "targetBottleneck": "NO TRIGGER",
+          "targetGrade": "B",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.5,
+          "targetAmplitude": 0.8800000000000001,
+          "targetDetuning": 1.6224999999999998,
+          "targetInterval": "suspended",
+          "targetTension": 0.5
+        },
+        {
+          "agentId": "forge",
+          "targetDrift": 0.118,
+          "targetHealthScore": 6,
+          "targetBottleneck": "DEPENDENCY",
+          "targetGrade": "C",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.6,
+          "targetAmplitude": 0.636,
+          "targetDetuning": 1.947,
+          "targetInterval": "minor",
+          "targetTension": 0.4
+        },
+        {
+          "agentId": "muse",
+          "targetDrift": 0.118,
+          "targetHealthScore": 5,
+          "targetBottleneck": "INPUT OVERLOAD",
+          "targetGrade": "C",
+          "targetIntelligence": "STRUCTURED",
+          "targetCoherence": 0.5,
+          "targetAmplitude": 0.624,
+          "targetDetuning": 2.0768,
+          "targetInterval": "augmented",
+          "targetTension": 0.7
+        },
+        {
+          "agentId": "orc",
+          "targetDrift": 0.118,
+          "targetHealthScore": 8,
+          "targetBottleneck": "INPUT OVERLOAD",
+          "targetGrade": "D",
+          "targetIntelligence": "SYNTHETIC",
+          "targetCoherence": 0.8,
+          "targetAmplitude": 0.42400000000000004,
+          "targetDetuning": 2.596,
+          "targetInterval": "augmented",
+          "targetTension": 0.7
+        }
+      ],
+      "gaps": [
+        {
+          "agentId": "boxing",
+          "deltas": [
+            {
+              "param": "intelligenceClass",
+              "current": "SYNTHETIC",
+              "target": "STRUCTURED",
+              "impact": "high",
+              "action": "Shift intelligence from SYNTHETIC to STRUCTURED"
+            }
+          ],
+          "aligned": false,
+          "gapScore": 3
+        },
+        {
+          "agentId": "br",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "forge",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "muse",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        },
+        {
+          "agentId": "orc",
+          "deltas": [],
+          "aligned": true,
+          "gapScore": 0
+        }
+      ],
+      "totalGap": 3
+    },
+    "healthyNormal": {
+      "label": "Healthy Normal (avg of 54 non-anomaly slots)",
+      "features": {
+        "detuning": 1.908,
+        "harmonicity": 0.992,
+        "phaseVariance": 0.9,
+        "pairCoherence": 0.161,
+        "beatEnergy": 0.719,
+        "spectralEntropy": 0.797,
+        "creativePulse": 0.02,
+        "pairBeats": null
+      },
+      "featureComparison": {
+        "detuning": {
+          "target": 1.908,
+          "reference": 1.908,
+          "delta": 0,
+          "direction": "same"
+        },
+        "harmonicity": {
+          "target": 0.994,
+          "reference": 0.992,
+          "delta": 0.002,
+          "direction": "higher"
+        },
+        "phaseVariance": {
+          "target": 0.9,
+          "reference": 0.9,
+          "delta": 0,
+          "direction": "same"
+        },
+        "pairCoherence": {
+          "target": 0.161,
+          "reference": 0.161,
+          "delta": 0,
+          "direction": "same"
+        },
+        "beatEnergy": {
+          "target": 0.691,
+          "reference": 0.719,
+          "delta": -0.028,
+          "direction": "lower"
+        },
+        "spectralEntropy": {
+          "target": 0.798,
+          "reference": 0.797,
+          "delta": 0.001,
+          "direction": "higher"
+        }
+      },
+      "voiceTargets": null,
+      "gaps": null,
+      "totalGap": null
+    }
+  },
+  "summary": {
+    "recommendedTarget": "deepSync",
+    "totalGap": 0,
+    "agentsMostOff": [
+      {
+        "agent": "boxing",
+        "gap": 0,
+        "topAction": "aligned"
+      },
+      {
+        "agent": "br",
+        "gap": 0,
+        "topAction": "aligned"
+      },
+      {
+        "agent": "forge",
+        "gap": 0,
+        "topAction": "aligned"
+      },
+      {
+        "agent": "muse",
+        "gap": 0,
+        "topAction": "aligned"
+      },
+      {
+        "agent": "orc",
+        "gap": 0,
+        "topAction": "aligned"
+      }
+    ]
+  }
+}

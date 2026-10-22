@@ -1,0 +1,593 @@
+{
+  "version": "v1",
+  "generated": "2026-10-22T09:41:47.056Z",
+  "description": "Cathedral Voice Registry — all monitoring systems mapped to harmonic voices",
+  "systemChord": {
+    "quality": "diminished",
+    "overall": "FRAGILE",
+    "intervals": [
+      0,
+      3,
+      6
+    ]
+  },
+  "voices": [
+    {
+      "id": "boxing",
+      "layer": "agent",
+      "fundamental": 220,
+      "register": "mid",
+      "amplitude": 0.6,
+      "waveform": "sine",
+      "detuning_cents": 0,
+      "jitter": 0,
+      "intelligenceClass": "SYNTHETIC",
+      "source": {
+        "score": 6,
+        "grade": "A",
+        "intel": "SYNTHETIC",
+        "drift": 0,
+        "waste": 0
+      }
+    },
+    {
+      "id": "br",
+      "layer": "agent",
+      "fundamental": 275,
+      "register": "mid",
+      "amplitude": 0.5,
+      "waveform": "triangle",
+      "detuning_cents": 0,
+      "jitter": 0,
+      "intelligenceClass": "STRUCTURED",
+      "source": {
+        "score": 0,
+        "grade": "B",
+        "intel": "STRUCTURED",
+        "drift": 0,
+        "waste": 0
+      }
+    },
+    {
+      "id": "forge",
+      "layer": "agent",
+      "fundamental": 330,
+      "register": "mid",
+      "amplitude": 0.6,
+      "waveform": "sawtooth",
+      "detuning_cents": 0,
+      "jitter": 0,
+      "intelligenceClass": "STRUCTURED",
+      "source": {
+        "score": 6,
+        "grade": "C",
+        "intel": "STRUCTURED",
+        "drift": 0,
+        "waste": 0
+      }
+    },
+    {
+      "id": "muse",
+      "layer": "agent",
+      "fundamental": 352,
+      "register": "mid",
+      "amplitude": 0.5,
+      "waveform": "sawtooth",
+      "detuning_cents": 0,
+      "jitter": 0,
+      "intelligenceClass": "STRUCTURED",
+      "source": {
+        "score": 0,
+        "grade": "C",
+        "intel": "STRUCTURED",
+        "drift": 0,
+        "waste": 0
+      }
+    },
+    {
+      "id": "orc",
+      "layer": "agent",
+      "fundamental": 440,
+      "register": "mid",
+      "amplitude": 0.8,
+      "waveform": "square",
+      "detuning_cents": 0,
+      "jitter": 0,
+      "intelligenceClass": "SYNTHETIC",
+      "source": {
+        "score": 8,
+        "grade": "D",
+        "intel": "SYNTHETIC",
+        "drift": 0,
+        "waste": 0
+      }
+    },
+    {
+      "id": "vitality",
+      "layer": "emergence",
+      "fundamental": 523.25,
+      "register": "high",
+      "amplitude": 1,
+      "waveform": "sine",
+      "detuning_cents": 0,
+      "jitter": 0.05,
+      "status": "healthy",
+      "issueCount": 0,
+      "source": {
+        "status": "healthy",
+        "mirrorExcerpt": "14373 vault entries scored. 2724 load-bearing (19%), 5963 alive, 5686 fading. | Newly fading: 00_Staging/cathedral/night"
+      }
+    },
+    {
+      "id": "surprise",
+      "layer": "emergence",
+      "fundamental": 587.33,
+      "register": "high",
+      "amplitude": 0.6,
+      "waveform": "sawtooth",
+      "detuning_cents": 25,
+      "jitter": 0.15,
+      "status": "alert",
+      "issueCount": 5,
+      "source": {
+        "status": "alert",
+        "mirrorExcerpt": "23 beliefs tracked (19 high-confidence). | 5 unresolved surprises! system/technology_dominates_vault: 40% technology -> "
+      }
+    },
+    {
+      "id": "goals",
+      "layer": "emergence",
+      "fundamental": 659.25,
+      "register": "high",
+      "amplitude": 0.9,
+      "waveform": "sine",
+      "detuning_cents": 0,
+      "jitter": 0.05,
+      "status": "active",
+      "issueCount": 0,
+      "source": {
+        "status": "active",
+        "mirrorExcerpt": "0 pending proposals, 15 active goals. Agent accuracy: universe=100.0%, br=100.0%, cathy=100.0%, miyagi=100.0%, trading=1"
+      }
+    },
+    {
+      "id": "temporal",
+      "layer": "emergence",
+      "fundamental": 739.99,
+      "register": "high",
+      "amplitude": 0.8,
+      "waveform": "triangle",
+      "detuning_cents": 0,
+      "jitter": 0.05,
+      "status": "tracking",
+      "issueCount": 0,
+      "source": {
+        "status": "tracking",
+        "mirrorExcerpt": "6 metrics moving. Biggest: total_entries (rising, +28.0)."
+      }
+    },
+    {
+      "id": "dialogue",
+      "layer": "emergence",
+      "fundamental": 830.61,
+      "register": "high",
+      "amplitude": 0.9,
+      "waveform": "sine",
+      "detuning_cents": 170,
+      "jitter": 0.05,
+      "status": "active",
+      "issueCount": 34,
+      "source": {
+        "status": "active",
+        "mirrorExcerpt": "344 inter-agent exchanges. 34 active threads. Latest: signal between cathy, orc, boxing, br, trading, universe, ling, ma"
+      }
+    },
+    {
+      "id": "smell",
+      "layer": "emergence",
+      "fundamental": 932.33,
+      "register": "high",
+      "amplitude": 0.6,
+      "waveform": "sawtooth",
+      "detuning_cents": 50,
+      "jitter": 0.15,
+      "status": "alert",
+      "issueCount": 10,
+      "source": {
+        "status": "alert",
+        "mirrorExcerpt": "Efficiency 50%. 10 waste signals detected. PROCESS: sentinel is stopped — should be always-on | PROCESS: cathedral-panel"
+      }
+    },
+    {
+      "id": "compression",
+      "layer": "stress",
+      "fundamental": 55,
+      "register": "sub",
+      "amplitude": 0,
+      "waveform": "noise",
+      "detuning_cents": 25,
+      "jitter": 0.4,
+      "chamberScore": 0,
+      "source": {
+        "score": 0,
+        "overall": "FRAGILE",
+        "testNumber": 63,
+        "date": "2026-10-21"
+      }
+    },
+    {
+      "id": "contradiction",
+      "layer": "stress",
+      "fundamental": 73.42,
+      "register": "sub",
+      "amplitude": 0.5,
+      "waveform": "sawtooth",
+      "detuning_cents": 15,
+      "jitter": 0.1,
+      "chamberScore": 5,
+      "source": {
+        "score": 5,
+        "overall": "FRAGILE",
+        "testNumber": 63,
+        "date": "2026-10-21"
+      }
+    },
+    {
+      "id": "identity",
+      "layer": "stress",
+      "fundamental": 110,
+      "register": "sub",
+      "amplitude": 0,
+      "waveform": "noise",
+      "detuning_cents": 25,
+      "jitter": 0.4,
+      "chamberScore": 0,
+      "source": {
+        "score": 0,
+        "overall": "FRAGILE",
+        "testNumber": 63,
+        "date": "2026-10-21"
+      }
+    },
+    {
+      "id": "heartbeat",
+      "layer": "system",
+      "fundamental": 7.83,
+      "register": "infra",
+      "amplitude": 1,
+      "waveform": "sine",
+      "detuning_cents": 0,
+      "jitter": 0.02,
+      "source": {
+        "emergenceScore": 100
+      }
+    },
+    {
+      "id": "synapse",
+      "layer": "system",
+      "fundamental": 15.66,
+      "register": "infra",
+      "amplitude": 0.5959831481481481,
+      "waveform": "sine",
+      "detuning_cents": 4.040168518518518,
+      "jitter": 0.01,
+      "source": {
+        "pulseRecency": 0.6
+      }
+    }
+  ],
+  "composite": {
+    "totalVoices": 16,
+    "layerStats": {
+      "agent": {
+        "voiceCount": 5,
+        "avgAmplitude": 0.6,
+        "avgDetuning": 0,
+        "avgJitter": 0,
+        "dominantWaveform": "sawtooth"
+      },
+      "emergence": {
+        "voiceCount": 6,
+        "avgAmplitude": 0.8,
+        "avgDetuning": 40.83,
+        "avgJitter": 0.083,
+        "dominantWaveform": "sine"
+      },
+      "stress": {
+        "voiceCount": 3,
+        "avgAmplitude": 0.167,
+        "avgDetuning": 21.67,
+        "avgJitter": 0.3,
+        "dominantWaveform": "noise"
+      },
+      "system": {
+        "voiceCount": 2,
+        "avgAmplitude": 0.798,
+        "avgDetuning": 2.02,
+        "avgJitter": 0.015,
+        "dominantWaveform": "sine"
+      }
+    },
+    "coherence": 0.607,
+    "totalEnergy": 0.618,
+    "dissonance": 0.241,
+    "crossBeatEnergy": 0.347,
+    "strongestBeats": [
+      {
+        "pair": "vitality-heartbeat",
+        "beatFreq": 515.42,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 1
+      },
+      {
+        "pair": "vitality-goals",
+        "beatFreq": 136,
+        "crossLayer": false,
+        "layers": "emergence↔emergence",
+        "combinedAmplitude": 0.9
+      },
+      {
+        "pair": "vitality-dialogue",
+        "beatFreq": 307.36,
+        "crossLayer": false,
+        "layers": "emergence↔emergence",
+        "combinedAmplitude": 0.9
+      },
+      {
+        "pair": "goals-heartbeat",
+        "beatFreq": 651.42,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 0.9
+      },
+      {
+        "pair": "dialogue-heartbeat",
+        "beatFreq": 822.78,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 0.9
+      },
+      {
+        "pair": "goals-dialogue",
+        "beatFreq": 171.36,
+        "crossLayer": false,
+        "layers": "emergence↔emergence",
+        "combinedAmplitude": 0.81
+      },
+      {
+        "pair": "orc-vitality",
+        "beatFreq": 83.25,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.8
+      },
+      {
+        "pair": "orc-heartbeat",
+        "beatFreq": 432.17,
+        "crossLayer": true,
+        "layers": "agent↔system",
+        "combinedAmplitude": 0.8
+      },
+      {
+        "pair": "vitality-temporal",
+        "beatFreq": 216.74,
+        "crossLayer": false,
+        "layers": "emergence↔emergence",
+        "combinedAmplitude": 0.8
+      },
+      {
+        "pair": "temporal-heartbeat",
+        "beatFreq": 732.16,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 0.8
+      },
+      {
+        "pair": "orc-goals",
+        "beatFreq": 219.25,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.72
+      },
+      {
+        "pair": "orc-dialogue",
+        "beatFreq": 390.61,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.72
+      },
+      {
+        "pair": "goals-temporal",
+        "beatFreq": 80.74,
+        "crossLayer": false,
+        "layers": "emergence↔emergence",
+        "combinedAmplitude": 0.72
+      },
+      {
+        "pair": "temporal-dialogue",
+        "beatFreq": 90.62,
+        "crossLayer": false,
+        "layers": "emergence↔emergence",
+        "combinedAmplitude": 0.72
+      },
+      {
+        "pair": "orc-temporal",
+        "beatFreq": 299.99,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.64
+      }
+    ],
+    "crossLayerBeats": [
+      {
+        "pair": "vitality-heartbeat",
+        "beatFreq": 515.42,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 1
+      },
+      {
+        "pair": "goals-heartbeat",
+        "beatFreq": 651.42,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 0.9
+      },
+      {
+        "pair": "dialogue-heartbeat",
+        "beatFreq": 822.78,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 0.9
+      },
+      {
+        "pair": "orc-vitality",
+        "beatFreq": 83.25,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.8
+      },
+      {
+        "pair": "orc-heartbeat",
+        "beatFreq": 432.17,
+        "crossLayer": true,
+        "layers": "agent↔system",
+        "combinedAmplitude": 0.8
+      },
+      {
+        "pair": "temporal-heartbeat",
+        "beatFreq": 732.16,
+        "crossLayer": true,
+        "layers": "emergence↔system",
+        "combinedAmplitude": 0.8
+      },
+      {
+        "pair": "orc-goals",
+        "beatFreq": 219.25,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.72
+      },
+      {
+        "pair": "orc-dialogue",
+        "beatFreq": 390.61,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.72
+      },
+      {
+        "pair": "orc-temporal",
+        "beatFreq": 299.99,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.64
+      },
+      {
+        "pair": "boxing-vitality",
+        "beatFreq": 303.25,
+        "crossLayer": true,
+        "layers": "agent↔emergence",
+        "combinedAmplitude": 0.6
+      }
+    ]
+  },
+  "voiceMap": {
+    "boxing": {
+      "freq": 220,
+      "layer": "agent",
+      "register": "mid",
+      "id": "boxing"
+    },
+    "br": {
+      "freq": 275,
+      "layer": "agent",
+      "register": "mid",
+      "id": "br"
+    },
+    "forge": {
+      "freq": 330,
+      "layer": "agent",
+      "register": "mid",
+      "id": "forge"
+    },
+    "muse": {
+      "freq": 352,
+      "layer": "agent",
+      "register": "mid",
+      "id": "muse"
+    },
+    "orc": {
+      "freq": 440,
+      "layer": "agent",
+      "register": "mid",
+      "id": "orc"
+    },
+    "vitality": {
+      "freq": 523.25,
+      "layer": "emergence",
+      "register": "high",
+      "id": "vitality"
+    },
+    "surprise": {
+      "freq": 587.33,
+      "layer": "emergence",
+      "register": "high",
+      "id": "surprise"
+    },
+    "goals": {
+      "freq": 659.25,
+      "layer": "emergence",
+      "register": "high",
+      "id": "goals"
+    },
+    "temporal": {
+      "freq": 739.99,
+      "layer": "emergence",
+      "register": "high",
+      "id": "temporal"
+    },
+    "dialogue": {
+      "freq": 830.61,
+      "layer": "emergence",
+      "register": "high",
+      "id": "dialogue"
+    },
+    "smell": {
+      "freq": 932.33,
+      "layer": "emergence",
+      "register": "high",
+      "id": "smell"
+    },
+    "compression": {
+      "freq": 55,
+      "layer": "stress",
+      "register": "sub",
+      "id": "compression"
+    },
+    "contradiction": {
+      "freq": 73.42,
+      "layer": "stress",
+      "register": "sub",
+      "id": "contradiction"
+    },
+    "identity": {
+      "freq": 110,
+      "layer": "stress",
+      "register": "sub",
+      "id": "identity"
+    },
+    "heartbeat": {
+      "freq": 7.83,
+      "layer": "system",
+      "register": "infra",
+      "id": "heartbeat"
+    },
+    "synapse": {
+      "freq": 15.66,
+      "layer": "system",
+      "register": "infra",
+      "id": "synapse"
+    }
+  }
+}

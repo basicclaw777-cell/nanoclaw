@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harmonic Probe — V1 Backtest</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --gold: #f7b408;
+    --red: #ef4444;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --purple: #a78bfa;
+    --orange: #f97316;
+    --cyan: #22d3ee;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 13px;
+    overflow-x: hidden;
+  }
+
+  .header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header h1 { font-size: 16px; font-weight: 600; color: var(--gold); }
+  .header .meta { color: var(--text-dim); font-size: 11px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 280px auto auto;
+    gap: 1px;
+    background: var(--border);
+    min-height: calc(100vh - 52px);
+  }
+
+  .panel {
+    background: var(--surface);
+    padding: 12px;
+    overflow: hidden;
+  }
+  .timeline-panel { overflow: visible; }
+  .panel-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  /* Cymatic Canvas */
+  .cymatic-panel { grid-column: 1; grid-row: 1; }
+  #cymaticCanvas { width: 100%; height: 100%; border-radius: 4px; }
+
+  /* Oscilloscope */
+  .scope-panel { grid-column: 2; grid-row: 1; }
+  #scopeCanvas { width: 100%; height: 100%; border-radius: 4px; }
+
+  /* Timeline */
+  .timeline-panel { grid-column: 1 / -1; grid-row: 2; }
+  #timelineCanvas { width: 100%; height: 110px; border-radius: 4px; cursor: pointer; }
+  .timeline-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .timeline-controls button {
+    background: var(--border);
+    color: var(--text);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+  }
+  .timeline-controls button:hover { background: var(--gold); color: var(--bg); }
+  .timeline-controls button.active { background: var(--gold); color: var(--bg); }
+  .slot-label { color: var(--gold); font-size: 12px; font-weight: 600; flex: 1; }
+
+  /* Features Dashboard */
+  .features-panel { grid-column: 1; grid-row: 3; }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .feature-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px;
+  }
+  .feature-name { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .feature-value { font-size: 22px; font-weight: 700; margin: 4px 0; }
+  .feature-zscore { font-size: 10px; }
+  .z-normal { color: var(--green); }
+  .z-warn { color: var(--orange); }
+  .z-anomaly { color: var(--red); }
+
+  /* Voice Cards */
+  .voices-panel { grid-column: 2; grid-row: 3; }
+  .voice-list { display: flex; flex-direction: column; gap: 6px; }
+  .voice-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .voice-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .voice-name { font-weight: 600; font-size: 12px; width: 60px; }
+  .voice-freq { color: var(--cyan); font-size: 11px; width: 80px; }
+  .voice-interval { font-size: 10px; padding: 2px 6px; border-radius: 2px; }
+  .interval-major { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+  .interval-diminished { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+  .interval-suspended { background: rgba(249, 115, 22, 0.15); color: var(--orange); }
+  .interval-augmented { background: rgba(167, 139, 250, 0.15); color: var(--purple); }
+  .interval-chromatic { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
+  .interval-minor { background: rgba(34, 211, 238, 0.15); color: var(--cyan); }
+  .interval-tritone { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+  .voice-coherence { font-size: 11px; margin-left: auto; }
+  .voice-waveform { font-size: 10px; color: var(--text-dim); }
+  .voice-pulse { font-size: 10px; color: #f472b6; }
+
+  /* Pair Beat Heatmap */
+  .pair-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    margin-top: 8px;
+  }
+  .pair-cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: rgba(255,255,255,0.7);
+    position: relative;
+  }
+  .pair-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 2px;
+  }
+
+  /* Ground truth markers */
+  .gt-marker {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    opacity: 0.6;
+  }
+  .gt-experiment { background: var(--blue); }
+  .gt-build { background: var(--green); }
+  .gt-intervention { background: var(--orange); }
+  .gt-system { background: var(--cyan); }
+  .gt-transition { background: var(--purple); }
+  .gt-diagnostic { background: var(--text-dim); }
+  .gt-incident { background: var(--red); }
+
+  .legend {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text-dim); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* Prescriber & Vocabulary Panels */
+  .extended-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+  .ext-panel {
+    background: var(--surface);
+    padding: 16px;
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    padding: 0 16px;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 12px;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .prescription-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .prescription-card .agent-name { font-weight: 600; font-size: 13px; }
+  .prescription-card .aligned { color: var(--green); font-size: 11px; }
+  .prescription-card .delta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 11px;
+  }
+  .delta-row .impact-high { color: var(--red); }
+  .delta-row .impact-medium { color: var(--orange); }
+  .delta-row .impact-low { color: var(--text-dim); }
+  .delta-row .arrow { color: var(--gold); }
+
+  .fingerprint-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .fp-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .fp-btn:hover { border-color: var(--gold); color: var(--text); }
+  .fp-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(247,180,8,0.08); }
+
+  .gap-summary {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .gap-low { color: var(--green); }
+  .gap-mid { color: var(--orange); }
+  .gap-high { color: var(--red); }
+
+  .feature-delta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .feature-delta-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  .feature-delta-card .fname { color: var(--text-dim); font-size: 10px; text-transform: uppercase; }
+  .feature-delta-card .fval { font-size: 16px; font-weight: 700; margin: 2px 0; }
+  .feature-delta-card .farrow { font-size: 10px; }
+  .fdir-higher { color: var(--red); }
+  .fdir-lower { color: var(--green); }
+  .fdir-same { color: var(--text-dim); }
+
+  .poem-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  .poem-card .poem-title { font-weight: 600; font-size: 13px; color: var(--gold); }
+  .poem-card .poem-date { font-size: 10px; color: var(--text-dim); }
+  .poem-card .poem-tones {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .tone-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: rgba(247,180,8,0.1);
+    color: var(--gold);
+  }
+  .tone-tag.secondary { background: rgba(96,165,250,0.1); color: var(--blue); }
+  .poem-card .poem-pivot { font-size: 11px; font-style: italic; color: var(--cyan); margin-top: 6px; }
+  .poem-card .poem-harmonic {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .poem-card .poem-harmonic span { color: var(--text); }
+
+  .pattern-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .pattern-card .pname { font-weight: 600; font-size: 12px; color: var(--purple); }
+  .pattern-card .pfinding { font-size: 11px; margin-top: 4px; }
+  .pattern-card .pinterp { font-size: 11px; color: var(--cyan); margin-top: 4px; }
+
+  .compose-section {
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+  .compose-section h3 { font-size: 12px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+
+  .rhythm-section { margin-bottom: 20px; }
+  .rhythm-section h3 {
+    font-size: 12px; color: var(--gold); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 10px;
+    border-bottom: 1px solid var(--border); padding-bottom: 6px;
+  }
+  .schumann-pair {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; padding: 4px 0;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+  }
+  .schumann-pair .pair-name { width: 100px; color: var(--text-dim); }
+  .schumann-pair .beat-freq { width: 70px; font-weight: 600; }
+  .schumann-pair .harmonic-label { color: var(--purple); width: 120px; }
+  .schumann-pair .deviation { width: 80px; }
+  .schumann-pair .resonant-badge {
+    font-size: 10px; padding: 1px 6px; border-radius: 2px;
+    background: rgba(74,222,128,0.15); color: var(--green);
+  }
+  .solfeggio-agent {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; padding: 6px 0;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+  }
+  .solfeggio-agent .agent-freq { font-weight: 600; width: 100px; }
+  .solfeggio-agent .solf-match { color: var(--cyan); }
+  .solfeggio-agent .harmonic-hit { color: var(--gold); font-size: 11px; }
+  .lunar-bar {
+    display: flex; align-items: center; gap: 8px; font-size: 12px;
+    padding: 6px 0;
+  }
+  .lunar-bar .phase-icon { font-size: 20px; }
+  .lunar-bar .phase-name { color: var(--purple); text-transform: capitalize; }
+  .correlation-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 10px 12px; margin-bottom: 8px;
+  }
+  .correlation-card .cname { font-weight: 600; font-size: 12px; color: var(--cyan); }
+  .correlation-card .cfinding { font-size: 11px; margin-top: 4px; }
+  .correlation-card .cinterp { font-size: 11px; color: var(--purple); margin-top: 4px; }
+  .compliance-meter {
+    height: 24px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 3px; overflow: hidden; margin: 8px 0;
+  }
+  .compliance-fill {
+    height: 100%; background: linear-gradient(90deg, var(--red), var(--gold), var(--green));
+    transition: width 0.3s;
+  }
+  .lunar-quarter-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    margin-top: 8px;
+  }
+  .lunar-quarter-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 8px; text-align: center; font-size: 11px;
+  }
+  .lunar-quarter-card .lq-name { color: var(--purple); font-weight: 600; text-transform: capitalize; }
+  .lunar-quarter-card .lq-val { font-size: 16px; font-weight: 700; margin: 4px 0; }
+
+  @media (max-width: 800px) {
+    .extended-panels { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 800px) {
+    .grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: 260px 260px 180px auto auto;
+    }
+    .cymatic-panel { grid-column: 1; grid-row: 1; }
+    .scope-panel { grid-column: 1; grid-row: 2; }
+    .timeline-panel { grid-column: 1; grid-row: 3; }
+    .features-panel { grid-column: 1; grid-row: 4; }
+    .voices-panel { grid-column: 1; grid-row: 5; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>HARMONIC PROBE</h1>
+  <span class="meta">V3 Backtest · Oct 15–22 2026 · 1h resolution · 5 voices · git pulse</span>
+  <span class="meta" id="statusLabel">Loading telemetry...</span>
+</div>
+
+<div class="grid">
+  <div class="panel cymatic-panel">
+    <div class="panel-title">Cymatics — Interference Pattern</div>
+    <canvas id="cymaticCanvas"></canvas>
+  </div>
+
+  <div class="panel scope-panel">
+    <div class="panel-title">Oscilloscope — 5 Voices</div>
+    <canvas id="scopeCanvas"></canvas>
+  </div>
+
+  <div class="panel timeline-panel">
+    <div class="panel-title">Timeline — Anomaly Density</div>
+    <canvas id="timelineCanvas"></canvas>
+    <div class="timeline-controls">
+      <button id="btnPrev">◀</button>
+      <button id="btnPlay">▶ Play</button>
+      <button id="btnNext">▶</button>
+      <button id="btnSound" title="Toggle sonification">🔇 Sound</button>
+      <span class="slot-label" id="slotLabel">—</span>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>experiment</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>build</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>intervention</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>transition</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>incident</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--text-dim)"></div>diagnostic</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel features-panel">
+    <div class="panel-title">Listener Features</div>
+    <div class="feature-grid" id="featureGrid"></div>
+  </div>
+
+  <div class="panel voices-panel">
+    <div class="panel-title">Voice Cards</div>
+    <div class="voice-list" id="voiceList"></div>
+  </div>
+</div>
+
+<!-- Extended Panels: Prescriber + Tonal Vocabulary -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="prescriber">Prescriber</button>
+  <button class="tab-btn" data-tab="vocabulary">Tonal Vocabulary</button>
+  <button class="tab-btn" data-tab="rhythms">External Rhythms</button>
+</div>
+
+<div class="extended-panels" id="prescriberTab">
+  <div class="ext-panel">
+    <div class="panel-title">Target Fingerprint</div>
+    <div class="fingerprint-selector" id="fpSelector"></div>
+    <div class="gap-summary" id="gapSummary">Loading...</div>
+    <div class="feature-delta-grid" id="featureDeltaGrid"></div>
+  </div>
+  <div class="ext-panel">
+    <div class="panel-title">Agent Prescriptions</div>
+    <div id="prescriptionList"></div>
+  </div>
+</div>
+
+<div class="extended-panels" id="rhythmsTab" style="display:none">
+  <div class="ext-panel">
+    <div class="rhythm-section" id="schumannSection">
+      <h3>Schumann Resonance (7.83 Hz)</h3>
+      <div id="schumannPairs">Loading...</div>
+    </div>
+    <div class="rhythm-section" id="solfeggioSection">
+      <h3>Solfeggio Proximity</h3>
+      <div id="solfeggioAgents">Loading...</div>
+    </div>
+  </div>
+  <div class="ext-panel">
+    <div class="rhythm-section" id="lunarSection">
+      <h3>Lunar Phase</h3>
+      <div id="lunarDisplay">Loading...</div>
+    </div>
+    <div class="rhythm-section" id="complianceSection">
+      <h3>Session Close Compliance</h3>
+      <div id="complianceDisplay">Loading...</div>
+    </div>
+    <div class="rhythm-section" id="correlationSection">
+      <h3>Correlations</h3>
+      <div id="correlationDisplay">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<div class="extended-panels" id="vocabularyTab" style="display:none">
+  <div class="ext-panel">
+    <div class="panel-title">Poem → Harmonic Correlations</div>
+    <div id="poemList"></div>
+  </div>
+  <div class="ext-panel">
+    <div class="panel-title">Patterns & Compose</div>
+    <div id="patternList"></div>
+    <div class="compose-section" id="composeSection">
+      <h3>Compose from Intent</h3>
+      <div id="composeResults"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const AGENT_COLORS = {
+  boxing: '#ef4444',
+  br:     '#f97316',
+  forge:  '#f7b408',
+  muse:   '#a78bfa',
+  orc:    '#60a5fa',
+};
+
+const GT_COLORS = {
+  experiment: '#60a5fa',
+  build: '#4ade80',
+  intervention: '#f97316',
+  system: '#22d3ee',
+  transition: '#a78bfa',
+  diagnostic: '#888',
+  incident: '#ef4444',
+};
+
+let telemetryData = null;
+let currentSlot = 0;
+let playing = false;
+let playInterval = null;
+
+// ── Canvas Setup ──
+
+function setupCanvas(canvas) {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const w = rect.width - 24;
+  const h = rect.height - 36;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx, w, h };
+}
+
+// ── Cymatic Renderer ──
+
+function renderCymatics(slot) {
+  const canvas = document.getElementById('cymaticCanvas');
+  const { ctx, w, h } = setupCanvas(canvas);
+  const voices = slot.voices.filter(Boolean);
+
+  ctx.fillStyle = '#0a0a0f';
+  ctx.fillRect(0, 0, w, h);
+
+  const cx = w / 2;
+  const cy = h / 2;
+  const maxR = Math.min(w, h) / 2 - 10;
+  const resolution = 60;
+  const time = currentSlot * 0.5;
+
+  // Build interference pattern
+  const grid = [];
+  for (let gy = 0; gy < resolution; gy++) {
+    grid[gy] = [];
+    for (let gx = 0; gx < resolution; gx++) {
+      const px = (gx / resolution - 0.5) * 2;
+      const py = (gy / resolution - 0.5) * 2;
+      const dist = Math.sqrt(px * px + py * py);
+      if (dist > 1) { grid[gy][gx] = 0; continue; }
+
+      let val = 0;
+      for (const v of voices) {
+        const freq = v.effectiveFreq / 50;
+        const amp = v.amplitude;
+        const phase = v.phaseStability * time;
+        const angle = Math.atan2(py, px);
+        const vibrato = Math.sin(time * v.vibratoRate) * 0.02;
+
+        // Circular wave from agent position
+        const agentAngle = Object.keys(AGENT_COLORS).indexOf(v.agentId) * (Math.PI * 2 / 5);
+        const agentDist = 0.4;
+        const ax = Math.cos(agentAngle) * agentDist;
+        const ay = Math.sin(agentAngle) * agentDist;
+        const d = Math.sqrt((px - ax) ** 2 + (py - ay) ** 2);
+
+        val += amp * Math.sin(d * freq + phase + vibrato) * (1 - dist * 0.3);
+
+        // Add one harmonic based on coherence
+        val += (amp * v.coherence / 2) * Math.sin(d * freq * 2 + phase * 2);
+      }
+
+      grid[gy][gx] = val;
+    }
+  }
+
+  // Find range for normalization
+  let min = Infinity, max = -Infinity;
+  for (const row of grid) for (const v of row) {
+    if (v < min) min = v;
+    if (v > max) max = v;
+  }
+  const range = max - min || 1;
+
+  // Render
+  const cellW = w / resolution;
+  const cellH = h / resolution;
+  for (let gy = 0; gy < resolution; gy++) {
+    for (let gx = 0; gx < resolution; gx++) {
+      const val = (grid[gy][gx] - min) / range;
+      const px = (gx / resolution - 0.5) * 2;
+      const py = (gy / resolution - 0.5) * 2;
+      const dist = Math.sqrt(px * px + py * py);
+      if (dist > 1) continue;
+
+      // Color: gold for consonance, red for dissonance
+      const tension = slot.voices.reduce((s, v) => s + (v ? v.intervalTension : 0), 0) / voices.length;
+      const r = Math.round(247 * (1 - val * 0.3) * (1 - tension * 0.3) + 239 * tension * val);
+      const g = Math.round(180 * val * (1 - tension));
+      const b = Math.round(8 + 60 * (1 - val));
+      const a = Math.max(0.05, val * 0.9 * (1 - dist * 0.4));
+
+      ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+      ctx.fillRect(gx * cellW, gy * cellH, cellW + 0.5, cellH + 0.5);
+    }
+  }
+
+  // Agent position markers
+  for (const v of voices) {
+    const idx = Object.keys(AGENT_COLORS).indexOf(v.agentId);
+    const angle = idx * (Math.PI * 2 / 5);
+    const x = cx + Math.cos(angle) * maxR * 0.4;
+    const y = cy + Math.sin(angle) * maxR * 0.4;
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = AGENT_COLORS[v.agentId];
+    ctx.fill();
+    ctx.font = '9px monospace';
+    ctx.fillStyle = AGENT_COLORS[v.agentId];
+    ctx.fillText(v.agentId, x + 6, y + 3);
+  }
+}
+
+// ── Oscilloscope ──
+
+function renderScope(slot) {
+  const canvas = document.getElementById('scopeCanvas');
+  const { ctx, w, h } = setupCanvas(canvas);
+  const voices = slot.voices.filter(Boolean);
+
+  ctx.fillStyle = '#0a0a0f';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 0.5;
+  for (let y = 0; y < h; y += h / 10) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+
+  const samples = 512;
+  const time = currentSlot * 0.3;
+  const laneH = h / voices.length;
+
+  for (let vi = 0; vi < voices.length; vi++) {
+    const v = voices[vi];
+    const baseY = laneH * vi + laneH / 2;
+    const color = AGENT_COLORS[v.agentId];
+
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.2;
+    ctx.globalAlpha = 0.8;
+
+    for (let s = 0; s < samples; s++) {
+      const t = (s / samples) * Math.PI * 8 + time;
+      let val = 0;
+
+      // Sum harmonics
+      for (const h of v.harmonics) {
+        const freq = h.frequency / v.fundamental;
+        val += h.amplitude * Math.sin(t * freq);
+      }
+
+      // Add vibrato
+      val *= 1 + Math.sin(t * v.vibratoRate / v.fundamental) * 0.1;
+
+      const x = (s / samples) * w;
+      const y = baseY + val * laneH * 0.35;
+
+      if (s === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Label
+    ctx.font = '10px monospace';
+    ctx.fillStyle = color;
+    ctx.fillText(v.agentId + ' ' + Math.round(v.effectiveFreq) + 'Hz', 4, laneH * vi + 12);
+
+    // Lane separator
+    if (vi > 0) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(0, laneH * vi);
+      ctx.lineTo(w, laneH * vi);
+      ctx.stroke();
+    }
+  }
+}
+
+// ── Timeline ──
+
+function renderTimeline() {
+  const canvas = document.getElementById('timelineCanvas');
+  const { ctx, w, h } = setupCanvas(canvas);
+  const data = telemetryData.telemetry;
+
+  ctx.fillStyle = '#0a0a0f';
+  ctx.fillRect(0, 0, w, h);
+
+  const barW = w / data.length;
+  const features = ['detuning', 'harmonicity', 'phaseVariance', 'pairCoherence', 'beatEnergy', 'spectralEntropy', 'creativePulse'];
+  const featureColors = ['#ef4444', '#4ade80', '#a78bfa', '#60a5fa', '#f7b408', '#22d3ee', '#f472b6'];
+
+  // Stacked feature bars
+  for (let i = 0; i < data.length; i++) {
+    const slot = data[i];
+    const x = i * barW;
+
+    // Background for anomaly slots
+    if (slot.anomalies && slot.anomalies.length > 0) {
+      ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(slot.anomalies.length * 0.1, 0.3)})`;
+      ctx.fillRect(x, 0, barW, h);
+    }
+
+    // Feature bars (normalized)
+    let stackY = h;
+    for (let fi = 0; fi < features.length; fi++) {
+      const val = slot.features[features[fi]] || 0;
+      const barH = val * (h / features.length) * 0.8;
+      stackY -= barH;
+      ctx.fillStyle = featureColors[fi] + '80';
+      ctx.fillRect(x + 1, stackY, barW - 2, barH);
+    }
+
+    // Ground truth markers
+    if (slot.groundTruth && slot.groundTruth.length > 0) {
+      for (const gt of slot.groundTruth) {
+        ctx.fillStyle = GT_COLORS[gt.type] || '#888';
+        ctx.fillRect(x, 0, barW, 4);
+      }
+    }
+  }
+
+  // Current position indicator
+  const cx = currentSlot * barW + barW / 2;
+  ctx.strokeStyle = '#f7b408';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx, 0);
+  ctx.lineTo(cx, h);
+  ctx.stroke();
+
+  // Date labels
+  ctx.font = '9px monospace';
+  ctx.fillStyle = '#888';
+  let lastDate = '';
+  for (let i = 0; i < data.length; i++) {
+    const date = data[i].timestamp.slice(5, 10);
+    if (date !== lastDate) {
+      const x = i * barW;
+      ctx.fillText(date, x + 2, h - 2);
+      lastDate = date;
+    }
+  }
+}
+
+// ── Feature Dashboard ──
+
+function renderFeatures(slot) {
+  const grid = document.getElementById('featureGrid');
+  const features = [
+    { key: 'detuning', name: 'Detuning', unit: 'Hz', color: '#ef4444' },
+    { key: 'harmonicity', name: 'Harmonicity', unit: '', color: '#4ade80' },
+    { key: 'phaseVariance', name: 'Phase Var', unit: '', color: '#a78bfa' },
+    { key: 'pairCoherence', name: 'Pair Coh', unit: '', color: '#60a5fa' },
+    { key: 'beatEnergy', name: 'Beat Energy', unit: '', color: '#f7b408' },
+    { key: 'spectralEntropy', name: 'Sp Entropy', unit: '', color: '#22d3ee' },
+    { key: 'creativePulse', name: 'Git Pulse', unit: '', color: '#f472b6' },
+  ];
+
+  grid.innerHTML = features.map(f => {
+    const val = slot.features[f.key];
+    const z = slot.zScores ? slot.zScores[f.key] : 0;
+    const absZ = Math.abs(z);
+    const zClass = absZ > 2 ? 'z-anomaly' : absZ > 1 ? 'z-warn' : 'z-normal';
+    return `<div class="feature-card">
+      <div class="feature-name">${f.name}</div>
+      <div class="feature-value" style="color:${f.color}">${val !== undefined ? val.toFixed(3) : '—'}</div>
+      <div class="feature-zscore ${zClass}">z = ${z !== undefined ? z.toFixed(2) : '—'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Voice Cards ──
+
+function renderVoices(slot) {
+  const list = document.getElementById('voiceList');
+  const voices = slot.voices.filter(Boolean);
+
+  list.innerHTML = voices.map(v => {
+    const color = AGENT_COLORS[v.agentId];
+    const intClass = 'interval-' + v.interval;
+    const cohPct = Math.round(v.coherence * 100);
+    const pulse = v.creativePulse !== undefined ? v.creativePulse.toFixed(2) : '—';
+    return `<div class="voice-card">
+      <div class="voice-dot" style="background:${color}"></div>
+      <div class="voice-name" style="color:${color}">${v.agentId}</div>
+      <div class="voice-freq">${v.effectiveFreq.toFixed(1)} Hz</div>
+      <span class="voice-interval ${intClass}">${v.interval}</span>
+      <span class="voice-waveform">${v.waveform}</span>
+      <span class="voice-pulse">${pulse}</span>
+      <span class="voice-coherence" style="color:${cohPct > 60 ? '#4ade80' : cohPct > 30 ? '#f97316' : '#ef4444'}">${cohPct}%</span>
+    </div>`;
+  }).join('');
+
+  // Pair Beat Heatmap
+  const pairBeats = slot.features.pairBeats;
+  if (pairBeats) {
+    const agents = Object.keys(AGENT_COLORS);
+    const maxBeat = Math.max(0.001, ...Object.values(pairBeats));
+
+    let heatHTML = '<div style="margin-top:10px"><div class="panel-title">Pair Beat Energy</div>';
+    heatHTML += '<div style="display:grid;grid-template-columns:40px repeat(5,1fr);gap:2px;font-size:9px">';
+    heatHTML += '<div></div>' + agents.map(a => `<div class="pair-label">${a}</div>`).join('');
+
+    for (let i = 0; i < agents.length; i++) {
+      heatHTML += `<div class="pair-label" style="text-align:right">${agents[i]}</div>`;
+      for (let j = 0; j < agents.length; j++) {
+        if (i === j) {
+          heatHTML += `<div class="pair-cell" style="background:rgba(255,255,255,0.03)">—</div>`;
+        } else {
+          const key = i < j ? `${agents[i]}-${agents[j]}` : `${agents[j]}-${agents[i]}`;
+          const val = pairBeats[key] || 0;
+          const intensity = val / maxBeat;
+          const r = Math.round(239 * intensity + 30);
+          const g = Math.round(68 * (1 - intensity) + 180 * intensity * 0.2);
+          const b = Math.round(68 * (1 - intensity));
+          heatHTML += `<div class="pair-cell" style="background:rgba(${r},${g},${b},${0.15 + intensity * 0.7})">${val.toFixed(3)}</div>`;
+        }
+      }
+    }
+    heatHTML += '</div></div>';
+    list.innerHTML += heatHTML;
+  }
+}
+
+// ── Slot Navigation ──
+
+function setSlot(idx) {
+  if (!telemetryData) return;
+  currentSlot = Math.max(0, Math.min(idx, telemetryData.telemetry.length - 1));
+  const slot = telemetryData.telemetry[currentSlot];
+
+  const ts = slot.timestamp;
+  const date = ts.slice(0, 10);
+  const time = ts.slice(11, 16);
+  const anomalyCount = slot.anomalies ? slot.anomalies.length : 0;
+  const gtEvents = slot.groundTruth ? slot.groundTruth.map(g => g.event).join(' · ') : '';
+
+  document.getElementById('slotLabel').textContent =
+    `${date} ${time} UTC` +
+    (anomalyCount > 0 ? ` · ${anomalyCount} anomalies` : '') +
+    (gtEvents ? ` · ${gtEvents}` : '');
+
+  renderCymatics(slot);
+  renderScope(slot);
+  renderTimeline();
+  renderFeatures(slot);
+  renderVoices(slot);
+  updateAudio(slot);
+}
+
+// ── Web Audio Sonification Engine ──
+
+let audioCtx = null;
+let audioNodes = {};
+let masterGain = null;
+let audioActive = false;
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.15;
+  masterGain.connect(audioCtx.destination);
+}
+
+function buildVoiceNode(voice) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  const type = voice.waveform === 'noise' ? 'sawtooth' : voice.waveform;
+  osc.type = type;
+  osc.frequency.value = voice.effectiveFreq;
+  gain.gain.value = voice.amplitude * 0.3;
+  osc.connect(gain);
+  gain.connect(masterGain);
+  osc.start();
+  return { osc, gain };
+}
+
+function updateAudio(slot) {
+  if (!audioCtx || !audioActive) return;
+  const voices = slot.voices.filter(Boolean);
+  const activeIds = new Set(voices.map(v => v.agentId));
+
+  // Remove stale
+  for (const id of Object.keys(audioNodes)) {
+    if (!activeIds.has(id)) {
+      audioNodes[id].osc.stop();
+      delete audioNodes[id];
+    }
+  }
+
+  for (const v of voices) {
+    if (audioNodes[v.agentId]) {
+      const n = audioNodes[v.agentId];
+      n.osc.frequency.setTargetAtTime(v.effectiveFreq, audioCtx.currentTime, 0.05);
+      n.gain.gain.setTargetAtTime(v.amplitude * 0.3, audioCtx.currentTime, 0.05);
+    } else {
+      audioNodes[v.agentId] = buildVoiceNode(v);
+    }
+  }
+}
+
+function stopAudio() {
+  for (const n of Object.values(audioNodes)) {
+    try { n.osc.stop(); } catch(e) {}
+  }
+  audioNodes = {};
+  audioActive = false;
+}
+
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('btnPlay').textContent = playing ? '⏸ Pause' : '▶ Play';
+  document.getElementById('btnPlay').classList.toggle('active', playing);
+
+  if (playing) {
+    initAudio();
+    audioActive = true;
+    if (telemetryData) updateAudio(telemetryData.telemetry[currentSlot]);
+    playInterval = setInterval(() => {
+      if (currentSlot >= telemetryData.telemetry.length - 1) {
+        togglePlay();
+        return;
+      }
+      setSlot(currentSlot + 1);
+    }, 800);
+  } else {
+    clearInterval(playInterval);
+    stopAudio();
+  }
+}
+
+// ── Timeline Click ──
+
+document.getElementById('timelineCanvas').addEventListener('click', (e) => {
+  if (!telemetryData) return;
+  const rect = e.target.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const idx = Math.floor((x / rect.width) * telemetryData.telemetry.length);
+  setSlot(idx);
+});
+
+// ── Controls ──
+
+document.getElementById('btnPrev').addEventListener('click', () => setSlot(currentSlot - 1));
+document.getElementById('btnNext').addEventListener('click', () => setSlot(currentSlot + 1));
+document.getElementById('btnPlay').addEventListener('click', togglePlay);
+document.getElementById('btnSound').addEventListener('click', () => {
+  initAudio();
+  audioActive = !audioActive;
+  const btn = document.getElementById('btnSound');
+  btn.textContent = audioActive ? '🔊 Sound' : '🔇 Sound';
+  btn.classList.toggle('active', audioActive);
+  if (audioActive && telemetryData) {
+    updateAudio(telemetryData.telemetry[currentSlot]);
+  } else {
+    stopAudio();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') setSlot(currentSlot - 1);
+  if (e.key === 'ArrowRight') setSlot(currentSlot + 1);
+  if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+});
+
+// ── Load Data ──
+
+async function init() {
+  try {
+    const res = await fetch('telemetry.json');
+    telemetryData = await res.json();
+    document.getElementById('statusLabel').textContent =
+      `${telemetryData.stats.totalSlots} slots · ${telemetryData.stats.totalAnomalies} anomalies`;
+    setSlot(0);
+
+    window.addEventListener('resize', () => setSlot(currentSlot));
+  } catch (err) {
+    document.getElementById('statusLabel').textContent = 'Error loading telemetry: ' + err.message;
+    console.error(err);
+  }
+}
+
+init();
+
+// ── Tab Switching ──
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('prescriberTab').style.display = tab === 'prescriber' ? 'grid' : 'none';
+    document.getElementById('vocabularyTab').style.display = tab === 'vocabulary' ? 'grid' : 'none';
+    document.getElementById('rhythmsTab').style.display = tab === 'rhythms' ? 'grid' : 'none';
+  });
+});
+
+// ── Prescriber Panel ──
+
+let prescriptionData = null;
+let selectedFingerprint = 'deepSync';
+
+async function initPrescriber() {
+  try {
+    const res = await fetch('prescription.json');
+    prescriptionData = await res.json();
+    renderFingerprintSelector();
+    renderPrescription(selectedFingerprint);
+  } catch (err) {
+    document.getElementById('gapSummary').textContent = 'No prescription data — run prescriber.cjs first';
+  }
+}
+
+function renderFingerprintSelector() {
+  const sel = document.getElementById('fpSelector');
+  const fps = prescriptionData.fingerprints;
+  sel.innerHTML = Object.entries(fps).map(([key, fp]) => {
+    const active = key === selectedFingerprint ? 'active' : '';
+    return `<button class="fp-btn ${active}" data-fp="${key}">${fp.label.split('(')[0].trim()}</button>`;
+  }).join('');
+
+  sel.querySelectorAll('.fp-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedFingerprint = btn.dataset.fp;
+      sel.querySelectorAll('.fp-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPrescription(selectedFingerprint);
+    });
+  });
+}
+
+function renderPrescription(fpKey) {
+  const p = prescriptionData.prescriptions[fpKey];
+  if (!p) return;
+
+  // Gap summary
+  const gapEl = document.getElementById('gapSummary');
+  if (p.totalGap === null) {
+    gapEl.innerHTML = '<span class="gap-low">Synthetic fingerprint — no voice-level prescription</span>';
+  } else if (p.totalGap === 0) {
+    gapEl.innerHTML = '<span class="gap-low">ALIGNED — system matches target</span>';
+  } else {
+    const cls = p.totalGap > 10 ? 'gap-high' : p.totalGap > 5 ? 'gap-mid' : 'gap-low';
+    gapEl.innerHTML = `Gap Score: <span class="${cls}">${p.totalGap}</span>`;
+  }
+
+  // Feature deltas
+  const fGrid = document.getElementById('featureDeltaGrid');
+  if (p.featureComparison) {
+    fGrid.innerHTML = Object.entries(p.featureComparison).map(([f, comp]) => {
+      const arrow = comp.direction === 'higher' ? '↑' : comp.direction === 'lower' ? '↓' : '=';
+      const cls = 'fdir-' + comp.direction;
+      return `<div class="feature-delta-card">
+        <div class="fname">${f}</div>
+        <div class="fval ${cls}">${comp.target}</div>
+        <div class="farrow ${cls}">${arrow} ${comp.delta} from current (${comp.reference})</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Agent prescriptions
+  const list = document.getElementById('prescriptionList');
+  if (!p.gaps) {
+    list.innerHTML = '<div style="color:var(--text-dim);font-size:12px">No agent-level prescriptions for synthetic fingerprint</div>';
+    return;
+  }
+
+  list.innerHTML = p.gaps.map(gap => {
+    const color = AGENT_COLORS[gap.agentId] || '#888';
+    if (gap.aligned) {
+      return `<div class="prescription-card">
+        <span class="agent-name" style="color:${color}">${gap.agentId}</span>
+        <span class="aligned"> ALIGNED</span>
+      </div>`;
+    }
+    const deltas = gap.deltas.map(d => {
+      const impactCls = 'impact-' + d.impact;
+      return `<div class="delta-row">
+        <span class="${impactCls}">[${d.impact}]</span>
+        <span class="arrow">${d.current} → ${d.target}</span>
+        <span>${d.action}</span>
+      </div>`;
+    }).join('');
+    return `<div class="prescription-card">
+      <span class="agent-name" style="color:${color}">${gap.agentId}</span>
+      <span style="color:var(--text-dim);font-size:11px"> gap=${gap.gapScore}</span>
+      ${deltas}
+    </div>`;
+  }).join('');
+}
+
+// ── Tonal Vocabulary Panel ──
+
+let vocabularyData = null;
+
+async function initVocabulary() {
+  try {
+    const res = await fetch('tonal-vocabulary.json');
+    vocabularyData = await res.json();
+    renderPoems();
+    renderPatterns();
+    renderCompose();
+  } catch (err) {
+    document.getElementById('poemList').innerHTML =
+      '<div style="color:var(--text-dim);font-size:12px">No vocabulary data — run tonal-vocabulary.cjs first</div>';
+  }
+}
+
+function renderPoems() {
+  const list = document.getElementById('poemList');
+  list.innerHTML = vocabularyData.vocabulary.map(v => {
+    const harmonicInfo = v.harmonicSignature
+      ? `<div class="poem-harmonic">
+           beat: <span>${v.harmonicSignature.features.beatEnergy}</span>
+           harmonicity: <span>${v.harmonicSignature.features.harmonicity}</span>
+           anomalies: <span>${v.harmonicSignature.anomalyCount}</span>
+           peak z: <span>${v.harmonicSignature.peakZ}</span>
+         </div>`
+      : '<div class="poem-harmonic" style="color:var(--red)">No telemetry overlap</div>';
+
+    const pivot = v.pivotLine ? `<div class="poem-pivot">"${v.pivotLine}"</div>` : '';
+
+    return `<div class="poem-card">
+      <div class="poem-title">${v.title}</div>
+      <div class="poem-date">${v.date} · ${v.tones.topDown} → ${v.tones.bottomUp} · flip=${v.tones.flipMagnitude}</div>
+      <div class="poem-tones">
+        <span class="tone-tag">${v.tones.dominant}</span>
+        <span class="tone-tag secondary">${v.tones.secondary}</span>
+      </div>
+      ${pivot}
+      ${harmonicInfo}
+    </div>`;
+  }).join('');
+}
+
+function renderPatterns() {
+  const list = document.getElementById('patternList');
+  list.innerHTML = vocabularyData.patterns.map(p => {
+    return `<div class="pattern-card">
+      <div class="pname">${p.name}</div>
+      <div class="pfinding">${p.finding}</div>
+      <div class="pinterp">${p.interpretation}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderCompose() {
+  const el = document.getElementById('composeResults');
+  if (!vocabularyData.composeDemos || vocabularyData.composeDemos.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-dim);font-size:12px">No compose demos available</div>';
+    return;
+  }
+
+  el.innerHTML = vocabularyData.composeDemos.map(c => {
+    return `<div class="prescription-card">
+      <div style="font-size:11px;color:var(--text-dim)">Intent: ${JSON.stringify(c.intent)}</div>
+      <div style="margin-top:4px">
+        <span style="color:var(--gold);font-weight:600">${c.matchedPoem}</span>
+        <span style="color:var(--text-dim);font-size:11px"> (${c.matchedDate}, score=${c.matchScore})</span>
+      </div>
+      <div style="margin-top:4px;font-size:11px">
+        Target: beat=${c.targetSignature.beatEnergy} · harmonicity=${c.targetSignature.harmonicity} · coherence=${c.targetSignature.pairCoherence}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── External Rhythms Panel ──
+
+let rhythmsData = null;
+
+async function initRhythms() {
+  try {
+    const res = await fetch('external-rhythms.json');
+    rhythmsData = await res.json();
+    renderSchumann();
+    renderSolfeggio();
+    renderLunar();
+    renderCompliance();
+    renderCorrelations();
+  } catch (err) {
+    document.getElementById('schumannPairs').innerHTML =
+      '<div style="color:var(--text-dim);font-size:12px">No rhythms data — run external-rhythms.cjs first</div>';
+  }
+}
+
+function renderSchumann() {
+  const el = document.getElementById('schumannPairs');
+  const pairs = rhythmsData.schumann.agentPairs;
+  const resonantCount = pairs.filter(p => p.resonant).length;
+
+  let html = `<div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">
+    ${resonantCount}/${pairs.length} pairs within 5% of a Schumann harmonic (7.83 Hz × n)
+  </div>`;
+
+  html += pairs.map(p => {
+    const devColor = p.deviationPct < 1 ? 'var(--green)' : p.deviationPct < 3 ? 'var(--gold)' : 'var(--red)';
+    const badge = p.resonant ? '<span class="resonant-badge">RESONANT</span>' : '';
+    return `<div class="schumann-pair">
+      <span class="pair-name">${p.pair}</span>
+      <span class="beat-freq">${p.beatFreq} Hz</span>
+      <span class="harmonic-label">${p.closestSchumannHarmonic}th harmonic</span>
+      <span class="deviation" style="color:${devColor}">${p.deviationPct.toFixed(2)}%</span>
+      ${badge}
+    </div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+function renderSolfeggio() {
+  const el = document.getElementById('solfeggioAgents');
+  const agents = rhythmsData.solfeggio.agents;
+  const beatMatches = rhythmsData.solfeggio.beatMatches || [];
+
+  let html = agents.map(a => {
+    const hmHtml = a.harmonicMatch
+      ? `<span class="harmonic-hit">${a.harmonicMatch.solfeggio} ${a.harmonicMatch.harmonic} (${a.harmonicMatch.deviationHz}Hz off)</span>`
+      : '';
+    return `<div class="solfeggio-agent">
+      <span class="agent-freq" style="color:${AGENT_COLORS[a.agent] || '#888'}">${a.agent} ${a.fundamental}Hz</span>
+      <span class="solf-match">→ ${a.closestSolfeggio} (${a.closestSolfeggioFreq}Hz, ${a.distanceHz}Hz away)</span>
+      ${hmHtml}
+    </div>`;
+  }).join('');
+
+  if (beatMatches.length > 0) {
+    html += `<div style="margin-top:10px;font-size:11px;color:var(--text-dim)">Beat frequency solfeggio matches:</div>`;
+    html += beatMatches.map(b => {
+      return `<div style="font-size:11px;padding:3px 0;color:var(--gold)">
+        ${b.pair} beat (${b.beatFreq}Hz) → ${b.solfeggio} ${b.harmonic} (${b.deviationHz}Hz off)
+      </div>`;
+    }).join('');
+  }
+
+  el.innerHTML = html;
+}
+
+function renderLunar() {
+  const el = document.getElementById('lunarDisplay');
+  const lunar = rhythmsData.lunar;
+  const MOON_ICONS = {
+    'new': '🌑', 'waxing-crescent': '🌒', 'first-quarter': '🌓',
+    'waxing-gibbous': '🌔', 'full': '🌕', 'waning-gibbous': '🌖',
+    'last-quarter': '🌗', 'waning-crescent': '🌘'
+  };
+
+  let html = `<div class="lunar-bar">
+    <span class="phase-icon">${MOON_ICONS[lunar.startPhase.name] || '🌑'}</span>
+    <span class="phase-name">${lunar.startPhase.name.replace('-',' ')}</span>
+    <span style="color:var(--text-dim);font-size:11px">→</span>
+    <span class="phase-icon">${MOON_ICONS[lunar.endPhase.name] || '🌑'}</span>
+    <span class="phase-name">${lunar.endPhase.name.replace('-',' ')}</span>
+    <span style="color:var(--text-dim);font-size:11px">(day ${lunar.startPhase.dayInCycle.toFixed(0)}→${lunar.endPhase.dayInCycle.toFixed(0)} of cycle)</span>
+  </div>`;
+
+  // Quarter breakdown from correlations
+  const lunarCorr = rhythmsData.correlations.find(c => c.name === 'lunar-anomaly');
+  if (lunarCorr && lunarCorr.data) {
+    html += '<div class="lunar-quarter-grid">';
+    for (const [quarter, stats] of Object.entries(lunarCorr.data)) {
+      html += `<div class="lunar-quarter-card">
+        <div class="lq-name">${quarter}</div>
+        <div class="lq-val">${stats.avgAnomalies.toFixed(1)}</div>
+        <div style="color:var(--text-dim)">anomalies/slot</div>
+        <div style="font-size:10px;margin-top:4px">n=${stats.n} · beat=${stats.avgBeatEnergy.toFixed(3)}</div>
+        <div style="font-size:10px">creative=${stats.avgCreativePulse.toFixed(3)}</div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function renderCompliance() {
+  const el = document.getElementById('complianceDisplay');
+  const c = rhythmsData.compliance;
+  const pct = Math.round(c.ratio * 100);
+  const barColor = pct > 70 ? 'var(--green)' : pct > 40 ? 'var(--gold)' : 'var(--red)';
+
+  let html = `<div style="font-size:12px;margin-bottom:6px">
+    <strong>${c.totalPoems}</strong>/${c.totalManifests} sessions have poems
+    <span style="color:${barColor};font-weight:700">(${pct}%)</span>
+  </div>
+  <div class="compliance-meter">
+    <div class="compliance-fill" style="width:${pct}%;background:${barColor}"></div>
+  </div>`;
+
+  // Mini timeline of compliance
+  if (c.timeline && c.timeline.length > 0) {
+    html += '<div style="display:flex;gap:2px;margin-top:6px;flex-wrap:wrap">';
+    for (const t of c.timeline) {
+      const color = t.hasPoem ? 'var(--green)' : 'var(--red)';
+      html += `<div title="${t.date}: ${t.hasPoem ? 'poem' : 'missing'}"
+        style="width:8px;height:8px;background:${color};border-radius:1px"></div>`;
+    }
+    html += '</div>';
+    html += `<div style="font-size:10px;color:var(--text-dim);margin-top:4px">
+      Each square = one session (green = poem deposited, red = missing)
+    </div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+function renderCorrelations() {
+  const el = document.getElementById('correlationDisplay');
+  const corrs = rhythmsData.correlations;
+
+  el.innerHTML = corrs.map(c => {
+    let detail = '';
+    if (c.r !== undefined) {
+      const strength = Math.abs(c.r) < 0.1 ? 'None' : Math.abs(c.r) < 0.3 ? 'Weak' : Math.abs(c.r) < 0.5 ? 'Moderate' : 'Strong';
+      const rColor = Math.abs(c.r) > 0.3 ? 'var(--gold)' : 'var(--text-dim)';
+      detail = `<div style="font-size:11px;margin-top:4px">r = <span style="color:${rColor};font-weight:600">${c.r.toFixed(3)}</span> (${strength})</div>`;
+    }
+    return `<div class="correlation-card">
+      <div class="cname">${c.name}</div>
+      <div class="cfinding">${c.finding || c.description}</div>
+      ${detail}
+      ${c.interpretation ? `<div class="cinterp">${c.interpretation}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+initPrescriber();
+initVocabulary();
+initRhythms();
+</script>
+</body>
+</html>

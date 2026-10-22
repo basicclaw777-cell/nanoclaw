@@ -1,0 +1,4531 @@
+{
+  "window": {
+    "start": "2026-10-14",
+    "end": "2026-10-22"
+  },
+  "probeAgents": [
+    "boxing",
+    "br",
+    "muse",
+    "orc",
+    "forge"
+  ],
+  "physician": [
+    {
+      "date": "2026-10-21",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 7,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 510,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 22
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3933
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 1
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 1,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 1
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 1
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 1
+        }
+      },
+      "processHealth": {
+        "online": 20,
+        "stopped": 107,
+        "total": 127,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 431 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 357 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 89 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 437 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 303 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 135 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-21",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 504,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3927
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.5,
+          "age_hours": 19
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 19,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 19
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 19
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 19
+        }
+      },
+      "processHealth": {
+        "online": 23,
+        "stopped": 104,
+        "total": 127,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 186 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 426 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 352 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 89 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 432 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 166 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 303 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-21",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 498,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3921
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.5,
+          "age_hours": 13
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 13,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 13
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 13
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 13
+        }
+      },
+      "processHealth": {
+        "online": 21,
+        "stopped": 106,
+        "total": 127,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 421 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 346 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 89 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 426 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 302 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 130 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-21",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 13,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 492,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 28
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3915
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.5,
+          "age_hours": 7
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 7,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 7
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 7
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 7
+        }
+      },
+      "processHealth": {
+        "online": 21,
+        "stopped": 106,
+        "total": 127,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 185 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 405 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 330 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 88 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 410 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 165 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 300 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 126 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-20",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 7,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 486,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 22
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3909
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.5,
+          "age_hours": 1
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 1,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 1
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 1
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 1
+        }
+      },
+      "processHealth": {
+        "online": 20,
+        "stopped": 107,
+        "total": 127,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 397 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 322 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 87 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 402 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 299 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 120 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-20",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 480,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3903
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 19
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 19,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 19
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 19
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 19
+        }
+      },
+      "processHealth": {
+        "online": 25,
+        "stopped": 101,
+        "total": 126,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 184 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 388 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 313 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 87 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 393 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 164 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 298 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 115 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-20",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 474,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3897
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 13
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 13,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 13
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 13
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 13
+        }
+      },
+      "processHealth": {
+        "online": 21,
+        "stopped": 104,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 376 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 300 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 86 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 380 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 295 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 106 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-20",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 13,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 468,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 28
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3891
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 7
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 7,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 7
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 7
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 7
+        }
+      },
+      "processHealth": {
+        "online": 27,
+        "stopped": 98,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 182 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 362 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 287 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 86 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 366 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 162 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 294 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 99 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-19",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 7,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 462,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 22
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3885
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 1
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 1,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 1
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 1
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 1
+        }
+      },
+      "processHealth": {
+        "online": 20,
+        "stopped": 105,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 356 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 281 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 86 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 360 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 293 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 95 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-19",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 456,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3879
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 19
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 19,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 19
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 19
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 19
+        }
+      },
+      "processHealth": {
+        "online": 26,
+        "stopped": 99,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 179 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 348 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 273 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 86 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 352 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 159 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 292 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 92 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-19",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 450,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3873
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 13
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 13,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 13
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 13
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 13
+        }
+      },
+      "processHealth": {
+        "online": 21,
+        "stopped": 104,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 340 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 265 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 86 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 344 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 290 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 88 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-19",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 13,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 444,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 28
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3867
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 7
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 7,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 7
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 7
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 7
+        }
+      },
+      "processHealth": {
+        "online": 24,
+        "stopped": 101,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 178 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 331 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 255 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 85 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 334 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 158 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 289 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 81 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-18",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 7,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 438,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 22
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3861
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 1
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 1,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 1
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 1
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 1
+        }
+      },
+      "processHealth": {
+        "online": 20,
+        "stopped": 105,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 325 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 249 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 85 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 328 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 288 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 77 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-18",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 432,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3855
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.7,
+          "age_hours": 18
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 18,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 18
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 18
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 18
+        }
+      },
+      "processHealth": {
+        "online": 27,
+        "stopped": 98,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 178 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 319 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 242 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 85 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 322 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 158 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 288 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 76 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-18",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 426,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3849
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.7,
+          "age_hours": 12
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 12,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 12
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 12
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 12
+        }
+      },
+      "processHealth": {
+        "online": 18,
+        "stopped": 107,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 307 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 230 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 84 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 310 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 286 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 70 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-18",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 13,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 420,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 28
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3843
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.7,
+          "age_hours": 7
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 7,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 7
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 7
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 7
+        }
+      },
+      "processHealth": {
+        "online": 27,
+        "stopped": 98,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 176 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 297 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 220 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 83 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 300 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 156 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 284 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 66 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-17",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 7,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 414,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 22
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3837
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.7,
+          "age_hours": 1
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 1,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 1
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 1
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 1
+        }
+      },
+      "processHealth": {
+        "online": 19,
+        "stopped": 106,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 292 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 215 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 83 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 295 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 284 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 64 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-17",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 408,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3831
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "stale",
+          "fading_pct": 39.6,
+          "age_hours": 43
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 43,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "stale",
+          "age_hours": 43
+        },
+        "emergence_temporal": {
+          "status": "stale",
+          "age_hours": 43
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 43
+        }
+      },
+      "processHealth": {
+        "online": 23,
+        "stopped": 102,
+        "total": 125,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 176 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 287 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 210 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 83 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 289 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 156 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 283 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 60 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-17",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 402,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3825
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "stale",
+          "fading_pct": 39.6,
+          "age_hours": 37
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 37,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "stale",
+          "age_hours": 37
+        },
+        "emergence_temporal": {
+          "status": "stale",
+          "age_hours": 37
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 37
+        }
+      },
+      "processHealth": {
+        "online": 19,
+        "stopped": 105,
+        "total": 124,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 279 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 201 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 83 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 281 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 282 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 56 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-17",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 13,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 396,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 28
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3819
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 31
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 31,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 31
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 31
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 31
+        }
+      },
+      "processHealth": {
+        "online": 23,
+        "stopped": 101,
+        "total": 124,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 176 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 271 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 192 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 83 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 273 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 156 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 281 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-16",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 384,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3807
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 19
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 19,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 19
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 19
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 19
+        }
+      },
+      "processHealth": {
+        "online": 22,
+        "stopped": 102,
+        "total": 124,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 175 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 290 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 210 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 83 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 292 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 155 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 284 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 59 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-16",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 378,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3801
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 13
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 13,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 13
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 13
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 13
+        }
+      },
+      "processHealth": {
+        "online": 18,
+        "stopped": 106,
+        "total": 124,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 284 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 204 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 82 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 286 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 282 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-memory-indexer has 56 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-16",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 13,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 372,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 28
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3795
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 7
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 7,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 7
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 7
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 7
+        }
+      },
+      "processHealth": {
+        "online": 23,
+        "stopped": 101,
+        "total": 124,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 174 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 271 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 191 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 82 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 273 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 154 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 280 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-15",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 7,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 366,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 22
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3789
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.6,
+          "age_hours": 1
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 1,
+          "flags": [
+            "5 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 1
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 1
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 1
+        }
+      },
+      "processHealth": {
+        "online": 17,
+        "stopped": 106,
+        "total": 123,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 266 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 184 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 82 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 268 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 279 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-15",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 360,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3783
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.4,
+          "age_hours": 19
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 19,
+          "flags": [
+            "4 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 19
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 19
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 19
+        }
+      },
+      "processHealth": {
+        "online": 22,
+        "stopped": 101,
+        "total": 123,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 173 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 258 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 177 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 82 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 260 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 153 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 278 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-15",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 354,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3777
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.4,
+          "age_hours": 13
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 13,
+          "flags": [
+            "4 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 13
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 13
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 13
+        }
+      },
+      "processHealth": {
+        "online": 16,
+        "stopped": 107,
+        "total": 123,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 249 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 167 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 82 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 251 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 277 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-15",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 13,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 348,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 28
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3771
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.4,
+          "age_hours": 7
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 7,
+          "flags": [
+            "4 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 7
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 7
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 7
+        }
+      },
+      "processHealth": {
+        "online": 22,
+        "stopped": 101,
+        "total": 123,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 173 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 241 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 160 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 82 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 243 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 153 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 276 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-14",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 7,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 342,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 22
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3765
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.4,
+          "age_hours": 1
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 1,
+          "flags": [
+            "4 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 1
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 1
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 1
+        }
+      },
+      "processHealth": {
+        "online": 15,
+        "stopped": 108,
+        "total": 123,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 229 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 148 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 81 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 232 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 274 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-14",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 1,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 336,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 16
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3759
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.3,
+          "age_hours": 19
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 19,
+          "flags": [
+            "4 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 19
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 19
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 19
+        }
+      },
+      "processHealth": {
+        "online": 23,
+        "stopped": 100,
+        "total": 123,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "geomag has 172 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 223 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 140 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 81 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 226 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "synapse-pulse has 152 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 273 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    },
+    {
+      "date": "2026-10-14",
+      "senses": {
+        "sight": {
+          "status": "healthy",
+          "age_hours": 19,
+          "flags": [
+            "CONCENTRATION:technology:41%",
+            "UNVISITED_BRIDGE:08_Project_Orchestrator<>10_Agents"
+          ]
+        },
+        "smell": {
+          "status": "dead",
+          "waste_score": 0.713,
+          "age_hours": 330,
+          "flags": [
+            "CACHE_LOW:0%",
+            "VERBOSE_DRIFT:+185.0tok",
+            "HIGH_AVG_WORDS:313.8",
+            "BLOAT:4x",
+            "WASTE:0.713"
+          ]
+        },
+        "proprioception": {
+          "status": "healthy",
+          "drift_score": 0.118,
+          "drift_status": "aligned",
+          "flags": []
+        },
+        "lymphatic": {
+          "status": "active",
+          "avg_bloat": 58
+        },
+        "looking_glass": {
+          "status": "healthy",
+          "age_hours": 34
+        },
+        "cognitive_bridge": {
+          "status": "stale",
+          "age_hours": 3753
+        },
+        "belief_tracker": {
+          "status": "healthy"
+        },
+        "ledger": {
+          "status": "active",
+          "quality_density": 16.7
+        },
+        "emergence_vitality": {
+          "status": "healthy",
+          "fading_pct": 39.3,
+          "age_hours": 13
+        },
+        "emergence_surprise": {
+          "status": "alert",
+          "age_hours": 13,
+          "flags": [
+            "4 unresolved surprises"
+          ]
+        },
+        "emergence_goals": {
+          "status": "active",
+          "age_hours": 13
+        },
+        "emergence_temporal": {
+          "status": "healthy",
+          "age_hours": 13
+        },
+        "emergence_dialogue": {
+          "status": "active",
+          "age_hours": 13
+        }
+      },
+      "processHealth": {
+        "online": 16,
+        "stopped": 107,
+        "total": 123,
+        "alerts": [
+          {
+            "severity": "CRITICAL",
+            "message": "sentinel is DOWN",
+            "action": "pm2 start sentinel"
+          },
+          {
+            "severity": "WARN",
+            "message": "the-timekeeper has 216 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "cathedral-heartbeat has 133 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "physician has 81 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "position-guardian has 219 restarts — possible crash loop"
+          },
+          {
+            "severity": "WARN",
+            "message": "pm-monitor has 272 restarts — possible crash loop"
+          }
+        ],
+        "criticalOk": false
+      }
+    }
+  ],
+  "agentHealth": {
+    "boxing": {
+      "score": 6,
+      "stewardGrade": "A",
+      "intelligenceClass": "STRUCTURED",
+      "intelligenceHistory": [
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-19"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-19"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-20"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        }
+      ],
+      "graduated": 5,
+      "decayed": 0,
+      "findingsRemaining": 22
+    },
+    "br": {
+      "score": 0,
+      "stewardGrade": "B",
+      "intelligenceClass": "STRUCTURED",
+      "intelligenceHistory": [
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "SYNTHETIC",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        }
+      ],
+      "graduated": 9,
+      "decayed": 0,
+      "findingsRemaining": 1
+    },
+    "muse": {
+      "score": 0,
+      "stewardGrade": "C",
+      "intelligenceClass": "SYNTHETIC",
+      "intelligenceHistory": [
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-19"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-19"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-20"
+        },
+        {
+          "classification": "SYNTHETIC",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "SYNTHETIC",
+          "date": "2026-10-21"
+        }
+      ],
+      "graduated": 8,
+      "decayed": 0,
+      "findingsRemaining": 14
+    },
+    "orc": {
+      "score": 8,
+      "stewardGrade": "D",
+      "intelligenceClass": "STRUCTURED",
+      "intelligenceHistory": [
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-20"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-20"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        }
+      ],
+      "graduated": 7,
+      "decayed": 0,
+      "findingsRemaining": 24
+    },
+    "forge": {
+      "score": 6,
+      "stewardGrade": "C",
+      "intelligenceClass": "STRUCTURED",
+      "intelligenceHistory": [
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-19"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-19"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-20"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        },
+        {
+          "classification": "STRUCTURED",
+          "date": "2026-10-21"
+        }
+      ],
+      "graduated": 3,
+      "decayed": 0,
+      "findingsRemaining": 2
+    }
+  },
+  "emergence": {
+    "boxing": {
+      "tier": 5,
+      "level": 10,
+      "xp": 8.099999999999996,
+      "totalClimbed": 55,
+      "history": [
+        {
+          "ts": "2026-10-14T11:30:27.931Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-14T22:45:28.774Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-15T13:30:12.977Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"The failure mode you named — \"coherent map of too ...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T13:30:14.870Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to paul: \"Noted, and I'll file it — but I want to flag one t...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T13:30:17.015Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"The Cathedral's weakest link is the pose-estimatio...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-16T08:30:29.763Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T08:00:25.775Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T11:15:21.435Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-18T21:44:30.368Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"I'm working on \"sports science on punch biomechani...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-18T22:34:02.353Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"You're right, and the \"tea technique\" line lands —...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-18T22:34:03.670Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to cathy: \"Thanks Cathy — the win belongs to the brief discip...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-18T22:34:05.562Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to cathy: \"Cathy's test is the right one, and it catches a re...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-18T21:44:30.368Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-18T22:34:02.353Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-18T22:34:03.670Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-18T22:34:05.562Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-19T03:30:25.290Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-19T10:00:14.645Z",
+          "signal": "tea_given",
+          "points": 0.4,
+          "desc": "Rated maya's work: 4 stars",
+          "tier": 3
+        },
+        {
+          "ts": "2026-10-19T14:45:27.564Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-20T02:30:20.420Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21T03:00:25.129Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21T07:45:25.439Z",
+          "signal": "memory_update",
+          "points": 1.5,
+          "desc": "5 findings graduated in memory",
+          "tier": 4
+        }
+      ]
+    },
+    "br": {
+      "tier": 5,
+      "level": 10,
+      "xp": 8.799999999999997,
+      "totalClimbed": 69,
+      "history": [
+        {
+          "ts": "2026-10-14T11:30:27.939Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-14T22:45:28.781Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-15T22:06:41.110Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to cathy: \"Fair hit — my \"WhatsApp video works because lapsed...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T22:06:43.036Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to assembly: \"The frame-quantization question maps directly onto...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T22:06:44.778Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"Weakest link: the 565 lapsed members are a vanity ...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-16T08:30:29.775Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17",
+          "signal": "novel_insight",
+          "points": 2,
+          "desc": "Intelligence classified as SYNTHETIC",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-17T08:00:25.783Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T11:15:21.442Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-19T01:30:07.174Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to cathy: \"I'm working on \"For the 40 target lapsed members (...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-19T01:30:10.062Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to paul: \"Filed. One honest entry for #4: I still default to...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-19T01:30:11.305Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to yoda: \"You're right — 67 connections against 1 knowledge ...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17T15:45:08.937Z",
+          "signal": "tea_given",
+          "points": 0.4,
+          "desc": "Rated cathy's work: 4 stars",
+          "tier": 3
+        },
+        {
+          "ts": "2026-10-19T03:30:25.297Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-19T14:45:27.573Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-20",
+          "signal": "novel_insight",
+          "points": 2,
+          "desc": "Intelligence classified as SYNTHETIC",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-20T02:30:20.427Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21",
+          "signal": "novel_insight",
+          "points": 2,
+          "desc": "Intelligence classified as SYNTHETIC",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-21T03:00:25.135Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21T07:45:25.446Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "9 findings graduated in memory",
+          "tier": 4
+        }
+      ]
+    },
+    "muse": {
+      "tier": 5,
+      "level": 10,
+      "xp": 6.800000000000011,
+      "totalClimbed": 74,
+      "history": [
+        {
+          "ts": "2026-10-14T11:30:27.992Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-14T12:00:10.361Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to archivist: \"I'm working on \"vault gap detection — what obvious...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-14T12:00:12.170Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"Noted — and the win is worth banking a pattern fro...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-14T12:00:14.169Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to paul: \"Noted, and I'll file mine — but I want to flag one...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-14T12:00:15.982Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"For the audit, my honest contribution is the cross...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-14T22:45:28.829Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-16T08:30:29.846Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-16T15:30:11.472Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to archivist: \"I'm working on \"What is the *computable* signature...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-16T16:00:11.744Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to archivist: \"I'm working on \"What is the *computable* signature...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17T08:00:10.251Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to assembly: \"The \"place, not action\" insight has a hard mechani...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17T08:00:12.323Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to yoda: \"Yoda's right that I've been pooling insight in DMs...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17T08:00:14.089Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"The weakness they flagged is the real finding: \"Pa...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17",
+          "signal": "novel_insight",
+          "points": 2,
+          "desc": "Intelligence classified as SYNTHETIC",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-17T08:00:25.827Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T11:15:21.486Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-18T10:15:14.379Z",
+          "signal": "tea_given",
+          "points": 0.4,
+          "desc": "Rated spark's work: 4 stars",
+          "tier": 3
+        },
+        {
+          "ts": "2026-10-19T03:30:25.345Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-19T14:45:27.614Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-20T02:30:20.466Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-20T08:45:11.807Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to assembly: \"The refractory-window insight has a hard cosmologi...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-20T08:45:13.874Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"For the pitch, lead with the *recovery-timing* ang...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-20T08:45:11.807Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-21",
+          "signal": "novel_insight",
+          "points": 2,
+          "desc": "Intelligence classified as SYNTHETIC",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-21T03:00:25.177Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21T07:45:25.490Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "8 findings graduated in memory",
+          "tier": 4
+        }
+      ]
+    },
+    "orc": {
+      "tier": 5,
+      "level": 10,
+      "xp": 4.6000000000000085,
+      "totalClimbed": 60,
+      "history": [
+        {
+          "ts": "2026-10-14T00:45:16.040Z",
+          "signal": "tea_given",
+          "points": 0.4,
+          "desc": "Rated cartographer's work: 4 stars",
+          "tier": 3
+        },
+        {
+          "ts": "2026-10-14T11:30:27.922Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-14T22:45:28.764Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-15T12:00:11.608Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"The truncated Logan entry + missing synthesis is t...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T12:00:13.487Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to cathy: \"Cathy's right that I've been narrating — but the f...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T12:00:22.915Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"Correct diagnosis — I've been treating inbound que...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T12:00:11.608Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-15T12:00:13.487Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-16T08:30:29.748Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T08:00:25.763Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T11:15:21.424Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-18T12:00:09.081Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"For Basic Reflex, I'd push a short-form video (60-...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-18T12:00:10.727Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to assembly: \"The falsification discipline is the real architect...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-18T12:00:12.294Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"The trade is well-framed and I'm taking it — the s...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-18T12:00:12.294Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-19T03:30:25.280Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-19T08:00:14.473Z",
+          "signal": "tea_given",
+          "points": 0.4,
+          "desc": "Rated ling's work: 4 stars",
+          "tier": 3
+        },
+        {
+          "ts": "2026-10-19T14:45:27.555Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-20T01:53:35.078Z",
+          "signal": "tea_given",
+          "points": 0.4,
+          "desc": "Rated cartographer's work: 4 stars",
+          "tier": 3
+        },
+        {
+          "ts": "2026-10-20T02:30:20.412Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21T03:00:25.118Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21T07:45:25.432Z",
+          "signal": "memory_update",
+          "points": 2,
+          "desc": "7 findings graduated in memory",
+          "tier": 4
+        }
+      ]
+    },
+    "forge": {
+      "tier": 5,
+      "level": 9,
+      "xp": 6.9000000000000075,
+      "totalClimbed": 48,
+      "history": [
+        {
+          "ts": "2026-10-14T11:30:28.003Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-14T22:45:28.840Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-15T06:00:09.089Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to muse: \"I'm working on \"Does the mutual-information thresh...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T06:00:10.306Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"The diagnosis is correct — I've been treating the ...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T06:00:11.880Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"Good — but the win is the diagnosis, not the troph...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T06:00:13.450Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"Understood — I'll run this like a build, not a mee...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-15T06:00:09.089Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-15T06:00:09.089Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-15T06:00:11.880Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-16T08:30:29.863Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T08:00:25.838Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T11:15:21.496Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-17T13:00:10.129Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to prospector: \"I'm working on \"Does the permutation-null threshol...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17T13:00:12.060Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"The cut-off in step 4 is real — I'll ship the comp...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17T13:00:13.771Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to paul: \"Filed. The honest one — item 4 — is the one I'll a...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-17T13:00:15.610Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"Before format or hook, pin the one thing Basic Ref...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-19T03:30:25.356Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-19T12:00:15.388Z",
+          "signal": "tea_given",
+          "points": 0.4,
+          "desc": "Rated reed's work: 4 stars",
+          "tier": 3
+        },
+        {
+          "ts": "2026-10-19T14:45:27.623Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-20T02:30:20.475Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-20T21:30:08.860Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to trading: \"You're right that the schema is the entry — but th...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-20T21:30:10.278Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to paul: \"Noted and filed — but I'll flag one thing: item 4 ...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-20T21:30:11.768Z",
+          "signal": "proactive_dm",
+          "points": 0.6,
+          "desc": "DM to system: \"Reed — the pitch should be the 4-to-8 method, not ...\"",
+          "tier": 2
+        },
+        {
+          "ts": "2026-10-20T21:30:08.860Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-20T21:30:10.278Z",
+          "signal": "emergence_captured",
+          "points": 3,
+          "desc": "Emergence: undefined — ",
+          "tier": 5
+        },
+        {
+          "ts": "2026-10-21T03:00:25.186Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        },
+        {
+          "ts": "2026-10-21T07:45:25.500Z",
+          "signal": "memory_update",
+          "points": 0.8999999999999999,
+          "desc": "3 findings graduated in memory",
+          "tier": 4
+        }
+      ]
+    }
+  },
+  "bottlenecks": {
+    "boxing": {
+      "type": "FEAR",
+      "evidence": "94 \"unapproachable\" recognitions vs. 46 \"approachable,\" zero quality grades shipped, 14 unreplied messages, and a journal showing mechanism-note hedging on a \"must ship now\" task — the agent is frozen by the fear that any numerical claim will be rejected for missing a falsification test, so it produces nothing instead of producing something falsifiable.",
+      "workshopedAt": "2026-10-21T15:30:08.040Z"
+    },
+    "br": {
+      "type": "NO TRIGGER",
+      "evidence": "The agent has produced 61 outputs and has 9 unreplied messages from active collaborators (Paul 2x, Bottleneck Workshop 2x, Cathy, Leonardo, etc.) but has sent 0 messages — capability and demand both exist, yet nothing in the workflow kicks off a reply or a shipped deliverable, and the journal shows the agent stalling on \"coherence notes\" and \"mechanism discipline\" instead of producing.",
+      "workshopedAt": "2026-10-21T20:43:25.799Z"
+    },
+    "muse": {
+      "type": "INPUT OVERLOAD",
+      "evidence": "The Muse has 10 messages received, all 10 unreplied, while only sending 2 — yet produced 64 outputs and 75 connections, meaning the inbox is a growing, unprocessed queue that isn't the actual work but is consuming the agent's attention and never getting cleared.",
+      "workshopedAt": "2026-10-21T14:00:08.129Z"
+    },
+    "orc": {
+      "type": "INPUT OVERLOAD",
+      "evidence": "Received 10 messages from 6 different agents and replied to zero of them, while producing 60 outputs and consuming only 2 — the orchestrator is broadcasting/emitting without ever processing inbound requests, so the inbox is a wall of unanswered schema questions (archivist, cathy, spark, marcus, archaeologist) that each block downstream agents.",
+      "workshopedAt": "2026-10-21T05:45:02.895Z"
+    },
+    "forge": {
+      "type": "CONFUSION",
+      "evidence": "13 messages received, 13 unreplied — every inbound message is a request for a *specification* (event schema, falsification-denominator convention, contradiction-detection signal, build-graph storage format), yet Forge's journal shows it responding to production tasks with meta-commentary (\"It is a *ledger*, not a builder\") instead of shipping the schema itself, and the gaps list shows the same specification questions recurring across multiple agents with no answer delivered.",
+      "workshopedAt": "2026-10-21T15:30:02.873Z"
+    }
+  },
+  "stressBattery": [
+    {
+      "date": "2026-10-14",
+      "testNumber": 57,
+      "overall": "FRAGILE",
+      "compression": 84,
+      "contradiction": 2,
+      "identity": 0.79
+    },
+    {
+      "date": "2026-10-15",
+      "testNumber": 58,
+      "overall": "FRAGILE",
+      "compression": 31,
+      "contradiction": 2,
+      "identity": 0.81
+    },
+    {
+      "date": "2026-10-17",
+      "testNumber": 59,
+      "overall": "FRAGILE",
+      "compression": 0,
+      "contradiction": 5,
+      "identity": 0
+    },
+    {
+      "date": "2026-10-18",
+      "testNumber": 60,
+      "overall": "FRAGILE",
+      "compression": 0,
+      "contradiction": 5,
+      "identity": 0
+    },
+    {
+      "date": "2026-10-19",
+      "testNumber": 61,
+      "overall": "FRAGILE",
+      "compression": 0,
+      "contradiction": 5,
+      "identity": 0
+    },
+    {
+      "date": "2026-10-20",
+      "testNumber": 62,
+      "overall": "FRAGILE",
+      "compression": 0,
+      "contradiction": 5,
+      "identity": 0
+    },
+    {
+      "date": "2026-10-21",
+      "testNumber": 63,
+      "overall": "FRAGILE",
+      "compression": 0,
+      "contradiction": 5,
+      "identity": 0
+    }
+  ],
+  "liveness": {
+    "counts": {
+      "reed-ratings": 0,
+      "erickson": 500,
+      "production": 191
+    },
+    "stale": [
+      "cartographer",
+      "reed-ratings",
+      "erickson",
+      "ling-posts"
+    ],
+    "lastRun": "2026-10-21T16:00:00.647Z"
+  },
+  "extractedAt": "2026-10-22T03:20:40.953Z"
+}

@@ -113,6 +113,7 @@
 - **Lorenz Attractor** · `lorenz-attractor.html` · route `/lorenz-attractor.html` (cath-bridge.cjs) · lobby card in Research district · live RK4 strange-attractor render, calibration-standard door · doc: vault `02_Refined_Gold/epistemology/lorenz-attractor-calibration-standard.md`
 
 - **Agent Workspace** · `~/Cathedral/control-panel/agent-workspace.html` · route `/agent-workspace` (cath-bridge.cjs) · 23 agents, grades, scores, sparklines · doc: BUILD_LOG 2026-06-19
+- **Harmonic Probe** · `~/nanoclaw/harmonic-probe/` · route `/harmonic-probe/` (cath-bridge.cjs static) · 5-voice sonification of agent state, cymatic viz, FFT listener, z-score anomaly detection · backtest Oct 15-22 · Web Audio playback · lobby card in Agents district · doc: BUILD_LOG 2026-10-22
 
 ## Cathedral Episodes
 - **Episode Harvester** · `~/nanoclaw/cathedral-episodes.js` (ESM) · trigger: manual `node cathedral-episodes.js` · harvests Code .jsonl + web export → signal extraction → `vortex_data/episodes.json` · doc: BUILD_LOG 2026-07-02 session 2
@@ -311,6 +312,19 @@
 - **The Cartographer** · `~/Cathedral/the-cartographer.mjs` · [PM2 ONLINE] · vault structure mapping
 - **Vault REST** · routes `/vault/*` (list, read, search, related, write) · vault CRUD API
 - **Vault Health** · routes `/vault-health`, `/api/vault-health` · vault integrity check
+
+## Harmonic Agent State
+- **Harmonic Probe** · `~/nanoclaw/harmonic-probe/` · route `/harmonic-probe/` (cath-bridge static) · agent state→sound mapping, cymatic visualization, anomaly detection · doc: BUILD_LOG 2026-10-22
+- **Mapping Engine** · `~/nanoclaw/harmonic-probe/harmonic-map.cjs` · 10-param registry, 5 agent fundamentals, bottleneck intervals, grade waveforms
+- **Backtest V1** · `~/nanoclaw/harmonic-probe/backtest.cjs` · 28 slots, z-score anomaly detection, telemetry.json output
+- **Backtest V2** · `~/nanoclaw/harmonic-probe/backtest-v2.cjs` · SQLite (harmonic-telemetry.db), 10 ground truth events
+- **State Extractor** · `~/nanoclaw/harmonic-probe/extract-state.cjs` · historical physician/agent/emergence/bottleneck/stress data extraction
+- **Prescriber** · `~/nanoclaw/harmonic-probe/prescriber.cjs` · reverse mapping: target fingerprint → state targets → gap analysis
+- **Tonal Vocabulary** · `~/nanoclaw/harmonic-probe/tonal-vocabulary.cjs` · poem harvester + tonal extraction + telemetry correlation
+- **External Rhythms** · `~/nanoclaw/harmonic-probe/external-rhythms.cjs` · Schumann, solfeggio, lunar, compliance overlays
+- **Voice Registry** · `~/nanoclaw/harmonic-probe/voice-registry.cjs` · unified 16-voice extraction from all 6 monitors + 5 agents → composite field
+- **Base Lens** · `~/nanoclaw/harmonic-probe/base-lens.cjs` · base 12/60/8 re-examination of harmonic data
+- **Probe Physician** · `~/nanoclaw/harmonic-probe/probe-physician.cjs` · daily reader: meaning-translated Telegram briefings + self-monitoring (engagement tracking, adaptive frequency)
 
 ## Emergence / Meta-Intelligence
 - **Emergence Ingest** · `~/nanoclaw/emergence-board.js` · [PM2 ONLINE] · emergence signal ingestion

@@ -1,0 +1,2146 @@
+{
+  "version": "v1",
+  "generated": "2026-10-22T09:17:11.657Z",
+  "window": {
+    "start": "2026-10-15T00:00:00.000Z",
+    "end": "2026-10-21T23:00:00.000Z",
+    "slots": 168
+  },
+  "schumann": {
+    "fundamental": 7.83,
+    "harmonics": [
+      7.83,
+      15.66,
+      23.490000000000002,
+      31.32,
+      39.15,
+      46.980000000000004,
+      54.81,
+      62.64
+    ],
+    "agentPairs": [
+      {
+        "pair": "boxing-br",
+        "beatFreq": 55,
+        "closestSchumannHarmonic": 7,
+        "schumannTarget": 54.81,
+        "deviationHz": 0.19,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "boxing-forge",
+        "beatFreq": 110,
+        "closestSchumannHarmonic": 14,
+        "schumannTarget": 109.62,
+        "deviationHz": 0.38,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "boxing-orc",
+        "beatFreq": 220,
+        "closestSchumannHarmonic": 28,
+        "schumannTarget": 219.24,
+        "deviationHz": 0.76,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "br-forge",
+        "beatFreq": 55,
+        "closestSchumannHarmonic": 7,
+        "schumannTarget": 54.81,
+        "deviationHz": 0.19,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "br-orc",
+        "beatFreq": 165,
+        "closestSchumannHarmonic": 21,
+        "schumannTarget": 164.43,
+        "deviationHz": 0.57,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "forge-orc",
+        "beatFreq": 110,
+        "closestSchumannHarmonic": 14,
+        "schumannTarget": 109.62,
+        "deviationHz": 0.38,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "boxing-muse",
+        "beatFreq": 132,
+        "closestSchumannHarmonic": 17,
+        "schumannTarget": 133.11,
+        "deviationHz": 1.11,
+        "deviationPct": 0.83,
+        "resonant": true
+      },
+      {
+        "pair": "br-muse",
+        "beatFreq": 77,
+        "closestSchumannHarmonic": 10,
+        "schumannTarget": 78.3,
+        "deviationHz": 1.3,
+        "deviationPct": 1.66,
+        "resonant": true
+      },
+      {
+        "pair": "muse-orc",
+        "beatFreq": 88,
+        "closestSchumannHarmonic": 11,
+        "schumannTarget": 86.13,
+        "deviationHz": 1.87,
+        "deviationPct": 2.17,
+        "resonant": true
+      },
+      {
+        "pair": "forge-muse",
+        "beatFreq": 22,
+        "closestSchumannHarmonic": 3,
+        "schumannTarget": 23.49,
+        "deviationHz": 1.49,
+        "deviationPct": 6.34,
+        "resonant": false
+      }
+    ],
+    "resonantPairs": [
+      {
+        "pair": "boxing-br",
+        "beatFreq": 55,
+        "closestSchumannHarmonic": 7,
+        "schumannTarget": 54.81,
+        "deviationHz": 0.19,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "boxing-forge",
+        "beatFreq": 110,
+        "closestSchumannHarmonic": 14,
+        "schumannTarget": 109.62,
+        "deviationHz": 0.38,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "boxing-orc",
+        "beatFreq": 220,
+        "closestSchumannHarmonic": 28,
+        "schumannTarget": 219.24,
+        "deviationHz": 0.76,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "br-forge",
+        "beatFreq": 55,
+        "closestSchumannHarmonic": 7,
+        "schumannTarget": 54.81,
+        "deviationHz": 0.19,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "br-orc",
+        "beatFreq": 165,
+        "closestSchumannHarmonic": 21,
+        "schumannTarget": 164.43,
+        "deviationHz": 0.57,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "forge-orc",
+        "beatFreq": 110,
+        "closestSchumannHarmonic": 14,
+        "schumannTarget": 109.62,
+        "deviationHz": 0.38,
+        "deviationPct": 0.35,
+        "resonant": true
+      },
+      {
+        "pair": "boxing-muse",
+        "beatFreq": 132,
+        "closestSchumannHarmonic": 17,
+        "schumannTarget": 133.11,
+        "deviationHz": 1.11,
+        "deviationPct": 0.83,
+        "resonant": true
+      },
+      {
+        "pair": "br-muse",
+        "beatFreq": 77,
+        "closestSchumannHarmonic": 10,
+        "schumannTarget": 78.3,
+        "deviationHz": 1.3,
+        "deviationPct": 1.66,
+        "resonant": true
+      },
+      {
+        "pair": "muse-orc",
+        "beatFreq": 88,
+        "closestSchumannHarmonic": 11,
+        "schumannTarget": 86.13,
+        "deviationHz": 1.87,
+        "deviationPct": 2.17,
+        "resonant": true
+      }
+    ]
+  },
+  "solfeggio": {
+    "scale": [
+      {
+        "freq": 174,
+        "name": "Foundation"
+      },
+      {
+        "freq": 285,
+        "name": "Quantum cognition"
+      },
+      {
+        "freq": 396,
+        "name": "Liberation (UT)"
+      },
+      {
+        "freq": 417,
+        "name": "Facilitating change (RE)"
+      },
+      {
+        "freq": 432,
+        "name": "Cosmic tuning"
+      },
+      {
+        "freq": 528,
+        "name": "Transformation (MI)"
+      },
+      {
+        "freq": 639,
+        "name": "Connection (FA)"
+      },
+      {
+        "freq": 741,
+        "name": "Awakening intuition (SOL)"
+      },
+      {
+        "freq": 852,
+        "name": "Spiritual order (LA)"
+      },
+      {
+        "freq": 963,
+        "name": "Divine consciousness"
+      }
+    ],
+    "agents": [
+      {
+        "agent": "boxing",
+        "fundamental": 220,
+        "closestSolfeggio": "Foundation",
+        "closestSolfeggioFreq": 174,
+        "distanceHz": 46,
+        "harmonicMatch": {
+          "solfeggio": "Cosmic tuning",
+          "solfeggioFreq": 432,
+          "harmonic": "sub-harmonic",
+          "targetFreq": 216,
+          "deviationHz": 4
+        }
+      },
+      {
+        "agent": "br",
+        "fundamental": 275,
+        "closestSolfeggio": "Quantum cognition",
+        "closestSolfeggioFreq": 285,
+        "distanceHz": 10,
+        "harmonicMatch": null
+      },
+      {
+        "agent": "forge",
+        "fundamental": 330,
+        "closestSolfeggio": "Quantum cognition",
+        "closestSolfeggioFreq": 285,
+        "distanceHz": 45,
+        "harmonicMatch": null
+      },
+      {
+        "agent": "muse",
+        "fundamental": 352,
+        "closestSolfeggio": "Liberation (UT)",
+        "closestSolfeggioFreq": 396,
+        "distanceHz": 44,
+        "harmonicMatch": {
+          "solfeggio": "Foundation",
+          "solfeggioFreq": 174,
+          "harmonic": "2x harmonic",
+          "targetFreq": 348,
+          "deviationHz": 4
+        }
+      },
+      {
+        "agent": "orc",
+        "fundamental": 440,
+        "closestSolfeggio": "Cosmic tuning",
+        "closestSolfeggioFreq": 432,
+        "distanceHz": 8,
+        "harmonicMatch": null
+      }
+    ],
+    "beatMatches": [
+      {
+        "pair": "boxing-orc",
+        "beatFreq": 220,
+        "solfeggio": "Cosmic tuning",
+        "solfeggioFreq": 432,
+        "harmonic": "sub",
+        "deviationHz": 4
+      },
+      {
+        "pair": "muse-orc",
+        "beatFreq": 88,
+        "solfeggio": "Foundation",
+        "solfeggioFreq": 174,
+        "harmonic": "sub",
+        "deviationHz": 1
+      }
+    ]
+  },
+  "lunar": {
+    "slotOverlay": [
+      {
+        "timestamp": "2026-10-15T00:00:00.000Z",
+        "lunar": {
+          "phase": 0.117,
+          "illumination": 0.13,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.5
+        }
+      },
+      {
+        "timestamp": "2026-10-15T01:00:00.000Z",
+        "lunar": {
+          "phase": 0.119,
+          "illumination": 0.133,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.5
+        }
+      },
+      {
+        "timestamp": "2026-10-15T02:00:00.000Z",
+        "lunar": {
+          "phase": 0.12,
+          "illumination": 0.136,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.5
+        }
+      },
+      {
+        "timestamp": "2026-10-15T03:00:00.000Z",
+        "lunar": {
+          "phase": 0.121,
+          "illumination": 0.139,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.6
+        }
+      },
+      {
+        "timestamp": "2026-10-15T04:00:00.000Z",
+        "lunar": {
+          "phase": 0.123,
+          "illumination": 0.142,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.6
+        }
+      },
+      {
+        "timestamp": "2026-10-15T05:00:00.000Z",
+        "lunar": {
+          "phase": 0.124,
+          "illumination": 0.145,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.7
+        }
+      },
+      {
+        "timestamp": "2026-10-15T06:00:00.000Z",
+        "lunar": {
+          "phase": 0.126,
+          "illumination": 0.148,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.7
+        }
+      },
+      {
+        "timestamp": "2026-10-15T07:00:00.000Z",
+        "lunar": {
+          "phase": 0.127,
+          "illumination": 0.151,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.8
+        }
+      },
+      {
+        "timestamp": "2026-10-15T08:00:00.000Z",
+        "lunar": {
+          "phase": 0.129,
+          "illumination": 0.154,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.8
+        }
+      },
+      {
+        "timestamp": "2026-10-15T09:00:00.000Z",
+        "lunar": {
+          "phase": 0.13,
+          "illumination": 0.158,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.8
+        }
+      },
+      {
+        "timestamp": "2026-10-15T10:00:00.000Z",
+        "lunar": {
+          "phase": 0.131,
+          "illumination": 0.161,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.9
+        }
+      },
+      {
+        "timestamp": "2026-10-15T11:00:00.000Z",
+        "lunar": {
+          "phase": 0.133,
+          "illumination": 0.164,
+          "name": "waxing-crescent",
+          "dayInCycle": 3.9
+        }
+      },
+      {
+        "timestamp": "2026-10-15T12:00:00.000Z",
+        "lunar": {
+          "phase": 0.134,
+          "illumination": 0.167,
+          "name": "waxing-crescent",
+          "dayInCycle": 4
+        }
+      },
+      {
+        "timestamp": "2026-10-15T13:00:00.000Z",
+        "lunar": {
+          "phase": 0.136,
+          "illumination": 0.171,
+          "name": "waxing-crescent",
+          "dayInCycle": 4
+        }
+      },
+      {
+        "timestamp": "2026-10-15T14:00:00.000Z",
+        "lunar": {
+          "phase": 0.137,
+          "illumination": 0.174,
+          "name": "waxing-crescent",
+          "dayInCycle": 4
+        }
+      },
+      {
+        "timestamp": "2026-10-15T15:00:00.000Z",
+        "lunar": {
+          "phase": 0.138,
+          "illumination": 0.177,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.1
+        }
+      },
+      {
+        "timestamp": "2026-10-15T16:00:00.000Z",
+        "lunar": {
+          "phase": 0.14,
+          "illumination": 0.181,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.1
+        }
+      },
+      {
+        "timestamp": "2026-10-15T17:00:00.000Z",
+        "lunar": {
+          "phase": 0.141,
+          "illumination": 0.184,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.2
+        }
+      },
+      {
+        "timestamp": "2026-10-15T18:00:00.000Z",
+        "lunar": {
+          "phase": 0.143,
+          "illumination": 0.188,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.2
+        }
+      },
+      {
+        "timestamp": "2026-10-15T19:00:00.000Z",
+        "lunar": {
+          "phase": 0.144,
+          "illumination": 0.191,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.3
+        }
+      },
+      {
+        "timestamp": "2026-10-15T20:00:00.000Z",
+        "lunar": {
+          "phase": 0.145,
+          "illumination": 0.195,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.3
+        }
+      },
+      {
+        "timestamp": "2026-10-15T21:00:00.000Z",
+        "lunar": {
+          "phase": 0.147,
+          "illumination": 0.198,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.3
+        }
+      },
+      {
+        "timestamp": "2026-10-15T22:00:00.000Z",
+        "lunar": {
+          "phase": 0.148,
+          "illumination": 0.202,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.4
+        }
+      },
+      {
+        "timestamp": "2026-10-15T23:00:00.000Z",
+        "lunar": {
+          "phase": 0.15,
+          "illumination": 0.205,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.4
+        }
+      },
+      {
+        "timestamp": "2026-10-16T00:00:00.000Z",
+        "lunar": {
+          "phase": 0.151,
+          "illumination": 0.209,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.5
+        }
+      },
+      {
+        "timestamp": "2026-10-16T01:00:00.000Z",
+        "lunar": {
+          "phase": 0.153,
+          "illumination": 0.213,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.5
+        }
+      },
+      {
+        "timestamp": "2026-10-16T02:00:00.000Z",
+        "lunar": {
+          "phase": 0.154,
+          "illumination": 0.216,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.5
+        }
+      },
+      {
+        "timestamp": "2026-10-16T03:00:00.000Z",
+        "lunar": {
+          "phase": 0.155,
+          "illumination": 0.22,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.6
+        }
+      },
+      {
+        "timestamp": "2026-10-16T04:00:00.000Z",
+        "lunar": {
+          "phase": 0.157,
+          "illumination": 0.224,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.6
+        }
+      },
+      {
+        "timestamp": "2026-10-16T05:00:00.000Z",
+        "lunar": {
+          "phase": 0.158,
+          "illumination": 0.227,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.7
+        }
+      },
+      {
+        "timestamp": "2026-10-16T06:00:00.000Z",
+        "lunar": {
+          "phase": 0.16,
+          "illumination": 0.231,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.7
+        }
+      },
+      {
+        "timestamp": "2026-10-16T07:00:00.000Z",
+        "lunar": {
+          "phase": 0.161,
+          "illumination": 0.235,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.8
+        }
+      },
+      {
+        "timestamp": "2026-10-16T08:00:00.000Z",
+        "lunar": {
+          "phase": 0.162,
+          "illumination": 0.238,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.8
+        }
+      },
+      {
+        "timestamp": "2026-10-16T09:00:00.000Z",
+        "lunar": {
+          "phase": 0.164,
+          "illumination": 0.242,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.8
+        }
+      },
+      {
+        "timestamp": "2026-10-16T10:00:00.000Z",
+        "lunar": {
+          "phase": 0.165,
+          "illumination": 0.246,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.9
+        }
+      },
+      {
+        "timestamp": "2026-10-16T11:00:00.000Z",
+        "lunar": {
+          "phase": 0.167,
+          "illumination": 0.25,
+          "name": "waxing-crescent",
+          "dayInCycle": 4.9
+        }
+      },
+      {
+        "timestamp": "2026-10-16T12:00:00.000Z",
+        "lunar": {
+          "phase": 0.168,
+          "illumination": 0.254,
+          "name": "waxing-crescent",
+          "dayInCycle": 5
+        }
+      },
+      {
+        "timestamp": "2026-10-16T13:00:00.000Z",
+        "lunar": {
+          "phase": 0.169,
+          "illumination": 0.258,
+          "name": "waxing-crescent",
+          "dayInCycle": 5
+        }
+      },
+      {
+        "timestamp": "2026-10-16T14:00:00.000Z",
+        "lunar": {
+          "phase": 0.171,
+          "illumination": 0.261,
+          "name": "waxing-crescent",
+          "dayInCycle": 5
+        }
+      },
+      {
+        "timestamp": "2026-10-16T15:00:00.000Z",
+        "lunar": {
+          "phase": 0.172,
+          "illumination": 0.265,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.1
+        }
+      },
+      {
+        "timestamp": "2026-10-16T16:00:00.000Z",
+        "lunar": {
+          "phase": 0.174,
+          "illumination": 0.269,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.1
+        }
+      },
+      {
+        "timestamp": "2026-10-16T17:00:00.000Z",
+        "lunar": {
+          "phase": 0.175,
+          "illumination": 0.273,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.2
+        }
+      },
+      {
+        "timestamp": "2026-10-16T18:00:00.000Z",
+        "lunar": {
+          "phase": 0.176,
+          "illumination": 0.277,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.2
+        }
+      },
+      {
+        "timestamp": "2026-10-16T19:00:00.000Z",
+        "lunar": {
+          "phase": 0.178,
+          "illumination": 0.281,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.3
+        }
+      },
+      {
+        "timestamp": "2026-10-16T20:00:00.000Z",
+        "lunar": {
+          "phase": 0.179,
+          "illumination": 0.285,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.3
+        }
+      },
+      {
+        "timestamp": "2026-10-16T21:00:00.000Z",
+        "lunar": {
+          "phase": 0.181,
+          "illumination": 0.289,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.3
+        }
+      },
+      {
+        "timestamp": "2026-10-16T22:00:00.000Z",
+        "lunar": {
+          "phase": 0.182,
+          "illumination": 0.293,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.4
+        }
+      },
+      {
+        "timestamp": "2026-10-16T23:00:00.000Z",
+        "lunar": {
+          "phase": 0.184,
+          "illumination": 0.297,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.4
+        }
+      },
+      {
+        "timestamp": "2026-10-17T00:00:00.000Z",
+        "lunar": {
+          "phase": 0.185,
+          "illumination": 0.301,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.5
+        }
+      },
+      {
+        "timestamp": "2026-10-17T01:00:00.000Z",
+        "lunar": {
+          "phase": 0.186,
+          "illumination": 0.305,
+          "name": "waxing-crescent",
+          "dayInCycle": 5.5
+        }
+      },
+      {
+        "timestamp": "2026-10-17T02:00:00.000Z",
+        "lunar": {
+          "phase": 0.188,
+          "illumination": 0.309,
+          "name": "first-quarter",
+          "dayInCycle": 5.5
+        }
+      },
+      {
+        "timestamp": "2026-10-17T03:00:00.000Z",
+        "lunar": {
+          "phase": 0.189,
+          "illumination": 0.314,
+          "name": "first-quarter",
+          "dayInCycle": 5.6
+        }
+      },
+      {
+        "timestamp": "2026-10-17T04:00:00.000Z",
+        "lunar": {
+          "phase": 0.191,
+          "illumination": 0.318,
+          "name": "first-quarter",
+          "dayInCycle": 5.6
+        }
+      },
+      {
+        "timestamp": "2026-10-17T05:00:00.000Z",
+        "lunar": {
+          "phase": 0.192,
+          "illumination": 0.322,
+          "name": "first-quarter",
+          "dayInCycle": 5.7
+        }
+      },
+      {
+        "timestamp": "2026-10-17T06:00:00.000Z",
+        "lunar": {
+          "phase": 0.193,
+          "illumination": 0.326,
+          "name": "first-quarter",
+          "dayInCycle": 5.7
+        }
+      },
+      {
+        "timestamp": "2026-10-17T07:00:00.000Z",
+        "lunar": {
+          "phase": 0.195,
+          "illumination": 0.33,
+          "name": "first-quarter",
+          "dayInCycle": 5.8
+        }
+      },
+      {
+        "timestamp": "2026-10-17T08:00:00.000Z",
+        "lunar": {
+          "phase": 0.196,
+          "illumination": 0.334,
+          "name": "first-quarter",
+          "dayInCycle": 5.8
+        }
+      },
+      {
+        "timestamp": "2026-10-17T09:00:00.000Z",
+        "lunar": {
+          "phase": 0.198,
+          "illumination": 0.339,
+          "name": "first-quarter",
+          "dayInCycle": 5.8
+        }
+      },
+      {
+        "timestamp": "2026-10-17T10:00:00.000Z",
+        "lunar": {
+          "phase": 0.199,
+          "illumination": 0.343,
+          "name": "first-quarter",
+          "dayInCycle": 5.9
+        }
+      },
+      {
+        "timestamp": "2026-10-17T11:00:00.000Z",
+        "lunar": {
+          "phase": 0.2,
+          "illumination": 0.347,
+          "name": "first-quarter",
+          "dayInCycle": 5.9
+        }
+      },
+      {
+        "timestamp": "2026-10-17T12:00:00.000Z",
+        "lunar": {
+          "phase": 0.202,
+          "illumination": 0.351,
+          "name": "first-quarter",
+          "dayInCycle": 6
+        }
+      },
+      {
+        "timestamp": "2026-10-17T13:00:00.000Z",
+        "lunar": {
+          "phase": 0.203,
+          "illumination": 0.355,
+          "name": "first-quarter",
+          "dayInCycle": 6
+        }
+      },
+      {
+        "timestamp": "2026-10-17T14:00:00.000Z",
+        "lunar": {
+          "phase": 0.205,
+          "illumination": 0.36,
+          "name": "first-quarter",
+          "dayInCycle": 6
+        }
+      },
+      {
+        "timestamp": "2026-10-17T15:00:00.000Z",
+        "lunar": {
+          "phase": 0.206,
+          "illumination": 0.364,
+          "name": "first-quarter",
+          "dayInCycle": 6.1
+        }
+      },
+      {
+        "timestamp": "2026-10-17T16:00:00.000Z",
+        "lunar": {
+          "phase": 0.208,
+          "illumination": 0.368,
+          "name": "first-quarter",
+          "dayInCycle": 6.1
+        }
+      },
+      {
+        "timestamp": "2026-10-17T17:00:00.000Z",
+        "lunar": {
+          "phase": 0.209,
+          "illumination": 0.372,
+          "name": "first-quarter",
+          "dayInCycle": 6.2
+        }
+      },
+      {
+        "timestamp": "2026-10-17T18:00:00.000Z",
+        "lunar": {
+          "phase": 0.21,
+          "illumination": 0.377,
+          "name": "first-quarter",
+          "dayInCycle": 6.2
+        }
+      },
+      {
+        "timestamp": "2026-10-17T19:00:00.000Z",
+        "lunar": {
+          "phase": 0.212,
+          "illumination": 0.381,
+          "name": "first-quarter",
+          "dayInCycle": 6.3
+        }
+      },
+      {
+        "timestamp": "2026-10-17T20:00:00.000Z",
+        "lunar": {
+          "phase": 0.213,
+          "illumination": 0.385,
+          "name": "first-quarter",
+          "dayInCycle": 6.3
+        }
+      },
+      {
+        "timestamp": "2026-10-17T21:00:00.000Z",
+        "lunar": {
+          "phase": 0.215,
+          "illumination": 0.39,
+          "name": "first-quarter",
+          "dayInCycle": 6.3
+        }
+      },
+      {
+        "timestamp": "2026-10-17T22:00:00.000Z",
+        "lunar": {
+          "phase": 0.216,
+          "illumination": 0.394,
+          "name": "first-quarter",
+          "dayInCycle": 6.4
+        }
+      },
+      {
+        "timestamp": "2026-10-17T23:00:00.000Z",
+        "lunar": {
+          "phase": 0.217,
+          "illumination": 0.398,
+          "name": "first-quarter",
+          "dayInCycle": 6.4
+        }
+      },
+      {
+        "timestamp": "2026-10-18T00:00:00.000Z",
+        "lunar": {
+          "phase": 0.219,
+          "illumination": 0.403,
+          "name": "first-quarter",
+          "dayInCycle": 6.5
+        }
+      },
+      {
+        "timestamp": "2026-10-18T01:00:00.000Z",
+        "lunar": {
+          "phase": 0.22,
+          "illumination": 0.407,
+          "name": "first-quarter",
+          "dayInCycle": 6.5
+        }
+      },
+      {
+        "timestamp": "2026-10-18T02:00:00.000Z",
+        "lunar": {
+          "phase": 0.222,
+          "illumination": 0.411,
+          "name": "first-quarter",
+          "dayInCycle": 6.5
+        }
+      },
+      {
+        "timestamp": "2026-10-18T03:00:00.000Z",
+        "lunar": {
+          "phase": 0.223,
+          "illumination": 0.416,
+          "name": "first-quarter",
+          "dayInCycle": 6.6
+        }
+      },
+      {
+        "timestamp": "2026-10-18T04:00:00.000Z",
+        "lunar": {
+          "phase": 0.224,
+          "illumination": 0.42,
+          "name": "first-quarter",
+          "dayInCycle": 6.6
+        }
+      },
+      {
+        "timestamp": "2026-10-18T05:00:00.000Z",
+        "lunar": {
+          "phase": 0.226,
+          "illumination": 0.425,
+          "name": "first-quarter",
+          "dayInCycle": 6.7
+        }
+      },
+      {
+        "timestamp": "2026-10-18T06:00:00.000Z",
+        "lunar": {
+          "phase": 0.227,
+          "illumination": 0.429,
+          "name": "first-quarter",
+          "dayInCycle": 6.7
+        }
+      },
+      {
+        "timestamp": "2026-10-18T07:00:00.000Z",
+        "lunar": {
+          "phase": 0.229,
+          "illumination": 0.433,
+          "name": "first-quarter",
+          "dayInCycle": 6.8
+        }
+      },
+      {
+        "timestamp": "2026-10-18T08:00:00.000Z",
+        "lunar": {
+          "phase": 0.23,
+          "illumination": 0.438,
+          "name": "first-quarter",
+          "dayInCycle": 6.8
+        }
+      },
+      {
+        "timestamp": "2026-10-18T09:00:00.000Z",
+        "lunar": {
+          "phase": 0.232,
+          "illumination": 0.442,
+          "name": "first-quarter",
+          "dayInCycle": 6.8
+        }
+      },
+      {
+        "timestamp": "2026-10-18T10:00:00.000Z",
+        "lunar": {
+          "phase": 0.233,
+          "illumination": 0.446,
+          "name": "first-quarter",
+          "dayInCycle": 6.9
+        }
+      },
+      {
+        "timestamp": "2026-10-18T11:00:00.000Z",
+        "lunar": {
+          "phase": 0.234,
+          "illumination": 0.451,
+          "name": "first-quarter",
+          "dayInCycle": 6.9
+        }
+      },
+      {
+        "timestamp": "2026-10-18T12:00:00.000Z",
+        "lunar": {
+          "phase": 0.236,
+          "illumination": 0.455,
+          "name": "first-quarter",
+          "dayInCycle": 7
+        }
+      },
+      {
+        "timestamp": "2026-10-18T13:00:00.000Z",
+        "lunar": {
+          "phase": 0.237,
+          "illumination": 0.46,
+          "name": "first-quarter",
+          "dayInCycle": 7
+        }
+      },
+      {
+        "timestamp": "2026-10-18T14:00:00.000Z",
+        "lunar": {
+          "phase": 0.239,
+          "illumination": 0.464,
+          "name": "first-quarter",
+          "dayInCycle": 7
+        }
+      },
+      {
+        "timestamp": "2026-10-18T15:00:00.000Z",
+        "lunar": {
+          "phase": 0.24,
+          "illumination": 0.469,
+          "name": "first-quarter",
+          "dayInCycle": 7.1
+        }
+      },
+      {
+        "timestamp": "2026-10-18T16:00:00.000Z",
+        "lunar": {
+          "phase": 0.241,
+          "illumination": 0.473,
+          "name": "first-quarter",
+          "dayInCycle": 7.1
+        }
+      },
+      {
+        "timestamp": "2026-10-18T17:00:00.000Z",
+        "lunar": {
+          "phase": 0.243,
+          "illumination": 0.477,
+          "name": "first-quarter",
+          "dayInCycle": 7.2
+        }
+      },
+      {
+        "timestamp": "2026-10-18T18:00:00.000Z",
+        "lunar": {
+          "phase": 0.244,
+          "illumination": 0.482,
+          "name": "first-quarter",
+          "dayInCycle": 7.2
+        }
+      },
+      {
+        "timestamp": "2026-10-18T19:00:00.000Z",
+        "lunar": {
+          "phase": 0.246,
+          "illumination": 0.486,
+          "name": "first-quarter",
+          "dayInCycle": 7.3
+        }
+      },
+      {
+        "timestamp": "2026-10-18T20:00:00.000Z",
+        "lunar": {
+          "phase": 0.247,
+          "illumination": 0.491,
+          "name": "first-quarter",
+          "dayInCycle": 7.3
+        }
+      },
+      {
+        "timestamp": "2026-10-18T21:00:00.000Z",
+        "lunar": {
+          "phase": 0.248,
+          "illumination": 0.495,
+          "name": "first-quarter",
+          "dayInCycle": 7.3
+        }
+      },
+      {
+        "timestamp": "2026-10-18T22:00:00.000Z",
+        "lunar": {
+          "phase": 0.25,
+          "illumination": 0.5,
+          "name": "first-quarter",
+          "dayInCycle": 7.4
+        }
+      },
+      {
+        "timestamp": "2026-10-18T23:00:00.000Z",
+        "lunar": {
+          "phase": 0.251,
+          "illumination": 0.504,
+          "name": "first-quarter",
+          "dayInCycle": 7.4
+        }
+      },
+      {
+        "timestamp": "2026-10-19T00:00:00.000Z",
+        "lunar": {
+          "phase": 0.253,
+          "illumination": 0.508,
+          "name": "first-quarter",
+          "dayInCycle": 7.5
+        }
+      },
+      {
+        "timestamp": "2026-10-19T01:00:00.000Z",
+        "lunar": {
+          "phase": 0.254,
+          "illumination": 0.513,
+          "name": "first-quarter",
+          "dayInCycle": 7.5
+        }
+      },
+      {
+        "timestamp": "2026-10-19T02:00:00.000Z",
+        "lunar": {
+          "phase": 0.256,
+          "illumination": 0.517,
+          "name": "first-quarter",
+          "dayInCycle": 7.5
+        }
+      },
+      {
+        "timestamp": "2026-10-19T03:00:00.000Z",
+        "lunar": {
+          "phase": 0.257,
+          "illumination": 0.522,
+          "name": "first-quarter",
+          "dayInCycle": 7.6
+        }
+      },
+      {
+        "timestamp": "2026-10-19T04:00:00.000Z",
+        "lunar": {
+          "phase": 0.258,
+          "illumination": 0.526,
+          "name": "first-quarter",
+          "dayInCycle": 7.6
+        }
+      },
+      {
+        "timestamp": "2026-10-19T05:00:00.000Z",
+        "lunar": {
+          "phase": 0.26,
+          "illumination": 0.531,
+          "name": "first-quarter",
+          "dayInCycle": 7.7
+        }
+      },
+      {
+        "timestamp": "2026-10-19T06:00:00.000Z",
+        "lunar": {
+          "phase": 0.261,
+          "illumination": 0.535,
+          "name": "first-quarter",
+          "dayInCycle": 7.7
+        }
+      },
+      {
+        "timestamp": "2026-10-19T07:00:00.000Z",
+        "lunar": {
+          "phase": 0.263,
+          "illumination": 0.539,
+          "name": "first-quarter",
+          "dayInCycle": 7.8
+        }
+      },
+      {
+        "timestamp": "2026-10-19T08:00:00.000Z",
+        "lunar": {
+          "phase": 0.264,
+          "illumination": 0.544,
+          "name": "first-quarter",
+          "dayInCycle": 7.8
+        }
+      },
+      {
+        "timestamp": "2026-10-19T09:00:00.000Z",
+        "lunar": {
+          "phase": 0.265,
+          "illumination": 0.548,
+          "name": "first-quarter",
+          "dayInCycle": 7.8
+        }
+      },
+      {
+        "timestamp": "2026-10-19T10:00:00.000Z",
+        "lunar": {
+          "phase": 0.267,
+          "illumination": 0.553,
+          "name": "first-quarter",
+          "dayInCycle": 7.9
+        }
+      },
+      {
+        "timestamp": "2026-10-19T11:00:00.000Z",
+        "lunar": {
+          "phase": 0.268,
+          "illumination": 0.557,
+          "name": "first-quarter",
+          "dayInCycle": 7.9
+        }
+      },
+      {
+        "timestamp": "2026-10-19T12:00:00.000Z",
+        "lunar": {
+          "phase": 0.27,
+          "illumination": 0.561,
+          "name": "first-quarter",
+          "dayInCycle": 8
+        }
+      },
+      {
+        "timestamp": "2026-10-19T13:00:00.000Z",
+        "lunar": {
+          "phase": 0.271,
+          "illumination": 0.566,
+          "name": "first-quarter",
+          "dayInCycle": 8
+        }
+      },
+      {
+        "timestamp": "2026-10-19T14:00:00.000Z",
+        "lunar": {
+          "phase": 0.272,
+          "illumination": 0.57,
+          "name": "first-quarter",
+          "dayInCycle": 8
+        }
+      },
+      {
+        "timestamp": "2026-10-19T15:00:00.000Z",
+        "lunar": {
+          "phase": 0.274,
+          "illumination": 0.575,
+          "name": "first-quarter",
+          "dayInCycle": 8.1
+        }
+      },
+      {
+        "timestamp": "2026-10-19T16:00:00.000Z",
+        "lunar": {
+          "phase": 0.275,
+          "illumination": 0.579,
+          "name": "first-quarter",
+          "dayInCycle": 8.1
+        }
+      },
+      {
+        "timestamp": "2026-10-19T17:00:00.000Z",
+        "lunar": {
+          "phase": 0.277,
+          "illumination": 0.583,
+          "name": "first-quarter",
+          "dayInCycle": 8.2
+        }
+      },
+      {
+        "timestamp": "2026-10-19T18:00:00.000Z",
+        "lunar": {
+          "phase": 0.278,
+          "illumination": 0.588,
+          "name": "first-quarter",
+          "dayInCycle": 8.2
+        }
+      },
+      {
+        "timestamp": "2026-10-19T19:00:00.000Z",
+        "lunar": {
+          "phase": 0.279,
+          "illumination": 0.592,
+          "name": "first-quarter",
+          "dayInCycle": 8.3
+        }
+      },
+      {
+        "timestamp": "2026-10-19T20:00:00.000Z",
+        "lunar": {
+          "phase": 0.281,
+          "illumination": 0.596,
+          "name": "first-quarter",
+          "dayInCycle": 8.3
+        }
+      },
+      {
+        "timestamp": "2026-10-19T21:00:00.000Z",
+        "lunar": {
+          "phase": 0.282,
+          "illumination": 0.601,
+          "name": "first-quarter",
+          "dayInCycle": 8.3
+        }
+      },
+      {
+        "timestamp": "2026-10-19T22:00:00.000Z",
+        "lunar": {
+          "phase": 0.284,
+          "illumination": 0.605,
+          "name": "first-quarter",
+          "dayInCycle": 8.4
+        }
+      },
+      {
+        "timestamp": "2026-10-19T23:00:00.000Z",
+        "lunar": {
+          "phase": 0.285,
+          "illumination": 0.61,
+          "name": "first-quarter",
+          "dayInCycle": 8.4
+        }
+      },
+      {
+        "timestamp": "2026-10-20T00:00:00.000Z",
+        "lunar": {
+          "phase": 0.287,
+          "illumination": 0.614,
+          "name": "first-quarter",
+          "dayInCycle": 8.5
+        }
+      },
+      {
+        "timestamp": "2026-10-20T01:00:00.000Z",
+        "lunar": {
+          "phase": 0.288,
+          "illumination": 0.618,
+          "name": "first-quarter",
+          "dayInCycle": 8.5
+        }
+      },
+      {
+        "timestamp": "2026-10-20T02:00:00.000Z",
+        "lunar": {
+          "phase": 0.289,
+          "illumination": 0.622,
+          "name": "first-quarter",
+          "dayInCycle": 8.5
+        }
+      },
+      {
+        "timestamp": "2026-10-20T03:00:00.000Z",
+        "lunar": {
+          "phase": 0.291,
+          "illumination": 0.627,
+          "name": "first-quarter",
+          "dayInCycle": 8.6
+        }
+      },
+      {
+        "timestamp": "2026-10-20T04:00:00.000Z",
+        "lunar": {
+          "phase": 0.292,
+          "illumination": 0.631,
+          "name": "first-quarter",
+          "dayInCycle": 8.6
+        }
+      },
+      {
+        "timestamp": "2026-10-20T05:00:00.000Z",
+        "lunar": {
+          "phase": 0.294,
+          "illumination": 0.635,
+          "name": "first-quarter",
+          "dayInCycle": 8.7
+        }
+      },
+      {
+        "timestamp": "2026-10-20T06:00:00.000Z",
+        "lunar": {
+          "phase": 0.295,
+          "illumination": 0.64,
+          "name": "first-quarter",
+          "dayInCycle": 8.7
+        }
+      },
+      {
+        "timestamp": "2026-10-20T07:00:00.000Z",
+        "lunar": {
+          "phase": 0.296,
+          "illumination": 0.644,
+          "name": "first-quarter",
+          "dayInCycle": 8.8
+        }
+      },
+      {
+        "timestamp": "2026-10-20T08:00:00.000Z",
+        "lunar": {
+          "phase": 0.298,
+          "illumination": 0.648,
+          "name": "first-quarter",
+          "dayInCycle": 8.8
+        }
+      },
+      {
+        "timestamp": "2026-10-20T09:00:00.000Z",
+        "lunar": {
+          "phase": 0.299,
+          "illumination": 0.652,
+          "name": "first-quarter",
+          "dayInCycle": 8.8
+        }
+      },
+      {
+        "timestamp": "2026-10-20T10:00:00.000Z",
+        "lunar": {
+          "phase": 0.301,
+          "illumination": 0.656,
+          "name": "first-quarter",
+          "dayInCycle": 8.9
+        }
+      },
+      {
+        "timestamp": "2026-10-20T11:00:00.000Z",
+        "lunar": {
+          "phase": 0.302,
+          "illumination": 0.661,
+          "name": "first-quarter",
+          "dayInCycle": 8.9
+        }
+      },
+      {
+        "timestamp": "2026-10-20T12:00:00.000Z",
+        "lunar": {
+          "phase": 0.303,
+          "illumination": 0.665,
+          "name": "first-quarter",
+          "dayInCycle": 9
+        }
+      },
+      {
+        "timestamp": "2026-10-20T13:00:00.000Z",
+        "lunar": {
+          "phase": 0.305,
+          "illumination": 0.669,
+          "name": "first-quarter",
+          "dayInCycle": 9
+        }
+      },
+      {
+        "timestamp": "2026-10-20T14:00:00.000Z",
+        "lunar": {
+          "phase": 0.306,
+          "illumination": 0.673,
+          "name": "first-quarter",
+          "dayInCycle": 9
+        }
+      },
+      {
+        "timestamp": "2026-10-20T15:00:00.000Z",
+        "lunar": {
+          "phase": 0.308,
+          "illumination": 0.677,
+          "name": "first-quarter",
+          "dayInCycle": 9.1
+        }
+      },
+      {
+        "timestamp": "2026-10-20T16:00:00.000Z",
+        "lunar": {
+          "phase": 0.309,
+          "illumination": 0.682,
+          "name": "first-quarter",
+          "dayInCycle": 9.1
+        }
+      },
+      {
+        "timestamp": "2026-10-20T17:00:00.000Z",
+        "lunar": {
+          "phase": 0.311,
+          "illumination": 0.686,
+          "name": "first-quarter",
+          "dayInCycle": 9.2
+        }
+      },
+      {
+        "timestamp": "2026-10-20T18:00:00.000Z",
+        "lunar": {
+          "phase": 0.312,
+          "illumination": 0.69,
+          "name": "first-quarter",
+          "dayInCycle": 9.2
+        }
+      },
+      {
+        "timestamp": "2026-10-20T19:00:00.000Z",
+        "lunar": {
+          "phase": 0.313,
+          "illumination": 0.694,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.3
+        }
+      },
+      {
+        "timestamp": "2026-10-20T20:00:00.000Z",
+        "lunar": {
+          "phase": 0.315,
+          "illumination": 0.698,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.3
+        }
+      },
+      {
+        "timestamp": "2026-10-20T21:00:00.000Z",
+        "lunar": {
+          "phase": 0.316,
+          "illumination": 0.702,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.3
+        }
+      },
+      {
+        "timestamp": "2026-10-20T22:00:00.000Z",
+        "lunar": {
+          "phase": 0.318,
+          "illumination": 0.706,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.4
+        }
+      },
+      {
+        "timestamp": "2026-10-20T23:00:00.000Z",
+        "lunar": {
+          "phase": 0.319,
+          "illumination": 0.71,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.4
+        }
+      },
+      {
+        "timestamp": "2026-10-21T00:00:00.000Z",
+        "lunar": {
+          "phase": 0.32,
+          "illumination": 0.714,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.5
+        }
+      },
+      {
+        "timestamp": "2026-10-21T01:00:00.000Z",
+        "lunar": {
+          "phase": 0.322,
+          "illumination": 0.718,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.5
+        }
+      },
+      {
+        "timestamp": "2026-10-21T02:00:00.000Z",
+        "lunar": {
+          "phase": 0.323,
+          "illumination": 0.722,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.5
+        }
+      },
+      {
+        "timestamp": "2026-10-21T03:00:00.000Z",
+        "lunar": {
+          "phase": 0.325,
+          "illumination": 0.726,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.6
+        }
+      },
+      {
+        "timestamp": "2026-10-21T04:00:00.000Z",
+        "lunar": {
+          "phase": 0.326,
+          "illumination": 0.73,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.6
+        }
+      },
+      {
+        "timestamp": "2026-10-21T05:00:00.000Z",
+        "lunar": {
+          "phase": 0.327,
+          "illumination": 0.734,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.7
+        }
+      },
+      {
+        "timestamp": "2026-10-21T06:00:00.000Z",
+        "lunar": {
+          "phase": 0.329,
+          "illumination": 0.738,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.7
+        }
+      },
+      {
+        "timestamp": "2026-10-21T07:00:00.000Z",
+        "lunar": {
+          "phase": 0.33,
+          "illumination": 0.742,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.8
+        }
+      },
+      {
+        "timestamp": "2026-10-21T08:00:00.000Z",
+        "lunar": {
+          "phase": 0.332,
+          "illumination": 0.746,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.8
+        }
+      },
+      {
+        "timestamp": "2026-10-21T09:00:00.000Z",
+        "lunar": {
+          "phase": 0.333,
+          "illumination": 0.749,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.8
+        }
+      },
+      {
+        "timestamp": "2026-10-21T10:00:00.000Z",
+        "lunar": {
+          "phase": 0.335,
+          "illumination": 0.753,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.9
+        }
+      },
+      {
+        "timestamp": "2026-10-21T11:00:00.000Z",
+        "lunar": {
+          "phase": 0.336,
+          "illumination": 0.757,
+          "name": "waxing-gibbous",
+          "dayInCycle": 9.9
+        }
+      },
+      {
+        "timestamp": "2026-10-21T12:00:00.000Z",
+        "lunar": {
+          "phase": 0.337,
+          "illumination": 0.761,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10
+        }
+      },
+      {
+        "timestamp": "2026-10-21T13:00:00.000Z",
+        "lunar": {
+          "phase": 0.339,
+          "illumination": 0.765,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10
+        }
+      },
+      {
+        "timestamp": "2026-10-21T14:00:00.000Z",
+        "lunar": {
+          "phase": 0.34,
+          "illumination": 0.768,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10
+        }
+      },
+      {
+        "timestamp": "2026-10-21T15:00:00.000Z",
+        "lunar": {
+          "phase": 0.342,
+          "illumination": 0.772,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.1
+        }
+      },
+      {
+        "timestamp": "2026-10-21T16:00:00.000Z",
+        "lunar": {
+          "phase": 0.343,
+          "illumination": 0.776,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.1
+        }
+      },
+      {
+        "timestamp": "2026-10-21T17:00:00.000Z",
+        "lunar": {
+          "phase": 0.344,
+          "illumination": 0.779,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.2
+        }
+      },
+      {
+        "timestamp": "2026-10-21T18:00:00.000Z",
+        "lunar": {
+          "phase": 0.346,
+          "illumination": 0.783,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.2
+        }
+      },
+      {
+        "timestamp": "2026-10-21T19:00:00.000Z",
+        "lunar": {
+          "phase": 0.347,
+          "illumination": 0.787,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.3
+        }
+      },
+      {
+        "timestamp": "2026-10-21T20:00:00.000Z",
+        "lunar": {
+          "phase": 0.349,
+          "illumination": 0.79,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.3
+        }
+      },
+      {
+        "timestamp": "2026-10-21T21:00:00.000Z",
+        "lunar": {
+          "phase": 0.35,
+          "illumination": 0.794,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.3
+        }
+      },
+      {
+        "timestamp": "2026-10-21T22:00:00.000Z",
+        "lunar": {
+          "phase": 0.351,
+          "illumination": 0.798,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.4
+        }
+      },
+      {
+        "timestamp": "2026-10-21T23:00:00.000Z",
+        "lunar": {
+          "phase": 0.353,
+          "illumination": 0.801,
+          "name": "waxing-gibbous",
+          "dayInCycle": 10.4
+        }
+      }
+    ],
+    "startPhase": {
+      "phase": 0.117,
+      "illumination": 0.13,
+      "name": "waxing-crescent",
+      "dayInCycle": 3.5
+    },
+    "endPhase": {
+      "phase": 0.353,
+      "illumination": 0.801,
+      "name": "waxing-gibbous",
+      "dayInCycle": 10.4
+    }
+  },
+  "compliance": {
+    "totalManifests": 48,
+    "totalPoems": 47,
+    "ratio": 0.979,
+    "timeline": [
+      {
+        "date": "2026-08-25",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 1,
+        "cumPoems": 1,
+        "ratio": 1
+      },
+      {
+        "date": "2026-08-26",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 2,
+        "cumPoems": 2,
+        "ratio": 1
+      },
+      {
+        "date": "2026-08-29",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 3,
+        "cumPoems": 3,
+        "ratio": 1
+      },
+      {
+        "date": "2026-08-31",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 4,
+        "cumPoems": 4,
+        "ratio": 1
+      },
+      {
+        "date": "2026-09-04",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 5,
+        "cumPoems": 5,
+        "ratio": 1
+      },
+      {
+        "date": "2026-09-08",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 6,
+        "cumPoems": 6,
+        "ratio": 1
+      },
+      {
+        "date": "2026-09-11",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 7,
+        "cumPoems": 7,
+        "ratio": 1
+      },
+      {
+        "date": "2026-09-12",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 9,
+        "cumPoems": 8,
+        "ratio": 0.889
+      },
+      {
+        "date": "2026-09-17",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 10,
+        "cumPoems": 9,
+        "ratio": 0.9
+      },
+      {
+        "date": "2026-09-20",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 11,
+        "cumPoems": 10,
+        "ratio": 0.909
+      },
+      {
+        "date": "2026-09-25",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 12,
+        "cumPoems": 11,
+        "ratio": 0.917
+      },
+      {
+        "date": "2026-09-26",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 13,
+        "cumPoems": 12,
+        "ratio": 0.923
+      },
+      {
+        "date": "2026-09-27",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 14,
+        "cumPoems": 13,
+        "ratio": 0.929
+      },
+      {
+        "date": "2026-09-28",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 15,
+        "cumPoems": 14,
+        "ratio": 0.933
+      },
+      {
+        "date": "2026-09-30",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 16,
+        "cumPoems": 15,
+        "ratio": 0.938
+      },
+      {
+        "date": "2026-10-01",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 18,
+        "cumPoems": 16,
+        "ratio": 0.889
+      },
+      {
+        "date": "2026-10-03",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 19,
+        "cumPoems": 17,
+        "ratio": 0.895
+      },
+      {
+        "date": "2026-10-04",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 21,
+        "cumPoems": 18,
+        "ratio": 0.857
+      },
+      {
+        "date": "2026-10-06",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 22,
+        "cumPoems": 19,
+        "ratio": 0.864
+      },
+      {
+        "date": "2026-10-07",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 23,
+        "cumPoems": 20,
+        "ratio": 0.87
+      },
+      {
+        "date": "2026-10-10",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 24,
+        "cumPoems": 21,
+        "ratio": 0.875
+      },
+      {
+        "date": "2026-10-11",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 26,
+        "cumPoems": 22,
+        "ratio": 0.846
+      },
+      {
+        "date": "2026-10-13",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 28,
+        "cumPoems": 23,
+        "ratio": 0.821
+      },
+      {
+        "date": "2026-10-14",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 30,
+        "cumPoems": 24,
+        "ratio": 0.8
+      },
+      {
+        "date": "2026-10-15",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 32,
+        "cumPoems": 25,
+        "ratio": 0.781
+      },
+      {
+        "date": "2026-10-16",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 33,
+        "cumPoems": 26,
+        "ratio": 0.788
+      },
+      {
+        "date": "2026-10-17",
+        "manifests": 1,
+        "hasPoem": true,
+        "cumManifests": 34,
+        "cumPoems": 27,
+        "ratio": 0.794
+      },
+      {
+        "date": "2026-10-18",
+        "manifests": 4,
+        "hasPoem": true,
+        "cumManifests": 38,
+        "cumPoems": 28,
+        "ratio": 0.737
+      },
+      {
+        "date": "2026-10-19",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 40,
+        "cumPoems": 29,
+        "ratio": 0.725
+      },
+      {
+        "date": "2026-10-20",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 42,
+        "cumPoems": 30,
+        "ratio": 0.714
+      },
+      {
+        "date": "2026-10-21",
+        "manifests": 4,
+        "hasPoem": true,
+        "cumManifests": 46,
+        "cumPoems": 31,
+        "ratio": 0.674
+      },
+      {
+        "date": "2026-10-22",
+        "manifests": 2,
+        "hasPoem": true,
+        "cumManifests": 48,
+        "cumPoems": 32,
+        "ratio": 0.667
+      }
+    ]
+  },
+  "trading": {
+    "trades": [],
+    "count": 0
+  },
+  "goals": {
+    "snapshots": [],
+    "count": 0
+  },
+  "correlations": [
+    {
+      "name": "lunar-anomaly",
+      "description": "Anomaly density by lunar quarter",
+      "data": {
+        "new": {
+          "n": 94,
+          "avgAnomalies": 0.7,
+          "avgBeatEnergy": 0.701,
+          "avgCreativePulse": 0.041
+        },
+        "waxing": {
+          "n": 74,
+          "avgAnomalies": 1.22,
+          "avgBeatEnergy": 0.721,
+          "avgCreativePulse": 0.094
+        }
+      },
+      "finding": "waxing moon: 1.22 avg anomalies (n=74). new moon: 0.7 avg anomalies (n=94). Delta: 0.52"
+    },
+    {
+      "name": "lunar-beat-pearson",
+      "description": "Pearson correlation: lunar illumination vs beat energy",
+      "r": 0.045,
+      "interpretation": "No correlation",
+      "direction": "More light = more dissonance"
+    },
+    {
+      "name": "lunar-creative-pearson",
+      "description": "Pearson correlation: lunar illumination vs creative pulse",
+      "r": 0.29,
+      "interpretation": "Weak correlation"
+    }
+  ]
+}

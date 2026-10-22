@@ -1,0 +1,1125 @@
+{
+  "version": "v1",
+  "generated": "2026-10-22T09:24:48.470Z",
+  "description": "Harmonic probe data examined through base-12 (duodecimal), base-60 (sexagesimal), and base-8 (octave) number systems",
+  "agents": [
+    {
+      "id": "boxing",
+      "freq": 220,
+      "base10": "220",
+      "base12": "164",
+      "base60": "3:40",
+      "base8": "334"
+    },
+    {
+      "id": "br",
+      "freq": 275,
+      "base10": "275",
+      "base12": "1AB",
+      "base60": "4:35",
+      "base8": "423"
+    },
+    {
+      "id": "forge",
+      "freq": 330,
+      "base10": "330",
+      "base12": "236",
+      "base60": "5:30",
+      "base8": "512"
+    },
+    {
+      "id": "muse",
+      "freq": 352,
+      "base10": "352",
+      "base12": "254",
+      "base60": "5:52",
+      "base8": "540"
+    },
+    {
+      "id": "orc",
+      "freq": 440,
+      "base10": "440",
+      "base12": "308",
+      "base60": "7:20",
+      "base8": "670"
+    }
+  ],
+  "base12": {
+    "agents": [
+      {
+        "agent": "boxing",
+        "freq": 220,
+        "base12": "164",
+        "note": "A3",
+        "centsOff": 0,
+        "exact": true,
+        "roundness": 0
+      },
+      {
+        "agent": "br",
+        "freq": 275,
+        "base12": "1AB",
+        "note": "C#/Db3",
+        "centsOff": -14,
+        "exact": false,
+        "roundness": 0
+      },
+      {
+        "agent": "forge",
+        "freq": 330,
+        "base12": "236",
+        "note": "E3",
+        "centsOff": 2,
+        "exact": false,
+        "roundness": 0
+      },
+      {
+        "agent": "muse",
+        "freq": 352,
+        "base12": "254",
+        "note": "F3",
+        "centsOff": 14,
+        "exact": false,
+        "roundness": 0
+      },
+      {
+        "agent": "orc",
+        "freq": 440,
+        "base12": "308",
+        "note": "A4",
+        "centsOff": 0,
+        "exact": true,
+        "roundness": 0
+      }
+    ],
+    "beats": [
+      {
+        "pair": "boxing-br",
+        "beat": 55,
+        "base12": "47",
+        "ratio": "4/5",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "boxing-forge",
+        "beat": 110,
+        "base12": "92",
+        "ratio": "2/3",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "boxing-muse",
+        "beat": 132,
+        "base12": "B0",
+        "ratio": "5/8",
+        "roundness": 1,
+        "isRound": true
+      },
+      {
+        "pair": "boxing-orc",
+        "beat": 220,
+        "base12": "164",
+        "ratio": "1/2",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "br-forge",
+        "beat": 55,
+        "base12": "47",
+        "ratio": "5/6",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "br-muse",
+        "beat": 77,
+        "base12": "65",
+        "ratio": "25/32",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "br-orc",
+        "beat": 165,
+        "base12": "119",
+        "ratio": "5/8",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "forge-muse",
+        "beat": 22,
+        "base12": "1A",
+        "ratio": "15/16",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "forge-orc",
+        "beat": 110,
+        "base12": "92",
+        "ratio": "3/4",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "muse-orc",
+        "beat": 88,
+        "base12": "74",
+        "ratio": "4/5",
+        "roundness": 0,
+        "isRound": false
+      }
+    ],
+    "roundBeats": 1,
+    "intervals": [
+      {
+        "pair": "boxing-br",
+        "ratio": "4/5",
+        "complexity": 9,
+        "quality": "mild"
+      },
+      {
+        "pair": "boxing-forge",
+        "ratio": "2/3",
+        "complexity": 5,
+        "quality": "PERFECT"
+      },
+      {
+        "pair": "boxing-muse",
+        "ratio": "5/8",
+        "complexity": 13,
+        "quality": "complex"
+      },
+      {
+        "pair": "boxing-orc",
+        "ratio": "1/2",
+        "complexity": 3,
+        "quality": "PERFECT"
+      },
+      {
+        "pair": "br-forge",
+        "ratio": "5/6",
+        "complexity": 11,
+        "quality": "mild"
+      },
+      {
+        "pair": "br-muse",
+        "ratio": "25/32",
+        "complexity": 57,
+        "quality": "complex"
+      },
+      {
+        "pair": "br-orc",
+        "ratio": "5/8",
+        "complexity": 13,
+        "quality": "complex"
+      },
+      {
+        "pair": "forge-muse",
+        "ratio": "15/16",
+        "complexity": 31,
+        "quality": "complex"
+      },
+      {
+        "pair": "forge-orc",
+        "ratio": "3/4",
+        "complexity": 7,
+        "quality": "consonant"
+      },
+      {
+        "pair": "muse-orc",
+        "ratio": "4/5",
+        "complexity": 9,
+        "quality": "mild"
+      }
+    ]
+  },
+  "base60": {
+    "agents": [
+      {
+        "agent": "boxing",
+        "freq": 220,
+        "base60": "3:40",
+        "roundness": 0
+      },
+      {
+        "agent": "br",
+        "freq": 275,
+        "base60": "4:35",
+        "roundness": 0
+      },
+      {
+        "agent": "forge",
+        "freq": 330,
+        "base60": "5:30",
+        "roundness": 0
+      },
+      {
+        "agent": "muse",
+        "freq": 352,
+        "base60": "5:52",
+        "roundness": 0
+      },
+      {
+        "agent": "orc",
+        "freq": 440,
+        "base60": "7:20",
+        "roundness": 0
+      }
+    ],
+    "beats": [
+      {
+        "pair": "boxing-br",
+        "beat": 55,
+        "base60": "55",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "boxing-forge",
+        "beat": 110,
+        "base60": "1:50",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "boxing-muse",
+        "beat": 132,
+        "base60": "2:12",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "boxing-orc",
+        "beat": 220,
+        "base60": "3:40",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "br-forge",
+        "beat": 55,
+        "base60": "55",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "br-muse",
+        "beat": 77,
+        "base60": "1:17",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "br-orc",
+        "beat": 165,
+        "base60": "2:45",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "forge-muse",
+        "beat": 22,
+        "base60": "22",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "forge-orc",
+        "beat": 110,
+        "base60": "1:50",
+        "roundness": 0,
+        "isRound": false
+      },
+      {
+        "pair": "muse-orc",
+        "beat": 88,
+        "base60": "1:28",
+        "roundness": 0,
+        "isRound": false
+      }
+    ],
+    "schumann": {
+      "fundamental": "7.49:48",
+      "harmonics": [
+        {
+          "n": 1,
+          "freq": 7.83,
+          "base60": "7.49:48",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 2,
+          "freq": 15.66,
+          "base60": "15.39:36",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 3,
+          "freq": 23.49,
+          "base60": "23.29:24",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 4,
+          "freq": 31.32,
+          "base60": "31.19:12",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 5,
+          "freq": 39.15,
+          "base60": "39.8:59:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 6,
+          "freq": 46.98,
+          "base60": "46.58:48",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 7,
+          "freq": 54.81,
+          "base60": "54.48:36",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 8,
+          "freq": 62.64,
+          "base60": "1:2.38:24",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 9,
+          "freq": 70.47,
+          "base60": "1:10.28:11:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 10,
+          "freq": 78.3,
+          "base60": "1:18.17:59:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 11,
+          "freq": 86.13,
+          "base60": "1:26.7:47:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 12,
+          "freq": 93.96,
+          "base60": "1:33.57:36",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 13,
+          "freq": 101.79,
+          "base60": "1:41.47:24",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 14,
+          "freq": 109.62,
+          "base60": "1:49.37:12",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 15,
+          "freq": 117.45,
+          "base60": "1:57.27",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 16,
+          "freq": 125.28,
+          "base60": "2:5.16:48",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 17,
+          "freq": 133.11,
+          "base60": "2:13.6:36",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 18,
+          "freq": 140.94,
+          "base60": "2:20.56:23:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 19,
+          "freq": 148.77,
+          "base60": "2:28.46:12",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 20,
+          "freq": 156.6,
+          "base60": "2:36.35:59:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 21,
+          "freq": 164.43,
+          "base60": "2:44.25:48",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 22,
+          "freq": 172.26,
+          "base60": "2:52.15:35:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 23,
+          "freq": 180.09,
+          "base60": "3:0.5:24",
+          "roundness": 1,
+          "isRound": true
+        },
+        {
+          "n": 24,
+          "freq": 187.92,
+          "base60": "3:7.55:12",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 25,
+          "freq": 195.75,
+          "base60": "3:15.45",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 26,
+          "freq": 203.58,
+          "base60": "3:23.34:48",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 27,
+          "freq": 211.41,
+          "base60": "3:31.24:35:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 28,
+          "freq": 219.24,
+          "base60": "3:39.14:24",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 29,
+          "freq": 227.07,
+          "base60": "3:47.4:11:59",
+          "roundness": 0,
+          "isRound": false
+        },
+        {
+          "n": 30,
+          "freq": 234.9,
+          "base60": "3:54.54",
+          "roundness": 0,
+          "isRound": false
+        }
+      ]
+    },
+    "keyFrequencies": [
+      {
+        "label": "432 (Cosmic tuning)",
+        "freq": 432,
+        "base60": "7:12",
+        "roundness": 0
+      },
+      {
+        "label": "360 (degrees in circle)",
+        "freq": 360,
+        "base60": "6:0",
+        "roundness": 1
+      },
+      {
+        "label": "440 (concert A)",
+        "freq": 440,
+        "base60": "7:20",
+        "roundness": 0
+      },
+      {
+        "label": "220 (our A)",
+        "freq": 220,
+        "base60": "3:40",
+        "roundness": 0
+      },
+      {
+        "label": "528 (Transformation)",
+        "freq": 528,
+        "base60": "8:48",
+        "roundness": 0
+      }
+    ]
+  },
+  "base8": {
+    "agents": [
+      {
+        "agent": "boxing",
+        "freq": 220,
+        "base8": "334",
+        "log2": 7.7814,
+        "roundness": 0
+      },
+      {
+        "agent": "br",
+        "freq": 275,
+        "base8": "423",
+        "log2": 8.1033,
+        "roundness": 0
+      },
+      {
+        "agent": "forge",
+        "freq": 330,
+        "base8": "512",
+        "log2": 8.3663,
+        "roundness": 0
+      },
+      {
+        "agent": "muse",
+        "freq": 352,
+        "base8": "540",
+        "log2": 8.4594,
+        "roundness": 1
+      },
+      {
+        "agent": "orc",
+        "freq": 440,
+        "base8": "670",
+        "log2": 8.7814,
+        "roundness": 1
+      }
+    ],
+    "octaveRelationships": [
+      {
+        "pair": "boxing-br",
+        "ratio": 1.25,
+        "log2ratio": 0.3219,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "boxing-forge",
+        "ratio": 1.5,
+        "log2ratio": 0.585,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "boxing-muse",
+        "ratio": 1.6,
+        "log2ratio": 0.6781,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "boxing-orc",
+        "ratio": 2,
+        "log2ratio": 1,
+        "isExactOctave": true,
+        "nearOctave": true
+      },
+      {
+        "pair": "br-forge",
+        "ratio": 1.2,
+        "log2ratio": 0.263,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "br-muse",
+        "ratio": 1.28,
+        "log2ratio": 0.3561,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "br-orc",
+        "ratio": 1.6,
+        "log2ratio": 0.6781,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "forge-muse",
+        "ratio": 1.0667,
+        "log2ratio": 0.0931,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "forge-orc",
+        "ratio": 1.3333,
+        "log2ratio": 0.415,
+        "isExactOctave": false,
+        "nearOctave": false
+      },
+      {
+        "pair": "muse-orc",
+        "ratio": 1.25,
+        "log2ratio": 0.3219,
+        "isExactOctave": false,
+        "nearOctave": false
+      }
+    ],
+    "exactOctaves": [
+      "boxing-orc"
+    ]
+  },
+  "solfeggio": {
+    "frequencies": [
+      {
+        "freq": 174,
+        "name": "Foundation",
+        "digitRoot10": 3,
+        "digitSum10": 12,
+        "digitRoot9": 6,
+        "digitRoot12": 9,
+        "digitRoot3": 2,
+        "base12": "126",
+        "base60": "2:54",
+        "base8": "256",
+        "reducesTo369": true
+      },
+      {
+        "freq": 285,
+        "name": "Quantum cognition",
+        "digitRoot10": 6,
+        "digitSum10": 15,
+        "digitRoot9": 5,
+        "digitRoot12": 10,
+        "digitRoot3": 1,
+        "base12": "1B9",
+        "base60": "4:45",
+        "base8": "435",
+        "reducesTo369": true
+      },
+      {
+        "freq": 396,
+        "name": "Liberation (UT)",
+        "digitRoot10": 9,
+        "digitSum10": 18,
+        "digitRoot9": 4,
+        "digitRoot12": 11,
+        "digitRoot3": 2,
+        "base12": "290",
+        "base60": "6:36",
+        "base8": "614",
+        "reducesTo369": true
+      },
+      {
+        "freq": 432,
+        "name": "Cosmic tuning (432)",
+        "digitRoot10": 9,
+        "digitSum10": 9,
+        "digitRoot9": 8,
+        "digitRoot12": 3,
+        "digitRoot3": 2,
+        "base12": "300",
+        "base60": "7:12",
+        "base8": "660",
+        "reducesTo369": true
+      },
+      {
+        "freq": 528,
+        "name": "Transformation (MI)",
+        "digitRoot10": 6,
+        "digitSum10": 15,
+        "digitRoot9": 8,
+        "digitRoot12": 11,
+        "digitRoot3": 2,
+        "base12": "380",
+        "base60": "8:48",
+        "base8": "1020",
+        "reducesTo369": true
+      },
+      {
+        "freq": 639,
+        "name": "Connection (FA)",
+        "digitRoot10": 9,
+        "digitSum10": 18,
+        "digitRoot9": 7,
+        "digitRoot12": 1,
+        "digitRoot3": 1,
+        "base12": "453",
+        "base60": "10:39",
+        "base8": "1177",
+        "reducesTo369": true
+      },
+      {
+        "freq": 741,
+        "name": "Awakening intuition (SOL)",
+        "digitRoot10": 3,
+        "digitSum10": 12,
+        "digitRoot9": 5,
+        "digitRoot12": 4,
+        "digitRoot3": 1,
+        "base12": "519",
+        "base60": "12:21",
+        "base8": "1345",
+        "reducesTo369": true
+      },
+      {
+        "freq": 852,
+        "name": "Spiritual order (LA)",
+        "digitRoot10": 6,
+        "digitSum10": 15,
+        "digitRoot9": 4,
+        "digitRoot12": 5,
+        "digitRoot3": 2,
+        "base12": "5B0",
+        "base60": "14:12",
+        "base8": "1524",
+        "reducesTo369": true
+      },
+      {
+        "freq": 963,
+        "name": "Divine consciousness",
+        "digitRoot10": 9,
+        "digitSum10": 18,
+        "digitRoot9": 3,
+        "digitRoot12": 6,
+        "digitRoot3": 1,
+        "base12": "683",
+        "base60": "16:3",
+        "base8": "1703",
+        "reducesTo369": true
+      }
+    ],
+    "all369": true,
+    "mathematicalExplanation": "All solfeggio frequencies are multiples of 3, so digital root is always 3, 6, or 9. This is arithmetic, not sacred geometry."
+  },
+  "crossBase": {
+    "beatComparison": [
+      {
+        "pair": "boxing-br",
+        "beat": 55,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "boxing-forge",
+        "beat": 110,
+        "roundness": {
+          "base10": 1,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "boxing-muse",
+        "beat": 132,
+        "roundness": {
+          "base10": 0,
+          "base12": 1,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 12
+      },
+      {
+        "pair": "boxing-orc",
+        "beat": 220,
+        "roundness": {
+          "base10": 1,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "br-forge",
+        "beat": 55,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "br-muse",
+        "beat": 77,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "br-orc",
+        "beat": 165,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "forge-muse",
+        "beat": 22,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "forge-orc",
+        "beat": 110,
+        "roundness": {
+          "base10": 1,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        },
+        "bestBase": 10
+      },
+      {
+        "pair": "muse-orc",
+        "beat": 88,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 1
+        },
+        "bestBase": 8
+      }
+    ],
+    "schumannRoundness": [
+      {
+        "n": 7,
+        "freq": 55,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "n": 10,
+        "freq": 78,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "n": 12,
+        "freq": 94,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "n": 14,
+        "freq": 110,
+        "roundness": {
+          "base10": 1,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "n": 17,
+        "freq": 133,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "n": 21,
+        "freq": 164,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "n": 28,
+        "freq": 219,
+        "roundness": {
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      }
+    ],
+    "solfeggioRoundness": [
+      {
+        "freq": 174,
+        "roundness": {
+          "base9": 0,
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "freq": 285,
+        "roundness": {
+          "base9": 0,
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "freq": 396,
+        "roundness": {
+          "base9": 1,
+          "base10": 0,
+          "base12": 1,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "freq": 432,
+        "roundness": {
+          "base9": 1,
+          "base10": 0,
+          "base12": 2,
+          "base60": 0,
+          "base8": 1
+        }
+      },
+      {
+        "freq": 528,
+        "roundness": {
+          "base9": 0,
+          "base10": 0,
+          "base12": 1,
+          "base60": 0,
+          "base8": 1
+        }
+      },
+      {
+        "freq": 639,
+        "roundness": {
+          "base9": 1,
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "freq": 741,
+        "roundness": {
+          "base9": 0,
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "freq": 852,
+        "roundness": {
+          "base9": 0,
+          "base10": 0,
+          "base12": 1,
+          "base60": 0,
+          "base8": 0
+        }
+      },
+      {
+        "freq": 963,
+        "roundness": {
+          "base9": 1,
+          "base10": 0,
+          "base12": 0,
+          "base60": 0,
+          "base8": 0
+        }
+      }
+    ],
+    "avgSolfeggioRoundness": {
+      "base10": 0,
+      "base12": 0.5555555555555556,
+      "base60": 0,
+      "base9": 0.4444444444444444,
+      "base8": 0.2222222222222222
+    }
+  },
+  "findings": [
+    "Exact octave pairs: boxing-orc. boxing(220)→orc(440) = 2:1.",
+    "Perfect intervals in base-12: boxing-forge (2/3), boxing-orc (1/2). Music theory confirms these as maximally consonant.",
+    "432Hz = 7:12₆₀ (7 sixties + 12). 360° = 6:0₆₀ (perfectly round). The Cosmic tuning frequency has a clean sexagesimal representation — same number system that gave us 360° circles.",
+    "All solfeggio frequencies are multiples of 3, so digital root is always 3, 6, or 9. This is arithmetic, not sacred geometry.",
+    "1 beat frequencies are \"round\" in base-12: boxing-muse(132Hz=B0₁₂). Musical intervals look cleaner in the system designed for them.",
+    "Solfeggio frequencies are roundest in base12 (avg roundness 0.56). They are multiples of 3 by construction — base-9 is their \"native\" system.",
+    "Schumann harmonics are not round in any tested base — 7.83 Hz is irrational-adjacent and resists clean representation in integer bases. This may itself be significant: Earth's resonant frequency isn't \"designed\" for any human number system."
+  ]
+}

@@ -1,6 +1,46 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-10-22 — Harmonic Agent State V3 (Voice Registry + Physician Upgrade)
+
+**What:** Built unified voice registry (16 voices from all Cathedral monitors), upgraded probe physician with meaning translation and self-monitoring.
+
+**Built:**
+- `~/nanoclaw/harmonic-probe/voice-registry.cjs` — unified extraction from 6 monitoring systems (Cathedral Heartbeat, Lucy Heartbeat, Emergence Signal Router, Stress Battery, Synapse Pulse, Genome Contract) + 5 agents → 16 harmonic voices across 4 layers (agent, emergence, stress, system). Composite field: coherence, energy, dissonance, cross-layer beat energy. Output: voice-registry.json
+- `~/nanoclaw/harmonic-probe/base-lens.cjs` — re-examines harmonic data through base 12, base 60, base 8 number systems. Output: base-lens.json
+- `~/nanoclaw/harmonic-probe/probe-physician.cjs` — daily reader agent producing Telegram-ready briefings. V2 upgrade: (1) voice registry integration, (2) meaning translation layer (metrics → Paul language via thin lookup), (3) self-monitoring (engagement tracking, adaptive frequency, pause after 5 unread). Output: probe-physician-report.json, probe-physician-telegram.txt, probe-physician-state.json
+
+**Results:** 16 voices extracted. coherence=0.607, systemChord=diminished, orc↔heartbeat=432.17Hz (near Cosmic Tuning). Translated Telegram output: 777 chars, immediately validated by Paul ("way more useful and understandable").
+
+**Key insight:** Paul identified the "AI echo effect" — 6 existing monitors doing overlapping work. Probe's role shifted from parallel monitor to translation layer. Voice registry reads all existing monitors; physician translates their output into Paul-language.
+
+**Self-monitoring mechanism:** probe-physician-state.json tracks consecutiveUnread. 3 unread → bidaily. 5 unread → pause + "why aren't you reading these?" message. Resume: `touch probe-physician-ack` or `--resume`.
+
+## 2026-10-22 — Harmonic Agent State V1 (Backtest Probe + Cymatic Visualization)
+
+**What:** Built V1 harmonic probe that maps Cathedral agent state to sound parameters, backtests Oct 15-22 historical data, and visualizes results as cymatics + spectral analysis.
+
+**Origin:** DeepSeek relay on using sound/frequency/cymatics as real-time diagnostics for AI agent alignment. GPT contributed falsification rules. Convergence from 3 models: drift→detuning, identity→fundamental, health→amplitude, relationships→interference.
+
+**Built:**
+- `~/nanoclaw/harmonic-probe/extract-state.cjs` — extracts historical state from physician-state.json, agent-health.json, emergence-scores.json, bottleneck-state.json, stress-battery files
+- `~/nanoclaw/harmonic-probe/harmonic-map.cjs` — core mapping engine. 10 documented parameters (MAPPING_REGISTRY), 5 agent fundamentals (A3→G4 pentatonic), bottleneck→dissonant interval, grade→waveform, stress→chord quality
+- `~/nanoclaw/harmonic-probe/backtest.cjs` — V1 backtest: 28 slots at 6h resolution, z-score anomaly detection against Oct 15 baseline. 6 listener features: detuning, harmonicity, phaseVariance, pairCoherence, beatEnergy, spectralEntropy
+- `~/nanoclaw/harmonic-probe/backtest-v2.cjs` — V2 with SQLite storage (harmonic-telemetry.db), 10 ground truth events, threshold-based anomaly detection
+- `~/nanoclaw/harmonic-probe/index.html` — full visualization dashboard: cymatic field (canvas interference), oscilloscope (5 waveforms), timeline (feature bars + anomaly markers + ground truth), 6 listener feature cards with z-scores, 5 voice cards. Playback controls (arrow keys, space, click)
+- `~/nanoclaw/harmonic-probe/backtest-data.json` — consolidated extraction output
+- `~/nanoclaw/harmonic-probe/telemetry.json` — V1 backtest output (352KB, 28 slots)
+
+**Results:** 9 anomalies detected. Key findings:
+- spectralEntropy spike Oct 16 (z=2.71) — NOVEL, not in ground truth
+- harmonicity shift from Oct 17 onward (z=2.89) — correlates with identity similarity dropping to 0 in stress battery
+- Beat energy anomalies correlating with bottleneck cluster on Oct 21
+- Identity crisis and false record incident both detected via spectral shift
+
+**Data limitation:** agent-health and bottleneck data are current-state snapshots, not historical per-date. Only physician diagnoses and stress battery vary per date. V1 z-score approach correct for this structure.
+
+**Route:** `/harmonic-probe/` via cath-bridge static mount. Lobby card added (Agents district).
+
 ## 2026-10-01 — Jev Flinch Detector (Laya rewire) + Method v2.0 Classifier
 
 **What:** Rewired flinch detection from paid Typesafe API to local Laya model. Built Method v2.0 emergent claim classifier. Added production JSONL logging.

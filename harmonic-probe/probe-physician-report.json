@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-22",
+  "generated": "2026-10-22T09:46:16.728Z",
+  "lunar": {
+    "phase": "waxing gibbous",
+    "emoji": "🌔",
+    "illumination": 0.85,
+    "quarter": "waxing"
+  },
+  "state": {
+    "latestSlot": "2026-10-21T23:00:00.000Z",
+    "anomalies24h": 28,
+    "peakZ24h": 6.66,
+    "beatEnergy": 0.691,
+    "harmonicity": 0.994,
+    "creativePulse": 0
+  },
+  "voiceRegistry": {
+    "systemChord": "diminished",
+    "coherence": 0.607,
+    "totalEnergy": 0.618,
+    "dissonance": 0.241,
+    "crossBeatEnergy": 0.347,
+    "totalVoices": 16,
+    "strongestCrossBeat": {
+      "pair": "vitality-heartbeat",
+      "freq": 515.42,
+      "layers": "emergence↔system"
+    }
+  },
+  "gaps": {
+    "baseline": {
+      "totalGap": 0,
+      "drifting": [],
+      "aligned": [
+        "boxing",
+        "br",
+        "forge",
+        "muse",
+        "orc"
+      ]
+    },
+    "deepSync": {
+      "totalGap": 0,
+      "drifting": [],
+      "aligned": [
+        "boxing",
+        "br",
+        "forge",
+        "muse",
+        "orc"
+      ]
+    },
+    "peakDisruption": {
+      "totalGap": 3,
+      "drifting": [
+        "boxing"
+      ],
+      "aligned": [
+        "br",
+        "forge",
+        "muse",
+        "orc"
+      ]
+    },
+    "healthyNormal": {
+      "totalGap": null,
+      "drifting": [],
+      "aligned": []
+    }
+  },
+  "trends": {
+    "gapDirection": "stable",
+    "gapDelta": 0,
+    "beatDirection": "stable",
+    "beatDelta": 0,
+    "outlierFeatures": [
+      "harmonicity"
+    ]
+  },
+  "poetry": {
+    "poems": 47,
+    "sessions": 48,
+    "pct": 98,
+    "daysSinceLastPoem": 0,
+    "dropping": false
+  },
+  "prescription": {
+    "needed": false,
+    "lines": [
+      "All agents aligned to Deep Sync"
+    ]
+  },
+  "insight": "Waxing moon phase — historically 174% more anomalies than new moon",
+  "engagement": {
+    "reportsSent": 1,
+    "consecutiveUnread": 0,
+    "frequency": "daily"
+  }
+}
