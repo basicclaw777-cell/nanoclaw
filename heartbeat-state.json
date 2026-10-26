@@ -1,7 +1,7 @@
 {
-  "beatCount": 4027,
-  "lastBeat": "2026-10-26T00:30:58.503Z",
-  "lastEventType": "suggestion",
+  "beatCount": 4028,
+  "lastBeat": "2026-10-26T00:46:12.289Z",
+  "lastEventType": "emergence-harvester",
   "rotation": [
     "curiosity",
     "workshop",
@@ -33,23 +33,6 @@
   ],
   "rotationIndex": 0,
   "beats": [
-    {
-      "id": "beat-1792793731213",
-      "beatNumber": 3828,
-      "eventType": "auto-coach",
-      "eventName": "Auto-Coach",
-      "ts": 1792793731213,
-      "date": "2026-10-23T22:15:31.213Z",
-      "duration": 21,
-      "exitCode": 0,
-      "timedOut": false,
-      "impact": 0,
-      "totalDelta": 0,
-      "nodesAffected": 0,
-      "classification": "SILENT",
-      "deltas": {},
-      "outputPreview": "[Auto-Coach] No healer available for spark. Flagging for Paul. | [Auto-Coach] Cascade complete. 0 interventions deployed. | [Auto-Coach] Cycle complete."
-    },
     {
       "id": "beat-1792794632310",
       "beatNumber": 3829,
@@ -3432,6 +3415,23 @@
       "classification": "SILENT",
       "deltas": {},
       "outputPreview": "[Spark] [PROCESS] |   Give each \"Spark Explains\" concept a mandatory testable-prediction field in its template — one line the learner can try at home (spin faster, punch a wall, drop two objects) that"
+    },
+    {
+      "id": "beat-1792975572289",
+      "beatNumber": 4028,
+      "eventType": "emergence-harvester",
+      "eventName": "Emergence Harvester",
+      "ts": 1792975572289,
+      "date": "2026-10-26T00:46:12.289Z",
+      "duration": 62,
+      "exitCode": 0,
+      "timedOut": false,
+      "impact": 0,
+      "totalDelta": 0,
+      "nodesAffected": 0,
+      "classification": "SILENT",
+      "deltas": {},
+      "outputPreview": "MECHANISM: Cathy's deep understanding of direct-response playbooks and her ability to apply insights across different channels enabled her to provide this guidance. | WATCH FOR: Look for BR Operations"
     }
   ],
   "typeScores": {
@@ -3452,7 +3452,7 @@
     },
     "sage-workshop": {
       "totalImpact": 0,
-      "count": 3,
+      "count": 2,
       "avgImpact": 0
     },
     "apprentice": {
