@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-18T04:01:41.695Z",
-  "score": 78,
+  "timestamp": "2026-10-25T04:00:44.970Z",
+  "score": 79,
   "max": 100,
-  "percentage": "78%",
+  "percentage": "79%",
   "dimensions": {
     "revenue_flow": {
       "score": 16,
@@ -17,13 +17,13 @@
         {
           "name": "Active trading (paper)",
           "status": "running",
-          "pnl": -104.7360980424601,
+          "pnl": -101.45774967755835,
           "score": 2
         },
         {
           "name": "Long-term portfolio (paper)",
           "status": "accumulating",
-          "invested": 6600,
+          "invested": 6900,
           "score": 5
         },
         {
@@ -40,14 +40,14 @@
       "raw": 32
     },
     "project_liveness": {
-      "score": 14,
+      "score": 15,
       "max": 25,
       "projects": [
         {
           "name": "PM2 processes",
-          "online": 13,
-          "stopped": 112,
-          "total": 125
+          "online": 14,
+          "stopped": 113,
+          "total": 127
         },
         {
           "name": "Trading cron",
@@ -64,7 +64,7 @@
           "live": false
         }
       ],
-      "live": 16,
+      "live": 17,
       "total": 28
     },
     "compound_rate": {
@@ -73,7 +73,7 @@
       "indicators": [
         {
           "name": "Vault nuggets",
-          "count": 14155
+          "count": 14658
         },
         {
           "name": "Deck cards",
@@ -166,14 +166,6 @@
   "target": "Flow state: finance flowing + projects live + system sustains itself",
   "phase": "Flow",
   "history": [
-    {
-      "date": "2026-05-10",
-      "score": 88
-    },
-    {
-      "date": "2026-05-16",
-      "score": 82
-    },
     {
       "date": "2026-05-16",
       "score": 87
@@ -373,6 +365,14 @@
     {
       "date": "2026-10-18",
       "score": 78
+    },
+    {
+      "date": "2026-10-24",
+      "score": 81
+    },
+    {
+      "date": "2026-10-25",
+      "score": 79
     }
   ]
 }

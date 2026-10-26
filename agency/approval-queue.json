@@ -3443,5 +3443,200 @@
     "risk_notes": "Additive new vault note only; no money, no external message, no delete/overwrite, no code change. The answer explicitly refuses to invent thread contents and defers verification to Paul, so capturing it as a note is safe. Actual mining of relay logs and any architecture decision remain for Paul (propose).",
     "status": "pending",
     "ts": "2026-10-18T17:15:39.686Z"
+  },
+  {
+    "id": "de12c2d72b58",
+    "a_item": {
+      "question": "What is the cheapest /log-style feedback loop that feeds real-world results (a member's PR, a video's performance, a method's first sale) back into the Cathedral so the standing questions sharpen against reality instead of internal echo — and which single result would you wire first?",
+      "domain": "cathedral"
+    },
+    "action": "Write a new vault note specifying the pre-registration /log protocol and proposing the WhatsApp 45-second CTA as the first loop to wire, including the prediction line and metric to track.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "auto refused by governor (assertSafe REFUSED: external message/post detected); needs review",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:08.057Z"
+  },
+  {
+    "id": "64a66cee7626",
+    "a_item": {
+      "question": "What is the single Gym Eyes detection failure mode — occlusion during clinch, pose-slot thrash on multi-person frames, or velocity spikes — that blocks the multi-person leaderboard, and what is the cheapest fix that gets it shippable without the smart-glasses hardware?",
+      "domain": "gym"
+    },
+    "action": "Queue a task to prototype a clinch-occlusion fallback in the Gym Eyes detection pipeline that switches to body/limb landmarks when faces are occluded.",
+    "kind": "queue_task",
+    "reversible_via": "remove the queued task from the planner/todo queue",
+    "risk_notes": "The fix requires modifying the existing detection pipeline (code change to existing files), which is outside the auto whitelist; it also involves design judgment about tracking logic. Therefore it must be proposed for human approval.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:11.596Z"
+  },
+  {
+    "id": "c128c432f6c8",
+    "a_item": {
+      "question": "For Gym Eyes multi-person tracking, which failure mode is actually binding on the leaderboard product — occlusion-driven ID switches, pose-slot thrash between adjacent athletes, or velocity spikes from re-ID — and what is the minimum-annotation experiment that discriminates the three this week?",
+      "domain": "gym"
+    },
+    "action": "Queue a task to design and run the minimum-annotation crossing-event identity-labeling experiment for Gym Eyes tracker diagnosis.",
+    "kind": "queue_task",
+    "reversible_via": "remove the queued task from the planner/todo queue",
+    "risk_notes": "Requires Paul's judgment on experiment design, clip selection, and annotation effort; not a pure read-only analysis or new note. Falls outside the narrow auto whitelist, so propose.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:16.625Z"
+  },
+  {
+    "id": "9d953fc68cef",
+    "a_item": {
+      "question": "At the Fear Gate, what observable client behavior in the first 30 seconds after the fear is named predicts breakthrough versus shutdown — and how would you encode that tell so a coach or agent can run the intervention without Paul in the room?",
+      "domain": "cathedral"
+    },
+    "action": "Write a new vault note encoding the Fear Gate 'return arc' tell (gaze re-orientation, exhale, present/sensory language shift within ~30s) as a coach/agent-runnable checklist.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note",
+    "risk_notes": "Additive internal artifact only: creates a NEW vault note, no existing file edited, no money, no external message, no delete, no code change. Fits whitelist (a) write_vault_note. Reversible by deleting the note.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:18.529Z"
+  },
+  {
+    "id": "4cde2f5c6019",
+    "a_item": {
+      "question": "Calibration-before-batch: what is the single pass/fail criterion that says Reed v2 (or Logan via Kling) is likeness-calibrated enough to spend the remaining credits — and what is the pre-committed fallback if calibration fails twice, before any batch burns the reserve?",
+      "domain": "content"
+    },
+    "action": "Draft a new vault note specifying the blind A/B likeness gate (held-out reference, ungraded by Paul) and the two-strike fallback to non-likeness shots, for Paul's review before any code change.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note",
+    "risk_notes": "Creating a new note is additive, reversible, no spend, no external message, no code edit. The answer's actual move (hard-coding the gate into reed-generate.js config) is a code change to an existing file and is NOT executed here — only captured as a proposal note.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:20.455Z"
+  },
+  {
+    "id": "002b875fc3f0",
+    "a_item": {
+      "question": "If Paul's financial strategies are based on DeepSeek's critiques of other AI financial advice, how does he ensure those strategies are not just confident fiction, but actually durable and forensic-proofed?",
+      "domain": "wealth"
+    },
+    "action": "Run one read-only adversarial pass on the DeepSeek Wealth Creation Strategy Session in 02_Refined_Gold, tagging each claim 'external scaffold' vs 'internal coherence only', and write findings to a NEW report file.",
+    "kind": "write_report",
+    "reversible_via": "delete the new report file",
+    "risk_notes": "Read-only analysis producing a new file; no edits to existing vault notes, no spend, no external messages, no deletes. Fits write_report whitelist. The actual gating decision (which claims pass, changing the 02_Refined_Gold threshold) is NOT auto — that requires Paul's judgment and would be a separate propose.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:22.139Z"
+  },
+  {
+    "id": "8a79ee7fe36f",
+    "a_item": {
+      "question": "If the 1-bit Alignment Tax and Sovereign Decoder are theoretical frameworks that map directly to Cathedral architecture, why aren't they being actively developed and integrated into the system, rather than just being filed as raw transcripts?",
+      "domain": "truth"
+    },
+    "action": "Draft a NEW vault note proposing a 'Blueprint' status and the three forced questions, flagging that '1-bit Alignment Tax'/'Sovereign Decoder' are unverified and need Paul's review before any pipeline change.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note",
+    "risk_notes": "Creating a new note is additive/reversible with no spend, no external message, no delete/overwrite, no code change. The actual pipeline change (adding a Blueprint stage) is NOT executed — it is only captured as a proposal, so it stays within the write_vault_note whitelist.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:23.853Z"
+  },
+  {
+    "id": "9a0f18715579",
+    "a_item": {
+      "question": "How can we turn the insights gained from landscape research into actionable tools, products, and business ventures for the Cathedral, and what role can Paul play in driving this process?",
+      "domain": "business|truth"
+    },
+    "action": "Write a new vault note capturing the extraction-pipeline product thesis and queue a task to inventory documented landscape domains in 04_Esoteric_Studies before selecting a first domain.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note and remove the appended queue task",
+    "risk_notes": "Additive internal artifact only: creates a NEW vault note and appends a task; no money, no external message, no delete/overwrite, no code change. Fits whitelist (a)+(b). The actual venture decision and domain selection remain with Paul.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:25.719Z"
+  },
+  {
+    "id": "6311ac082954",
+    "a_item": {
+      "question": "What are the most effective ways to integrate Ebbinghaus forgetting curves and memory retention principles into the Cathedral's knowledge management and learning systems, and how can we ensure that these systems are continuously improved and updated?",
+      "domain": "system|truth"
+    },
+    "action": "Write a new vault note proposing a retrieval-telemetry schema (last_accessed, access_count) and a decay→Elicitation resurfacing queue, flagging schema verification as a prerequisite.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Additive new vault note only; no existing files edited, no spend, no external messages, no code changes. Fits whitelist (a) write_vault_note. The note is a proposal, not an implementation, so it does not touch the live schema.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:27.613Z"
+  },
+  {
+    "id": "f6715e491275",
+    "a_item": {
+      "question": "How can we optimize the relay thread filing process to maximize the value and reusability of the information gathered, and what tools or systems can we develop to support this process?",
+      "domain": "system|truth"
+    },
+    "action": "Read 06_Methods (The Relay Map / The Relay Suite) and the 00_Staging cross-project pulse to check whether a relay close-condition / 'reusable' definition already exists, then write a NEW report summarizing findings and the reuse-card propos",
+    "kind": "write_report",
+    "reversible_via": "delete the new report file",
+    "risk_notes": "Read-only analysis of existing vault notes plus creation of a NEW report file — no edits to existing files, no deletes, no spend, no external messages, no code changes. Fits whitelist item (c) write_report. The proposed protocol change itself is NOT executed here; only the read-only investigation and report are auto.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:29.555Z"
+  },
+  {
+    "id": "2deedaf7de21",
+    "a_item": {
+      "question": "What are the most effective ways to integrate the concepts of 4D conceptual space and Bipartite Oracle/Decoder architecture into the Cathedral's decision-making and problem-solving processes, and how can we ensure that these concepts are continuously refined and improved?",
+      "domain": "truth|system"
+    },
+    "action": "Write a new vault note proposing a single live Cathedral decision be run through an explicit Oracle→Decoder register-router split, logging mid-problem register flips as the 4D coordinate data.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new note",
+    "risk_notes": "Additive internal capture only — creates a NEW vault note, no existing file edited, no spend, no external message, no code change. Fits whitelist (a) write_vault_note. The actual decision-selection and execution remain for Paul; this only records the proposed experiment.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:31.351Z"
+  },
+  {
+    "id": "f8aeeb935686",
+    "a_item": {
+      "question": "If Paul's creative sprint is truly about creating content that looks and feels like him and Logan, rather than just batch-burning credits, how can he ensure that the calibration phase is thorough enough to avoid wasting credits on output that doesn't meet the high bar of authenticity and likeness?",
+      "domain": "gym|cathedral|ai|wealth|content"
+    },
+    "action": "Draft a calibration protocol note for Paul's creative sprint: a checklist for feeding real-world Paul/Logan scenarios into prompts before spending credits, saved as a new vault note.",
+    "kind": "write_vault_note",
+    "reversible_via": "delete the new vault note",
+    "risk_notes": "Additive internal artifact only — creates a new note, no existing data touched, no spend, no external message, no code change. Fits whitelist (a) write_vault_note. The actual calibration prompting/credit spend remains Paul's to execute.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:33.033Z"
+  },
+  {
+    "id": "5f0eb8ec7c07",
+    "a_item": {
+      "question": "How can we leverage the Sovereign Decoder and 1-bit Alignment Tax concepts to improve the Cathedral's truth-finding and self-auditing capabilities, especially in constrained forensic-architect roles?",
+      "domain": "cathedral|truth"
+    },
+    "action": "Queue a task to locate Paul's source notes defining 'Sovereign Decoder' and '1-bit Alignment Tax' before any implementation, and flag the raw-vs-aligned diff protocol as a proposal pending those definitions.",
+    "kind": "queue_task",
+    "reversible_via": "remove the appended task from the planner/todo queue",
+    "risk_notes": "Appending a task to a planner queue is additive, internal, no spend, no external message, no delete/overwrite, no code change — fits whitelist (b). The substantive protocol (running decoder upstream, logging diffs) is NOT executed here; it remains a proposal requiring Paul's judgment and the missing definitions.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:34.771Z"
+  },
+  {
+    "id": "251fc7853fd5",
+    "a_item": {
+      "question": "If Paul's Ebbinghaus decay engine is correctly modeling the forgetting curve, how much of his vault is already in the 'WEAKENED' or 'ARCHIVED' states, and what does that imply about the long-term retention and utility of his current knowledge management practices?",
+      "domain": "gym|cathedral|ai|wealth|content"
+    },
+    "action": "Write a NEW read-only diagnostic report comparing count of notes labeled WEAKENED/ARCHIVED vs notes with any recorded re-access event, flagging the decay-state field name as needing verification.",
+    "kind": "write_report",
+    "reversible_via": "delete the new report file",
+    "risk_notes": "Read-only analysis producing a new file; no spend, no external message, no deletes/overwrites, no code change. Fits whitelist (c) write_report. Note: the report must not invent the state distribution — it should surface the query gap and the WEAKENED-vs-reaccessed comparison as the diagnostic.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:36.881Z"
+  },
+  {
+    "id": "10ca452577a4",
+    "a_item": {
+      "question": "What are the most significant gaps in the Cathedral's vault provenance schema, and how can they be resolved to ensure the integrity and traceability of the stored knowledge?",
+      "domain": "cathedral"
+    },
+    "action": "Open and read the staging note '2026-04-21_epistemology_vault-cross-reference-corrections-and-gaps' to reconcile the two proposed schema additions against its existing gap categories.",
+    "kind": "other",
+    "reversible_via": "read-only; no undo needed",
+    "risk_notes": "Requires Paul's judgment to reconcile findings and decide schema changes; not in auto whitelist. Reading is safe but the reconciliation and any schema/field edits are judgment calls needing approval.",
+    "status": "pending",
+    "ts": "2026-10-25T17:15:38.544Z"
   }
 ]

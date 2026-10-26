@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-10-22T12:00:34.489953",
+  "timestamp": "2026-10-26T00:00:31.750763",
   "prices": {},
   "fear_greed": {
-    "value": 68,
-    "label": "Greed",
-    "week_avg": 59.4,
-    "trend": "rising"
+    "value": 54,
+    "label": "Neutral",
+    "week_avg": 57.1,
+    "trend": "falling"
   },
   "reddit_sentiment": null,
   "news": [
@@ -16,12 +16,17 @@
     },
     {
       "source": "cointelegraph",
+      "title": "State of TRON Q3 2026 report highlights $2.21 trillion in stablecoin settlement amid network activity growth",
+      "url": "https://cointelegraph.com/"
+    },
+    {
+      "source": "cointelegraph",
       "title": "Gate &amp; Visa partner to launch crypto card across 40+ regions",
       "url": "https://cointelegraph.com/"
     },
     {
       "source": "cointelegraph",
-      "title": "RAFA to launch agentic fund management on Base for transparent on-chain funds",
+      "title": "ViaBTC announces \u201cA Fresh Start with ViaBTC\u201d campaign for new users",
       "url": "https://cointelegraph.com/"
     },
     {
@@ -51,128 +56,114 @@
     },
     {
       "source": "cointelegraph",
-      "title": "State of TRON Q3 2026 report highlights $2.21 trillion in stablecoin settlement amid network activity growth",
-      "url": "https://cointelegraph.com/"
-    },
-    {
-      "source": "cointelegraph",
       "title": "Daily byte-sized crypto news for those on the move",
       "url": "https://cointelegraph.com/"
     }
   ],
-  "signals": [
-    {
-      "source": "sentiment",
-      "asset": "MARKET",
-      "direction": "short",
-      "strength": 0.08571428571428572,
-      "reasoning": "Fear & Greed at 68 (Greed) \u2014 greed zone, contrarian caution",
-      "type": "contrarian"
-    }
-  ],
+  "signals": [],
   "deep_data": {
     "liquidation_levels": {
       "BTC": {
-        "perp_open_interest": 836608410,
-        "perp_mark_price": 82859.02,
-        "perp_funding": 4.53e-06
+        "perp_open_interest": 842174230,
+        "perp_mark_price": 80554.6,
+        "perp_funding": 3.495e-05
       }
     },
     "exchange_reserves": {
       "BTC": {
-        "total_supply": 20101743.0
+        "total_supply": 20103390.0
       }
     },
     "stablecoin_flows": {
       "USDT": {
-        "circulating": 182685294895.4489,
+        "circulating": 182423338598.6736,
         "name": "Tether",
-        "chain_total": 182685294895.44888
+        "chain_total": 182423338598.6735
       },
       "USDC": {
-        "circulating": 72668727416.13881,
+        "circulating": 71701165119.61797,
         "name": "USD Coin",
-        "chain_total": 72668727416.13884
+        "chain_total": 71701165119.61795
       },
       "DAI": {
-        "circulating": 4742946924.106594,
+        "circulating": 4726220413.388902,
         "name": "Dai",
-        "chain_total": 4742946924.106597
+        "chain_total": 4726220413.388904
       },
       "BUSD": {
-        "circulating": 7640959.698884735,
+        "circulating": 7181833.7146872645,
         "name": "Bera USD",
-        "chain_total": 7640959.698884735
+        "chain_total": 7181833.7146872645
       }
     },
     "options_flow": {
       "BTC": {
-        "put_call_ratio": 0.605,
-        "calls_oi": 243305.5000000001,
-        "puts_oi": 147298.79999999993,
-        "calls_volume": 20568.2,
-        "puts_volume": 16673.700000000004,
-        "total_oi": 390604.30000000005,
+        "put_call_ratio": 0.599,
+        "calls_oi": 241778.50000000012,
+        "puts_oi": 144858.20000000007,
+        "calls_volume": 2110.9999999999986,
+        "puts_volume": 3751.999999999999,
+        "total_oi": 386636.7000000002,
         "max_oi_strike": "BTC-30OCT26-95000-C",
-        "max_oi": 20036.2
+        "max_oi": 19947.8
       },
       "ETH": {
-        "put_call_ratio": 0.506,
-        "calls_oi": 1015851.0,
-        "puts_oi": 514463.0,
-        "total_oi": 1530314.0
+        "put_call_ratio": 0.496,
+        "calls_oi": 1014166.0,
+        "puts_oi": 503230.0,
+        "total_oi": 1517396.0
       }
     },
     "github_activity": {
       "BTC": {
         "repo": "bitcoin/bitcoin",
-        "last_commit": "2026-10-21T19:16:50Z",
-        "days_since_commit": 0
+        "last_commit": "2026-10-23T21:06:57Z",
+        "days_since_commit": 1
       },
       "ETH": {
         "repo": "ethereum/go-ethereum",
-        "last_commit": "2026-10-21T16:41:43Z",
-        "days_since_commit": 0
+        "last_commit": "2026-10-23T12:29:12Z",
+        "days_since_commit": 2
       },
       "SOL": {
         "repo": "anza-xyz/agave",
-        "last_commit": "2026-10-22T01:11:08Z",
+        "last_commit": "2026-10-25T09:13:05Z",
         "days_since_commit": 0
       },
       "DOT": {
         "repo": "paritytech/polkadot-sdk",
-        "last_commit": "2026-10-22T03:05:51Z",
+        "last_commit": "2026-10-25T10:23:12Z",
         "days_since_commit": 0
       },
       "ATOM": {
         "repo": "cosmos/cosmos-sdk",
-        "last_commit": "2026-10-21T17:30:42Z",
-        "days_since_commit": 0
+        "last_commit": "2026-10-22T17:13:31Z",
+        "days_since_commit": 2
       },
       "AVAX": {
         "repo": "ava-labs/avalanchego",
-        "last_commit": "2026-10-21T22:35:48Z",
-        "days_since_commit": 0
+        "last_commit": "2026-10-23T18:29:00Z",
+        "days_since_commit": 1
       },
       "ADA": {
         "repo": "IntersectMBO/cardano-node",
-        "last_commit": "2026-10-16T09:21:43Z",
-        "days_since_commit": 5
+        "last_commit": "2026-10-23T22:11:57Z",
+        "days_since_commit": 1
       },
       "ARB": {
         "repo": "OffchainLabs/nitro",
         "last_commit": "2026-08-28T19:36:32Z",
-        "days_since_commit": 54
+        "days_since_commit": 57
       },
       "UNI": {
         "repo": "Uniswap/v3-core",
-        "last_commit": "2026-10-14T13:56:17Z",
-        "days_since_commit": 7
+        "last_commit": "2026-10-23T09:00:16Z",
+        "days_since_commit": 2
       },
       "LINK": {
         "repo": "smartcontractkit/chainlink",
-        "last_commit": "2026-10-21T21:39:43Z",
-        "days_since_commit": 0
+        "last_commit": "2026-10-23T19:57:07Z",
+        "days_since_commit": 1
       }
     }
   }

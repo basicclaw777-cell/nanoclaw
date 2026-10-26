@@ -1,36 +1,36 @@
 {
-  "balance_cash": 43100,
+  "balance_cash": 42800,
   "initial_balance": 50000,
   "positions": {
     "BTC": {
-      "qty": 0.0636595436927932,
-      "total_cost": 4600,
-      "avg_price": 72259.3932215188,
+      "qty": 0.06613525081664044,
+      "total_cost": 4800,
+      "avg_price": 72578.54080432792,
       "first_buy": "2026-05-10",
-      "current_value": 5213.08,
-      "unrealised_pnl": 613.08,
-      "unrealised_pct": 13.33
+      "current_value": 5342.74,
+      "unrealised_pnl": 542.74,
+      "unrealised_pct": 11.31
     },
     "ETH": {
-      "qty": 1.1020054551115035,
-      "total_cost": 2300,
-      "avg_price": 2087.1040060026567,
+      "qty": 1.1443767206140902,
+      "total_cost": 2400,
+      "avg_price": 2097.211483568211,
       "first_buy": "2026-05-10",
-      "current_value": 2670.89,
-      "unrealised_pnl": 370.89,
-      "unrealised_pct": 16.13
+      "current_value": 2700.83,
+      "unrealised_pnl": 300.83,
+      "unrealised_pct": 12.53
     }
   },
   "dca_schedule": {
     "btc_weekly": 200,
     "eth_weekly": 100
   },
-  "total_invested": 6900,
-  "total_value": 50983.97,
-  "unrealised_pnl": 983.97,
+  "total_invested": 7200,
+  "total_value": 50843.57,
+  "unrealised_pnl": 843.57,
   "realised_pnl": 0,
   "started": "2026-05-10",
-  "last_dca": "2026-10-18",
+  "last_dca": "2026-10-25",
   "last_rebalance": null,
   "history": [
     {
@@ -248,6 +248,13 @@
       "unrealised_pnl": 983.97,
       "btc_price": 81890,
       "eth_price": 2423.66
+    },
+    {
+      "date": "2026-10-25",
+      "total_value": 50843.57,
+      "unrealised_pnl": 843.57,
+      "btc_price": 80785,
+      "eth_price": 2360.09
     }
   ]
 }
