@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logan Stories — Cathedral Channels</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#0f1018;--card:#131320;--border:#1a1a2e;--text:#c8c8d0;--dim:#555;--gold:#f7b408;--accent:#ea580c;--accent-glow:rgba(234,88,12,0.15);--cave:#8b6914}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',ui-monospace,monospace;min-height:100vh}
+
+.hero{position:relative;width:100%;aspect-ratio:896/336;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.7)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg) 100%)}
+.back{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 12px;border-radius:3px;cursor:pointer;text-decoration:none;letter-spacing:1px;z-index:2;transition:color .2s}
+.back:hover{color:var(--gold)}
+.hero-title{position:absolute;bottom:20px;left:16px;z-index:2}
+.hero-title h1{font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 20px var(--accent-glow)}
+.hero-title .band{font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.phase-badge{position:absolute;bottom:24px;right:16px;z-index:2;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:3px;background:rgba(249,115,22,0.2);border:1px solid #f97316;color:#f97316}
+
+.content{max-width:900px;margin:0 auto;padding:16px}
+
+.section-title{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.brief{font-size:12px;line-height:1.7;color:var(--text);margin-bottom:24px}
+.brief strong{color:var(--gold)}
+
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px}
+
+.mission{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s}
+.mission:hover{border-color:var(--accent);background:var(--accent-glow)}
+.mission-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.mission-name .status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mission-name .status.ready{background:var(--gold)}
+.mission-name .status.pending{background:var(--dim)}
+.mission-desc{font-size:10px;color:var(--dim);line-height:1.5;margin-bottom:8px}
+.mission-gain{font-size:9px;color:var(--accent);letter-spacing:0.5px}
+.mission-gain span{color:var(--gold)}
+
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 14px;flex:1;min-width:120px}
+.stat-val{font-size:18px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.tech-spec{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;font-size:10px;line-height:1.8;color:var(--dim);margin-bottom:24px}
+.tech-spec code{color:var(--accent);background:rgba(234,88,12,0.1);padding:1px 4px;border-radius:2px}
+
+.launch-btn{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;margin-bottom:40px}
+.launch-btn:hover{background:var(--accent-glow);box-shadow:0 0 30px var(--accent-glow)}
+
+@media(max-width:600px){
+  .content{padding:12px 16px}
+  .mission-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="panels/logan-stories.jpg" alt="Logan Stories">
+  <div class="hero-overlay"></div>
+  <a href="index.html" class="back">&larr; CHANNELS</a>
+  <div class="hero-title">
+    <h1>Logan Stories</h1>
+    <div class="band">Creative</div>
+  </div>
+  <div class="phase-badge">PHASE 1 &mdash; SUPERVISED</div>
+</div>
+
+<div class="content">
+
+  <div class="section-title">Channel Brief</div>
+  <div class="brief">
+    Logan is the Cathedral's <strong>ELI5 character</strong> — present in every domain, simplifies anything.
+    Origin story: <strong>Cuba &rarr; Hong Kong &rarr; Cathedral</strong>. A stick figure with dreadlocks and a beard
+    who boxes his way through complex ideas. 1,093 atoms in the stick figure engine. Logan doesn't just
+    explain — he <strong>invites people in</strong>. Every door in the Cathedral has Logan holding it open.
+  </div>
+
+  <div class="section-title">Potential Missions</div>
+  <div class="mission-grid">
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>New Domain Explainer</div>
+      <div class="mission-desc">Take a complex Cathedral domain (cosmology, frequency research, vortex maths) and build a Logan story that makes it accessible. Visual + narrative.</div>
+      <div class="mission-gain">Gain: <span>Accessible entry point</span> into a dense research domain</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>Origin Story Chapter</div>
+      <div class="mission-desc">Extend the Logan origin narrative. Cuba chapter, Hong Kong chapter, Cathedral chapter. Each one grounded in real experiences, told through stick figures.</div>
+      <div class="mission-gain">Gain: <span>Character depth</span> — Logan becomes a real narrative, not just a mascot</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Kids Programme Content</div>
+      <div class="mission-desc">Logan-led visual content for the BR kids programme. Boxing basics, discipline concepts, fun challenges. Highest-growth demographic meets friendliest character.</div>
+      <div class="mission-gain">Gain: <span>Kids engagement assets</span> — the R&D lab gets a face</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Icon Pose Library Expansion</div>
+      <div class="mission-desc">40+ poses for buttons, cards, UI elements. Boxing stances, thinking poses, celebrating, explaining. Vectorized for any size. Kids = first test audience.</div>
+      <div class="mission-gain">Gain: <span>Reusable icon set</span> across all Cathedral products</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Cross-Domain Logan Adventures</div>
+      <div class="mission-desc">Logan visits other channels — Patent Miner Logan with a flashlight, Vault Graph Logan connecting nodes, Animation Lab Logan directing mini-Logans. The crossover universe.</div>
+      <div class="mission-gain">Gain: <span>Visual unity</span> across all Cathedral channels</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Channel Stats</div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">1093</div><div class="stat-label">Engine Atoms</div></div>
+    <div class="stat"><div class="stat-val">296</div><div class="stat-label">Ling Bible Lines</div></div>
+    <div class="stat"><div class="stat-val">40+</div><div class="stat-label">Planned Poses</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Origin Chapters</div></div>
+  </div>
+
+  <div class="section-title">Technical Spec</div>
+  <div class="tech-spec">
+    <strong>Source:</strong> Stick Logan Engine, Ling Bible, Character Genome, visual-memory.md<br>
+    <strong>Pipeline:</strong> <code>domain research → Logan narrative → visual sheet → crop → deploy</code><br>
+    <strong>Seed:</strong> Tourist <code>1C5pA7eS7oGsMt5DMivJ</code> — Logan's consistent visual identity<br>
+    <strong>Output:</strong> Story panels, icon poses, explainer sheets, kids content<br>
+    <strong>Phase 1 loop:</strong> Forge drafts story/visual → Paul reviews narrative + character accuracy<br>
+    <strong>Graduation criteria:</strong> Consistent character voice across 10+ domain stories
+  </div>
+
+  <button class="launch-btn">&#128293; LAUNCH MISSION &mdash; PHASE 1 (SUPERVISED)</button>
+
+</div>
+
+</body>
+</html>

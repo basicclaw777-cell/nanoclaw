@@ -4013,3 +4013,28 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 
 **DB schema additions:**
 - `client_progress` table: id, student_name, series_key, level_completed, total_levels, started_date, completed_date, notes, UNIQUE(student_name, series_key)
+
+## 2026-10-27 — Enforcement Spectrum + Coaching Methodology
+
+**Hooks built (3 new, all in ~/.claude/hooks/):**
+- `guard-gemma4.js` — PreToolUse on Bash: blocks ollama+gemma4 commands. Exit code pattern. Promotes gemma4-load Level 1→3
+- `gate-build-completion.js` — PostToolUse on Bash: after git commit, checks BUILD_LOG.md + SYSTEM_MAP.md updated today. Advisory (hookSpecificOutput), non-blocking. Promotes build-completion-gate Level 1→3
+- `auto-system-map.js` — PostToolUse on Edit|Write: when file_path matches lobby.html, reminds to run gen-system-map.js. Advisory. Promotes system-map-after-lobby Level 0→3 (SATISFIED, gap=0)
+- All 3 wired into `~/.claude/settings.json` with correct matcher patterns
+
+**Enforcement registry updated:**
+- `~/nanoclaw/channels/enforcement-registry.js` — 3 entries promoted. Total debt 30→23. Satisfied 9→10.
+
+**Internalization Spectrum (coaching methodology):**
+- `~/basic-reflex/internalization-spectrum.md` — 6-level coaching tool mapping enforcement spectrum to student skill acquisition. Hope→Written→Cue→Drill→Gate→Reflex. Per-student diagnostic table, integration with 10 Blocks/Three Engines/Gym Eyes/Student Deck
+- Formal connection: Basic = Level 0-2 (recall), Reflex = Level 4-5 (automatic), Drill = Level 3 (the bridge)
+
+**Visual:**
+- `~/Cathedral/artifacts/internalization-spectrum-sheet.png` — 6-panel Logan sheet (GPT Image 2, 42cr, tourist seed). Character verified (dreadlocks, beard, black tee)
+- `~/Cathedral/artifacts/internalization-spectrum-sheet-thumb.jpg` — 147K compressed thumbnail
+
+**Memory:**
+- `project_coaching_ai_isomorphism.md` — Coaching↔AI enforcement isomorphism (same mechanism, not analogy)
+- `project_ryan_chan_prospect.md` — Ryan Chan CV review, agreed approach: attend→shadow→earn pads
+- MEMORY.md compacted 20.4KB→17.1KB (hook warning threshold)
+- forge_health_status.md updated (Knowledge Architecture → PEAK)

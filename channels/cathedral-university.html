@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral University — Cathedral Channels</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#0f1018;--card:#131320;--border:#1a1a2e;--text:#c8c8d0;--dim:#555;--gold:#f7b408;--accent:#8b5cf6;--accent-glow:rgba(139,92,246,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',ui-monospace,monospace;min-height:100vh}
+
+.hero{position:relative;width:100%;aspect-ratio:896/336;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.7)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg) 100%)}
+.back{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 12px;border-radius:3px;cursor:pointer;text-decoration:none;letter-spacing:1px;z-index:2;transition:color .2s}
+.back:hover{color:var(--gold)}
+.hero-title{position:absolute;bottom:20px;left:16px;z-index:2}
+.hero-title h1{font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 20px var(--accent-glow)}
+.hero-title .band{font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.phase-badge{position:absolute;bottom:24px;right:16px;z-index:2;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:3px;background:rgba(34,211,238,0.15);border:1px solid #22d3ee;color:#22d3ee}
+
+.content{max-width:900px;margin:0 auto;padding:16px}
+
+.section-title{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.brief{font-size:12px;line-height:1.7;color:var(--text);margin-bottom:24px}
+.brief strong{color:var(--gold)}
+
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px}
+
+.mission{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s}
+.mission:hover{border-color:var(--accent);background:var(--accent-glow)}
+.mission-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.mission-name .status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mission-name .status.ready{background:var(--gold)}
+.mission-name .status.active{background:#22d3ee}
+.mission-name .status.pending{background:var(--dim)}
+.mission-desc{font-size:10px;color:var(--dim);line-height:1.5;margin-bottom:8px}
+.mission-gain{font-size:9px;color:var(--accent);letter-spacing:0.5px}
+.mission-gain span{color:var(--gold)}
+
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 14px;flex:1;min-width:120px}
+.stat-val{font-size:18px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.tech-spec{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;font-size:10px;line-height:1.8;color:var(--dim);margin-bottom:24px}
+.tech-spec code{color:var(--accent);background:rgba(139,92,246,0.1);padding:1px 4px;border-radius:2px}
+
+.launch-btn{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;margin-bottom:40px}
+.launch-btn:hover{background:var(--accent-glow);box-shadow:0 0 30px var(--accent-glow)}
+
+@media(max-width:600px){
+  .content{padding:12px 16px}
+  .mission-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="panels/cathedral-university.jpg" alt="Cathedral University">
+  <div class="hero-overlay"></div>
+  <a href="index.html" class="back">&larr; CHANNELS</a>
+  <div class="hero-title">
+    <h1>Cathedral University</h1>
+    <div class="band">Knowledge</div>
+  </div>
+  <div class="phase-badge">PHASE 2 &mdash; CALIBRATED</div>
+</div>
+
+<div class="content">
+
+  <div class="section-title">Channel Brief</div>
+  <div class="brief">
+    <strong>10 schools, 79 courses, 2,949KB</strong> of structured knowledge. The Cathedral's learning architecture &mdash;
+    <strong>Knowledge Before Build</strong> applied systematically. Every domain gets a degree programme before
+    anything gets built. The freshness system ensures courses stay current. The university-onboard skill is the
+    proven Phase 2 workflow: research &rarr; course files &rarr; enrollment &rarr; graduation.
+  </div>
+
+  <div class="section-title">Potential Missions</div>
+  <div class="mission-grid">
+
+    <div class="mission">
+      <div class="mission-name"><span class="status active"></span>Course Freshness Audit</div>
+      <div class="mission-desc">Scan all 79 courses for stale content. Check freshness.json timestamps. Flag courses where source material has evolved since last update.</div>
+      <div class="mission-gain">Gain: <span>Knowledge currency report</span> &mdash; what needs refreshing</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>New Domain Enrollment</div>
+      <div class="mission-desc">When Paul identifies a new domain to build in, the university creates the degree programme first. Bachelor's &rarr; Master's &rarr; then build begins.</div>
+      <div class="mission-gain">Gain: <span>10-20x resolution</span> on build decisions through prior research</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Cross-School Convergence</div>
+      <div class="mission-desc">Find where different schools teach overlapping concepts. Sacred geometry in physics school + ancient knowledge school = convergence candidate for Gold Extraction.</div>
+      <div class="mission-gain">Gain: <span>Inter-domain connections</span> the flat structure hides</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Knowledge Gap Detection</div>
+      <div class="mission-desc">Compare Cathedral build targets against available university courses. Building without a course = building without understanding. Flag the gaps.</div>
+      <div class="mission-gain">Gain: <span>Build-readiness assessment</span> per project</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Graduation Pathway Planning</div>
+      <div class="mission-desc">Map prerequisite chains across courses. Which Master's degrees require which Bachelor's? Where are the bottlenecks in the learning DAG?</div>
+      <div class="mission-gain">Gain: <span>Optimal learning sequence</span> for any domain entry</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Channel Stats</div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">10</div><div class="stat-label">Schools</div></div>
+    <div class="stat"><div class="stat-val">79</div><div class="stat-label">Courses</div></div>
+    <div class="stat"><div class="stat-val">2,949</div><div class="stat-label">KB Content</div></div>
+    <div class="stat"><div class="stat-val">Active</div><div class="stat-label">Freshness System</div></div>
+  </div>
+
+  <div class="section-title">Technical Spec</div>
+  <div class="tech-spec">
+    <strong>Source:</strong> ~/Cathedral/cathedral-university/ course files, freshness.json<br>
+    <strong>Pipeline:</strong> <code>research &rarr; outline &rarr; course-files &rarr; enroll &rarr; freshness-track</code><br>
+    <strong>Model:</strong> <code>Claude Opus</code> for research, <code>hermes3</code> for freshness checks<br>
+    <strong>Output:</strong> Course files &rarr; enrollment confirmation &rarr; freshness reports<br>
+    <strong>Phase 2 loop:</strong> /university-onboard skill runs semi-autonomously &mdash; Paul approves domain, agent builds courses<br>
+    <strong>Graduation criteria:</strong> Already Phase 2 &mdash; earned through 79 successful course builds with consistent quality
+  </div>
+
+  <button class="launch-btn">&#127891; OPEN UNIVERSITY &mdash; PHASE 2 (CALIBRATED)</button>
+
+</div>
+
+</body>
+</html>

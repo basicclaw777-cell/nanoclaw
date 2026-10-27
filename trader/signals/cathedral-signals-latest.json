@@ -1,14 +1,22 @@
 {
-  "timestamp": "2026-10-25T12:00:28.223812",
+  "timestamp": "2026-10-27T00:00:31.025913",
   "strategy_count": 13,
-  "total_signals": 9,
+  "total_signals": 10,
   "signals": [
+    {
+      "source": "dca_baseline",
+      "asset": "BTC",
+      "direction": "long",
+      "strength": 0.6,
+      "reasoning": "DCA Baseline: Weekly BTC buy (Monday). No timing, no emotion, just accumulation.",
+      "type": "dca_baseline"
+    },
     {
       "source": "gann_geometry",
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC approaching Gann ordinal level $80643 from above (-0.2% away) \u2014 geometric resistance",
+      "reasoning": "BTC approaching Gann ordinal level $80189 from above (-0.2% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
@@ -16,31 +24,31 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH approaching Gann ordinal level $2336 from above (-1.0% away) \u2014 geometric resistance",
+      "reasoning": "ETH approaching Gann ordinal level $2302 from above (-1.0% away) \u2014 geometric resistance",
       "type": "gann_geometry"
     },
     {
       "source": "lunar_cycles",
       "asset": "BTC",
       "direction": "short",
-      "strength": 0.64,
-      "reasoning": "Full moon zone (phase day 13.6/29.5) \u2014 historically weaker returns. Caution.",
+      "strength": 0.71,
+      "reasoning": "Full moon zone (phase day 15.1/29.5) \u2014 historically weaker returns. Caution.",
       "type": "lunar_cycles"
     },
     {
       "source": "lunar_cycles",
       "asset": "ETH",
       "direction": "short",
-      "strength": 0.64,
-      "reasoning": "Full moon zone (phase day 13.6/29.5) \u2014 historically weaker returns. Caution.",
+      "strength": 0.71,
+      "reasoning": "Full moon zone (phase day 15.1/29.5) \u2014 historically weaker returns. Caution.",
       "type": "lunar_cycles"
     },
     {
       "source": "lunar_cycles",
       "asset": "SOL",
       "direction": "short",
-      "strength": 0.64,
-      "reasoning": "Full moon zone (phase day 13.6/29.5) \u2014 historically weaker returns. Caution.",
+      "strength": 0.71,
+      "reasoning": "Full moon zone (phase day 15.1/29.5) \u2014 historically weaker returns. Caution.",
       "type": "lunar_cycles"
     },
     {
@@ -64,7 +72,7 @@
       "asset": "BTC",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "BTC at 360-degree Gann level $80714 (45deg, -0.1% away) \u2014 cavity's native geometry resistance",
+      "reasoning": "BTC at 360-degree Gann level $80260 (45deg, -0.1% away) \u2014 cavity's native geometry resistance",
       "type": "harmonic_year"
     },
     {
@@ -72,7 +80,7 @@
       "asset": "ETH",
       "direction": "short",
       "strength": 0.55,
-      "reasoning": "ETH at 360-degree Gann level $2348 (45deg, -0.5% away) \u2014 cavity's native geometry resistance",
+      "reasoning": "ETH at 360-degree Gann level $2314 (45deg, -0.5% away) \u2014 cavity's native geometry resistance",
       "type": "harmonic_year"
     }
   ]

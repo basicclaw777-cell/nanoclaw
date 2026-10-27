@@ -1,10 +1,10 @@
 {
-  "date": "2026-10-22",
-  "generated": "2026-10-22T09:46:16.728Z",
+  "date": "2026-10-26",
+  "generated": "2026-10-26T01:35:00.101Z",
   "lunar": {
-    "phase": "waxing gibbous",
-    "emoji": "🌔",
-    "illumination": 0.85,
+    "phase": "full",
+    "emoji": "🌕",
+    "illumination": 1,
     "quarter": "waxing"
   },
   "state": {
@@ -17,15 +17,15 @@
   },
   "voiceRegistry": {
     "systemChord": "diminished",
-    "coherence": 0.607,
-    "totalEnergy": 0.618,
-    "dissonance": 0.241,
-    "crossBeatEnergy": 0.347,
+    "coherence": 0.548,
+    "totalEnergy": 0.72,
+    "dissonance": 0.252,
+    "crossBeatEnergy": 0.514,
     "totalVoices": 16,
     "strongestCrossBeat": {
-      "pair": "vitality-heartbeat",
-      "freq": 515.42,
-      "layers": "emergence↔system"
+      "pair": "vitality-compression",
+      "freq": 468.25,
+      "layers": "emergence↔stress"
     }
   },
   "gaps": {
@@ -93,8 +93,8 @@
   },
   "insight": "Waxing moon phase — historically 174% more anomalies than new moon",
   "engagement": {
-    "reportsSent": 1,
-    "consecutiveUnread": 0,
+    "reportsSent": 3,
+    "consecutiveUnread": 2,
     "frequency": "daily"
   }
 }

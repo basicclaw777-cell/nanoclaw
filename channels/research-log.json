@@ -1,0 +1,64 @@
+{
+  "sessions": [
+    {
+      "id": "research-1793006656661",
+      "timestamp": "2026-10-26T09:24:16.661Z",
+      "project": "combo-cards",
+      "tags": [
+        "pedagogy",
+        "curriculum",
+        "boxing-gym",
+        "motor-learning",
+        "eli5"
+      ],
+      "depth": "brief",
+      "channels": [
+        "phd-miner",
+        "cathedral-university"
+      ],
+      "status": "complete",
+      "findings": [
+        {
+          "channel": "phd-miner",
+          "timestamp": "2026-10-26T09:24:16.662Z",
+          "title": "Motor Learning Periodization in Combat Sports",
+          "summary": "Dissertation from Leeds 2019 — periodized skill acquisition in boxing maps to combo-card sequencing.",
+          "grade": "B",
+          "domains": [
+            "motor-learning",
+            "pedagogy",
+            "boxing"
+          ],
+          "actionable": true,
+          "skillCandidate": "combo-card-sequencing-from-periodization",
+          "approved": true,
+          "reviewedAt": "2026-10-26T09:24:16.663Z"
+        },
+        {
+          "channel": "phd-miner",
+          "timestamp": "2026-10-26T09:24:16.662Z",
+          "title": "Contextual Interference Effect in Martial Arts",
+          "summary": "Random practice order (not blocked) improves retention — directly applies to combo card shuffle mode.",
+          "grade": "A",
+          "domains": [
+            "motor-learning",
+            "pedagogy"
+          ],
+          "actionable": true,
+          "skillCandidate": null
+        }
+      ],
+      "convergences": [],
+      "completedAt": "2026-10-26T09:24:16.663Z",
+      "summary": {
+        "approved": 1,
+        "rejected": 0,
+        "pending": 1,
+        "total": 2,
+        "skillCandidates": [
+          "combo-card-sequencing-from-periodization"
+        ]
+      }
+    }
+  ]
+}

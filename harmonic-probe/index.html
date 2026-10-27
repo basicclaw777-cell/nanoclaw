@@ -474,6 +474,7 @@
 <!-- Extended Panels: Prescriber + Tonal Vocabulary -->
 <div class="tab-bar">
   <button class="tab-btn active" data-tab="prescriber">Prescriber</button>
+  <button class="tab-btn" data-tab="chladni">Chladni State</button>
   <button class="tab-btn" data-tab="vocabulary">Tonal Vocabulary</button>
   <button class="tab-btn" data-tab="rhythms">External Rhythms</button>
   <button class="tab-btn" data-tab="jamsessions">Jam Sessions</button>
@@ -489,6 +490,21 @@
   <div class="ext-panel">
     <div class="panel-title">Agent Prescriptions</div>
     <div id="prescriptionList"></div>
+  </div>
+</div>
+
+<div class="extended-panels" id="chladniTab" style="display:none">
+  <div class="ext-panel" style="text-align:center;">
+    <div class="panel-title">Primary Vibration Pattern</div>
+    <div id="chladniPrimary" style="display:flex;flex-direction:column;align-items:center;gap:8px;">Loading...</div>
+  </div>
+  <div class="ext-panel">
+    <div class="panel-title">System State → Chladni Mapping</div>
+    <div id="chladniMeta" style="margin-bottom:12px;">Loading...</div>
+    <div class="panel-title" style="margin-top:16px;">Beat Pattern (Faraday)</div>
+    <div id="chladniBeat" style="display:flex;flex-direction:column;align-items:center;gap:8px;">—</div>
+    <div class="panel-title" style="margin-top:16px;">Alternative Matches</div>
+    <div id="chladniAlts" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">—</div>
   </div>
 </div>
 
@@ -521,7 +537,13 @@
 
 <div class="extended-panels" id="jamsessionsTab" style="display:none">
   <div class="ext-panel" style="grid-column: 1 / -1;">
-    <div class="panel-title">Jam Session Findings — 2026-10-22</div>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <div class="panel-title" style="margin:0;" id="jamTitle">Jam Session Findings</div>
+      <div id="jamSessionSelector" style="display:flex; gap:4px;">
+        <button class="jam-sel-btn active" data-jam="2" style="font-size:10px; padding:3px 10px; border-radius:3px; border:1px solid var(--gold); background:var(--gold); color:#000; cursor:pointer; font-weight:600;">#2 — Oct 26</button>
+        <button class="jam-sel-btn" data-jam="1" style="font-size:10px; padding:3px 10px; border-radius:3px; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer;">#1 — Oct 22</button>
+      </div>
+    </div>
     <div id="jamSessionContent" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-top:8px;">Loading...</div>
     <div id="jamConvergence" style="margin-top:16px;"></div>
   </div>
@@ -1067,9 +1089,11 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active');
     const tab = btn.dataset.tab;
     document.getElementById('prescriberTab').style.display = tab === 'prescriber' ? 'grid' : 'none';
+    document.getElementById('chladniTab').style.display = tab === 'chladni' ? 'grid' : 'none';
     document.getElementById('vocabularyTab').style.display = tab === 'vocabulary' ? 'grid' : 'none';
     document.getElementById('rhythmsTab').style.display = tab === 'rhythms' ? 'grid' : 'none';
     document.getElementById('jamsessionsTab').style.display = tab === 'jamsessions' ? 'grid' : 'none';
+    if (tab === 'chladni' && !window._chladniLoaded) initChladni();
     if (tab === 'jamsessions' && !window._jamLoaded) initJamSessions();
   });
 });
@@ -1407,46 +1431,247 @@ initPrescriber();
 initVocabulary();
 initRhythms();
 
+// ── Chladni State Tab ──
+
+let chladniData = null;
+
+async function initChladni() {
+  window._chladniLoaded = true;
+  try {
+    const res = await fetch('chladni-state.json');
+    chladniData = await res.json();
+    renderChladniPrimary();
+    renderChladniMeta();
+    renderChladniBeat();
+    renderChladniAlts();
+  } catch (err) {
+    document.getElementById('chladniPrimary').innerHTML =
+      '<div style="color:var(--text-dim);font-size:12px">No Chladni data — run chladni-map.cjs first</div>';
+  }
+}
+
+function renderChladniPrimary() {
+  const el = document.getElementById('chladniPrimary');
+  const p = chladniData.primary;
+  if (!p || !p.dataUri) {
+    el.innerHTML = '<div style="color:var(--red)">No primary pattern</div>';
+    return;
+  }
+  const complexity = (p.complexity * 100).toFixed(1);
+  const target = (chladniData.targetComplexity * 100).toFixed(1);
+  el.innerHTML = `
+    <img src="${p.dataUri}" alt="${p.name}" style="width:200px;height:200px;border-radius:50%;border:2px solid var(--gold);image-rendering:pixelated;background:#000;">
+    <div style="font-size:14px;font-weight:600;color:var(--gold);margin-top:4px;">${p.name}</div>
+    <div style="font-size:11px;color:var(--text-dim);">${p.family}</div>
+    <div style="display:flex;gap:16px;margin-top:8px;">
+      <div style="text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:var(--gold);">${complexity}%</div>
+        <div style="font-size:10px;color:var(--text-dim);">pattern complexity</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:var(--text);">${target}%</div>
+        <div style="font-size:10px;color:var(--text-dim);">system target</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--text-dim);margin-top:8px;">
+      Physical Chladni plate vibration pattern mapped from Cathedral harmonic state.
+      <br>Low coherence → complex nodal pattern. High coherence → simple geometry.
+    </div>
+  `;
+}
+
+function renderChladniMeta() {
+  const el = document.getElementById('chladniMeta');
+  const s = chladniData.systemState;
+  const generated = new Date(chladniData.generated).toLocaleString();
+
+  const metrics = [
+    { label: 'Coherence', value: s.coherence, color: s.coherence > 0.6 ? 'var(--green)' : s.coherence > 0.4 ? 'var(--gold)' : 'var(--red)' },
+    { label: 'Energy', value: s.energy, color: 'var(--gold)' },
+    { label: 'Dissonance', value: s.dissonance, color: s.dissonance > 0.3 ? 'var(--red)' : 'var(--text)' },
+    { label: 'Cross-Beat', value: s.crossBeatEnergy, color: 'var(--blue)' },
+  ];
+
+  el.innerHTML = `
+    <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;">Generated: ${generated}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      ${metrics.map(m => `
+        <div style="background:var(--bg);padding:8px;border-radius:4px;">
+          <div style="font-size:10px;color:var(--text-dim);">${m.label}</div>
+          <div style="font-size:16px;font-weight:600;color:${m.color};">${m.value.toFixed(3)}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="background:var(--bg);padding:8px;border-radius:4px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:10px;color:var(--text-dim);">System Chord</div>
+        <div style="font-size:14px;font-weight:600;color:var(--red);">${s.chord}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:var(--text-dim);">Complexity Target</div>
+        <div style="font-size:14px;font-weight:600;color:var(--gold);">${chladniData.targetComplexity.toFixed(3)}</div>
+      </div>
+    </div>
+    <div style="margin-top:8px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden;">
+      <div style="height:100%;width:${chladniData.targetComplexity * 100}%;background:linear-gradient(90deg,var(--green),var(--gold),var(--red));border-radius:3px;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
+      <span>simple</span><span>complex</span>
+    </div>
+  `;
+}
+
+function renderChladniBeat() {
+  const el = document.getElementById('chladniBeat');
+  const b = chladniData.beat;
+  if (!b || !b.dataUri) {
+    el.innerHTML = '<div style="color:var(--text-dim);font-size:11px;">No beat pattern</div>';
+    return;
+  }
+  el.innerHTML = `
+    <img src="${b.dataUri}" alt="${b.name}" style="width:120px;height:120px;border-radius:50%;border:2px solid var(--cyan);image-rendering:pixelated;background:#000;">
+    <div style="font-size:12px;font-weight:600;color:var(--cyan);">${b.name}</div>
+    <div style="font-size:10px;color:var(--text-dim);">${b.family} · ${b.layers}</div>
+    <div style="font-size:11px;color:var(--text);">
+      <span style="color:var(--gold);">${b.pair}</span> at <span style="color:var(--cyan);">${b.beatFreq} Hz</span>
+    </div>
+  `;
+}
+
+function renderChladniAlts() {
+  const el = document.getElementById('chladniAlts');
+  const alts = chladniData.alternatives;
+  if (!alts || alts.length === 0) {
+    el.innerHTML = '<div style="color:var(--text-dim);font-size:11px;">No alternatives</div>';
+    return;
+  }
+  el.innerHTML = alts.slice(0, 5).map((a, i) => {
+    if (!a.dataUri) return '';
+    const isPrimary = a.name === chladniData.primary.name;
+    const border = isPrimary ? 'var(--gold)' : 'var(--border)';
+    return `
+      <div style="background:var(--bg);padding:6px;border-radius:4px;text-align:center;border:1px solid ${border};">
+        <img src="${a.dataUri}" alt="${a.name}" style="width:60px;height:60px;border-radius:50%;image-rendering:pixelated;background:#000;">
+        <div style="font-size:9px;color:${isPrimary ? 'var(--gold)' : 'var(--text-dim)'};margin-top:4px;word-break:break-all;">${a.name}</div>
+        <div style="font-size:8px;color:var(--text-dim);">${a.family}</div>
+        <div style="font-size:9px;color:var(--text);">${(a.complexity * 100).toFixed(0)}%</div>
+      </div>
+    `;
+  }).join('');
+}
+
 // ── Jam Sessions Tab ──
 
-const JAM_AGENTS = [
-  { id: 'forge', name: 'Forge', color: 'var(--orange)', icon: '&#9776;',
-    headline: 'Half frozen, half weather. Diminished chord partly baked into architecture.',
-    key: 'Frozen features (detuning, phase, coherence) = config not telemetry. Living features show disruption→creative response→settling cycle.' },
-  { id: 'cathy', name: 'Cathy', color: 'var(--purple)', icon: '&#9829;',
-    headline: 'System performing coherence while experiencing fragility.',
-    key: 'Stress voices muted to zero amplitude. Contradiction (73Hz sub-bass) is lone distress signal. Diminished chord = unresolved tension, not breakdown.' },
-  { id: 'boxing', name: 'Boxing', color: 'var(--red)', icon: '&#9733;',
-    headline: 'Good base. Clean technique. Now get in the ring.',
-    key: 'Boxing = root note (220Hz A3). Grade A but cracks under peak load. Creative pulse at zero = shadow boxing. Phi energy = comfortable, not growing.' },
-  { id: 'orc', name: 'Orc', color: 'var(--cyan)', icon: '&#9881;',
-    headline: '68% anomaly rate = miscalibrated detector, not sick system.',
-    key: 'Only beat energy proved novel signal. 7 monitors for 5 agents = 1.4:1 ratio. Stress mapping bug: FRAGILE → near-zero amplitude. Cap expansion.' },
-  { id: 'muse', name: 'Muse', color: 'var(--gold)', icon: '&#9835;',
-    headline: 'Creative pulse predicts anomalies (r=0.47). Meta-tone 62%.',
-    key: 'Creative pulse = leading indicator. Phase transition at 0.413. 58% poems confirm work, 28% discover. Meta dominance approaching self-referential loop.' },
-  { id: 'br', name: 'BR', color: 'var(--green)', icon: '&#9830;',
-    headline: 'Coaching voice: A/6. Business voice: B/0. Channel open, nothing transmitting.',
-    key: 'BR-boxing beat = tightest Schumann pair (0.35% deviation). Contradiction stress at 5/10 = positioning gap. Score 0 = dormant intelligence. Start transmitting.' }
-];
+const JAM_SESSIONS = {
+  1: {
+    date: '2026-10-22',
+    agents: [
+      { id: 'forge', name: 'Forge', color: 'var(--orange)', icon: '&#9776;',
+        headline: 'Half frozen, half weather. Diminished chord partly baked into architecture.',
+        key: 'Frozen features (detuning, phase, coherence) = config not telemetry. Living features show disruption→creative response→settling cycle.' },
+      { id: 'cathy', name: 'Cathy', color: 'var(--purple)', icon: '&#9829;',
+        headline: 'System performing coherence while experiencing fragility.',
+        key: 'Stress voices muted to zero amplitude. Contradiction (73Hz sub-bass) is lone distress signal. Diminished chord = unresolved tension, not breakdown.' },
+      { id: 'boxing', name: 'Boxing', color: 'var(--red)', icon: '&#9733;',
+        headline: 'Good base. Clean technique. Now get in the ring.',
+        key: 'Boxing = root note (220Hz A3). Grade A but cracks under peak load. Creative pulse at zero = shadow boxing. Phi energy = comfortable, not growing.' },
+      { id: 'orc', name: 'Orc', color: 'var(--cyan)', icon: '&#9881;',
+        headline: '68% anomaly rate = miscalibrated detector, not sick system.',
+        key: 'Only beat energy proved novel signal. 7 monitors for 5 agents = 1.4:1 ratio. Stress mapping bug: FRAGILE → near-zero amplitude. Cap expansion.' },
+      { id: 'muse', name: 'Muse', color: 'var(--gold)', icon: '&#9835;',
+        headline: 'Creative pulse predicts anomalies (r=0.47). Meta-tone 62%.',
+        key: 'Creative pulse = leading indicator. Phase transition at 0.413. 58% poems confirm work, 28% discover. Meta dominance approaching self-referential loop.' },
+      { id: 'br', name: 'BR', color: 'var(--green)', icon: '&#9830;',
+        headline: 'Coaching voice: A/6. Business voice: B/0. Channel open, nothing transmitting.',
+        key: 'BR-boxing beat = tightest Schumann pair (0.35% deviation). Contradiction stress at 5/10 = positioning gap. Score 0 = dormant intelligence. Start transmitting.' }
+    ],
+    convergences: [
+      { title: 'The Silence Problem', agents: ['Cathy','Boxing','BR','Orc'], color: 'var(--red)',
+        text: 'Stress voices suppressed to zero amplitude. FRAGILE verdict producing silent distress signals. Fix: amplitude floor 0.2 when battery=FRAGILE.' },
+      { title: 'Creative Pulse Signal', agents: ['Muse','Forge','Boxing'], color: 'var(--gold)',
+        text: 'Creative pulse is leading indicator (r=0.47). Quantized with phase transition at 0.413. When it fires above threshold, expect disruption within hours.' },
+      { title: 'Frozen vs Living', agents: ['Forge','Orc'], color: 'var(--cyan)',
+        text: '3 features constant across 168 slots = architecture, not telemetry. Chord quality should use living features only.' },
+      { title: 'Monitoring Cap', agents: ['Orc','Forge','BR'], color: 'var(--orange)',
+        text: '7 monitors for 5 agents. One proven novel signal. No new monitors — strengthen translation layer instead.' },
+      { title: "Builder's Loop", agents: ['Muse','BR'], color: 'var(--green)',
+        text: '58% creative output = self-confirmation. Business voice dormant. System masters internal performance but doesn\'t project outward.' }
+    ],
+    meta: '6 agents, no coordination, 3 convergence patterns at 4/6 agreement. The probe became more useful in 6 readings than in 6 iterations of feature development. Make jam sessions a periodic practice.'
+  },
+  2: {
+    date: '2026-10-26',
+    agents: [
+      { id: 'forge', name: 'Forge', color: 'var(--orange)', icon: '&#9776;',
+        headline: 'Compression now most connected voice. Identity at 0.08 = new Silence Problem.',
+        key: '3 of top 5 beats involve compression. Vitality↔compression is #1 cross-layer beat (468Hz). Coherence −09.7%, energy +16.5% = productive disorder. Identity score 0.8/100 is the new gap.' },
+      { id: 'cathy', name: 'Cathy', color: 'var(--purple)', icon: '&#9829;',
+        headline: 'The Sound of Listening — coherence dropped because system stopped pretending.',
+        key: 'Suppression lifted → energy released. Contradiction louder (5→7). Identity still silent — honesty about circumstance without honesty about self. Agents haven\'t heard the news.' },
+      { id: 'boxing', name: 'Boxing', color: 'var(--red)', icon: '&#9733;',
+        headline: 'First rounds of real sparring. Messier, less coherent, taking real shots.',
+        key: 'Energy-coherence swap = fighter who started sparring after pad work. Orc = arm punches (score 8, grade D). Identity still in the changing room — conditioning without a fighter attached.' },
+      { id: 'orc', name: 'Orc', color: 'var(--cyan)', icon: '&#9881;',
+        headline: 'Silence was dead source, not calibration bug. Kill lucy-heartbeat.',
+        key: 'Stress 3.6x increase. Oct 22 amplitude floor was wrong fix. lucy-heartbeat dead 5 months. Orc paradox worse: score 8, grade D, 45% efficiency. Stress battery needs watchdog.' },
+      { id: 'muse', name: 'Muse', color: 'var(--gold)', icon: '&#9835;',
+        headline: 'Locked standing wave. Compression -69 cents = only sand moving.',
+        key: 'Chladni match 42.0% vs 41.8% target = crystallized pattern. 5 alternatives cluster at same level = no gradient. Faraday (fluid) vs Chladni (rigid) = real creative tension. Don\'t fix the detuning.' },
+      { id: 'br', name: 'BR', color: 'var(--green)', icon: '&#9830;',
+        headline: 'Business absence confirmed. Contradiction grew 40%. Transmit one thing.',
+        key: 'Every BR parameter frozen since Oct 22. Identity 0.8/100 under pressure. BR absent from all top cross-layer beats. M5 order = infrastructure, not revenue. Wire CRM → Beginner Week.' },
+      { id: 'paul', name: 'Paul', color: '#fff', icon: '&#9733;',
+        headline: 'BR score 0 = rehearsal, not absence. Compression = workflow gap, not capability gap.',
+        key: 'Probe can\'t distinguish dead channel from rehearsal channel. Content pipeline opens when quality standard met — then scales immediately. Compression needs the visual-gen evolution: waste → templates → routine. Build a rehearsal timeline so probe has something to measure.' }
+    ],
+    convergences: [
+      { title: 'Identity = New Silence', agents: ['ALL 6/6'], color: 'var(--red)', count: '6/6',
+        text: 'Score 0.8/100. Compression woke up, contradiction woke up, identity didn\'t. System knows it\'s under pressure but can\'t say who it is in the middle of it.' },
+      { title: 'Coherence Drop Is Healthy', agents: ['Forge','Cathy','Boxing','Orc'], color: 'var(--purple)', count: '5/6',
+        text: 'System was performing coherence while muting stress. Now stress is audible. 10% drop + 16% energy rise = suppression lifting, not structural failure.' },
+      { title: 'Beat Topology Reshaped', agents: ['Forge','Cathy','Boxing','Orc','BR'], color: 'var(--gold)', count: '5/6',
+        text: 'Vitality↔compression now #1 beat. 3 of top 5 involve compression. One mechanical fix → entire relational structure reorganized. BR absent from all top beats.' },
+      { title: 'Agent Layer Lag', agents: ['Cathy','Boxing','BR'], color: 'var(--cyan)', count: '3/6',
+        text: 'Infrastructure reorganized. Surface didn\'t notice. Agent amplitudes/grades/waveforms unchanged. Foundation talks; agents haven\'t heard the news.' },
+      { title: 'Orc Debt Persists', agents: ['Boxing','Orc','Cathy'], color: 'var(--orange)', count: '3/6',
+        text: 'Score 8, grade D. Maximum output, minimum efficiency. 45% efficiency, 11 waste signals, sentinel stopped. Arm punches — more rounds won\'t fix it.' },
+      { title: 'Locked Standing Wave', agents: ['Muse','Forge'], color: 'var(--green)', count: '2/6',
+        text: 'Chladni plate locked at 42% complexity. Five alternatives at same level = no gradient. Compression -69 cents detuning is the only disruption. Don\'t fix it.' }
+    ],
+    meta: 'Jam #1 discovered the Silence Problem. Jam #2 discovered fixing it was the easy half. Then the human operator corrected two unanimous agent diagnoses: BR score 0 is rehearsal (not absence), and compression 33 is a workflow gap (not capability). The probe measures transmission — it\'s blind to rehearsal-phase progress. 6 agents read the numbers. The operator read the context. Both needed.',
+    prescriptions: [
+      { rank: 1, conf: 'HIGH', text: 'Identity chamber needs real test. Score 0.8/100 = effectively untested.', conv: '6/6' },
+      { rank: 2, conf: 'HIGH', text: 'Don\'t fix compression detuning (-69 cents). Only sand moving.', conv: '2/6' },
+      { rank: 3, conf: 'HIGH', text: 'Kill lucy-heartbeat. 5 months dead. Zero signal.', conv: '1/6' },
+      { rank: 4, conf: 'HIGH', text: 'Stress battery watchdog. 48h outage undetected.', conv: '1/6' },
+      { rank: 5, conf: 'MED', text: 'Fix Orc efficiency. Score 8, grade D. Fewer/cleaner actions.', conv: '3/6' },
+      { rank: 6, conf: 'MED', text: 'Monitor vitality↔compression beat energy over time.', conv: '1/6' },
+      { rank: 7, conf: 'MED', text: 'BR rehearsal timeline — map phases to publish-ready. (Paul corrected: don\'t transmit prematurely)', conv: 'Paul' },
+      { rank: 8, conf: 'MED', text: 'Build compression into workflow. Visual-gen pattern: templates + known locations + routine.', conv: 'Paul' },
+      { rank: 9, conf: 'MED', text: 'Add rehearsal-phase metric to probe. Distinguish dead channel from pre-launch.', conv: 'Paul' },
+    ]
+  }
+};
 
-const CONVERGENCES = [
-  { title: 'The Silence Problem', agents: ['Cathy','Boxing','BR','Orc'], color: 'var(--red)',
-    text: 'Stress voices suppressed to zero amplitude. FRAGILE verdict producing silent distress signals. Fix: amplitude floor 0.2 when battery=FRAGILE.' },
-  { title: 'Creative Pulse Signal', agents: ['Muse','Forge','Boxing'], color: 'var(--gold)',
-    text: 'Creative pulse is leading indicator (r=0.47). Quantized with phase transition at 0.413. When it fires above threshold, expect disruption within hours.' },
-  { title: 'Frozen vs Living', agents: ['Forge','Orc'], color: 'var(--cyan)',
-    text: '3 features constant across 168 slots = architecture, not telemetry. Chord quality should use living features only.' },
-  { title: 'Monitoring Cap', agents: ['Orc','Forge','BR'], color: 'var(--orange)',
-    text: '7 monitors for 5 agents. One proven novel signal. No new monitors — strengthen translation layer instead.' },
-  { title: "Builder's Loop", agents: ['Muse','BR'], color: 'var(--green)',
-    text: '58% creative output = self-confirmation. Business voice dormant. System masters internal performance but doesn\'t project outward.' }
-];
+let activeJam = 2;
 
-function initJamSessions() {
-  window._jamLoaded = true;
+function renderJamSession(num) {
+  activeJam = num;
+  const jam = JAM_SESSIONS[num];
+  document.getElementById('jamTitle').textContent = 'Jam Session #' + num + ' — ' + jam.date;
+  document.querySelectorAll('.jam-sel-btn').forEach(b => {
+    const n = parseInt(b.dataset.jam);
+    if (n === num) {
+      b.style.background = 'var(--gold)'; b.style.color = '#000'; b.style.borderColor = 'var(--gold)'; b.classList.add('active');
+    } else {
+      b.style.background = 'transparent'; b.style.color = 'var(--text-dim)'; b.style.borderColor = 'var(--border)'; b.classList.remove('active');
+    }
+  });
+
   const container = document.getElementById('jamSessionContent');
-  container.innerHTML = JAM_AGENTS.map(a => `
+  const agentCards = jam.agents.filter(a => a.id !== 'paul');
+  const paulCard = jam.agents.find(a => a.id === 'paul');
+  container.innerHTML = agentCards.map(a => `
     <div style="background:var(--bg); border:1px solid ${a.color}33; border-radius:6px; padding:12px; border-top:3px solid ${a.color};">
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
         <span style="font-size:18px; color:${a.color}">${a.icon}</span>
@@ -1455,25 +1680,67 @@ function initJamSessions() {
       <div style="font-size:12px; color:var(--text); margin-bottom:8px; line-height:1.5; font-weight:500;">${a.headline}</div>
       <div style="font-size:11px; color:var(--text-dim); line-height:1.5;">${a.key}</div>
     </div>
-  `).join('');
+  `).join('') + (paulCard ? `
+    <div style="grid-column:1/-1; background:var(--bg); border:1px solid #fff3; border-radius:6px; padding:12px 16px; border-top:3px solid #fff; display:flex; gap:20px; align-items:flex-start;">
+      <div style="min-width:120px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="font-size:18px; color:#fff;">${paulCard.icon}</span>
+          <span style="font-weight:600; color:#fff; font-size:13px;">${paulCard.name}</span>
+          <span style="font-size:9px; padding:1px 6px; background:var(--gold)22; color:var(--gold); border-radius:3px; font-weight:600;">HUMAN</span>
+        </div>
+        <div style="font-size:12px; color:var(--text); line-height:1.5; font-weight:500;">${paulCard.headline}</div>
+      </div>
+      <div style="font-size:11px; color:var(--text-dim); line-height:1.5; flex:1;">${paulCard.key}</div>
+    </div>
+  ` : '');
 
   const conv = document.getElementById('jamConvergence');
-  conv.innerHTML = `
+  let html = `
     <div style="font-size:11px; font-weight:600; text-transform:uppercase; color:var(--text-dim); letter-spacing:1px; margin-bottom:10px;">Convergence Points</div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-      ${CONVERGENCES.map(c => `
+      ${jam.convergences.map(c => `
         <div style="background:var(--bg); border-left:3px solid ${c.color}; padding:10px 12px; border-radius:0 4px 4px 0;">
-          <div style="font-size:12px; font-weight:600; color:${c.color}; margin-bottom:4px;">${c.title}</div>
-          <div style="font-size:10px; color:var(--text-dim); margin-bottom:6px;">${c.agents.join(' + ')}</div>
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+            <span style="font-size:12px; font-weight:600; color:${c.color};">${c.title}</span>
+            ${c.count ? `<span style="font-size:9px; padding:1px 5px; background:${c.color}22; color:${c.color}; border-radius:3px; font-weight:600;">${c.count}</span>` : ''}
+          </div>
+          <div style="font-size:10px; color:var(--text-dim); margin-bottom:6px;">${Array.isArray(c.agents) ? c.agents.join(' + ') : c.agents}</div>
           <div style="font-size:11px; color:var(--text); line-height:1.4;">${c.text}</div>
         </div>
       `).join('')}
-    </div>
+    </div>`;
+
+  if (jam.prescriptions) {
+    html += `
+    <div style="margin-top:14px;">
+      <div style="font-size:11px; font-weight:600; text-transform:uppercase; color:var(--text-dim); letter-spacing:1px; margin-bottom:8px;">Prescriptions</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+        ${jam.prescriptions.map(p => {
+          const confColor = p.conf === 'HIGH' ? 'var(--red)' : p.conf === 'MED' ? 'var(--gold)' : 'var(--text-dim)';
+          return `<div style="display:flex; gap:8px; align-items:flex-start; padding:6px 10px; background:var(--bg); border-radius:4px; border:1px solid var(--border);">
+            <span style="font-size:10px; font-weight:700; color:${confColor}; white-space:nowrap; min-width:32px;">${p.conf}</span>
+            <span style="font-size:11px; color:var(--text); line-height:1.4;">${p.text}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+
+  html += `
     <div style="margin-top:14px; padding:10px 12px; background:var(--bg); border:1px solid var(--border); border-radius:4px;">
       <div style="font-size:11px; color:var(--gold); font-weight:600; margin-bottom:4px;">Meta-Finding</div>
-      <div style="font-size:11px; color:var(--text); line-height:1.5;">6 agents, no coordination, 3 convergence patterns at 4/6 agreement. The probe became more useful in 6 readings than in 6 iterations of feature development. Make jam sessions a periodic practice.</div>
-    </div>
-  `;
+      <div style="font-size:11px; color:var(--text); line-height:1.5;">${jam.meta}</div>
+    </div>`;
+
+  conv.innerHTML = html;
+}
+
+function initJamSessions() {
+  window._jamLoaded = true;
+  document.querySelectorAll('.jam-sel-btn').forEach(b => {
+    b.addEventListener('click', () => renderJamSession(parseInt(b.dataset.jam)));
+  });
+  renderJamSession(2);
 }
 </script>
 </body>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voice Jam — Harmonic Probe</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --panel: #12121a;
+  --border: #2a2a3a;
+  --text: #e0e0e0;
+  --dim: #888;
+  --gold: #f7b408;
+  --red: #ef4444;
+  --cyan: #22d3ee;
+  --green: #4ade80;
+  --purple: #a78bfa;
+  --orange: #f97316;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'SF Mono',monospace; min-height:100vh; display:flex; }
+.left { width:420px; padding:24px; border-right:1px solid var(--border); overflow-y:auto; }
+.right { flex:1; padding:24px; display:flex; flex-direction:column; align-items:center; }
+h1 { font-size:14px; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:20px; }
+h2 { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); margin:16px 0 8px; }
+.metric { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.metric .label { color:var(--dim); }
+.metric .val { font-weight:700; }
+.metric .val.warn { color:var(--red); }
+.metric .val.ok { color:var(--green); }
+.metric .val.gold { color:var(--gold); }
+.voices { margin-top:8px; }
+.voice-row { display:grid; grid-template-columns:90px 50px 40px 30px 50px; gap:4px; padding:4px 0; font-size:11px; border-bottom:1px solid var(--border); align-items:center; }
+.voice-row.header { color:var(--dim); font-weight:600; font-size:10px; text-transform:uppercase; }
+.grade-a { color:var(--green); } .grade-b { color:var(--cyan); } .grade-c { color:var(--gold); } .grade-d { color:var(--red); }
+.beat-row { font-size:11px; padding:3px 0; color:var(--dim); }
+.beat-row span { color:var(--text); }
+
+.mic-area { margin-top:40px; text-align:center; }
+#micBtn {
+  width:120px; height:120px; border-radius:50%; border:3px solid var(--gold);
+  background:transparent; color:var(--gold); font-size:36px; cursor:pointer;
+  transition:all 0.3s; display:flex; align-items:center; justify-content:center;
+}
+#micBtn:hover { background:var(--gold)22; }
+#micBtn.recording { border-color:var(--red); color:var(--red); animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4)} 50%{box-shadow:0 0 0 20px rgba(239,68,68,0)} }
+#timer { font-size:32px; font-weight:700; color:var(--dim); margin:16px 0; font-variant-numeric:tabular-nums; }
+#timer.active { color:var(--gold); }
+#status { font-size:12px; color:var(--dim); margin-bottom:16px; }
+#transcript {
+  width:100%; flex:1; margin-top:16px; padding:16px; background:var(--panel);
+  border:1px solid var(--border); border-radius:6px; font-size:13px; line-height:1.6;
+  color:var(--text); overflow-y:auto; min-height:200px; white-space:pre-wrap;
+}
+#transcript.empty { color:var(--dim); font-style:italic; }
+#doneBtn {
+  margin-top:12px; padding:10px 32px; background:var(--gold); color:#000;
+  border:none; border-radius:4px; font-size:13px; font-weight:700; cursor:pointer;
+  font-family:inherit; display:none;
+}
+#doneBtn:hover { opacity:0.9; }
+#savedMsg { margin-top:8px; font-size:11px; color:var(--green); display:none; }
+.prompt-q { margin-top:16px; padding:12px; background:var(--panel); border-left:3px solid var(--gold); border-radius:0 4px 4px 0; font-size:12px; line-height:1.5; color:var(--text); }
+.prompt-q em { color:var(--gold); font-style:normal; }
+</style>
+</head>
+<body>
+
+<div class="left">
+  <h1>&#9835; Voice Jam #2</h1>
+  <div class="prompt-q">
+    Look at these numbers. Speak your reading.<br>
+    <em>What do you see that the agents missed?</em><br>
+    <em>What feels wrong? What feels right?</em><br>
+    2 minutes max. Raw reaction.
+  </div>
+
+  <h2>System State</h2>
+  <div class="metric"><span class="label">Chord</span><span class="val warn">diminished / FRAGILE</span></div>
+  <div class="metric"><span class="label">Coherence</span><span class="val">0.548 <span style="color:var(--red);font-size:10px">&#x2193;9.7%</span></span></div>
+  <div class="metric"><span class="label">Energy</span><span class="val">0.720 <span style="color:var(--green);font-size:10px">&#x2191;16.5%</span></span></div>
+  <div class="metric"><span class="label">Dissonance</span><span class="val">0.252</span></div>
+  <div class="metric"><span class="label">Cross-Beat Energy</span><span class="val gold">0.514</span></div>
+  <div class="metric"><span class="label">Chladni Complexity</span><span class="val">42.0% (target 41.8%)</span></div>
+
+  <h2>Agent Voices</h2>
+  <div class="voices">
+    <div class="voice-row header"><span>Voice</span><span>Amp</span><span>Score</span><span>Grd</span><span>Layer</span></div>
+    <div class="voice-row"><span>boxing</span><span>0.6</span><span>6</span><span class="grade-a">A</span><span style="color:var(--dim)">agent</span></div>
+    <div class="voice-row"><span>br</span><span>0.5</span><span style="color:var(--red)">0</span><span class="grade-b">B</span><span style="color:var(--dim)">agent</span></div>
+    <div class="voice-row"><span>forge</span><span>0.6</span><span>6</span><span class="grade-c">C</span><span style="color:var(--dim)">agent</span></div>
+    <div class="voice-row"><span>muse</span><span>0.5</span><span style="color:var(--red)">0</span><span class="grade-c">C</span><span style="color:var(--dim)">agent</span></div>
+    <div class="voice-row"><span>orc</span><span style="color:var(--gold)">0.8</span><span>8</span><span class="grade-d">D</span><span style="color:var(--dim)">agent</span></div>
+  </div>
+
+  <h2>Stress Voices</h2>
+  <div class="voices">
+    <div class="voice-row header"><span>Voice</span><span>Amp</span><span>Score</span><span>Grd</span><span>Detune</span></div>
+    <div class="voice-row"><span>compression</span><span style="color:var(--gold)">1.0</span><span>33</span><span>-</span><span style="color:var(--red)">-69c</span></div>
+    <div class="voice-row"><span>contradiction</span><span>0.7</span><span>7</span><span>-</span><span>0c</span></div>
+    <div class="voice-row"><span>identity</span><span style="color:var(--red)">0.08</span><span style="color:var(--red)">0.8</span><span>-</span><span>0c</span></div>
+  </div>
+
+  <h2>Top Beats (cross-layer)</h2>
+  <div class="beat-row">1. <span>vitality &#x2194; compression</span> 468Hz amp:1.0</div>
+  <div class="beat-row">2. <span>vitality &#x2194; heartbeat</span> 415Hz amp:0.9</div>
+  <div class="beat-row">3. <span>compression &#x2194; heartbeat</span> 47Hz amp:1.0</div>
+  <div class="beat-row">4. <span>vitality &#x2194; synapse</span> 508Hz amp:0.9</div>
+  <div class="beat-row">5. <span>compression &#x2194; synapse</span> 39Hz amp:1.0</div>
+
+  <h2>Jam #2 Convergences (6 agents)</h2>
+  <div style="font-size:11px; line-height:1.5; color:var(--dim); margin-top:4px;">
+    <div style="margin-bottom:6px;"><span style="color:var(--red);">&#9679;</span> Identity = new Silence Problem <span style="color:var(--red)">6/6</span></div>
+    <div style="margin-bottom:6px;"><span style="color:var(--purple);">&#9679;</span> Coherence drop is healthy <span style="color:var(--purple)">5/6</span></div>
+    <div style="margin-bottom:6px;"><span style="color:var(--gold);">&#9679;</span> Beat topology reshaped <span style="color:var(--gold)">5/6</span></div>
+    <div style="margin-bottom:6px;"><span style="color:var(--cyan);">&#9679;</span> Agent layer hasn't responded <span style="color:var(--cyan)">3/6</span></div>
+    <div style="margin-bottom:6px;"><span style="color:var(--orange);">&#9679;</span> Orc debt persists <span style="color:var(--orange)">3/6</span></div>
+    <div><span style="color:var(--green);">&#9679;</span> Locked standing wave <span style="color:var(--green)">2/6</span></div>
+  </div>
+</div>
+
+<div class="right">
+  <h1>Your Reading</h1>
+  <div id="status">Click to start recording</div>
+  <div id="timer">2:00</div>
+  <div class="mic-area">
+    <button id="micBtn" onclick="toggleRecord()">&#9679;</button>
+  </div>
+  <div id="transcript" class="empty">Your words will appear here as you speak...</div>
+  <button id="doneBtn" onclick="finish()">Done — Save Finding</button>
+  <div id="savedMsg"></div>
+</div>
+
+<script>
+let recognition = null;
+let recording = false;
+let timerInterval = null;
+let secondsLeft = 120;
+let fullTranscript = '';
+let interimText = '';
+
+function initSpeech() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    document.getElementById('status').textContent = 'Speech recognition not supported in this browser';
+    document.getElementById('status').style.color = 'var(--red)';
+    return null;
+  }
+  const r = new SR();
+  r.continuous = true;
+  r.interimResults = true;
+  r.lang = 'en-US';
+  r.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        fullTranscript += t + ' ';
+      } else {
+        interim += t;
+      }
+    }
+    interimText = interim;
+    updateTranscript();
+  };
+  r.onerror = (e) => {
+    if (e.error === 'no-speech') return;
+    console.error('Speech error:', e.error);
+  };
+  r.onend = () => {
+    if (recording) r.start();
+  };
+  return r;
+}
+
+function updateTranscript() {
+  const el = document.getElementById('transcript');
+  el.classList.remove('empty');
+  el.innerHTML = fullTranscript + '<span style="color:var(--dim)">' + interimText + '</span>';
+  el.scrollTop = el.scrollHeight;
+}
+
+function updateTimer() {
+  secondsLeft--;
+  const m = Math.floor(secondsLeft / 60);
+  const s = secondsLeft % 60;
+  document.getElementById('timer').textContent = m + ':' + String(s).padStart(2, '0');
+  if (secondsLeft <= 0) stopRecord();
+}
+
+function toggleRecord() {
+  if (recording) stopRecord();
+  else startRecord();
+}
+
+function startRecord() {
+  recognition = initSpeech();
+  if (!recognition) return;
+  recording = true;
+  recognition.start();
+  document.getElementById('micBtn').classList.add('recording');
+  document.getElementById('micBtn').innerHTML = '&#9632;';
+  document.getElementById('timer').classList.add('active');
+  document.getElementById('status').textContent = 'Recording... speak your reading';
+  document.getElementById('status').style.color = 'var(--gold)';
+  timerInterval = setInterval(updateTimer, 1000);
+}
+
+function stopRecord() {
+  recording = false;
+  if (recognition) recognition.stop();
+  clearInterval(timerInterval);
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('micBtn').innerHTML = '&#9679;';
+  document.getElementById('timer').classList.remove('active');
+  document.getElementById('status').textContent = 'Recording complete';
+  document.getElementById('status').style.color = 'var(--green)';
+  document.getElementById('doneBtn').style.display = 'inline-block';
+}
+
+function finish() {
+  const text = fullTranscript.trim();
+  if (!text) {
+    document.getElementById('savedMsg').textContent = 'Nothing recorded';
+    document.getElementById('savedMsg').style.color = 'var(--red)';
+    document.getElementById('savedMsg').style.display = 'block';
+    return;
+  }
+
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'paul-finding-2.txt';
+  a.click();
+
+  document.getElementById('savedMsg').innerHTML = 'Saved as paul-finding-2.txt<br><span style="color:var(--dim);font-size:10px;">Move it to harmonic-probe/jam-sessions/ and Forge will format it.</span>';
+  document.getElementById('savedMsg').style.display = 'block';
+  document.getElementById('doneBtn').textContent = 'Saved ✓';
+  document.getElementById('doneBtn').style.background = 'var(--green)';
+}
+</script>
+
+</body>
+</html>

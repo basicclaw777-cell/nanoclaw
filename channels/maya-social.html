@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya Social — Cathedral Channels</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#0f1018;--card:#131320;--border:#1a1a2e;--text:#c8c8d0;--dim:#555;--gold:#f7b408;--accent:#1da1f2;--accent-glow:rgba(29,161,242,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',ui-monospace,monospace;min-height:100vh}
+
+.hero{position:relative;width:100%;aspect-ratio:896/336;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.7)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg) 100%)}
+.back{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 12px;border-radius:3px;cursor:pointer;text-decoration:none;letter-spacing:1px;z-index:2;transition:color .2s}
+.back:hover{color:var(--gold)}
+.hero-title{position:absolute;bottom:20px;left:16px;z-index:2}
+.hero-title h1{font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 20px var(--accent-glow)}
+.hero-title .band{font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.phase-badge{position:absolute;bottom:24px;right:16px;z-index:2;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:3px;background:rgba(68,68,68,0.4);border:1px solid #444;color:var(--dim)}
+
+.content{max-width:900px;margin:0 auto;padding:16px}
+
+.section-title{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.brief{font-size:12px;line-height:1.7;color:var(--text);margin-bottom:24px}
+.brief strong{color:var(--gold)}
+
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px}
+
+.mission{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s}
+.mission:hover{border-color:var(--accent);background:var(--accent-glow)}
+.mission-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.mission-name .status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mission-name .status.ready{background:var(--gold)}
+.mission-name .status.pending{background:var(--dim)}
+.mission-desc{font-size:10px;color:var(--dim);line-height:1.5;margin-bottom:8px}
+.mission-gain{font-size:9px;color:var(--accent);letter-spacing:0.5px}
+.mission-gain span{color:var(--gold)}
+
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 14px;flex:1;min-width:120px}
+.stat-val{font-size:18px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.tech-spec{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;font-size:10px;line-height:1.8;color:var(--dim);margin-bottom:24px}
+.tech-spec code{color:var(--accent);background:rgba(29,161,242,0.1);padding:1px 4px;border-radius:2px}
+
+.launch-btn{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;margin-bottom:40px}
+.launch-btn:hover{background:var(--accent-glow);box-shadow:0 0 30px var(--accent-glow)}
+.launch-btn:disabled{opacity:0.3;cursor:not-allowed}
+
+@media(max-width:600px){
+  .content{padding:12px 16px}
+  .mission-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="panels/maya-social.jpg" alt="Maya Social">
+  <div class="hero-overlay"></div>
+  <a href="index.html" class="back">&larr; CHANNELS</a>
+  <div class="hero-title">
+    <h1>Maya Social</h1>
+    <div class="band">Business</div>
+  </div>
+  <div class="phase-badge">PHASE 0 &mdash; NOT BUILT</div>
+</div>
+
+<div class="content">
+
+  <div class="section-title">Channel Brief</div>
+  <div class="brief">
+    Maya is the <strong>social intelligence character</strong> — monitoring competitors, tracking trends,
+    managing BR's public presence. Where Logan simplifies and Reed directs, Maya <strong>reads the room</strong>.
+    HK boxing market intelligence, content performance tracking, audience growth strategy.
+    The public face of Cathedral intelligence, translating internal craft into external presence.
+  </div>
+
+  <div class="section-title">Potential Missions</div>
+  <div class="mission-grid">
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Competitor Content Scan</div>
+      <div class="mission-desc">Systematic scan of HK boxing gym social presence. What content gets traction, what falls flat. Map the competitive landscape — not to copy, but to find gaps.</div>
+      <div class="mission-gain">Gain: <span>Competitive intelligence map</span> — where BR can own space</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Trend Opportunity Detection</div>
+      <div class="mission-desc">Monitor trending fitness/boxing/wellness content. Flag opportunities that align with BR's brand and Paul's coaching philosophy. Not chasing trends — intercepting them.</div>
+      <div class="mission-gain">Gain: <span>Timely content hooks</span> that align with brand values</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Content Performance Analysis</div>
+      <div class="mission-desc">Track which BR posts perform. Correlate style (black/gold sketch vs photo vs video) with engagement. Build the data for what works, not what feels right.</div>
+      <div class="mission-gain">Gain: <span>Evidence-based content strategy</span> replacing gut feel</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Audience Growth Strategy</div>
+      <div class="mission-desc">Map BR's audience segments. Beginners vs athletes vs kids vs corporate. Each segment needs different content in different places. Maya knows who's where.</div>
+      <div class="mission-gain">Gain: <span>Segmented content plan</span> — right message, right channel</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Social Calendar Management</div>
+      <div class="mission-desc">Maintain a content calendar fed by Reed Studio output, Animation Lab clips, and Logan stories. Schedule, post, track. The execution layer under the creative layer.</div>
+      <div class="mission-gain">Gain: <span>Consistent posting cadence</span> without daily decisions</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Channel Stats</div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Posts Tracked</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Competitors Mapped</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Trends Flagged</div></div>
+    <div class="stat"><div class="stat-val">&mdash;</div><div class="stat-label">Last Scan</div></div>
+  </div>
+
+  <div class="section-title">Technical Spec</div>
+  <div class="tech-spec">
+    <strong>Source:</strong> Instagram API, competitor profiles, content analytics<br>
+    <strong>Pipeline:</strong> <code>scan → analyse → flag opportunities → calendar → post</code><br>
+    <strong>Character:</strong> Maya from the Cathedral cast — social intelligence, street-level awareness<br>
+    <strong>Output:</strong> Competitor reports, content calendar, trend alerts via Telegram<br>
+    <strong>Phase 1 loop:</strong> Maya scans → placeholder → Paul reviews opportunities → approves/skips<br>
+    <strong>Graduation criteria:</strong> 30+ content recommendations with &gt;60% acceptance rate
+  </div>
+
+  <button class="launch-btn" disabled>&#128225; LAUNCH CHANNEL &mdash; PHASE 0 (BUILD REQUIRED)</button>
+
+</div>
+
+</body>
+</html>

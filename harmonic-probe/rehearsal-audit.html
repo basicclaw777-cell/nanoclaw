@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral Rehearsal Audit</title>
+<style>
+:root { --bg:#0a0a0f; --panel:#12121a; --border:#2a2a3a; --text:#e0e0e0; --dim:#888; --gold:#f7b408; --red:#ef4444; --green:#4ade80; --cyan:#22d3ee; --purple:#a78bfa; --orange:#f97316; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',monospace;padding:24px 32px;max-width:1100px;margin:0 auto;line-height:1.6}
+h1{font-size:16px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px}
+.sub{font-size:11px;color:var(--dim);margin-bottom:24px}
+h2{font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin:28px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:12px;color:var(--text);margin:16px 0 8px}
+
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 24px}
+.stat{padding:14px;border-radius:6px;text-align:center;border:1px solid var(--border);background:var(--panel)}
+.stat .num{font-size:28px;font-weight:700}
+.stat .label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-top:4px}
+.stat .pct{font-size:11px;color:var(--dim)}
+.stat.live .num{color:var(--green)} .stat.rehearsing .num{color:var(--gold)} .stat.dormant .num{color:var(--cyan)} .stat.dead .num{color:var(--red)}
+
+table{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0 16px}
+th{text-align:left;padding:6px 8px;color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border)}
+td{padding:6px 8px;border-bottom:1px solid var(--border)}
+tr:hover{background:#ffffff06}
+.s-live{color:var(--green);font-weight:600} .s-rehearsing{color:var(--gold);font-weight:600} .s-dormant{color:var(--cyan)} .s-dead{color:var(--red)}
+
+.cluster{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin:10px 0}
+.cluster-title{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.cluster p{font-size:11px;color:var(--dim);margin:4px 0}
+.cluster .trigger{color:var(--text);font-weight:600}
+
+.kill-row{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px}
+.kill-name{color:var(--red);font-weight:600;min-width:180px}
+.kill-why{color:var(--dim);flex:1}
+
+.correction{background:var(--panel);border-left:3px solid var(--gold);padding:14px 16px;border-radius:0 6px 6px 0;margin:20px 0;font-size:12px}
+.correction strong{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<h1>Cathedral Rehearsal Audit</h1>
+<div class="sub">2026-10-26 &mdash; 173 systems classified across 15 categories<br>Method: PM2 live state + state file timestamps + voice registry + SYSTEM_MAP + MEMORY.md</div>
+
+<div class="summary-grid">
+  <div class="stat live"><div class="num">28</div><div class="label">Live</div><div class="pct">16%</div></div>
+  <div class="stat rehearsing"><div class="num">35</div><div class="label">Rehearsing</div><div class="pct">20%</div></div>
+  <div class="stat dormant"><div class="num">42</div><div class="label">Dormant</div><div class="pct">24%</div></div>
+  <div class="stat dead"><div class="num">68</div><div class="label">Dead</div><div class="pct">40%</div></div>
+</div>
+
+<div class="correction">
+  <strong>The Probe's Blind Spot:</strong> 35 REHEARSING + 68 DEAD both read as score 0. The probe can't tell them apart. A theatre in rehearsal looks the same as an empty building. This audit is the first step to fixing that.
+</div>
+
+<!-- REHEARSAL CLUSTERS -->
+<h2>4 Rehearsal Clusters (where timelines matter most)</h2>
+
+<div class="cluster">
+  <div class="cluster-title">1. Coaching OS &mdash; 15+ tools built</div>
+  <p><strong>Built:</strong> Planner, drills, capture, hub, whiteboard design, combo cards, class sheet, 134 technique animations, coaching.db</p>
+  <p><strong>Missing:</strong> Daily operational integration into Paul's gym workflow</p>
+  <p><strong>Phase:</strong> Set built, cast ready. Need first dress rehearsal &mdash; Paul uses the tools for one real class week</p>
+  <p class="trigger">Trigger: Paul decides to run a class through the system end-to-end</p>
+</div>
+
+<div class="cluster">
+  <div class="cluster-title">2. BR Public Presence &mdash; website + content + Instagram</div>
+  <p><strong>Built:</strong> Website v4, design bibles, Instagram voice, content pipeline, first-visit conversion design, beginner week design</p>
+  <p><strong>Missing:</strong> Paul's quality standard met for public output</p>
+  <p><strong>Phase:</strong> Scripts written, production not started. Need first content that meets the standard</p>
+  <p class="trigger">Trigger: Paul says "this is ready to publish" on one piece</p>
+</div>
+
+<div class="cluster">
+  <div class="cluster-title">3. Reed / Content Studio &mdash; full pipeline</div>
+  <p><strong>Built:</strong> Character-driven content gen, visual hub, API layer, buzz monitor, Maya social intel</p>
+  <p><strong>Missing:</strong> M5 hardware + Paul's quality standard for content</p>
+  <p><strong>Phase:</strong> Engine built, fuel not loaded</p>
+  <p class="trigger">Trigger: M5 arrives (Nov 10) + first Reed-produced piece that passes quality gate</p>
+</div>
+
+<div class="cluster">
+  <div class="cluster-title">4. Visual / Logan &mdash; animation + vectors + stained glass</div>
+  <p><strong>Built:</strong> 1093 atoms, Bhagat rig, technique library, animation lab, stained glass concept</p>
+  <p><strong>Missing:</strong> Consistent production workflow (same compression pattern &mdash; capability exists, routine doesn't)</p>
+  <p><strong>Phase:</strong> Most advanced. Already producing in sessions</p>
+  <p class="trigger">Trigger: M5 + visual-gen workflow maturation</p>
+</div>
+
+<!-- INFRASTRUCTURE -->
+<h2>1. Infrastructure Backbone</h2>
+<table>
+<tr><th>System</th><th>PM2</th><th>Status</th><th>Notes</th></tr>
+<tr><td>cath-bridge</td><td>ONLINE</td><td class="s-live">LIVE</td><td>569 routes, all web UIs, port 8080</td></tr>
+<tr><td>cathedral-bot</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Primary command interface</td></tr>
+<tr><td>vault-brain</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Chokidar watcher, cross-domain associations</td></tr>
+<tr><td>vault-promoter</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Staging &rarr; refined promotion</td></tr>
+<tr><td>vault-state-refresh</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Regenerates vault-state.json</td></tr>
+<tr><td>vault-watcher</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Python event bus</td></tr>
+<tr><td>intake-watcher</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Incoming file routing</td></tr>
+<tr><td>terminal-harvester</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Session signal extraction</td></tr>
+<tr><td>lymphatic</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Waste detection/clearing</td></tr>
+<tr><td>orchestrator-seed</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Seed generation</td></tr>
+<tr><td>content-reviews</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Automated content review</td></tr>
+<tr><td>archaeologist-weekly</td><td>ONLINE</td><td class="s-live">LIVE</td><td>Forgotten technique mining</td></tr>
+<tr><td>lucy-heartbeat</td><td>ONLINE</td><td class="s-dead">DEAD</td><td>5 months stale. Online but producing nothing</td></tr>
+<tr><td>sentinel</td><td>STOPPED</td><td class="s-dead">DEAD</td><td>Was smell-test sentinel. 11 waste signals accumulating</td></tr>
+<tr><td>telegram-tunnel</td><td>STOPPED</td><td class="s-dormant">DORMANT</td><td>Webhook proxy, works when needed</td></tr>
+<tr><td>forge-backup</td><td>STOPPED</td><td class="s-dormant">DORMANT</td><td>Nightly backup via cron</td></tr>
+</table>
+
+<!-- AGENT LAYER -->
+<h2>2. Agent Layer (Probe Voices)</h2>
+<table>
+<tr><th>Voice</th><th>Score</th><th>Grade</th><th>Amp</th><th>Status</th><th>Notes</th></tr>
+<tr><td>boxing</td><td>6</td><td>A</td><td>0.6</td><td class="s-live">LIVE</td><td>Best grade. Coaching OS, Gym Eyes all built and used</td></tr>
+<tr><td>br</td><td>0</td><td>B</td><td>0.5</td><td class="s-rehearsing">REHEARSING</td><td>Paul's correction: content pipeline building toward quality standard</td></tr>
+<tr><td>forge</td><td>6</td><td>C</td><td>0.6</td><td class="s-live">LIVE</td><td>Building daily</td></tr>
+<tr><td>muse</td><td>0</td><td>C</td><td>0.5</td><td class="s-rehearsing">REHEARSING</td><td>Content studio exists, Reed built. Waiting for M5 + standard</td></tr>
+<tr><td>orc</td><td>8</td><td>D</td><td>0.8</td><td class="s-live">LIVE</td><td>Highest activity, worst quality. 45% efficiency</td></tr>
+</table>
+
+<!-- STRESS -->
+<h2>3. Stress Layer</h2>
+<table>
+<tr><th>Voice</th><th>Score</th><th>Status</th><th>Notes</th></tr>
+<tr><td>compression</td><td>33</td><td class="s-live">LIVE</td><td>Fixed today. Score 33 = workflow gap (Paul)</td></tr>
+<tr><td>contradiction</td><td>7</td><td class="s-live">LIVE</td><td>Grew 40% from Oct 22. Real signal</td></tr>
+<tr><td>identity</td><td>0.8</td><td class="s-dead">UNKNOWN</td><td>0.8/100 = untested or incapable. Needs real test</td></tr>
+</table>
+
+<!-- COACHING OS -->
+<h2>4. Coaching OS + Gym Tools</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Coaching Planner</td><td class="s-rehearsing">REHEARSING</td><td>Full suite: teach mode, workout card, intelligence, series graph</td></tr>
+<tr><td>Coaching API</td><td class="s-rehearsing">REHEARSING</td><td>14 endpoints. Wired but not daily-used</td></tr>
+<tr><td>Coaching Hub</td><td class="s-rehearsing">REHEARSING</td><td>23 cards, 5 sections. Door exists</td></tr>
+<tr><td>Drill Library</td><td class="s-rehearsing">REHEARSING</td><td>60+ drills mapped</td></tr>
+<tr><td>Drill Capture</td><td class="s-rehearsing">REHEARSING</td><td>URL &rarr; vision &rarr; tags &rarr; library</td></tr>
+<tr><td>coaching.db</td><td class="s-live">LIVE</td><td>Last written 4 days ago. Data accumulating</td></tr>
+<tr><td>Technique Library</td><td class="s-live">LIVE</td><td>134 MoCap animations on Logan rig</td></tr>
+<tr><td>Class Sheet</td><td class="s-rehearsing">REHEARSING</td><td>3-view planner. Built, not daily workflow</td></tr>
+<tr><td>Combo Cards</td><td class="s-rehearsing">REHEARSING</td><td>Free HTML generator. Curriculum backbone</td></tr>
+<tr><td>Coach Paul Engine</td><td class="s-rehearsing">REHEARSING</td><td>27 vault-seed hypotheses. Not firing daily</td></tr>
+<tr><td>Coaching Whiteboard</td><td class="s-rehearsing">REHEARSING</td><td>BUILD READY. Previous/Current/Next per class+client</td></tr>
+</table>
+
+<!-- BR CRM -->
+<h2>5. BR CRM + Business</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>BR CRM (565 records)</td><td class="s-dormant">DORMANT</td><td>3 months stale. Not being written to</td></tr>
+<tr><td>CRM Signal Map</td><td class="s-dormant">DORMANT</td><td>Data stale</td></tr>
+<tr><td>Punchpass Scraper</td><td class="s-dormant">DORMANT</td><td>Could restart</td></tr>
+<tr><td>BR Revenue Digest</td><td class="s-dormant">DORMANT</td><td>Revenue reporting stopped</td></tr>
+<tr><td>Lapsed Campaign</td><td class="s-dormant">DORMANT</td><td>20 sent, result 4 months overdue</td></tr>
+<tr><td>Comms Daily</td><td class="s-dead">DEAD</td><td>No state file</td></tr>
+<tr><td>WhatsApp Integration</td><td class="s-dead">DEAD</td><td>Routes wired, never used</td></tr>
+<tr><td>BR Website</td><td class="s-rehearsing">REHEARSING</td><td>V4 parked, needs artwork. Design bibles written</td></tr>
+<tr><td>CSOB Website</td><td class="s-rehearsing">REHEARSING</td><td>Fable-authored bible exists. No build yet</td></tr>
+<tr><td>Beginner Week</td><td class="s-rehearsing">REHEARSING</td><td>$500 5-day programme designed. Not launched</td></tr>
+<tr><td>First Visit Conversion</td><td class="s-rehearsing">REHEARSING</td><td>AI follow-up chain designed. CRM median=0. Not wired</td></tr>
+<tr><td>PT Tracker</td><td class="s-live">LIVE</td><td>Mobile session counter. In use</td></tr>
+</table>
+
+<!-- TRADING -->
+<h2>6. Trading System</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Bottleneck Arbitrage</td><td class="s-dormant">DORMANT</td><td>Last fired Sep 30. $100K paper, 18 positions</td></tr>
+<tr><td>Trading Orchestrator</td><td class="s-dead">DEAD</td><td>Central loop stopped</td></tr>
+<tr><td>Simpsons Trader</td><td class="s-dead">DEAD</td><td>Event trader stopped</td></tr>
+<tr><td>Cyclical Trader</td><td class="s-dead">DEAD</td><td>Cycle strategy stopped</td></tr>
+<tr><td>Position Guardian</td><td class="s-dead">DEAD</td><td>579 restarts = was crashlooping</td></tr>
+<tr><td>Trading Mentor</td><td class="s-dead">DEAD</td><td>Never gained traction</td></tr>
+<tr><td>Daily Picks</td><td class="s-dead">DEAD</td><td>Stopped</td></tr>
+<tr><td>Allocation Tracker</td><td class="s-dead">DEAD</td><td>Stopped</td></tr>
+<tr><td>Causal Critic</td><td class="s-dormant">DORMANT</td><td>Process Score system built</td></tr>
+<tr><td>Learning Pulse</td><td class="s-dormant">DORMANT</td><td>Anti-streak dashboard exists</td></tr>
+</table>
+
+<!-- CONTENT STUDIO -->
+<h2>7. Content Studio / Reed</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Buzz Monitor</td><td class="s-live">LIVE</td><td>Trend monitoring</td></tr>
+<tr><td>Maya Social</td><td class="s-live">LIVE</td><td>Social intelligence</td></tr>
+<tr><td>Reed Studio</td><td class="s-rehearsing">REHEARSING</td><td>Full pipeline. Waiting M5 + quality standard</td></tr>
+<tr><td>Reed Visual Hub</td><td class="s-rehearsing">REHEARSING</td><td>Visual content pipeline</td></tr>
+<tr><td>Reed Lab</td><td class="s-rehearsing">REHEARSING</td><td>Experimental generation</td></tr>
+<tr><td>Content Studio API</td><td class="s-rehearsing">REHEARSING</td><td>12 endpoints built</td></tr>
+<tr><td>Higgsfield Gallery</td><td class="s-dormant">DORMANT</td><td>Credits near zero</td></tr>
+<tr><td>Logan Story Engine</td><td class="s-rehearsing">REHEARSING</td><td>Narrative generator from Bible</td></tr>
+</table>
+
+<!-- CATHEDRAL OS -->
+<h2>8. Cathedral OS + Meta</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Cathedral OS</td><td class="s-dormant">DORMANT</td><td>Atrium + rooms built. DB 2 months stale</td></tr>
+<tr><td>Cathedral Foundry</td><td class="s-dormant">DORMANT</td><td>23 agent genomes. Not actively evolving</td></tr>
+<tr><td>Cathedral Gardener</td><td class="s-dead">DEAD</td><td>Sunday cron. No state file</td></tr>
+<tr><td>Production Engine</td><td class="s-live">LIVE</td><td>Fired yesterday. Daily agent production</td></tr>
+<tr><td>Output Architect</td><td class="s-dead">DEAD</td><td>No state file</td></tr>
+<tr><td>Cathedral City</td><td class="s-dead">DEAD</td><td>Social simulation. No evidence of use</td></tr>
+<tr><td>The Mirror</td><td class="s-dormant">DORMANT</td><td>Digital Paul. No state file</td></tr>
+<tr><td>The Concierge</td><td class="s-dormant">DORMANT</td><td>Cathedral guide. Route exists</td></tr>
+<tr><td>The Oracle</td><td class="s-dormant">DORMANT</td><td>Vault RAG. Route exists</td></tr>
+<tr><td>Morning View</td><td class="s-dead">DEAD</td><td>Stopped. No state</td></tr>
+<tr><td>Episodes Dashboard</td><td class="s-dormant">DORMANT</td><td>Last harvested Jul 2</td></tr>
+</table>
+
+<!-- RESEARCH -->
+<h2>9. Research Instruments</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Harmonic Probe</td><td class="s-live">LIVE</td><td>This session. Dashboard + jam + Chladni</td></tr>
+<tr><td>Stress Battery</td><td class="s-live">LIVE</td><td>Fixed this session. Daily cron</td></tr>
+<tr><td>Flinch Detector</td><td class="s-live">LIVE</td><td>Production log 104KB</td></tr>
+<tr><td>Paul Patterns</td><td class="s-dead">DEAD</td><td>3 months stale</td></tr>
+<tr><td>Corpus Diagnostic</td><td class="s-dead">DEAD</td><td>No state file</td></tr>
+<tr><td>Prospector</td><td class="s-dead">DEAD</td><td>2 months stale</td></tr>
+<tr><td>Somatic Orrery</td><td class="s-dormant">DORMANT</td><td>7-planet diagnostic. Door exists</td></tr>
+<tr><td>Probe Physician</td><td class="s-dormant">DORMANT</td><td>Daily reader. Not confirmed firing</td></tr>
+<tr><td>Base-60 Lens</td><td class="s-dormant">DORMANT</td><td>On-demand research tool</td></tr>
+</table>
+
+<!-- GOVERNANCE -->
+<h2>10. Governance + Autonomy</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Autonomy Constitution</td><td class="s-dormant">DORMANT</td><td>AgentOrgan, Escalation, StateBus &mdash; all built, zero enforcement</td></tr>
+<tr><td>Reed Governance</td><td class="s-dormant">DORMANT</td><td>7 organs on standard chassis</td></tr>
+<tr><td>Brand Invariant</td><td class="s-dormant">DORMANT</td><td>BR palette checker</td></tr>
+<tr><td>Spend Circuit Breaker</td><td class="s-dormant">DORMANT</td><td>canSpend()/guardedCall()</td></tr>
+<tr><td>Constitutional Invariants</td><td class="s-dormant">DORMANT</td><td>8 executable invariants</td></tr>
+<tr><td>Calibration Tracker</td><td class="s-dormant">DORMANT</td><td>Brier score + drift</td></tr>
+</table>
+
+<!-- RESEARCH LANES -->
+<h2>11. Research Lanes</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Vault Graph</td><td class="s-dormant">DORMANT</td><td>1907 nodes. Route exists</td></tr>
+<tr><td>Pandamericano</td><td class="s-dormant">DORMANT</td><td>130 transcripts. Framework built</td></tr>
+<tr><td>Babylon Translator</td><td class="s-dormant">DORMANT</td><td>Calibrated Jun 15. Bulk pending</td></tr>
+<tr><td>Ancient Corpus</td><td class="s-dormant">DORMANT</td><td>135K tablets. Pipeline built</td></tr>
+<tr><td>Beacon (SEO)</td><td class="s-dormant">DORMANT</td><td>39,550 pages generated. Not deployed</td></tr>
+<tr><td>Hunch Lane</td><td class="s-dormant">DORMANT</td><td>Retrieve-before-derive. Built</td></tr>
+<tr><td>Film Room</td><td class="s-dead">DEAD</td><td>PARKED. RAM issues</td></tr>
+</table>
+
+<!-- OTHER DEAD -->
+<h2>12-14. Confirmed Dead</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>The Dojo (flavor)</td><td class="s-dead">DEAD</td><td>Design exercise. PARKED</td></tr>
+<tr><td>The Atelier (flavor)</td><td class="s-dead">DEAD</td><td>Design exercise. PARKED</td></tr>
+<tr><td>The Scriptorium (flavor)</td><td class="s-dead">DEAD</td><td>Design exercise. PARKED</td></tr>
+<tr><td>PM Scanner</td><td class="s-dead">DEAD</td><td>Stopped</td></tr>
+<tr><td>Patent Miner</td><td class="s-dead">DEAD</td><td>Never produced meaningful output</td></tr>
+<tr><td>Clinical Miner</td><td class="s-dead">DEAD</td><td>&mdash;</td></tr>
+<tr><td>PhD Miner</td><td class="s-dead">DEAD</td><td>&mdash;</td></tr>
+<tr><td>Soviet Miner</td><td class="s-dead">DEAD</td><td>&mdash;</td></tr>
+</table>
+
+<!-- VISUAL -->
+<h2>15. Visual / Animation</h2>
+<table>
+<tr><th>System</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Visual-gen pipeline</td><td class="s-live">LIVE</td><td>OpenArt + cost control + seeds. Active every session</td></tr>
+<tr><td>Animation Lab</td><td class="s-rehearsing">REHEARSING</td><td>Lab gallery 2.4MB. Protocol established</td></tr>
+<tr><td>3D Logan Lab</td><td class="s-rehearsing">REHEARSING</td><td>Bhagat rig + mocap. E01-08 done</td></tr>
+<tr><td>Stained Glass</td><td class="s-rehearsing">REHEARSING</td><td>New visual language. Forge's Window = proof</td></tr>
+<tr><td>Logan Vector Pipeline</td><td class="s-rehearsing">REHEARSING</td><td>1093 atoms. Engine built</td></tr>
+<tr><td>Instagram</td><td class="s-rehearsing">REHEARSING</td><td>Black/gold sketch voice defined. Not posting</td></tr>
+</table>
+
+<!-- PAUL'S CORRECTIONS -->
+<h2>Paul's Correction Pass</h2>
+
+<h3 style="color:var(--red);margin-top:16px">Confirmed Kills (4)</h3>
+<div style="margin:8px 0 16px;">
+<div class="kill-row"><span class="kill-name">lucy-heartbeat</span><span class="kill-why">Kill PM2 process. Keep protocol for manual use</span></div>
+<div class="kill-row"><span class="kill-name">Flavors (Dojo, Atelier, Scriptorium)</span><span class="kill-why">Unknown purpose to Paul. Kill</span></div>
+</div>
+
+<h3 style="color:var(--green);margin-top:16px">Saved from Kill List</h3>
+<div style="margin:8px 0 16px;">
+<div class="kill-row"><span class="kill-name" style="color:var(--green)">Goldmine Miners (4)</span><span class="kill-why">MODERNIZE. Autonomous gold-finding = core Cathedral function. Connect to scout pattern + freshness system. Rewire to know what gold looks like NOW, don't run blind</span></div>
+<div class="kill-row"><span class="kill-name" style="color:var(--green)">Cathedral City</span><span class="kill-why">HOLD FOR M5 (Nov 10). Social simulation needs hardware. M5 = activation trigger</span></div>
+<div class="kill-row"><span class="kill-name" style="color:var(--green)">Morning View</span><span class="kill-why">HOLD FOR M5. Concept good, delivery channel wrong. Telegram text can't grab attention. Needs visual/audio delivery</span></div>
+<div class="kill-row"><span class="kill-name" style="color:var(--green)">Trading (6)</span><span class="kill-why">KEEP. Paul wants trading to work. Don't give up on it</span></div>
+</div>
+
+<div class="correction">
+  <strong>Correction pattern:</strong> Kill list went from 18 &rarr; 4. Paul's instinct: modernize + reconnect, not burn. Gold-finding is a Cathedral core function &mdash; the miners need to know what gold looks like NOW (ecosystem-aware, freshness-connected), not be killed for running blind.<br><br>
+  <strong>Still reviewing:</strong> Infrastructure, Agents, Coaching OS, BR CRM, Content Studio, Cathedral OS, Research, Governance, Visual sections.
+</div>
+
+</body>
+</html>

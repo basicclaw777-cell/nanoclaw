@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relay Threads — Cathedral Channels</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#0f1018;--card:#131320;--border:#1a1a2e;--text:#c8c8d0;--dim:#555;--gold:#f7b408;--accent:#f59e0b;--accent-glow:rgba(245,158,11,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',ui-monospace,monospace;min-height:100vh}
+
+.hero{position:relative;width:100%;aspect-ratio:896/336;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.7)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg) 100%)}
+.back{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 12px;border-radius:3px;cursor:pointer;text-decoration:none;letter-spacing:1px;z-index:2;transition:color .2s}
+.back:hover{color:var(--gold)}
+.hero-title{position:absolute;bottom:20px;left:16px;z-index:2}
+.hero-title h1{font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 20px var(--accent-glow)}
+.hero-title .band{font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.phase-badge{position:absolute;bottom:24px;right:16px;z-index:2;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:3px;background:rgba(249,115,22,0.15);border:1px solid #f97316;color:#f97316}
+
+.content{max-width:900px;margin:0 auto;padding:16px}
+
+.section-title{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.brief{font-size:12px;line-height:1.7;color:var(--text);margin-bottom:24px}
+.brief strong{color:var(--gold)}
+
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px}
+
+.mission{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s}
+.mission:hover{border-color:var(--accent);background:var(--accent-glow)}
+.mission-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.mission-name .status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mission-name .status.ready{background:var(--gold)}
+.mission-name .status.active{background:#f97316}
+.mission-name .status.pending{background:var(--dim)}
+.mission-desc{font-size:10px;color:var(--dim);line-height:1.5;margin-bottom:8px}
+.mission-gain{font-size:9px;color:var(--accent);letter-spacing:0.5px}
+.mission-gain span{color:var(--gold)}
+
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 14px;flex:1;min-width:120px}
+.stat-val{font-size:18px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.tech-spec{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;font-size:10px;line-height:1.8;color:var(--dim);margin-bottom:24px}
+.tech-spec code{color:var(--accent);background:rgba(245,158,11,0.1);padding:1px 4px;border-radius:2px}
+
+.launch-btn{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;margin-bottom:40px}
+.launch-btn:hover{background:var(--accent-glow);box-shadow:0 0 30px var(--accent-glow)}
+
+@media(max-width:600px){
+  .content{padding:12px 16px}
+  .mission-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="panels/relay-threads.jpg" alt="Relay Threads">
+  <div class="hero-overlay"></div>
+  <a href="index.html" class="back">&larr; CHANNELS</a>
+  <div class="hero-title">
+    <h1>Relay Threads</h1>
+    <div class="band">Knowledge</div>
+  </div>
+  <div class="phase-badge">PHASE 1 &mdash; SUPERVISED</div>
+</div>
+
+<div class="content">
+
+  <div class="section-title">Channel Brief</div>
+  <div class="brief">
+    Deep-dive research conversations &mdash; <strong>multi-turn structured exploration</strong> of complex questions.
+    The relay thread format forces rigour and prevents drift. Each relay has a thesis, evidence rounds,
+    a convergence check, and a verdict. The format is the Cathedral's <strong>primary reasoning instrument</strong> &mdash;
+    how Paul and Forge think through hard problems together.
+  </div>
+
+  <div class="section-title">Potential Missions</div>
+  <div class="mission-grid">
+
+    <div class="mission">
+      <div class="mission-name"><span class="status active"></span>Active Thread Continuation</div>
+      <div class="mission-desc">Resume open relay threads from prior sessions. Recover context, check where the argument left off, push toward convergence or identify what's blocking it.</div>
+      <div class="mission-gain">Gain: <span>Thread momentum</span> &mdash; no relay dies from context loss</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>Thread Convergence Check</div>
+      <div class="mission-desc">Scan all active relays for threads approaching convergence. Apply dreadlock convergence test &mdash; do multiple independent angles lock onto the same conclusion?</div>
+      <div class="mission-gain">Gain: <span>Convergence candidates</span> ready for verdict</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Relay Template Library</div>
+      <div class="mission-desc">Maintain the library of relay templates for different investigation types: forensic audit, domain comparison, hypothesis test, creative exploration.</div>
+      <div class="mission-gain">Gain: <span>Structured starting points</span> for new investigations</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Cross-Thread Pattern Mining</div>
+      <div class="mission-desc">Find patterns across completed relays. Which investigation strategies produced convergence? Which ones stalled? What do successful threads have in common?</div>
+      <div class="mission-gain">Gain: <span>Meta-knowledge</span> about what makes relay threads work</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Thread Graduation Assessment</div>
+      <div class="mission-desc">Review completed relays for vault-worthy findings. Grade conclusions using epistemic triage. Archive graduated threads with full provenance chain.</div>
+      <div class="mission-gain">Gain: <span>Vault-ready findings</span> with full reasoning trail</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Channel Stats</div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">6</div><div class="stat-label">Completed Relays</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Active Threads</div></div>
+    <div class="stat"><div class="stat-val">4</div><div class="stat-label">Templates</div></div>
+    <div class="stat"><div class="stat-val">&mdash;</div><div class="stat-label">Last Relay</div></div>
+  </div>
+
+  <div class="section-title">Technical Spec</div>
+  <div class="tech-spec">
+    <strong>Source:</strong> ~/cathedral-vault/02_Refined_Gold/ relay archives, session transcripts<br>
+    <strong>Pipeline:</strong> <code>context-recover &rarr; thesis-check &rarr; evidence-round &rarr; convergence-test &rarr; verdict</code><br>
+    <strong>Model:</strong> <code>Claude Opus</code> for deep reasoning, <code>hermes3</code> for pattern mining<br>
+    <strong>Output:</strong> Relay thread documents &rarr; Convergence reports &rarr; Vault deposits<br>
+    <strong>Phase 1 loop:</strong> Paul initiates relay topic &rarr; Forge researches &rarr; structured rounds &rarr; Paul steers<br>
+    <strong>Graduation criteria:</strong> 20+ relays completed with consistent dreadlock convergence
+  </div>
+
+  <button class="launch-btn">&#128293; OPEN RELAY THREADS &mdash; PHASE 1 (SUPERVISED)</button>
+
+</div>
+
+</body>
+</html>

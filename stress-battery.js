@@ -36,28 +36,39 @@ function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
-async function callOllama(system, prompt) {
-  const res = await fetch(OLLAMA_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'hermes3',
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: prompt }
-      ],
-      stream: false,
-      options: { temperature: 0.3 }
-    })
-  });
-  const data = await res.json();
-  return data.message?.content || '';
+async function callOllama(system, prompt, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(OLLAMA_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(120000),
+        body: JSON.stringify({
+          model: 'hermes3',
+          messages: [
+            { role: 'system', content: system },
+            { role: 'user', content: prompt }
+          ],
+          stream: false,
+          options: { temperature: 0.3 }
+        })
+      });
+      const data = await res.json();
+      return data.message?.content || '';
+    } catch (err) {
+      if (attempt < retries) {
+        console.log(`[stress-battery] Ollama timeout, retry ${attempt + 1}/${retries}...`);
+        await new Promise(r => setTimeout(r, 3000));
+      } else throw err;
+    }
+  }
 }
 
 async function getEmbedding(text) {
   const res = await fetch(EMBED_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    signal: AbortSignal.timeout(30000),
     body: JSON.stringify({ model: 'nomic-embed-text', prompt: text })
   });
   const data = await res.json();

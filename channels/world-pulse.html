@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Pulse — Cathedral Channels</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#0f1018;--card:#131320;--border:#1a1a2e;--text:#c8c8d0;--dim:#555;--gold:#f7b408;--accent:#4169e1;--accent-glow:rgba(65,105,225,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',ui-monospace,monospace;min-height:100vh}
+
+.hero{position:relative;width:100%;aspect-ratio:896/336;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.7)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg) 100%)}
+.back{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 12px;border-radius:3px;cursor:pointer;text-decoration:none;letter-spacing:1px;z-index:2;transition:color .2s}
+.back:hover{color:var(--gold)}
+.hero-title{position:absolute;bottom:20px;left:16px;z-index:2}
+.hero-title h1{font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 20px var(--accent-glow)}
+.hero-title .band{font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.phase-badge{position:absolute;bottom:24px;right:16px;z-index:2;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:3px;background:rgba(68,68,68,0.4);border:1px solid #444;color:var(--dim)}
+
+.content{max-width:900px;margin:0 auto;padding:16px}
+
+.section-title{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.brief{font-size:12px;line-height:1.7;color:var(--text);margin-bottom:24px}
+.brief strong{color:var(--gold)}
+
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px}
+
+.mission{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s}
+.mission:hover{border-color:var(--accent);background:var(--accent-glow)}
+.mission-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.mission-name .status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mission-name .status.ready{background:var(--gold)}
+.mission-name .status.pending{background:var(--dim)}
+.mission-desc{font-size:10px;color:var(--dim);line-height:1.5;margin-bottom:8px}
+.mission-gain{font-size:9px;color:var(--accent);letter-spacing:0.5px}
+.mission-gain span{color:var(--gold)}
+
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 14px;flex:1;min-width:120px}
+.stat-val{font-size:18px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.tech-spec{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;font-size:10px;line-height:1.8;color:var(--dim);margin-bottom:24px}
+.tech-spec code{color:var(--accent);background:rgba(65,105,225,0.1);padding:1px 4px;border-radius:2px}
+
+.launch-btn{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;margin-bottom:40px}
+.launch-btn:hover{background:var(--accent-glow);box-shadow:0 0 30px var(--accent-glow)}
+.launch-btn:disabled{opacity:0.3;cursor:not-allowed}
+
+@media(max-width:600px){
+  .content{padding:12px 16px}
+  .mission-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="panels/world-pulse.jpg" alt="World Pulse">
+  <div class="hero-overlay"></div>
+  <a href="index.html" class="back">&larr; CHANNELS</a>
+  <div class="hero-title">
+    <h1>World Pulse</h1>
+    <div class="band">Intelligence</div>
+  </div>
+  <div class="phase-badge">PHASE 0 &mdash; NOT BUILT</div>
+</div>
+
+<div class="content">
+
+  <div class="section-title">Channel Brief</div>
+  <div class="brief">
+    <strong>Global macro intelligence</strong> — markets, geopolitics, supply chains. Connects macro movements
+    to Cathedral research domains and <strong>BR business impact</strong>. Not a news feed — a signal extractor
+    that filters noise and surfaces what actually matters to Paul's decisions. Cross-feeds Property Scout and trading channels.
+  </div>
+
+  <div class="section-title">Potential Missions</div>
+  <div class="mission-grid">
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>Market Regime Detection</div>
+      <div class="mission-desc">Classify current market regime (risk-on, risk-off, transition). Track regime shifts across equity, bond, commodity, and crypto markets simultaneously.</div>
+      <div class="mission-gain">Gain: <span>Regime classification</span> for positioning decisions</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Geopolitical Shift Monitor</div>
+      <div class="mission-desc">Track power dynamics between US, China, Russia, EU. Flag policy changes that affect HK directly. Monitor sanctions, trade agreements, tech restrictions.</div>
+      <div class="mission-gain">Gain: <span>Early warning system</span> for HK-impacting geopolitical moves</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Supply Chain Signal</div>
+      <div class="mission-desc">Track shipping routes, port congestion, commodity prices. Identify supply-side shocks before they hit consumer prices. Relevant to BR equipment costs.</div>
+      <div class="mission-gain">Gain: <span>Supply disruption alerts</span> before price impact</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>HK Economic Pulse</div>
+      <div class="mission-desc">Local economic indicators — PMI, retail sales, tourism numbers, property transaction volumes. The ground truth beneath the headlines.</div>
+      <div class="mission-gain">Gain: <span>Local economic context</span> for business decisions</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Cathedral Domain Impact</div>
+      <div class="mission-desc">When a macro event hits, trace the implications through Cathedral domains. New energy policy → suppressed tech relevance. AI regulation → Cathedral tool risk.</div>
+      <div class="mission-gain">Gain: <span>Cross-domain impact mapping</span> from macro to micro</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Channel Stats</div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Signals Tracked</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Regime Shifts</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Alerts Sent</div></div>
+    <div class="stat"><div class="stat-val">&mdash;</div><div class="stat-label">Last Pulse</div></div>
+  </div>
+
+  <div class="section-title">Technical Spec</div>
+  <div class="tech-spec">
+    <strong>Source:</strong> Bloomberg feeds, Reuters, SCMP, HKMA, macro APIs<br>
+    <strong>Pipeline:</strong> <code>ingest &rarr; classify &rarr; impact-score &rarr; cross-reference &rarr; alert</code><br>
+    <strong>Model:</strong> <code>hermes3</code> for analysis, sentiment models for news classification<br>
+    <strong>Output:</strong> Daily pulse digest &rarr; Telegram notification &rarr; Channel placeholder<br>
+    <strong>Phase 1 loop:</strong> Agent scans &rarr; daily digest &rarr; Paul browses &rarr; flags actionable items<br>
+    <strong>Graduation criteria:</strong> 30+ daily digests with &gt;60% signal-to-noise ratio
+  </div>
+
+  <button class="launch-btn" disabled>&#127760; LAUNCH CHANNEL &mdash; PHASE 0 (BUILD REQUIRED)</button>
+
+</div>
+
+</body>
+</html>

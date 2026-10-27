@@ -1,11 +1,136 @@
 {
-  "scannedAt": "2026-10-26T00:00:01.977Z",
+  "scannedAt": "2026-10-27T00:00:01.802Z",
   "totalEvents": 50,
-  "totalMarkets": 1255,
-  "filteredMarkets": 157,
-  "candidates": 131,
+  "totalMarkets": 1123,
+  "filteredMarkets": 161,
+  "candidates": 142,
   "markets": {
     "candidates": [
+      {
+        "eventId": "81557",
+        "eventTitle": "Prime Minister of Israel after the next election?",
+        "marketId": "682705",
+        "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
+        "slug": "will-benjamin-netanyahu-be-the-next-prime-minister-of-israel",
+        "conditionId": "0x7586a96520578acaaaa4ea84a2582f197f84255da1f3392a7aa300386c187b37",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.285,
+          0.715
+        ],
+        "yesPrice": 0.285,
+        "noPrice": 0.715,
+        "volume24hr": 2961253.395399,
+        "liquidity": 536733.2642,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
+        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
+        "relevanceScore": 3
+      },
+      {
+        "eventId": "81557",
+        "eventTitle": "Prime Minister of Israel after the next election?",
+        "marketId": "682706",
+        "question": "Will Naftali Bennett be the next Prime Minister of Israel?",
+        "slug": "will-naftali-bennett-be-the-next-prime-minister-of-israel",
+        "conditionId": "0x9ed0ecc8b8589e67967d44c4420944a41b6a6806419019a1581d514174eee9b1",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.115,
+          0.885
+        ],
+        "yesPrice": 0.115,
+        "noPrice": 0.885,
+        "volume24hr": 2961253.395399,
+        "liquidity": 116303.091,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
+        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
+        "relevanceScore": 3
+      },
+      {
+        "eventId": "81557",
+        "eventTitle": "Prime Minister of Israel after the next election?",
+        "marketId": "682708",
+        "question": "Will Gadi Eizenkot be the next Prime Minister of Israel?",
+        "slug": "will-gadi-eizenkot-be-the-next-prime-minister-of-israel",
+        "conditionId": "0xdbe93b5a701f36076a560fa4b9ba59e365a6e8e2ea6a83764640010657277ca4",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.5475,
+          0.4525
+        ],
+        "yesPrice": 0.5475,
+        "noPrice": 0.4525,
+        "volume24hr": 2961253.395399,
+        "liquidity": 189664.35933,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
+        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
+        "relevanceScore": 3
+      },
+      {
+        "eventId": "81557",
+        "eventTitle": "Prime Minister of Israel after the next election?",
+        "marketId": "682710",
+        "question": "Will Avigdor Lieberman be the next Prime Minister of Israel?",
+        "slug": "will-avigdor-lieberman-be-the-next-prime-minister-of-israel",
+        "conditionId": "0xadffc96f54f350b3655f72fe2853c81bfd705e9703f62469e6a14782ad5d4ec0",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0215,
+          0.9785
+        ],
+        "yesPrice": 0.0215,
+        "noPrice": 0.9785,
+        "volume24hr": 2961253.395399,
+        "liquidity": 166158.9918,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
+        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
+        "relevanceScore": 3
+      },
+      {
+        "eventId": "1211791",
+        "eventTitle": "France declares state of emergency by...?",
+        "marketId": "5880782",
+        "question": "France declares state of emergency by December 31, 2026?",
+        "slug": "france-declares-state-of-emergency-by-december-31-2026",
+        "conditionId": "0x230637a2f974ebdaa5b56974c3daec95938f8a7bfcee9f351441bf8483a115f1",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.095,
+          0.905
+        ],
+        "yesPrice": 0.095,
+        "noPrice": 0.905,
+        "volume24hr": 1002679.6046140001,
+        "liquidity": 220893.6559,
+        "endDate": "2027-01-01T04:59:00Z",
+        "daysToResolution": 67,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/paris-curfew-by-DUjbwhNELlln.jpg",
+        "description": "This market will resolve to \"Yes\" if a legally binding decree declaring a state of emergency (état d'urgence) in France enters into effect at any point between this market's creation and the specified date, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nTo count toward resolution, the corresponding decree must explicitly constitute a \"state of emergency\" (état d'urgence) as defined by Law No. 55-385 of April 3, 1955 (Loi n° 55-385 du 3 avril 1955 relative à l'état d'urgence).\n\nOnly declarations explicitly constituting a state of emergency under Law No. 55-385 will count.\n\nA declaration covering any part of the territory of the French Republic, including overseas departments, regions, and collectivities, will qualify.\n\nA declaration of a public health state of emergency (état d'urgence sanitaire) under the Public Health Code, a state of siege (état de siège) under Article 36 of the French Constitution, the use of exceptional powers under Article 16 of the French Constitution, the \"Urgence attentat\" level of the Vigipirate plan, a natural disaster declaration (état de catastrophe naturelle), or prefectoral orders issued outside of Law No. 55-385 will not count.\n\nThe primary resolution source for this market will be the Journal Officiel de la République française (legifrance.gouv.fr); however, a consensus of credible reporting may also be used.",
+        "relevanceScore": 3
+      },
       {
         "eventId": "32225",
         "eventTitle": "Which party will win the House in 2026?",
@@ -23,10 +148,10 @@
         ],
         "yesPrice": 0.915,
         "noPrice": 0.085,
-        "volume24hr": 1493264.7427080001,
-        "liquidity": 3887841.1297,
+        "volume24hr": 987850.3269660001,
+        "liquidity": 3991455.1096,
         "endDate": "2026-11-04T04:59:00Z",
-        "daysToResolution": 10,
+        "daysToResolution": 9,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/which-party-will-win-the-house-in-2026-lO2ezdY5lP2i.png",
         "description": "This market will resolve according to the party that wins control of the United States House of Representatives in the 2026 United States midterm election.\n\nA party wins control of the United States House of Representatives if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the chamber will be deemed controlled by the party with which the first elected Speaker of the House of the Congress that convenes after the 2026 midterm election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chamber.\n\nAll House elections in the 2026 United States midterm election that elect voting members and determine representation in the upcoming 120th Congress are included. Where a seat is decided by a runoff, the runoff result will determine attribution of that seat.\n\nSeats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected.\n\nHouse members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the House elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
         "relevanceScore": 3
@@ -48,112 +173,12 @@
         ],
         "yesPrice": 0.085,
         "noPrice": 0.915,
-        "volume24hr": 1493264.7427080001,
-        "liquidity": 2662259.6679,
+        "volume24hr": 987850.3269660001,
+        "liquidity": 2964620.7629,
         "endDate": "2026-11-04T04:59:00Z",
-        "daysToResolution": 10,
+        "daysToResolution": 9,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/which-party-will-win-the-house-in-2026-lO2ezdY5lP2i.png",
         "description": "This market will resolve according to the party that wins control of the United States House of Representatives in the 2026 United States midterm election.\n\nA party wins control of the United States House of Representatives if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the chamber will be deemed controlled by the party with which the first elected Speaker of the House of the Congress that convenes after the 2026 midterm election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chamber.\n\nAll House elections in the 2026 United States midterm election that elect voting members and determine representation in the upcoming 120th Congress are included. Where a seat is decided by a runoff, the runoff result will determine attribution of that seat.\n\nSeats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected.\n\nHouse members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the House elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "81557",
-        "eventTitle": "Prime Minister of Israel after the next election?",
-        "marketId": "682705",
-        "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
-        "slug": "will-benjamin-netanyahu-be-the-next-prime-minister-of-israel",
-        "conditionId": "0x7586a96520578acaaaa4ea84a2582f197f84255da1f3392a7aa300386c187b37",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.27,
-          0.73
-        ],
-        "yesPrice": 0.27,
-        "noPrice": 0.73,
-        "volume24hr": 1243402.373174,
-        "liquidity": 421019.4469,
-        "endDate": "2026-10-28T03:59:00Z",
-        "daysToResolution": 3,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
-        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "81557",
-        "eventTitle": "Prime Minister of Israel after the next election?",
-        "marketId": "682706",
-        "question": "Will Naftali Bennett be the next Prime Minister of Israel?",
-        "slug": "will-naftali-bennett-be-the-next-prime-minister-of-israel",
-        "conditionId": "0x9ed0ecc8b8589e67967d44c4420944a41b6a6806419019a1581d514174eee9b1",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.125,
-          0.875
-        ],
-        "yesPrice": 0.125,
-        "noPrice": 0.875,
-        "volume24hr": 1243402.373174,
-        "liquidity": 91656.1224,
-        "endDate": "2026-10-28T03:59:00Z",
-        "daysToResolution": 3,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
-        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "81557",
-        "eventTitle": "Prime Minister of Israel after the next election?",
-        "marketId": "682708",
-        "question": "Will Gadi Eizenkot be the next Prime Minister of Israel?",
-        "slug": "will-gadi-eizenkot-be-the-next-prime-minister-of-israel",
-        "conditionId": "0xdbe93b5a701f36076a560fa4b9ba59e365a6e8e2ea6a83764640010657277ca4",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.5025,
-          0.4975
-        ],
-        "yesPrice": 0.5025,
-        "noPrice": 0.4975,
-        "volume24hr": 1243402.373174,
-        "liquidity": 155408.92811,
-        "endDate": "2026-10-28T03:59:00Z",
-        "daysToResolution": 3,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
-        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "81557",
-        "eventTitle": "Prime Minister of Israel after the next election?",
-        "marketId": "682710",
-        "question": "Will Avigdor Lieberman be the next Prime Minister of Israel?",
-        "slug": "will-avigdor-lieberman-be-the-next-prime-minister-of-israel",
-        "conditionId": "0xadffc96f54f350b3655f72fe2853c81bfd705e9703f62469e6a14782ad5d4ec0",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.025,
-          0.975
-        ],
-        "yesPrice": 0.025,
-        "noPrice": 0.975,
-        "volume24hr": 1243402.373174,
-        "liquidity": 130395.10717,
-        "endDate": "2026-10-28T03:59:00Z",
-        "daysToResolution": 3,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png",
-        "description": "Legislative elections are schedule to be held in Israel on October 27, 2026. \n\nThis market will resolve to the next individual who is officially appointed and sworn in as Prime Minister of Israel following the 2026 parliamentary election. If an election is called early, this market will immediately resolve to the individual who is officially appointed and sworn in after that election.\n\nTo count for resolution, the individual must be formally sworn in. Any interim or caretaker Prime Minister will not count toward the resolution of this market.\n\nIf no such Prime Minister is sworn in by December 31, 2027, 11:59 PM ET, this market will resolve to “Other”.\n\nThe primary resolution source for this market will be official information from the Government of Israel; however, a consensus of credible reporting may also be used.",
         "relevanceScore": 3
       },
       {
@@ -173,10 +198,10 @@
         ],
         "yesPrice": 0.655,
         "noPrice": 0.345,
-        "volume24hr": 558721.64558,
-        "liquidity": 2630947.8904,
+        "volume24hr": 799919.3067589999,
+        "liquidity": 2917831.9656,
         "endDate": "2026-11-04T04:59:00Z",
-        "daysToResolution": 10,
+        "daysToResolution": 9,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/balance-of-power-2024-election-r-Fp-y4ONJBS.jpg",
         "description": "This market will resolve according to the party that wins control of the United States Senate and the party that wins control of the United States House of Representatives in the 2026 United States midterm election.\n\nA party wins control of the United States Senate if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the party that wins control of the chamber is the party that wins half of the voting seats and holds the Vice Presidency. If the outcome remains ambiguous after applying the above criteria, the chamber will be deemed controlled by the party with which the first selected President Pro Tempore of the Congress that convenes after the specified election is affiliated.\n\nA party wins control of the United States House of Representatives if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the chamber will be deemed controlled by the party with which the first elected Speaker of the House of the Congress that convenes after the 2026 midterm election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chambers.\n\nFor determining Senate control, all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026 are included. Vacant Senate seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat. For determining House control, all House elections in the 2026 United States midterm election that elect voting members and determine representation in the upcoming 120th Congress are included. Where a Senate or House seat is decided by a runoff, the runoff result will determine attribution of that seat, even if it takes place after November 2026.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate and House members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the Senate or House elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
         "relevanceScore": 3
@@ -198,10 +223,10 @@
         ],
         "yesPrice": 0.265,
         "noPrice": 0.735,
-        "volume24hr": 558721.64558,
-        "liquidity": 1847515.8671,
+        "volume24hr": 799919.3067589999,
+        "liquidity": 2472772.2339,
         "endDate": "2026-11-04T04:59:00Z",
-        "daysToResolution": 10,
+        "daysToResolution": 9,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/balance-of-power-2024-election-r-Fp-y4ONJBS.jpg",
         "description": "This market will resolve according to the party that wins control of the United States Senate and the party that wins control of the United States House of Representatives in the 2026 United States midterm election.\n\nA party wins control of the United States Senate if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the party that wins control of the chamber is the party that wins half of the voting seats and holds the Vice Presidency. If the outcome remains ambiguous after applying the above criteria, the chamber will be deemed controlled by the party with which the first selected President Pro Tempore of the Congress that convenes after the specified election is affiliated.\n\nA party wins control of the United States House of Representatives if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the chamber will be deemed controlled by the party with which the first elected Speaker of the House of the Congress that convenes after the 2026 midterm election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chambers.\n\nFor determining Senate control, all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026 are included. Vacant Senate seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat. For determining House control, all House elections in the 2026 United States midterm election that elect voting members and determine representation in the upcoming 120th Congress are included. Where a Senate or House seat is decided by a runoff, the runoff result will determine attribution of that seat, even if it takes place after November 2026.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate and House members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the Senate or House elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
         "relevanceScore": 3
@@ -223,255 +248,37 @@
         ],
         "yesPrice": 0.075,
         "noPrice": 0.925,
-        "volume24hr": 558721.64558,
-        "liquidity": 2226748.8632,
+        "volume24hr": 799919.3067589999,
+        "liquidity": 2814852.066,
         "endDate": "2026-11-04T04:59:00Z",
-        "daysToResolution": 10,
+        "daysToResolution": 9,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/balance-of-power-2024-election-r-Fp-y4ONJBS.jpg",
         "description": "This market will resolve according to the party that wins control of the United States Senate and the party that wins control of the United States House of Representatives in the 2026 United States midterm election.\n\nA party wins control of the United States Senate if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the party that wins control of the chamber is the party that wins half of the voting seats and holds the Vice Presidency. If the outcome remains ambiguous after applying the above criteria, the chamber will be deemed controlled by the party with which the first selected President Pro Tempore of the Congress that convenes after the specified election is affiliated.\n\nA party wins control of the United States House of Representatives if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the chamber will be deemed controlled by the party with which the first elected Speaker of the House of the Congress that convenes after the 2026 midterm election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chambers.\n\nFor determining Senate control, all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026 are included. Vacant Senate seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat. For determining House control, all House elections in the 2026 United States midterm election that elect voting members and determine representation in the upcoming 120th Congress are included. Where a Senate or House seat is decided by a runoff, the runoff result will determine attribution of that seat, even if it takes place after November 2026.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate and House members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the Senate or House elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
         "relevanceScore": 3
       },
       {
-        "eventId": "166780",
-        "eventTitle": "Bulgaria Presidential Election",
-        "marketId": "1194643",
-        "question": "Will Iliana Iotova win the next Bulgarian presidential election?",
-        "slug": "will-iliana-iotova-win-the-next-bulgarian-presidential-election",
-        "conditionId": "0x5512bfa9294bf914063ed120969908dee5cdf6e14293f28ca405d3ce4edcf485",
+        "eventId": "30828",
+        "eventTitle": "Xi Jinping out before 2027?",
+        "marketId": "559651",
+        "question": "Xi Jinping out before 2027?",
+        "slug": "xi-jinping-out-before-2027",
+        "conditionId": "0xa467b14d51f01b957109d9cbb1d6c124fab2a089d52ed8f471d23c2812e743b7",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.68,
-          0.32
+          0.0395,
+          0.9605
         ],
-        "yesPrice": 0.68,
-        "noPrice": 0.32,
-        "volume24hr": 275901.02603500005,
-        "liquidity": 80618.9721,
-        "endDate": "2026-10-26T03:59:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/bulgaria-election-scheduled-by-december-31-sj1lowFVfVXg.png",
-        "description": "Presidential elections in Bulgaria are expected to be held in the Fall of 2026.\n\nThis market will resolve according to the listed candidate who wins the next presidential election in Bulgaria. \n\nThis market includes any potential second round. If the result of this election isn't known by December 31, 2027, 11:59 PM ET, the market will resolve to \"Other\".\n\nThis market will resolve based on the result of the election, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by the Bulgarian government, specifically the Central Election Commission (Centralna izbiratelna komisia, CEC) (www.cik.bg/).",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "166780",
-        "eventTitle": "Bulgaria Presidential Election",
-        "marketId": "1194657",
-        "question": "Will Аndrey Gyurov win the next Bulgarian presidential election?",
-        "slug": "will-ndrey-gyurov-win-the-next-bulgarian-presidential-election",
-        "conditionId": "0xd0590fb2d44c3b5deb053fde7072206ee9041441e3ee0e5fb022a41caf79b407",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.32,
-          0.68
-        ],
-        "yesPrice": 0.32,
-        "noPrice": 0.68,
-        "volume24hr": 275901.02603500005,
-        "liquidity": 88285.7061,
-        "endDate": "2026-10-26T03:59:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/bulgaria-election-scheduled-by-december-31-sj1lowFVfVXg.png",
-        "description": "Presidential elections in Bulgaria are expected to be held in the Fall of 2026.\n\nThis market will resolve according to the listed candidate who wins the next presidential election in Bulgaria. \n\nThis market includes any potential second round. If the result of this election isn't known by December 31, 2027, 11:59 PM ET, the market will resolve to \"Other\".\n\nThis market will resolve based on the result of the election, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by the Bulgarian government, specifically the Central Election Commission (Centralna izbiratelna komisia, CEC) (www.cik.bg/).",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "64731",
-        "eventTitle": "Billionaire one-time wealth tax passes in California election 2026?",
-        "marketId": "648383",
-        "question": "Billionaire one-time wealth tax passes in California election 2026?",
-        "slug": "billionaire-one-time-wealth-tax-passes-in-california-election-2026",
-        "conditionId": "0x9345d5142a67f5541264c96515496affee02580f1c572680759eac9fd2a1588a",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.245,
-          0.755
-        ],
-        "yesPrice": 0.245,
-        "noPrice": 0.755,
-        "volume24hr": 255101.55085200001,
-        "liquidity": 92623.691,
-        "endDate": "2026-11-04T04:59:00Z",
-        "daysToResolution": 10,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/billionaire-one-time-wealth-tax-on-california-ballot-Cu7EZFeYeO2R.jpg",
-        "description": "A one-time wealth tax on billionaires has been proposed to potentially appear on California's ballot for the November 3, 2026 general election. You can read more about that here: https://6abc.com/post/california-union-proposes-taxing-billionaires-offset-medicaid-cuts-low-income-people/18066430/\n\nThis market will resolve to \"Yes\" if any proposition containing a one-time tax targeting individuals, households, or family units with wealth, assets, or net worth of at least $1 billion (USD or equivalent) passes in the named election. Otherwise, this market will resolve to \"No\".\n\nIf no qualifying ballot initiative is certified to appear on the official statewide California ballot as a proposition to be voted on in the stated election by June 25, 2026, 11:59 PM ET (the official cutoff date for new initiatives to be approved), or if all qualifying propositions/initiatives are removed from the ballot or amended before the election such that the main threshold drops below $1 billion, this market will resolve \"No\".\n\nThe primary resolution source for this market will be official information from the Government of the State of California, however a consensus of credible reporting may also be used.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "106193",
-        "eventTitle": "Republican Senate seats after the 2026 midterm elections?",
-        "marketId": "943819",
-        "question": "Will the Republican Party hold 47 or fewer Senate seats after the 2026 midterm elections?",
-        "slug": "will-the-republican-party-hold-47-or-fewer-senate-seats-after-the-2026-midterm-elections",
-        "conditionId": "0x46c862237fc39f6357ce2efa748274e4539c1ffe60cd6a89e3fe689373fa27a8",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.395,
-          0.605
-        ],
-        "yesPrice": 0.395,
-        "noPrice": 0.605,
-        "volume24hr": 248312.70110400004,
-        "liquidity": 143693.1255,
-        "daysToResolution": null,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-republicans-lose-a-seat-in-the-us-senate-for-any-state-trump-won-in-2024-36T8qr8R2Va9.jpg",
-        "description": "This market will resolve according to the Republican Party’s seat count in the United States Senate as a result of the 2026 United States midterm election scheduled for November 3, 2026.\n\nThe seat count includes all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, the Republican party are included in the count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "106193",
-        "eventTitle": "Republican Senate seats after the 2026 midterm elections?",
-        "marketId": "943820",
-        "question": "Will the Republican Party hold exactly 48 Senate seats after the 2026 midterm elections?",
-        "slug": "will-the-republican-party-hold-exactly-48-senate-seats-after-the-2026-midterm-elections-971",
-        "conditionId": "0xb2ce24bdd043abf35f09428cad5e67ffc5d6cae16b7a3556dec55fb539dd1253",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.175,
-          0.825
-        ],
-        "yesPrice": 0.175,
-        "noPrice": 0.825,
-        "volume24hr": 248312.70110400004,
-        "liquidity": 256480.1173,
-        "daysToResolution": null,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-republicans-lose-a-seat-in-the-us-senate-for-any-state-trump-won-in-2024-36T8qr8R2Va9.jpg",
-        "description": "This market will resolve according to the Republican Party’s seat count in the United States Senate as a result of the 2026 United States midterm election scheduled for November 3, 2026.\n\nThe seat count includes all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, the Republican party are included in the count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "106193",
-        "eventTitle": "Republican Senate seats after the 2026 midterm elections?",
-        "marketId": "943821",
-        "question": "Will the Republican Party hold exactly 49 Senate seats after the 2026 midterm elections?",
-        "slug": "will-the-republican-party-hold-exactly-49-senate-seats-after-the-2026-midterm-elections-189",
-        "conditionId": "0x2fb2b4f6d030ed03404e844400cf763a5dfc70275a3d6bd03770287cd7bced56",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.105,
-          0.895
-        ],
-        "yesPrice": 0.105,
-        "noPrice": 0.895,
-        "volume24hr": 248312.70110400004,
-        "liquidity": 184368.63,
-        "daysToResolution": null,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-republicans-lose-a-seat-in-the-us-senate-for-any-state-trump-won-in-2024-36T8qr8R2Va9.jpg",
-        "description": "This market will resolve according to the Republican Party’s seat count in the United States Senate as a result of the 2026 United States midterm election scheduled for November 3, 2026.\n\nThe seat count includes all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, the Republican party are included in the count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "106193",
-        "eventTitle": "Republican Senate seats after the 2026 midterm elections?",
-        "marketId": "943822",
-        "question": "Will the Republican Party hold exactly 50 Senate seats after the 2026 midterm elections?",
-        "slug": "will-the-republican-party-hold-exactly-50-senate-seats-after-the-2026-midterm-elections-968",
-        "conditionId": "0xa81e63ff4a59e8611215a7cc37c86e4ac6164924b86a1f4aab73379a073f88fb",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.105,
-          0.895
-        ],
-        "yesPrice": 0.105,
-        "noPrice": 0.895,
-        "volume24hr": 248312.70110400004,
-        "liquidity": 339873.3547,
-        "daysToResolution": null,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-republicans-lose-a-seat-in-the-us-senate-for-any-state-trump-won-in-2024-36T8qr8R2Va9.jpg",
-        "description": "This market will resolve according to the Republican Party’s seat count in the United States Senate as a result of the 2026 United States midterm election scheduled for November 3, 2026.\n\nThe seat count includes all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, the Republican party are included in the count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "106193",
-        "eventTitle": "Republican Senate seats after the 2026 midterm elections?",
-        "marketId": "943823",
-        "question": "Will the Republican Party hold exactly 51 Senate seats after the 2026 midterm elections?",
-        "slug": "will-the-republican-party-hold-exactly-51-senate-seats-after-the-2026-midterm-elections-753",
-        "conditionId": "0xf9b68b99b3ca714f63e49c5a595ade99bf65585e00bfa0e2ebd112cdc090456c",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.105,
-          0.895
-        ],
-        "yesPrice": 0.105,
-        "noPrice": 0.895,
-        "volume24hr": 248312.70110400004,
-        "liquidity": 289921.683,
-        "daysToResolution": null,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-republicans-lose-a-seat-in-the-us-senate-for-any-state-trump-won-in-2024-36T8qr8R2Va9.jpg",
-        "description": "This market will resolve according to the Republican Party’s seat count in the United States Senate as a result of the 2026 United States midterm election scheduled for November 3, 2026.\n\nThe seat count includes all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, the Republican party are included in the count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "106193",
-        "eventTitle": "Republican Senate seats after the 2026 midterm elections?",
-        "marketId": "943824",
-        "question": "Will the Republican Party hold exactly 52 Senate seats after the 2026 midterm elections?",
-        "slug": "will-the-republican-party-hold-exactly-52-senate-seats-after-the-2026-midterm-elections-829",
-        "conditionId": "0x4b6d354831374f40d664728aa1cf4093e58f782c25ba82b782d0e08c06270486",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.062,
-          0.938
-        ],
-        "yesPrice": 0.062,
-        "noPrice": 0.938,
-        "volume24hr": 248312.70110400004,
-        "liquidity": 290137.61609,
-        "daysToResolution": null,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-republicans-lose-a-seat-in-the-us-senate-for-any-state-trump-won-in-2024-36T8qr8R2Va9.jpg",
-        "description": "This market will resolve according to the Republican Party’s seat count in the United States Senate as a result of the 2026 United States midterm election scheduled for November 3, 2026.\n\nThe seat count includes all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, the Republican party are included in the count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
-        "relevanceScore": 3
-      },
-      {
-        "eventId": "106193",
-        "eventTitle": "Republican Senate seats after the 2026 midterm elections?",
-        "marketId": "943825",
-        "question": "Will the Republican Party hold exactly 53 Senate seats after the 2026 midterm elections?",
-        "slug": "will-the-republican-party-hold-exactly-53-senate-seats-after-the-2026-midterm-elections",
-        "conditionId": "0x812d9ea644c58f1e889643bbd9184e9c5fdacbba55d1f9fef2eb2d55ce5dc1c2",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.062,
-          0.938
-        ],
-        "yesPrice": 0.062,
-        "noPrice": 0.938,
-        "volume24hr": 248312.70110400004,
-        "liquidity": 271761.96307,
-        "daysToResolution": null,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-republicans-lose-a-seat-in-the-us-senate-for-any-state-trump-won-in-2024-36T8qr8R2Va9.jpg",
-        "description": "This market will resolve according to the Republican Party’s seat count in the United States Senate as a result of the 2026 United States midterm election scheduled for November 3, 2026.\n\nThe seat count includes all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, the Republican party are included in the count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
+        "yesPrice": 0.0395,
+        "noPrice": 0.9605,
+        "volume24hr": 442549.97530799994,
+        "liquidity": 264243.08105,
+        "endDate": "2027-01-01T04:59:00Z",
+        "daysToResolution": 67,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/xi-jinping-out-in-2025-EjF4SM20eaa3.jpg",
+        "description": "This market will resolve to \"Yes\" if China's General Secretary of the Communist Party, Xi Jinping, is removed from power for any length of time between July 3, 2025, and December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nCCP General Secretary Xi Jinping will be considered removed from power if he announces his resignation from his role as General Secretary, or is otherwise dismissed, detained, disqualified, or otherwise loses his position or is prevented from fulfilling his duties as General Secretary within this market's timeframe.\n\nThe primary resolution source for this market will be a consensus of credible reporting.",
         "relevanceScore": 3
       },
       {
@@ -486,15 +293,15 @@
           "No"
         ],
         "prices": [
-          0.945,
-          0.055
+          0.935,
+          0.065
         ],
-        "yesPrice": 0.945,
-        "noPrice": 0.055,
-        "volume24hr": 3940268.44859,
-        "liquidity": 1418053.5418,
+        "yesPrice": 0.935,
+        "noPrice": 0.065,
+        "volume24hr": 7489370.892899,
+        "liquidity": 904701.76218,
         "endDate": "2026-10-29T03:59:00Z",
-        "daysToResolution": 4,
+        "daysToResolution": 3,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/fed-decision-in-september-762-c4RyWuxRPo1L.jpg",
         "description": "The FED interest rates are defined in this market by the upper bound of the target federal funds range. The decisions on the target federal funds range are made by the Federal Open Market Committee (FOMC) meetings.\n\nThis market will resolve to the amount of basis points the upper bound of the target federal funds rate is changed by versus the level it was prior to the Federal Reserve's October 2026 meeting.\n\nIf the target federal funds rate is changed to a level not expressed in the displayed options, the change will be rounded up to the nearest 25 and will resolve to the relevant bracket. (e.g. if there's a cut/increase of 12.5 bps it will be considered to be 25 bps)\n\nThe resolution source for this market is the FOMC’s statement after its meeting scheduled for October 27-28, 2026 according to the official calendar: https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm.\n\nThe level and change of the target federal funds rate is also published at the official website of the Federal Reserve at https://www.federalreserve.gov/monetarypolicy/openmarket.htm.\n\nThis market may resolve as soon as the FOMC’s statement for their October meeting with relevant data is issued. If no statement is released by the end date of the next scheduled meeting, this market will resolve to the \"No change\" bracket.",
         "relevanceScore": 2
@@ -511,92 +318,17 @@
           "No"
         ],
         "prices": [
-          0.055,
-          0.945
+          0.065,
+          0.935
         ],
-        "yesPrice": 0.055,
-        "noPrice": 0.945,
-        "volume24hr": 3940268.44859,
-        "liquidity": 1119553.3292,
+        "yesPrice": 0.065,
+        "noPrice": 0.935,
+        "volume24hr": 7489370.892899,
+        "liquidity": 1091736.316,
         "endDate": "2026-10-29T03:59:00Z",
-        "daysToResolution": 4,
+        "daysToResolution": 3,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/fed-decision-in-september-762-c4RyWuxRPo1L.jpg",
         "description": "The FED interest rates are defined in this market by the upper bound of the target federal funds range. The decisions on the target federal funds range are made by the Federal Open Market Committee (FOMC) meetings.\n\nThis market will resolve to the amount of basis points the upper bound of the target federal funds rate is changed by versus the level it was prior to the Federal Reserve's October 2026 meeting.\n\nIf the target federal funds rate is changed to a level not expressed in the displayed options, the change will be rounded up to the nearest 25 and will resolve to the relevant bracket. (e.g. if there's a cut/increase of 12.5 bps it will be considered to be 25 bps)\n\nThe resolution source for this market is the FOMC’s statement after its meeting scheduled for October 27-28, 2026 according to the official calendar: https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm.\n\nThe level and change of the target federal funds rate is also published at the official website of the Federal Reserve at https://www.federalreserve.gov/monetarypolicy/openmarket.htm.\n\nThis market may resolve as soon as the FOMC’s statement for their October meeting with relevant data is issued. If no statement is released by the end date of the next scheduled meeting, this market will resolve to the \"No change\" bracket.",
-        "relevanceScore": 2
-      },
-      {
-        "eventId": "1138953",
-        "eventTitle": "Brazil Presidential Election Second Round: Margin of Victory",
-        "marketId": "5340072",
-        "question": "Will Luiz Inácio Lula da Silva win the second round of the 2026 Brazilian presidential election by less than 4%?",
-        "slug": "will-luiz-inacio-lula-da-silva-win-the-second-round-of-the-2026-brazilian-presidential-election-by-less-than-4",
-        "conditionId": "0x84837e7c004d6761827e0c1ae9e1523ac799493b6a412a2616df4b97c13f4ef2",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.92,
-          0.08
-        ],
-        "yesPrice": 0.92,
-        "noPrice": 0.08,
-        "volume24hr": 3466893.735971,
-        "liquidity": 49581.8589,
-        "endDate": "2026-10-26T03:59:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/brazil-presidential-election-37lx5Jgvkbr8.png",
-        "description": "The second round of the presidential election is scheduled to take place in Brazil on October 25, 2026.\n\nThis market will resolve according to the margin of victory between the top two candidates in the second round of the next Brazil Presidential Election.\n\nFor the purpose of this market, the “margin of victory” is defined as the absolute difference between the percentages of valid votes received by the first- and second-place candidates. Percentages of the valid votes received by each candidate will be determined by dividing the total number of valid votes each of the top two candidates receives by the sum of all valid votes cast in the election.\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nIf a candidate other than Flávio Bolsonaro or Luiz Inácio Lula da Silva receives the most valid votes in the second round, or if the top two candidates receive exactly the same number of valid votes, this market will resolve to \"Other\".\n\nThis market will resolve based on the official vote count once the vote count has been made official.\n\nIf a recount is initiated before the vote total has been made official, the market will remain open until the recount is completed and the vote is made official.\n\nIf the result of this election isn't known definitively by June 30, 2027, 11:59 PM ET, the market will resolve to \"Other\".\n\nThis market will resolve based on the result of the election, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by the Brazilian government, specifically the Superior Electoral Court (Tribunal Superior Eleitoral, TSE) (e.g., https://dadosabertos.tse.jus.br/).",
-        "relevanceScore": 2
-      },
-      {
-        "eventId": "1138953",
-        "eventTitle": "Brazil Presidential Election Second Round: Margin of Victory",
-        "marketId": "5340073",
-        "question": "Will Luiz Inácio Lula da Silva win the second round of the 2026 Brazilian presidential election by 4–8%?",
-        "slug": "will-luiz-inacio-lula-da-silva-win-the-second-round-of-the-2026-brazilian-presidential-election-by-48",
-        "conditionId": "0x7ab4429b26f2125f658fca430449e48914d8213149fa1e937b106e27d3fb52fa",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.0485,
-          0.9515
-        ],
-        "yesPrice": 0.0485,
-        "noPrice": 0.9515,
-        "volume24hr": 3466893.735971,
-        "liquidity": 54040.22059,
-        "endDate": "2026-10-26T03:59:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/brazil-presidential-election-37lx5Jgvkbr8.png",
-        "description": "The second round of the presidential election is scheduled to take place in Brazil on October 25, 2026.\n\nThis market will resolve according to the margin of victory between the top two candidates in the second round of the next Brazil Presidential Election.\n\nFor the purpose of this market, the “margin of victory” is defined as the absolute difference between the percentages of valid votes received by the first- and second-place candidates. Percentages of the valid votes received by each candidate will be determined by dividing the total number of valid votes each of the top two candidates receives by the sum of all valid votes cast in the election.\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nIf a candidate other than Flávio Bolsonaro or Luiz Inácio Lula da Silva receives the most valid votes in the second round, or if the top two candidates receive exactly the same number of valid votes, this market will resolve to \"Other\".\n\nThis market will resolve based on the official vote count once the vote count has been made official.\n\nIf a recount is initiated before the vote total has been made official, the market will remain open until the recount is completed and the vote is made official.\n\nIf the result of this election isn't known definitively by June 30, 2027, 11:59 PM ET, the market will resolve to \"Other\".\n\nThis market will resolve based on the result of the election, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by the Brazilian government, specifically the Superior Electoral Court (Tribunal Superior Eleitoral, TSE) (e.g., https://dadosabertos.tse.jus.br/).",
-        "relevanceScore": 2
-      },
-      {
-        "eventId": "1138953",
-        "eventTitle": "Brazil Presidential Election Second Round: Margin of Victory",
-        "marketId": "5340076",
-        "question": "Will another person win the second round of the 2026 Brazilian presidential election?",
-        "slug": "will-another-person-win-the-second-round-of-the-2026-brazilian-presidential-election",
-        "conditionId": "0x2ea711550b72187055e4b7856455a866664e80ab6ce9721de1d73b38c67871bd",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.5,
-          0.5
-        ],
-        "yesPrice": 0.5,
-        "noPrice": 0.5,
-        "volume24hr": 3466893.735971,
-        "liquidity": 0,
-        "endDate": "2026-10-26T03:59:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/brazil-presidential-election-37lx5Jgvkbr8.png",
-        "description": "The second round of the presidential election is scheduled to take place in Brazil on October 25, 2026.\n\nThis market will resolve according to the margin of victory between the top two candidates in the second round of the next Brazil Presidential Election.\n\nFor the purpose of this market, the “margin of victory” is defined as the absolute difference between the percentages of valid votes received by the first- and second-place candidates. Percentages of the valid votes received by each candidate will be determined by dividing the total number of valid votes each of the top two candidates receives by the sum of all valid votes cast in the election.\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nIf a candidate other than Flávio Bolsonaro or Luiz Inácio Lula da Silva receives the most valid votes in the second round, or if the top two candidates receive exactly the same number of valid votes, this market will resolve to \"Other\".\n\nThis market will resolve based on the official vote count once the vote count has been made official.\n\nIf a recount is initiated before the vote total has been made official, the market will remain open until the recount is completed and the vote is made official.\n\nIf the result of this election isn't known definitively by June 30, 2027, 11:59 PM ET, the market will resolve to \"Other\".\n\nThis market will resolve based on the result of the election, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by the Brazilian government, specifically the Superior Electoral Court (Tribunal Superior Eleitoral, TSE) (e.g., https://dadosabertos.tse.jus.br/).",
         "relevanceScore": 2
       },
       {
@@ -616,10 +348,10 @@
         ],
         "yesPrice": 0.315,
         "noPrice": 0.685,
-        "volume24hr": 919052.90222,
-        "liquidity": 101433.5924,
+        "volume24hr": 1027740.309424,
+        "liquidity": 153585.9589,
         "endDate": "2026-10-28T03:59:00Z",
-        "daysToResolution": 3,
+        "daysToResolution": 2,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-update-JlG6pTiX-iGy.png",
         "description": "Legislative elections are expected to be held in Israel on October 27, 2026.\n\nThis market will resolve according to the political party or coalition that wins the greatest number of seats in the Israeli Knesset as a result of this election.\n\nIf the results of this election are not definitively known by June 30, 2027, 11:59 PM ET, this market will resolve to \"Other\".\n\nIn the event of a tie between multiple parties or coalitions for the most seats won, this market will resolve in favor of the party or coalition whose candidate list received a greater number of valid votes. In the event that results in a tie, this market will resolve in favor of the party whose listed name appears first in alphabetical order.\n\nThis market's resolution will be based solely on the number of seats won by the named party or coalition in the Israeli Knesset.\n\nThis market will resolve based on the election results, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by Israel’s Central Election Committee (Va'adet HaBehirot HaMerkazit) (https://www.gov.il/en/departments/central-elections-committee/govil-landing-page).\n\nThe following rules govern the merging, joint contention, and splitting of listed parties:\n\n- If Likud or Together (or any successor party created through a merger) merge or contest the election jointly with any other party, the option corresponding to Likud or Together will represent the resultant candidate list or merged party. \n\nOtherwise:\n\n- If a listed party merges with, or contests the election as part of a joint candidate list with, one or more unlisted parties prior to the election, the option corresponding to the listed party will represent all seats won by the merged party or joint candidate list. If a listed party merges with, or contests the election as part of a joint candidate list with, one or more other listed parties prior to the election, the option corresponding to the party which held the most seats in the prior Knesset will represent all seats won by the merged party/joint candidate list. If these rules do not adequately determine which option represents a merged party or joint candidate list, the listed party whose name, as listed in this market, comes first in alphabetical order, will represent all seats won by the merged party or joint candidate list.\n\n- If a listed party splits into multiple parties prior to the election, the option corresponding to the listed party will represent the resulting party that holds the greatest number of seats in the Israeli Knesset as a result of the split. If these rules do not adequately determine which party represents a listed option after a split, the listed option will represent all seats won by the party resulting from the split whose primary English name comes first in alphabetical order.",
         "relevanceScore": 2
@@ -636,92 +368,217 @@
           "No"
         ],
         "prices": [
-          0.67,
-          0.33
+          0.685,
+          0.315
         ],
-        "yesPrice": 0.67,
-        "noPrice": 0.33,
-        "volume24hr": 919052.90222,
-        "liquidity": 86329.616,
+        "yesPrice": 0.685,
+        "noPrice": 0.315,
+        "volume24hr": 1027740.309424,
+        "liquidity": 123425.3035,
         "endDate": "2026-10-28T03:59:00Z",
-        "daysToResolution": 3,
+        "daysToResolution": 2,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-update-JlG6pTiX-iGy.png",
         "description": "Legislative elections are expected to be held in Israel on October 27, 2026.\n\nThis market will resolve according to the political party or coalition that wins the greatest number of seats in the Israeli Knesset as a result of this election.\n\nIf the results of this election are not definitively known by June 30, 2027, 11:59 PM ET, this market will resolve to \"Other\".\n\nIn the event of a tie between multiple parties or coalitions for the most seats won, this market will resolve in favor of the party or coalition whose candidate list received a greater number of valid votes. In the event that results in a tie, this market will resolve in favor of the party whose listed name appears first in alphabetical order.\n\nThis market's resolution will be based solely on the number of seats won by the named party or coalition in the Israeli Knesset.\n\nThis market will resolve based on the election results, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by Israel’s Central Election Committee (Va'adet HaBehirot HaMerkazit) (https://www.gov.il/en/departments/central-elections-committee/govil-landing-page).\n\nThe following rules govern the merging, joint contention, and splitting of listed parties:\n\n- If Likud or Together (or any successor party created through a merger) merge or contest the election jointly with any other party, the option corresponding to Likud or Together will represent the resultant candidate list or merged party. \n\nOtherwise:\n\n- If a listed party merges with, or contests the election as part of a joint candidate list with, one or more unlisted parties prior to the election, the option corresponding to the listed party will represent all seats won by the merged party or joint candidate list. If a listed party merges with, or contests the election as part of a joint candidate list with, one or more other listed parties prior to the election, the option corresponding to the party which held the most seats in the prior Knesset will represent all seats won by the merged party/joint candidate list. If these rules do not adequately determine which option represents a merged party or joint candidate list, the listed party whose name, as listed in this market, comes first in alphabetical order, will represent all seats won by the merged party or joint candidate list.\n\n- If a listed party splits into multiple parties prior to the election, the option corresponding to the listed party will represent the resulting party that holds the greatest number of seats in the Israeli Knesset as a result of the split. If these rules do not adequately determine which party represents a listed option after a split, the listed option will represent all seats won by the party resulting from the split whose primary English name comes first in alphabetical order.",
         "relevanceScore": 2
       },
       {
-        "eventId": "1071009",
-        "eventTitle": "Bulgaria Presidential Election First Round: Margin of Victory",
-        "marketId": "4890266",
-        "question": "Will Iliana Iotova win the 2026 Bulgarian presidential first round by less than 10%?",
-        "slug": "will-iliana-iotova-win-the-2026-bulgarian-presidential-first-round-by-less-than-10",
-        "conditionId": "0x455c43770eac36ce421a55f1b9baa795619784be31a62f36f4d3c9684fc3c80e",
+        "eventId": "1203169",
+        "eventTitle": "Elon Musk # tweets October 20 - October 27, 2026?",
+        "marketId": "5794292",
+        "question": "Will Elon Musk post 300-319 tweets from October 20 to October 27, 2026?",
+        "slug": "elon-musk-of-tweets-october-20-october-27-2026-300-319",
+        "conditionId": "0xf420cae000580fc004457155dba1ce7a8a76b708f256dc74f88d659ae8c04f15",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.919,
-          0.081
+          0.034,
+          0.966
         ],
-        "yesPrice": 0.919,
-        "noPrice": 0.081,
-        "volume24hr": 664618.205203,
-        "liquidity": 12792.65324,
-        "endDate": "2026-10-25T23:59:00Z",
-        "daysToResolution": 0,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/bulgaria-election-scheduled-by-december-31-sj1lowFVfVXg.png",
-        "description": "The first round of the 2026 Bulgarian presidential election is currently expected to be held on October 25, 2026.\n\nThis market will resolve according to the margin of victory between the top two candidates in the first round of the specified election.\n\nThe \"margin of victory\" is defined as the absolute difference between the percentages of valid votes received by the first-place and second-place candidates. Percentages of the valid votes received by each candidate will be determined by dividing the total number of valid votes each of the top two candidates receives by the sum of all valid votes cast in the election.\n\nThe candidates named in this market are individual candidates appearing on the first round ballot. They do not represent party options, and this market will not resolve based on the party affiliation of any candidate.\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher margin bracket.\n\nIf two or more candidates tie for the most valid votes in this election, and the tie is between two candidates listed, this market will resolve to the lowest margin bracket for the candidate whose ballot-listed last name comes first in alphabetical order. If the tie is between a listed candidate and an unlisted candidate, this market will resolve to the lowest margin bracket for the listed candidate. If the tie is between two or more unlisted candidates, this market will resolve to \"Other.\"\n\nThis market will resolve based on the official vote count once the count has been made official.\n\nIf the election results are not known definitively by June 30, 2027, 11:59 PM ET, this market will resolve to \"Other\".\n\nIf a recount is initiated before the vote total has been made official, the market will remain open until the recount is completed and the vote is made official.\n\nThe primary resolution source for this market will be the official results of the 2026 Bulgarian presidential election as published by the Central Election Commission of Bulgaria (Централна избирателна комисия); however, an overwhelming consensus of credible reporting may also be used.",
+        "yesPrice": 0.034,
+        "noPrice": 0.966,
+        "volume24hr": 465366.118285,
+        "liquidity": 11138.55005,
+        "endDate": "2026-10-27T16:00:00Z",
+        "daysToResolution": 1,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/elon-musk-of-tweets-nov-22-29-apMPG21-pzx_.jpg",
+        "description": "This market will resolve according to the number of times Elon Musk (@elonmusk), posts on X from October 20 12:00 PM ET to October 27, 2026 12:00 PM ET.\n\nFor the purposes of this market, only main feed posts, quote posts and reposts will count.\n\nReplies will NOT count towards the total - however, replies on the main feed such as https://x.com/elonmusk/status/1786073478711353576 will be counted by the tracker.\n\nDeleted posts will count as long as they remain available long enough to be captured by the tracker (~5 minutes).\n\nCommunity reposts which are not counted by the tracker not count toward the total.\n\nThe resolution source for this market is the 'Post Counter' figure for posts found at https://xtracker.polymarket.com. Individual posts can be viewed by clicking \"Export Data\". If the tracker does not update correctly in accordance with the rules, X itself may be used as a secondary resolution source.",
         "relevanceScore": 2
       },
       {
-        "eventId": "1071009",
-        "eventTitle": "Bulgaria Presidential Election First Round: Margin of Victory",
-        "marketId": "4890267",
-        "question": "Will Andrey Gyurov win the 2026 Bulgarian presidential first round by less than 10%?",
-        "slug": "will-andrey-gyurov-win-the-2026-bulgarian-presidential-first-round-by-less-than-10",
-        "conditionId": "0xc1976de3298a37629c122a51a562dfd99809a11bf6cb64c86693853277de5f9b",
+        "eventId": "1203169",
+        "eventTitle": "Elon Musk # tweets October 20 - October 27, 2026?",
+        "marketId": "5794293",
+        "question": "Will Elon Musk post 320-339 tweets from October 20 to October 27, 2026?",
+        "slug": "elon-musk-of-tweets-october-20-october-27-2026-320-339",
+        "conditionId": "0x29bb70b289e723b297ef66592d8ebc1a03fc248417004453f5d49517d7ac4776",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.054,
-          0.946
+          0.535,
+          0.465
         ],
-        "yesPrice": 0.054,
-        "noPrice": 0.946,
-        "volume24hr": 664618.205203,
-        "liquidity": 13885.10908,
-        "endDate": "2026-10-25T23:59:00Z",
-        "daysToResolution": 0,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/bulgaria-election-scheduled-by-december-31-sj1lowFVfVXg.png",
-        "description": "The first round of the 2026 Bulgarian presidential election is currently expected to be held on October 25, 2026.\n\nThis market will resolve according to the margin of victory between the top two candidates in the first round of the specified election.\n\nThe \"margin of victory\" is defined as the absolute difference between the percentages of valid votes received by the first-place and second-place candidates. Percentages of the valid votes received by each candidate will be determined by dividing the total number of valid votes each of the top two candidates receives by the sum of all valid votes cast in the election.\n\nThe candidates named in this market are individual candidates appearing on the first round ballot. They do not represent party options, and this market will not resolve based on the party affiliation of any candidate.\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher margin bracket.\n\nIf two or more candidates tie for the most valid votes in this election, and the tie is between two candidates listed, this market will resolve to the lowest margin bracket for the candidate whose ballot-listed last name comes first in alphabetical order. If the tie is between a listed candidate and an unlisted candidate, this market will resolve to the lowest margin bracket for the listed candidate. If the tie is between two or more unlisted candidates, this market will resolve to \"Other.\"\n\nThis market will resolve based on the official vote count once the count has been made official.\n\nIf the election results are not known definitively by June 30, 2027, 11:59 PM ET, this market will resolve to \"Other\".\n\nIf a recount is initiated before the vote total has been made official, the market will remain open until the recount is completed and the vote is made official.\n\nThe primary resolution source for this market will be the official results of the 2026 Bulgarian presidential election as published by the Central Election Commission of Bulgaria (Централна избирателна комисия); however, an overwhelming consensus of credible reporting may also be used.",
+        "yesPrice": 0.535,
+        "noPrice": 0.465,
+        "volume24hr": 465366.118285,
+        "liquidity": 5555.7499,
+        "endDate": "2026-10-27T16:00:00Z",
+        "daysToResolution": 1,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/elon-musk-of-tweets-nov-22-29-apMPG21-pzx_.jpg",
+        "description": "This market will resolve according to the number of times Elon Musk (@elonmusk), posts on X from October 20 12:00 PM ET to October 27, 2026 12:00 PM ET.\n\nFor the purposes of this market, only main feed posts, quote posts and reposts will count.\n\nReplies will NOT count towards the total - however, replies on the main feed such as https://x.com/elonmusk/status/1786073478711353576 will be counted by the tracker.\n\nDeleted posts will count as long as they remain available long enough to be captured by the tracker (~5 minutes).\n\nCommunity reposts which are not counted by the tracker not count toward the total.\n\nThe resolution source for this market is the 'Post Counter' figure for posts found at https://xtracker.polymarket.com. Individual posts can be viewed by clicking \"Export Data\". If the tracker does not update correctly in accordance with the rules, X itself may be used as a secondary resolution source.",
         "relevanceScore": 2
       },
       {
-        "eventId": "1071009",
-        "eventTitle": "Bulgaria Presidential Election First Round: Margin of Victory",
-        "marketId": "4890272",
-        "question": "Will Another Candidate win the 2026 Bulgarian presidential first round?",
-        "slug": "will-another-candidate-win-the-2026-bulgarian-presidential-first-round",
-        "conditionId": "0x6e05aad9a850d78e17630774976eee947b6ba2bd0c46962ad04dbff34de1f7dc",
+        "eventId": "1203169",
+        "eventTitle": "Elon Musk # tweets October 20 - October 27, 2026?",
+        "marketId": "5794294",
+        "question": "Will Elon Musk post 340-359 tweets from October 20 to October 27, 2026?",
+        "slug": "elon-musk-of-tweets-october-20-october-27-2026-340-359",
+        "conditionId": "0x668ea68a752eb0b511781868c62cfd2bd4bdf6faf7e6f8e92d344222c79232ed",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.5,
-          0.5
+          0.375,
+          0.625
         ],
-        "yesPrice": 0.5,
-        "noPrice": 0.5,
-        "volume24hr": 664618.205203,
-        "liquidity": 0,
-        "endDate": "2026-10-25T23:59:00Z",
-        "daysToResolution": 0,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/bulgaria-election-scheduled-by-december-31-sj1lowFVfVXg.png",
-        "description": "The first round of the 2026 Bulgarian presidential election is currently expected to be held on October 25, 2026.\n\nThis market will resolve according to the margin of victory between the top two candidates in the first round of the specified election.\n\nThe \"margin of victory\" is defined as the absolute difference between the percentages of valid votes received by the first-place and second-place candidates. Percentages of the valid votes received by each candidate will be determined by dividing the total number of valid votes each of the top two candidates receives by the sum of all valid votes cast in the election.\n\nThe candidates named in this market are individual candidates appearing on the first round ballot. They do not represent party options, and this market will not resolve based on the party affiliation of any candidate.\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher margin bracket.\n\nIf two or more candidates tie for the most valid votes in this election, and the tie is between two candidates listed, this market will resolve to the lowest margin bracket for the candidate whose ballot-listed last name comes first in alphabetical order. If the tie is between a listed candidate and an unlisted candidate, this market will resolve to the lowest margin bracket for the listed candidate. If the tie is between two or more unlisted candidates, this market will resolve to \"Other.\"\n\nThis market will resolve based on the official vote count once the count has been made official.\n\nIf the election results are not known definitively by June 30, 2027, 11:59 PM ET, this market will resolve to \"Other\".\n\nIf a recount is initiated before the vote total has been made official, the market will remain open until the recount is completed and the vote is made official.\n\nThe primary resolution source for this market will be the official results of the 2026 Bulgarian presidential election as published by the Central Election Commission of Bulgaria (Централна избирателна комисия); however, an overwhelming consensus of credible reporting may also be used.",
+        "yesPrice": 0.375,
+        "noPrice": 0.625,
+        "volume24hr": 465366.118285,
+        "liquidity": 7413.32455,
+        "endDate": "2026-10-27T16:00:00Z",
+        "daysToResolution": 1,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/elon-musk-of-tweets-nov-22-29-apMPG21-pzx_.jpg",
+        "description": "This market will resolve according to the number of times Elon Musk (@elonmusk), posts on X from October 20 12:00 PM ET to October 27, 2026 12:00 PM ET.\n\nFor the purposes of this market, only main feed posts, quote posts and reposts will count.\n\nReplies will NOT count towards the total - however, replies on the main feed such as https://x.com/elonmusk/status/1786073478711353576 will be counted by the tracker.\n\nDeleted posts will count as long as they remain available long enough to be captured by the tracker (~5 minutes).\n\nCommunity reposts which are not counted by the tracker not count toward the total.\n\nThe resolution source for this market is the 'Post Counter' figure for posts found at https://xtracker.polymarket.com. Individual posts can be viewed by clicking \"Export Data\". If the tracker does not update correctly in accordance with the rules, X itself may be used as a secondary resolution source.",
+        "relevanceScore": 2
+      },
+      {
+        "eventId": "1203169",
+        "eventTitle": "Elon Musk # tweets October 20 - October 27, 2026?",
+        "marketId": "5794295",
+        "question": "Will Elon Musk post 360-379 tweets from October 20 to October 27, 2026?",
+        "slug": "elon-musk-of-tweets-october-20-october-27-2026-360-379",
+        "conditionId": "0xab8278b67d047e8467b8bcacd4c47d48a21955c0fd038ea0f3b03dbe28e18448",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0555,
+          0.9445
+        ],
+        "yesPrice": 0.0555,
+        "noPrice": 0.9445,
+        "volume24hr": 465366.118285,
+        "liquidity": 12365.7817,
+        "endDate": "2026-10-27T16:00:00Z",
+        "daysToResolution": 1,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/elon-musk-of-tweets-nov-22-29-apMPG21-pzx_.jpg",
+        "description": "This market will resolve according to the number of times Elon Musk (@elonmusk), posts on X from October 20 12:00 PM ET to October 27, 2026 12:00 PM ET.\n\nFor the purposes of this market, only main feed posts, quote posts and reposts will count.\n\nReplies will NOT count towards the total - however, replies on the main feed such as https://x.com/elonmusk/status/1786073478711353576 will be counted by the tracker.\n\nDeleted posts will count as long as they remain available long enough to be captured by the tracker (~5 minutes).\n\nCommunity reposts which are not counted by the tracker not count toward the total.\n\nThe resolution source for this market is the 'Post Counter' figure for posts found at https://xtracker.polymarket.com. Individual posts can be viewed by clicking \"Export Data\". If the tracker does not update correctly in accordance with the rules, X itself may be used as a secondary resolution source.",
+        "relevanceScore": 2
+      },
+      {
+        "eventId": "428819",
+        "eventTitle": "Israel Election: Likud # of seats?",
+        "marketId": "2110576",
+        "question": "Will Likud win fewer than 20 seats in the 2026 Israeli legislative election?",
+        "slug": "will-likud-win-fewer-than-20-seats-in-the-2026-israeli-legislative-election",
+        "conditionId": "0xb3c97c349eca27060cbbfa2bc1beec1df512fc90a859f08439318785c461dc86",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.2755,
+          0.7245
+        ],
+        "yesPrice": 0.2755,
+        "noPrice": 0.7245,
+        "volume24hr": 269086.459033,
+        "liquidity": 72683.92745,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-likud-win-the-most-seats-in-the-2026-israeli-legislative-election-g2ML70fSwzBP.jpg",
+        "description": "Legislative elections are expected to be held in Israel on October 27, 2026.\n\nThis market will resolve according to the number of seats won by the Likud party in the Israeli Knesset as a result of this election.\n\nIf the Likud party contests this election as part of a joint candidate list with one or more parties, all seats won by the joint candidate list will be counted. If the Likud party merges with another party prior to the election, all seats won by the resultant merged party, or any joint candidate list through which it contests the election, will be counted.\n\nIf the results of this election are not definitively known by October 31, 2027, 11:59 PM ET, this market will resolve to the lowest range bracket.\n\nThis market's resolution will be based solely on the number of seats won by the Likud party in this election.\n\nThis market will resolve based on the election results, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by Israel’s Central Election Committee (Va'adet HaBehirot HaMerkazit) (https://www.gov.il/en/departments/central-elections-committee/govil-landing-page).",
+        "relevanceScore": 2
+      },
+      {
+        "eventId": "428819",
+        "eventTitle": "Israel Election: Likud # of seats?",
+        "marketId": "2110577",
+        "question": "Will Likud win 20-24 seats in the 2026 Israeli legislative election?",
+        "slug": "will-likud-win-20-24-seats-in-the-2026-israeli-legislative-election",
+        "conditionId": "0x3135bdbe2e03604ff34296d209bccf73d7e90b47f634bf47becffaad852c064d",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.405,
+          0.595
+        ],
+        "yesPrice": 0.405,
+        "noPrice": 0.595,
+        "volume24hr": 269086.459033,
+        "liquidity": 45317.4272,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-likud-win-the-most-seats-in-the-2026-israeli-legislative-election-g2ML70fSwzBP.jpg",
+        "description": "Legislative elections are expected to be held in Israel on October 27, 2026.\n\nThis market will resolve according to the number of seats won by the Likud party in the Israeli Knesset as a result of this election.\n\nIf the Likud party contests this election as part of a joint candidate list with one or more parties, all seats won by the joint candidate list will be counted. If the Likud party merges with another party prior to the election, all seats won by the resultant merged party, or any joint candidate list through which it contests the election, will be counted.\n\nIf the results of this election are not definitively known by October 31, 2027, 11:59 PM ET, this market will resolve to the lowest range bracket.\n\nThis market's resolution will be based solely on the number of seats won by the Likud party in this election.\n\nThis market will resolve based on the election results, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by Israel’s Central Election Committee (Va'adet HaBehirot HaMerkazit) (https://www.gov.il/en/departments/central-elections-committee/govil-landing-page).",
+        "relevanceScore": 2
+      },
+      {
+        "eventId": "428819",
+        "eventTitle": "Israel Election: Likud # of seats?",
+        "marketId": "2110578",
+        "question": "Will Likud win 25-29 seats in the 2026 Israeli legislative election?",
+        "slug": "will-likud-win-25-29-seats-in-the-2026-israeli-legislative-election",
+        "conditionId": "0xd63e1e2db811ba09972cbac9810edcca72ffdc1d195c03547ac0be2fb7a3c3d7",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.205,
+          0.795
+        ],
+        "yesPrice": 0.205,
+        "noPrice": 0.795,
+        "volume24hr": 269086.459033,
+        "liquidity": 67049.3584,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-likud-win-the-most-seats-in-the-2026-israeli-legislative-election-g2ML70fSwzBP.jpg",
+        "description": "Legislative elections are expected to be held in Israel on October 27, 2026.\n\nThis market will resolve according to the number of seats won by the Likud party in the Israeli Knesset as a result of this election.\n\nIf the Likud party contests this election as part of a joint candidate list with one or more parties, all seats won by the joint candidate list will be counted. If the Likud party merges with another party prior to the election, all seats won by the resultant merged party, or any joint candidate list through which it contests the election, will be counted.\n\nIf the results of this election are not definitively known by October 31, 2027, 11:59 PM ET, this market will resolve to the lowest range bracket.\n\nThis market's resolution will be based solely on the number of seats won by the Likud party in this election.\n\nThis market will resolve based on the election results, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by Israel’s Central Election Committee (Va'adet HaBehirot HaMerkazit) (https://www.gov.il/en/departments/central-elections-committee/govil-landing-page).",
+        "relevanceScore": 2
+      },
+      {
+        "eventId": "428819",
+        "eventTitle": "Israel Election: Likud # of seats?",
+        "marketId": "2110579",
+        "question": "Will Likud win 30-34 seats in the 2026 Israeli legislative election?",
+        "slug": "will-likud-win-30-34-seats-in-the-2026-israeli-legislative-election",
+        "conditionId": "0xc855714184ac46005a7897c68f274147f0abf1fde791421541edb065fa65a1e4",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.1025,
+          0.8975
+        ],
+        "yesPrice": 0.1025,
+        "noPrice": 0.8975,
+        "volume24hr": 269086.459033,
+        "liquidity": 104332.30664,
+        "endDate": "2026-10-28T03:59:00Z",
+        "daysToResolution": 2,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-likud-win-the-most-seats-in-the-2026-israeli-legislative-election-g2ML70fSwzBP.jpg",
+        "description": "Legislative elections are expected to be held in Israel on October 27, 2026.\n\nThis market will resolve according to the number of seats won by the Likud party in the Israeli Knesset as a result of this election.\n\nIf the Likud party contests this election as part of a joint candidate list with one or more parties, all seats won by the joint candidate list will be counted. If the Likud party merges with another party prior to the election, all seats won by the resultant merged party, or any joint candidate list through which it contests the election, will be counted.\n\nIf the results of this election are not definitively known by October 31, 2027, 11:59 PM ET, this market will resolve to the lowest range bracket.\n\nThis market's resolution will be based solely on the number of seats won by the Likud party in this election.\n\nThis market will resolve based on the election results, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by Israel’s Central Election Committee (Va'adet HaBehirot HaMerkazit) (https://www.gov.il/en/departments/central-elections-committee/govil-landing-page).",
         "relevanceScore": 2
       },
       {
@@ -736,446 +593,171 @@
           "No"
         ],
         "prices": [
-          0.0365,
-          0.9635
+          0.0415,
+          0.9585
         ],
-        "yesPrice": 0.0365,
-        "noPrice": 0.9635,
-        "volume24hr": 374017.892373,
-        "liquidity": 387445.11049,
+        "yesPrice": 0.0415,
+        "noPrice": 0.9585,
+        "volume24hr": 225965.255842,
+        "liquidity": 773557.40213,
         "endDate": "2027-01-01T04:59:00Z",
-        "daysToResolution": 68,
+        "daysToResolution": 67,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/alien+head.jpeg",
         "description": "This market will resolve to \"Yes\" if the President of the United States, any member of the Cabinet of the United States, any member of the Joint Chiefs of Staff, or any US federal agency definitively states that extraterrestrial life or technology exists by December 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nThe primary resolution source for this market will be official information from the government of the United States, however a consensus of credible reporting will also be used.",
         "relevanceScore": 2
+      },
+      {
+        "eventId": "1112205",
+        "eventTitle": "What price will Bitcoin hit in October?",
+        "marketId": "5170734",
+        "question": "Will Bitcoin reach $90,000 in October?",
+        "slug": "will-bitcoin-reach-90k-in-october-2026",
+        "conditionId": "0x94f623a9c9ac7e0caca65b1ab664e8158ebb8ec0c826b023ba98518967910755",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0275,
+          0.9725
+        ],
+        "yesPrice": 0.0275,
+        "noPrice": 0.9725,
+        "volume24hr": 544237.474418,
+        "liquidity": 77668.21052,
+        "endDate": "2026-11-01T04:00:00Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+        "description": "What price will Bitcoin hit in October?",
+        "relevanceScore": 1
+      },
+      {
+        "eventId": "1112205",
+        "eventTitle": "What price will Bitcoin hit in October?",
+        "marketId": "5170735",
+        "question": "Will Bitcoin reach $87,500 in October?",
+        "slug": "will-bitcoin-reach-87pt5k-in-october-2026",
+        "conditionId": "0x42dc04e485b5d8ec749326fe564820ee37a1c63425f43d7b0755a016afd5c4cb",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.055,
+          0.945
+        ],
+        "yesPrice": 0.055,
+        "noPrice": 0.945,
+        "volume24hr": 544237.474418,
+        "liquidity": 101285.3528,
+        "endDate": "2026-11-01T04:00:00Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+        "description": "What price will Bitcoin hit in October?",
+        "relevanceScore": 1
+      },
+      {
+        "eventId": "1112205",
+        "eventTitle": "What price will Bitcoin hit in October?",
+        "marketId": "5170739",
+        "question": "Will Bitcoin dip to $77,500 in October?",
+        "slug": "will-bitcoin-dip-to-77pt5k-in-october-2026",
+        "conditionId": "0x4e22f6d2ae4af77a41c1f57a3f077e3c32606c826b987406d6e27fac9ddad7aa",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.425,
+          0.575
+        ],
+        "yesPrice": 0.425,
+        "noPrice": 0.575,
+        "volume24hr": 544237.474418,
+        "liquidity": 63737.4367,
+        "endDate": "2026-11-01T04:00:00Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+        "description": "What price will Bitcoin hit in October?",
+        "relevanceScore": 1
+      },
+      {
+        "eventId": "1112205",
+        "eventTitle": "What price will Bitcoin hit in October?",
+        "marketId": "5170740",
+        "question": "Will Bitcoin dip to $75,000 in October?",
+        "slug": "will-bitcoin-dip-to-75k-in-october-2026",
+        "conditionId": "0x5280e91e95ab540de0879f26813f060f51f9d77d8c2e41dd81f1aec41c8bb714",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.145,
+          0.855
+        ],
+        "yesPrice": 0.145,
+        "noPrice": 0.855,
+        "volume24hr": 544237.474418,
+        "liquidity": 67869.1677,
+        "endDate": "2026-11-01T04:00:00Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+        "description": "What price will Bitcoin hit in October?",
+        "relevanceScore": 1
+      },
+      {
+        "eventId": "1112205",
+        "eventTitle": "What price will Bitcoin hit in October?",
+        "marketId": "5170741",
+        "question": "Will Bitcoin dip to $72,500 in October?",
+        "slug": "will-bitcoin-dip-to-72pt5k-in-october-2026",
+        "conditionId": "0xbf0602707edd80eada90c28ee03e74b9330432105f71b41da38f3997a55c1bde",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0475,
+          0.9525
+        ],
+        "yesPrice": 0.0475,
+        "noPrice": 0.9525,
+        "volume24hr": 544237.474418,
+        "liquidity": 76693.72775,
+        "endDate": "2026-11-01T04:00:00Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+        "description": "What price will Bitcoin hit in October?",
+        "relevanceScore": 1
+      },
+      {
+        "eventId": "1112205",
+        "eventTitle": "What price will Bitcoin hit in October?",
+        "marketId": "5170742",
+        "question": "Will Bitcoin dip to $70,000 in October?",
+        "slug": "will-bitcoin-dip-to-70k-in-october-2026",
+        "conditionId": "0x8feb2a254634f61caacbbe13abd7b9d5b30c296e66fa3666990cab540fb3d0a5",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0235,
+          0.9765
+        ],
+        "yesPrice": 0.0235,
+        "noPrice": 0.9765,
+        "volume24hr": 544237.474418,
+        "liquidity": 87675.86109,
+        "endDate": "2026-11-01T04:00:00Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+        "description": "What price will Bitcoin hit in October?",
+        "relevanceScore": 1
       }
     ],
     "other": [
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168140",
-        "question": "Game 1: Both Teams Destroy Inhibitors?",
-        "slug": "lol-gen-ly-2026-10-25-game1-both-teams-destroy-inhibitors",
-        "conditionId": "0x9aaa34961ae53e9f0d5ca865e285d6f967a50640aafcad933a4fd05853330a9f",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.25,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168143",
-        "question": "Game 2: Both Teams Slay Baron Nashor?",
-        "slug": "lol-gen-ly-2026-10-25-game2-both-teams-slay-baron",
-        "conditionId": "0x46b77b5eb0c6ca9e828188db9a536f66b7631e0ccd45c1b4993d8113801f32c3",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168144",
-        "question": "Game 2: Both Teams Slay a Dragon?",
-        "slug": "lol-gen-ly-2026-10-25-game2-both-teams-slay-dragon",
-        "conditionId": "0xcafeab133b2f5af1ded95c88710165feba34572b0654fe8c57cbf2a97cb2c5c6",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168145",
-        "question": "Game 2: Both Teams Destroy Inhibitors?",
-        "slug": "lol-gen-ly-2026-10-25-game2-both-teams-destroy-inhibitors",
-        "conditionId": "0xf0648af7a67a34eeaebfed5dcfb29209cd8a4614908ac1a4a5e0c924e653108b",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168146",
-        "question": "Game 2: Any Player Quadra Kill?",
-        "slug": "lol-gen-ly-2026-10-25-game2-any-player-quadra-kill",
-        "conditionId": "0xa247f9ca96e6a1f904c18cd7a034606f5c76a67422ab89261806ced939b7513c",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168147",
-        "question": "Game 2: Any Player Penta Kill?",
-        "slug": "lol-gen-ly-2026-10-25-game2-any-player-penta-kill",
-        "conditionId": "0x1003bf6c057f5ca45dc6495870f29b5cb43bf9a9b4ce8d43986bdd0403839e5e",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168148",
-        "question": "Game 3: Both Teams Slay Baron Nashor?",
-        "slug": "lol-gen-ly-2026-10-25-game3-both-teams-slay-baron",
-        "conditionId": "0xc86eb131e8b1e046c7a8f383a4b84281ccb85557661761de1339b08927512106",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168149",
-        "question": "Game 3: Both Teams Slay a Dragon?",
-        "slug": "lol-gen-ly-2026-10-25-game3-both-teams-slay-dragon",
-        "conditionId": "0x6f8a36420c3f83592d8c242ae83c0497a0a9b9e45ee87dfd6f0c1210d1508302",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.525,
-          0.475
-        ],
-        "yesPrice": 0.525,
-        "noPrice": 0.475,
-        "volume24hr": 8985600.817295,
-        "liquidity": 28.55,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168150",
-        "question": "Game 3: Both Teams Destroy Inhibitors?",
-        "slug": "lol-gen-ly-2026-10-25-game3-both-teams-destroy-inhibitors",
-        "conditionId": "0xa9123000ce1d1fa98cd55d24811c5e8a86388dae1439f7fd58f273bdfd1a1851",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168151",
-        "question": "Game 3: Any Player Quadra Kill?",
-        "slug": "lol-gen-ly-2026-10-25-game3-any-player-quadra-kill",
-        "conditionId": "0x5976f95d54910684d138132f6334dd0b2d3515e6a7a5fc84d66e53a9ba90e553",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1249638",
-        "eventTitle": "LoL: Gen.G vs LYON (BO3) - Worlds Group Stage",
-        "marketId": "6168152",
-        "question": "Game 3: Any Player Penta Kill?",
-        "slug": "lol-gen-ly-2026-10-25-game3-any-player-penta-kill",
-        "conditionId": "0xc94b7f873df4a4186411e29d0ad1e5fdfedfd6163b803490d0abd502a0569e8b",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "yesPrice": 0.475,
-        "noPrice": 0.525,
-        "volume24hr": 8985600.817295,
-        "liquidity": 27.15,
-        "endDate": "2026-10-26T02:55:00Z",
-        "daysToResolution": 1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/league-of-legends-61a4f083a6.png",
-        "description": "This market refers to the LoL Round 3 match between Gen.G and LYON in the Worlds Group Stage, initially scheduled for October 25, 2026 at 3:00 PM ET.\n\nThis market will resolve to \"Gen.G\" if Gen.G win the match against LYON.\n\nThis market will resolve to \"LYON\" if LYON win the match against Gen.G.\n\nIf the match is canceled (not played at all) or ends in a tie, this market will resolve to 50-50.\n\nIf the match is postponed, it must be rescheduled to a start time on or before November 8, 2026 at 11:59 PM ET (14 calendar days after the originally scheduled start of October 25, 2026 at 3:00 PM ET). If, by that deadline, the most recently announced rescheduled start time is on or before the deadline, this market resolves based on the result of the match as played. Otherwise, this market resolves 50-50, regardless of whether the match is subsequently played.\n\nIf the match begins but is not completed, and one team wins due to the opponent's forfeiture, disqualification, or walkover, this market will resolve to the team who wins. \n\nIf the match ends in a forfeit, disqualification, or walkover (team withdraws before the start and the other wins automatically), this market will resolve to 50-50. \n\nThe resolution source for this market will be official information from https://gol.gg/esports/home. However, if https://gol.gg/esports/home has not published final results within 2 hours after the event’s conclusion, a consensus of credible reporting may be used instead including video evidence.\n\nIn cases where a team’s listed name includes minor discrepancies from the resolution source, this market will resolve based on the underlying real-world match rather than exact name matching. Recognizable abbreviations, alternate or erroneous spellings, sponsor tags, affiliate or academy designations, regional identifiers, and minor formatting differences will be treated as referring to the same team, provided the intended team can be clearly and uniquely identified within the relevant competition. If a listed team name has no reasonable connection to any participating team, or if it matches or could reasonably refer to another team in the same competition such that the intended team cannot be unambiguously determined, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "48361",
-        "eventTitle": "Ballon d'Or Winner 2026",
-        "marketId": "608540",
-        "question": "Will Kylian Mbappé win the 2026 Ballon d'Or?",
-        "slug": "will-kylian-mbapp-win-the-2026-ballon-dor",
-        "conditionId": "0x87091dc5932f015d80c40e71e47cb043c3f8b6098484eb5bc3943cf35ee9afc1",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.1705,
-          0.8295
-        ],
-        "yesPrice": 0.1705,
-        "noPrice": 0.8295,
-        "volume24hr": 3671726.527671,
-        "liquidity": 154468.68787,
-        "endDate": "2026-10-27T03:59:00Z",
-        "daysToResolution": 2,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/ballon-dor-winner-2025-vTCj-1ZkJzga.jpg",
-        "description": "This market will resolve according to the winner of the 2026 Ballon d’Or.\n\nIf no 2026 Ballon d’Or winner is declared by December 31, 2026, 11:59 PM ET, this market will resolve to \"Other\".\n\nThe primary resolution source for this market is official information from France Football (https://www.francefootball.fr/).",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "48361",
-        "eventTitle": "Ballon d'Or Winner 2026",
-        "marketId": "608545",
-        "question": "Will Lamine Yamal win the 2026 Ballon d'Or?",
-        "slug": "will-lamine-yamal-win-the-2026-ballon-dor",
-        "conditionId": "0xa34edb6c898232378a9cc08744842df2cd89d278ba45b012bed3ac10c7241c4d",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.1095,
-          0.8905
-        ],
-        "yesPrice": 0.1095,
-        "noPrice": 0.8905,
-        "volume24hr": 3671726.527671,
-        "liquidity": 182879.61126,
-        "endDate": "2026-10-27T03:59:00Z",
-        "daysToResolution": 2,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/ballon-dor-winner-2025-vTCj-1ZkJzga.jpg",
-        "description": "This market will resolve according to the winner of the 2026 Ballon d’Or.\n\nIf no 2026 Ballon d’Or winner is declared by December 31, 2026, 11:59 PM ET, this market will resolve to \"Other\".\n\nThe primary resolution source for this market is official information from France Football (https://www.francefootball.fr/).",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "48361",
-        "eventTitle": "Ballon d'Or Winner 2026",
-        "marketId": "608547",
-        "question": "Will Harry Kane win the 2026 Ballon d'Or?",
-        "slug": "will-harry-kane-win-the-2026-ballon-dor",
-        "conditionId": "0x12dc2b61723b2a54fc1947a307389b5f32038e7a29a0e936ad1fe410b969d06a",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.7135,
-          0.2865
-        ],
-        "yesPrice": 0.7135,
-        "noPrice": 0.2865,
-        "volume24hr": 3671726.527671,
-        "liquidity": 151403.36304,
-        "endDate": "2026-10-27T03:59:00Z",
-        "daysToResolution": 2,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/ballon-dor-winner-2025-vTCj-1ZkJzga.jpg",
-        "description": "This market will resolve according to the winner of the 2026 Ballon d’Or.\n\nIf no 2026 Ballon d’Or winner is declared by December 31, 2026, 11:59 PM ET, this market will resolve to \"Other\".\n\nThe primary resolution source for this market is official information from France Football (https://www.francefootball.fr/).",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1178529",
-        "eventTitle": "Ole Miss vs. Texas",
-        "marketId": "5629517",
-        "question": "Ole Miss vs. Texas: Kickoff or Punt Return Touchdown",
-        "slug": "cfb-miss-tx-2026-10-24-kick-punt-return-td",
-        "conditionId": "0x6dcb5a816237eb4e687a4db119cffbbbf829cb263ef68bcbd21804f2e9441ec4",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.5,
-          0.5
-        ],
-        "yesPrice": 0.5,
-        "noPrice": 0.5,
-        "volume24hr": 1406096.0017759998,
-        "liquidity": 0,
-        "endDate": "2026-10-24T23:30:00Z",
-        "daysToResolution": -1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/espn+college+football+logo.png",
-        "description": "In the upcoming college football game between Ole Miss and Texas, scheduled for October 24 at 7:30PM ET:\nThis market will resolve to \"Ole Miss\" if Ole Miss win the game.\nThis market will resolve to \"Texas\" if Texas win the game.\nOvertime is included if played.\nIf the game ends in a tie, this market will resolve 50-50.\nIf the game is postponed, this market will remain open until the game has been completed.\nIf the game is canceled entirely, with no make-up game, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1178529",
-        "eventTitle": "Ole Miss vs. Texas",
-        "marketId": "5629733",
-        "question": "Ole Miss vs. Texas: Total Defensive/Special Teams Touchdowns O/U 0.5",
-        "slug": "cfb-miss-tx-2026-10-24-total-dst-tds-0pt5",
-        "conditionId": "0x4912f065bbec0398c988f2ec475e2fd25aee70c62291d87e1fe0f51a436dea71",
-        "outcomes": [
-          "Over",
-          "Under"
-        ],
-        "prices": [
-          0.5,
-          0.5
-        ],
-        "yesPrice": 0.5,
-        "noPrice": 0.5,
-        "volume24hr": 1406096.0017759998,
-        "liquidity": 0,
-        "endDate": "2026-10-24T23:30:00Z",
-        "daysToResolution": -1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/espn+college+football+logo.png",
-        "description": "In the upcoming college football game between Ole Miss and Texas, scheduled for October 24 at 7:30PM ET:\nThis market will resolve to \"Ole Miss\" if Ole Miss win the game.\nThis market will resolve to \"Texas\" if Texas win the game.\nOvertime is included if played.\nIf the game ends in a tie, this market will resolve 50-50.\nIf the game is postponed, this market will remain open until the game has been completed.\nIf the game is canceled entirely, with no make-up game, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
-      {
-        "eventId": "1178529",
-        "eventTitle": "Ole Miss vs. Texas",
-        "marketId": "5998585",
-        "question": "Ole Miss vs. Texas: 4Q Moneyline",
-        "slug": "cfb-miss-tx-2026-10-24-4q-moneyline",
-        "conditionId": "0xb57c50f06ea98103a8e9e58c7289049e6c79eb3374388483c232a74c3b8e015b",
-        "outcomes": [
-          "Ole Miss",
-          "Texas"
-        ],
-        "prices": [
-          0.5,
-          0.5
-        ],
-        "yesPrice": 0.5,
-        "noPrice": 0.5,
-        "volume24hr": 1406096.0017759998,
-        "liquidity": 0,
-        "endDate": "2026-10-24T23:30:00Z",
-        "daysToResolution": -1,
-        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/espn+college+football+logo.png",
-        "description": "In the upcoming college football game between Ole Miss and Texas, scheduled for October 24 at 7:30PM ET:\nThis market will resolve to \"Ole Miss\" if Ole Miss win the game.\nThis market will resolve to \"Texas\" if Texas win the game.\nOvertime is included if played.\nIf the game ends in a tie, this market will resolve 50-50.\nIf the game is postponed, this market will remain open until the game has been completed.\nIf the game is canceled entirely, with no make-up game, this market will resolve 50-50.",
-        "relevanceScore": 0
-      },
       {
         "eventId": "991810",
         "eventTitle": "Worlds 2026: Winner",
@@ -1188,15 +770,15 @@
           "No"
         ],
         "prices": [
-          0.385,
-          0.615
+          0.43,
+          0.57
         ],
-        "yesPrice": 0.385,
-        "noPrice": 0.615,
-        "volume24hr": 865272.657532,
-        "liquidity": 63041.8653,
+        "yesPrice": 0.43,
+        "noPrice": 0.57,
+        "volume24hr": 674003.319735,
+        "liquidity": 456433.0748,
         "endDate": "2026-11-29T04:59:00Z",
-        "daysToResolution": 35,
+        "daysToResolution": 34,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
         "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
         "relevanceScore": 0
@@ -1213,15 +795,15 @@
           "No"
         ],
         "prices": [
-          0.16,
-          0.84
+          0.155,
+          0.845
         ],
-        "yesPrice": 0.16,
-        "noPrice": 0.84,
-        "volume24hr": 865272.657532,
-        "liquidity": 154911.5367,
+        "yesPrice": 0.155,
+        "noPrice": 0.845,
+        "volume24hr": 674003.319735,
+        "liquidity": 133003.8256,
         "endDate": "2026-11-29T04:59:00Z",
-        "daysToResolution": 35,
+        "daysToResolution": 34,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
         "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
         "relevanceScore": 0
@@ -1238,17 +820,417 @@
           "No"
         ],
         "prices": [
-          0.105,
-          0.895
+          0.09,
+          0.91
         ],
-        "yesPrice": 0.105,
-        "noPrice": 0.895,
-        "volume24hr": 865272.657532,
-        "liquidity": 28298.5477,
+        "yesPrice": 0.09,
+        "noPrice": 0.91,
+        "volume24hr": 674003.319735,
+        "liquidity": 107439.6999,
         "endDate": "2026-11-29T04:59:00Z",
-        "daysToResolution": 35,
+        "daysToResolution": 34,
         "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
         "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "991810",
+        "eventTitle": "Worlds 2026: Winner",
+        "marketId": "4397030",
+        "question": "Will Dplus KIA win Worlds 2026?",
+        "slug": "will-dplus-kia-win-worlds-2026",
+        "conditionId": "0x1688a8656aea76cdd84659259a2e8edb412a796c376fe6f8925dc7ab5b625f4b",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.1255,
+          0.8745
+        ],
+        "yesPrice": 0.1255,
+        "noPrice": 0.8745,
+        "volume24hr": 674003.319735,
+        "liquidity": 73105.09077,
+        "endDate": "2026-11-29T04:59:00Z",
+        "daysToResolution": 34,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
+        "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "991810",
+        "eventTitle": "Worlds 2026: Winner",
+        "marketId": "4397033",
+        "question": "Will Bilibili Gaming win Worlds 2026?",
+        "slug": "will-bilibili-gaming-win-worlds-2026",
+        "conditionId": "0xc288967f4bee42292b3c1516fe640c19d7805f8ed949bfcabf989b0eb5e70554",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.115,
+          0.885
+        ],
+        "yesPrice": 0.115,
+        "noPrice": 0.885,
+        "volume24hr": 674003.319735,
+        "liquidity": 84115.9558,
+        "endDate": "2026-11-29T04:59:00Z",
+        "daysToResolution": 34,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
+        "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "991810",
+        "eventTitle": "Worlds 2026: Winner",
+        "marketId": "4397050",
+        "question": "Will Invictus Gaming win Worlds 2026?",
+        "slug": "will-invictus-gaming-win-worlds-2026",
+        "conditionId": "0x68cb2ebbe9df9ace26db76f61905a4a41dc65e44fc6b8640793505dda37f191d",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0495,
+          0.9505
+        ],
+        "yesPrice": 0.0495,
+        "noPrice": 0.9505,
+        "volume24hr": 674003.319735,
+        "liquidity": 23230.1532,
+        "endDate": "2026-11-29T04:59:00Z",
+        "daysToResolution": 34,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
+        "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "991810",
+        "eventTitle": "Worlds 2026: Winner",
+        "marketId": "4397058",
+        "question": "Will LYON win Worlds 2026?",
+        "slug": "will-lyon-win-worlds-2026",
+        "conditionId": "0xfdb9ca8b00f8f906da642d2bb7b894d041e916195e825a913f4e611fe85dec8a",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0295,
+          0.9705
+        ],
+        "yesPrice": 0.0295,
+        "noPrice": 0.9705,
+        "volume24hr": 674003.319735,
+        "liquidity": 23791.66613,
+        "endDate": "2026-11-29T04:59:00Z",
+        "daysToResolution": 34,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
+        "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "991810",
+        "eventTitle": "Worlds 2026: Winner",
+        "marketId": "4397061",
+        "question": "Will Team I win Worlds 2026?",
+        "slug": "will-team-i-win-worlds-2026",
+        "conditionId": "0x2370ac11aeb690ae1f0ca23d0b5674a126e0b76f72a293d495e89dbfb75ef390",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.5,
+          0.5
+        ],
+        "yesPrice": 0.5,
+        "noPrice": 0.5,
+        "volume24hr": 674003.319735,
+        "liquidity": 0,
+        "endDate": "2026-11-29T04:59:00Z",
+        "daysToResolution": 34,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
+        "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "991810",
+        "eventTitle": "Worlds 2026: Winner",
+        "marketId": "4397062",
+        "question": "Will another team win Worlds 2026?",
+        "slug": "will-another-team-win-worlds-2026",
+        "conditionId": "0xc62e60a1d5ec8d2f5d99941b25417789ea18a06bfa22e383856df70689740fe0",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.5,
+          0.5
+        ],
+        "yesPrice": 0.5,
+        "noPrice": 0.5,
+        "volume24hr": 674003.319735,
+        "liquidity": 0,
+        "endDate": "2026-11-29T04:59:00Z",
+        "daysToResolution": 34,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/event-art/esports/lol/worlds-2026-winner.png",
+        "description": "This market will resolve according to the winner of the 2026 League of Legends World Championship (Worlds 2026), currently scheduled for October 15 to November 14, 2026.\n\nIf this tournament is postponed after November 28, 2026, 11:59 PM ET, canceled, or a winner has not been declared within this timeframe, this market will resolve to \"Other\".\n\nIf multiple teams are declared winners, this market will resolve in favor of the team whose listed team name comes first alphabetically.\n\nThe resolution source for this market will be official information from the tournament organizer, Riot Games, via the LoL Esports website (https://lolesports.com). However, a consensus of credible reporting (e.g., Liquipedia at https://liquipedia.net/leagueoflegends/World_Championship/2026) may also be used.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "4936101",
+        "question": "Will WTI Crude Oil (WTI) hit (HIGH) $120 in October?",
+        "slug": "will-wti-reach-120-in-october-2026",
+        "conditionId": "0x4568ddee88c723eea4942fc59d9050cffcbcec86be10d14b5d758245504b185b",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.025,
+          0.975
+        ],
+        "yesPrice": 0.025,
+        "noPrice": 0.975,
+        "volume24hr": 325835.21222,
+        "liquidity": 143605.32018,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "4936102",
+        "question": "Will WTI Crude Oil (WTI) hit (HIGH) $110 in October?",
+        "slug": "will-wti-reach-110-in-october-2026",
+        "conditionId": "0x28c4c18e1933cc4af657f84bd048e88ab6b157ecbe588b7fc05486a56e0aae4e",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.12,
+          0.88
+        ],
+        "yesPrice": 0.12,
+        "noPrice": 0.88,
+        "volume24hr": 325835.21222,
+        "liquidity": 48254.4372,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "4951226",
+        "question": "Will WTI Crude Oil (WTI) hit (LOW) $85 in October?",
+        "slug": "will-wti-dip-to-85-in-october-2026",
+        "conditionId": "0xa01984a038cf05bb3fec2133890a29ab93a52e90d9dbb0de9d01a821588b9a2a",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.025,
+          0.975
+        ],
+        "yesPrice": 0.025,
+        "noPrice": 0.975,
+        "volume24hr": 325835.21222,
+        "liquidity": 60809.64899,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "4951227",
+        "question": "Will WTI Crude Oil (WTI) hit (HIGH) $105 in October?",
+        "slug": "will-wti-reach-105-in-october-2026",
+        "conditionId": "0x33f529b87bb00a1ff2a948694a0b72cb67f8e267246c9e7658bb6198eb2d9af4",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.47,
+          0.53
+        ],
+        "yesPrice": 0.47,
+        "noPrice": 0.53,
+        "volume24hr": 325835.21222,
+        "liquidity": 25166.6105,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "4951229",
+        "question": "Will WTI Crude Oil (WTI) hit (HIGH) $115 in October?",
+        "slug": "will-wti-reach-115-in-october-2026",
+        "conditionId": "0xf40f9b9d6a518c5de4f0a136068719c47b39617164f50cceaf420832e2ab400c",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.034,
+          0.966
+        ],
+        "yesPrice": 0.034,
+        "noPrice": 0.966,
+        "volume24hr": 325835.21222,
+        "liquidity": 85391.39531,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "5612213",
+        "question": "Will WTI Crude Oil (WTI) hit (LOW) $90 in October?",
+        "slug": "will-wti-dip-to-90-in-october-2026-from-october-12",
+        "conditionId": "0x80e03dc0e3ffa53d87de4816532da6269a06d93f3e27203da7e322179ebf2233",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.075,
+          0.925
+        ],
+        "yesPrice": 0.075,
+        "noPrice": 0.925,
+        "volume24hr": 325835.21222,
+        "liquidity": 31555.9322,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "5743142",
+        "question": "Will WTI Crude Oil (WTI) hit (LOW) $95 in October?",
+        "slug": "will-wti-dip-to-95-in-october-2026-from-october-15",
+        "conditionId": "0x8b7b2e489425ee4ec269e3b30e9db2a1ff8b5ebdc82a972df4f4c82fb0a923f5",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.235,
+          0.765
+        ],
+        "yesPrice": 0.235,
+        "noPrice": 0.765,
+        "volume24hr": 325835.21222,
+        "liquidity": 26008.3659,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1078055",
+        "eventTitle": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "marketId": "6085634",
+        "question": "Will WTI Crude Oil (WTI) hit (LOW) $100 in October?",
+        "slug": "will-wti-dip-to-100-in-october-2026",
+        "conditionId": "0xb73f864977528d4c3a66d2fa5022bdc3e9d039a72582425d2f1691c5f333b291",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.785,
+          0.215
+        ],
+        "yesPrice": 0.785,
+        "noPrice": 0.215,
+        "volume24hr": 325835.21222,
+        "liquidity": 21872.6364,
+        "endDate": "2026-11-01T03:59:59.999Z",
+        "daysToResolution": 6,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/crude-oil-9a850ce2a2.png",
+        "description": "What will WTI Crude Oil (WTI) hit in October 2026?",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1184377",
+        "eventTitle": "CR Flamengo vs. CA Mineiro",
+        "marketId": "5668350",
+        "question": "Will CR Flamengo win on 2026-10-26?",
+        "slug": "bra-fla-cam-2026-10-26-fla",
+        "conditionId": "0xed0db6a34c0cf242540c28d05911830ab408f0dc6cb926c8bff82a70f7786ca7",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.905,
+          0.095
+        ],
+        "yesPrice": 0.905,
+        "noPrice": 0.095,
+        "volume24hr": 250189.60338100005,
+        "liquidity": 57000.9606,
+        "endDate": "2026-10-26T23:00:00Z",
+        "daysToResolution": 0,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/brasilerirao-image-52ef283574.png",
+        "description": "This event is for the upcoming Brazil Série A game, scheduled for Monday, October 26, 2026 between CR Flamengo and CA Mineiro.",
+        "relevanceScore": 0
+      },
+      {
+        "eventId": "1184377",
+        "eventTitle": "CR Flamengo vs. CA Mineiro",
+        "marketId": "5668351",
+        "question": "Will CR Flamengo vs. CA Mineiro end in a draw?",
+        "slug": "bra-fla-cam-2026-10-26-draw",
+        "conditionId": "0x9e6ecf6e8bfb080e8da26ac1204b37f752384068ed43809812beff6e2b57a994",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.08,
+          0.92
+        ],
+        "yesPrice": 0.08,
+        "noPrice": 0.92,
+        "volume24hr": 250189.60338100005,
+        "liquidity": 53588.1067,
+        "endDate": "2026-10-26T23:00:00Z",
+        "daysToResolution": 0,
+        "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/brasilerirao-image-52ef283574.png",
+        "description": "This event is for the upcoming Brazil Série A game, scheduled for Monday, October 26, 2026 between CR Flamengo and CA Mineiro.",
         "relevanceScore": 0
       }
     ]

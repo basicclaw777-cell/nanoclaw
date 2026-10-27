@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animation Lab — Cathedral Channels</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#0f1018;--card:#131320;--border:#1a1a2e;--text:#c8c8d0;--dim:#555;--gold:#f7b408;--accent:#fb923c;--accent-glow:rgba(251,146,60,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',ui-monospace,monospace;min-height:100vh}
+
+.hero{position:relative;width:100%;aspect-ratio:896/336;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.7)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg) 100%)}
+.back{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 12px;border-radius:3px;cursor:pointer;text-decoration:none;letter-spacing:1px;z-index:2;transition:color .2s}
+.back:hover{color:var(--gold)}
+.hero-title{position:absolute;bottom:20px;left:16px;z-index:2}
+.hero-title h1{font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 20px var(--accent-glow)}
+.hero-title .band{font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.phase-badge{position:absolute;bottom:24px;right:16px;z-index:2;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:3px;background:rgba(34,211,238,0.2);border:1px solid #22d3ee;color:#22d3ee}
+
+.content{max-width:900px;margin:0 auto;padding:16px}
+
+.section-title{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.brief{font-size:12px;line-height:1.7;color:var(--text);margin-bottom:24px}
+.brief strong{color:var(--gold)}
+
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px}
+
+.mission{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s}
+.mission:hover{border-color:var(--accent);background:var(--accent-glow)}
+.mission-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.mission-name .status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mission-name .status.ready{background:var(--gold)}
+.mission-name .status.pending{background:var(--dim)}
+.mission-desc{font-size:10px;color:var(--dim);line-height:1.5;margin-bottom:8px}
+.mission-gain{font-size:9px;color:var(--accent);letter-spacing:0.5px}
+.mission-gain span{color:var(--gold)}
+
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:10px 14px;flex:1;min-width:120px}
+.stat-val{font-size:18px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.tech-spec{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;font-size:10px;line-height:1.8;color:var(--dim);margin-bottom:24px}
+.tech-spec code{color:var(--accent);background:rgba(251,146,60,0.1);padding:1px 4px;border-radius:2px}
+
+.launch-btn{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;margin-bottom:40px}
+.launch-btn:hover{background:var(--accent-glow);box-shadow:0 0 30px var(--accent-glow)}
+
+@media(max-width:600px){
+  .content{padding:12px 16px}
+  .mission-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="panels/animation-lab.jpg" alt="Animation Lab">
+  <div class="hero-overlay"></div>
+  <a href="index.html" class="back">&larr; CHANNELS</a>
+  <div class="hero-title">
+    <h1>Animation Lab</h1>
+    <div class="band">Creative</div>
+  </div>
+  <div class="phase-badge">PHASE 2 &mdash; CALIBRATED</div>
+</div>
+
+<div class="content">
+
+  <div class="section-title">Channel Brief</div>
+  <div class="brief">
+    The animation production pipeline. <strong>Higgsfield video generation</strong>, frame sheets,
+    batch workflows. Every new animation lands here first as a placeholder — no backfill.
+    The Lab proved the <strong>calibration loop</strong>: waste → templates → protocols → routine.
+    2.4MB gallery, LAB-REPORT.md as knowledge base. Phase 2 earned through consistent output.
+  </div>
+
+  <div class="section-title">Potential Missions</div>
+  <div class="mission-grid">
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>Frame Sheet Production</div>
+      <div class="mission-desc">Batch start/end frames on one sheet (42cr). 4-8x savings over individual generations. Crop into paired frames for Higgsfield input.</div>
+      <div class="mission-gain">Gain: <span>Animation-ready frame pairs</span> at batch pricing</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>Video Generation Run</div>
+      <div class="mission-desc">Feed frame pairs into Higgsfield. 5-6s clips, consistent seed for character placement. Monitor quality, flag failures, collect results.</div>
+      <div class="mission-gain">Gain: <span>Finished video clips</span> for content pipeline</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status ready"></span>Style Test Series</div>
+      <div class="mission-desc">Test new animation styles — clay Logan, 3D Bhagat rig, mocap-driven. Small batch, evaluate output quality before committing budget.</div>
+      <div class="mission-gain">Gain: <span>Validated new animation styles</span> with cost data</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Animation Quality Audit</div>
+      <div class="mission-desc">Review all Lab gallery entries. Grade by output quality. Identify which recipes produce consistent results and which need retirement.</div>
+      <div class="mission-gain">Gain: <span>Curated recipe book</span> — keep winners, kill losers</div>
+    </div>
+
+    <div class="mission">
+      <div class="mission-name"><span class="status pending"></span>Pipeline Optimization</div>
+      <div class="mission-desc">Reduce manual steps in the frame-to-video pipeline. Auto-crop, auto-compress, auto-deploy. Move toward Phase 3 autonomous production.</div>
+      <div class="mission-gain">Gain: <span>Faster throughput</span> + lower per-clip human cost</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Channel Stats</div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">2.4</div><div class="stat-label">MB Gallery</div></div>
+    <div class="stat"><div class="stat-val">8</div><div class="stat-label">3D Episodes</div></div>
+    <div class="stat"><div class="stat-val">42</div><div class="stat-label">Cr Per Sheet</div></div>
+    <div class="stat"><div class="stat-val">P2</div><div class="stat-label">Phase</div></div>
+  </div>
+
+  <div class="section-title">Technical Spec</div>
+  <div class="tech-spec">
+    <strong>Source:</strong> OpenArt frame sheets, Higgsfield video gen, Bhagat 3D rig<br>
+    <strong>Pipeline:</strong> <code>frame sheet → crop pairs → Higgsfield → quality check → gallery</code><br>
+    <strong>Gallery:</strong> <code>localhost:8080/animation-lab/</code> — LAB-REPORT.md for knowledge<br>
+    <strong>Output:</strong> Video clips → content pipeline, Cathedral channel, social<br>
+    <strong>Phase 2 loop:</strong> Forge produces → Paul batch-reviews → flags outliers only<br>
+    <strong>Graduation criteria:</strong> Autonomous routine production with &lt;5% rejection rate
+  </div>
+
+  <button class="launch-btn">&#127916; LAUNCH MISSION &mdash; PHASE 2 (CALIBRATED)</button>
+
+</div>
+
+</body>
+</html>

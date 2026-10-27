@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral Channels</title>
+<style>
+:root{--bg:#08080e;--surface:#10101a;--border:#2a2a3a;--text:#e0e0e0;--dim:#666;--gold:#f7b408;--gold-dim:rgba(247,180,8,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono',ui-monospace,monospace;min-height:100vh}
+
+.header{padding:20px 16px 12px;text-align:center}
+.header h1{font-size:11px;text-transform:uppercase;letter-spacing:4px;color:var(--gold);margin-bottom:4px}
+.header .sub{font-size:9px;color:var(--dim);letter-spacing:2px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:3px;padding:8px 16px 40px}
+
+.card{position:relative;cursor:pointer;overflow:hidden;border-radius:4px;aspect-ratio:896/336;background:var(--surface)}
+.card img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease,filter .3s ease;filter:brightness(0.85)}
+.card:hover img{transform:scale(1.05);filter:brightness(1)}
+.card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,0.5) 100%);opacity:0;transition:opacity .3s ease;pointer-events:none}
+.card:hover::after{opacity:1}
+
+.phase-dot{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);z-index:2}
+.phase-dot[data-phase="0"]{background:#444}
+.phase-dot[data-phase="1"]{background:#f97316}
+.phase-dot[data-phase="2"]{background:#22d3ee}
+.phase-dot[data-phase="3"]{background:#4ade80}
+
+.card-label{position:absolute;bottom:0;left:0;right:0;padding:6px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0);transition:color .3s ease;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8)}
+.card:hover .card-label{color:rgba(255,255,255,0.7)}
+
+.band-label{grid-column:1/-1;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);padding:16px 0 4px;border-top:1px solid var(--border);margin-top:8px}
+.band-label:first-of-type{border-top:none;margin-top:0}
+.band-label .band-icon{display:inline-block;margin-right:6px;opacity:0.6}
+
+.pulse-ring{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;z-index:3;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(247,180,8,0.6)}70%{box-shadow:0 0 0 8px rgba(247,180,8,0)}100%{box-shadow:0 0 0 0 rgba(247,180,8,0)}}
+
+.missing{background:var(--surface);border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;border-radius:4px}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr;gap:2px;padding:8px 16px 24px}
+  .header{padding:16px 16px 8px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Cathedral Channels</h1>
+  <div class="sub">18 channels · 5 bands · browse &amp; approve</div>
+</div>
+
+<div class="grid">
+
+  <div class="band-label"><span class="band-icon">&#9935;</span>Research &amp; Discovery</div>
+
+  <div class="card" onclick="openChannel('patent-miner')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/patent-miner.jpg" alt="Patent Miner" loading="lazy">
+    <div class="card-label">Patent Miner</div>
+  </div>
+
+  <div class="card" onclick="openChannel('phd-miner')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/phd-miner.jpg" alt="PhD Miner" loading="lazy">
+    <div class="card-label">PhD Miner</div>
+  </div>
+
+  <div class="card" onclick="openChannel('soviet-miner')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/soviet-miner.jpg" alt="Soviet Miner" loading="lazy">
+    <div class="card-label">Soviet Miner</div>
+  </div>
+
+  <div class="card" onclick="openChannel('clinical-miner')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/clinical-miner.jpg" alt="Clinical Miner" loading="lazy">
+    <div class="card-label">Clinical Miner</div>
+  </div>
+
+  <div class="band-label"><span class="band-icon">&#128225;</span>Intelligence</div>
+
+  <div class="card" onclick="openChannel('gold-extraction')">
+    <div class="phase-dot" data-phase="1" title="Phase 1 — Supervised"></div>
+    <img src="panels/gold-extraction.jpg" alt="Gold Extraction" loading="lazy">
+    <div class="card-label">Gold Extraction</div>
+  </div>
+
+  <div class="card" onclick="openChannel('buzz-monitor')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/buzz-monitor.jpg" alt="Buzz Monitor" loading="lazy">
+    <div class="card-label">Buzz Monitor</div>
+  </div>
+
+  <div class="card" onclick="openChannel('property-scout')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/property-scout.jpg" alt="Property Scout" loading="lazy">
+    <div class="card-label">Property Scout</div>
+  </div>
+
+  <div class="card" onclick="openChannel('world-pulse')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/world-pulse.jpg" alt="World Pulse" loading="lazy">
+    <div class="card-label">World Pulse</div>
+  </div>
+
+  <div class="band-label"><span class="band-icon">&#128218;</span>Knowledge</div>
+
+  <div class="card" onclick="openChannel('cathedral-university')">
+    <div class="phase-dot" data-phase="2" title="Phase 2 — Calibrated"></div>
+    <img src="panels/cathedral-university.jpg" alt="Cathedral University" loading="lazy">
+    <div class="card-label">Cathedral University</div>
+  </div>
+
+  <div class="card" onclick="openChannel('vault-graph')">
+    <div class="phase-dot" data-phase="1" title="Phase 1 — Supervised"></div>
+    <img src="panels/vault-graph.jpg" alt="Vault Graph" loading="lazy">
+    <div class="card-label">Vault Graph</div>
+  </div>
+
+  <div class="card" onclick="openChannel('relay-threads')">
+    <div class="phase-dot" data-phase="1" title="Phase 1 — Supervised"></div>
+    <img src="panels/relay-threads.jpg" alt="Relay Threads" loading="lazy">
+    <div class="card-label">Relay Threads</div>
+  </div>
+
+  <div class="band-label"><span class="band-icon">&#127912;</span>Creative</div>
+
+  <div class="card" onclick="openChannel('reed-studio')">
+    <div class="phase-dot" data-phase="1" title="Phase 1 — Supervised"></div>
+    <img src="panels/reed-studio.jpg" alt="Reed Studio" loading="lazy">
+    <div class="card-label">Reed Studio</div>
+  </div>
+
+  <div class="card" onclick="openChannel('animation-lab')">
+    <div class="phase-dot" data-phase="2" title="Phase 2 — Calibrated"></div>
+    <img src="panels/animation-lab.jpg" alt="Animation Lab" loading="lazy">
+    <div class="card-label">Animation Lab</div>
+  </div>
+
+  <div class="card" onclick="openChannel('logan-stories')">
+    <div class="phase-dot" data-phase="1" title="Phase 1 — Supervised"></div>
+    <img src="panels/logan-stories.jpg" alt="Logan Stories" loading="lazy">
+    <div class="card-label">Logan Stories</div>
+  </div>
+
+  <div class="band-label"><span class="band-icon">&#128188;</span>Business</div>
+
+  <div class="card" onclick="openChannel('maya-social')">
+    <div class="phase-dot" data-phase="0" title="Phase 0 — Not Built"></div>
+    <img src="panels/maya-social.jpg" alt="Maya Social" loading="lazy">
+    <div class="card-label">Maya Social</div>
+  </div>
+
+  <div class="card" onclick="openChannel('first-visit-conversion')">
+    <div class="phase-dot" data-phase="1" title="Phase 1 — Supervised"></div>
+    <img src="panels/first-visit-conversion.jpg" alt="First Visit Conversion" loading="lazy">
+    <div class="card-label">First Visit Conversion</div>
+  </div>
+
+  <div class="missing" style="aspect-ratio:896/336">Competitor Watch — Sheet 3</div>
+  <div class="missing" style="aspect-ratio:896/336">Beginner Week — Sheet 3</div>
+
+</div>
+
+<script>
+function openChannel(slug) {
+  window.location.href = slug + '.html';
+}
+
+const PHASE_LABELS = {0:'Phase 0 — Not Built',1:'Phase 1 — Supervised',2:'Phase 2 — Calibrated',3:'Phase 3 — Autonomous'};
+
+async function loadHealth() {
+  try {
+    const r = await fetch('channels-health.json?t=' + Date.now());
+    if (!r.ok) return;
+    const health = await r.json();
+    let p0=0,p1=0,p2=0,p3=0,stale=0,ready=0;
+
+    for (const [slug, ch] of Object.entries(health)) {
+      const card = document.querySelector(`[onclick="openChannel('${slug}')"]`);
+      if (!card) continue;
+      const dot = card.querySelector('.phase-dot');
+      if (dot) {
+        dot.dataset.phase = ch.phase;
+        dot.title = PHASE_LABELS[ch.phase] || '';
+      }
+      if (ch.stale) card.style.opacity = '0.6';
+      if (ch.status === 'placeholder-ready') {
+        const pulse = document.createElement('div');
+        pulse.className = 'pulse-ring';
+        card.appendChild(pulse);
+      }
+      if (ch.phase === 0) p0++;
+      else if (ch.phase === 1) p1++;
+      else if (ch.phase === 2) p2++;
+      else if (ch.phase === 3) p3++;
+      if (ch.stale) stale++;
+      if (ch.status === 'placeholder-ready') ready++;
+    }
+
+    const sub = document.querySelector('.header .sub');
+    if (sub) {
+      let parts = [`${p0+p1+p2+p3} channels`];
+      if (p3) parts.push(`${p3} autonomous`);
+      if (p2) parts.push(`${p2} calibrated`);
+      if (p1) parts.push(`${p1} supervised`);
+      if (p0) parts.push(`${p0} not built`);
+      if (stale) parts.push(`${stale} stale`);
+      if (ready) parts.push(`${ready} ready to browse`);
+      sub.textContent = parts.join(' · ');
+    }
+  } catch(e) {}
+}
+loadHealth();
+</script>
+
+</body>
+</html>
