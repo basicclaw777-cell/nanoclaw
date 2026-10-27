@@ -354,6 +354,8 @@
 - **Kids Class** · route `/kids-class` · kids programme interface
 - **Open Gym** · route `/open-gym` · open gym session tool
 - **Technique Library** · `~/basic-reflex/gym-eyes/technique-library.html` · routes `/technique-library`, `/techniques` · 134 Punch Perfect MoCap animations on Logan Mixamo rig · retarget pipeline: `~/basic-reflex/gym-eyes/mocap/retarget-batch.py` (Blender headless) · doc: BUILD_LOG 2026-08-01
+- **Footwork Lift** · `~/basic-reflex/gym-eyes/footwork-lift.html` · whiteboard footprints → 3D lift, impact FX (house style freeze + flash) · doc: BUILD_LOG 2026-10-28
+- **Guard Check** · `~/basic-reflex/gym-eyes/guard-check.html` · 134 techniques scored per frame vs coach rules (shoulder widths), sliders + Save lines · doc: BUILD_LOG 2026-10-28
 - **ANIM_CATALOG** · `~/basic-reflex/gym-eyes/mocap/anim-catalog.js` · shared ES module · 134 techniques, 5 categories, MOCAP_DIR constant · doc: BUILD_LOG 2026-08-21
 - **Class Sheet** · `~/basic-reflex/gym-eyes/class-sheet.html` · standalone · 3-view class planner (Deck/Sheet/Run), 5-axis composer · doc: BUILD_LOG 2026-08-21
 - **Overlay Mode** · `~/basic-reflex/gym-eyes/overlay.html` · standalone · Logan-over-webcam, MediaPipe pose, diagnostic layers · doc: BUILD_LOG 2026-08-21

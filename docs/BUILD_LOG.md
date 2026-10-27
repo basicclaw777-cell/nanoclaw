@@ -4038,3 +4038,7 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 - `project_ryan_chan_prospect.md` — Ryan Chan CV review, agreed approach: attend→shadow→earn pads
 - MEMORY.md compacted 20.4KB→17.1KB (hook warning threshold)
 - forge_health_status.md updated (Knowledge Architecture → PEAK)
+
+## 2026-10-28 — Guard Check + Impact Styles (3D Logan Lab Phase 3)
+- `~/basic-reflex/gym-eyes/guard-check.html`: 134 mocap techniques scored per frame against 3 coach rules (shoulder-width units), sliders, Save lines (localStorage + `guard-lines.json`). Door: Lobby card + 3D Lab E12.
+- `~/basic-reflex/gym-eyes/footwork-lift.html`: impact FX styles (`applyFx`); house style = freeze + flash. Render: `~/Cathedral/animation-lab/lift-lens/impact-test.cjs`. Door: Animation Lab L2.
