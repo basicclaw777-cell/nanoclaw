@@ -229,6 +229,7 @@ const ROOMS = [
   { d:'core', icon:'💼', name:'Work',   orc:'Conductor', desc:'BR operations, clients, content. Punchpass data pipeline.', route:'/scraper/hub' },
   { d:'core', icon:'⚒', name:'Forge',  orc:'Forge',     desc:'Claude Code terminal. Build, debug, deploy. The Cathedral\'s builder.', route:'FORGE_TTYD', ext:true },
   { d:'core', icon:'✈️', name:'Travel Agent', orc:'Forge',  desc:'Personal AI travel agent. Price monitoring, alerts, upgrade intel, pre-trip briefings. Currently tracking UK+Thai Aug 2026.', route:'/travel-agent' },
+  { d:'core', icon:'📅', name:'Cathedral Calendar', orc:'Forge', desc:'Daily calendar — Paul + Forge lanes, attention items, cathedral doors. DB-backed, phone-first.', route:'https://claude.ai/artifact/PA1PGh4xJ3zrrXmarKzdEc', ext:true },
 
   // ── Basic Reflex ──
   { d:'br', icon:'📋', name:'The Whiteboard', orc:'Coach', desc:'Coaching cockpit — Previous ← Current → Next. Group classes, individual clients, the week. Voice journal after class.', route:'/coaching-os/whiteboard/' },
@@ -327,6 +328,7 @@ const ROOMS = [
   { d:'research', icon:'🕶', name:'Base-60 Lens',         orc:'Forge',                desc:'Interactive instrument: convert numbers to base-60, scan text for hidden structure, 6 domain guides with coaching triggers. The 3D glasses — tells you WHEN to use them.', route:'/base60/lens' },
   { d:'research', icon:'⛏', name:'Forensic Relay Engine', orc:'A.P. + Prospector + Bypass Map', desc:'Three-headed extractor. Prospector scans for cracks, A.P. designs forensic sequences, Bypass Map selects tactical prompts. 70 concessions, 10 deception shapes, 8 bypass layers. Point at any domain.', route:'/forensic-relay' },
   { d:'research', icon:'⚗️', name:'Extraction Cycle', orc:'5-Stage Engine', desc:'Dissolve → Excavate → Assay → Converge → Synthesize. Feed it a domain, get a replacement framework. Strips false legs, finds buried gold, grades it, maps cross-domain convergence, builds what the evidence actually supports.', route:'/extraction-cycle' },
+  { d:'research', icon:'🎓', name:'Cathedral University', orc:'Knowledge Engine', desc:'24 schools, 162 courses, ~4MB research. Bachelor\'s + Master\'s degrees across all Cathedral domains. Knowledge Before Build — the research that unlocks every build.', route:'https://claude.ai/artifact/2jyxmE1UvgxHbhrnYR8C5w', ext:true },
 
   // ── Property & Finance ──
   { d:'property', icon:'🏢', name:'Property Scout', orc:'Scout', desc:'HK industrial property intelligence. 5 golden zones, 16 units, leverage calculator. Sun→Wed→Thu cycle.', route:'http://localhost:8080/property-scout', ext:true },
@@ -394,7 +396,8 @@ const ROOMS = [
 
   // ── Ops & Infrastructure ──
   { d:'ops', icon:'🧾', name:'Subscriptions & Services', orc:'The Registry', desc:'Status board for everything Paul pays for: Higgsfield, fal.ai, DeepSeek, Gemini and more. Plan, cost, cycle, renewal, credit balance, what each covers, and a needs-attention strip.', route:'/services' },
-  { d:'ops', icon:'📦', name:'Status Board', orc:'Amazon for your work', desc:'The lifecycle board: Services · In Progress · Delivered · Spend. See your finished images/clips/prompts, what is still in the basket, the live Higgsfield spend feed (catches silent leaks), and real-world bills + due dates.', route:'/board' }
+  { d:'ops', icon:'📦', name:'Status Board', orc:'Amazon for your work', desc:'The lifecycle board: Services · In Progress · Delivered · Spend. See your finished images/clips/prompts, what is still in the basket, the live Higgsfield spend feed (catches silent leaks), and real-world bills + due dates.', route:'/board' },
+  { d:'ops', icon:'🍋', name:'The Big Squeeze', orc:'Forge', desc:'Parallel agent factory. Audit unused budget → compile wish list from memory → fire batched Fable/creative agents → visual plan → build winners. 25 agents, 890KB, zero waste.', route:'https://claude.ai/artifact/B1uGU6hUJdtnuEgF6L2cu6', ext:true }
 ];
 
 // Retired rooms — dead links / no UI. Kept here, clearly marked.

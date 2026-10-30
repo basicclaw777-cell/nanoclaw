@@ -336,11 +336,85 @@ body {
   border: none; font-size: 20px; color: var(--ink-light); cursor: pointer;
 }
 
+/* ── Clients / Internalization Spectrum ── */
+.clients-view {
+  padding: 16px; overflow-y: auto; height: 100%;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;
+  align-content: start;
+}
+.client-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden;
+}
+.client-card-header {
+  padding: 10px 12px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border); cursor: pointer; user-select: none;
+}
+.client-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--gold-dim); border: 1.5px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--gold);
+}
+.client-name { font-size: 13px; font-weight: 600; flex: 1; }
+.client-block {
+  font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-dim); background: var(--bg); padding: 2px 6px;
+  border-radius: 3px;
+}
+.client-body { padding: 8px 12px; }
+.client-body.collapsed { display: none; }
+.skill-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.skill-row:last-child { border-bottom: none; }
+.skill-name { font-size: 11px; color: var(--text-dim); width: 80px; flex-shrink: 0; }
+.spectrum-dots {
+  display: flex; gap: 3px; flex: 1;
+}
+.spectrum-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; cursor: pointer; transition: all 0.15s;
+  border: 1.5px solid transparent; color: var(--text-muted);
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.spectrum-dot:hover { border-color: var(--gold); }
+.spectrum-dot.active { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
+.spectrum-dot.active.l0 { color: #ef4444; border-color: #ef4444; background: rgba(239,68,68,0.1); }
+.spectrum-dot.active.l1 { color: #f97316; border-color: #f97316; background: rgba(249,115,22,0.1); }
+.spectrum-dot.active.l2 { color: #eab308; border-color: #eab308; background: rgba(234,179,8,0.1); }
+.spectrum-dot.active.l3 { color: #22c55e; border-color: #22c55e; background: rgba(34,197,94,0.1); }
+.spectrum-dot.active.l4 { color: #3b82f6; border-color: #3b82f6; background: rgba(59,130,246,0.1); }
+.spectrum-dot.active.l5 { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
+.spectrum-level-label {
+  font-size: 9px; color: var(--text-muted); width: 50px; text-align: right; flex-shrink: 0;
+}
+.spectrum-legend {
+  display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 0; margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.legend-item {
+  display: flex; align-items: center; gap: 4px; font-size: 9px;
+  color: var(--text-dim); letter-spacing: 0.5px;
+}
+.legend-dot { font-size: 12px; }
+.add-client-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 20px; border: 1px dashed rgba(247,180,8,0.25);
+  border-radius: 6px; color: var(--gold); font-size: 12px;
+  cursor: pointer; background: var(--gold-dim); min-height: 80px;
+  font-family: inherit; transition: all 0.2s;
+}
+.add-client-btn:hover { background: rgba(247,180,8,0.12); }
+
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .palette { display: none; }
   .planner { height: auto; min-height: calc(100vh - 90px); }
   .section-col { width: 170px; min-width: 170px; }
+  .clients-view { grid-template-columns: 1fr; }
 }
 
 /* ── Soundboard (Combo Composer) ── */
@@ -2081,19 +2155,106 @@ document.getElementById('soundboardOverlay').addEventListener('click', e => {
   if (e.target === document.getElementById('soundboardOverlay')) closeSoundboard();
 });
 
-// ── Mode tabs (simple show/hide for now) ──
+// ── Internalization Spectrum ──
+const SPECTRUM_LEVELS = [
+  { sym: '○', name: 'Hope', tip: 'Told once, hoping they remember' },
+  { sym: '◔', name: 'Written', tip: 'On their card, can describe it' },
+  { sym: '◑', name: 'Cue', tip: 'Fires while coached, drops off without' },
+  { sym: '◕', name: 'Drill', tip: 'Fires in structured work without cue' },
+  { sym: '●', name: 'Gate', tip: 'Progression blocked until solid' },
+  { sym: '⬤', name: 'Reflex', tip: 'Fires under pressure automatically' }
+];
+const CORE_SKILLS = ['Guard','Jab','Cross','Footwork','Defense','Combos'];
+
+function loadClientData() {
+  try { return JSON.parse(localStorage.getItem('wb_clients') || '[]'); } catch(e) { return []; }
+}
+function saveClientData(data) {
+  try { localStorage.setItem('wb_clients', JSON.stringify(data)); } catch(e) {}
+}
+
+function renderClientsView(container) {
+  let clients = loadClientData();
+  if (!clients.length) {
+    clients = [
+      { name: 'Example Student', initials: 'ES', block: 2, skills: { Guard:2, Jab:3, Cross:1, Footwork:0, Defense:1, Combos:0 } }
+    ];
+    saveClientData(clients);
+  }
+
+  container.innerHTML = `
+    <div class="clients-view">
+      <div style="grid-column:1/-1;">
+        <div class="spectrum-legend">
+          ${SPECTRUM_LEVELS.map((l,i) => `<div class="legend-item"><span class="legend-dot" style="color:${['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','var(--gold)'][i]}">${l.sym}</span> ${i} ${l.name}</div>`).join('')}
+        </div>
+      </div>
+      ${clients.map((c,ci) => `
+        <div class="client-card">
+          <div class="client-card-header" onclick="toggleClientCard(${ci})">
+            <div class="client-avatar">${esc(c.initials)}</div>
+            <div class="client-name">${esc(c.name)}</div>
+            <div class="client-block">Block ${c.block || '?'}</div>
+          </div>
+          <div class="client-body" id="clientBody${ci}">
+            ${CORE_SKILLS.map(sk => {
+              const lvl = (c.skills && c.skills[sk]) || 0;
+              return `<div class="skill-row">
+                <div class="skill-name">${sk}</div>
+                <div class="spectrum-dots">
+                  ${SPECTRUM_LEVELS.map((l,li) => `<div class="spectrum-dot ${li <= lvl ? 'active l'+li : ''}" data-ci="${ci}" data-skill="${sk}" data-level="${li}" title="${l.name}: ${l.tip}" onclick="setSpectrumLevel(${ci},'${sk}',${li})">${l.sym}</div>`).join('')}
+                </div>
+                <div class="spectrum-level-label">${SPECTRUM_LEVELS[lvl].name}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      `).join('')}
+      <button class="add-client-btn" onclick="addClient()">+ Add Student</button>
+    </div>
+  `;
+}
+
+function toggleClientCard(ci) {
+  const body = document.getElementById('clientBody'+ci);
+  if (body) body.classList.toggle('collapsed');
+}
+
+function setSpectrumLevel(ci, skill, level) {
+  const clients = loadClientData();
+  if (!clients[ci]) return;
+  if (!clients[ci].skills) clients[ci].skills = {};
+  clients[ci].skills[skill] = level;
+  saveClientData(clients);
+  const container = document.getElementById('planView').querySelector('.board-area');
+  renderClientsView(container);
+}
+
+function addClient() {
+  const name = prompt('Student name:');
+  if (!name) return;
+  const clients = loadClientData();
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  clients.push({ name, initials, block: 1, skills: {} });
+  saveClientData(clients);
+  const container = document.getElementById('planView').querySelector('.board-area');
+  renderClientsView(container);
+}
+
+// ── Mode tabs ──
 document.querySelector('.mode-tabs').addEventListener('click', e => {
   const tab = e.target.closest('.mode-tab');
   if (!tab) return;
   document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
-  // For now only plan view is built
-  if (tab.dataset.mode !== 'plan') {
-    document.getElementById('planView').querySelector('.board-area').innerHTML = `
+  const boardArea = document.getElementById('planView').querySelector('.board-area');
+  if (tab.dataset.mode === 'clients') {
+    renderClientsView(boardArea);
+  } else if (tab.dataset.mode !== 'plan') {
+    boardArea.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:14px;">
         ${tab.dataset.mode === 'review' ? 'Review mode — see Previous Class button ↑' :
-          tab.dataset.mode === 'week' ? 'Week view coming next — needs schedule data' :
-          'Client boards — needs student data in coaching.db'}
+          'Week view coming next — needs schedule data'}
       </div>
     `;
   } else {
