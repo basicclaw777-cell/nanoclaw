@@ -2197,6 +2197,10 @@ function renderClientsView(container) {
             <div class="client-block">Block ${c.block || '?'}</div>
           </div>
           <div class="client-body" id="clientBody${ci}">
+            <div style="display:flex;gap:8px;margin-bottom:8px;font-size:11px;color:var(--text-dim)">
+              <span>Last seen: ${c.lastSeen ? new Date(c.lastSeen).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '—'}</span>
+              <span style="margin-left:auto;cursor:pointer;color:var(--gold)" onclick="markSeen(${ci})">✓ Today</span>
+            </div>
             ${CORE_SKILLS.map(sk => {
               const lvl = (c.skills && c.skills[sk]) || 0;
               return `<div class="skill-row">
@@ -2207,6 +2211,9 @@ function renderClientsView(container) {
                 <div class="spectrum-level-label">${SPECTRUM_LEVELS[lvl].name}</div>
               </div>`;
             }).join('')}
+            <div style="margin-top:8px">
+              <textarea style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:6px 8px;font-size:12px;resize:vertical;min-height:32px;font-family:inherit" placeholder="Notes..." onblur="saveNote(${ci},this.value)">${esc(c.notes||'')}</textarea>
+            </div>
           </div>
         </div>
       `).join('')}
@@ -2228,6 +2235,22 @@ function setSpectrumLevel(ci, skill, level) {
   saveClientData(clients);
   const container = document.getElementById('planView').querySelector('.board-area');
   renderClientsView(container);
+}
+
+function markSeen(ci) {
+  const clients = loadClientData();
+  if (!clients[ci]) return;
+  clients[ci].lastSeen = new Date().toISOString();
+  saveClientData(clients);
+  const container = document.getElementById('planView').querySelector('.board-area');
+  renderClientsView(container);
+}
+
+function saveNote(ci, text) {
+  const clients = loadClientData();
+  if (!clients[ci]) return;
+  clients[ci].notes = text;
+  saveClientData(clients);
 }
 
 function addClient() {
