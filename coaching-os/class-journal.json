@@ -1,6 +1,54 @@
 {
-  "built_at": "2026-10-20T16:16:44.881Z",
+  "built_at": "2026-10-30T13:14:53.628Z",
   "classes": [
+    {
+      "id": "cls-2026-10-30-athletes",
+      "title": "Athletes - Small Group Focus (Footwork + Power)",
+      "date": "2026-10-30",
+      "group": "Athletes (Tue/Fri)",
+      "athletes": 2,
+      "summary": "Athletes group (Tue/Fri), 2 athletes - small group so the session focused on getting each of them better. Both are good: one has good footwork, the other (ex-footballer, still plays football) has good power in his punch. They enjoyed it and had a good time. Halloween night - left early enough to avoid the crowds.",
+      "suggestions": [
+        "Cross-teach the strengths: pair them so the footwork athlete leads movement drills and the power athlete leads the pad rounds - each borrows what the other has.",
+        "Footwork athlete: add power from the ground up (step-and-drive on the cross) so the good feet start feeding the punch.",
+        "Power athlete: footwork before punching - shuffle-jab and step 1-2 line drills, power only lands if he gets there first.",
+        "Two in the room is a gift: use it for one-on-one corrections that get lost in a bigger group, and note one fault each for next class.",
+        "The ex-footballer is still deciding between football and combat sports - keep training honest and fun; let him find his own answer rather than pushing either way."
+      ],
+      "tags": [
+        "attendance:2",
+        "group:athletes-tue-fri",
+        "halloween",
+        "theme:small-group-focus"
+      ],
+      "segments": [
+        {
+          "segment_num": 1,
+          "segment_name": "Session",
+          "drill_id": null,
+          "drill_name": null,
+          "drill_notes": "Drill list not recorded in the debrief - small-group focused training on both athletes."
+        }
+      ],
+      "observations": [
+        {
+          "observation": "One athlete has good footwork.",
+          "engine": "body"
+        },
+        {
+          "observation": "The ex-footballer has good power in his punch.",
+          "engine": "body"
+        },
+        {
+          "observation": "Both enjoyed it and had a good time - small group let the coaching focus on each of them.",
+          "engine": "eq"
+        },
+        {
+          "observation": "After class the ex-footballer (still plays football, wants combat sports for a long time) talked about his choices. Paul asked why combat sports when football pays and the risk is lower; he said he isn't sure what he wants to do.",
+          "engine": "mind"
+        }
+      ]
+    },
     {
       "id": "cls-2026-10-20-athletes",
       "title": "Athletes - Sharp Steps, Defence Revision, Shuffle-Jab",
