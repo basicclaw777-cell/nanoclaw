@@ -1,6 +1,28 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-11-03 — Phase 0: Environment Architecture (7-Door Lobby + Routing)
+
+**What:** Replaced flat 153-room lobby with 7 environment doors. Built full BR environment page (28 cards, 6 branches). Created 6 placeholder environment pages. Fixed cath-bridge routing.
+
+**Built:**
+- `environments/lobby.html` — new 7-door lobby (dark theme, gold accents, unique gradient per environment, stats, status badges). Old lobby backed up as lobby-v1-backup.html
+- `environments/env-br.html` — full BR environment: 28 cards across 6 branches (Coaching/Clients/Products/Social/Business/Games), 4 action buttons, build terminal, activity feed
+- `environments/env-studio.html` — Studio placeholder (purple accent, 6 cards)
+- `environments/env-money.html` — Money placeholder (green accent, 6 cards)
+- `environments/env-body-mind.html` — Body & Mind placeholder (cyan accent, 6 cards)
+- `environments/env-universe.html` — Universe placeholder (dark gold accent, 6 cards)
+- `environments/env-cathedral.html` — Cathedral placeholder (slate accent, 6 cards)
+- `environments/env-personal.html` — Personal placeholder (rose accent, 6 cards)
+- `cath-bridge.cjs` line 5072 — fixed /env/:domain catch-all routing. Now serves correct env file per domain; unknown domains redirect to lobby
+- `environments/ENVIRONMENT-ARCHITECTURE.md` — 527-line architecture plan (7 environments, branches, room mapping, 8-phase build sequence)
+
+**Design decision:** Option C (Hybrid) selected from 3 mockups (A=Visual Dashboard, B=Scoped Terminal, C=Hybrid). All mockups preserved.
+
+**Routes:** /env/ → lobby, /env/br → BR, /env/studio → Studio, /env/money → Money, /env/body-mind → Body&Mind, /env/universe → Universe, /env/cathedral → Cathedral, /env/personal → Personal
+
+**Next:** Phase 1 = Wire BR cards to existing tool pages, branch tab filtering, action button routing.
+
 ## 2026-10-22 — Harmonic Agent State V3 (Voice Registry + Physician Upgrade)
 
 **What:** Built unified voice registry (16 voices from all Cathedral monitors), upgraded probe physician with meaning translation and self-monitoring.
@@ -4064,3 +4086,16 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 **Calendar DB:** 7 → 10 doors (added Whiteboard, Visual Studio, Lobby)
 
 **Pending:** WhatsApp number verification on Beginner Week card CTA (placeholder 85296324587)
+
+**Hexad Storyboards — all 11 books complete:**
+- Books 01-02: pre-existing (prose format + OpenArt prompts)
+- Books 03, 05, 08: extracted from pipeline doc worked examples into `book-NN/storyboard-*.md`
+- Book 04 (Hex's Balancing Act): NEW solo — Shaking City, resonant frequency tuning
+- Book 06 (Prism's Scattered Light): NEW solo — Argument Peaks, white light superposition
+- Book 07 (Steam Caverns): NEW Season 2 duo — Vora+Flux, phase transition
+- Book 09 (Storm Plateau): NEW Season 2 duo — Hex+Prism, Faraday cage + light medium
+- Book 10 (Growing Stair): NEW Season 2 duo — Vora+Hex, phyllotaxis/Fibonacci deposition
+- Book 11 (The Great Dissonance): NEW Season 3 finale — all six vs The Static, torus of light
+- Total: ~102KB storyboard content. All pass Trojan Horse test, 4-beat grammar, hidden embers, echo frames
+- Commit: 414877d (basic-reflex, local only)
+- Open decisions for Paul: (1) Flux/Prism vs Sparky/Aria canon, (2) Book 5 title, (3) Book 8 tone guard, (4) Duo beat structure approval

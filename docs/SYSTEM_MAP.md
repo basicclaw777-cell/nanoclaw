@@ -85,6 +85,7 @@
 - **Emergence Signal Router** · `~/Cathedral/emergence/emergence-signal-router.js` · PM2 #168 cron 05:25 HKT · reads monitor/watcher/health/scores → generates corrective planner tasks · doc: BUILD_LOG 2026-06-19
 
 ## Aether Universe Tools
+- **Hexad Storyboards (11 books)** · `~/basic-reflex/aether-universe/book-NN/storyboard-*.md` · 4-beat grammar, Trojan Horse tested · doc: BUILD_LOG 2026-10-30
 - **Resonance Engine** · `~/basic-reflex/aether-universe/resonance-engine.html` · route `/resonance-engine` · doc: BUILD_LOG 2026-07-15
 - **Thinking Companion** · `~/basic-reflex/aether-universe/thinking-companion.html` · route `/thinking-companion` · doc: BUILD_LOG 2026-07-15
 - **Mission Generator** · `~/nanoclaw/mission-generator.js` (ESM) · CLI `node mission-generator.js "topic" --band cadets` · doc: BUILD_LOG 2026-07-15
@@ -107,6 +108,17 @@
 
 ## Boxing harvest
 - **Pandamericano harvest** · `panam-harvest.cjs` (whisper.cpp ES transcription) + `panam-structure.cjs` (DeepSeek→gemma3 structuring) · trigger: manual `pm2 start` (must run under PM2 — daemon has KINGSTON2 disk access; Terminal is TCC-blocked) · 88GB Cuban camp video → 130 Spanish transcripts (vault 00_Staging/panamericano) → bilingual framework · zero-to-pennies cost · door `/pandamericano` · doc: vault `06_Methods/pandamericano-methodology-framework.md`. Calibration sampler: `panam-sample.cjs`. Query: `/panam <question>` (telegram-bot.js → `panam-query.js`, retrieval + grounded answer, DeepSeek/gemma).
+
+## Environment Architecture (7-door lobby, built 2026-11-03)
+- **Lobby** · `environments/lobby.html` · route `/env/` · 7 environment doors replacing 153-room flat list · doc: BUILD_LOG 2026-11-03
+- **BR Environment** · `environments/env-br.html` · route `/env/br` · 28 cards, 6 branches, action buttons, build terminal · doc: BUILD_LOG 2026-11-03
+- **Studio Environment** · `environments/env-studio.html` · route `/env/studio` · placeholder (purple accent) · doc: BUILD_LOG 2026-11-03
+- **Money Environment** · `environments/env-money.html` · route `/env/money` · placeholder (green accent) · doc: BUILD_LOG 2026-11-03
+- **Body & Mind Environment** · `environments/env-body-mind.html` · route `/env/body-mind` · placeholder (cyan accent) · doc: BUILD_LOG 2026-11-03
+- **Universe Environment** · `environments/env-universe.html` · route `/env/universe` · placeholder (dark gold accent) · doc: BUILD_LOG 2026-11-03
+- **Cathedral Environment** · `environments/env-cathedral.html` · route `/env/cathedral` · placeholder (slate accent) · doc: BUILD_LOG 2026-11-03
+- **Personal Environment** · `environments/env-personal.html` · route `/env/personal` · placeholder (rose accent) · doc: BUILD_LOG 2026-11-03
+- **Architecture Plan** · `environments/ENVIRONMENT-ARCHITECTURE.md` · 527-line spec (environments, branches, room mapping, 8-phase build sequence)
 
 ## Doors (web UIs, served on :8080 by cath-bridge.cjs)
 - **Pandamericano Framework** · `pandamericano-framework.html` · route `/pandamericano` (cath-bridge.cjs) · lobby card in BR district · day 1–17 progression + 177 transferable principles, Spanish+English · doc: vault `06_Methods/pandamericano-methodology-framework.md`
