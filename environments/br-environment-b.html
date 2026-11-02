@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B — Scoped Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --gold: #f7b408;
+  --gold-soft: rgba(247,180,8,0.12);
+  --gold-glow: rgba(247,180,8,0.25);
+  --black: #0a0a0a;
+  --surface: #111111;
+  --surface-2: #181818;
+  --surface-3: #222222;
+  --border: #2a2a2a;
+  --border-hover: #3a3a3a;
+  --ink: #f0f0f0;
+  --ink-soft: #aaaaaa;
+  --ink-faint: #666666;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --radius: 14px;
+  --radius-sm: 10px;
+}
+body {
+  background: var(--black);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ═══ NAV BAR ═══ */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,10,0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 24px;
+}
+.nav-back {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--ink-soft);
+  cursor: pointer; padding: 6px 14px;
+  border-radius: 8px; border: 1px solid var(--border);
+  transition: all 0.15s; background: none;
+}
+.nav-back:hover { border-color: var(--gold); color: var(--gold); }
+.nav-back svg { width: 14px; height: 14px; }
+.nav-env {
+  font-family: 'Anton', sans-serif;
+  font-size: 18px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--gold);
+}
+.nav-status {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; color: var(--green);
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.gold-strip {
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 20%, var(--gold) 80%, transparent 100%);
+}
+
+/* ═══ MAIN ═══ */
+.main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* ═══ PROMPT HEADING ═══ */
+.prompt-heading {
+  font-size: 28px; font-weight: 800; letter-spacing: -0.5px;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+.prompt-heading span { color: var(--gold); }
+
+/* ═══ ACTION BUTTONS ═══ */
+.actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 48px; }
+
+.action-btn {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.action-btn::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+  background: var(--gold-soft);
+  transition: width 0.25s ease;
+}
+.action-btn:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold-glow), 0 8px 30px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+.action-btn:hover::before { width: 100%; }
+.action-btn:active { transform: translateY(0); }
+
+.action-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--surface-3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  position: relative; z-index: 1;
+  transition: background 0.18s;
+}
+.action-btn:hover .action-icon { background: var(--gold-soft); }
+
+.action-text { position: relative; z-index: 1; }
+.action-title {
+  font-size: 16px; font-weight: 700; color: var(--ink);
+  margin-bottom: 2px;
+}
+.action-sub {
+  font-size: 13px; color: var(--ink-faint); line-height: 1.4;
+}
+
+.action-arrow {
+  margin-left: auto; font-size: 18px; color: var(--ink-faint);
+  position: relative; z-index: 1;
+  transition: color 0.15s, transform 0.15s;
+}
+.action-btn:hover .action-arrow { color: var(--gold); transform: translateX(4px); }
+
+/* ═══ TOOLS SECTION ═══ */
+.section-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--ink-faint);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-bottom: 48px;
+}
+.tool-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tool-card:hover {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+.tool-icon { font-size: 18px; flex-shrink: 0; width: 28px; text-align: center; }
+.tool-info {}
+.tool-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.tool-desc { font-size: 11px; color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+
+/* ═══ BUILD ZONE ═══ */
+.build-zone { margin-bottom: 48px; }
+.build-input-wrap {
+  display: flex; gap: 10px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 8px 6px 18px;
+  align-items: center;
+  transition: border-color 0.15s;
+}
+.build-input-wrap:focus-within { border-color: var(--gold); }
+.build-prompt {
+  color: var(--gold); font-family: 'SF Mono', ui-monospace, monospace;
+  font-size: 16px; font-weight: 700; flex-shrink: 0;
+  user-select: none;
+}
+.build-input {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: inherit; font-size: 15px; color: var(--ink);
+  padding: 10px 4px;
+}
+.build-input::placeholder { color: var(--ink-faint); }
+.build-btn {
+  background: var(--gold); color: var(--black);
+  font-size: 13px; font-weight: 700;
+  border: none; border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.build-btn:hover { filter: brightness(1.1); box-shadow: 0 4px 16px var(--gold-glow); }
+
+/* ═══ ACTIVITY FEED ═══ */
+.activity-list { display: flex; flex-direction: column; }
+.activity-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.act-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  margin-top: 6px; flex-shrink: 0;
+}
+.act-dot.update { background: var(--green); }
+.act-dot.alert { background: var(--red); }
+.act-dot.build { background: var(--gold); }
+.act-dot.content { background: #9333ea; }
+.act-text { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+.act-text strong { color: var(--ink); font-weight: 600; }
+.act-time { margin-left: auto; font-size: 11px; color: var(--ink-faint); white-space: nowrap; flex-shrink: 0; }
+
+@media (max-width: 640px) {
+  .main { padding: 28px 16px 60px; }
+  .prompt-heading { font-size: 22px; }
+  .tools-grid { grid-template-columns: 1fr 1fr; }
+  .action-btn { padding: 14px 16px; }
+  .action-icon { width: 40px; height: 40px; font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/env/lobby.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Lobby
+    </a>
+    <span class="nav-env">Basic Reflex</span>
+    <div class="nav-status">
+      <span class="nav-dot"></span>
+      LIVE
+    </div>
+  </div>
+  <div class="gold-strip"></div>
+</nav>
+
+<div class="main">
+
+  <!-- PROMPT HEADING -->
+  <h1 class="prompt-heading">What do you want to <span>do</span>?</h1>
+
+  <!-- ACTION BUTTONS -->
+  <div class="actions">
+    <div class="action-btn">
+      <div class="action-icon">📅</div>
+      <div class="action-text">
+        <div class="action-title">Plan tonight's class</div>
+        <div class="action-sub">Last class was defense focus. 8 attended.</div>
+      </div>
+      <div class="action-arrow">→</div>
+    </div>
+
+    <div class="action-btn">
+      <div class="action-icon">📩</div>
+      <div class="action-text">
+        <div class="action-title">Who needs follow-up?</div>
+        <div class="action-sub">3 members haven't visited in 14+ days</div>
+      </div>
+      <div class="action-arrow">→</div>
+    </div>
+
+    <div class="action-btn">
+      <div class="action-icon">✉️</div>
+      <div class="action-text">
+        <div class="action-title">Draft a message</div>
+        <div class="action-sub">WhatsApp templates ready. 566 lapsed contacts.</div>
+      </div>
+      <div class="action-arrow">→</div>
+    </div>
+
+    <div class="action-btn">
+      <div class="action-icon">📊</div>
+      <div class="action-text">
+        <div class="action-title">Review this week's numbers</div>
+        <div class="action-sub">October revenue compiled.</div>
+      </div>
+      <div class="action-arrow">→</div>
+    </div>
+
+    <div class="action-btn">
+      <div class="action-icon">🕐</div>
+      <div class="action-text">
+        <div class="action-title">What happened since last time?</div>
+        <div class="action-sub">Catch up on BR activity</div>
+      </div>
+      <div class="action-arrow">→</div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="section-label">Tools &amp; Rooms</div>
+  <div class="tools-grid">
+    <div class="tool-card"><span class="tool-icon">🥊</span><div class="tool-info"><div class="tool-name">Gym Floor</div><div class="tool-desc">72 members, attendance, profiles</div></div></div>
+    <div class="tool-card"><span class="tool-icon">📋</span><div class="tool-info"><div class="tool-name">Whiteboard</div><div class="tool-desc">Prev → Current → Next</div></div></div>
+    <div class="tool-card"><span class="tool-icon">💬</span><div class="tool-info"><div class="tool-name">Client Comms</div><div class="tool-desc">Alerts, templates, lapsed</div></div></div>
+    <div class="tool-card"><span class="tool-icon">📱</span><div class="tool-info"><div class="tool-name">WhatsApp Agent</div><div class="tool-desc">AI inbound messaging</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🇨🇺</span><div class="tool-info"><div class="tool-name">Pandamericano</div><div class="tool-desc">Cuban camp, 177 principles</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🥥</span><div class="tool-info"><div class="tool-name">Cuba 2014</div><div class="tool-desc">Camp 2, 161 principles</div></div></div>
+    <div class="tool-card"><span class="tool-icon">📓</span><div class="tool-info"><div class="tool-name">Class Journal</div><div class="tool-desc">Every class, by day + group</div></div></div>
+    <div class="tool-card"><span class="tool-icon">📊</span><div class="tool-info"><div class="tool-name">Operations</div><div class="tool-desc">KPI, P&amp;L, compliance</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🚀</span><div class="tool-info"><div class="tool-name">Growth</div><div class="tool-desc">Calendar, outreach, SEO</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🏛️</span><div class="tool-info"><div class="tool-name">Corporate Engine</div><div class="tool-desc">Three Keys, 37 targets</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🎓</span><div class="tool-info"><div class="tool-name">Course Engine</div><div class="tool-desc">$99–149/yr Cuban boxing</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🗓️</span><div class="tool-info"><div class="tool-name">Beginner Week</div><div class="tool-desc">$500/5-day onboarding</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🗺</span><div class="tool-info"><div class="tool-name">Curriculum Map</div><div class="tool-desc">5-lane skill tree</div></div></div>
+    <div class="tool-card"><span class="tool-icon">🥊</span><div class="tool-info"><div class="tool-name">Rhythm Street</div><div class="tool-desc">Reflex game prototype</div></div></div>
+    <div class="tool-card"><span class="tool-icon">👕</span><div class="tool-info"><div class="tool-name">Merch</div><div class="tool-desc">Runs, suppliers, tracking</div></div></div>
+    <div class="tool-card"><span class="tool-icon">📸</span><div class="tool-info"><div class="tool-name">Pro Photo</div><div class="tool-desc">Shoot pipeline + delivery</div></div></div>
+  </div>
+
+  <!-- BUILD ZONE -->
+  <div class="section-label">Build something new</div>
+  <div class="build-zone">
+    <div class="build-input-wrap">
+      <span class="build-prompt">&gt;</span>
+      <input class="build-input" type="text" placeholder="Describe what you need...">
+      <button class="build-btn">Build</button>
+    </div>
+  </div>
+
+  <!-- ACTIVITY FEED -->
+  <div class="section-label">Recent</div>
+  <div class="activity-list">
+    <div class="activity-item">
+      <div class="act-dot update"></div>
+      <div class="act-text"><strong>Punchpass</strong> — 72 active members, 3 new this week</div>
+      <div class="act-time">2h ago</div>
+    </div>
+    <div class="activity-item">
+      <div class="act-dot content"></div>
+      <div class="act-text"><strong>Class Journal</strong> — Tuesday group: defense combos, 8 attended</div>
+      <div class="act-time">Yesterday</div>
+    </div>
+    <div class="activity-item">
+      <div class="act-dot alert"></div>
+      <div class="act-text"><strong>Lapsed</strong> — Sarah K. no visit in 21 days (was 3x/week)</div>
+      <div class="act-time">Yesterday</div>
+    </div>
+    <div class="activity-item">
+      <div class="act-dot build"></div>
+      <div class="act-text"><strong>Archive</strong> — 863 files classified, 15 sample assets built</div>
+      <div class="act-time">Today</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

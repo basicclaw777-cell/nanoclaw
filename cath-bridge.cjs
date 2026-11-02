@@ -5070,15 +5070,25 @@ app.get('/env/icon-180.png', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'environments', 'icon-180.png'));
 });
 app.get('/env/:domain', (req, res) => {
+  const ENVS = ['br', 'studio', 'money', 'body-mind', 'universe', 'cathedral', 'personal'];
+  const domain = req.params.domain;
+  if (!ENVS.includes(domain)) {
+    return res.redirect('/env/');
+  }
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
   res.set('Pragma', 'no-cache');
-  res.sendFile(path.join(NANOCLAW, 'environments', 'lobby.html'));
+  res.sendFile(path.join(NANOCLAW, 'environments', `env-${domain}.html`));
 });
 
 // ── Looking Glass (Sky Sense) ────────────────────────────────────────────────
 
 app.get('/cathedral-deck', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'cathedral-deck.html'));
+});
+
+app.get('/m5-services.html', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(CATH, 'control-panel', 'm5-services.html'));
 });
 
 app.get('/property-scout', (req, res) => {

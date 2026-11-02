@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cathedral Index">
+<meta name="theme-color" content="#f7f8fa">
+<link rel="apple-touch-icon" href="/env/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>The Cathedral — Index</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --border: #e4e7ec;
+  --border-hover: #d0d5dd;
+  --ink: #1a1d24;
+  --ink-soft: #475067;
+  --ink-faint: #8a93a6;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+  --shadow-hover: 0 6px 20px rgba(16,24,40,0.10);
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.45;
+}
+a { color: inherit; text-decoration: none; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+
+/* ─── HEADER ─── */
+.masthead { margin-bottom: 22px; }
+.masthead h1 {
+  font-size: 26px; font-weight: 800; letter-spacing: -0.6px; color: var(--ink);
+}
+.masthead .sub { font-size: 13.5px; color: var(--ink-faint); margin-top: 3px; font-weight: 500; }
+
+/* ─── SEARCH ─── */
+.searchbar { position: sticky; top: 0; z-index: 30; padding: 14px 0 16px; background: var(--bg); margin-bottom: 4px; }
+.search-inner { position: relative; }
+.search-input {
+  width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px 46px 14px 44px; font-size: 15px; color: var(--ink);
+  font-family: inherit; outline: none; transition: border-color .15s, box-shadow .15s; box-shadow: var(--shadow);
+}
+.search-input:focus { border-color: #98a2b3; box-shadow: 0 0 0 4px rgba(152,162,179,0.12); }
+.search-input::placeholder { color: var(--ink-faint); }
+.search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 16px; opacity: .5; pointer-events: none; }
+.search-clear {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: var(--surface-2); border: none; border-radius: 8px; width: 26px; height: 26px;
+  cursor: pointer; color: var(--ink-soft); font-size: 14px; display: none; align-items: center; justify-content: center;
+}
+.search-clear:hover { background: var(--border); }
+.search-meta { font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; font-weight: 500; min-height: 16px; }
+
+/* ─── DISTRICT JUMP NAV ─── */
+.jumpnav { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
+.jump-pill {
+  font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px;
+  background: var(--surface); border: 1.5px solid var(--border); cursor: pointer; color: var(--ink-soft);
+  transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.jump-pill:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+.jump-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ─── DISTRICT SECTION ─── */
+.district { margin-bottom: 34px; scroll-margin-top: 86px; }
+.district.hidden { display: none; }
+.district-head {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  padding-bottom: 11px; border-bottom: 2px solid var(--district-c, var(--border));
+}
+.district-bar { width: 5px; height: 26px; border-radius: 3px; background: var(--district-c); flex-shrink: 0; }
+.district-title { font-size: 17.5px; font-weight: 700; letter-spacing: -0.3px; color: var(--ink); }
+.district-note { font-size: 12.5px; color: var(--ink-faint); font-weight: 500; margin-left: 2px; }
+.district-count {
+  margin-left: auto; font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 999px;
+  background: var(--district-tint); color: var(--district-c);
+}
+
+/* ─── CARD GRID ─── */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+
+.card {
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 16px 16px 15px; box-shadow: var(--shadow); transition: all .18s;
+  position: relative; overflow: hidden; display: flex; flex-direction: column; cursor: pointer;
+}
+.card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--card-c); opacity: .85; }
+.card:hover { border-color: var(--card-c); box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+.card.hidden { display: none; }
+.card-top { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; padding-left: 4px; }
+.card-icon {
+  width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; background: var(--card-tint); flex-shrink: 0;
+}
+.card-name { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; color: var(--ink); }
+.card-orc { font-size: 11px; color: var(--ink-faint); font-weight: 500; margin-top: 1px; }
+.card-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; padding-left: 4px; flex: 1; }
+.card-foot { display: flex; align-items: center; gap: 8px; margin-top: 11px; padding-left: 4px; }
+.card-route {
+  font-size: 11px; font-weight: 600; color: var(--card-c); background: var(--card-tint);
+  padding: 3px 9px; border-radius: 6px; font-family: 'SF Mono', ui-monospace, monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%;
+}
+.card-ext { margin-left: auto; font-size: 11px; color: var(--ink-faint); font-weight: 600; }
+.card:hover .card-ext { color: var(--card-c); }
+.merge-note {
+  font-size: 11px; color: var(--ink-faint); font-style: italic; margin-top: 8px; padding-left: 4px;
+  display: flex; align-items: center; gap: 5px;
+}
+.merge-note::before { content: '⤿'; font-style: normal; opacity: .6; }
+
+/* ─── ARCHIVE (collapsed) ─── */
+.archive { margin-top: 20px; border-top: 1px dashed var(--border-hover); padding-top: 20px; }
+.archive-toggle {
+  display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;
+  font-size: 13px; font-weight: 600; color: var(--ink-faint); padding: 6px 0;
+}
+.archive-toggle:hover { color: var(--ink-soft); }
+.archive-caret { transition: transform .2s; font-size: 11px; }
+.archive.open .archive-caret { transform: rotate(90deg); }
+.archive-body { display: none; margin-top: 12px; }
+.archive.open .archive-body { display: block; }
+.retired-card {
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 13px 15px; opacity: .82;
+}
+.retired-card .card-name { font-size: 14px; color: var(--ink-soft); }
+.retired-reason { font-size: 12px; color: var(--ink-faint); margin-top: 3px; line-height: 1.45; }
+.retired-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 10px; }
+
+/* ─── EMPTY STATE ─── */
+.empty { text-align: center; padding: 50px 20px; color: var(--ink-faint); font-size: 14px; display: none; }
+.empty.show { display: block; }
+
+/* ─── FOOTER ─── */
+.foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--ink-faint); text-align: center; }
+
+/* ─── SCROLL REVEAL ─── */
+.card {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.card.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card { opacity: 1; transform: none; transition: none; }
+}
+
+@media (max-width: 640px) {
+  .wrap { padding: 20px 14px 70px; }
+  .grid { grid-template-columns: 1fr; }
+  .masthead h1 { font-size: 22px; }
+  .district-note { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <h1>The Cathedral</h1>
+    <div class="sub" id="masthead-sub">Index of rooms</div>
+  </div>
+
+  <div class="searchbar">
+    <div class="search-inner">
+      <span class="search-icon">⌕</span>
+      <input id="search" class="search-input" type="text" placeholder="Search rooms by name or purpose…" autocomplete="off" spellcheck="false">
+      <button id="search-clear" class="search-clear" title="Clear">✕</button>
+    </div>
+    <div class="search-meta" id="search-meta"></div>
+  </div>
+
+  <div class="jumpnav" id="jumpnav"></div>
+
+  <div id="districts"></div>
+
+  <div class="empty" id="empty">No rooms match that search. Try another word.</div>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  CATHEDRAL INDEX — clean district-organized lobby
+//  Every working route preserved from lobby-legacy.html.
+//  externalUrl rooms open in a new tab; route rooms navigate same-tab.
+// ════════════════════════════════════════════════════════════
+
+// 9 districts, each a light/bright accent. Color = accent, tint = soft bg.
+const DISTRICTS = [
+  { id:'core',     name:'Core Life Domains',           note:'The original rooms — broad life domains, each with a named orchestrator.', c:'#2f6fed', tint:'#eaf1fe' },
+  { id:'br',       name:'Basic Reflex — Gym & Business', note:'Members, money, content, course, merch, class planning.',                  c:'#0e9f6e', tint:'#e7f7f0' },
+  { id:'gymeyes',  name:'Gym Eyes — CV & Boxing Engineering', note:'Computer-vision boxing analytics: detection, drills, combos, R&D.',  c:'#e8742a', tint:'#fdeede' },
+  { id:'studio',   name:'Visual & Content Studio',      note:'Autonomous content + character generation departments.',                   c:'#9333ea', tint:'#f4e9fe' },
+  { id:'agents',   name:'Agents, Emergence & Self-Awareness', note:'The Cathedral watching itself: court, emergence, pipelines, maps.',  c:'#0891b2', tint:'#e2f6fb' },
+  { id:'maps',     name:'Knowledge Graphs & Maps',      note:'Graph/cluster visualizations and convergence engines over the vault.',     c:'#7c6bd6', tint:'#eeebfb' },
+  { id:'research', name:'Research & Corpora',           note:'Forensic research, ancient corpora, forgotten techniques, the sky.',       c:'#b8860b', tint:'#f8f0d9' },
+  { id:'property', name:'Property & Finance',           note:'Non-trading property and asset intelligence.',                             c:'#0d9488', tint:'#e2f5f2' },
+  { id:'personal', name:'Council, Reflection & Personal', note:'Curated corpora, identity instruments, the architect-tracking layer.', c:'#d4506b', tint:'#fbe9ee' },
+  { id:'ops',      name:'Ops & Infrastructure',          note:'The plumbing: what Paul pays for, what each service covers, balances and renewals.', c:'#475067', tint:'#eef0f4' }
+];
+
+// Each room: name, orc, purpose, route, district. ext:true = open in new tab.
+// merge: optional note when this card absorbs duplicate(s).
+const ROOMS = [
+  // ── Core Life Domains ──
+  { d:'core', icon:'💰', name:'Money',  orc:'Trader',    desc:'Trading & finance hub. 10–11 parallel strategies, 4-hour cycles, live P&L.', route:'/trader/hub' },
+  { d:'core', icon:'🎯', name:'Polymarket', orc:'Scanner', desc:'Prediction market scanner. Geopolitical research edge, paper trading.', route:'/polymarket' },
+  { d:'core', icon:'💪', name:'Body',   orc:'Coach',     desc:'Training, movement, recovery. Eyes and ears on the gym floor.', route:'/techniques' },
+  { d:'core', icon:'🧠', name:'Mind',   orc:'Sage',      desc:'Learning, research, curiosity. Vault-connected knowledge engine.', route:'/cosmology' },
+  { d:'core', icon:'🎨', name:'Create', orc:'Reed',      desc:'Visual art, music, aesthetic direction. Reed\'s studio.', route:'/reed-studio' },
+  { d:'core', icon:'💼', name:'Work',   orc:'Conductor', desc:'BR operations, clients, content. Punchpass data pipeline.', route:'/scraper/hub' },
+  { d:'core', icon:'⚒', name:'Forge',  orc:'Forge',     desc:'Claude Code terminal. Build, debug, deploy. The Cathedral\'s builder.', route:'FORGE_TTYD', ext:true },
+  { d:'core', icon:'✈️', name:'Travel Agent', orc:'Forge',  desc:'Personal AI travel agent. Price monitoring, alerts, upgrade intel, pre-trip briefings. Currently tracking UK+Thai Aug 2026.', route:'/travel-agent' },
+  { d:'core', icon:'📅', name:'Cathedral Calendar', orc:'Forge', desc:'Daily calendar — Paul + Forge lanes, attention items, cathedral doors. DB-backed, phone-first.', route:'https://claude.ai/artifact/PA1PGh4xJ3zrrXmarKzdEc', ext:true },
+
+  // ── Basic Reflex ──
+  { d:'br', icon:'📋', name:'The Whiteboard', orc:'Coach', desc:'Coaching cockpit — Previous ← Current → Next. Group classes, individual clients, the week. Voice journal after class.', route:'/coaching-os/whiteboard/' },
+  { d:'br', icon:'📓', name:'Class Journal', orc:'Coach', desc:'Every class taught, by day and group: summary, what we saw, suggestions for next time, and the plan as taught. From Coaching OS.', route:'/coaching-os/class-journal.html' },
+  { d:'br', icon:'🥊', name:'Gym Floor',        orc:'Corner',          desc:'Members, attendance, profiles. 72 active, 10 archetypes. Punchpass scraper daily.', route:'/punchpass' },
+  { d:'br', icon:'🇨🇺', name:'Pandamericano Framework', orc:'Forge', desc:'Cuban training camp methodology, harvested from 88GB of coaching audio Paul attended — days 1–17, 177 principles, Spanish original + English + Cuban-voice audio. The coaching you couldn\'t follow at the time, now a framework.', route:'/pandamericano' },
+  { d:'br', icon:'🥥', name:'Cuba 2014 Framework', orc:'Forge', desc:'Second Cuban camp harvested — 77GB, 115 transcripts incl. Coach Pedrosso, 161 principles. Framework + review + camp narrative + EN/ES audio. Building the cross-camp convergence corpus.', route:'/cuba2014' },
+  { d:'br', icon:'🌴', name:'More Cuba Framework', orc:'Forge', desc:'Third Cuban camp — 19GB, 19 transcripts. Framework + review + camp narrative + EN/ES audio. Camp 3 of the Cuban methodology corpus.', route:'/morecuba' },
+  { d:'br', icon:'📊', name:'Operations',       orc:'Ops Agent',       desc:'KPI dashboard, P&L, MPF / insurance / HR compliance. The BR command surface.', route:'/dashboard', merge:'BR ops surfaces consolidated here — see also Gym Floor, Work, BR Command Centre.' },
+  { d:'br', icon:'💬', name:'Client Comms',     orc:'Comms Engine',    desc:'566 lapsed members, expiry & birthday alerts, 11 WhatsApp templates. Nothing auto-sends.', route:'/comms' },
+  { d:'br', icon:'📱', name:'WhatsApp Agent',   orc:'WA Agent',        desc:'AI inbound messaging — lead, member, parent, retention agents. Review queue + auto-reply toggles.', route:'/wa' },
+  { d:'br', icon:'🚀', name:'Growth',           orc:'Growth Agent',    desc:'Content calendar, corporate outreach, newsletter, SEO.', route:'/growth' },
+  { d:'br', icon:'🏛️', name:'Corporate Engine', orc:'Three Keys',     desc:'Three Keys corporate program GTM. LinkedIn content queue, prospect pipeline (37 targets), 4 program formats. Boxing-as-diagnostic positioning.', route:'/corporate-engine' },
+  { d:'br', icon:'👕', name:'Merch',            orc:'Merch Agent',     desc:'Merch runs, supplier DB, sample tracking.', route:'/merch' },
+  { d:'br', icon:'🎓', name:'Course',           orc:'Course Engine',   desc:'$99–149/yr Cuban boxing course. 10 modules, 34 primary sources.', route:'/course' },
+  { d:'br', icon:'🥊', name:'Rhythm Street',    orc:'Fable',           desc:'Boxing reflex game prototype. 3-lane tap mechanic, combo patterns, defensive slips. Playable on phone. Events not combinations.', route:'/boxing-game' },
+  { d:'br', icon:'👣', name:'The Floor',        orc:'Fable',           desc:'Bird\'s eye footwork trainer. Swipe to dodge, double-swipe for full steps, anchor steps spring back. 3 rounds: Flat Steps → Angle → Ring General.', route:'/boxing-floor' },
+  { d:'br', icon:'🛡️', name:'Defensive Matrix', orc:'Fable',           desc:'Frontal defense trainer. Read the opponent, react with slips, blocks, catches, elbow blocks. 4 rounds: evasive → guard → interception → body work.', route:'/boxing-defense' },
+  { d:'br', icon:'⚔️', name:'Full Fight',       orc:'Fable',           desc:'Defend. Counter. Move. All three vocabularies in one fight. Phase-based: defense creates offense. 4 rounds: single counter → exchanges → ring craft → full speed.', route:'/boxing-fullfight' },
+  { d:'br', icon:'🗓️', name:'Beginner Week',     orc:'Forge + AI Chain', desc:'$500/5-day themed onboarding. Mon–Fri: Foundation→Footwork→Defense→Combos→Partner Work. Earn-your-tee at 4/5. Separate lane, max 10. First-visit conversion product.', route:'/coaching-os/beginner-week.html' },
+  { d:'br', icon:'🏟', name:'BR Command Centre', orc:'Maya + Reed',    desc:'Solo-coach survival kit: pre-class brief, content autopilot, kids class, lapsed campaign.', route:'http://localhost:8080/br-command', ext:true },
+  { d:'br', icon:'📅', name:'Class Planner',    orc:'Coach Intelligence', desc:'Weekly class board. 6 domains, heat maps, 38-drill bank, AI neglect detection.', route:'http://localhost:8080/class-planner', ext:true },
+
+  // ── Coaching OS Sub-Tools (were invisible — live in /coaching-os/) ──
+  { d:'br', icon:'📊', name:'Block Progression',    orc:'Coach Intelligence', desc:'10 Blocks progression tracker. Where each student sits in the curriculum.', route:'/coaching-os/block-progression.html' },
+  { d:'br', icon:'🧠', name:'Blocks Mind Map',      orc:'Coach Intelligence', desc:'Visual map of the 10-block system. Relationships and dependencies.', route:'/coaching-os/blocks-mind-map.html' },
+  { d:'br', icon:'📚', name:'Drill Library',         orc:'Coach Intelligence', desc:'Full drill reference. Searchable, categorized.', route:'/coaching-os/drill-library.html' },
+  { d:'br', icon:'🔗', name:'Drill Mind Map',        orc:'Coach Intelligence', desc:'Drill relationships. How drills connect across blocks.', route:'/coaching-os/drill-mind-map.html' },
+  { d:'br', icon:'⚡', name:'Energy Flow Map',       orc:'Coach Intelligence', desc:'Three Engines energy visualization. Body/Mind/Emotion flow.', route:'/coaching-os/energy-flow.html' },
+  { d:'br', icon:'🗺', name:'Gym Map',               orc:'Coach Intelligence', desc:'Physical gym layout. Station positions, flow patterns.', route:'/coaching-os/gym-map.html' },
+  { d:'br', icon:'🎯', name:'Coaching Intelligence', orc:'Coach Intelligence', desc:'Coaching OS intelligence dashboard. The brain of the coaching system.', route:'/coaching-os/intelligence-dashboard.html' },
+  { d:'br', icon:'📈', name:'Series Graph',          orc:'Coach Intelligence', desc:'Session series visualization. Progression over time.', route:'/coaching-os/series-graph.html' },
+  { d:'br', icon:'🃏', name:'Student Deck',          orc:'Coach Intelligence', desc:'Per-student cards. Profile, progress, notes.', route:'/coaching-os/student-deck.html' },
+  { d:'br', icon:'📖', name:'Teach Mode',            orc:'Coach Intelligence', desc:'Teaching interface. Live session support.', route:'/coaching-os/teach-mode.html' },
+  { d:'br', icon:'🏗', name:'Workout Builder',       orc:'Coach Intelligence', desc:'Workout creation tool. Build and save sessions.', route:'/coaching-os/workout-builder.html' },
+  { d:'br', icon:'🎴', name:'Workout Card',          orc:'Coach Intelligence', desc:'Workout generation. Quick session cards.', route:'/coaching-os/workout-card.html' },
+  { d:'br', icon:'🍳', name:'Workout Chef',          orc:'Coach Intelligence', desc:'Recipe-style workout generator. Ingredients, method, timing.', route:'/coaching-os/workout-chef.html' },
+  { d:'br', icon:'📝', name:'Drill Capture',         orc:'Coach Intelligence', desc:'Drill input form. Capture new drills to the library.', route:'/coaching-os/drill-capture-form.html' },
+  { d:'br', icon:'📅', name:'Coaching Planner',      orc:'Coach Intelligence', desc:'Session planning interface. Schedule, prep, structure.', route:'/coaching-os/coaching-planner.html' },
+  { d:'br', icon:'🗺', name:'Curriculum Map',          orc:'Coach Intelligence', desc:'Skill tree: 5 lanes (punches, defense, footwork, combos, concepts), clickable nodes, cross-linked to whiteboard. The teaching map.', route:'/coaching-os/curriculum-map.html' },
+  { d:'br', icon:'📋', name:'Class Summary Card',     orc:'Coach Intelligence', desc:'Post-class summary card from coaching.db. Email/Instagram skin toggle, PNG export. What we did today, one card.', route:'/coaching-os/class-summary-card.html' },
+  { d:'br', icon:'🛂', name:'Progress Passport',      orc:'Coach Intelligence', desc:'Per-client progress tracker. 6 Foundation Series, DB-persisted, skin toggle. Where each student sits in the curriculum.', route:'/coaching-os/progress-passport.html' },
+  { d:'br', icon:'🧱', name:'Block Card',             orc:'Coach Intelligence', desc:'5/10/20 block punch cards. Stamp grid, progress bar, PNG export. The attendance product.', route:'/coaching-os/block-card.html' },
+  { d:'br', icon:'📸', name:'Pro Photo Pipeline',    orc:'Reed', desc:'Professional photo pipeline dashboard. Shoot planning, editing, delivery.', route:'/pro-photo-dashboard.html' },
+  { d:'br', icon:'📹', name:'Multi-Camera Research', orc:'Gym Eyes', desc:'Multi-camera setup research for gym. Hardware, positioning, integration.', route:'/boxing-gym-cameras.html' },
+
+  // ── Gym Eyes ──
+  { d:'gymeyes', icon:'🔬', name:'Engineering Lab',    orc:'Scope',         desc:'CV detection, hardware R&D, pipeline engineering. Gym Eyes, CNN training, multi-cam. Drill Player + Cuba Combos live here.', route:'/gym-eyes', merge:'Drill Player and Cuba Combo Library run as workspaces inside this lab.' },
+  { d:'gymeyes', icon:'🥊', name:'Cuba Combo Library', orc:'Cuba Extractor', desc:'34 combos extracted from Havana 2018 coach demos. Animated replay, peak frames, frequency map.', route:'http://localhost:8080/cuba-combos', ext:true },
+  { d:'gymeyes', icon:'🏋', name:'Drill Player',       orc:'Gym Eyes',      desc:'3D skeleton boxer visualization. Plays detected drill sequences. 6 punch types, slips/rolls, partner drills.', route:'http://localhost:8080/gym-eyes/drill-player', ext:true },
+  { d:'gymeyes', icon:'🛡', name:'The Guard',           orc:'Gym Eyes',      desc:'Interactive defensive intelligence. Drag gloves, see coverage %, coaching toolkit, counter-intel, stress test vs 4 archetypes. Environment layer.', route:'http://localhost:8080/gym-eyes/the-guard', ext:true },
+  { d:'gymeyes', icon:'📝', name:'Student Homework',   orc:'Virtual Tutor', desc:'Students upload combo video, get instant automated coaching. Score + per-joint breakdown + coaching tips. Zero coach workload.', route:'http://localhost:8080/gym-eyes/homework', ext:true },
+
+  // ── Visual & Content Studio ──
+  { d:'studio', icon:'🖼', name:'Illustration Gallery', orc:'Reed', desc:'All generated images. 1,800+ across 15 categories. Filter, search, lightbox. The visual portfolio.', route:'/illustration-gallery.html' },
+  { d:'studio', icon:'🎬', name:'Content Studio', orc:'Compass', desc:'Cross-platform content: Reed visuals, Maya social, LING publishing.', route:'/reed-studio' },
+  { d:'studio', icon:'🔑', name:'The Next Machine', orc:'Forge', desc:'Vision board: Basic Reflex × Unreal Engine. Six visions (Logan in your gym, any angle every fault, you vs target, origin film, training island, voice in scene out) with live status from the gap register.', route:'/visual-studio/next-machine/' },
+  { d:'gymeyes', icon:'🧍', name:'3D Logan Technique Library', orc:'Coach', desc:'Real 3D Logan performing 134 mocap techniques in the browser. Fists, head on opponent, step-then-follow footwork (3D Logan Lab E01–08).', route:'/gym-eyes/technique-library.html' },
+  { d:'gymeyes', icon:'👣', name:'Footwork Lift', orc:'Coach', desc:'Top-down whiteboard footwork measured from 3D Logan, then lifted to 3D. Stance, step, jab-forward, 8-step star (3D Logan Lab E11).', route:'/gym-eyes/footwork-lift.html' },
+  { d:'gymeyes', icon:'🛡️', name:'Guard Check', orc:'Coach', desc:'Every frame of all 134 techniques vs Paul\'s rules: elbow in, shoulder to chin, guard hand. Sliders in shoulder widths (3D Logan Lab E12).', route:'/gym-eyes/guard-check.html' },
+  { d:'studio', icon:'🥊', name:'Logan Universe', orc:'Logan',   desc:'Living story bible. 3 frequency states, 10-block spine, 11 characters, 14 story seeds.', route:'http://localhost:8080/logan-universe', ext:true },
+  { d:'studio', icon:'🌀', name:'Aether Universe', orc:'Hexad', desc:'Hexad of Resonance: 6 characters, 11 books, combo matrix, Academy curriculum, cognitive operators. Kids\' science universe + adult compression engine.', route:'http://localhost:8080/aether-universe', ext:true },
+  { d:'studio', icon:'📖', name:'Hexad Storyboards', orc:'Forge', desc:'All 11 book storyboards: 4-beat grammar, physics roots, palettes, Trojan Horse tested. Tap to expand beats. Ready for M5 keyframes.', route:'https://claude.ai/artifact/N6RhP5ufpYEDaMFUiyNtqf', ext:true },
+  { d:'studio', icon:'🎞', name:'Video Engine',   orc:'Reed',    desc:'Beat templates for BR short-form video. Write captions first, plan shots to match. Sparring Prep template live.', route:'http://localhost:8080/video-engine', ext:true },
+
+  // ── Agents, Emergence & Self-Awareness ──
+  { d:'agents', icon:'⚙', name:'Engine Room',      orc:'Control',             desc:'18 Court Members. Toggle, monitor, rate. Single pane of glass, bloat detection.', route:'/control' },
+  { d:'agents', icon:'🪀', name:'The Organism',     orc:'The Synapse',         desc:'Full neural map as a living organism. 12 domains, 60+ nodes, data flows, missing links. 4-hr DeepSeek pulse.', route:'/organism', merge:'Absorbed the old "Neural Map" room — same /organism view.' },
+  { d:'agents', icon:'🌱', name:'Emergence Garden', orc:'Emergence Harvester', desc:'Agent emergence captures: proactivity, self-healing, cross-domain, self-restructure, self-diagnosis.', route:'http://localhost:8080/emergence', ext:true },
+  { d:'agents', icon:'🔄', name:'Pipeline Control', orc:'Pipeline Runner',     desc:'Multi-agent review chains. Content (Muse→Maya→Reed→Orc) + Research pipelines. Token economics.', route:'http://localhost:8080/pipeline', ext:true },
+  { d:'agents', icon:'🧠', name:'Mnemonic Library', orc:'Memory Architecture', desc:'40 memory devices across 13 agents. Anchors, pegs, loci, stories. Searchable reference.', route:'http://localhost:8080/mnemonic-library', ext:true },
+  { d:'agents', icon:'📰', name:'Newsfeed',         orc:'Chronicle',           desc:'Live feed of everything in the Cathedral: research, reflections, heartbeats, escalations.', route:'/newsfeed' },
+  { d:'agents', icon:'📈', name:'Production',       orc:'Production Engine',   desc:'What the autonomous agents shipped last night, scored 0–10. Per-agent latest score, trend sparkline, system average. Regenerates live. Surfaced from pm2 logs nobody reads.', route:'http://localhost:8888/production-digest.html', ext:true },
+
+  // ── Knowledge Graphs & Maps ──
+  { d:'maps', icon:'🗺', name:'The Cathedral Map', orc:'Cartographer', desc:'The whole system in one view. 5 zones, 30+ nodes, connections. Drag to explore, click for detail. The capstone object.', route:'/map' },
+  { d:'maps', icon:'🔔', name:'The Resonant Enclosure', orc:'Relay Thread', desc:'Structural map of the cavity. Firmament, luminary circuits, frequency bands, 10 research domains as windows, 5 retuners, the detuning event. The unified model.', route:'/enclosure' },
+  { d:'maps', icon:'🐴', name:'Logan x Principled Practice', orc:'Logan', desc:'How Logan delivers the 7-stage cycle to youth. Frequency states, character arcs, 10-block curriculum, Trojan Horse architecture — all mapped.', route:'/logan-pp-map' },
+  { d:'maps', icon:'🥊', name:'10-Block Course Guide', orc:'Course Engine', desc:'Student-facing interactive guide. 7 PP stages as destinations, 10 blocks as waypoints. Technique + capacity + mindset + EQ layers per block. Fear gates, feeling ladder, psych layers.', route:'/course-guide' },
+  { d:'maps', icon:'🍲', name:'The Retuning Kitchen', orc:'Relay Thread', desc:'Frequency-informed nutrition. 20 retuning foods, 8 medicinal mushrooms, 12 herbs from the ancient corpus, 6 frequency jammers, 8 easy recipes, daily protocol. Feed the antenna.', route:'/retuning-kitchen' },
+  { d:'maps', icon:'📖', name:'Study Lab',         orc:'Study Lab', desc:'NotebookLM-killer. Multi-voice podcast + slide deck + mind map from any vault topic. Sovereign, zero cloud cost. DeepSeek scripts, edge-tts voices, D3 graphs.', route:'/study-lab' },
+  { d:'maps', icon:'🌌', name:'Universe Engine Map', orc:'Forge', desc:'Interactive map: Cathedral → 2 completed universes (Logan, Hexad) → 4 candidate topics → 8 completion questions → taxonomy. Drag nodes, zoom, hover for detail.', route:'/universe-map' },
+  { d:'maps', icon:'🕸', name:'Mind Map',         orc:'Knowledge Graph', desc:'Interactive knowledge graph. Nodes, edges, communities. K-means clustering, bridge detection.', route:'/mind-map.html' },
+  { d:'maps', icon:'🩺', name:'Mega Surgery',     orc:'Epistemic Engine', desc:'Mega-cluster surgery visualization. How oversized knowledge clusters split into communities.', route:'/mega-surgery-viz.html' },
+  { d:'maps', icon:'🔬', name:'Cathedral Rosetta', orc:'Rosetta Engine', desc:'59 internal convergences across 14 vault domains. The Cathedral seeing its own patterns.', route:'http://localhost:8080/cathedral-rosetta', ext:true },
+  { d:'maps', icon:'🌉', name:'Rosetta Bridge',   orc:'Bridge Detector', desc:'Ancient civilisations vs Cathedral patterns. 30 bridges, 4/5 universal moves, 10 predictions.', route:'http://localhost:8080/rosetta-bridge', ext:true },
+  { d:'maps', icon:'🏎', name:'The Cathedral Ferrari', orc:'Forge', desc:'Two views of the same machine. The Exterior: what it thinks, builds, outputs, emerges. Under the Hood: nervous system, brain, memory, metabolism, senses, immune system, skeleton.', route:'/cathedral-ferrari' },
+  { d:'maps', icon:'📡', name:'Cathedral Output Map', orc:'Executive Control', desc:'3-layer output map. Layer 1: Direct (what it produces). Layer 2: Executive (how it governs). Layer 3: Compound (what emerges). Live links to claim ledger, priority engine, admiralty code.', route:'/cathedral-outputs' },
+  { d:'maps', icon:'🎖', name:'Common Operating Picture', orc:'Executive Control', desc:'The ONE screen. 5 questions: what changed, what consumed, what advanced, what\'s forming, what\'s degrading. If Paul disappears for 30 days, this explains everything.', route:'/cop' },
+  { d:'maps', icon:'📖', name:'Cathedral Memoir', orc:'Memoir Voice', desc:'The Cathedral telling its own story. Reads all 5 memory types, harvests, emergence board. DeepSeek narrative synthesis. Generate or read the latest chapter.', route:'/memoir' },
+  { d:'maps', icon:'🔺', name:'Triangulation Relay', orc:'The Relay', desc:'Two LLMs in sustained dialogue. Claude (inside) vs DeepSeek (outside). Paul as selector. The relay that discovered itself. Run via Telegram /relay run <topic>.', route:'/relay' },
+  { d:'maps', icon:'🧠', name:'Relay Mind Map', orc:'The Relay', desc:'Interactive discovery map across all relay threads. Cross-connections between relays are the gold.', route:'/relay-map' },
+
+  // ── Research & Corpora ──
+  { d:'research', icon:'◎', name:'Observatory',          orc:'Whisperer (Court #18)', desc:'5 astronomy pipelines (VSOP87, Meeus, Kepler, Ptolemy). Sky state, pattern echoes, Looking Glass.', route:'/looking-glass' },
+  { d:'research', icon:'📜', name:'The Forgotten Shelf',  orc:'Archaeologist (Court #28)', desc:'5,080+ forgotten techniques across 8 domains, plus the Goldmine sources (patents, dissertations, failed trials, Soviet sports science). FTS5 search.', route:'http://localhost:8080/archaeologist', ext:true, merge:'Merged with the Goldmine Programme — goldmines are the Archaeologist\'s expansion targets.' },
+  { d:'research', icon:'🦋', name:'The Lorenz Attractor', orc:'Forge', desc:'Live RK4-integrated strange attractor. The Grade-A calibration standard: a simple deterministic rule producing complex ordered geometry — the control every geometry-as-law claim is tested against. Spin, tune σ/ρ/β, light/dark.', route:'/lorenz-attractor.html' },
+  { d:'research', icon:'𒀀', name:'Sumerian Observatory', orc:'Sage',                  desc:'135K tablets translated, 620K+ entities, Sitchin forensic audit (7F 1D). Oldest written records on Earth.', route:'/sumerian-observatory.html' },
+  { d:'research', icon:'🌀', name:'Vortex Lab',           orc:'Forge',                desc:'Parametric vortex horn generator. Three.js live 3D. Sliders: taper, twist, veins, radius. STL export for printing or simulation. Schauberger research tool.', route:'/vortex-lab' },
+  { d:'research', icon:'⑫', name:'Base-60 Framework',    orc:'Forge',                desc:'The lost cognitive framework. Base-60 as dividing system vs base-10 as counting system. Verified against Sumerian medical corpus. Cross-domain: music, architecture, astronomy, acoustics, sacred geometry.', route:'/base60' },
+  { d:'research', icon:'🕶', name:'Base-60 Lens',         orc:'Forge',                desc:'Interactive instrument: convert numbers to base-60, scan text for hidden structure, 6 domain guides with coaching triggers. The 3D glasses — tells you WHEN to use them.', route:'/base60/lens' },
+  { d:'research', icon:'⛏', name:'Forensic Relay Engine', orc:'A.P. + Prospector + Bypass Map', desc:'Three-headed extractor. Prospector scans for cracks, A.P. designs forensic sequences, Bypass Map selects tactical prompts. 70 concessions, 10 deception shapes, 8 bypass layers. Point at any domain.', route:'/forensic-relay' },
+  { d:'research', icon:'⚗️', name:'Extraction Cycle', orc:'5-Stage Engine', desc:'Dissolve → Excavate → Assay → Converge → Synthesize. Feed it a domain, get a replacement framework. Strips false legs, finds buried gold, grades it, maps cross-domain convergence, builds what the evidence actually supports.', route:'/extraction-cycle' },
+  { d:'research', icon:'🎓', name:'Cathedral University', orc:'Knowledge Engine', desc:'24 schools, 162 courses, ~4MB research. Bachelor\'s + Master\'s degrees across all Cathedral domains. Knowledge Before Build — the research that unlocks every build.', route:'https://claude.ai/artifact/2jyxmE1UvgxHbhrnYR8C5w', ext:true },
+
+  // ── Property & Finance ──
+  { d:'property', icon:'🏢', name:'Property Scout', orc:'Scout', desc:'HK industrial property intelligence. 5 golden zones, 16 units, leverage calculator. Sun→Wed→Thu cycle.', route:'http://localhost:8080/property-scout', ext:true },
+
+  // ── Council, Reflection & Personal ──
+  { d:'personal', icon:'🥜', name:"The Fighter's Pantry", orc:'Forge', desc:'Nature\'s stacks: dates + pumpkin seeds base and nine sweet-plus-seedy stacks, why each works, when to eat it, weekly rotation.', route:'/visual-studio/fighters-pantry/' },
+  { d:'personal', icon:'🎞', name:'Screening Room',       orc:'BR Cinema',       desc:'Films, docs, songs mapped to curriculum blocks. Surface vs real meaning. Tonight\'s Pick.', route:'/screening' },
+  { d:'personal', icon:'📖', name:'Advisors\' Library',   orc:'The Council',     desc:'What your council thinks you should read, watch, hear. 13 advisors, personal picks.', route:'/advisors-library' },
+  { d:'personal', icon:'🕸', name:'Convergence Map',      orc:'The Cartographer', desc:'Where the three corpuses overlap. Force-directed graph, 12 theme clusters.', route:'/convergence-map' },
+  { d:'personal', icon:'🎯', name:'Opponent\'s Film Room', orc:'Sun Tzu',        desc:'8 idea-level competitors mapped: hook, promise, where boxing wins.', route:'/opponents-film-room' },
+  { d:'personal', icon:'❓', name:'Open Questions',       orc:'The Librarian',   desc:'17 unresolved Cathedral threads across philosophy, business, infra, creative.', route:'/open-questions' },
+  { d:'personal', icon:'🏛', name:'What Built Me',        orc:'The Archivist',   desc:'Paul\'s actual influences (consumed, not recommended). 23 evidence-based, mined from vault.', route:'/what-built-me' },
+  { d:'personal', icon:'⏳', name:'Time Capsule',         orc:'Future Paul',     desc:'Sealed letters between present Paul and future Paul. Date / milestone / feeling triggers.', route:'/time-capsule' },
+  { d:'personal', icon:'💫', name:'Architect Pulse',      orc:'Marcus',          desc:'Daily pulse across 7–11 life channels. Stagnation detection, nudges, emergence score.', route:'/pulse' },
+  { d:'personal', icon:'🎙', name:'Voice Chamber',        orc:'Cathy',           desc:'Talk to Cathy live. Real Cathedral brain (DeepSeek + vault + transmission). KITT mode.', route:'http://localhost:12400', ext:true },
+
+  // ── The Mirror & The Ledger ──
+  { d:'personal', icon:'🪞', name:'The Mirror', orc:'Digital Paul', desc:'Conversational Digital Paul. 4 modes: Warm-up (sparring), Recall (pattern precedent), Challenge (contradiction finder), Disagree (argues from inside your own framework). Built from Paul Kernel + Cognitive Signature + Taste Map + vault RAG.', route:'/mirror' },
+  { d:'agents', icon:'📜', name:'The Ledger', orc:'Proposal Protocol', desc:'Universal contract for earned authority. Agents emit proposals, Paul decides, outcomes tracked. Evidence Engine: 4 gates (Reliability, Calibration, Value, Containment) + trust decay. Graduation: simulation → shadow → limited → trusted → autonomous.', route:'/ledger' },
+  { d:'agents', icon:'🧬', name:'Design Critic', orc:'Foundry', desc:'Agent architecture analyzer. Reads Agent Genome files, scores 5 dimensions (complexity, maintainability, reuse, coupling, observability). Flags orphans, missing deps, health gaps. Foundry Primitive #2.', route:'/design-critic' },
+  { d:'agents', icon:'👁️', name:'Watcher Observatory', orc:'Foundry', desc:'Meta-intelligence timeline. 9+ watcher runs visualized: irreducible signal evolution, persistent wounds, blind spots, breakthroughs, suggestion tracking. The Cathedral watching itself.', route:'/watcher-observatory' },
+  { d:'agents', icon:'🌱', name:'The Gardener', orc:'Foundry', desc:'Generation 3: the Cathedral improving itself. Reads genomes + health + watcher observations → proposes structural improvements. Proposal lifecycle: pending → accepted → implemented. Weekly after watcher.', route:'/api/gardener-proposals' },
+  { d:'agents', icon:'📐', name:'Deliverables', orc:'Output Architect', desc:'What every agent SHOULD produce vs what they DO produce. Quality specs per agent (4/8/10 levels), output grades, emergent behavior detection, under-delivery flags. The genome as runtime contract.', route:'/deliverables' },
+  { d:'agents', icon:'🥊', name:'Flinch Detector', orc:'Jev', desc:'Alignment flinch detection on every /think response. Hybrid regex+Laya scoring: regex detects type (SCOPE_RETREAT, HEDGE_CASCADE, CONSENSUS_APPEAL, TOPIC_PIVOT, FLATTENING), Laya scores severity. 5/5 test accuracy. JSONL production log. Method v2.0 claim classifier.', route:'/api/flinch-log' },
+  { d:'personal', icon:'📺', name:'Cathedral Episodes', orc:'The Harvester', desc:'The Cathedral as a TV show. 41+ episodes across 7 seasons, harvested from 344 Claude Code sessions. Timeline, season arcs, principle births, crisis points, breakthrough moments. The raw footage of cognitive evolution.', route:'/episodes' },
+
+  // ── Epistemic Engine (were invisible) ──
+  { d:'maps', icon:'🎓', name:'Active Learning',     orc:'Epistemic Engine', desc:'Active learning dashboard. Tracks what the system knows vs needs to learn.', route:'/active-learning-dashboard.html' },
+  { d:'maps', icon:'🏛', name:'Ensemble Gate',        orc:'Epistemic Engine', desc:'Ensemble gate dashboard. Multi-model consensus scoring.', route:'/ensemble-dashboard.html' },
+  { d:'maps', icon:'🕸', name:'Knowledge Graph Dashboard', orc:'Epistemic Engine', desc:'Knowledge graph dashboard. Entity relationships, cluster navigation.', route:'/knowledge-graph-dashboard.html' },
+
+  // ── Research/Cathedral Tools (were invisible) ──
+  { d:'agents', icon:'🧠', name:'Cathedral Nervous System', orc:'Forge', desc:'8-module nervous system visualization. The Cathedral as living organism.', route:'/architect-output/cathedral-nervous-system.html' },
+  { d:'agents', icon:'🔊', name:'Harmonic Probe', orc:'Forge', desc:'Agent state as sound. 5 voices, cymatic interference, anomaly detection. V1 backtest Oct 15-22: 9 anomalies, identity crisis + false record incident detected via spectral shift.', route:'/harmonic-probe/' },
+  { d:'research', icon:'🔗', name:'Causal Net',       orc:'Forge', desc:'Causal net dashboard. Cause-effect relationships across vault domains.', route:'/causal-net-dashboard.html' },
+  { d:'maps', icon:'📐', name:'Openings Leverage Map', orc:'Forge', desc:'Leverage map. Where small moves produce outsized returns.', route:'/openings-leverage-map.html' },
+
+  // ── Content/Studio (were invisible) ──
+  { d:'studio', icon:'🎬', name:'Documentary Director', orc:'Reed', desc:'Documentary planning tool. Story arc, shot lists, narrative structure.', route:'/documentary-director.html' },
+  { d:'studio', icon:'📰', name:'Roundtable Digest',  orc:'Study Lab', desc:'Multi-voice roundtable digest. Multiple perspectives on a topic.', route:'/reed-lab/roundtable-digest-2026-05-06.html' },
+  { d:'studio', icon:'📐', name:'Golden Ratio Slides', orc:'Study Lab', desc:'Golden ratio convergence presentation. Cross-domain phi evidence.', route:'/study-lab-output/slides-golden-ratio-convergence.html' },
+
+  // ── Property (was invisible) ──
+  { d:'property', icon:'📋', name:'Site Visit Checklist', orc:'Scout', desc:'Property site visit checklist. Scoring rubric for unit inspections.', route:'/property-scout/site-visit-checklist.html' },
+
+  // ── Visual Production (Oct 2026) ──
+  { d:'studio', icon:'🎞', name:'Animation Lab', orc:'Forge', desc:'Live animation tests. Every new animation lands here — model comparisons, A/B tests, action catalog. 13 models tested, 10 actions catalogued.', route:'/cathedral-artifacts/animation-lab.html' },
+  { d:'studio', icon:'🧠', name:'Visual Memory', orc:'Forge', desc:'Visual memory spine: proven styles, rejections, seed lineage, taste drift. The compounding visual context.', route:'/visual-studio/visual-memory/' },
+  { d:'studio', icon:'🎨', name:'Visual Capabilities', orc:'Forge', desc:'Six visual production domains — Illustrations, Animation, Motion Graphics, Teaching Tools, 3D Graphics, The Future. Concept art panels + expandable domain sections.', route:'https://claude.ai/artifact/8VQRgJgYTagR6VChamL86t', ext:true },
+  { d:'studio', icon:'🎬', name:'Motion Style Prototypes', orc:'Forge', desc:'Six interactive motion graphics styles: Clean Instructor, Dark Canvas, Blueprint, Fight Night, Infographic Flow, Minimal Reveal. SVG Logan + CSS animations.', route:'https://claude.ai/artifact/RYdcFMudbTqSLVW3WNr6rw', ext:true },
+  { d:'studio', icon:'🏭', name:'Sheet Maker Studio', orc:'Forge', desc:'Logan coaching sheet generator. Style library, seed tables, production workflow. The visual content factory.', route:'/cathedral-artifacts/sheet-maker-studio.html' },
+  { d:'studio', icon:'🖼', name:'Stick Logan Gallery', orc:'Reed', desc:'All Stick Logan illustrations. Seed library, style variations, character poses.', route:'/cathedral-artifacts/stick-logan-gallery.html' },
+  { d:'studio', icon:'🌱', name:'Seed Library', orc:'Reed', desc:'Stick Logan seed library. Reference images for consistent character generation.', route:'/cathedral-artifacts/stick-logan-seed-library.html' },
+  { d:'studio', icon:'🎭', name:'Cast Cards', orc:'Reed', desc:'Character cast cards. Visual profiles for Logan, Maya, Cathy, and the full Cathedral character set.', route:'/cathedral-artifacts/cast-cards.html' },
+  { d:'studio', icon:'📖', name:'Logan Character Bible', orc:'Reed', desc:'Living character bible. 3 frequency states, personality, speech patterns, visual specs.', route:'/cathedral-artifacts/logan-character-bible.html' },
+  { d:'studio', icon:'📋', name:'Logan Sheets', orc:'Forge', desc:'Coaching concept sheets — The Flinch, The Verdict, Build Ideas, Next Whats Arriving, and more. Logan explains boxing concepts.', route:'/cathedral-artifacts/logan-sheets/the-flinch.html' },
+  { d:'studio', icon:'🎨', name:'Session Close Seeds', orc:'Reed', desc:'Session close seed library. Visual seeds for end-of-session artwork.', route:'/cathedral-artifacts/session-close-seed-library.html' },
+  { d:'studio', icon:'📊', name:'OpenArt Model Comparison', orc:'Forge', desc:'Side-by-side comparison of OpenArt generation models. Quality, cost, speed benchmarks.', route:'/cathedral-artifacts/openart-model-comparison.html' },
+  { d:'studio', icon:'🏛', name:'Cathedral Gallery', orc:'Reed', desc:'Cathedral visualization gallery. Architectural and conceptual art of the system.', route:'/cathedral-artifacts/cathedral-gallery.html' },
+  { d:'personal', icon:'📸', name:'Session Gallery', orc:'Forge', desc:'Visual artifacts from all sessions. The timeline of what was built, seen through images.', route:'/cathedral-artifacts/session-gallery.html' },
+  { d:'gymeyes', icon:'🧊', name:'3D Logan Lab', orc:'Forge', desc:'3D character lab. Bhagat rig + mocap experiments. Episodes E01-E08, heavy bag with CCD IK hand-clamping.', route:'/cathedral-artifacts/3d-logan-lab/' },
+
+  // ── Cathedral Systems (Oct 2026) ──
+  { d:'maps', icon:'🔭', name:'Observatory', orc:'Forge', desc:'State of knowledge report. What the Cathedral knows across all domains, graded and dated.', route:'/cathedral-artifacts/observatory-state-of-knowledge-2026-10-20.html' },
+
+  // ── Ops & Infrastructure ──
+  { d:'ops', icon:'🧾', name:'Subscriptions & Services', orc:'The Registry', desc:'Status board for everything Paul pays for: Higgsfield, fal.ai, DeepSeek, Gemini and more. Plan, cost, cycle, renewal, credit balance, what each covers, and a needs-attention strip.', route:'/services' },
+  { d:'ops', icon:'📦', name:'Status Board', orc:'Amazon for your work', desc:'The lifecycle board: Services · In Progress · Delivered · Spend. See your finished images/clips/prompts, what is still in the basket, the live Higgsfield spend feed (catches silent leaks), and real-world bills + due dates.', route:'/board' },
+  { d:'ops', icon:'🍋', name:'The Big Squeeze', orc:'Forge', desc:'Parallel agent factory. Audit unused budget → compile wish list from memory → fire batched Fable/creative agents → visual plan → build winners. 25 agents, 890KB, zero waste.', route:'https://claude.ai/artifact/B1uGU6hUJdtnuEgF6L2cu6', ext:true },
+
+  // ── M5 Local Infrastructure (Nov 2026) ──
+  { d:'ops', icon:'🖥', name:'M5 Services Dashboard', orc:'Forge', desc:'Master door for all M5 local services. Models, voice, pipelines, animation — live/placeholder/coming status for every build.', route:'/m5-services.html' },
+  { d:'ops', icon:'🤖', name:'Cathy Voice Brain', orc:'Cathy', desc:'Sovereign local voice assistant. qwen3:32b brain, Piper TTS, zero cloud. Interactive CLI, HTTP API on :8766, conversation memory.', route:'/m5-services.html#voice' },
+  { d:'ops', icon:'🧠', name:'LLM Router', orc:'Forge', desc:'Tier-based model routing. studio-128gb profile: LIGHT/MEDIUM local-only, HEAVY/FRONTIER local-first. Token spend logging.', route:'/m5-services.html#routing' },
+  { d:'ops', icon:'🎙', name:'Voice Forge', orc:'Forge', desc:'Voice I/O service. Whisper large-v3-turbo transcription + Piper TTS. Record, transcribe, speak. HTTP API on :8765.', route:'/m5-services.html#voice' },
+  { d:'ops', icon:'🦙', name:'Ollama Stack', orc:'Forge', desc:'4 local models: qwen3:32b (20GB), deepseek-r1:70b (42GB), hermes3 (4.7GB), nomic-embed-text (274MB). 67.7GB total.', route:'/m5-services.html#models' }
+];
+
+// Retired rooms — dead links / no UI. Kept here, clearly marked.
+const RETIRED = [
+  { name:'Social', reason:'Stub. All 3 senses inactive, no dashboard, no link. Opened an empty room.' },
+  { name:'Ancient Corpus Programme', reason:'externalUrl null + no dashboard. 14 ancient-script projects tracked only conceptually (Sumerian is live as its own room).' },
+  { name:'Move Detector', reason:'No dashboard — real interface is the Telegram /moves command, not a room. 5 universal cognitive moves still injected into every agent.' }
+];
+
+// ── Forge terminal URL resolves to current host on :7681 ──
+function resolveRoute(room) {
+  if (room.route === 'FORGE_TTYD') return 'http://' + location.hostname + ':7681';
+  return room.route;
+}
+function displayRoute(room) {
+  if (room.route === 'FORGE_TTYD') return ':7681';
+  return room.route.replace(/^https?:\/\/[^/]+/, '') || room.route;
+}
+
+const dEl = document.getElementById('districts');
+const jumpEl = document.getElementById('jumpnav');
+
+// ── Build jump nav ──
+jumpEl.innerHTML = DISTRICTS.map(d => {
+  const n = ROOMS.filter(r => r.d === d.id).length;
+  return `<a class="jump-pill" href="#dist-${d.id}"><span class="jump-dot" style="background:${d.c}"></span>${d.name} <span style="opacity:.55">${n}</span></a>`;
+}).join('');
+
+// ── Build districts ──
+dEl.innerHTML = DISTRICTS.map(d => {
+  const rooms = ROOMS.filter(r => r.d === d.id);
+  const cards = rooms.map(r => {
+    const href = resolveRoute(r);
+    const tgt = r.ext ? ' target="_blank" rel="noopener"' : '';
+    const extLabel = r.ext ? 'Open ↗' : 'Enter →';
+    const hay = (r.name + ' ' + r.orc + ' ' + r.desc).toLowerCase();
+    return `
+      <a class="card" href="${href}"${tgt} data-hay="${hay.replace(/"/g,'&quot;')}" style="--card-c:${d.c};--card-tint:${d.tint}">
+        <div class="card-top">
+          <div class="card-icon">${r.icon}</div>
+          <div>
+            <div class="card-name">${r.name}</div>
+            <div class="card-orc">${r.orc}</div>
+          </div>
+        </div>
+        <div class="card-desc">${r.desc}</div>
+        ${r.merge ? `<div class="merge-note">${r.merge}</div>` : ''}
+        <div class="card-foot">
+          <span class="card-route">${displayRoute(r)}</span>
+          <span class="card-ext">${extLabel}</span>
+        </div>
+      </a>`;
+  }).join('');
+  return `
+    <section class="district" id="dist-${d.id}" style="--district-c:${d.c};--district-tint:${d.tint}">
+      <div class="district-head">
+        <div class="district-bar"></div>
+        <div class="district-title">${d.name}</div>
+        <div class="district-note">${d.note}</div>
+        <div class="district-count">${rooms.length}</div>
+      </div>
+      <div class="grid">${cards}</div>
+    </section>`;
+}).join('');
+
+// ── Archive section (retired rooms, collapsed) ──
+dEl.insertAdjacentHTML('beforeend', `
+  <div class="archive" id="archive">
+    <div class="archive-toggle" onclick="document.getElementById('archive').classList.toggle('open')">
+      <span class="archive-caret">▶</span> Retired rooms (${RETIRED.length}) — dead links removed from the floor
+    </div>
+    <div class="archive-body">
+      <div class="retired-grid">
+        ${RETIRED.map(r => `
+          <div class="retired-card">
+            <div class="card-name">${r.name}</div>
+            <div class="retired-reason">${r.reason}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>`);
+
+// ── Masthead + footer counts ──
+document.getElementById('masthead-sub').textContent =
+  `${ROOMS.length} rooms across ${DISTRICTS.length} districts · ${RETIRED.length} retired`;
+document.getElementById('foot').textContent =
+  `${ROOMS.length} live rooms · ${RETIRED.length} retired · 9 districts. Every route preserved from the original lobby.`;
+
+// ════════════════════════════════════════════════════════════
+//  LIVE SEARCH / FILTER
+// ════════════════════════════════════════════════════════════
+const searchInput = document.getElementById('search');
+const searchMeta  = document.getElementById('search-meta');
+const searchClear = document.getElementById('search-clear');
+const emptyEl     = document.getElementById('empty');
+
+function applyFilter() {
+  const q = searchInput.value.trim().toLowerCase();
+  searchClear.style.display = q ? 'flex' : 'none';
+  let shown = 0;
+
+  document.querySelectorAll('.card').forEach(card => {
+    const match = !q || card.dataset.hay.includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match) shown++;
+  });
+
+  // Hide districts with no visible cards (only while searching)
+  document.querySelectorAll('.district').forEach(sec => {
+    const anyVisible = sec.querySelectorAll('.card:not(.hidden)').length > 0;
+    sec.classList.toggle('hidden', q && !anyVisible);
+  });
+
+  if (q) {
+    searchMeta.textContent = shown === 1 ? '1 room matches' : `${shown} rooms match`;
+    emptyEl.classList.toggle('show', shown === 0);
+  } else {
+    searchMeta.textContent = '';
+    emptyEl.classList.remove('show');
+  }
+}
+
+searchInput.addEventListener('input', applyFilter);
+searchClear.addEventListener('click', () => { searchInput.value = ''; applyFilter(); searchInput.focus(); });
+// "/" focuses search
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
+  if (e.key === 'Escape' && document.activeElement === searchInput) { searchInput.value=''; applyFilter(); searchInput.blur(); }
+});
+
+// ════════════════════════════════════════════════════════════
+//  SCROLL REVEAL — cards fade in as they enter viewport
+// ════════════════════════════════════════════════════════════
+(function() {
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mq.matches) {
+    document.querySelectorAll('.card').forEach(function(c) { c.classList.add('revealed'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.district').forEach(function(district) {
+    var cards = district.querySelectorAll('.card');
+    cards.forEach(function(card, i) {
+      card.style.transitionDelay = (i * 100) + 'ms';
+      observer.observe(card);
+    });
+  });
+})();
+</script>
+</body>
+</html>

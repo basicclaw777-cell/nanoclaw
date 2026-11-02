@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0a">
+<title>The Cathedral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;
+  --gold:#f7b408;
+  --gold-soft:rgba(247,180,8,.12);
+  --gold-glow:rgba(247,180,8,.25);
+  --ink:#f0f0f0;
+  --ink-soft:#aaa;
+  --ink-faint:#666;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --radius:18px;
+}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+.gold-strip{
+  height:3px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold) 20%,var(--gold) 80%,transparent 100%);
+}
+
+.wrap{
+  max-width:900px;
+  margin:0 auto;
+  padding:48px 24px 40px;
+}
+
+.masthead{
+  text-align:center;
+  margin-bottom:48px;
+}
+.masthead h1{
+  font-family:'Anton',sans-serif;
+  font-size:42px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.masthead .sub{
+  font-size:13px;
+  color:var(--ink-faint);
+  font-weight:500;
+  margin-top:6px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+.door{
+  position:relative;
+  border-radius:var(--radius);
+  overflow:hidden;
+  padding:28px 26px 24px;
+  display:flex;
+  flex-direction:column;
+  cursor:pointer;
+  border:1.5px solid rgba(255,255,255,.06);
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+  text-decoration:none;
+  color:inherit;
+  min-height:190px;
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp .5s ease forwards;
+}
+.door:nth-child(1){animation-delay:.05s}
+.door:nth-child(2){animation-delay:.1s}
+.door:nth-child(3){animation-delay:.15s}
+.door:nth-child(4){animation-delay:.2s}
+.door:nth-child(5){animation-delay:.25s}
+.door:nth-child(6){animation-delay:.3s}
+.door:nth-child(7){animation-delay:.35s}
+
+@keyframes fadeUp{
+  to{opacity:1;transform:translateY(0)}
+}
+
+.door:hover{
+  transform:translateY(-4px);
+  border-color:var(--door-accent,var(--gold));
+  box-shadow:0 8px 40px rgba(0,0,0,.4),0 0 30px var(--door-glow,var(--gold-glow));
+}
+
+.door-icon{
+  font-size:38px;
+  margin-bottom:12px;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.3));
+}
+
+.door-name{
+  font-family:'Anton',sans-serif;
+  font-size:26px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--ink);
+  line-height:1.1;
+}
+
+.door-desc{
+  font-size:13px;
+  color:var(--ink-soft);
+  margin-top:6px;
+  line-height:1.4;
+}
+
+.door-meta{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-top:auto;
+  padding-top:16px;
+}
+
+.door-stat{
+  font-size:11px;
+  font-weight:600;
+  color:var(--ink-faint);
+}
+.door-stat .val{
+  color:var(--gold);
+}
+
+.door-status{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.door-status .dot{
+  width:7px;height:7px;border-radius:50%;
+}
+.door-status.live .dot{background:var(--green);box-shadow:0 0 6px var(--green)}
+.door-status.live{color:var(--green)}
+.door-status.building .dot{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.door-status.building{color:var(--amber)}
+
+/* Door 7 (Personal) spans full width on its own row */
+.door.full-width{
+  grid-column:1/-1;
+  max-width:calc(50% - 8px);
+  justify-self:center;
+}
+
+/* Per-door gradients */
+.door.br{
+  background:linear-gradient(145deg,#1a1200 0%,#1f1600 40%,#0f0d08 100%);
+  --door-accent:#f7b408;
+  --door-glow:rgba(247,180,8,.2);
+}
+.door.studio{
+  background:linear-gradient(145deg,#180d2a 0%,#1a0f30 40%,#0d0a14 100%);
+  --door-accent:#9333ea;
+  --door-glow:rgba(147,51,234,.2);
+}
+.door.money{
+  background:linear-gradient(145deg,#081a12 0%,#0a1f16 40%,#080f0c 100%);
+  --door-accent:#0e9f6e;
+  --door-glow:rgba(14,159,110,.2);
+}
+.door.bodymind{
+  background:linear-gradient(145deg,#081519 0%,#0a1a1f 40%,#080d0f 100%);
+  --door-accent:#0891b2;
+  --door-glow:rgba(8,145,178,.2);
+}
+.door.universe{
+  background:linear-gradient(145deg,#1a1408 0%,#1f180a 40%,#0f0d08 100%);
+  --door-accent:#b8860b;
+  --door-glow:rgba(184,134,11,.2);
+}
+.door.cathedral{
+  background:linear-gradient(145deg,#121416 0%,#14171a 40%,#0c0d0e 100%);
+  --door-accent:#475067;
+  --door-glow:rgba(71,80,103,.25);
+}
+.door.personal{
+  background:linear-gradient(145deg,#1a0d14 0%,#1f1018 40%,#0f0a0c 100%);
+  --door-accent:#d4506b;
+  --door-glow:rgba(212,80,107,.2);
+}
+
+.foot{
+  margin-top:40px;
+  text-align:center;
+  font-size:11px;
+  color:var(--ink-faint);
+  letter-spacing:.5px;
+}
+
+@media(max-width:640px){
+  .wrap{padding:32px 16px 32px}
+  .masthead h1{font-size:32px}
+  .masthead{margin-bottom:32px}
+  .grid{grid-template-columns:1fr;gap:12px}
+  .door{min-height:160px;padding:22px 20px 20px}
+  .door-name{font-size:22px}
+  .door.full-width{max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .door{opacity:1;transform:none;animation:none}
+}
+</style>
+</head>
+<body>
+<div class="gold-strip"></div>
+
+<div class="wrap">
+  <div class="masthead">
+    <h1>The Cathedral</h1>
+    <div class="sub">7 environments</div>
+  </div>
+
+  <div class="grid">
+
+    <a href="/env/br" class="door br">
+      <div class="door-icon">🥊</div>
+      <div class="door-name">Basic Reflex</div>
+      <div class="door-desc">Boxing gym, coaching, business</div>
+      <div class="door-meta">
+        <span class="door-stat"><span class="val">72</span> members</span>
+        <span class="door-stat"><span class="val">28</span> tools</span>
+        <span class="door-stat"><span class="val">566</span> lapsed</span>
+        <div class="door-status live"><span class="dot"></span>LIVE</div>
+      </div>
+    </a>
+
+    <a href="/env/studio" class="door studio">
+      <div class="door-icon">🎨</div>
+      <div class="door-name">Studio</div>
+      <div class="door-desc">Visual content, Logan, animation, video</div>
+      <div class="door-meta">
+        <span class="door-stat"><span class="val">23</span> tools</span>
+        <span class="door-stat"><span class="val">10</span> styles</span>
+        <span class="door-stat"><span class="val">63</span> videos</span>
+        <div class="door-status live"><span class="dot"></span>LIVE</div>
+      </div>
+    </a>
+
+    <a href="/env/money" class="door money">
+      <div class="door-icon">💰</div>
+      <div class="door-name">Money</div>
+      <div class="door-desc">Revenue, trading, property, investments</div>
+      <div class="door-meta">
+        <span class="door-stat"><span class="val">11</span> strategies</span>
+        <span class="door-stat"><span class="val">2</span> properties</span>
+        <div class="door-status live"><span class="dot"></span>LIVE</div>
+      </div>
+    </a>
+
+    <a href="/env/body-mind" class="door bodymind">
+      <div class="door-icon">🧠</div>
+      <div class="door-name">Body &amp; Mind</div>
+      <div class="door-desc">Training, health, cognition, research</div>
+      <div class="door-meta">
+        <span class="door-stat"><span class="val">27</span> relays</span>
+        <span class="door-stat"><span class="val">135K</span> corpus</span>
+        <div class="door-status building"><span class="dot"></span>BUILDING</div>
+      </div>
+    </a>
+
+    <a href="/env/universe" class="door universe">
+      <div class="door-icon">🔭</div>
+      <div class="door-name">Universe</div>
+      <div class="door-desc">Cosmology, university, knowledge</div>
+      <div class="door-meta">
+        <span class="door-stat"><span class="val">162</span> courses</span>
+        <span class="door-stat"><span class="val">1600+</span> vault files</span>
+        <div class="door-status live"><span class="dot"></span>LIVE</div>
+      </div>
+    </a>
+
+    <a href="/env/cathedral" class="door cathedral">
+      <div class="door-icon">⚙️</div>
+      <div class="door-name">Cathedral</div>
+      <div class="door-desc">Agents, infrastructure, memory, development</div>
+      <div class="door-meta">
+        <span class="door-stat"><span class="val">9</span> online</span>
+        <span class="door-stat"><span class="val">128</span> processes</span>
+        <span class="door-stat"><span class="val">4</span> LLM tiers</span>
+        <div class="door-status live"><span class="dot"></span>LIVE</div>
+      </div>
+    </a>
+
+    <a href="/env/personal" class="door personal full-width">
+      <div class="door-icon">📅</div>
+      <div class="door-name">Personal</div>
+      <div class="door-desc">Calendar, travel, reflection, people</div>
+      <div class="door-meta">
+        <span class="door-stat">Daily seed</span>
+        <span class="door-stat">I Ching</span>
+        <span class="door-stat">Travel agent</span>
+        <div class="door-status live"><span class="dot"></span>LIVE</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="foot">The Cathedral — M5 Mac Studio — 7 environments · 153 rooms</div>
+</div>
+
+</body>
+</html>
