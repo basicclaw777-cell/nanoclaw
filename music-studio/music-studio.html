@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Studio — Cathedral</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; color: #e0e0e0; font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+.accent-strip { height: 3px; background: linear-gradient(90deg, #e44dff, #9333ea, #e44dff); }
+
+nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; border-bottom: 1px solid #2a2a2a; position: sticky; top: 0; background: #0a0a0a; z-index: 100; }
+nav a { color: #888; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+nav a:hover { color: #e44dff; }
+nav .title { font-family: 'Anton', sans-serif; font-size: 20px; color: #e44dff; letter-spacing: 2px; }
+.status { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.status .dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-live { background: #22c55e; }
+.dot-off { background: #ef4444; }
+
+.hero { background: linear-gradient(135deg, rgba(147,51,234,0.15), rgba(228,77,255,0.05)); padding: 32px 24px; display: flex; align-items: center; justify-content: space-between; }
+.hero-left { display: flex; align-items: center; gap: 16px; }
+.hero-icon { font-size: 48px; }
+.hero h1 { font-family: 'Anton', sans-serif; font-size: 32px; color: white; letter-spacing: 2px; }
+.hero p { color: #999; font-size: 14px; margin-top: 4px; }
+.hero-stats { display: flex; gap: 24px; }
+.hero-stats .stat { text-align: center; }
+.hero-stats .stat-val { font-family: 'Anton', sans-serif; font-size: 28px; color: #e44dff; }
+.hero-stats .stat-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+.main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+.section-label { font-family: 'Anton', sans-serif; font-size: 14px; color: #e44dff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.section-label::before { content: ''; width: 24px; height: 2px; background: #e44dff; }
+
+.producer-box { background: #111; border: 1px solid #2a2a2a; border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+.form-group input, .form-group select, .form-group textarea {
+  background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 10px 14px;
+  color: white; font-family: 'Inter', sans-serif; font-size: 14px; outline: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #e44dff; }
+.form-group textarea { resize: vertical; min-height: 120px; font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 13px; line-height: 1.6; }
+
+.form-group select { cursor: pointer; }
+.form-group select option { background: #1a1a1a; }
+
+.prompt-input { grid-column: 1 / -1; }
+.lyrics-input { grid-column: 1 / -1; }
+
+.params-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.param-group { display: flex; flex-direction: column; gap: 4px; }
+.param-group label { font-size: 11px; color: #666; }
+.param-group input { background: #1a1a1a; border: 1px solid #333; border-radius: 6px; padding: 8px 10px; color: white; font-size: 13px; width: 100%; }
+
+.generate-row { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; }
+.btn-generate {
+  background: linear-gradient(135deg, #9333ea, #e44dff); color: white; border: none;
+  padding: 14px 32px; border-radius: 8px; font-family: 'Anton', sans-serif;
+  font-size: 18px; letter-spacing: 2px; cursor: pointer; transition: all 0.2s;
+}
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(147,51,234,0.4); }
+.btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-generate.generating { animation: pulse-glow 1.5s ease-in-out infinite; }
+@keyframes pulse-glow { 0%,100% { box-shadow: 0 0 10px rgba(147,51,234,0.3); } 50% { box-shadow: 0 0 30px rgba(228,77,255,0.6); } }
+
+.status-text { font-size: 13px; color: #666; }
+
+.player-section { background: #111; border: 1px solid #2a2a2a; border-radius: 12px; padding: 24px; margin-bottom: 32px; display: none; }
+.player-section.visible { display: block; }
+.player-section audio { width: 100%; margin: 12px 0; }
+.player-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.player-meta .track-info { font-size: 13px; color: #888; }
+.player-meta .track-title { font-size: 16px; color: white; font-weight: 600; }
+
+.btn-small { background: #1a1a1a; border: 1px solid #333; color: #888; padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+.btn-small:hover { border-color: #e44dff; color: #e44dff; }
+
+.presets-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+.preset-card {
+  background: #111; border: 1px solid #2a2a2a; border-radius: 10px; padding: 16px;
+  cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.preset-card:hover { border-color: #e44dff; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(147,51,234,0.2); }
+.preset-card .emoji { font-size: 28px; margin-bottom: 8px; }
+.preset-card .name { font-size: 13px; font-weight: 600; color: white; }
+.preset-card .desc { font-size: 11px; color: #666; margin-top: 4px; }
+
+.library-section { margin-bottom: 32px; }
+.library-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.library-card {
+  background: #111; border: 1px solid #2a2a2a; border-radius: 10px; padding: 16px;
+  cursor: pointer; transition: all 0.2s;
+}
+.library-card:hover { border-color: #e44dff; }
+.library-card .track-name { font-weight: 600; color: white; font-size: 14px; }
+.library-card .track-meta { font-size: 11px; color: #666; margin-top: 4px; }
+.library-card audio { width: 100%; margin-top: 8px; }
+.library-empty { color: #444; font-size: 14px; text-align: center; padding: 40px; border: 1px dashed #2a2a2a; border-radius: 10px; }
+
+.tips-box { background: #111; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+.tips-box h3 { font-family: 'Anton', sans-serif; font-size: 16px; color: #e44dff; margin-bottom: 12px; letter-spacing: 1px; }
+.tips-box ul { list-style: none; }
+.tips-box li { font-size: 13px; color: #888; margin-bottom: 6px; padding-left: 16px; position: relative; }
+.tips-box li::before { content: '♪'; position: absolute; left: 0; color: #e44dff; }
+
+footer { text-align: center; padding: 24px; color: #333; font-size: 12px; }
+
+@media (max-width: 768px) {
+  .form-row { grid-template-columns: 1fr; }
+  .params-row { grid-template-columns: repeat(2, 1fr); }
+  .presets-grid { grid-template-columns: repeat(2, 1fr); }
+  .library-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="accent-strip"></div>
+
+<nav>
+  <a href="/env/studio">← Studio</a>
+  <span class="title">MUSIC STUDIO</span>
+  <div class="status">
+    <span class="dot" id="engineDot"></span>
+    <span id="engineStatus">Checking...</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-icon">🎵</div>
+    <div>
+      <h1>MUSIC STUDIO</h1>
+      <p>AI music producer. Local generation on M5. Vocals + instrumentals.</p>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-val" id="trackCount">0</div>
+      <div class="stat-label">Tracks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">LOCAL</div>
+      <div class="stat-label">Engine</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">$0</div>
+      <div class="stat-label">Cost</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Quick Presets</div>
+  <div class="presets-grid">
+    <div class="preset-card" onclick="loadPreset('boxing')">
+      <div class="emoji">🥊</div>
+      <div class="name">Boxing Entrance</div>
+      <div class="desc">High energy, aggressive, fight walk-in</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('ambient')">
+      <div class="emoji">🏛️</div>
+      <div class="name">Cathedral Ambient</div>
+      <div class="desc">Deep, contemplative, spatial reverb</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('cuban')">
+      <div class="emoji">🇨🇺</div>
+      <div class="name">Cuban Rhythm</div>
+      <div class="desc">Son cubano, salsa, Havana streets</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('hiphop')">
+      <div class="emoji">🎤</div>
+      <div class="name">Hip Hop Beat</div>
+      <div class="desc">Boom bap, hard drums, vocal ready</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('lofi')">
+      <div class="emoji">☕</div>
+      <div class="name">Lo-Fi Chill</div>
+      <div class="desc">Study vibes, warm keys, tape hiss</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('cinematic')">
+      <div class="emoji">🎬</div>
+      <div class="name">Cinematic Score</div>
+      <div class="desc">Epic orchestral, Logan animation</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('drill')">
+      <div class="emoji">⚡</div>
+      <div class="name">UK Drill</div>
+      <div class="desc">Dark slides, 808s, sliding bass</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('reggaeton')">
+      <div class="emoji">🌴</div>
+      <div class="name">Reggaeton</div>
+      <div class="desc">Dembow rhythm, club energy</div>
+    </div>
+  </div>
+
+  <div class="section-label">Producer Console</div>
+  <div class="producer-box">
+    <div class="form-row">
+      <div class="form-group prompt-input">
+        <label>Style / Genre Prompt</label>
+        <input type="text" id="prompt" placeholder="e.g. dark aggressive hip hop, heavy 808 bass, boxing gym energy, minor key" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group lyrics-input">
+        <label>Lyrics (optional — leave empty for instrumental)</label>
+        <textarea id="lyrics" placeholder="[verse]
+Step in the ring, eyes locked, no fear
+Every round a lesson, every year
+Coach says move, I move like water
+Built different, nobody's daughter
+
+[chorus]
+Basic Reflex, that's the way
+Train today, fight today
+No excuses, just the work
+Every bruise is how we learn"></textarea>
+      </div>
+    </div>
+    <div class="params-row">
+      <div class="param-group">
+        <label>Duration (sec)</label>
+        <input type="number" id="duration" value="60" min="10" max="300" step="5" />
+      </div>
+      <div class="param-group">
+        <label>Steps (quality)</label>
+        <input type="number" id="steps" value="100" min="20" max="200" step="10" />
+      </div>
+      <div class="param-group">
+        <label>Guidance Scale</label>
+        <input type="number" id="guidance" value="15" min="1" max="30" step="0.5" />
+      </div>
+      <div class="param-group">
+        <label>Seed (-1 = random)</label>
+        <input type="number" id="seed" value="-1" />
+      </div>
+    </div>
+    <div class="generate-row">
+      <div class="status-text" id="genStatus">Ready — ACE-Step 1.5 on M5 Mac Studio</div>
+      <button class="btn-generate" id="generateBtn" onclick="generate()">GENERATE</button>
+    </div>
+  </div>
+
+  <div class="player-section" id="playerSection">
+    <div class="section-label">Now Playing</div>
+    <div class="player-meta">
+      <div>
+        <div class="track-title" id="trackTitle">—</div>
+        <div class="track-info" id="trackInfo">—</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-small" onclick="saveToLibrary()">Save to Library</button>
+        <button class="btn-small" onclick="regenerate()">Regenerate</button>
+      </div>
+    </div>
+    <audio controls id="audioPlayer"></audio>
+  </div>
+
+  <div class="library-section">
+    <div class="section-label">Track Library</div>
+    <div class="library-grid" id="libraryGrid">
+      <div class="library-empty">No tracks yet. Generate your first track above.</div>
+    </div>
+  </div>
+
+  <div class="tips-box">
+    <h3>Producer Tips</h3>
+    <ul>
+      <li>Use [verse], [chorus], [bridge], [outro] tags in lyrics for song structure</li>
+      <li>Leave lyrics empty for instrumental tracks</li>
+      <li>Higher steps = better quality but slower (100 is solid, 200 for finals)</li>
+      <li>Guidance scale: 10-15 for balanced, 20+ for more prompt-adherent</li>
+      <li>Seed: save the seed of tracks you like to reproduce similar results</li>
+      <li>Duration: 30s for loops/samples, 60s for short tracks, 120-180s for full songs</li>
+      <li>Combine genres: "cuban son meets UK drill" works surprisingly well</li>
+      <li>For boxing content: "aggressive", "high energy", "pump up", "walk-in anthem"</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>Music Studio — ACE-Step 1.5 — Cathedral M5 Mac Studio — 100% Local — $0 Cost</footer>
+
+<script>
+const GRADIO_URL = 'http://localhost:7865';
+const API_URL = '/api/music-studio';
+let currentTrack = null;
+let library = JSON.parse(localStorage.getItem('cathedral-music-library') || '[]');
+
+const PRESETS = {
+  boxing: {
+    prompt: 'aggressive hip hop, heavy 808 bass, dark minor key, boxing walk-in anthem, high energy, fight music, powerful drums',
+    lyrics: '[verse]\nStep in the ring, gloves tight, eyes locked\nEvery round I train, every second on the clock\nCoach says move, I move like thunder\nPull back, snap, watch them go under\n\n[chorus]\nBasic Reflex, that\'s the code\nEvery session, heavy load\nNo retreat and no surrender\nBuilt for war, born contender'
+  },
+  ambient: {
+    prompt: 'ambient electronic, deep reverb, cathedral space, contemplative, slow build, ethereal pads, sacred geometry vibes',
+    lyrics: ''
+  },
+  cuban: {
+    prompt: 'cuban son, salsa rhythm, congas, timbales, tres guitar, Havana streets, warm, rhythmic, joyful',
+    lyrics: ''
+  },
+  hiphop: {
+    prompt: 'boom bap hip hop, classic 90s drums, jazzy piano sample, vinyl crackle, head-nodding groove, raw',
+    lyrics: '[verse]\nYo, pen to paper, mind to matter\nEvery bar I write makes the doubters scatter\nFrom Hong Kong streets to the ring I master\nCoach Paul with the blueprint, building faster\n\n[chorus]\nReal talk, no cap, just facts\nWe build cathedrals, lay the tracks\nEvery brick a lesson learned\nEvery bridge a bridge we earned'
+  },
+  lofi: {
+    prompt: 'lo-fi hip hop, warm Rhodes piano, tape saturation, gentle drums, rain ambiance, study music, chill',
+    lyrics: ''
+  },
+  cinematic: {
+    prompt: 'epic cinematic orchestral, sweeping strings, powerful brass, timpani, building intensity, heroic theme, film score',
+    lyrics: ''
+  },
+  drill: {
+    prompt: 'UK drill, dark 808 slides, rapid hi-hats, minor key piano, aggressive, gritty London sound',
+    lyrics: '[verse]\nSlide through, no time to waste\nEvery combo thrown with grace\nPad work heavy, drills all day\nBasic Reflex, that\'s the way\n\n[chorus]\nWe don\'t stop, we don\'t fold\nEvery story that\'s been told\nStarts right here on this floor\nOpen up that gym door'
+  },
+  reggaeton: {
+    prompt: 'reggaeton, dembow rhythm, Latin trap, perreo beat, club energy, tropical bass, catchy hook',
+    lyrics: ''
+  }
+};
+
+function loadPreset(name) {
+  const preset = PRESETS[name];
+  document.getElementById('prompt').value = preset.prompt;
+  document.getElementById('lyrics').value = preset.lyrics;
+  document.getElementById('prompt').focus();
+}
+
+async function checkEngine() {
+  const dot = document.getElementById('engineDot');
+  const status = document.getElementById('engineStatus');
+  try {
+    const resp = await fetch(GRADIO_URL + '/info', { signal: AbortSignal.timeout(3000) });
+    if (resp.ok) {
+      dot.className = 'dot dot-live';
+      status.textContent = 'ACE-Step Online';
+      document.getElementById('generateBtn').disabled = false;
+    } else { throw new Error(); }
+  } catch {
+    dot.className = 'dot dot-off';
+    status.textContent = 'Engine Offline';
+    document.getElementById('generateBtn').disabled = true;
+    document.getElementById('genStatus').textContent = 'ACE-Step not running. Start with: source ~/acestep-venv/bin/activate && acestep --bf16 false --port 7865';
+  }
+}
+
+async function generate() {
+  const btn = document.getElementById('generateBtn');
+  const statusEl = document.getElementById('genStatus');
+  const prompt = document.getElementById('prompt').value;
+  const lyrics = document.getElementById('lyrics').value;
+  const duration = parseFloat(document.getElementById('duration').value);
+  const steps = parseInt(document.getElementById('steps').value);
+  const guidance = parseFloat(document.getElementById('guidance').value);
+  const seed = parseInt(document.getElementById('seed').value);
+
+  if (!prompt) { statusEl.textContent = 'Need a style/genre prompt'; return; }
+
+  btn.disabled = true;
+  btn.classList.add('generating');
+  btn.textContent = 'GENERATING...';
+  statusEl.textContent = `Generating ${duration}s track... (${steps} steps, this takes a moment)`;
+
+  try {
+    const resp = await fetch(API_URL + '/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, lyrics, duration, steps, guidance, seed })
+    });
+    const data = await resp.json();
+    if (data.success) {
+      currentTrack = data;
+      showPlayer(data);
+      statusEl.textContent = `Generated in ${data.elapsed}s — seed: ${data.seed}`;
+      updateTrackCount();
+    } else {
+      statusEl.textContent = `Error: ${data.error}`;
+    }
+  } catch (err) {
+    statusEl.textContent = `Connection error: ${err.message}. Is ACE-Step running on port 7865?`;
+  }
+
+  btn.disabled = false;
+  btn.classList.remove('generating');
+  btn.textContent = 'GENERATE';
+}
+
+function showPlayer(data) {
+  const section = document.getElementById('playerSection');
+  section.classList.add('visible');
+  document.getElementById('audioPlayer').src = data.url;
+  document.getElementById('trackTitle').textContent = data.title || document.getElementById('prompt').value.slice(0, 50);
+  document.getElementById('trackInfo').textContent = `${data.duration}s • seed ${data.seed} • ${data.steps} steps`;
+}
+
+function regenerate() {
+  document.getElementById('seed').value = '-1';
+  generate();
+}
+
+function saveToLibrary() {
+  if (!currentTrack) return;
+  const entry = {
+    ...currentTrack,
+    title: document.getElementById('prompt').value.slice(0, 50),
+    prompt: document.getElementById('prompt').value,
+    lyrics: document.getElementById('lyrics').value,
+    savedAt: new Date().toISOString()
+  };
+  library.unshift(entry);
+  localStorage.setItem('cathedral-music-library', JSON.stringify(library));
+  renderLibrary();
+}
+
+function renderLibrary() {
+  const grid = document.getElementById('libraryGrid');
+  if (library.length === 0) {
+    grid.innerHTML = '<div class="library-empty">No tracks yet. Generate your first track above.</div>';
+    return;
+  }
+  grid.innerHTML = library.map((t, i) => `
+    <div class="library-card">
+      <div class="track-name">${t.title || 'Untitled'}</div>
+      <div class="track-meta">${t.duration || '?'}s • seed ${t.seed || '?'} • ${new Date(t.savedAt).toLocaleDateString()}</div>
+      ${t.url ? `<audio controls src="${t.url}" preload="none"></audio>` : ''}
+    </div>
+  `).join('');
+}
+
+function updateTrackCount() {
+  document.getElementById('trackCount').textContent = library.length;
+}
+
+checkEngine();
+renderLibrary();
+updateTrackCount();
+setInterval(checkEngine, 30000);
+</script>
+</body>
+</html>

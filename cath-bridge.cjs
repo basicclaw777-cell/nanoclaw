@@ -24,6 +24,7 @@ app.use('/gym-eyes', express.static(path.join(HOME, 'basic-reflex', 'gym-eyes'))
 app.use('/property-scout', express.static(path.join(NANOCLAW, 'property-scout')));
 app.use('/harmonic-probe', express.static(path.join(NANOCLAW, 'harmonic-probe')));
 app.use('/channels', express.static(path.join(NANOCLAW, 'channels')));
+app.use('/api/music-studio', require('./music-studio/music-api.cjs'));
 
 // Image gallery — serve basic-reflex and visual-studio images
 app.use('/basic-reflex', express.static(path.join(HOME, 'basic-reflex'), { maxAge: '1h' }));
@@ -5053,6 +5054,13 @@ app.get('/chat/memory/:persona', (req, res) => {
   } catch (_) {
     res.json([]);
   }
+});
+
+// ── Music Studio ─────────────────────────────────────────────────────────────
+
+app.get('/music-studio', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'music-studio', 'music-studio.html'));
 });
 
 // ── Environments ──────────────────────────────────────────────────────────────
