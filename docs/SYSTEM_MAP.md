@@ -398,6 +398,12 @@
 - **Coach Paul (Alter Ego)** · `~/basic-reflex/gym-eyes/coach-paul.py` · CLI · AI Coach Paul with personality, coaching philosophy, drill design. Modes: --evaluate/--philosophy/--create-drill/--ask/REPL · doc: BUILD_LOG 2026-11-03
 - **Gym Eyes Lab** · `~/basic-reflex/gym-eyes/lab/gym-lab.html` · route `/gym-lab` · visual experiments dashboard: film strips, burst mode, client intel, experiment showcase · doc: BUILD_LOG 2026-11-03
 
+## Vault RAG + M5 Relay
+- **Vault Embeddings** · `~/nanoclaw/vault-rag/vault-embeddings.py` · CLI · embeds 15K+ vault .md files via nomic-embed-text → vault-vectors.db (SQLite). Incremental, skip unchanged. `--stats` / `--rebuild` · doc: BUILD_LOG 2026-11-03
+- **Vault Search** · `~/nanoclaw/vault-rag/vault-search.py` · CLI + route `/vault-search` · hybrid semantic + FTS5 search over vault. `--ask` (hermes3 RAG), `--deep-ask` (deepseek-r1:70b). API: `/api/vault-search`, `/api/vault-ask`, `/api/vault-stats` · doc: BUILD_LOG 2026-11-03
+- **M5 Relay Engine** · `~/nanoclaw/m5-relay/m5-relay.py` · CLI + route `/relay` · 5-stage multi-model pipeline: Scout→Deep→Challenge→Anti-Flinch→Synthesis. Modes: full/--scout/--deep/--council/--unflinch. `--vault` for vault grounding · doc: BUILD_LOG 2026-11-03
+- **Flinch Detector** · `~/nanoclaw/m5-relay/flinch-detector.py` · CLI · standalone AI flinch analysis (6 patterns). `--compare` mode for cross-model flinch comparison · doc: BUILD_LOG 2026-11-03
+
 ## BR Business Tools
 - **BR Pre-Class Brief** · `~/nanoclaw/br-preclass-brief.js` · [PM2 STOPPED] route `/br-brief` · pre-class briefing
 - **BR Command** · route `/br-command` · command center

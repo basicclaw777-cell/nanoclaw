@@ -1,6 +1,24 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-11-03 — Vault RAG Pipeline + M5 Relay Engine (Anti-Flinch)
+
+**What:** Two new Cathedral tools that use M5's 128GB: vault-wide semantic search over 15K+ Obsidian notes, and a multi-model forensic relay engine with anti-flinch detection. LoRA fine-tuning plan replaced with RAG pipeline (stays fresh, no training cycle needed).
+
+**Built:**
+- `vault-rag/vault-embeddings.py` — Embeds all vault .md files via nomic-embed-text → SQLite. Incremental (skip unchanged), ~15K notes.
+- `vault-rag/vault-search.py` — Hybrid semantic + FTS5 search. Modes: `--semantic`, `--keyword`, default hybrid (0.6/0.4 weighting). `--ask` feeds top 20 results to hermes3 for RAG answer. `--deep-ask` uses deepseek-r1:70b.
+- `vault-rag/vault-rag.html` — Web door. Search + Ask mode + model selector. Dark theme, folder color coding.
+- `m5-relay/m5-relay.py` — 5-stage multi-model pipeline: Scout (hermes3) → Deep Reason (deepseek-r1:70b) → Challenge (qwen3:32b) → Anti-Flinch (conditional, deepseek) → Synthesis. Modes: full, `--scout`, `--deep`, `--council` (all 3 independent), `--unflinch`. `--vault` enables vault search grounding.
+- `m5-relay/flinch-detector.py` — Standalone flinch analysis. Detects 6 patterns: consensus_retreat, category_dismissal, hedge_inflation, evidence_blindness, safety_retreat, false_balance. Model comparison mode.
+- `m5-relay/relay.html` — Live relay dashboard with stage progress panels.
+
+**Anti-Flinch Architecture:** qwen3:32b watches for trained aversion in deepseek-r1:70b reasoning. If flinch detected (score > 0.15), deepseek re-runs with explicit structural-engagement instructions. Flinch score visible in output.
+
+**Why RAG not LoRA:** Context windows got massive. RAG stays fresh (vault changes daily). Fine-tuning bakes static knowledge into weights. Same outcome, no training cycle. 15K notes searchable day one.
+
+**Doors:** `/vault-search` + `/relay` on cath-bridge :8080
+
 ## 2026-11-03 — Coaching Brain + Coach Paul Alter Ego + Gym Eyes Lab
 
 **What:** Two-tier coaching intelligence: Tier A = data brain (RAG over 238 sessions), Tier B = Coach Paul personality (opinions, philosophy, drill design). Plus a visual lab for frame analysis experiments.
