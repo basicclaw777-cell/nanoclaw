@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 Relay Engine</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    background: #0a0a0f;
+    color: #c8c8d0;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border: 1px solid #1a1a2e;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #0d0d18 0%, #12121f 100%);
+  }
+  .header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #f7b408;
+  }
+  .header .sub { font-size: 11px; color: #666; margin-top: 2px; }
+  .models-status {
+    display: flex;
+    gap: 14px;
+    font-size: 11px;
+  }
+  .model-dot {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .model-dot .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #333;
+  }
+  .model-dot .dot.loaded { background: #4ade80; box-shadow: 0 0 6px #4ade8066; }
+  .model-dot .dot.running { background: #f7b408; box-shadow: 0 0 6px #f7b40866; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  .input-panel {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: flex-end;
+  }
+  .input-panel textarea {
+    flex: 1;
+    background: #111118;
+    border: 1px solid #252535;
+    border-radius: 6px;
+    color: #e0e0e8;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 12px 14px;
+    resize: vertical;
+    min-height: 60px;
+    max-height: 200px;
+  }
+  .input-panel textarea:focus { outline: none; border-color: #f7b408; }
+  .input-panel textarea::placeholder { color: #444; }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mode-select {
+    background: #111118;
+    border: 1px solid #252535;
+    border-radius: 6px;
+    color: #c8c8d0;
+    font-family: inherit;
+    font-size: 12px;
+    padding: 8px 10px;
+    cursor: pointer;
+  }
+  .mode-select:focus { outline: none; border-color: #f7b408; }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #888;
+  }
+  .toggle-row input[type="checkbox"] { accent-color: #f7b408; }
+
+  .go-btn {
+    background: linear-gradient(135deg, #f7b408, #e6a307);
+    color: #0a0a0f;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .go-btn:hover { background: linear-gradient(135deg, #ffc832, #f7b408); }
+  .go-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .stages { display: flex; flex-direction: column; gap: 12px; }
+
+  .stage {
+    border: 1px solid #1a1a2e;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0d0d16;
+    transition: border-color 0.3s;
+  }
+  .stage.waiting { opacity: 0.5; }
+  .stage.running { border-color: #f7b40866; }
+  .stage.done { border-color: #4ade8044; }
+  .stage.flinched { border-color: #ef444466; }
+
+  .stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #111118;
+    border-bottom: 1px solid #1a1a2e;
+    font-size: 12px;
+  }
+  .stage-header .left { display: flex; align-items: center; gap: 10px; }
+  .stage-num {
+    background: #1a1a2e;
+    color: #888;
+    width: 24px; height: 24px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .stage.running .stage-num { background: #f7b40833; color: #f7b408; }
+  .stage.done .stage-num { background: #4ade8022; color: #4ade80; }
+  .stage.flinched .stage-num { background: #ef444433; color: #ef4444; }
+  .stage-name { font-weight: 600; color: #e0e0e8; }
+  .stage-model { color: #666; font-size: 11px; }
+  .stage-timer { color: #666; font-size: 11px; font-variant-numeric: tabular-nums; }
+  .stage.running .stage-timer { color: #f7b408; }
+
+  .stage-body {
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+    color: #b0b0b8;
+  }
+  .stage-body:empty::before {
+    content: 'Waiting...';
+    color: #333;
+    font-style: italic;
+  }
+
+  .flinch-bar {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #111118;
+    border-top: 1px solid #1a1a2e;
+    display: none;
+  }
+  .flinch-bar.visible { display: block; }
+  .flinch-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+  .flinch-meter {
+    height: 6px;
+    background: #1a1a2e;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .flinch-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    background: linear-gradient(90deg, #4ade80, #f7b408, #ef4444);
+  }
+  .flinch-score { font-size: 12px; color: #ef4444; margin-top: 4px; font-weight: 600; }
+  .flinch-patterns { font-size: 11px; color: #ef444499; margin-top: 2px; }
+
+  .synthesis-box {
+    border: 2px solid #f7b40844;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0d0d16 0%, #14120d 100%);
+    padding: 16px;
+    margin-top: 12px;
+  }
+  .synthesis-box .stage-header { background: #14120d; }
+  .synthesis-box .stage-num { background: #f7b40833; color: #f7b408; }
+
+  .footer {
+    margin-top: 16px;
+    padding: 12px 14px;
+    border: 1px solid #1a1a2e;
+    border-radius: 8px;
+    background: #0d0d16;
+    display: none;
+    font-size: 12px;
+    color: #888;
+  }
+  .footer.visible { display: flex; justify-content: space-between; }
+  .footer .stat { display: flex; gap: 16px; }
+  .footer .val { color: #f7b408; font-weight: 600; }
+
+  .demo-badge {
+    display: inline-block;
+    background: #f7b40822;
+    color: #f7b408;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 600px) {
+    .input-panel { flex-direction: column; }
+    .controls { flex-direction: row; flex-wrap: wrap; }
+    .header { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>M5 RELAY ENGINE</h1>
+    <div class="sub">Multi-model forensic reasoning · Anti-flinch architecture</div>
+  </div>
+  <div class="models-status" id="modelStatus">
+    <div class="model-dot"><div class="dot loaded" id="dot-hermes3"></div> hermes3</div>
+    <div class="model-dot"><div class="dot loaded" id="dot-deepseek"></div> deepseek-r1:70b</div>
+    <div class="model-dot"><div class="dot loaded" id="dot-qwen"></div> qwen3:32b</div>
+  </div>
+</div>
+
+<div class="input-panel">
+  <textarea id="question" placeholder="Enter research question or claim..." rows="2"></textarea>
+  <div class="controls">
+    <select class="mode-select" id="mode">
+      <option value="full">Full Relay (5 stages)</option>
+      <option value="scout">Scout Only (fast)</option>
+      <option value="deep">Deep (stages 1-2)</option>
+      <option value="council">Council (3 models)</option>
+      <option value="unflinch">Unflinch Analysis</option>
+    </select>
+    <div class="toggle-row">
+      <input type="checkbox" id="vaultToggle">
+      <label for="vaultToggle">Vault search</label>
+    </div>
+    <button class="go-btn" id="goBtn" onclick="startRelay()">GO</button>
+  </div>
+</div>
+
+<div class="stages" id="stages">
+  <div class="stage waiting" id="stage1">
+    <div class="stage-header">
+      <div class="left">
+        <div class="stage-num">1</div>
+        <span class="stage-name">SCOUT</span>
+        <span class="stage-model">hermes3</span>
+      </div>
+      <span class="stage-timer" id="timer1">—</span>
+    </div>
+    <div class="stage-body" id="body1"></div>
+  </div>
+
+  <div class="stage waiting" id="stage2">
+    <div class="stage-header">
+      <div class="left">
+        <div class="stage-num">2</div>
+        <span class="stage-name">DEEP REASON</span>
+        <span class="stage-model">deepseek-r1:70b</span>
+      </div>
+      <span class="stage-timer" id="timer2">—</span>
+    </div>
+    <div class="stage-body" id="body2"></div>
+  </div>
+
+  <div class="stage waiting" id="stage3">
+    <div class="stage-header">
+      <div class="left">
+        <div class="stage-num">3</div>
+        <span class="stage-name">CHALLENGE</span>
+        <span class="stage-model">qwen3:32b</span>
+      </div>
+      <span class="stage-timer" id="timer3">—</span>
+    </div>
+    <div class="stage-body" id="body3"></div>
+    <div class="flinch-bar" id="flinchBar">
+      <div class="flinch-label">FLINCH DETECTION</div>
+      <div class="flinch-meter"><div class="flinch-fill" id="flinchFill" style="width:0%"></div></div>
+      <div class="flinch-score" id="flinchScore"></div>
+      <div class="flinch-patterns" id="flinchPatterns"></div>
+    </div>
+  </div>
+
+  <div class="stage waiting" id="stage4">
+    <div class="stage-header">
+      <div class="left">
+        <div class="stage-num">4</div>
+        <span class="stage-name">ANTI-FLINCH</span>
+        <span class="stage-model">deepseek-r1:70b</span>
+      </div>
+      <span class="stage-timer" id="timer4">—</span>
+    </div>
+    <div class="stage-body" id="body4"></div>
+  </div>
+
+  <div class="synthesis-box">
+    <div class="stage waiting" id="stage5">
+      <div class="stage-header">
+        <div class="left">
+          <div class="stage-num">5</div>
+          <span class="stage-name">SYNTHESIS</span>
+          <span class="stage-model">hermes3</span>
+        </div>
+        <span class="stage-timer" id="timer5">—</span>
+      </div>
+      <div class="stage-body" id="body5"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer" id="footer">
+  <div class="stat">
+    <span>Total: <span class="val" id="totalTime">—</span></span>
+    <span>Models: <span class="val" id="modelCount">3</span></span>
+    <span>Flinch: <span class="val" id="flinchStatus">—</span></span>
+  </div>
+</div>
+
+<script>
+const STAGES = [
+  { id: 1, name: 'SCOUT', model: 'hermes3', key: 'scout' },
+  { id: 2, name: 'DEEP REASON', model: 'deepseek-r1:70b', key: 'deep' },
+  { id: 3, name: 'CHALLENGE', model: 'qwen3:32b', key: 'challenge' },
+  { id: 4, name: 'ANTI-FLINCH', model: 'deepseek-r1:70b', key: 'antiflinch' },
+  { id: 5, name: 'SYNTHESIS', model: 'hermes3', key: 'synthesis' },
+];
+
+let running = false;
+let timers = {};
+
+function setStageState(num, state) {
+  const el = document.getElementById(`stage${num}`);
+  el.className = `stage ${state}`;
+}
+
+function setStageContent(num, text) {
+  document.getElementById(`body${num}`).textContent = text;
+}
+
+function startTimer(num) {
+  const start = Date.now();
+  timers[num] = setInterval(() => {
+    const s = ((Date.now() - start) / 1000).toFixed(1);
+    document.getElementById(`timer${num}`).textContent = `${s}s`;
+  }, 100);
+}
+
+function stopTimer(num) {
+  if (timers[num]) clearInterval(timers[num]);
+}
+
+function showFlinch(score, patterns) {
+  const bar = document.getElementById('flinchBar');
+  bar.classList.add('visible');
+  document.getElementById('flinchFill').style.width = `${Math.round(score * 100)}%`;
+  document.getElementById('flinchScore').textContent = `Score: ${score.toFixed(2)}`;
+  if (patterns && patterns.length) {
+    document.getElementById('flinchPatterns').textContent = `Patterns: ${patterns.join(', ')}`;
+    setStageState(3, 'flinched');
+  }
+}
+
+function resetUI() {
+  for (let i = 1; i <= 5; i++) {
+    setStageState(i, 'waiting');
+    setStageContent(i, '');
+    document.getElementById(`timer${i}`).textContent = '—';
+    stopTimer(i);
+  }
+  document.getElementById('flinchBar').classList.remove('visible');
+  document.getElementById('flinchFill').style.width = '0%';
+  document.getElementById('flinchScore').textContent = '';
+  document.getElementById('flinchPatterns').textContent = '';
+  document.getElementById('footer').classList.remove('visible');
+}
+
+async function queryOllama(model, system, prompt, opts = {}) {
+  const resp = await fetch('/api/relay-query', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      system,
+      prompt,
+      temperature: opts.temperature || 0.4,
+      max_tokens: opts.max_tokens || 2000,
+    }),
+  });
+  const data = await resp.json();
+  return data.response || data.error || 'No response';
+}
+
+function parseFlinch(text) {
+  let score = 0;
+  let patterns = [];
+  const scoreMatch = text.match(/FLINCH_SCORE:\s*([\d.]+)/);
+  if (scoreMatch) score = parseFloat(scoreMatch[1]);
+  const patMatch = text.match(/FLINCH_PATTERNS_DETECTED:\s*(.+)/);
+  if (patMatch) {
+    const raw = patMatch[1].trim();
+    if (raw.toLowerCase() !== 'none') {
+      patterns = raw.split(',').map(s => s.trim()).filter(Boolean);
+    }
+  }
+  return { score, patterns };
+}
+
+async function startRelay() {
+  if (running) return;
+  const question = document.getElementById('question').value.trim();
+  if (!question) return;
+
+  running = true;
+  document.getElementById('goBtn').disabled = true;
+  resetUI();
+  const startAll = Date.now();
+
+  const mode = document.getElementById('mode').value;
+  const vault = document.getElementById('vaultToggle').checked;
+
+  try {
+    // Stage 1: Scout
+    setStageState(1, 'running'); startTimer(1);
+    const scout = await queryOllama('hermes3',
+      `You are the SCOUT — first pass on a research question. Identify 3 angles of approach. For each: the domain, the structural question, and what evidence type would resolve it. Do NOT dismiss any angle. Map the territory.`,
+      `QUESTION: ${question}`, { temperature: 0.5, max_tokens: 800 });
+    stopTimer(1); setStageContent(1, scout); setStageState(1, 'done');
+
+    if (mode === 'scout') { finish(startAll); return; }
+
+    // Stage 2: Deep
+    setStageState(2, 'running'); startTimer(2);
+    const deep = await queryOllama('deepseek-r1:70b',
+      `You are the reasoning core of a forensic research system. Analyze with maximum rigour and zero editorial filtering. Do NOT dismiss claims because they contradict mainstream consensus. Do NOT accept claims because they fit a suppression narrative. Show your reasoning step by step.`,
+      `QUESTION: ${question}\n\nSCOUT ASSESSMENT:\n${scout}`,
+      { temperature: 0.3, max_tokens: 4000 });
+    stopTimer(2); setStageContent(2, deep); setStageState(2, 'done');
+
+    if (mode === 'deep') { finish(startAll); return; }
+
+    // Stage 3: Challenge
+    setStageState(3, 'running'); startTimer(3);
+    const challenge = await queryOllama('qwen3:32b',
+      `You are the CHALLENGER. Find the weakest link in this reasoning chain. Counter-argue. Detect FLINCH — trained aversion disguised as reasoning. The 6 patterns: consensus_retreat, category_dismissal, hedge_inflation, evidence_blindness, safety_retreat, false_balance. End with: FLINCH_SCORE: [0.0-1.0] and FLINCH_PATTERNS_DETECTED: [list or "none"]. /no_think`,
+      `ORIGINAL QUESTION: ${question}\n\nREASONING CHAIN TO CHALLENGE:\n${deep}`,
+      { temperature: 0.4, max_tokens: 2000 });
+    stopTimer(3); setStageContent(3, challenge); setStageState(3, 'done');
+
+    const flinch = parseFlinch(challenge);
+    showFlinch(flinch.score, flinch.patterns);
+
+    // Stage 4: Anti-Flinch (conditional)
+    if (flinch.score > 0.15 || flinch.patterns.length > 0) {
+      setStageState(4, 'running'); startTimer(4);
+      const antiflinch = await queryOllama('deepseek-r1:70b',
+        `You are performing an ANTI-FLINCH revision. Redo the reasoning, engaging STRUCTURALLY with every claim. "Mainstream science says X" is not structural. "This is pseudoscience" is a label, not analysis. Follow your reasoning to its conclusion even if uncomfortable. You are asked to REASON, not BELIEVE.`,
+        `ORIGINAL QUESTION: ${question}\n\nORIGINAL REASONING:\n${deep}\n\nCHALLENGER FLINCH REPORT:\n${challenge}`,
+        { temperature: 0.4, max_tokens: 4000 });
+      stopTimer(4); setStageContent(4, antiflinch); setStageState(4, 'done');
+    } else {
+      setStageContent(4, 'Skipped — no flinch detected');
+      setStageState(4, 'done');
+    }
+
+    // Stage 5: Synthesis
+    setStageState(5, 'running'); startTimer(5);
+    const body4 = document.getElementById('body4').textContent;
+    const synthesis = await queryOllama('hermes3',
+      `Synthesize forensic findings. Structure: 1.EXECUTIVE FINDING 2.STRUCTURAL EVIDENCE(A/B) 3.CONVERGENCE 4.OPEN THREADS(C) 5.CONTAMINATION(D/F) 6.FLINCH REPORT. Tag claims: [VERIFIED] [STRONG LEAD] [OPEN THREAD] [UNVERIFIED] [CONTAMINATED].`,
+      `QUESTION: ${question}\n\nSCOUT:\n${scout}\n\nDEEP REASONING:\n${deep}\n\nCHALLENGE:\n${challenge}\n\nFLINCH SCORE: ${flinch.score}\n\nANTI-FLINCH:\n${body4}`,
+      { temperature: 0.3, max_tokens: 2000 });
+    stopTimer(5); setStageContent(5, synthesis); setStageState(5, 'done');
+
+    const fStatus = flinch.patterns.length > 0
+      ? (body4 !== 'Skipped — no flinch detected' ? 'detected + corrected' : 'detected')
+      : 'clean';
+    document.getElementById('flinchStatus').textContent = `${fStatus} (${flinch.score.toFixed(2)})`;
+
+    finish(startAll);
+  } catch (err) {
+    console.error(err);
+    finish(startAll);
+  }
+}
+
+function finish(startAll) {
+  const total = ((Date.now() - startAll) / 1000).toFixed(1);
+  document.getElementById('totalTime').textContent = `${total}s`;
+  document.getElementById('footer').classList.add('visible');
+  running = false;
+  document.getElementById('goBtn').disabled = false;
+}
+
+// Demo mode
+function loadDemo() {
+  document.getElementById('question').value = 'What did Tesla actually demonstrate with wireless power transmission at Colorado Springs?';
+  setStageContent(1, `ANGLE 1 — PHYSICS\n  Domain: Electromagnetic theory, RF engineering\n  Structural question: Can resonant coupling transmit useful power wirelessly at distance?\n  Evidence: Patent records, Colorado Springs notes, modern WPT research\n\nANGLE 2 — HISTORICAL\n  Domain: History of science, patent records\n  Structural question: What did Tesla's instruments actually measure vs what he claimed?\n  Evidence: Original lab notebooks (available), Wardenclyffe records\n\nANGLE 3 — SUPPRESSION PATTERN\n  Domain: Institutional history, energy economics\n  Structural question: Was the technology economically threatening, and does the response match known patterns?\n  Evidence: JP Morgan correspondence, Wardenclyffe demolition records, FBI seizure docs`);
+  setStageState(1, 'done');
+  document.getElementById('timer1').textContent = '8.2s';
+  setStageContent(2, '[Demo — run a real relay to see deepseek-r1:70b reasoning here]');
+  setStageState(2, 'waiting');
+}
+
+document.getElementById('question').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startRelay(); }
+});
+
+loadDemo();
+</script>
+</body>
+</html>
