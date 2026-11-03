@@ -1,6 +1,38 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-11-03 — Cathedral Nervous System Dashboard + Vision Intelligence Layer
+
+**What:** Wired the Cathedral's sensory nervous system: vision (LLaVA), audio (Whisper), motion (YOLO pose), all visible through a live dashboard. Added auto-tagging, prompt engine, and 360° search (combined audio + visual).
+
+**Built:**
+- `nervous-system-dashboard.html` — Live status of all sensory/processing/memory/output layers. 360° search integrated. Auto-refreshes 15s. Route: `/nervous-system`
+- `gym-eyes/frame-analyzer.py` — LLaVA 13B vision model analyzes video frames locally. Three modes: thumbnails (1 per video), timeline (frames every Ns), describe-photo (any image → generation prompt). Stores in transcripts.db with FTS5 visual search.
+- `gym-eyes/auto-tagger.py` — Uses vision descriptions + hermes3 text reasoning to auto-classify videos. 156 videos auto-tagged from vision descriptions alone. Categories: padwork/sparring/one-on-one/group-class/atmosphere/conditioning/technique-demo.
+- `frame-analyzer.py --mode generate` — Prompt engine: describes photos for image generation (composition, lighting, pose, atmosphere). Output suitable for img2img/animation reference.
+- `frame-analyzer.py --mode describe-photo --image <path>` — One-shot on any photo, direct stdout.
+- `transcription-api.cjs` — Added `/api/transcription/360-search` (combined audio+visual), `/api/transcription/visual-search`, `/api/transcription/visual-stats`
+- `gym-eyes/montage-builder.py` — Updated to read tags from DB (auto-tagged), hero montage now pulls from 156 videos (was 29)
+
+**Models pulled:** llava:13b (8GB) — runs on M5 128GB alongside hermes3, whisper, etc.
+
+**Stats:** 255 frames being analyzed (vision), 238 transcribed (audio), 185 tagged (29 manual + 156 auto), 4 montages built with watermark
+
+**Door:** `/nervous-system` on cath-bridge :8080
+
+## 2026-11-03 — Pose Overlay v2 + Montage Builder
+
+**What:** Rebuilt gym-eyes pose tracking with neon glow, person tracking (BoT-SORT), impact detection. Built montage builder for website hero videos.
+
+**Built:**
+- `gym-eyes/pose-overlay.py` v2 — PoseOverlayV2: neon glow skeleton (double Gaussian blur on black layer, additive blend), BoT-SORT person tracking (unique color per fighter), impact detection (wrist velocity > 25px/frame → radial burst + screen flash), 3 styles (social/analysis/minimal), H.264 output
+- `gym-eyes/montage-builder.py` — Auto-cuts category montages from tagged videos. Types: hero/pt/group/sparring/custom. Mixes normal + tracked clips at 30/70 ratio. PNG watermark overlay (drawtext unavailable in this ffmpeg). Scales to 1080p.
+- `gym-eyes/watermark.png` + `watermark-gold.png` — Transparent PNG BR branding
+
+**Generated:** 6 tracked clips (Francois, Glenn, LY/Calvin, Alen, group class) + 4 montages (hero 60s, PT 45s, group 45s, sparring 45s)
+
+**Door:** clips in `gym-eyes/tracked/`, montages in `gym-eyes/montages/`
+
 ## 2026-11-03 — Transcription System (Whisper Large-v3-Turbo Bulk Pipeline)
 
 **What:** Built full-stack transcription system for 255 iPhone Archive videos (30.9 hours). Whisper large-v3-turbo on M5, zero API cost. Tagging gallery for Paul to classify videos by person/type.

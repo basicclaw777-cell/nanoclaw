@@ -384,6 +384,17 @@
 - **Transcript DB Builder** · `~/nanoclaw/transcription/build-transcript-db.cjs` · CLI · SQLite + FTS5 full-text search on all segments · doc: BUILD_LOG 2026-11-03
 - **Transcript DB** · `~/nanoclaw/transcription/transcripts.db` · SQLite · videos table (metadata+tags) + segments table (timestamped text) + FTS5 index
 
+## Cathedral Nervous System
+- **Nervous System Dashboard** · `~/nanoclaw/nervous-system-dashboard.html` · route `/nervous-system` · live status of all sensory/processing/memory/output layers, 360° search · doc: BUILD_LOG 2026-11-03
+- **Neural Bus** · `~/nanoclaw/neural-bus.cjs` · [PM2 STOPPED] · WebSocket event stream port 8079, route-to-node mapping · doc: nervous-system.md
+- **Neural Map** · `~/nanoclaw/compound/neural-map.html` · route `/neural-map` · canvas visualization of system connections
+
+## Vision Intelligence (Gym Eyes)
+- **Frame Analyzer** · `~/basic-reflex/gym-eyes/frame-analyzer.py` · CLI · LLaVA 13B vision model, modes: thumbnails/timeline/generate/describe-photo/search · doc: BUILD_LOG 2026-11-03
+- **Auto-Tagger** · `~/basic-reflex/gym-eyes/auto-tagger.py` · CLI · vision descriptions + hermes3 → auto-classify videos · doc: BUILD_LOG 2026-11-03
+- **Pose Overlay v2** · `~/basic-reflex/gym-eyes/pose-overlay.py` · CLI · YOLO 11 pose + BoT-SORT, neon glow, impact detection, 3 styles · doc: BUILD_LOG 2026-11-03
+- **Montage Builder** · `~/basic-reflex/gym-eyes/montage-builder.py` · CLI · auto-cut category montages, PNG watermark overlay, reads DB tags · doc: BUILD_LOG 2026-11-03
+
 ## BR Business Tools
 - **BR Pre-Class Brief** · `~/nanoclaw/br-preclass-brief.js` · [PM2 STOPPED] route `/br-brief` · pre-class briefing
 - **BR Command** · route `/br-command` · command center
