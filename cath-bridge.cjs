@@ -5078,6 +5078,15 @@ app.get('/nervous-system', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'nervous-system-dashboard.html'));
 });
 
+// ── Gym Eyes Lab ─────────────────────────────────────────────────────────────
+
+const GYM_EYES_LAB = path.join(__dirname, '..', 'basic-reflex', 'gym-eyes', 'lab');
+app.use('/gym-lab', express.static(GYM_EYES_LAB, { maxAge: 0 }));
+app.get('/gym-lab', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(GYM_EYES_LAB, 'gym-lab.html'));
+});
+
 // ── Environments ──────────────────────────────────────────────────────────────
 
 app.get('/env/test', (req, res) => {
