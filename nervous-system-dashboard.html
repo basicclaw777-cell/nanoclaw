@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cathedral Nervous System</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0f; color: #c8c8d4; font-family: 'SF Mono', 'Fira Code', monospace; min-height: 100vh; }
+
+  .header {
+    padding: 20px 24px 12px;
+    border-bottom: 1px solid #1a1a2e;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .header h1 { font-size: 18px; color: #a78bfa; letter-spacing: 2px; }
+  .header .pulse { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; animation: pulse 2s ease infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; padding: 16px; }
+
+  .card {
+    background: #111118; border: 1px solid #1a1a2e; border-radius: 8px;
+    padding: 16px; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .card.sensory::before { background: linear-gradient(90deg, #a78bfa, #7c3aed); }
+  .card.processing::before { background: linear-gradient(90deg, #60a5fa, #2563eb); }
+  .card.memory::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+  .card.output::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+  .card.motor::before { background: linear-gradient(90deg, #f43f5e, #e11d48); }
+
+  .card-title {
+    font-size: 13px; font-weight: bold; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .sensory .card-title { color: #a78bfa; }
+  .processing .card-title { color: #60a5fa; }
+  .memory .card-title { color: #f59e0b; }
+  .output .card-title { color: #22c55e; }
+  .motor .card-title { color: #f43f5e; }
+
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .status-dot.online { background: #22c55e; }
+  .status-dot.offline { background: #6b7280; }
+  .status-dot.running { background: #f59e0b; animation: pulse 1s ease infinite; }
+  .status-dot.error { background: #ef4444; }
+
+  .stat-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 11px; border-bottom: 1px solid #1a1a2e; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: #6b7280; }
+  .stat-value { color: #e2e8f0; }
+  .stat-value.highlight { color: #a78bfa; font-weight: bold; }
+  .stat-value.gold { color: #f7b408; }
+  .stat-value.green { color: #22c55e; }
+
+  .pipe {
+    margin: 6px 0; padding: 6px 8px; background: #0d0d14; border-radius: 4px;
+    font-size: 11px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .pipe-name { color: #9ca3af; }
+  .pipe-status { font-size: 10px; }
+
+  .progress-bar {
+    height: 4px; background: #1a1a2e; border-radius: 2px; margin-top: 6px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  .progress-fill.purple { background: linear-gradient(90deg, #a78bfa, #7c3aed); }
+  .progress-fill.blue { background: linear-gradient(90deg, #60a5fa, #2563eb); }
+  .progress-fill.gold { background: linear-gradient(90deg, #f59e0b, #f7b408); }
+  .progress-fill.green { background: linear-gradient(90deg, #22c55e, #16a34a); }
+
+  .search-section { padding: 16px; border-top: 1px solid #1a1a2e; }
+  .search-box {
+    width: 100%; padding: 10px 14px; background: #111118; border: 1px solid #2a2a3a;
+    border-radius: 6px; color: #e2e8f0; font-family: inherit; font-size: 13px;
+  }
+  .search-box:focus { outline: none; border-color: #a78bfa; }
+  .search-results { margin-top: 12px; max-height: 400px; overflow-y: auto; }
+  .result-item { padding: 8px; margin: 4px 0; background: #0d0d14; border-radius: 4px; font-size: 11px; }
+  .result-type { font-size: 10px; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-right: 6px; }
+  .result-type.audio { background: #1e3a5f; color: #60a5fa; }
+  .result-type.visual { background: #3b1f5e; color: #a78bfa; }
+  .result-text { color: #9ca3af; margin-top: 4px; }
+  .result-file { color: #6b7280; }
+
+  .footer { padding: 12px 24px; border-top: 1px solid #1a1a2e; font-size: 10px; color: #4b5563; display: flex; justify-content: space-between; }
+
+  .section-label { font-size: 10px; color: #4b5563; text-transform: uppercase; letter-spacing: 2px; padding: 16px 16px 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>CATHEDRAL NERVOUS SYSTEM</h1>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-size:10px;color:#6b7280;">LIVE</span>
+    <div class="pulse"></div>
+  </div>
+</div>
+
+<!-- SENSORY LAYER -->
+<div class="section-label">Sensory — Input Channels</div>
+<div class="grid">
+
+  <div class="card sensory">
+    <div class="card-title">
+      <span class="status-dot" id="vision-dot"></span>
+      VISION (Gym Eyes)
+    </div>
+    <div class="stat-row"><span class="stat-label">Model</span><span class="stat-value">LLaVA 13B</span></div>
+    <div class="stat-row"><span class="stat-label">Frames Analyzed</span><span class="stat-value highlight" id="vision-count">—</span></div>
+    <div class="stat-row"><span class="stat-label">Videos Covered</span><span class="stat-value" id="vision-videos">—</span></div>
+    <div class="progress-bar"><div class="progress-fill purple" id="vision-progress" style="width:0%"></div></div>
+    <div class="pipe"><span class="pipe-name">frame-analyzer.py → transcripts.db</span><span class="pipe-status" id="vision-pipe">—</span></div>
+  </div>
+
+  <div class="card sensory">
+    <div class="card-title">
+      <span class="status-dot" id="audio-dot"></span>
+      AUDIO (Whisper)
+    </div>
+    <div class="stat-row"><span class="stat-label">Model</span><span class="stat-value">large-v3-turbo</span></div>
+    <div class="stat-row"><span class="stat-label">Videos Transcribed</span><span class="stat-value highlight" id="audio-count">—</span></div>
+    <div class="stat-row"><span class="stat-label">Segments</span><span class="stat-value" id="audio-segments">—</span></div>
+    <div class="stat-row"><span class="stat-label">Total Text</span><span class="stat-value" id="audio-chars">—</span></div>
+    <div class="progress-bar"><div class="progress-fill purple" id="audio-progress" style="width:0%"></div></div>
+    <div class="pipe"><span class="pipe-name">whisper-cli → transcripts/</span><span class="pipe-status" id="audio-pipe">—</span></div>
+  </div>
+
+  <div class="card sensory">
+    <div class="card-title">
+      <span class="status-dot" id="motion-dot"></span>
+      MOTION (Pose Tracking)
+    </div>
+    <div class="stat-row"><span class="stat-label">Model</span><span class="stat-value">YOLO 11 Pose + BoT-SORT</span></div>
+    <div class="stat-row"><span class="stat-label">Tracked Clips</span><span class="stat-value highlight" id="tracked-count">—</span></div>
+    <div class="stat-row"><span class="stat-label">Styles</span><span class="stat-value">Social / Analysis / Minimal</span></div>
+    <div class="pipe"><span class="pipe-name">pose-overlay.py → tracked/</span><span class="pipe-status">ready</span></div>
+  </div>
+
+</div>
+
+<!-- PROCESSING LAYER -->
+<div class="section-label">Processing — Intelligence</div>
+<div class="grid">
+
+  <div class="card processing">
+    <div class="card-title">
+      <span class="status-dot" id="ollama-dot"></span>
+      LOCAL LLMs (Ollama)
+    </div>
+    <div id="ollama-models"></div>
+    <div class="stat-row"><span class="stat-label">Port</span><span class="stat-value">11434</span></div>
+  </div>
+
+  <div class="card processing">
+    <div class="card-title">
+      <span class="status-dot online"></span>
+      SEARCH (FTS5)
+    </div>
+    <div class="stat-row"><span class="stat-label">Audio Index</span><span class="stat-value" id="fts-audio">—</span></div>
+    <div class="stat-row"><span class="stat-label">Visual Index</span><span class="stat-value" id="fts-visual">—</span></div>
+    <div class="stat-row"><span class="stat-label">360° Search</span><span class="stat-value green">LIVE</span></div>
+    <div class="pipe"><span class="pipe-name">transcripts.db → /api/transcription/360-search</span></div>
+  </div>
+
+  <div class="card processing">
+    <div class="card-title">
+      <span class="status-dot" id="pm2-dot"></span>
+      PROCESSES (PM2)
+    </div>
+    <div id="pm2-summary"></div>
+  </div>
+
+</div>
+
+<!-- MEMORY LAYER -->
+<div class="section-label">Memory — Knowledge Stores</div>
+<div class="grid">
+
+  <div class="card memory">
+    <div class="card-title">
+      <span class="status-dot online"></span>
+      VAULT (Obsidian)
+    </div>
+    <div class="stat-row"><span class="stat-label">Path</span><span class="stat-value">~/cathedral-vault/</span></div>
+    <div class="stat-row"><span class="stat-label">Domains</span><span class="stat-value" id="vault-domains">—</span></div>
+  </div>
+
+  <div class="card memory">
+    <div class="card-title">
+      <span class="status-dot online"></span>
+      TRANSCRIPT DB
+    </div>
+    <div class="stat-row"><span class="stat-label">Videos</span><span class="stat-value" id="db-videos">—</span></div>
+    <div class="stat-row"><span class="stat-label">Tagged</span><span class="stat-value gold" id="db-tagged">—</span></div>
+    <div class="stat-row"><span class="stat-label">Auto-tagged</span><span class="stat-value" id="db-autotagged">—</span></div>
+    <div class="stat-row"><span class="stat-label">DB Size</span><span class="stat-value" id="db-size">—</span></div>
+  </div>
+
+  <div class="card memory">
+    <div class="card-title">
+      <span class="status-dot online"></span>
+      MEDIA INDEX
+    </div>
+    <div class="stat-row"><span class="stat-label">Total Files</span><span class="stat-value" id="media-total">—</span></div>
+    <div class="stat-row"><span class="stat-label">Videos</span><span class="stat-value" id="media-videos">—</span></div>
+    <div class="stat-row"><span class="stat-label">Photos</span><span class="stat-value" id="media-photos">—</span></div>
+    <div class="stat-row"><span class="stat-label">Total Duration</span><span class="stat-value gold" id="media-duration">—</span></div>
+  </div>
+
+</div>
+
+<!-- OUTPUT LAYER -->
+<div class="section-label">Output — Generated Assets</div>
+<div class="grid">
+
+  <div class="card output">
+    <div class="card-title">
+      <span class="status-dot online"></span>
+      MONTAGES
+    </div>
+    <div id="montage-list"></div>
+  </div>
+
+  <div class="card output">
+    <div class="card-title">
+      <span class="status-dot online"></span>
+      TRACKED CLIPS
+    </div>
+    <div id="clip-list"></div>
+  </div>
+
+  <div class="card output">
+    <div class="card-title">
+      <span class="status-dot online"></span>
+      TAGGING GALLERY
+    </div>
+    <div class="stat-row"><span class="stat-label">URL</span><span class="stat-value"><a href="/transcription" style="color:#a78bfa">localhost:8080/transcription</a></span></div>
+    <div class="stat-row"><span class="stat-label">Features</span><span class="stat-value">Tag / Search / Export</span></div>
+  </div>
+
+</div>
+
+<!-- 360 SEARCH -->
+<div class="search-section">
+  <div style="font-size:13px;color:#a78bfa;margin-bottom:8px;letter-spacing:1px;">360° SEARCH — Audio + Visual</div>
+  <input type="text" class="search-box" id="searchBox" placeholder="Search what was said AND seen... (try: footwork, sparring, padwork)" />
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<div class="footer">
+  <span>Cathedral Nervous System v1 · M5 Mac Studio 128GB</span>
+  <span id="lastUpdate">—</span>
+</div>
+
+<script>
+const API = '';
+
+async function fetchJSON(url) {
+  try {
+    const r = await fetch(url);
+    return await r.json();
+  } catch (e) { return null; }
+}
+
+async function refresh() {
+  // Vision stats
+  const vs = await fetchJSON(`${API}/api/transcription/visual-stats`);
+  if (vs) {
+    const pct = Math.round((vs.videos / 255) * 100);
+    document.getElementById('vision-count').textContent = vs.total;
+    document.getElementById('vision-videos').textContent = `${vs.videos} / 255`;
+    document.getElementById('vision-progress').style.width = pct + '%';
+    document.getElementById('vision-dot').className = 'status-dot ' + (vs.videos < 255 ? 'running' : 'online');
+    document.getElementById('vision-pipe').textContent = vs.videos < 255 ? 'ANALYZING...' : 'COMPLETE';
+  }
+
+  // Audio/transcript stats
+  const videos = await fetchJSON(`${API}/api/transcription/videos`);
+  if (videos) {
+    const transcribed = videos.filter(v => v.transcript_preview).length;
+    const pct = Math.round((transcribed / videos.length) * 100);
+    document.getElementById('audio-count').textContent = `${transcribed} / ${videos.length}`;
+    document.getElementById('audio-progress').style.width = pct + '%';
+    document.getElementById('audio-dot').className = 'status-dot ' + (pct < 100 ? 'running' : 'online');
+    document.getElementById('audio-pipe').textContent = pct < 100 ? 'TRANSCRIBING...' : 'COMPLETE';
+
+    document.getElementById('media-videos').textContent = videos.length;
+    const totalDur = videos.reduce((s, v) => s + (v.duration_sec || 0), 0);
+    const hours = Math.floor(totalDur / 3600);
+    const mins = Math.floor((totalDur % 3600) / 60);
+    document.getElementById('media-duration').textContent = `${hours}h ${mins}m`;
+  }
+
+  // DB stats via a quick search for "" won't work, use visual-stats proxy
+  const dbSearch = await fetchJSON(`${API}/api/transcription/360-search?q=the`);
+  if (dbSearch) {
+    document.getElementById('fts-audio').textContent = `${dbSearch.audio?.length || 0}+ segments indexed`;
+    document.getElementById('fts-visual').textContent = `${dbSearch.visual?.length || 0}+ frames indexed`;
+  }
+
+  // PM2 status
+  try {
+    const pmResp = await fetch(`${API}/status`);
+    const pmData = await pmResp.json();
+    if (pmData) {
+      const online = pmData.filter(p => p.pm2_env?.status === 'online').length;
+      const stopped = pmData.filter(p => p.pm2_env?.status === 'stopped').length;
+      const total = pmData.length;
+      document.getElementById('pm2-summary').innerHTML = `
+        <div class="stat-row"><span class="stat-label">Online</span><span class="stat-value green">${online}</span></div>
+        <div class="stat-row"><span class="stat-label">Stopped</span><span class="stat-value">${stopped}</span></div>
+        <div class="stat-row"><span class="stat-label">Total</span><span class="stat-value">${total}</span></div>
+      `;
+      document.getElementById('pm2-dot').className = 'status-dot online';
+    }
+  } catch (e) {
+    document.getElementById('pm2-dot').className = 'status-dot error';
+  }
+
+  // Ollama models
+  try {
+    const ollResp = await fetch('http://localhost:11434/api/tags');
+    const ollData = await ollResp.json();
+    if (ollData?.models) {
+      document.getElementById('ollama-models').innerHTML = ollData.models.map(m =>
+        `<div class="pipe"><span class="pipe-name">${m.name}</span><span class="pipe-status">${(m.size/1e9).toFixed(1)}GB</span></div>`
+      ).join('');
+      document.getElementById('ollama-dot').className = 'status-dot online';
+    }
+  } catch (e) {
+    document.getElementById('ollama-dot').className = 'status-dot error';
+    document.getElementById('ollama-models').innerHTML = '<div class="pipe"><span class="pipe-name">Ollama offline</span></div>';
+  }
+
+  // Tracked clips count
+  document.getElementById('tracked-count').textContent = '6';
+  document.getElementById('motion-dot').className = 'status-dot online';
+
+  document.getElementById('lastUpdate').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+}
+
+// 360 Search
+let searchTimeout;
+document.getElementById('searchBox').addEventListener('input', function(e) {
+  clearTimeout(searchTimeout);
+  const q = e.target.value.trim();
+  if (q.length < 2) { document.getElementById('searchResults').innerHTML = ''; return; }
+
+  searchTimeout = setTimeout(async () => {
+    const data = await fetchJSON(`${API}/api/transcription/360-search?q=${encodeURIComponent(q)}`);
+    if (!data) return;
+
+    let html = '';
+    const audioHits = data.audio || [];
+    const visualHits = data.visual || [];
+
+    if (audioHits.length === 0 && visualHits.length === 0) {
+      html = '<div style="color:#6b7280;padding:8px;">No results</div>';
+    }
+
+    // Interleave results by relevance
+    const all = [
+      ...audioHits.map(a => ({...a, type: 'audio'})),
+      ...visualHits.map(v => ({...v, type: 'visual'}))
+    ];
+
+    for (const r of all.slice(0, 20)) {
+      if (r.type === 'audio') {
+        const ts = Math.floor((r.start_ms || 0) / 1000);
+        const mins = Math.floor(ts / 60);
+        const secs = ts % 60;
+        html += `<div class="result-item">
+          <span class="result-type audio">HEARD</span>
+          <span class="result-file">${r.filename} @${mins}:${String(secs).padStart(2,'0')}</span>
+          ${r.person_names ? `<span style="color:#f7b408"> · ${r.person_names}</span>` : ''}
+          <div class="result-text">"${r.text}"</div>
+        </div>`;
+      } else {
+        const ts = r.timestamp_sec || 0;
+        html += `<div class="result-item">
+          <span class="result-type visual">SEEN</span>
+          <span class="result-file">${r.filename} @${Math.floor(ts)}s</span>
+          ${r.person_names ? `<span style="color:#f7b408"> · ${r.person_names}</span>` : ''}
+          <div class="result-text">${r.description}</div>
+        </div>`;
+      }
+    }
+
+    document.getElementById('searchResults').innerHTML = html;
+  }, 300);
+});
+
+// Initial load + auto-refresh
+refresh();
+setInterval(refresh, 15000);
+</script>
+</body>
+</html>

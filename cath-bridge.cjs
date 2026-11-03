@@ -5071,6 +5071,13 @@ app.get('/transcription', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'transcription', 'tagging-gallery.html'));
 });
 
+// ── Nervous System Dashboard ─────────────────────────────────────────────────
+
+app.get('/nervous-system', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'nervous-system-dashboard.html'));
+});
+
 // ── Environments ──────────────────────────────────────────────────────────────
 
 app.get('/env/test', (req, res) => {
