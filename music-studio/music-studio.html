@@ -202,6 +202,30 @@ footer { text-align: center; padding: 24px; color: #333; font-size: 12px; }
     </div>
   </div>
 
+  <div class="section-label">Hexiad Animation Presets</div>
+  <div class="presets-grid">
+    <div class="preset-card" onclick="loadPreset('bears_path')">
+      <div class="emoji">🐻</div>
+      <div class="name">Bear's Path</div>
+      <div class="desc">Japanese zen, shakuhachi, koto, temple bells</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('shadow_temple')">
+      <div class="emoji">⛩️</div>
+      <div class="name">Shadow Temple</div>
+      <div class="desc">Dark Japanese ambient, cinematic tension</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('falling_petals')">
+      <div class="emoji">🌸</div>
+      <div class="name">Falling Petals</div>
+      <div class="desc">Minimal zen, solo flute, long silences</div>
+    </div>
+    <div class="preset-card" onclick="loadPreset('logan_theme')">
+      <div class="emoji">🥢</div>
+      <div class="name">Logan Theme</div>
+      <div class="desc">Playful yet wise, stick figure energy</div>
+    </div>
+  </div>
+
   <div class="section-label">Producer Console</div>
   <div class="producer-box">
     <div class="form-row">
@@ -327,6 +351,22 @@ const PRESETS = {
   },
   reggaeton: {
     prompt: 'reggaeton, dembow rhythm, Latin trap, perreo beat, club energy, tropical bass, catchy hook',
+    lyrics: ''
+  },
+  bears_path: {
+    prompt: 'japanese zen music, solo shakuhachi bamboo flute, sparse koto plucking, gentle taiko drums, soft temple bells, pentatonic minor scale, very slow tempo 65 bpm, meditative, contemplative, nature ambiance, forest sounds, flowing water, ancient temple atmosphere, minimal arrangement, lots of silence between notes, reverent and peaceful',
+    lyrics: ''
+  },
+  shadow_temple: {
+    prompt: 'japanese zen music meets dark cinematic score, deep shakuhachi flute, low koto drones, distant taiko thunder, pentatonic minor scale, slow 60 bpm, ominous yet beautiful, misty mountain atmosphere, sparse orchestral strings underneath, dramatic tension, samurai film soundtrack, dark forest ambiance, reverberant and vast',
+    lyrics: ''
+  },
+  falling_petals: {
+    prompt: 'solo shakuhachi bamboo flute, japanese honkyoku meditation, extreme minimalism, single notes with long silence, pentatonic scale, very slow 50 bpm, deep natural reverb, temple bell occasional, wind sounds, breathing pace, ancient zen buddhist music, contemplative solitude, no drums, no percussion, pure acoustic',
+    lyrics: ''
+  },
+  logan_theme: {
+    prompt: 'playful japanese folk meets lo-fi, light shamisen plucking, quirky wooden percussion, gentle koto melody, whimsical flute, warm bass, slightly bouncy rhythm, wise yet fun, animated character theme, cheerful but grounded',
     lyrics: ''
   }
 };
