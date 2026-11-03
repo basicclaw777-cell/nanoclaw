@@ -1,6 +1,25 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-11-03 — Transcription System (Whisper Large-v3-Turbo Bulk Pipeline)
+
+**What:** Built full-stack transcription system for 255 iPhone Archive videos (30.9 hours). Whisper large-v3-turbo on M5, zero API cost. Tagging gallery for Paul to classify videos by person/type.
+
+**Built:**
+- `transcription/bulk-transcribe.sh` — Single-pass whisper-cli with ggml-large-v3-turbo. Sorted shortest-first, skips already-done, derives TXT from JSON. ~2-3 hours for full corpus.
+- `transcription/build-transcript-db.cjs` — SQLite with FTS5 full-text search on all transcript segments. Links to media-index metadata and frame thumbnails.
+- `transcription/tagging-gallery.html` — Visual gallery showing frame thumbnail per video. Paul tags: person names, class type (1-on-1/group/padwork/sparring/explainer/etc.), notes. Filter by tag status, class type, duration. Full-text search across transcripts.
+- `transcription/transcription-api.cjs` — Express routes: /videos (metadata+preview), /frame/:file, /save-tags (→ SQLite), /search (FTS5), /transcript/:file
+- `cath-bridge.cjs` — routes `/transcription` + `/api/transcription`
+
+**Pipeline:** iPhone video → ffmpeg 16kHz WAV → whisper-cli large-v3-turbo → JSON (timestamped segments) → derived TXT → SQLite FTS5 → searchable knowledge base
+
+**Existing infra leveraged:** boxing-pipeline.sh (upgraded model path), VibeVoice (speaker diarization available), 255 frame thumbnails already extracted
+
+**Status:** Bulk transcription running in background. Gallery live at `/transcription`. 6 downstream uses planned: searchable knowledge base, Session Engine IP, CRM-linked transcripts, content extraction, Logan training data, Coaching Whiteboard feed.
+
+**Door:** `/transcription` on cath-bridge :8080
+
 ## 2026-11-03 — Music Studio (ACE-Step 1.5 Local Music Production)
 
 **What:** Built Cathedral music studio page with local AI music generation via ACE-Step 1.5. Forge = music producer. Instrumental + vocals with lyrics.

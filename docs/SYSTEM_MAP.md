@@ -377,6 +377,13 @@
 - **Overlay Mode** · `~/basic-reflex/gym-eyes/overlay.html` · standalone · Logan-over-webcam, MediaPipe pose, diagnostic layers · doc: BUILD_LOG 2026-08-21
 - **Mnemonic Library** · route `/mnemonic-library` · teaching mnemonics
 
+## Transcription System
+- **Tagging Gallery** · `~/nanoclaw/transcription/tagging-gallery.html` · route `/transcription` · visual grid of 255 videos with frame thumbnails, tagging (person/type/notes), filter+search · doc: BUILD_LOG 2026-11-03
+- **Transcription API** · `~/nanoclaw/transcription/transcription-api.cjs` · mounted `/api/transcription` · endpoints: /videos, /frame/:file, /save-tags, /search, /transcript/:file · doc: BUILD_LOG 2026-11-03
+- **Bulk Transcriber** · `~/nanoclaw/transcription/bulk-transcribe.sh` · CLI · whisper large-v3-turbo, 255 videos (30.9hrs), single-pass JSON+TXT · doc: BUILD_LOG 2026-11-03
+- **Transcript DB Builder** · `~/nanoclaw/transcription/build-transcript-db.cjs` · CLI · SQLite + FTS5 full-text search on all segments · doc: BUILD_LOG 2026-11-03
+- **Transcript DB** · `~/nanoclaw/transcription/transcripts.db` · SQLite · videos table (metadata+tags) + segments table (timestamped text) + FTS5 index
+
 ## BR Business Tools
 - **BR Pre-Class Brief** · `~/nanoclaw/br-preclass-brief.js` · [PM2 STOPPED] route `/br-brief` · pre-class briefing
 - **BR Command** · route `/br-command` · command center
