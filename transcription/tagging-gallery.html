@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Tagging Gallery — Cathedral</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #141414; --border: #222; --gold: #f7b408;
+    --green: #22c55e; --amber: #f59e0b; --text: #e5e5e5; --dim: #777;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; }
+
+  .header {
+    position: sticky; top: 0; z-index: 100; background: var(--bg);
+    border-bottom: 1px solid var(--border); padding: 12px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .header h1 { font-family: 'Anton', sans-serif; font-size: 1.3rem; color: var(--gold); }
+  .stats { display: flex; gap: 16px; font-size: 0.8rem; color: var(--dim); }
+  .stats .tagged { color: var(--green); }
+
+  .filters {
+    display: flex; gap: 8px; padding: 12px 20px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;
+  }
+  .filter-btn.active { border-color: var(--gold); color: var(--gold); }
+  .filter-btn:hover { border-color: #444; }
+
+  .search-bar {
+    padding: 8px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-bar input {
+    width: 100%; padding: 8px 12px; background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); border-radius: 4px; font-size: 0.85rem;
+  }
+
+  .gallery { padding: 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; transition: border-color 0.2s;
+  }
+  .card.tagged { border-color: #1a3a1a; }
+  .card.active { border-color: var(--gold); }
+
+  .card-frame {
+    position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden;
+    background: #000; cursor: pointer;
+  }
+  .card-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .card-frame .duration {
+    position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,0.8);
+    padding: 2px 8px; border-radius: 3px; font-size: 0.75rem; font-family: monospace;
+  }
+  .card-frame .tag-badge {
+    position: absolute; top: 6px; right: 6px; background: var(--green);
+    color: #000; padding: 2px 8px; border-radius: 3px; font-size: 0.7rem; font-weight: 600;
+  }
+
+  .card-meta {
+    padding: 10px; font-size: 0.8rem;
+  }
+  .card-meta .filename { font-family: monospace; color: var(--dim); font-size: 0.75rem; }
+  .card-meta .date { color: var(--dim); font-size: 0.75rem; }
+  .card-meta .transcript-preview {
+    margin-top: 6px; padding: 6px 8px; background: rgba(255,255,255,0.03);
+    border-radius: 4px; font-size: 0.78rem; color: #999; max-height: 60px;
+    overflow: hidden; font-style: italic;
+  }
+
+  .card-tags {
+    padding: 0 10px 10px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .tag-row { display: flex; gap: 6px; align-items: center; }
+  .tag-row label { font-size: 0.7rem; color: var(--dim); width: 60px; flex-shrink: 0; }
+  .tag-row select, .tag-row input {
+    flex: 1; padding: 4px 8px; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); border-radius: 3px; font-size: 0.78rem;
+  }
+  .tag-row .people-input {
+    flex: 1; padding: 4px 8px; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); border-radius: 3px; font-size: 0.78rem;
+  }
+
+  .save-btn {
+    width: 100%; padding: 6px; background: var(--gold); color: #000; border: none;
+    font-weight: 600; cursor: pointer; font-size: 0.8rem; border-radius: 0 0 7px 7px;
+  }
+  .save-btn:hover { background: #daa006; }
+  .save-btn.saved { background: var(--green); }
+
+  .export-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface);
+    border-top: 1px solid var(--border); padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center; z-index: 100;
+  }
+  .export-btn {
+    padding: 8px 20px; background: var(--gold); color: #000; border: none;
+    border-radius: 4px; font-weight: 600; cursor: pointer;
+  }
+
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    z-index: 200; justify-content: center; align-items: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-content { max-width: 90vw; max-height: 90vh; }
+  .modal-content img { max-width: 100%; max-height: 85vh; object-fit: contain; }
+  .modal-info { padding: 12px; color: var(--text); text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>VIDEO TAGGING GALLERY</h1>
+  <div class="stats">
+    <span id="total-count">0 videos</span>
+    <span class="tagged" id="tagged-count">0 tagged</span>
+    <span id="untagged-count">0 remaining</span>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="untagged">Untagged</button>
+  <button class="filter-btn" data-filter="tagged">Tagged</button>
+  <button class="filter-btn" data-filter="one-on-one">1-on-1</button>
+  <button class="filter-btn" data-filter="group-class">Group</button>
+  <button class="filter-btn" data-filter="explainer">Explainer</button>
+  <button class="filter-btn" data-filter="padwork">Padwork</button>
+  <button class="filter-btn" data-filter="sparring">Sparring</button>
+  <button class="filter-btn" data-filter="long">Long (5min+)</button>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="search" placeholder="Search transcripts, names, notes...">
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<div class="export-bar">
+  <span id="export-status" style="color: var(--dim); font-size: 0.8rem;">Tags saved to localStorage</span>
+  <div style="display: flex; gap: 8px;">
+    <button class="export-btn" onclick="exportJSON()">Export Tags JSON</button>
+    <button class="export-btn" onclick="pushToDB()" style="background: var(--green);">Push to DB</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="closeModal()">
+  <div class="modal-content">
+    <img id="modal-img" src="">
+    <div class="modal-info" id="modal-info"></div>
+  </div>
+</div>
+
+<script>
+const CLASS_TYPES = [
+  '', 'one-on-one', 'group-class', 'padwork', 'sparring', 'bagwork',
+  'shadowboxing', 'explainer', 'technique-demo', 'warmup', 'cooldown',
+  'gym-shot', 'personal', 'street-hk', 'other'
+];
+
+let allVideos = [];
+let tags = {};
+
+// Load tags from localStorage
+try {
+  tags = JSON.parse(localStorage.getItem('video-tags') || '{}');
+} catch(e) { tags = {}; }
+
+function saveTags() {
+  localStorage.setItem('video-tags', JSON.stringify(tags));
+  updateCounts();
+}
+
+function updateCounts() {
+  const total = allVideos.length;
+  const tagged = Object.keys(tags).filter(k => tags[k].class_type).length;
+  document.getElementById('total-count').textContent = `${total} videos`;
+  document.getElementById('tagged-count').textContent = `${tagged} tagged`;
+  document.getElementById('untagged-count').textContent = `${total - tagged} remaining`;
+}
+
+function formatDuration(sec) {
+  if (!sec) return '?';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  return d.split('T')[0];
+}
+
+async function loadData() {
+  try {
+    const res = await fetch('/api/transcription/videos');
+    allVideos = await res.json();
+  } catch(e) {
+    // Fallback: load from embedded data if served statically
+    console.error('API not available, using localStorage data');
+    return;
+  }
+  renderGallery(allVideos);
+}
+
+function renderGallery(videos) {
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '';
+
+  for (const v of videos) {
+    const tag = tags[v.filename] || {};
+    const isTagged = !!tag.class_type;
+    const frameSrc = v.frame_path
+      ? `/api/transcription/frame/${encodeURIComponent(v.filename.replace(/\.[^.]+$/, '.jpg'))}`
+      : '';
+
+    const card = document.createElement('div');
+    card.className = `card ${isTagged ? 'tagged' : ''}`;
+    card.dataset.filename = v.filename;
+    card.dataset.classType = tag.class_type || '';
+    card.dataset.duration = v.duration_sec || 0;
+
+    card.innerHTML = `
+      <div class="card-frame" onclick="openModal('${v.filename}')">
+        ${frameSrc ? `<img src="${frameSrc}" loading="lazy" alt="${v.filename}">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#333">No frame</div>'}
+        <span class="duration">${formatDuration(v.duration_sec)}</span>
+        ${isTagged ? '<span class="tag-badge">TAGGED</span>' : ''}
+      </div>
+      <div class="card-meta">
+        <div class="filename">${v.filename}</div>
+        <div class="date">${formatDate(v.date)} · ${v.width}x${v.height} · ${Math.round((v.size_bytes||0)/1e6)}MB</div>
+        ${v.transcript_preview ? `<div class="transcript-preview">"${v.transcript_preview}"</div>` : ''}
+      </div>
+      <div class="card-tags">
+        <div class="tag-row">
+          <label>Type</label>
+          <select data-field="class_type" onchange="updateTag('${v.filename}', 'class_type', this.value)">
+            ${CLASS_TYPES.map(t => `<option value="${t}" ${tag.class_type === t ? 'selected' : ''}>${t || '— select —'}</option>`).join('')}
+          </select>
+        </div>
+        <div class="tag-row">
+          <label>People</label>
+          <input class="people-input" data-field="person_names" value="${tag.person_names || ''}"
+            placeholder="John, Jack, ..."
+            onchange="updateTag('${v.filename}', 'person_names', this.value)">
+        </div>
+        <div class="tag-row">
+          <label>Notes</label>
+          <input data-field="notes" value="${tag.notes || ''}"
+            placeholder="good combo work, round 3 highlight..."
+            onchange="updateTag('${v.filename}', 'notes', this.value)">
+        </div>
+      </div>
+      <button class="save-btn ${isTagged ? 'saved' : ''}"
+        onclick="saveCard('${v.filename}', this)">
+        ${isTagged ? '✓ Saved' : 'Save Tag'}
+      </button>
+    `;
+    gallery.appendChild(card);
+  }
+  updateCounts();
+}
+
+function updateTag(filename, field, value) {
+  if (!tags[filename]) tags[filename] = {};
+  tags[filename][field] = value;
+  tags[filename].tagged_at = new Date().toISOString();
+}
+
+function saveCard(filename, btn) {
+  saveTags();
+  btn.textContent = '✓ Saved';
+  btn.classList.add('saved');
+  const card = btn.closest('.card');
+  card.classList.add('tagged');
+  const badge = card.querySelector('.tag-badge');
+  if (!badge) {
+    const frame = card.querySelector('.card-frame');
+    const b = document.createElement('span');
+    b.className = 'tag-badge';
+    b.textContent = 'TAGGED';
+    frame.appendChild(b);
+  }
+}
+
+function openModal(filename) {
+  const v = allVideos.find(x => x.filename === filename);
+  if (!v) return;
+  const frameSrc = `/api/transcription/frame/${encodeURIComponent(filename.replace(/\.[^.]+$/, '.jpg'))}`;
+  document.getElementById('modal-img').src = frameSrc;
+  document.getElementById('modal-info').textContent = `${filename} · ${formatDuration(v.duration_sec)} · ${formatDate(v.date)}`;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+// Filters
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  });
+});
+
+document.getElementById('search').addEventListener('input', () => applyFilters());
+
+function applyFilters() {
+  const filter = document.querySelector('.filter-btn.active').dataset.filter;
+  const search = document.getElementById('search').value.toLowerCase();
+
+  let filtered = allVideos;
+
+  if (filter === 'untagged') {
+    filtered = filtered.filter(v => !tags[v.filename]?.class_type);
+  } else if (filter === 'tagged') {
+    filtered = filtered.filter(v => !!tags[v.filename]?.class_type);
+  } else if (filter === 'long') {
+    filtered = filtered.filter(v => (v.duration_sec || 0) >= 300);
+  } else if (filter !== 'all') {
+    filtered = filtered.filter(v => tags[v.filename]?.class_type === filter);
+  }
+
+  if (search) {
+    filtered = filtered.filter(v => {
+      const tag = tags[v.filename] || {};
+      const haystack = [
+        v.filename, v.transcript_preview || '',
+        tag.person_names || '', tag.notes || '', tag.class_type || ''
+      ].join(' ').toLowerCase();
+      return haystack.includes(search);
+    });
+  }
+
+  renderGallery(filtered);
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(tags, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `video-tags-${new Date().toISOString().split('T')[0]}.json`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+async function pushToDB() {
+  try {
+    const res = await fetch('/api/transcription/save-tags', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tags)
+    });
+    const data = await res.json();
+    document.getElementById('export-status').textContent = `Pushed ${data.count} tags to DB`;
+    document.getElementById('export-status').style.color = 'var(--green)';
+  } catch(e) {
+    document.getElementById('export-status').textContent = 'Push failed: ' + e.message;
+    document.getElementById('export-status').style.color = '#ef4444';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+loadData();
+</script>
+</body>
+</html>

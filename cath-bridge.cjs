@@ -5063,6 +5063,14 @@ app.get('/music-studio', (req, res) => {
   res.sendFile(path.join(NANOCLAW, 'music-studio', 'music-studio.html'));
 });
 
+// ── Transcription Gallery ────────────────────────────────────────────────────
+
+app.use('/api/transcription', require('./transcription/transcription-api.cjs'));
+app.get('/transcription', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'transcription', 'tagging-gallery.html'));
+});
+
 // ── Environments ──────────────────────────────────────────────────────────────
 
 app.get('/env/test', (req, res) => {
