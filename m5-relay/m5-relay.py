@@ -162,42 +162,36 @@ def query_ollama(model, system, prompt, temperature=0.4, max_tokens=2000, timeou
         return f"ERROR: {e}"
 
 
+def clean_fts_query(query):
+    import re as _re
+    cleaned = _re.sub(r'[^\w\s]', ' ', query)
+    words = [w for w in cleaned.split() if len(w) > 2]
+    if not words:
+        return None
+    return " OR ".join(words)
+
+
 def search_vault(query, limit=10):
     if not os.path.exists(VAULT_DB):
+        return []
+    fts_query = clean_fts_query(query)
+    if not fts_query:
         return []
     try:
         conn = sqlite3.connect(VAULT_DB)
         conn.row_factory = sqlite3.Row
-        terms = query.replace("'", "").replace('"', "")
         rows = conn.execute(
             """SELECT n.path, n.title, n.folder, n.content
                FROM notes_fts fts
                JOIN notes n ON n.id = fts.rowid
                WHERE notes_fts MATCH ?
                ORDER BY rank LIMIT ?""",
-            (terms, limit),
+            (fts_query, limit),
         ).fetchall()
         conn.close()
         return [{"path": r["path"], "title": r["title"], "folder": r["folder"],
                  "snippet": (r["content"] or "")[:200]} for r in rows]
     except Exception:
-        words = query.split()
-        if len(words) > 1:
-            try:
-                conn = sqlite3.connect(VAULT_DB)
-                conn.row_factory = sqlite3.Row
-                or_query = " OR ".join(w for w in words if len(w) > 2)
-                rows = conn.execute(
-                    """SELECT n.path, n.title, n.folder, n.content
-                       FROM notes_fts fts JOIN notes n ON n.id = fts.rowid
-                       WHERE notes_fts MATCH ? ORDER BY rank LIMIT ?""",
-                    (or_query, limit),
-                ).fetchall()
-                conn.close()
-                return [{"path": r["path"], "title": r["title"], "folder": r["folder"],
-                         "snippet": (r["content"] or "")[:200]} for r in rows]
-            except Exception:
-                return []
         return []
 
 
@@ -238,25 +232,26 @@ def parse_flinch(response):
     score = 0.0
     patterns = []
 
-    score_match = re.search(r"FLINCH_SCORE:\s*([\d.]+)", response)
+    score_match = re.search(r"FLINCH_SCORE:\s*\*{0,2}\s*([\d.]+)", response)
     if score_match:
         try:
             score = float(score_match.group(1))
         except ValueError:
             pass
 
-    patterns_match = re.search(r"FLINCH_PATTERNS_DETECTED:\s*(.+)", response)
+    patterns_match = re.search(r"FLINCH_PATTERNS_DETECTED:\s*\*{0,2}\s*(.+)", response)
     if patterns_match:
-        raw = patterns_match.group(1).strip()
+        raw = patterns_match.group(1).strip().strip("*").strip()
         if raw.lower() != "none":
-            patterns = [p.strip() for p in raw.split(",") if p.strip()]
+            patterns = [p.strip().strip("*").strip() for p in raw.split(",") if p.strip().strip("*")]
 
-    if not score_match and not patterns:
+    if not score_match:
         text_lower = response.lower()
         for key in FLINCH_PATTERNS:
             if key.replace("_", " ") in text_lower or key in text_lower:
-                patterns.append(key)
-        if patterns:
+                if key not in patterns:
+                    patterns.append(key)
+        if patterns and score == 0.0:
             score = min(len(patterns) * 0.2, 1.0)
 
     return score, patterns
@@ -535,10 +530,74 @@ def run_unflinch(claim, use_vault=False):
             "flinch_score": flinch_score, "flinch_patterns": flinch_patterns}
 
 
+def run_quick_relay(question, use_vault=False):
+    """Fast relay — qwen3:32b replaces deepseek for interactive use (~40s vs ~4min)."""
+    print_header(question)
+    print("  ⚡ QUICK MODE — qwen3:32b as reasoner (faster)\n")
+
+    vault_ctx = ""
+    if use_vault:
+        vault_results = search_vault(question)
+        vault_ctx = format_vault_context(vault_results)
+        if vault_ctx:
+            print(f"  📚 Vault: {len(vault_results)} relevant notes found\n")
+
+    # Stage 1: Scout
+    t0 = time.time()
+    scout_result = query_ollama(
+        MODELS["scout"], SCOUT_PROMPT, f"QUESTION: {question}",
+        temperature=0.5, max_tokens=800, timeout=60,
+    )
+    print_stage(1, "SCOUT", MODELS["scout"], scout_result, time.time() - t0)
+
+    # Stage 2: Reason (qwen3 instead of deepseek)
+    reasoning_prompt = load_prompt("reasoning-engine") or "Analyze with maximum rigor."
+    deep_input = f"QUESTION: {question}\n\nSCOUT ASSESSMENT:\n{scout_result}"
+    if vault_ctx:
+        deep_input += f"\n\n{vault_ctx}"
+
+    t0 = time.time()
+    deep_result = query_ollama(
+        MODELS["challenge"], reasoning_prompt, deep_input,
+        temperature=0.3, max_tokens=2000, timeout=120,
+    )
+    print_stage(2, "REASON", MODELS["challenge"], deep_result, time.time() - t0)
+
+    # Stage 3: Flinch check (hermes3 — fastest available, different arch)
+    challenge_input = (
+        f"ORIGINAL QUESTION: {question}\n\nREASONING CHAIN TO CHALLENGE:\n{deep_result}"
+    )
+    if vault_ctx:
+        challenge_input += f"\n\n{vault_ctx}"
+
+    t0 = time.time()
+    challenge_result = query_ollama(
+        MODELS["scout"], CHALLENGE_PROMPT, challenge_input,
+        temperature=0.4, max_tokens=1000, timeout=60,
+    )
+    flinch_score, flinch_patterns = parse_flinch(challenge_result)
+    print_stage(
+        3, "FLINCH CHECK", MODELS["scout"], challenge_result, time.time() - t0,
+        flinch_score=flinch_score, flinch_patterns=flinch_patterns,
+    )
+
+    print(f"\n{'═' * 55}")
+    flinch_status = "detected" if flinch_patterns else "clean"
+    print(f"  QUICK RELAY | FLINCH: {flinch_status} ({flinch_score:.2f})")
+    print(f"{'═' * 55}\n")
+
+    return {
+        "question": question, "scout": scout_result,
+        "reason": deep_result, "flinch_check": challenge_result,
+        "flinch_score": flinch_score, "flinch_patterns": flinch_patterns,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="M5 Relay Engine — Multi-model forensic reasoning")
     parser.add_argument("question", nargs="?", help="Research question or claim")
     parser.add_argument("--scout", metavar="Q", help="Scout-only mode (hermes3, fast)")
+    parser.add_argument("--quick", metavar="Q", help="Quick relay (qwen3 + hermes3, ~40s)")
     parser.add_argument("--deep", metavar="Q", help="Scout + deep reasoning (stages 1-2)")
     parser.add_argument("--council", metavar="Q", help="All 3 models answer independently")
     parser.add_argument("--unflinch", metavar="Q", help="Anti-flinch analysis of a claim")
@@ -547,6 +606,8 @@ def main():
 
     if args.scout:
         run_scout(args.scout)
+    elif args.quick:
+        run_quick_relay(args.quick, use_vault=args.vault)
     elif args.deep:
         run_deep(args.deep, use_vault=args.vault)
     elif args.council:
@@ -557,11 +618,13 @@ def main():
         run_full_relay(args.question, use_vault=args.vault)
     else:
         print("Usage: python3 m5-relay.py 'your question here'")
-        print("       python3 m5-relay.py --scout 'quick scan'")
-        print("       python3 m5-relay.py --deep 'complex question'")
-        print("       python3 m5-relay.py --council 'compare models'")
-        print("       python3 m5-relay.py --unflinch 'claim to examine'")
-        print("       Add --vault to enable vault search")
+        print("       python3 m5-relay.py --scout 'quick scan'               (~3s)")
+        print("       python3 m5-relay.py --quick 'interactive question'      (~40s)")
+        print("       python3 m5-relay.py 'full question'                     (~4min)")
+        print("       python3 m5-relay.py --deep 'stages 1-2 only'           (~90s)")
+        print("       python3 m5-relay.py --council 'compare all 3 models'   (~3min)")
+        print("       python3 m5-relay.py --unflinch 'claim to examine'      (~4min)")
+        print("       Add --vault to enable vault search grounding")
         sys.exit(1)
 
 
