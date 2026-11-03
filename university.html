@@ -1,0 +1,343 @@
+<title>Cathedral University</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --bg: #0c0c0f; --fg: #e8e4df; --accent: #f7b408; --card-bg: #141418;
+  --border: #2a2a2e; --dim: #888; --green: #22c55e; --amber: #f59e0b;
+  --red: #ef4444; --blue: #3b82f6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0c0c0f; --fg: #e8e4df; color-scheme: dark;
+}}
+:root[data-theme="dark"] { --bg: #0c0c0f; --fg: #e8e4df; color-scheme: dark; }
+:root[data-theme="light"] {
+  --bg: #f8f6f3; --fg: #1a1a1a; --card-bg: #fff; --border: #ddd; --dim: #666;
+  --green: #16a34a; --amber: #d97706; --red: #dc2626; --blue: #2563eb;
+}
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  max-width: 960px; margin: 0 auto;
+}
+.hero {
+  text-align: center; padding: 48px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem; font-weight: 700; margin: 0;
+  letter-spacing: 1px;
+}
+.hero .sub {
+  color: var(--dim); font-size: .85rem; margin-top: 8px;
+}
+.stats-bar {
+  display: flex; gap: 24px; justify-content: center;
+  flex-wrap: wrap; margin-top: 20px;
+}
+.stat-pill {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 16px;
+  font-size: .8rem; color: var(--dim);
+}
+.stat-pill .val { color: var(--accent); font-weight: 700; }
+
+.filter-bar {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.filter-btn {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 14px; font-size: .75rem;
+  color: var(--dim); cursor: pointer; font-family: inherit;
+  transition: all .15s;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent); color: var(--accent);
+}
+
+.school-list { display: flex; flex-direction: column; gap: 12px; }
+
+.school {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  transition: border-color .2s;
+}
+.school:hover { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+
+.school-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px; cursor: pointer;
+  user-select: none;
+}
+.school-icon { font-size: 1.6rem; flex-shrink: 0; }
+.school-info { flex: 1; min-width: 0; }
+.school-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 600;
+  line-height: 1.3;
+}
+.school-meta {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-top: 4px; font-size: .72rem; color: var(--dim);
+}
+.school-meta .level {
+  padding: 1px 8px; border-radius: 3px;
+  font-weight: 600; font-size: .65rem;
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.level-bachelor { background: color-mix(in srgb, var(--blue) 20%, transparent); color: var(--blue); }
+.level-master { background: color-mix(in srgb, var(--amber) 20%, transparent); color: var(--amber); }
+.level-phd { background: color-mix(in srgb, var(--red) 20%, transparent); color: var(--red); }
+
+.school-toggle {
+  color: var(--dim); font-size: 1.2rem; flex-shrink: 0;
+  transition: transform .2s;
+}
+.school.open .school-toggle { transform: rotate(90deg); }
+
+.school-body {
+  display: none; padding: 0 18px 16px;
+  border-top: 1px solid var(--border);
+}
+.school.open .school-body { display: block; }
+
+.course-table {
+  width: 100%; border-collapse: collapse;
+  font-size: .8rem; margin-top: 12px;
+}
+.course-table th {
+  text-align: left; font-size: .65rem;
+  text-transform: uppercase; letter-spacing: .5px;
+  color: var(--dim); padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.course-table td {
+  padding: 8px; border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  vertical-align: top;
+}
+.course-num {
+  color: var(--accent); font-weight: 600;
+  width: 30px; text-align: center;
+}
+.course-name { font-weight: 500; }
+.course-file {
+  font-family: monospace; font-size: .7rem;
+  color: var(--dim); word-break: break-all;
+}
+.decay-badge {
+  display: inline-block; padding: 1px 6px;
+  border-radius: 3px; font-size: .6rem;
+  font-weight: 600; text-transform: uppercase;
+}
+.decay-timeless { background: color-mix(in srgb, var(--green) 20%, transparent); color: var(--green); }
+.decay-stable { background: color-mix(in srgb, var(--blue) 20%, transparent); color: var(--blue); }
+.decay-moderate { background: color-mix(in srgb, var(--amber) 20%, transparent); color: var(--amber); }
+.decay-fast { background: color-mix(in srgb, var(--red) 20%, transparent); color: var(--red); }
+
+.school-desc {
+  font-size: .8rem; color: var(--dim); line-height: 1.5;
+  margin-top: 8px;
+}
+
+.back-link {
+  display: inline-block; margin-bottom: 16px;
+  font-size: .8rem; color: var(--accent);
+  text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+
+.search-box {
+  width: 100%; padding: 10px 14px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--fg);
+  font-family: inherit; font-size: .85rem;
+  margin-bottom: 16px; outline: none;
+}
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--dim); }
+
+.empty-state {
+  text-align: center; padding: 48px 16px;
+  color: var(--dim); font-size: .9rem;
+}
+
+.footer {
+  text-align: center; padding: 32px 0;
+  font-size: .7rem; color: var(--dim);
+  border-top: 1px solid var(--border);
+  margin-top: 32px;
+}
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 1.8rem; }
+  .school-header { padding: 12px 14px; gap: 10px; }
+  .school-name { font-size: 1rem; }
+  .course-table { font-size: .75rem; }
+}
+</style>
+
+<a href="/env/universe" class="back-link">&larr; Universe</a>
+
+<div class="hero">
+  <h1>Cathedral University</h1>
+  <div class="sub">Knowledge Before Build &mdash; every domain mastered before building</div>
+  <div class="stats-bar" id="stats-bar"></div>
+</div>
+
+<input type="text" class="search-box" id="search" placeholder="Search schools or courses...">
+
+<div class="filter-bar" id="filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="bachelor">Bachelor's</button>
+  <button class="filter-btn" data-filter="master">Master's</button>
+  <button class="filter-btn" data-filter="phd">PhD</button>
+</div>
+
+<div class="school-list" id="school-list"></div>
+<div class="empty-state" id="empty" hidden>No matching schools found.</div>
+
+<div class="footer">Cathedral University &mdash; M5 Mac Studio &mdash; Knowledge is sovereign</div>
+
+<script>
+const ICONS = {
+  'AI Animation': '🎬', 'Web Design': '🌐', 'Motion Graphics': '🎞️',
+  'Interactive JS': '⚡', 'Education': '📚', 'Digital Product': '📈',
+  'Systems Thinking': '🔄', 'Cognitive': '🧠', 'Routine': '⚙️',
+  'Information Design': '📐', 'M5 Mac': '💻', 'Physical Computing': '🔧',
+  'Maker': '🔧', 'Claude Code': '🤖', 'Music': '🎵', 'Audio': '🎵',
+  'Game': '🎮', 'Boxing': '🥊', 'Cosmology': '🔭', 'Ancient': '📜',
+  'AI Systems': '🏗️', '3D Graphics': '🎨', 'Photography': '📷',
+};
+
+function getIcon(name) {
+  for (const [key, icon] of Object.entries(ICONS)) {
+    if (name.toLowerCase().includes(key.toLowerCase())) return icon;
+  }
+  return '🎓';
+}
+
+function getLevel(school) {
+  if (school.level) return school.level;
+  return 'bachelor';
+}
+
+function getDecayClass(rate) {
+  return 'decay-' + (rate || 'stable');
+}
+
+let schools = [];
+let activeFilter = 'all';
+
+async function loadData() {
+  try {
+    const res = await fetch('/api/university');
+    const data = await res.json();
+    schools = data.schools || [];
+    render();
+  } catch (e) {
+    document.getElementById('school-list').innerHTML =
+      '<div class="empty-state">Failed to load university data. Is cath-bridge running?</div>';
+  }
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const list = document.getElementById('school-list');
+  const empty = document.getElementById('empty');
+
+  let totalCourses = 0;
+  let totalSchools = schools.length;
+  let totalSize = 0;
+
+  schools.forEach(s => {
+    totalCourses += (s.courses || []).length;
+  });
+
+  document.getElementById('stats-bar').innerHTML = `
+    <span class="stat-pill"><span class="val">${totalSchools}</span> schools</span>
+    <span class="stat-pill"><span class="val">${totalCourses}</span> courses</span>
+    <span class="stat-pill"><span class="val">~${Math.round(totalCourses * 18)}KB</span> research</span>
+  `;
+
+  const filtered = schools.filter(s => {
+    const level = getLevel(s);
+    if (activeFilter !== 'all' && level !== activeFilter) return false;
+    if (q) {
+      const haystack = (s.name + ' ' + (s.courses || []).map(c => c.file).join(' ')).toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.hidden = false;
+    return;
+  }
+  empty.hidden = true;
+
+  list.innerHTML = filtered.map((s, i) => {
+    const level = getLevel(s);
+    const icon = getIcon(s.name);
+    const courses = s.courses || [];
+    const levelLabel = level === 'phd' ? 'PhD' : level === 'master' ? "Master's" : "Bachelor's";
+    const levelClass = 'level-' + level;
+
+    const courseRows = courses.map((c, ci) => {
+      const decay = c.decayRate || 'stable';
+      const fresh = c.freshUntil ? c.freshUntil : '∞';
+      return `<tr>
+        <td class="course-num">${ci + 1}</td>
+        <td><div class="course-name">${c.file.replace('.md', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+            <div class="course-file">${c.file}</div></td>
+        <td><span class="decay-badge ${getDecayClass(decay)}">${decay}</span></td>
+        <td style="font-size:.7rem;color:var(--dim)">${fresh}</td>
+      </tr>`;
+    }).join('');
+
+    return `<div class="school" data-level="${level}">
+      <div class="school-header" onclick="toggleSchool(this)">
+        <div class="school-icon">${icon}</div>
+        <div class="school-info">
+          <div class="school-name">${s.name}</div>
+          <div class="school-meta">
+            <span class="level ${levelClass}">${levelLabel}</span>
+            <span>${courses.length} courses</span>
+            <span>Written ${courses[0]?.written || '—'}</span>
+          </div>
+        </div>
+        <div class="school-toggle">&#9654;</div>
+      </div>
+      <div class="school-body">
+        ${s.dataPath ? `<div class="school-desc">Path: <code>${s.dataPath}</code></div>` : ''}
+        <table class="course-table">
+          <thead><tr><th>#</th><th>Course</th><th>Decay</th><th>Fresh until</th></tr></thead>
+          <tbody>${courseRows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSchool(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+document.getElementById('search').addEventListener('input', render);
+
+document.getElementById('filters').addEventListener('click', e => {
+  if (!e.target.classList.contains('filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  activeFilter = e.target.dataset.filter;
+  render();
+});
+
+loadData();
+</script>

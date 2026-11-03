@@ -1841,6 +1841,24 @@ app.get('/gym-eyes/vision-landscape', (req, res) => {
 // ── BR Website mockup ───────────────────────────────────────────────────────
 app.use('/br-website', express.static(path.join(HOME, 'basic-reflex', 'website')));
 
+// ── Cathedral University ────────────────────────────────────────────────────
+const FRESHNESS_PATH = path.join(HOME, 'Cathedral', 'knowledge', 'freshness.json');
+
+app.get('/university', (req, res) => {
+  res.set({ 'Cache-Control': 'no-store', 'Content-Type': 'text/html; charset=utf-8' });
+  res.sendFile(path.join(NANOCLAW, 'university.html'));
+});
+
+app.get('/api/university', (req, res) => {
+  try {
+    const raw = fs.readFileSync(FRESHNESS_PATH, 'utf8');
+    const data = JSON.parse(raw);
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to read freshness.json', detail: e.message });
+  }
+});
+
 // ── Study Lab ───────────────────────────────────────────────────────────────
 const STUDY_OUTPUT = path.join(NANOCLAW, 'study-lab-output');
 const PODCAST_DIR = path.join(HOME, 'Cathedral', 'podcasts');
