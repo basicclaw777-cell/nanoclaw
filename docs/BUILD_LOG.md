@@ -1,6 +1,20 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-11-03 — Coaching Brain + Coach Paul Alter Ego + Gym Eyes Lab
+
+**What:** Two-tier coaching intelligence: Tier A = data brain (RAG over 238 sessions), Tier B = Coach Paul personality (opinions, philosophy, drill design). Plus a visual lab for frame analysis experiments.
+
+**Built:**
+- `gym-eyes/coaching-brain.py` — RAG-powered CLI. Modes: `--client`, `--plan`, `--drill`, `--ask`, `--opinion`, interactive REPL. Searches audio (segments_fts) + visual (frame_desc_fts) via FTS5, feeds context to hermes3. Tested: Glenn lookup found guard-drop pattern across sessions.
+- `gym-eyes/coach-paul.py` — Alter ego with personality and coaching philosophy. Modes: `--evaluate` (coach-to-coach assessment), `--philosophy` (coaching wisdom), `--create-drill` (design drills Paul's way), `--ask`, interactive with conversation history.
+- `gym-eyes/lab/gym-lab.html` — Visual lab dashboard: film strips (Glenn 31fps padwork, LY/Calvin 57-frame sparring), burst mode (4fps action capture), client intel cards, experiment showcase (360° fusion, generation prompts, auto-tag stats, pipeline status). Route: `/gym-lab` on cath-bridge :8080.
+- LLaVA 13B deep frame analysis: 31 frames from Glenn padwork at 1fps, 57 frames from sparring at 0.5fps, 24-frame burst at 4fps
+
+**Stats:** 254/255 videos tagged, 238 transcribed, coaching brain answers in 2-4s per query
+
+**Door:** `/gym-lab/gym-lab.html` on cath-bridge :8080
+
 ## 2026-11-03 — Cathedral Nervous System Dashboard + Vision Intelligence Layer
 
 **What:** Wired the Cathedral's sensory nervous system: vision (LLaVA), audio (Whisper), motion (YOLO pose), all visible through a live dashboard. Added auto-tagging, prompt engine, and 360° search (combined audio + visual).

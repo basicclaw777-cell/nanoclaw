@@ -394,6 +394,9 @@
 - **Auto-Tagger** · `~/basic-reflex/gym-eyes/auto-tagger.py` · CLI · vision descriptions + hermes3 → auto-classify videos · doc: BUILD_LOG 2026-11-03
 - **Pose Overlay v2** · `~/basic-reflex/gym-eyes/pose-overlay.py` · CLI · YOLO 11 pose + BoT-SORT, neon glow, impact detection, 3 styles · doc: BUILD_LOG 2026-11-03
 - **Montage Builder** · `~/basic-reflex/gym-eyes/montage-builder.py` · CLI · auto-cut category montages, PNG watermark overlay, reads DB tags · doc: BUILD_LOG 2026-11-03
+- **Coaching Brain** · `~/basic-reflex/gym-eyes/coaching-brain.py` · CLI · RAG over 238 sessions + 254 visual descriptions via FTS5, hermes3 reasoning. Modes: --client/--plan/--drill/--ask/--opinion/REPL · doc: BUILD_LOG 2026-11-03
+- **Coach Paul (Alter Ego)** · `~/basic-reflex/gym-eyes/coach-paul.py` · CLI · AI Coach Paul with personality, coaching philosophy, drill design. Modes: --evaluate/--philosophy/--create-drill/--ask/REPL · doc: BUILD_LOG 2026-11-03
+- **Gym Eyes Lab** · `~/basic-reflex/gym-eyes/lab/gym-lab.html` · route `/gym-lab` · visual experiments dashboard: film strips, burst mode, client intel, experiment showcase · doc: BUILD_LOG 2026-11-03
 
 ## BR Business Tools
 - **BR Pre-Class Brief** · `~/nanoclaw/br-preclass-brief.js` · [PM2 STOPPED] route `/br-brief` · pre-class briefing
