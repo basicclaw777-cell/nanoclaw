@@ -356,22 +356,22 @@ a { color: inherit; text-decoration: none; }
 <div class="actions-section">
   <div class="actions-header">What do you want to do?</div>
   <div class="actions-grid">
-    <div class="action-btn">
+    <div class="action-btn" data-href="/services">
       <div class="action-icon">📟</div>
       <div class="action-label">PM2 status</div>
       <div class="action-sub">128 processes, 9 online</div>
     </div>
-    <div class="action-btn">
+    <div class="action-btn" data-href="/agents">
       <div class="action-icon">🤖</div>
       <div class="action-label">Agent health</div>
       <div class="action-sub">Emergence + awareness</div>
     </div>
-    <div class="action-btn">
+    <div class="action-btn" data-href="/vault-health">
       <div class="action-icon">🔍</div>
       <div class="action-label">Memory search</div>
       <div class="action-sub">Vault brain query</div>
     </div>
-    <div class="action-btn">
+    <div class="action-btn" data-href="/services">
       <div class="action-icon">📋</div>
       <div class="action-label">System logs</div>
       <div class="action-sub">Recent events</div>
@@ -384,42 +384,42 @@ a { color: inherit; text-decoration: none; }
     <div class="section-title">Tools &amp; Rooms</div>
   </div>
   <div class="content-grid">
-    <div class="content-card">
+    <div class="content-card" data-href="/services">
       <div class="card-thumb thumb-default">🧭<span class="card-badge">LIVE</span></div>
       <div class="card-body">
         <h3>LLM Router</h3>
         <p>4 tiers verified, all local. gemma3→hermes3→qwen3→deepseek-r1.</p>
       </div>
     </div>
-    <div class="content-card">
+    <div class="content-card" data-href="/services">
       <div class="card-thumb thumb-default">📟<span class="card-badge">LIVE</span></div>
       <div class="card-body">
         <h3>PM2 Fleet</h3>
         <p>128 processes. 9 online, 96 stopped with cron, 23 no-cron.</p>
       </div>
     </div>
-    <div class="content-card">
+    <div class="content-card" data-href="/vault-health">
       <div class="card-thumb thumb-default">🧠<span class="card-badge">LIVE</span></div>
       <div class="card-body">
         <h3>Vault Brain</h3>
         <p>225MB. Semantic search, memory system, vault bridge.</p>
       </div>
     </div>
-    <div class="content-card">
+    <div class="content-card" data-href="/agents">
       <div class="card-thumb thumb-default">🤖<span class="card-badge wip">WIP</span></div>
       <div class="card-body">
         <h3>Agent Roster</h3>
         <p>15 agent rooms. Emergence suite, buzz monitor, triggers.</p>
       </div>
     </div>
-    <div class="content-card">
+    <div class="content-card" data-href="/architect">
       <div class="card-thumb thumb-default">⚒️<span class="card-badge broken">BROKEN</span></div>
       <div class="card-body">
         <h3>Forge</h3>
         <p>Claude Code terminal room. Currently returning 404.</p>
       </div>
     </div>
-    <div class="content-card">
+    <div class="content-card" data-href="/services">
       <div class="card-thumb thumb-default">💾<span class="card-badge">LIVE</span></div>
       <div class="card-body">
         <h3>Backup System</h3>
@@ -466,5 +466,13 @@ a { color: inherit; text-decoration: none; }
   </div>
 </div>
 
+<script>
+document.querySelectorAll('[data-href]').forEach(card => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => {
+    window.location.href = card.dataset.href;
+  });
+});
+</script>
 </body>
 </html>

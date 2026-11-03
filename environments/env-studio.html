@@ -356,7 +356,7 @@ a { color: inherit; text-decoration: none; }
 <div class="actions-section">
   <div class="actions-header">What do you want to do?</div>
   <div class="actions-grid">
-    <div class="action-btn">
+    <div class="action-btn" data-href="/reed-studio">
       <div class="action-icon">🖼️</div>
       <div class="action-label">Generate visual</div>
       <div class="action-sub">ComfyUI + Reed styles</div>
@@ -371,7 +371,7 @@ a { color: inherit; text-decoration: none; }
       <div class="action-label">Logan editor</div>
       <div class="action-sub">Stick figure engine</div>
     </div>
-    <div class="action-btn">
+    <div class="action-btn" data-href="/reed-studio">
       <div class="action-icon">🎨</div>
       <div class="action-label">Style picker</div>
       <div class="action-sub">10 proven styles</div>
@@ -391,14 +391,14 @@ a { color: inherit; text-decoration: none; }
         <p>Stick Logan IP — 1093 items, vectors, cast, layers.</p>
       </div>
     </div>
-    <div class="content-card">
+    <div class="content-card" data-href="/reed-studio">
       <div class="card-thumb thumb-default">🎨<span class="card-badge">LIVE</span></div>
       <div class="card-body">
         <h3>Reed Visual Director</h3>
         <p>10 visual styles. Dramatic cinema, HK neon, manga, film noir.</p>
       </div>
     </div>
-    <div class="content-card">
+    <div class="content-card" data-href="/aether-universe">
       <div class="card-thumb thumb-default">🌌<span class="card-badge wip">WIP</span></div>
       <div class="card-body">
         <h3>Aether Universe</h3>
@@ -466,5 +466,13 @@ a { color: inherit; text-decoration: none; }
   </div>
 </div>
 
+<script>
+document.querySelectorAll('[data-href]').forEach(card => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => {
+    window.location.href = card.dataset.href;
+  });
+});
+</script>
 </body>
 </html>
