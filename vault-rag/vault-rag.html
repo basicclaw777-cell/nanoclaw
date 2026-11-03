@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vault Search — Cathedral</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --gold: #f7b408;
+    --gold-dim: #f7b40833;
+    --text: #e0e0e8;
+    --dim: #888;
+    --purple: #9b59b6;
+    --blue: #3498db;
+    --green: #27ae60;
+    --amber: #e67e22;
+    --cyan: #1abc9c;
+    --teal: #16a085;
+    --magenta: #8e44ad;
+    --pink: #e84393;
+    --orange: #f39c12;
+    --violet: #6c5ce7;
+    --red: #e74c3c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
+
+  header {
+    text-align: center;
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  .stats-line {
+    color: var(--dim);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .stats-line span { color: var(--gold); }
+
+  .search-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .search-bar input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-bar input:focus { border-color: var(--gold); }
+  .search-bar input::placeholder { color: #555; }
+
+  .search-bar select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .search-bar button {
+    background: var(--gold);
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: opacity 0.2s;
+  }
+  .search-bar button:hover { opacity: 0.85; }
+  .search-bar button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 8px 0;
+  }
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    color: var(--dim);
+    font-size: 13px;
+  }
+  .toggle input { display: none; }
+  .toggle-track {
+    width: 36px;
+    height: 20px;
+    background: var(--border);
+    border-radius: 10px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .toggle input:checked + .toggle-track { background: var(--gold); }
+  .toggle-track::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+  }
+  .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+
+  .model-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--dim);
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--gold);
+    display: none;
+  }
+  .loading.active { display: block; }
+  .loading .spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .rag-answer {
+    border: 1px solid var(--gold);
+    background: var(--gold-dim);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 24px;
+    display: none;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+  .rag-answer.active { display: block; }
+  .rag-answer .answer-header {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .rag-answer .model-tag {
+    float: right;
+    background: var(--surface);
+    color: var(--dim);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+
+  .results-header {
+    color: var(--dim);
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: none;
+  }
+  .results-header.active { display: block; }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+    cursor: default;
+  }
+  .result-card:hover { border-color: var(--gold-dim); }
+
+  .result-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .result-num {
+    color: var(--dim);
+    font-size: 11px;
+    min-width: 20px;
+  }
+  .folder-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .folder-tag.purple { background: #9b59b622; color: var(--purple); }
+  .folder-tag.blue { background: #3498db22; color: var(--blue); }
+  .folder-tag.gold { background: #f7b40822; color: var(--gold); }
+  .folder-tag.green { background: #27ae6022; color: var(--green); }
+  .folder-tag.amber { background: #e67e2222; color: var(--amber); }
+  .folder-tag.cyan { background: #1abc9c22; color: var(--cyan); }
+  .folder-tag.teal { background: #16a08522; color: var(--teal); }
+  .folder-tag.magenta { background: #8e44ad22; color: var(--magenta); }
+  .folder-tag.pink { background: #e8439322; color: var(--pink); }
+  .folder-tag.orange { background: #f39c1222; color: var(--orange); }
+  .folder-tag.violet { background: #6c5ce722; color: var(--violet); }
+  .folder-tag.dim { background: #88888822; color: var(--dim); }
+  .result-title {
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .result-score {
+    font-size: 11px;
+    color: var(--dim);
+    min-width: 44px;
+    text-align: right;
+  }
+
+  .result-path {
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 6px;
+    padding-left: 30px;
+  }
+
+  .score-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 6px 0 8px 30px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .result-snippet {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.5;
+    padding-left: 30px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  #results { min-height: 200px; }
+
+  footer {
+    text-align: center;
+    padding: 24px 0;
+    margin-top: 32px;
+    border-top: 1px solid var(--border);
+    color: #444;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  footer span { color: var(--dim); }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #444;
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+  .empty-state p { max-width: 400px; margin: 0 auto; line-height: 1.6; }
+
+  .error {
+    background: #e74c3c22;
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    display: none;
+    font-size: 13px;
+  }
+  .error.active { display: block; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>VAULT SEARCH</h1>
+    <div class="stats-line" id="statsLine">Loading stats...</div>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="queryInput" placeholder="Search 15,000+ vault notes..." autofocus>
+    <select id="modeSelect">
+      <option value="hybrid">Hybrid</option>
+      <option value="semantic">Semantic</option>
+      <option value="keyword">Keyword</option>
+    </select>
+    <button id="searchBtn" onclick="doSearch()">SEARCH</button>
+  </div>
+
+  <div class="controls">
+    <label class="toggle">
+      <input type="checkbox" id="askToggle">
+      <span class="toggle-track"></span>
+      Ask Mode
+    </label>
+    <select class="model-select" id="modelSelect">
+      <option value="hermes3">hermes3 (fast)</option>
+      <option value="deepseek-r1:70b">deepseek-r1:70b (deep)</option>
+      <option value="qwen3:32b">qwen3:32b (balanced)</option>
+    </select>
+  </div>
+
+  <div class="error" id="errorBox"></div>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div id="loadingText">Searching vault...</div>
+  </div>
+
+  <div class="rag-answer" id="ragAnswer">
+    <div class="answer-header">RAG ANSWER <span class="model-tag" id="answerModel"></span></div>
+    <div id="answerContent"></div>
+  </div>
+
+  <div class="results-header" id="resultsHeader"></div>
+  <div id="results">
+    <div class="empty-state">
+      <div class="icon">&#9681;</div>
+      <p>Search across the entire Cathedral vault.<br>
+      Semantic search finds meaning. Keyword search finds terms. Hybrid combines both.<br>
+      Toggle Ask Mode to get a reasoned answer grounded in vault evidence.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span id="footerStats"></span>
+  </footer>
+</div>
+
+<script>
+const FOLDER_COLORS = {
+  '04_Esoteric_Studies': 'purple',
+  '06_Methods': 'blue',
+  '06_Basic_Reflex_Syllabus': 'gold',
+  '03_Projects': 'green',
+  '02_Refined_Gold': 'amber',
+  '09_Artifacts': 'cyan',
+  '01_Raw_Transcripts': 'dim',
+  '00_Staging': 'dim',
+  '05_Archive_Graveyard': 'dim',
+  '05_Sessions': 'teal',
+  '05_Universes': 'magenta',
+  '07_Design_Vault': 'pink',
+  '07_Social_Content': 'orange',
+  '08_Project_Orchestrator': 'green',
+  '03_The_Sages': 'violet',
+};
+
+function folderColor(folder) {
+  return FOLDER_COLORS[folder] || 'dim';
+}
+
+function folderLabel(folder) {
+  return folder.replace(/^\d+_/, '').replace(/_/g, ' ');
+}
+
+const queryInput = document.getElementById('queryInput');
+const modeSelect = document.getElementById('modeSelect');
+const askToggle = document.getElementById('askToggle');
+const modelSelect = document.getElementById('modelSelect');
+const loading = document.getElementById('loading');
+const loadingText = document.getElementById('loadingText');
+const errorBox = document.getElementById('errorBox');
+const ragAnswer = document.getElementById('ragAnswer');
+const answerContent = document.getElementById('answerContent');
+const answerModel = document.getElementById('answerModel');
+const resultsHeader = document.getElementById('resultsHeader');
+const resultsDiv = document.getElementById('results');
+const searchBtn = document.getElementById('searchBtn');
+
+queryInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+async function loadStats() {
+  try {
+    const res = await fetch('/api/vault-stats');
+    const data = await res.json();
+    document.getElementById('statsLine').innerHTML =
+      `<span>${data.total_notes.toLocaleString()}</span> notes · ` +
+      `<span>${data.total_embedded.toLocaleString()}</span> embedded · ` +
+      `nomic-embed-text · <span>${data.db_size_mb}</span> MB`;
+    document.getElementById('footerStats').textContent =
+      `Last embedded: ${data.last_embedded || 'never'} · DB: ${data.db_size_mb} MB`;
+  } catch (e) {
+    document.getElementById('statsLine').textContent = 'Stats unavailable — run vault-embeddings.py first';
+  }
+}
+
+async function doSearch() {
+  const query = queryInput.value.trim();
+  if (!query) return;
+
+  const mode = modeSelect.value;
+  const isAsk = askToggle.checked;
+  const model = modelSelect.value;
+
+  errorBox.className = 'error';
+  ragAnswer.className = 'rag-answer';
+  resultsHeader.className = 'results-header';
+  resultsDiv.innerHTML = '';
+  loading.className = 'loading active';
+  searchBtn.disabled = true;
+
+  try {
+    if (isAsk) {
+      loadingText.textContent = `Searching vault + reasoning with ${model}...`;
+      const res = await fetch(`/api/vault-ask?q=${encodeURIComponent(query)}&model=${encodeURIComponent(model)}`);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      const data = await res.json();
+
+      answerModel.textContent = model;
+      answerContent.textContent = data.answer;
+      ragAnswer.className = 'rag-answer active';
+
+      renderResults(data.sources || [], query);
+    } else {
+      loadingText.textContent = 'Searching vault...';
+      const res = await fetch(`/api/vault-search?q=${encodeURIComponent(query)}&mode=${mode}&limit=20`);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      const data = await res.json();
+      renderResults(data, query);
+    }
+  } catch (e) {
+    errorBox.textContent = `Error: ${e.message}`;
+    errorBox.className = 'error active';
+  }
+
+  loading.className = 'loading';
+  searchBtn.disabled = false;
+}
+
+function renderResults(results, query) {
+  if (!results.length) {
+    resultsDiv.innerHTML = '<div class="empty-state"><p>No results found.</p></div>';
+    return;
+  }
+
+  resultsHeader.textContent = `${results.length} RESULTS`;
+  resultsHeader.className = 'results-header active';
+
+  const maxScore = Math.max(...results.map(r => r.combined || r.norm_score || r.score || 0));
+
+  resultsDiv.innerHTML = results.map((r, i) => {
+    const score = r.combined || r.norm_score || r.score || 0;
+    const pct = maxScore > 0 ? (score / maxScore * 100) : 0;
+    const color = folderColor(r.folder);
+    const label = folderLabel(r.folder);
+    const snippet = (r.snippet || '').replace(/\n/g, ' ').trim();
+
+    return `
+      <div class="result-card">
+        <div class="result-top">
+          <span class="result-num">${i + 1}</span>
+          <span class="folder-tag ${color}">${label}</span>
+          <span class="result-title">${escHtml(r.title)}</span>
+          <span class="result-score">${score.toFixed(3)}</span>
+        </div>
+        <div class="result-path">${escHtml(r.path)}</div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%"></div></div>
+        <div class="result-snippet">${escHtml(snippet)}</div>
+      </div>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+loadStats();
+</script>
+</body>
+</html>
