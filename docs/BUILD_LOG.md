@@ -1,6 +1,22 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-11-03 — Music Studio (ACE-Step 1.5 Local Music Production)
+
+**What:** Built Cathedral music studio page with local AI music generation via ACE-Step 1.5. Forge = music producer. Instrumental + vocals with lyrics.
+
+**Built:**
+- `music-studio/music-studio.html` — Full producer interface: 8 genre presets (boxing/ambient/cuban/hiphop/lofi/cinematic/drill/reggaeton), lyrics editor with [verse]/[chorus] tags, parameter controls (duration/steps/guidance/seed), track library with localStorage persistence, engine health check
+- `music-studio/music-api.cjs` — Express router bridging HTML to ACE-Step Python backend. Spawns Python process per generation, saves WAV tracks to music-studio/tracks/
+- `music-studio/install.sh` — One-command setup script for ACE-Step venv + dependencies
+- `cath-bridge.cjs` — route `/music-studio` + API mount `/api/music-studio`
+
+**Status:** Page live, API wired. ACE-Step model needs manual install (pip blocked by security classifier). Paul runs `bash ~/nanoclaw/music-studio/install.sh` to activate.
+
+**Engine:** ACE-Step 1.5 — 10GB model, runs on MPS (Apple Silicon), generates full songs with vocals, MIT licensed, $0 cost.
+
+**Door:** `/music-studio` on cath-bridge :8080. Links from Studio environment.
+
 ## 2026-11-03 — Phase 0: Environment Architecture (7-Door Lobby + Routing)
 
 **What:** Replaced flat 153-room lobby with 7 environment doors. Built full BR environment page (28 cards, 6 branches). Created 6 placeholder environment pages. Fixed cath-bridge routing.

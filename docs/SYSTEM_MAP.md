@@ -120,6 +120,10 @@
 - **Personal Environment** · `environments/env-personal.html` · route `/env/personal` · placeholder (rose accent) · doc: BUILD_LOG 2026-11-03
 - **Architecture Plan** · `environments/ENVIRONMENT-ARCHITECTURE.md` · 527-line spec (environments, branches, room mapping, 8-phase build sequence)
 
+## Music Studio
+- **Music Studio** · `music-studio/music-studio.html` · route `/music-studio` · ACE-Step 1.5 local music gen, 8 presets, lyrics editor, track library · doc: BUILD_LOG 2026-11-03
+- **Music API** · `music-studio/music-api.cjs` · mounted at `/api/music-studio` · Express router → ACE-Step Python · doc: BUILD_LOG 2026-11-03
+
 ## Doors (web UIs, served on :8080 by cath-bridge.cjs)
 - **Pandamericano Framework** · `pandamericano-framework.html` · route `/pandamericano` (cath-bridge.cjs) · lobby card in BR district · day 1–17 progression + 177 transferable principles, Spanish+English · doc: vault `06_Methods/pandamericano-methodology-framework.md`
 - **Lorenz Attractor** · `lorenz-attractor.html` · route `/lorenz-attractor.html` (cath-bridge.cjs) · lobby card in Research district · live RK4 strange-attractor render, calibration-standard door · doc: vault `02_Refined_Gold/epistemology/lorenz-attractor-calibration-standard.md`
