@@ -154,6 +154,112 @@ router.get('/search', (req, res) => {
   }
 });
 
+// GET /api/transcription/visual-search?q=sparring — search frame descriptions
+router.get('/visual-search', (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.json([]);
+
+  let Database;
+  try {
+    Database = require('better-sqlite3');
+  } catch (e) {
+    return res.status(500).json({ error: 'better-sqlite3 not available' });
+  }
+
+  if (!fs.existsSync(DB_PATH)) return res.json([]);
+
+  const db = new Database(DB_PATH, { readonly: true });
+  try {
+    const results = db.prepare(`
+      SELECT fd.filename, fd.timestamp_sec, fd.description,
+             v.person_names, v.class_type, v.duration_sec
+      FROM frame_desc_fts fts
+      JOIN frame_descriptions fd ON fd.id = fts.rowid
+      LEFT JOIN videos v ON v.filename = fd.filename
+      WHERE frame_desc_fts MATCH ?
+      ORDER BY rank
+      LIMIT 30
+    `).all(q);
+    res.json(results);
+  } catch (e) {
+    res.json([]);
+  } finally {
+    db.close();
+  }
+});
+
+// GET /api/transcription/360-search?q=footwork — combined audio + visual search
+router.get('/360-search', (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.json({ audio: [], visual: [] });
+
+  let Database;
+  try {
+    Database = require('better-sqlite3');
+  } catch (e) {
+    return res.status(500).json({ error: 'better-sqlite3 not available' });
+  }
+
+  if (!fs.existsSync(DB_PATH)) return res.json({ audio: [], visual: [] });
+
+  const db = new Database(DB_PATH, { readonly: true });
+  try {
+    const audio = db.prepare(`
+      SELECT s.filename, s.start_ms, s.end_ms, s.text,
+             v.person_names, v.class_type
+      FROM segments_fts fts
+      JOIN segments s ON s.id = fts.rowid
+      LEFT JOIN videos v ON v.filename = s.filename
+      WHERE segments_fts MATCH ?
+      ORDER BY rank LIMIT 20
+    `).all(q);
+
+    let visual = [];
+    try {
+      visual = db.prepare(`
+        SELECT fd.filename, fd.timestamp_sec, fd.description,
+               v.person_names, v.class_type
+        FROM frame_desc_fts fts
+        JOIN frame_descriptions fd ON fd.id = fts.rowid
+        LEFT JOIN videos v ON v.filename = fd.filename
+        WHERE frame_desc_fts MATCH ?
+        ORDER BY rank LIMIT 20
+      `).all(q);
+    } catch (e) {}
+
+    res.json({ audio, visual, query: q });
+  } catch (e) {
+    res.json({ audio: [], visual: [], error: e.message });
+  } finally {
+    db.close();
+  }
+});
+
+// GET /api/transcription/visual-stats — frame description stats
+router.get('/visual-stats', (req, res) => {
+  let Database;
+  try {
+    Database = require('better-sqlite3');
+  } catch (e) {
+    return res.status(500).json({ error: 'better-sqlite3 not available' });
+  }
+
+  if (!fs.existsSync(DB_PATH)) return res.json({ total: 0, videos: 0 });
+
+  const db = new Database(DB_PATH, { readonly: true });
+  try {
+    const stats = db.prepare(`
+      SELECT COUNT(*) as total, COUNT(DISTINCT filename) as videos
+      FROM frame_descriptions
+    `).get();
+    res.json(stats);
+  } catch (e) {
+    res.json({ total: 0, videos: 0 });
+  } finally {
+    db.close();
+  }
+});
+
 // GET /api/transcription/transcript/:filename — full transcript for one video
 router.get('/transcript/:filename', (req, res) => {
   const basename = req.params.filename.replace(/\.[^.]+$/, '');
