@@ -5087,6 +5087,65 @@ app.get('/gym-lab', (req, res) => {
   res.sendFile(path.join(GYM_EYES_LAB, 'gym-lab.html'));
 });
 
+// ── Vault RAG Search ────────────────────────────────────────────────────────
+
+const VAULT_RAG_DIR = path.join(NANOCLAW, 'vault-rag');
+app.get('/vault-search', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(VAULT_RAG_DIR, 'vault-rag.html'));
+});
+
+app.get('/api/vault-search', (req, res) => {
+  const q = req.query.q || '';
+  const mode = req.query.mode || 'hybrid';
+  const limit = req.query.limit || '20';
+  if (!q) return res.json({ results: [] });
+  const py = spawn('python3', [path.join(VAULT_RAG_DIR, 'vault-search.py'),
+    mode === 'semantic' ? '--semantic' : mode === 'keyword' ? '--keyword' : '',
+    q, '--limit', limit, '--json'].filter(Boolean), { timeout: 30000 });
+  let out = '';
+  py.stdout.on('data', d => out += d);
+  py.stderr.on('data', d => {});
+  py.on('close', () => {
+    try { res.json({ results: JSON.parse(out) }); }
+    catch { res.json({ results: [], raw: out }); }
+  });
+});
+
+app.get('/api/vault-ask', (req, res) => {
+  const q = req.query.q || '';
+  const model = req.query.model || 'hermes3';
+  if (!q) return res.json({ error: 'no query' });
+  const flag = model.includes('deepseek') ? '--deep-ask' : '--ask';
+  const py = spawn('python3', [path.join(VAULT_RAG_DIR, 'vault-search.py'), flag, q],
+    { timeout: 300000 });
+  let out = '';
+  py.stdout.on('data', d => out += d);
+  py.stderr.on('data', d => {});
+  py.on('close', () => { res.json({ answer: out, model }); });
+});
+
+app.get('/api/vault-stats', (req, res) => {
+  const py = spawn('python3', ['-c',
+    `import sys, importlib.util; spec=importlib.util.spec_from_file_location('vs','${path.join(VAULT_RAG_DIR, 'vault-search.py')}'); m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); import json; print(json.dumps(m.get_stats()))`
+  ], { timeout: 5000 });
+  let out = '';
+  py.stdout.on('data', d => out += d);
+  py.stderr.on('data', d => {});
+  py.on('close', () => {
+    try { res.json(JSON.parse(out)); }
+    catch { res.json({ error: 'stats unavailable' }); }
+  });
+});
+
+// ── M5 Relay Engine ─────────────────────────────────────────────────────────
+
+const RELAY_DIR = path.join(NANOCLAW, 'm5-relay');
+app.get('/relay', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(RELAY_DIR, 'relay.html'));
+});
+
 // ── Environments ──────────────────────────────────────────────────────────────
 
 app.get('/env/test', (req, res) => {

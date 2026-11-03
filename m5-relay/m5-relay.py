@@ -31,7 +31,7 @@ MODELS = {
     "deep": "deepseek-r1:70b",
     "challenge": "qwen3:32b",
 }
-VAULT_DB = os.path.expanduser("~/nanoclaw/m5-relay/vault-vectors.db")
+VAULT_DB = os.path.expanduser("~/nanoclaw/vault-rag/vault-vectors.db")
 PROMPTS_DIR = os.path.expanduser("~/nanoclaw/prompts")
 
 FLINCH_PATTERNS = {
@@ -168,13 +168,36 @@ def search_vault(query, limit=10):
     try:
         conn = sqlite3.connect(VAULT_DB)
         conn.row_factory = sqlite3.Row
+        terms = query.replace("'", "").replace('"', "")
         rows = conn.execute(
-            "SELECT path, title, snippet FROM vault_fts WHERE vault_fts MATCH ? ORDER BY rank LIMIT ?",
-            (query, limit),
+            """SELECT n.path, n.title, n.folder, n.content
+               FROM notes_fts fts
+               JOIN notes n ON n.id = fts.rowid
+               WHERE notes_fts MATCH ?
+               ORDER BY rank LIMIT ?""",
+            (terms, limit),
         ).fetchall()
         conn.close()
-        return [dict(r) for r in rows]
+        return [{"path": r["path"], "title": r["title"], "folder": r["folder"],
+                 "snippet": (r["content"] or "")[:200]} for r in rows]
     except Exception:
+        words = query.split()
+        if len(words) > 1:
+            try:
+                conn = sqlite3.connect(VAULT_DB)
+                conn.row_factory = sqlite3.Row
+                or_query = " OR ".join(w for w in words if len(w) > 2)
+                rows = conn.execute(
+                    """SELECT n.path, n.title, n.folder, n.content
+                       FROM notes_fts fts JOIN notes n ON n.id = fts.rowid
+                       WHERE notes_fts MATCH ? ORDER BY rank LIMIT ?""",
+                    (or_query, limit),
+                ).fetchall()
+                conn.close()
+                return [{"path": r["path"], "title": r["title"], "folder": r["folder"],
+                         "snippet": (r["content"] or "")[:200]} for r in rows]
+            except Exception:
+                return []
         return []
 
 
@@ -183,7 +206,7 @@ def format_vault_context(results):
         return ""
     lines = ["VAULT EVIDENCE:"]
     for r in results:
-        lines.append(f"  [{r.get('path', '?')}] {r.get('snippet', r.get('title', ''))}")
+        lines.append(f"  [{r.get('folder', '?')}/{r.get('path', '?')}] {r.get('title', '')}: {r.get('snippet', '')}")
     return "\n".join(lines)
 
 
