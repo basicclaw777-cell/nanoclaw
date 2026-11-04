@@ -127,7 +127,23 @@ async function init() {
     ]);
     const goals = await goalsRes.json();
     envData = goals[ENV_KEY];
-    if (!envData) { document.getElementById('content').textContent = 'Unknown environment.'; return; }
+    if (!envData) {
+      const cards = Object.entries(goals).map(([k, g]) =>
+        `<a href="/mission?env=${k}" style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:#111;border:1px solid rgba(255,255,255,0.06);border-radius:12px;text-decoration:none;color:#f0f0f0;transition:all 0.2s">
+          <span style="font-size:32px">${g.icon}</span>
+          <div><div style="font-family:Anton,sans-serif;font-size:18px;letter-spacing:0.04em;text-transform:uppercase">${g.name}</div>
+          <div style="font-size:12px;color:#888;margin-top:2px">${g.goal}</div></div>
+        </a>`
+      ).join('');
+      document.getElementById('content').innerHTML = `
+        <div style="margin-bottom:24px">
+          <h1 style="font-family:Anton,sans-serif;font-size:32px;letter-spacing:1px">MISSION DIRECTORY</h1>
+          <div style="font-size:13px;color:#888;margin-top:4px">Choose an environment to refine its mission</div>
+        </div>
+        <div style="display:grid;gap:10px">${cards}</div>
+        <div style="margin-top:20px"><a href="/build-tracker" style="color:#f7b408;font-size:12px;text-decoration:none">← Back to Build Tracker</a></div>`;
+      return;
+    }
 
     if (histRes.ok) {
       const histData = await histRes.json();

@@ -428,13 +428,13 @@ a { color: inherit; text-decoration: none; }
 <script>
 // ── Environment definitions ──
 const ENVS = [
-  { key: 'Basic Reflex', name: 'BASIC REFLEX', icon: '🥊', color: '#f7b408', projects: ['Basic Reflex','BR Instagram'] },
-  { key: 'Studio', name: 'STUDIO', icon: '🎬', color: '#b088e0', projects: ['Studio'] },
-  { key: 'Money', name: 'MONEY', icon: '💰', color: '#4dba6e', projects: ['Money'] },
-  { key: 'Cathedral', name: 'CATHEDRAL', icon: '⛪', color: '#e8a030', projects: ['Cathedral','Lobby','Calendar'] },
-  { key: 'University', name: 'UNIVERSITY', icon: '🎓', color: '#5ab0d0', projects: ['University'] },
-  { key: 'Research', name: 'RESEARCH', icon: '🔬', color: '#d06898', projects: ['Research'] },
-  { key: 'General', name: 'GENERAL', icon: '📦', color: '#a8a090', projects: ['General'] },
+  { key: 'Basic Reflex', goalKey: 'br', name: 'BASIC REFLEX', icon: '🥊', color: '#f7b408', projects: ['Basic Reflex','BR Instagram'] },
+  { key: 'Studio', goalKey: 'studio', name: 'STUDIO', icon: '🎬', color: '#b088e0', projects: ['Studio'] },
+  { key: 'Money', goalKey: 'money', name: 'MONEY', icon: '💰', color: '#4dba6e', projects: ['Money'] },
+  { key: 'Body & Mind', goalKey: 'bodymind', name: 'BODY & MIND', icon: '🧠', color: '#0891b2', projects: ['Research'] },
+  { key: 'University', goalKey: 'universe', name: 'UNIVERSE', icon: '🔭', color: '#5ab0d0', projects: ['University'] },
+  { key: 'Cathedral', goalKey: 'cathedral', name: 'CATHEDRAL', icon: '⛪', color: '#e8a030', projects: ['Cathedral','Lobby','Calendar'] },
+  { key: 'Personal', goalKey: 'personal', name: 'PERSONAL', icon: '📅', color: '#d4506b', projects: ['General'] },
 ];
 
 const PROJECT_COLORS = {
@@ -639,13 +639,13 @@ function renderHeatRooms() {
     const pct = Math.round((data.total / maxTotal) * 100);
     const intensity = data.daysSince < 3 ? 0.5 : data.daysSince < 7 ? 0.25 : 0.08;
     const daysLabel = data.daysSince === 0 ? 'Today' : data.daysSince < 999 ? data.daysSince + 'd ago' : 'Never';
-    const goal = envGoals[env.key];
+    const goal = envGoals[env.goalKey];
     const goalPct = goal ? Math.round((goal.current / goal.target) * 100) : 0;
     const goalHtml = goal ? `
       <div class="hr-goal" title="${goal.goal}">${goal.goal}</div>
       <div class="hr-goal-bar"><div class="hr-goal-fill" style="width:${goalPct}%"></div></div>
       <div class="hr-goal-pct">${goalPct}%</div>` : '';
-    return `<div class="heat-room" style="--room-glow: ${env.color}" onclick="location.href='/mission?env=${env.key}'">
+    return `<div class="heat-room" style="--room-glow: ${env.color}" onclick="location.href='/mission?env=${env.goalKey}'">
       <div class="hr-icon">${env.icon}</div>
       <div class="hr-name">${env.name}</div>
       <div class="hr-count">${data.total} sessions · ${data.recent} recent</div>
