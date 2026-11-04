@@ -1,65 +1,93 @@
 {
   "br": {
     "name": "Basic Reflex",
+    "icon": "🥊",
+    "color": "#f7b408",
+    "envRoute": "/env/br",
     "goal": "60% first-visit → second-visit conversion rate",
     "metric": "first_visit_conversion",
     "target": 60,
     "current": 5,
     "unit": "%",
-    "notes": "CRM median = 0 finding. AI follow-up chain: 1st→2nd visit gate. Currently near-zero tracked."
+    "notes": "CRM median = 0 finding. AI follow-up chain: 1st→2nd visit gate. Currently near-zero tracked.",
+    "subgoals": []
   },
   "studio": {
     "name": "Studio",
+    "icon": "🎨",
+    "color": "#9333ea",
+    "envRoute": "/env/studio",
     "goal": "Ship Logan web series pilot episode",
     "metric": "pilot_completion",
     "target": 100,
     "current": 65,
     "unit": "%",
-    "notes": "50 shots done, 67 keyframes, 63 videos. Need assembly + audio + distribution."
+    "notes": "50 shots done, 67 keyframes, 63 videos. Need assembly + audio + distribution.",
+    "subgoals": []
   },
   "money": {
     "name": "Money",
+    "icon": "💰",
+    "color": "#0e9f6e",
+    "envRoute": "/env/money",
     "goal": "$150K BUD grant submitted + property pipeline producing",
     "metric": "grant_and_pipeline",
     "target": 100,
     "current": 40,
     "unit": "%",
-    "notes": "BUD grant application in progress. Property scout running daily scans."
+    "notes": "BUD grant application in progress. Property scout running daily scans.",
+    "subgoals": []
   },
   "bodymind": {
     "name": "Body & Mind",
+    "icon": "🧠",
+    "color": "#0891b2",
+    "envRoute": "/env/body-mind",
     "goal": "135K corpus producing actionable relays weekly",
     "metric": "relay_cadence",
     "target": 4,
     "current": 1,
     "unit": "relays/month",
-    "notes": "Corpus ingested. Relay infrastructure built. Cadence not yet routine."
+    "notes": "Corpus ingested. Relay infrastructure built. Cadence not yet routine.",
+    "subgoals": []
   },
   "universe": {
     "name": "Universe",
+    "icon": "🔭",
+    "color": "#b8860b",
+    "envRoute": "/env/universe",
     "goal": "Shadow curriculum 14/14 built",
     "metric": "shadow_courses",
     "target": 14,
     "current": 5,
     "unit": "courses",
-    "notes": "5/14 shadow curriculum courses built. 21 schools, 169 courses total in university."
+    "notes": "5/14 shadow curriculum courses built. 21 schools, 169 courses total in university.",
+    "subgoals": []
   },
   "cathedral": {
     "name": "Cathedral",
+    "icon": "⚙️",
+    "color": "#475067",
+    "envRoute": "/env/cathedral",
     "goal": "Full autonomy loop — B-Team overnight, Forge day, zero manual",
     "metric": "autonomy_score",
     "target": 100,
     "current": 35,
     "unit": "%",
-    "notes": "B-Team shift running. Build Tracker live. Execution layer built. Missing: voice, multi-step workflows, self-correction."
+    "notes": "B-Team shift running. Build Tracker live. Execution layer built. Missing: voice, multi-step workflows, self-correction.",
+    "subgoals": []
   },
   "personal": {
     "name": "Personal",
+    "icon": "📅",
+    "color": "#d4506b",
+    "envRoute": "/env/personal",
     "goal": "Calendar + seed routine fully autonomous",
     "metric": "routine_automation",
     "target": 100,
     "current": 60,
     "unit": "%",
-    "notes": "Seed routine daily. Calendar as primary surface. Travel agent WIP."
+    "notes": "Seed routine daily. Calendar as primary surface. Travel agent WIP.",
+    "subgoals": []
   }
 }

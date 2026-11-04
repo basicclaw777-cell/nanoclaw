@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Director</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;--card:#111;--border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --fg:#f0f0f0;--fg2:#888;--gold:#f7b408;--gold-soft:rgba(247,180,8,0.12);
+  --env-color:#f7b408;
+}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+.gold-strip{height:3px;background:linear-gradient(90deg,transparent 0%,var(--env-color) 20%,var(--env-color) 80%,transparent 100%)}
+
+.wrap{max-width:800px;margin:0 auto;padding:32px 24px 40px}
+
+.nav{display:flex;align-items:center;gap:12px;margin-bottom:28px;font-size:12px;color:var(--fg2)}
+.nav a{color:var(--fg2);text-decoration:none;transition:color 0.2s}
+.nav a:hover{color:var(--gold)}
+.nav .sep{opacity:0.4}
+
+.header{display:flex;align-items:flex-start;gap:20px;margin-bottom:32px}
+.header-icon{font-size:48px;line-height:1;flex-shrink:0}
+.header-text h1{font-family:'Anton',sans-serif;font-size:32px;letter-spacing:1px;text-transform:uppercase;line-height:1.1}
+.header-text .subtitle{font-size:13px;color:var(--fg2);margin-top:4px}
+
+.goal-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px;
+  position:relative;overflow:hidden
+}
+.goal-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--env-color),transparent)
+}
+.goal-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--env-color);margin-bottom:8px}
+.goal-text{font-size:18px;font-weight:600;line-height:1.4;margin-bottom:12px}
+.goal-progress{display:flex;align-items:center;gap:12px}
+.goal-bar{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.goal-bar-fill{height:100%;border-radius:3px;background:var(--env-color);transition:width 0.8s ease}
+.goal-pct{font-size:14px;font-weight:700;color:var(--env-color);min-width:40px;text-align:right}
+.goal-notes{font-size:12px;color:var(--fg2);margin-top:10px;line-height:1.5}
+
+.subgoals{margin-bottom:24px}
+.subgoals h3{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;color:var(--fg2)}
+.subgoal{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px}
+.subgoal-dot{width:8px;height:8px;border-radius:50%;background:var(--env-color);flex-shrink:0;margin-top:4px}
+.subgoal-text{font-size:13px;line-height:1.4}
+.subgoal-empty{font-size:12px;color:var(--fg2);font-style:italic;padding:12px 0}
+
+.chat-section{margin-bottom:24px}
+.chat-section h3{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px;color:var(--fg2)}
+.chat-history{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:16px;max-height:400px;overflow-y:auto;margin-bottom:12px;min-height:120px
+}
+.chat-empty{font-size:12px;color:var(--fg2);font-style:italic;text-align:center;padding:32px 0}
+.chat-msg{margin-bottom:14px;display:flex;flex-direction:column;gap:3px}
+.chat-msg:last-child{margin-bottom:0}
+.chat-role{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.chat-role.user{color:var(--gold)}
+.chat-role.assistant{color:var(--env-color)}
+.chat-bubble{font-size:13px;line-height:1.5;color:var(--fg);white-space:pre-wrap}
+.chat-time{font-size:9px;color:var(--fg2)}
+
+.chat-input-row{display:flex;gap:8px}
+.chat-input{
+  flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;color:var(--fg);font-size:13px;font-family:inherit;resize:none;
+  outline:none;transition:border-color 0.2s;min-height:44px;max-height:120px
+}
+.chat-input:focus{border-color:var(--env-color)}
+.chat-input::placeholder{color:var(--fg2)}
+.chat-send{
+  background:var(--env-color);color:#000;border:none;border-radius:10px;
+  padding:0 20px;font-weight:700;font-size:12px;letter-spacing:0.04em;cursor:pointer;
+  transition:opacity 0.2s;white-space:nowrap
+}
+.chat-send:hover{opacity:0.85}
+.chat-send:disabled{opacity:0.4;cursor:not-allowed}
+
+.links{display:flex;gap:10px;flex-wrap:wrap}
+.link-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:10px 18px;
+  border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  color:var(--fg);font-size:12px;font-weight:600;text-decoration:none;
+  transition:all 0.2s;letter-spacing:0.02em
+}
+.link-btn:hover{border-color:var(--env-color);color:var(--env-color)}
+
+.loading{text-align:center;padding:40px;color:var(--fg2);font-size:13px}
+
+@media(max-width:640px){
+  .wrap{padding:24px 16px}
+  .header-icon{font-size:36px}
+  .header-text h1{font-size:24px}
+  .goal-text{font-size:15px}
+}
+</style>
+</head>
+<body>
+<div class="gold-strip"></div>
+<div class="wrap">
+  <div class="nav">
+    <a href="/build-tracker">Build Tracker</a>
+    <span class="sep">›</span>
+    <span id="nav-name">Mission</span>
+  </div>
+
+  <div id="content" class="loading">Loading mission...</div>
+</div>
+
+<script>
+const ENV_KEY = new URLSearchParams(location.search).get('env') || 'br';
+let envData = null;
+let chatHistory = [];
+
+async function init() {
+  try {
+    const [goalsRes, histRes] = await Promise.all([
+      fetch('/api/environment-goals'),
+      fetch(`/api/mission/${ENV_KEY}/history`)
+    ]);
+    const goals = await goalsRes.json();
+    envData = goals[ENV_KEY];
+    if (!envData) { document.getElementById('content').textContent = 'Unknown environment.'; return; }
+
+    if (histRes.ok) {
+      const histData = await histRes.json();
+      chatHistory = histData.messages || [];
+      if (histData.subgoals) envData.subgoals = histData.subgoals;
+    }
+
+    document.documentElement.style.setProperty('--env-color', envData.color);
+    document.querySelector('.gold-strip').style.background =
+      `linear-gradient(90deg,transparent 0%,${envData.color} 20%,${envData.color} 80%,transparent 100%)`;
+    document.getElementById('nav-name').textContent = envData.name + ' Mission';
+    document.title = envData.name + ' — Mission Director';
+    render();
+  } catch(e) {
+    document.getElementById('content').textContent = 'Failed to load: ' + e.message;
+  }
+}
+
+function render() {
+  const pct = Math.round((envData.current / envData.target) * 100);
+  const subgoalsHtml = (envData.subgoals && envData.subgoals.length)
+    ? envData.subgoals.map(sg => `
+      <div class="subgoal">
+        <div class="subgoal-dot"></div>
+        <div class="subgoal-text">${esc(sg)}</div>
+      </div>`).join('')
+    : '<div class="subgoal-empty">No sub-goals yet. Chat below to define directions.</div>';
+
+  const chatHtml = chatHistory.length
+    ? chatHistory.map(m => `
+      <div class="chat-msg">
+        <span class="chat-role ${m.role}">${m.role === 'user' ? 'Paul' : envData.name + ' Director'}</span>
+        <div class="chat-bubble">${esc(m.content)}</div>
+        ${m.time ? `<span class="chat-time">${new Date(m.time).toLocaleDateString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>` : ''}
+      </div>`).join('')
+    : `<div class="chat-empty">Start a conversation about your ${envData.name} goals.<br>The director will interview you and refine the mission.</div>`;
+
+  document.getElementById('content').innerHTML = `
+    <div class="header">
+      <div class="header-icon">${envData.icon}</div>
+      <div class="header-text">
+        <h1>${envData.name}</h1>
+        <div class="subtitle">Mission Director — Goal refinement & strategy</div>
+      </div>
+    </div>
+
+    <div class="goal-card">
+      <div class="goal-label">Primary Goal</div>
+      <div class="goal-text">${esc(envData.goal)}</div>
+      <div class="goal-progress">
+        <div class="goal-bar"><div class="goal-bar-fill" style="width:${pct}%"></div></div>
+        <div class="goal-pct">${pct}%</div>
+      </div>
+      <div class="goal-notes">${esc(envData.notes)}</div>
+    </div>
+
+    <div class="subgoals">
+      <h3>Directions & Sub-Goals</h3>
+      ${subgoalsHtml}
+    </div>
+
+    <div class="chat-section">
+      <h3>${envData.name} Director</h3>
+      <div class="chat-history" id="chat-history">${chatHtml}</div>
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chat-input" placeholder="Tell the director about your goals for ${envData.name}..." rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+        <button class="chat-send" id="chat-send" onclick="sendChat()">SEND</button>
+      </div>
+    </div>
+
+    <div class="links">
+      <a href="${envData.envRoute}" class="link-btn">${envData.icon} Open ${envData.name} Environment</a>
+      <a href="/build-tracker" class="link-btn">📊 Back to Tracker</a>
+    </div>
+  `;
+
+  const hist = document.getElementById('chat-history');
+  hist.scrollTop = hist.scrollHeight;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('chat-send');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  btn.disabled = true;
+  btn.textContent = 'THINKING...';
+
+  chatHistory.push({ role: 'user', content: msg, time: new Date().toISOString() });
+  render();
+
+  try {
+    const r = await fetch(`/api/mission/${ENV_KEY}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    const data = await r.json();
+    if (data.response) {
+      chatHistory.push({ role: 'assistant', content: data.response, time: new Date().toISOString() });
+      if (data.subgoals) envData.subgoals = data.subgoals;
+      if (data.goal_update) {
+        envData.goal = data.goal_update.goal || envData.goal;
+        envData.notes = data.goal_update.notes || envData.notes;
+      }
+    }
+  } catch(e) {
+    chatHistory.push({ role: 'assistant', content: 'Connection error. Try again.', time: new Date().toISOString() });
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'SEND';
+  render();
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+init();
+</script>
+</body>
+</html>

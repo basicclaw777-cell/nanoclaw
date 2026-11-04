@@ -4836,6 +4836,112 @@ app.post('/api/environment-goals/:env', (req, res) => {
   }
 });
 
+// ── Mission Director API ─────────────────────────────────────────────────────
+const MISSION_DIR = path.join(NANOCLAW, 'environments', 'mission-data');
+try { fs.mkdirSync(MISSION_DIR, { recursive: true }); } catch {}
+
+app.get('/mission', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'environments', 'mission.html'));
+});
+
+app.get('/api/mission/:env/history', (req, res) => {
+  const env = req.params.env;
+  const fp = path.join(MISSION_DIR, `${env}.json`);
+  try {
+    if (fs.existsSync(fp)) {
+      res.json(JSON.parse(fs.readFileSync(fp, 'utf8')));
+    } else {
+      res.json({ messages: [], subgoals: [] });
+    }
+  } catch (e) {
+    res.json({ messages: [], subgoals: [] });
+  }
+});
+
+app.post('/api/mission/:env/chat', async (req, res) => {
+  const env = req.params.env;
+  const { message } = req.body || {};
+  if (!message) return res.status(400).json({ error: 'No message' });
+
+  const fp = path.join(MISSION_DIR, `${env}.json`);
+  let missionData;
+  try {
+    missionData = fs.existsSync(fp) ? JSON.parse(fs.readFileSync(fp, 'utf8')) : { messages: [], subgoals: [] };
+  } catch { missionData = { messages: [], subgoals: [] }; }
+
+  let goals;
+  try { goals = JSON.parse(fs.readFileSync(GOALS_FILE, 'utf8')); } catch { return res.status(500).json({ error: 'Goals unavailable' }); }
+  const envGoal = goals[env];
+  if (!envGoal) return res.status(404).json({ error: 'Unknown environment' });
+
+  const userMsg = { role: 'user', content: message, time: new Date().toISOString() };
+  missionData.messages.push(userMsg);
+
+  const recentChat = missionData.messages.slice(-20);
+  const chatContext = recentChat.map(m => `${m.role === 'user' ? 'Paul' : 'Director'}: ${m.content}`).join('\n\n');
+
+  const systemPrompt = `You are the Mission Director for the "${envGoal.name}" environment in Paul's Cathedral system.
+
+Your role: interview Paul about his goals for this environment. Be conversational, specific, and strategic. Ask follow-up questions. Help him refine vague goals into concrete, measurable directions.
+
+CURRENT STATE:
+- Primary goal: ${envGoal.goal}
+- Progress: ${envGoal.current}/${envGoal.target} ${envGoal.unit} (${Math.round((envGoal.current / envGoal.target) * 100)}%)
+- Notes: ${envGoal.notes}
+- Current sub-goals: ${(missionData.subgoals || []).join('; ') || 'None yet'}
+
+RULES:
+- Be direct and strategic, not corporate. Paul is a boxing coach and AI builder in Hong Kong.
+- Ask ONE focused question at a time. Don't overwhelm.
+- When Paul reveals a clear direction, acknowledge it and probe deeper.
+- After 3+ exchanges, start synthesizing sub-goals from what Paul has said.
+- Keep responses under 150 words. Conversational, not essay.
+- Reference specific Cathedral systems/tools where relevant.
+- If Paul mentions something that should update the primary goal or notes, say so explicitly.
+
+When you identify concrete sub-goals from what Paul has actually said (not placeholders), end your response with a line:
+[SUBGOALS: first real sub-goal | second real sub-goal | third real sub-goal]
+CRITICAL: Only include this AFTER Paul has given you enough detail to form real, specific sub-goals. Never use placeholder text like "goal1" or "goal2". If you don't have enough information yet, do NOT include a SUBGOALS line at all — just ask your next question.`;
+
+  try {
+    const ollamaRes = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'hermes3',
+        prompt: chatContext,
+        system: systemPrompt,
+        stream: false,
+        options: { temperature: 0.5, num_predict: 300 }
+      })
+    });
+    const ollamaData = await ollamaRes.json();
+    let response = (ollamaData.response || '').trim();
+
+    let subgoals = missionData.subgoals || [];
+    const sgMatch = response.match(/\[SUBGOALS:\s*(.+?)\]/);
+    if (sgMatch) {
+      subgoals = sgMatch[1].split('|').map(s => s.trim()).filter(Boolean);
+      response = response.replace(/\[SUBGOALS:\s*.+?\]/, '').trim();
+    }
+
+    const assistantMsg = { role: 'assistant', content: response, time: new Date().toISOString() };
+    missionData.messages.push(assistantMsg);
+    missionData.subgoals = subgoals;
+    fs.writeFileSync(fp, JSON.stringify(missionData, null, 2));
+
+    if (subgoals.length) {
+      goals[env].subgoals = subgoals;
+      fs.writeFileSync(GOALS_FILE, JSON.stringify(goals, null, 2));
+    }
+
+    res.json({ response, subgoals });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ── Instagram Studio API ─────────────────────────────────────────────────────
 app.get('/instagram-studio', (req, res) => {
   res.set('Cache-Control', 'no-store');

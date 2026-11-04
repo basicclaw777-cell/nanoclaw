@@ -645,7 +645,7 @@ function renderHeatRooms() {
       <div class="hr-goal" title="${goal.goal}">${goal.goal}</div>
       <div class="hr-goal-bar"><div class="hr-goal-fill" style="width:${goalPct}%"></div></div>
       <div class="hr-goal-pct">${goalPct}%</div>` : '';
-    return `<div class="heat-room" style="--room-glow: ${env.color}" onclick="filter('${env.projects[0]}',document.querySelector('.f-chip'))">
+    return `<div class="heat-room" style="--room-glow: ${env.color}" onclick="location.href='/mission?env=${env.key}'">
       <div class="hr-icon">${env.icon}</div>
       <div class="hr-name">${env.name}</div>
       <div class="hr-count">${data.total} sessions · ${data.recent} recent</div>
