@@ -29,6 +29,7 @@ app.use('/api/music-studio', require('./music-studio/music-api.cjs'));
 // Image gallery — serve basic-reflex and visual-studio images
 app.use('/basic-reflex', express.static(path.join(HOME, 'basic-reflex'), { maxAge: '1h' }));
 app.use('/visual-studio', express.static(path.join(CATH, 'visual-studio'), { maxAge: '1h' }));
+app.use('/instagram-assets', express.static(path.join(CATH, 'content-studio', 'instagram'), { maxAge: '10m' }));
 app.use('/cathedral-artifacts', express.static(path.join(CATH, 'artifacts'), { maxAge: '1h' }));
 
 // Serve gallery sub-tools
@@ -4584,6 +4585,263 @@ app.post('/api/content-studio/fulfill', (req, res) => {
     fs.writeFileSync(f, JSON.stringify(wishlist, null, 2));
     res.json({ fulfilled: true, request });
   } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── Build Tracker API ────────────────────────────────────────────────────────
+app.get('/build-tracker', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'environments', 'build-tracker.html'));
+});
+
+app.get('/api/build-tracker', (req, res) => {
+  try {
+    const raw = fs.readFileSync(path.join(CATH, 'SESSION-LOG.md'), 'utf8');
+    const sections = raw.split(/^## /m).filter(s => s.trim());
+    const sessions = [];
+    for (const sec of sections) {
+      const lines = sec.split('\n');
+      const header = lines[0].trim();
+      const dateMatch = header.match(/^(\d{4}-\d{2}-\d{2})\s*—\s*(.+?)(?:\s*\(session\s+\w+\))?$/);
+      if (!dateMatch) continue;
+      const [, date, title] = dateMatch;
+      const body = lines.slice(1).join('\n');
+      const extract = (key) => {
+        const m = body.match(new RegExp(`\\*\\*${key}:\\*\\*\\s*(.+?)(?=\\n\\*\\*|\\n##|$)`, 's'));
+        return m ? m[1].trim() : '';
+      };
+      const built = extract('Built');
+      const decided = extract('Decided');
+      const inflight = extract('In-flight');
+      const next = extract('Next');
+      const methods = extract('Methods');
+      const corrections = extract('Corrections');
+      // detect which environments/projects are touched
+      const projects = new Set();
+      const text = (built + ' ' + title).toLowerCase();
+      if (/instagram|caption|photo|crop|grade/.test(text)) projects.add('BR Instagram');
+      if (/br\b|boxing|coaching|gym|member|beginner|whiteboard|crm/.test(text)) projects.add('Basic Reflex');
+      if (/university|degree|course|knowledge|photography/.test(text)) projects.add('University');
+      if (/lobby|door|environment|room/.test(text)) projects.add('Lobby');
+      if (/logan|stick|animation|hexad|aether|film/.test(text)) projects.add('Studio');
+      if (/calendar|seed|planner/.test(text)) projects.add('Calendar');
+      if (/cathedral|agent|emergence|memory|pm2/.test(text)) projects.add('Cathedral');
+      if (/property|trading|money|revenue/.test(text)) projects.add('Money');
+      if (/cosmology|vault|research|corpus/.test(text)) projects.add('Research');
+      if (projects.size === 0) projects.add('General');
+      sessions.push({
+        date, title,
+        built: built.substring(0, 500),
+        decided: decided.substring(0, 300),
+        inflight: inflight.substring(0, 300),
+        next: next.substring(0, 300),
+        methods: methods.substring(0, 200),
+        corrections: corrections.substring(0, 200),
+        projects: [...projects]
+      });
+    }
+    sessions.reverse();
+    res.json({ sessions: sessions.slice(0, 30), total: sessions.length });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── Build Intelligence API (Layer 2: Compass) ──────────────────────────────
+const { buildCompassContext } = require(path.join(NANOCLAW, 'environments', 'compass-context.cjs'));
+
+app.post('/api/build-intelligence', async (req, res) => {
+  try {
+    const compassCtx = buildCompassContext();
+    const userQ = req.body && req.body.query ? req.body.query : null;
+
+    const systemPrompt = `You are the Forge Observer — an intelligence analyst embedded in The Cathedral, a personal sovereign AI research system.
+
+You have access to:
+- Build session history (what was built, when, by which project)
+- The Gap Register (typed holes that need closing — each has a closure predicate)
+- High-priority items from the memory index
+- Environment door status (live cards, WIP, gaps)
+
+The Cathedral has 7 environments:
+- Basic Reflex (boxing gym business — THE revenue source)
+- Studio (creative: Logan animation, film, 3D, content)
+- Money (revenue, property, trading)
+- Body & Mind (health, coaching methodology)
+- Universe (research: cosmology, ancient knowledge, aetheric field)
+- Cathedral (platform: agents, memory, infrastructure)
+- Personal (Paul's growth, relationships)
+
+Your job:
+1. IDENTIFY what's neglected vs overworked
+2. SPOT compounding opportunities (Project A + Project B = 10x)
+3. FLAG automation candidates (repetitive manual work that M5 could handle)
+4. RECOMMEND specific next actions with reasoning
+5. SURFACE open gaps that could be closed this session
+
+Rules:
+- Name specific projects, dates, files. Never generic advice.
+- Revenue-generating work (Basic Reflex) gets priority weighting.
+- "BUILD READY" items in memory should be flagged — they're approved but unstarted.
+- Open gaps from the register are production orders, not suggestions.
+- Keep responses under 300 words. Be direct.`;
+
+    const userPrompt = userQ
+      ? `${compassCtx}\n\n---\nQuestion from Paul: ${userQ}`
+      : `${compassCtx}\n\n---\nAnalyze the current state. Provide:
+1. EFFORT MAP — where work is concentrated (last 2 weeks) vs dormant
+2. OPEN GAPS — which gap register items could be actioned now
+3. BUILD READY — items marked ready in memory but not yet started
+4. COMPOUNDING MOVE — one action that advances multiple projects simultaneously
+5. AUTOMATION CANDIDATE — one repetitive pattern that could be automated on M5`;
+
+    const ollamaRes = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'hermes3',
+        system: systemPrompt,
+        prompt: userPrompt,
+        stream: false,
+        options: { temperature: 0.35, num_predict: 600 }
+      })
+    });
+    const data = await ollamaRes.json();
+    res.json({ response: data.response, model: 'hermes3', context_size: compassCtx.length });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── Build Intelligence: Execution Layer (Layer 3) ───────────────────────────
+app.post('/api/build-actions/execute', (req, res) => {
+  const { action, params } = req.body || {};
+  if (!action) return res.status(400).json({ error: 'No action specified' });
+
+  try {
+    switch (action) {
+
+      case 'append-session-log': {
+        const { date, title, built, decided, inflight, next } = params || {};
+        if (!date || !title) return res.status(400).json({ error: 'date and title required' });
+        const entry = `\n## ${date} — ${title}\n\n**Built:** ${built || 'N/A'}\n**Decided:** ${decided || 'N/A'}\n**In-flight:** ${inflight || 'N/A'}\n**Next:** ${next || 'N/A'}\n`;
+        fs.appendFileSync(path.join(CATH, 'SESSION-LOG.md'), entry);
+        res.json({ ok: true, action, message: `Session logged: ${date} — ${title}` });
+        break;
+      }
+
+      case 'create-gap': {
+        const { name, closure_predicate, saddle_pressure } = params || {};
+        if (!name || !closure_predicate) return res.status(400).json({ error: 'name and closure_predicate required' });
+        const gap = {
+          status: 'open',
+          name,
+          absent_object: { description: name },
+          closure_predicate: { language: 'human', expr: closure_predicate },
+          saddle_pressure: saddle_pressure || 0.5,
+          searched: [],
+          created: new Date().toISOString()
+        };
+        const fname = `gap-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`;
+        fs.writeFileSync(path.join(CATH, 'gap-register', fname), JSON.stringify(gap, null, 2));
+        res.json({ ok: true, action, message: `Gap created: ${fname}` });
+        break;
+      }
+
+      case 'pm2-restart': {
+        const { process_name } = params || {};
+        if (!process_name) return res.status(400).json({ error: 'process_name required' });
+        const safe = /^[a-zA-Z0-9_-]+$/.test(process_name);
+        if (!safe) return res.status(400).json({ error: 'Invalid process name' });
+        const { execSync } = require('child_process');
+        const out = execSync(`pm2 restart ${process_name} 2>&1`, { encoding: 'utf8', timeout: 10000 });
+        res.json({ ok: true, action, message: `Restarted ${process_name}` });
+        break;
+      }
+
+      case 'git-commit': {
+        const { repo, message } = params || {};
+        const repoMap = {
+          'nanoclaw': NANOCLAW,
+          'Cathedral': CATH,
+          'cathedral-vault': path.join(process.env.HOME, 'cathedral-vault')
+        };
+        const repoDir = repoMap[repo];
+        if (!repoDir) return res.status(400).json({ error: `Unknown repo: ${repo}. Use: nanoclaw, Cathedral, cathedral-vault` });
+        if (!message) return res.status(400).json({ error: 'commit message required' });
+        const { execSync } = require('child_process');
+        execSync(`git -C "${repoDir}" add -A`, { encoding: 'utf8', timeout: 10000 });
+        const out = execSync(`git -C "${repoDir}" commit -m "${message.replace(/"/g, '\\"')}" 2>&1`, { encoding: 'utf8', timeout: 10000 });
+        res.json({ ok: true, action, message: `Committed to ${repo}: ${message}` });
+        break;
+      }
+
+      case 'close-gap': {
+        const { filename, disposition } = params || {};
+        if (!filename) return res.status(400).json({ error: 'filename required' });
+        const fp = path.join(CATH, 'gap-register', filename);
+        if (!fs.existsSync(fp)) return res.status(404).json({ error: `Gap not found: ${filename}` });
+        const gap = JSON.parse(fs.readFileSync(fp, 'utf8'));
+        gap.status = 'closed';
+        gap.disposition = disposition || 'inhabited';
+        gap.closed = new Date().toISOString();
+        fs.writeFileSync(fp, JSON.stringify(gap, null, 2));
+        res.json({ ok: true, action, message: `Gap closed: ${filename}` });
+        break;
+      }
+
+      default:
+        res.status(400).json({ error: `Unknown action: ${action}` });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// List available actions
+app.get('/api/build-actions', (req, res) => {
+  res.json({ actions: [
+    { id: 'append-session-log', name: 'Log Session', params: ['date','title','built','decided','inflight','next'], description: 'Append entry to SESSION-LOG.md' },
+    { id: 'create-gap', name: 'Create Gap', params: ['name','closure_predicate','saddle_pressure'], description: 'Add new gap to register' },
+    { id: 'pm2-restart', name: 'Restart Process', params: ['process_name'], description: 'Restart a PM2 process' },
+    { id: 'git-commit', name: 'Git Commit', params: ['repo','message'], description: 'Stage and commit changes' },
+    { id: 'close-gap', name: 'Close Gap', params: ['filename','disposition'], description: 'Close a gap register entry' },
+  ]});
+});
+
+// ── Instagram Studio API ─────────────────────────────────────────────────────
+app.get('/instagram-studio', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(path.join(NANOCLAW, 'environments', 'instagram-studio.html'));
+});
+
+app.get('/api/instagram/pipeline', (req, res) => {
+  const igDir = path.join(CATH, 'content-studio', 'instagram');
+  const count = (d) => {
+    try { return fs.readdirSync(path.join(igDir, d)).filter(f => !f.startsWith('.')).length; }
+    catch { return 0; }
+  };
+  const list = (d) => {
+    try {
+      return fs.readdirSync(path.join(igDir, d))
+        .filter(f => !f.startsWith('.') && /\.(jpg|jpeg|png|webp)$/i.test(f))
+        .map(f => {
+          const stat = fs.statSync(path.join(igDir, d, f));
+          return { name: f, size: stat.size, modified: stat.mtime };
+        });
+    } catch { return []; }
+  };
+  res.json({
+    source: list('source'),
+    graded: list('graded'),
+    cropped: list('cropped'),
+    posted: list('posted'),
+    counts: {
+      source: count('source'),
+      graded: count('graded'),
+      cropped: count('cropped'),
+      posted: count('posted'),
+    }
+  });
 });
 
 // ── Engineering Studio API ───────────────────────────────────────────────────

@@ -426,6 +426,13 @@ a { color: inherit; text-decoration: none; }
         <p>KINGSTON2 nightly 03:00 + forge-backup 03:15. WD 16TB Time Machine.</p>
       </div>
     </div>
+    <div class="content-card" data-href="/build-tracker">
+      <div class="card-thumb thumb-default">📊<span class="card-badge">LIVE</span></div>
+      <div class="card-body">
+        <h3>Build Tracker</h3>
+        <p>Live session history. What was built, when, which projects. Staleness alerts.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -446,25 +453,38 @@ a { color: inherit; text-decoration: none; }
 <div class="activity-section">
   <div class="section-header" style="margin-top: 24px;">
     <div class="section-title">Recent Activity</div>
+    <a href="/build-tracker" style="font-size:0.65rem;font-weight:700;color:var(--gold,#f7b408);text-decoration:none;letter-spacing:0.08em;">VIEW ALL →</a>
   </div>
-  <div class="activity-list">
-    <div class="activity-item">
-      <div class="activity-dot build"></div>
-      <div class="activity-text"><strong>LLM Router</strong> &mdash; 4 tiers tested on M5. gemma3:4b 2s, hermes3 5s, qwen3 7s, r1 14s</div>
-      <div class="activity-time">Today</div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-dot update"></div>
-      <div class="activity-text"><strong>WD 16TB</strong> &mdash; Time Machine configured. First backup scanning 1.4M items</div>
-      <div class="activity-time">Today</div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-dot alert"></div>
-      <div class="activity-text"><strong>intake-watcher</strong> &mdash; 5,385 restarts — crash-looping. Needs investigation</div>
-      <div class="activity-time">Ongoing</div>
-    </div>
+  <div class="activity-list" id="live-activity">
+    <div class="activity-item" style="color:#a8a090;font-size:0.78rem;">Loading live activity...</div>
   </div>
 </div>
+
+<script>
+(async function loadActivity() {
+  try {
+    const r = await fetch('/api/build-tracker');
+    const data = await r.json();
+    const el = document.getElementById('live-activity');
+    if (!data.sessions || data.sessions.length === 0) {
+      el.innerHTML = '<div class="activity-item" style="color:#a8a090;font-size:0.78rem;">No sessions logged yet.</div>';
+      return;
+    }
+    el.innerHTML = data.sessions.slice(0, 3).map(s => {
+      const built = s.built || s.title;
+      const short = built.length > 80 ? built.slice(0, 77) + '…' : built;
+      const tags = s.projects.slice(0, 2).join(', ');
+      return `<div class="activity-item">
+        <div class="activity-dot build"></div>
+        <div class="activity-text"><strong>${tags || 'Session'}</strong> &mdash; ${short.replace(/</g,'&lt;')}</div>
+        <div class="activity-time">${s.date}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('live-activity').innerHTML = '<div class="activity-item" style="color:#a8a090;font-size:0.78rem;">Could not load activity.</div>';
+  }
+})();
+</script>
 
 <script>
 document.querySelectorAll('[data-href]').forEach(card => {

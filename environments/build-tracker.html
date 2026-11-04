@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Tracker — The Cathedral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0a;
+  --fg: #f0ebe0;
+  --fg2: #a8a090;
+  --gold: #f7b408;
+  --gold-dim: #f7b40825;
+  --card: #141210;
+  --border: #2a2620;
+  --border2: #3a3530;
+  --green: #4dba6e;
+  --blue: #5ab0d0;
+  --red: #e86060;
+  --purple: #b088e0;
+  --orange: #e8a030;
+  --pink: #d06898;
+  --teal: #50b8a0;
+}
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,10,0.9);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+}
+.nav-inner {
+  max-width: 960px; margin: 0 auto;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 24px;
+}
+.nav-back {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--fg2);
+  padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+.nav-back:hover { border-color: var(--gold); color: var(--gold); }
+.nav-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 16px; letter-spacing: 1px; color: var(--gold);
+}
+
+.hero {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--card) 100%);
+  padding: 2rem 24px 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.hero h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: 0.06em;
+}
+.hero h1 .gold { color: var(--gold); }
+.hero .sub { font-size: 0.8rem; color: var(--fg2); margin-top: 0.3rem; }
+
+.main { max-width: 960px; margin: 0 auto; padding: 24px; }
+.section-label {
+  font-family: 'Anton', sans-serif; font-size: 0.75rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--fg2); margin-bottom: 12px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+
+/* Stats row */
+.stats { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.stat-card {
+  flex: 1; min-width: 100px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; text-align: center;
+}
+.stat-card .sn { font-family: 'Anton', sans-serif; font-size: 1.8rem; color: var(--gold); line-height: 1; }
+.stat-card .sl { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg2); margin-top: 0.15rem; }
+
+/* ── Constellation ── */
+.constellation-wrap {
+  margin-bottom: 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+#constellation {
+  width: 100%;
+  height: 420px;
+  display: block;
+}
+
+/* ── Heat Rooms ── */
+.heat-rooms { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 28px; }
+.heat-room {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 12px; text-align: center;
+  position: relative; overflow: hidden; cursor: pointer;
+  transition: all 0.3s;
+}
+.heat-room::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, var(--room-glow, transparent) 0%, transparent 70%);
+  opacity: 0.4; pointer-events: none;
+}
+.heat-room:hover { border-color: var(--border2); transform: translateY(-1px); }
+.hr-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.hr-name { font-family: 'Anton', sans-serif; font-size: 0.7rem; letter-spacing: 0.06em; }
+.hr-count { font-size: 0.6rem; color: var(--fg2); margin-top: 2px; }
+.hr-bar { height: 3px; border-radius: 2px; margin-top: 6px; background: var(--border); }
+.hr-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+.hr-days { font-size: 0.5rem; color: var(--fg2); margin-top: 3px; }
+
+/* ── Intelligence Panel ── */
+.intel-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px; margin-bottom: 28px;
+}
+.intel-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.intel-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green); animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.intel-title {
+  font-family: 'Anton', sans-serif; font-size: 0.8rem;
+  letter-spacing: 0.06em; color: var(--gold);
+}
+.intel-body {
+  font-size: 0.78rem; line-height: 1.7; color: var(--fg2);
+  min-height: 60px; white-space: pre-wrap;
+}
+.intel-body.loading { color: var(--fg2); font-style: italic; }
+.intel-query {
+  display: flex; gap: 8px; margin-top: 14px;
+  padding-top: 14px; border-top: 1px solid var(--border);
+}
+.intel-input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; color: var(--fg);
+  font-family: inherit; font-size: 0.75rem; outline: none;
+}
+.intel-input:focus { border-color: var(--gold); }
+.intel-input::placeholder { color: #555; }
+.intel-btn {
+  background: var(--gold); color: #000; border: none;
+  border-radius: 8px; padding: 8px 16px; cursor: pointer;
+  font-family: 'Anton', sans-serif; font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+.intel-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ── Action Bar ── */
+.action-bar {
+  display: none; gap: 8px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.action-bar.visible { display: flex; }
+.action-bar-label {
+  width: 100%; font-size: 0.55rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--gold); margin-bottom: 2px;
+}
+.act-btn {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 14px; cursor: pointer;
+  color: var(--fg); font-family: inherit; font-size: 0.68rem;
+  font-weight: 600; transition: all 0.15s;
+  display: flex; align-items: center; gap: 5px;
+}
+.act-btn:hover { border-color: var(--gold); color: var(--gold); }
+.act-btn.running { opacity: 0.5; pointer-events: none; }
+.act-btn .act-icon { font-size: 0.8rem; }
+.act-result {
+  width: 100%; font-size: 0.68rem; color: var(--green);
+  margin-top: 4px; display: none;
+}
+.act-result.visible { display: block; }
+.act-result.error { color: var(--red); }
+
+/* ── Log Session Modal ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center;
+}
+.modal-overlay.visible { display: flex; }
+.modal-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px; width: 90%; max-width: 480px;
+}
+.modal-title {
+  font-family: 'Anton', sans-serif; font-size: 1rem;
+  letter-spacing: 0.04em; color: var(--gold); margin-bottom: 14px;
+}
+.modal-field { margin-bottom: 10px; }
+.modal-field label {
+  display: block; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--fg2); margin-bottom: 3px;
+}
+.modal-field input, .modal-field textarea {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 7px 10px; color: var(--fg);
+  font-family: inherit; font-size: 0.75rem; outline: none;
+}
+.modal-field textarea { height: 60px; resize: vertical; }
+.modal-field input:focus, .modal-field textarea:focus { border-color: var(--gold); }
+.modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+.modal-submit {
+  background: var(--gold); color: #000; border: none;
+  border-radius: 8px; padding: 8px 20px; cursor: pointer;
+  font-family: 'Anton', sans-serif; font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+.modal-cancel {
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 16px; cursor: pointer;
+  color: var(--fg2); font-family: inherit; font-size: 0.7rem;
+}
+
+/* Project filter chips */
+.filters { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.f-chip {
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 0.65rem; font-weight: 700; cursor: pointer;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--fg2); font-family: inherit;
+  transition: all 0.15s;
+}
+.f-chip:hover { border-color: var(--gold); color: var(--fg); }
+.f-chip.active { background: var(--gold); color: #000; border-color: var(--gold); }
+
+/* Activity heatmap */
+.heatmap { margin-bottom: 24px; }
+.hm-row { display: flex; gap: 3px; margin-bottom: 3px; flex-wrap: wrap; }
+.hm-cell {
+  width: 28px; height: 28px; border-radius: 4px;
+  background: var(--card); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.55rem; font-weight: 700; color: var(--fg2);
+  position: relative; cursor: default;
+}
+.hm-cell.has-1 { background: #f7b40830; border-color: #f7b40850; color: var(--gold); }
+.hm-cell.has-2 { background: #f7b40850; border-color: #f7b40870; color: var(--gold); }
+.hm-cell.has-3 { background: #f7b40880; border-color: #f7b408a0; color: #000; }
+.hm-cell.today { box-shadow: 0 0 0 2px var(--gold); }
+
+/* Timeline */
+.timeline { position: relative; }
+.tl-entry {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px;
+  margin-bottom: 12px; transition: all 0.2s;
+  cursor: pointer;
+}
+.tl-entry:hover { border-color: var(--border2); }
+.tl-entry.expanded { border-color: var(--gold); }
+.tl-date {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--gold);
+}
+.tl-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 1rem; letter-spacing: 0.03em;
+  margin-top: 2px;
+}
+.tl-projects { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.tl-tag {
+  font-size: 0.5rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; padding: 2px 8px; border-radius: 10px;
+}
+.tl-built {
+  font-size: 0.78rem; color: var(--fg2); line-height: 1.6;
+  margin-top: 8px;
+}
+.tl-detail {
+  display: none; margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem; color: var(--fg2); line-height: 1.7;
+}
+.tl-entry.expanded .tl-detail { display: block; }
+.tl-detail-label {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--fg); margin-top: 8px; margin-bottom: 2px;
+}
+.tl-detail-label:first-child { margin-top: 0; }
+
+/* Dormant projects */
+.dormant { margin-top: 24px; }
+.dormant-head {
+  font-family: 'Anton', sans-serif; font-size: 0.9rem;
+  letter-spacing: 0.04em; margin-bottom: 10px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+.dormant-list { display: flex; gap: 8px; flex-wrap: wrap; }
+.dormant-chip {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px;
+  font-size: 0.72rem;
+}
+.dormant-chip .dc-name { font-weight: 700; }
+.dormant-chip .dc-days { font-size: 0.6rem; color: var(--fg2); margin-top: 1px; }
+
+@media (max-width: 640px) {
+  .main { padding: 16px; }
+  .hm-cell { width: 22px; height: 22px; font-size: 0.45rem; }
+  .stats { gap: 8px; }
+  .stat-card { min-width: 80px; padding: 10px; }
+  .stat-card .sn { font-size: 1.4rem; }
+  #constellation { height: 320px; }
+  .heat-rooms { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/env/cathedral" class="nav-back">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      Cathedral
+    </a>
+    <span class="nav-title">BUILD TRACKER</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>BUILD <span class="gold">TRACKER</span></h1>
+  <div class="sub">Every session, every build, every project — live from SESSION-LOG.md</div>
+</div>
+
+<div class="main">
+  <div class="stats" id="stats"></div>
+
+  <div class="section-label">ACTIVITY CONSTELLATION</div>
+  <div class="constellation-wrap">
+    <canvas id="constellation"></canvas>
+  </div>
+
+  <div class="section-label">ENVIRONMENT HEAT</div>
+  <div class="heat-rooms" id="heat-rooms"></div>
+
+  <div class="section-label">INTELLIGENCE</div>
+  <div class="intel-panel">
+    <div class="intel-header">
+      <div class="intel-dot"></div>
+      <div class="intel-title">FORGE OBSERVER — hermes3</div>
+    </div>
+    <div class="intel-body loading" id="intel-body">Analyzing build patterns...</div>
+    <div class="action-bar" id="action-bar">
+      <div class="action-bar-label">QUICK ACTIONS</div>
+      <button class="act-btn" onclick="openLogModal()"><span class="act-icon">📝</span> Log Session</button>
+      <button class="act-btn" onclick="openGapModal()"><span class="act-icon">🕳️</span> Create Gap</button>
+      <button class="act-btn" onclick="executeAction('pm2-restart',{process_name:'cath-bridge'})"><span class="act-icon">🔄</span> Restart Bridge</button>
+      <button class="act-btn" onclick="gitCommitAll()"><span class="act-icon">💾</span> Commit All</button>
+      <div class="act-result" id="act-result"></div>
+    </div>
+    <div class="intel-query">
+      <input class="intel-input" id="intel-input" type="text" placeholder="Ask about patterns, projects, momentum...">
+      <button class="intel-btn" id="intel-btn" onclick="queryIntel()">ASK</button>
+    </div>
+  </div>
+
+  <!-- Log Session Modal -->
+  <div class="modal-overlay" id="log-modal">
+    <div class="modal-box">
+      <div class="modal-title">LOG SESSION</div>
+      <div class="modal-field"><label>Date</label><input id="log-date" type="date"></div>
+      <div class="modal-field"><label>Title</label><input id="log-title" placeholder="Session title..."></div>
+      <div class="modal-field"><label>Built</label><textarea id="log-built" placeholder="What was built..."></textarea></div>
+      <div class="modal-field"><label>Decided</label><input id="log-decided" placeholder="Key decisions..."></div>
+      <div class="modal-field"><label>In-flight</label><input id="log-inflight" placeholder="Unfinished work..."></div>
+      <div class="modal-field"><label>Next</label><input id="log-next" placeholder="What's next..."></div>
+      <div class="modal-actions">
+        <button class="modal-submit" onclick="submitLog()">LOG IT</button>
+        <button class="modal-cancel" onclick="closeModal('log-modal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Gap Modal -->
+  <div class="modal-overlay" id="gap-modal">
+    <div class="modal-box">
+      <div class="modal-title">CREATE GAP</div>
+      <div class="modal-field"><label>Name</label><input id="gap-name" placeholder="e.g. coaching-whiteboard-deploy"></div>
+      <div class="modal-field"><label>Closure Predicate</label><textarea id="gap-closure" placeholder="What would close this gap? Be specific and falsifiable..."></textarea></div>
+      <div class="modal-field"><label>Pressure (0-1)</label><input id="gap-pressure" type="number" min="0" max="1" step="0.1" value="0.5"></div>
+      <div class="modal-actions">
+        <button class="modal-submit" onclick="submitGap()">CREATE</button>
+        <button class="modal-cancel" onclick="closeModal('gap-modal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">28 DAY HEATMAP</div>
+  <div class="heatmap" id="heatmap"></div>
+
+  <div class="section-label">FILTERS</div>
+  <div class="filters" id="filters"></div>
+
+  <div class="section-label">SESSION TIMELINE</div>
+  <div class="timeline" id="timeline"></div>
+  <div class="dormant" id="dormant"></div>
+</div>
+
+<script>
+// ── Environment definitions ──
+const ENVS = [
+  { key: 'Basic Reflex', name: 'BASIC REFLEX', icon: '🥊', color: '#f7b408', projects: ['Basic Reflex','BR Instagram'] },
+  { key: 'Studio', name: 'STUDIO', icon: '🎬', color: '#b088e0', projects: ['Studio'] },
+  { key: 'Money', name: 'MONEY', icon: '💰', color: '#4dba6e', projects: ['Money'] },
+  { key: 'Cathedral', name: 'CATHEDRAL', icon: '⛪', color: '#e8a030', projects: ['Cathedral','Lobby','Calendar'] },
+  { key: 'University', name: 'UNIVERSITY', icon: '🎓', color: '#5ab0d0', projects: ['University'] },
+  { key: 'Research', name: 'RESEARCH', icon: '🔬', color: '#d06898', projects: ['Research'] },
+  { key: 'General', name: 'GENERAL', icon: '📦', color: '#a8a090', projects: ['General'] },
+];
+
+const PROJECT_COLORS = {
+  'Basic Reflex': '#f7b408',
+  'BR Instagram': '#4dba6e',
+  'University': '#5ab0d0',
+  'Studio': '#b088e0',
+  'Cathedral': '#e8a030',
+  'Calendar': '#e86060',
+  'Lobby': '#f7b408',
+  'Money': '#4dba6e',
+  'Research': '#d06898',
+  'General': '#a8a090',
+};
+
+let allSessions = [];
+let activeFilter = 'all';
+let envCounts = {};
+
+async function load() {
+  try {
+    const r = await fetch('/api/build-tracker');
+    const data = await r.json();
+    allSessions = data.sessions;
+    computeEnvCounts();
+    renderStats(data);
+    renderConstellation();
+    renderHeatRooms();
+    renderHeatmap();
+    renderFilters();
+    renderTimeline();
+    renderDormant();
+    loadIntelligenceWithActions();
+  } catch(e) {
+    document.getElementById('timeline').innerHTML = '<div style="color:var(--fg2);padding:2rem;text-align:center">Failed to load build data.</div>';
+  }
+}
+
+function computeEnvCounts() {
+  envCounts = {};
+  const now = new Date();
+  ENVS.forEach(env => {
+    const sessions = allSessions.filter(s =>
+      s.projects.some(p => env.projects.includes(p))
+    );
+    const recent = sessions.filter(s => (now - new Date(s.date)) / 86400000 < 14);
+    const lastDate = sessions.length ? sessions[0].date : null;
+    const daysSince = lastDate ? Math.floor((now - new Date(lastDate)) / 86400000) : 999;
+    envCounts[env.key] = { total: sessions.length, recent: recent.length, daysSince, sessions };
+  });
+}
+
+// ── Stats ──
+function renderStats(data) {
+  const now = new Date();
+  const thisWeek = allSessions.filter(s => (now - new Date(s.date)) / 86400000 < 7);
+  const allProjects = new Set();
+  allSessions.forEach(s => s.projects.forEach(p => allProjects.add(p)));
+  const lastSession = allSessions[0];
+  const daysSince = lastSession ? Math.floor((now - new Date(lastSession.date)) / 86400000) : '—';
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-card"><div class="sn">${data.total}</div><div class="sl">Total Sessions</div></div>
+    <div class="stat-card"><div class="sn">${thisWeek.length}</div><div class="sl">This Week</div></div>
+    <div class="stat-card"><div class="sn">${allProjects.size}</div><div class="sl">Projects</div></div>
+    <div class="stat-card"><div class="sn">${daysSince}d</div><div class="sl">Since Last</div></div>
+  `;
+}
+
+// ── Constellation (canvas) ──
+function renderConstellation() {
+  const canvas = document.getElementById('constellation');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = (window.innerWidth < 640 ? 320 : 420) * dpr;
+  canvas.style.height = (window.innerWidth < 640 ? 320 : 420) + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = rect.width;
+  const H = canvas.height / dpr;
+
+  const maxTotal = Math.max(...ENVS.map(e => envCounts[e.key]?.total || 0), 1);
+  const maxRecent = Math.max(...ENVS.map(e => envCounts[e.key]?.recent || 0), 1);
+
+  // Position environments in a loose arrangement
+  const positions = [
+    { x: 0.22, y: 0.28 }, // BR - top left
+    { x: 0.50, y: 0.18 }, // Studio - top center
+    { x: 0.78, y: 0.28 }, // Money - top right
+    { x: 0.50, y: 0.50 }, // Cathedral - center
+    { x: 0.22, y: 0.72 }, // University - bottom left
+    { x: 0.78, y: 0.72 }, // Research - bottom right
+    { x: 0.50, y: 0.85 }, // General - bottom center
+  ];
+
+  // Draw faint connection lines between environments that share sessions
+  ctx.strokeStyle = 'rgba(168, 160, 144, 0.08)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < ENVS.length; i++) {
+    for (let j = i + 1; j < ENVS.length; j++) {
+      const shared = allSessions.filter(s =>
+        s.projects.some(p => ENVS[i].projects.includes(p)) &&
+        s.projects.some(p => ENVS[j].projects.includes(p))
+      ).length;
+      if (shared > 0) {
+        ctx.globalAlpha = Math.min(shared / 5, 0.3);
+        ctx.beginPath();
+        ctx.moveTo(positions[i].x * W, positions[i].y * H);
+        ctx.lineTo(positions[j].x * W, positions[j].y * H);
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.globalAlpha = 1;
+
+  // Draw dots and labels for each environment
+  ENVS.forEach((env, i) => {
+    const cx = positions[i].x * W;
+    const cy = positions[i].y * H;
+    const data = envCounts[env.key] || { total: 0, recent: 0, daysSince: 999 };
+    const dotCount = Math.min(data.total, 40);
+    const recentRatio = data.recent / Math.max(maxRecent, 1);
+    const col = env.color;
+
+    // Draw satellite dots
+    for (let d = 0; d < dotCount; d++) {
+      const angle = (d / dotCount) * Math.PI * 2 + (i * 0.7);
+      const layer = Math.floor(d / 8);
+      const baseR = 28 + layer * 16;
+      const wobble = ((d * 7 + i * 13) % 11) - 5;
+      const r = baseR + wobble;
+      const dx = cx + Math.cos(angle) * r;
+      const dy = cy + Math.sin(angle) * r;
+      const isRecent = d < data.recent;
+      const size = isRecent ? 3 : 2;
+      const alpha = isRecent ? 0.9 : 0.25;
+
+      ctx.beginPath();
+      ctx.arc(dx, dy, size, 0, Math.PI * 2);
+      ctx.fillStyle = col;
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+
+      if (isRecent) {
+        ctx.beginPath();
+        ctx.arc(dx, dy, size + 3, 0, Math.PI * 2);
+        ctx.fillStyle = col;
+        ctx.globalAlpha = 0.08;
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // Center glow
+    const glowR = 20 + recentRatio * 30;
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+    grd.addColorStop(0, col + '40');
+    grd.addColorStop(1, col + '00');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Center dot
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = data.daysSince > 7 ? '#3a3530' : col;
+    ctx.fill();
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = data.daysSince > 7 ? '#666' : '#f0ebe0';
+    ctx.font = '700 10px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(env.name, cx, cy + 22);
+
+    // Count label
+    ctx.fillStyle = col;
+    ctx.font = '600 9px Inter, sans-serif';
+    ctx.fillText(data.total + (data.total === 1 ? ' session' : ' sessions'), cx, cy + 34);
+
+    if (data.daysSince > 5 && data.daysSince < 999) {
+      ctx.fillStyle = '#e86060';
+      ctx.font = '600 8px Inter, sans-serif';
+      ctx.fillText(data.daysSince + 'd dormant', cx, cy + 45);
+    }
+  });
+}
+
+// ── Heat Rooms ──
+function renderHeatRooms() {
+  const maxTotal = Math.max(...ENVS.map(e => envCounts[e.key]?.total || 0), 1);
+  document.getElementById('heat-rooms').innerHTML = ENVS.map(env => {
+    const data = envCounts[env.key] || { total: 0, recent: 0, daysSince: 999 };
+    const pct = Math.round((data.total / maxTotal) * 100);
+    const intensity = data.daysSince < 3 ? 0.5 : data.daysSince < 7 ? 0.25 : 0.08;
+    const daysLabel = data.daysSince === 0 ? 'Today' : data.daysSince < 999 ? data.daysSince + 'd ago' : 'Never';
+    return `<div class="heat-room" style="--room-glow: ${env.color}" onclick="filter('${env.projects[0]}',document.querySelector('.f-chip'))">
+      <div class="hr-icon">${env.icon}</div>
+      <div class="hr-name">${env.name}</div>
+      <div class="hr-count">${data.total} sessions · ${data.recent} recent</div>
+      <div class="hr-bar"><div class="hr-bar-fill" style="width:${pct}%;background:${env.color}"></div></div>
+      <div class="hr-days">${daysLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Intelligence Panel ──
+async function loadIntelligence() {
+  const el = document.getElementById('intel-body');
+  try {
+    const r = await fetch('/api/build-intelligence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    const data = await r.json();
+    el.className = 'intel-body';
+    el.textContent = data.response || 'No response from hermes3.';
+  } catch(e) {
+    el.className = 'intel-body';
+    el.textContent = 'Could not reach local intelligence (hermes3). Is Ollama running?';
+  }
+}
+
+async function queryIntel() {
+  const input = document.getElementById('intel-input');
+  const btn = document.getElementById('intel-btn');
+  const el = document.getElementById('intel-body');
+  const q = input.value.trim();
+  if (!q) return;
+  btn.disabled = true;
+  el.className = 'intel-body loading';
+  el.textContent = 'Thinking...';
+  input.value = '';
+  try {
+    const r = await fetch('/api/build-intelligence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: q })
+    });
+    const data = await r.json();
+    el.className = 'intel-body';
+    el.textContent = data.response || 'No response.';
+  } catch(e) {
+    el.className = 'intel-body';
+    el.textContent = 'Query failed.';
+  }
+  btn.disabled = false;
+}
+
+document.getElementById('intel-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') queryIntel();
+});
+
+// ── Actions (Layer 3: Execution) ──
+async function loadIntelligenceWithActions() {
+  await loadIntelligence();
+  document.getElementById('action-bar').classList.add('visible');
+}
+
+async function executeAction(action, params) {
+  const resultEl = document.getElementById('act-result');
+  resultEl.className = 'act-result visible';
+  resultEl.textContent = 'Executing...';
+  try {
+    const r = await fetch('/api/build-actions/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, params })
+    });
+    const data = await r.json();
+    if (data.ok) {
+      resultEl.className = 'act-result visible';
+      resultEl.textContent = data.message;
+      if (action === 'append-session-log') setTimeout(load, 1000);
+    } else {
+      resultEl.className = 'act-result visible error';
+      resultEl.textContent = data.error || 'Failed';
+    }
+  } catch(e) {
+    resultEl.className = 'act-result visible error';
+    resultEl.textContent = 'Request failed';
+  }
+}
+
+function openLogModal() {
+  const d = new Date();
+  document.getElementById('log-date').value = d.toISOString().split('T')[0];
+  document.getElementById('log-modal').classList.add('visible');
+}
+
+function openGapModal() {
+  document.getElementById('gap-modal').classList.add('visible');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('visible');
+}
+
+async function submitLog() {
+  const params = {
+    date: document.getElementById('log-date').value,
+    title: document.getElementById('log-title').value,
+    built: document.getElementById('log-built').value,
+    decided: document.getElementById('log-decided').value,
+    inflight: document.getElementById('log-inflight').value,
+    next: document.getElementById('log-next').value,
+  };
+  if (!params.date || !params.title) return alert('Date and title required');
+  closeModal('log-modal');
+  await executeAction('append-session-log', params);
+}
+
+async function submitGap() {
+  const params = {
+    name: document.getElementById('gap-name').value,
+    closure_predicate: document.getElementById('gap-closure').value,
+    saddle_pressure: parseFloat(document.getElementById('gap-pressure').value) || 0.5,
+  };
+  if (!params.name || !params.closure_predicate) return alert('Name and closure predicate required');
+  closeModal('gap-modal');
+  await executeAction('create-gap', params);
+}
+
+async function gitCommitAll() {
+  const msg = prompt('Commit message:');
+  if (!msg) return;
+  const resultEl = document.getElementById('act-result');
+  resultEl.className = 'act-result visible';
+  resultEl.textContent = 'Committing...';
+  for (const repo of ['nanoclaw', 'Cathedral', 'cathedral-vault']) {
+    try {
+      await executeAction('git-commit', { repo, message: msg });
+    } catch {}
+  }
+}
+
+// ── Heatmap ──
+function renderHeatmap() {
+  const now = new Date();
+  const dateCounts = {};
+  allSessions.forEach(s => { dateCounts[s.date] = (dateCounts[s.date]||0) + 1; });
+  const today = now.toISOString().split('T')[0];
+  let html = '<div class="hm-row">';
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    const count = dateCounts[key] || 0;
+    const cls = count >= 3 ? 'has-3' : count >= 2 ? 'has-2' : count >= 1 ? 'has-1' : '';
+    const isToday = key === today ? ' today' : '';
+    html += `<div class="hm-cell ${cls}${isToday}" title="${key}: ${count} session${count!==1?'s':''}">${d.getDate()}</div>`;
+  }
+  html += '</div>';
+  document.getElementById('heatmap').innerHTML = html;
+}
+
+// ── Filters ──
+function renderFilters() {
+  const projects = new Set();
+  allSessions.forEach(s => s.projects.forEach(p => projects.add(p)));
+  let html = `<button class="f-chip active" onclick="filter('all',this)">All</button>`;
+  [...projects].sort().forEach(p => {
+    html += `<button class="f-chip" onclick="filter('${p}',this)">${p}</button>`;
+  });
+  document.getElementById('filters').innerHTML = html;
+}
+
+function filter(project, el) {
+  activeFilter = project;
+  document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderTimeline();
+}
+
+// ── Timeline ──
+function renderTimeline() {
+  const filtered = activeFilter === 'all'
+    ? allSessions
+    : allSessions.filter(s => s.projects.includes(activeFilter));
+
+  if (filtered.length === 0) {
+    document.getElementById('timeline').innerHTML = '<div style="color:var(--fg2);padding:1rem;font-size:0.8rem">No sessions for this project.</div>';
+    return;
+  }
+
+  document.getElementById('timeline').innerHTML = filtered.map(s => {
+    const tags = s.projects.map(p => {
+      const c = PROJECT_COLORS[p] || '#a8a090';
+      return `<span class="tl-tag" style="background:${c}20;border:1px solid ${c}50;color:${c}">${p}</span>`;
+    }).join('');
+    const details = [];
+    if (s.decided) details.push(`<div class="tl-detail-label">Decided</div><div>${esc(s.decided)}</div>`);
+    if (s.methods) details.push(`<div class="tl-detail-label">Methods</div><div>${esc(s.methods)}</div>`);
+    if (s.corrections) details.push(`<div class="tl-detail-label">Corrections</div><div>${esc(s.corrections)}</div>`);
+    if (s.inflight) details.push(`<div class="tl-detail-label">In-Flight</div><div>${esc(s.inflight)}</div>`);
+    if (s.next) details.push(`<div class="tl-detail-label">Next</div><div>${esc(s.next)}</div>`);
+    return `
+      <div class="tl-entry" onclick="this.classList.toggle('expanded')">
+        <div class="tl-date">${formatDate(s.date)}</div>
+        <div class="tl-title">${esc(s.title)}</div>
+        <div class="tl-projects">${tags}</div>
+        <div class="tl-built">${esc(s.built)}</div>
+        ${details.length ? `<div class="tl-detail">${details.join('')}</div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+// ── Dormant ──
+function renderDormant() {
+  const now = new Date();
+  const projectLastSeen = {};
+  allSessions.forEach(s => {
+    s.projects.forEach(p => {
+      if (!projectLastSeen[p] || s.date > projectLastSeen[p]) projectLastSeen[p] = s.date;
+    });
+  });
+  const dormant = Object.entries(projectLastSeen)
+    .map(([name, date]) => ({ name, date, days: Math.floor((now - new Date(date)) / 86400000) }))
+    .filter(p => p.days > 5)
+    .sort((a, b) => b.days - a.days);
+
+  if (dormant.length === 0) {
+    document.getElementById('dormant').innerHTML = '';
+    return;
+  }
+  document.getElementById('dormant').innerHTML = `
+    <div class="dormant-head">DORMANT PROJECTS (6+ days)</div>
+    <div class="dormant-list">
+      ${dormant.map(p => `<div class="dormant-chip"><div class="dc-name">${p.name}</div><div class="dc-days">${p.days}d · last ${formatDate(p.date)}</div></div>`).join('')}
+    </div>`;
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+}
+function esc(s) { return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;') : ''; }
+
+// Resize constellation on window resize
+window.addEventListener('resize', () => { if (allSessions.length) renderConstellation(); });
+
+load();
+</script>
+</body>
+</html>
