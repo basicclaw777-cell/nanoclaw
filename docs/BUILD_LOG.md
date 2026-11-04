@@ -4215,3 +4215,13 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 - Total: ~102KB storyboard content. All pass Trojan Horse test, 4-beat grammar, hidden embers, echo frames
 - Commit: 414877d (basic-reflex, local only)
 - Open decisions for Paul: (1) Flux/Prism vs Sparky/Aria canon, (2) Book 5 title, (3) Book 8 tone guard, (4) Duo beat structure approval
+
+## 2026-11-04 — Goals Layer + Mission Director
+
+- **environment-goals.json** — 7 environments with goal/metric/target/current/unit/notes/subgoals
+- **Goals API** — GET /api/environment-goals, POST /api/environment-goals/:env (cath-bridge.cjs)
+- **Build Tracker goals** — heat rooms show progress bars, parallel fetch of goals data
+- **Mission Director** — mission.html template, hermes3 interview per env, persistent chat (mission-data/*.json)
+- **Mission API** — GET /api/mission/:env/history, POST /api/mission/:env/chat (cath-bridge.cjs)
+- **Compass context** — section 10 added (environment goals with progress %)
+- **Fix:** ENVS goalKey mapping (display keys → slugs), /api/chat over /api/generate (impersonation fix)
