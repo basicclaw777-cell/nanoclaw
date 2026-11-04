@@ -228,7 +228,18 @@ function buildCompassContext() {
   });
   if (vaultScan) sections.push(`# VAULT STAGING\n${vaultScan}`);
 
-  // ── 10. Capability status (what hermes3 now has) ──
+  // ── 10. Environment goals ──
+  try {
+    const goalsRaw = fs.readFileSync(path.join(NANO, 'environments', 'environment-goals.json'), 'utf8');
+    const goals = JSON.parse(goalsRaw);
+    const goalLines = Object.entries(goals).map(([key, g]) => {
+      const pct = g.unit === '%' ? g.current : Math.round((g.current / g.target) * 100);
+      return `- ${g.name}: ${g.goal} — ${g.current}/${g.target} ${g.unit} (${pct}%)`;
+    });
+    sections.push(`# ENVIRONMENT GOALS (compass vectors)\n${goalLines.join('\n')}`);
+  } catch {}
+
+  // ── 11. Capability status (what hermes3 now has) ──
   sections.push(`# HERMES CAPABILITY STATUS
 Active tools (all read-only):
 ✓ SESSION-LOG.md parser (build history, 15 sessions)

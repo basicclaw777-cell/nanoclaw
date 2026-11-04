@@ -124,6 +124,10 @@ a { color: inherit; text-decoration: none; }
 .hr-bar { height: 3px; border-radius: 2px; margin-top: 6px; background: var(--border); }
 .hr-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
 .hr-days { font-size: 0.5rem; color: var(--fg2); margin-top: 3px; }
+.hr-goal { font-size: 0.48rem; color: var(--gold); margin-top: 5px; line-height: 1.3; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hr-goal-bar { height: 2px; border-radius: 1px; margin-top: 3px; background: rgba(247,180,8,0.15); }
+.hr-goal-fill { height: 100%; border-radius: 1px; background: var(--gold); transition: width 0.8s ease; }
+.hr-goal-pct { font-size: 0.55rem; color: var(--gold); font-weight: 700; margin-top: 2px; }
 
 /* ── Intelligence Panel ── */
 .intel-panel {
@@ -449,11 +453,16 @@ const PROJECT_COLORS = {
 let allSessions = [];
 let activeFilter = 'all';
 let envCounts = {};
+let envGoals = {};
 
 async function load() {
   try {
-    const r = await fetch('/api/build-tracker');
+    const [r, gr] = await Promise.all([
+      fetch('/api/build-tracker'),
+      fetch('/api/environment-goals').catch(() => ({ ok: false }))
+    ]);
     const data = await r.json();
+    if (gr.ok) envGoals = await gr.json();
     allSessions = data.sessions;
     computeEnvCounts();
     renderStats(data);
@@ -630,12 +639,18 @@ function renderHeatRooms() {
     const pct = Math.round((data.total / maxTotal) * 100);
     const intensity = data.daysSince < 3 ? 0.5 : data.daysSince < 7 ? 0.25 : 0.08;
     const daysLabel = data.daysSince === 0 ? 'Today' : data.daysSince < 999 ? data.daysSince + 'd ago' : 'Never';
+    const goal = envGoals[env.key];
+    const goalPct = goal ? Math.round((goal.current / goal.target) * 100) : 0;
+    const goalHtml = goal ? `
+      <div class="hr-goal" title="${goal.goal}">${goal.goal}</div>
+      <div class="hr-goal-bar"><div class="hr-goal-fill" style="width:${goalPct}%"></div></div>
+      <div class="hr-goal-pct">${goalPct}%</div>` : '';
     return `<div class="heat-room" style="--room-glow: ${env.color}" onclick="filter('${env.projects[0]}',document.querySelector('.f-chip'))">
       <div class="hr-icon">${env.icon}</div>
       <div class="hr-name">${env.name}</div>
       <div class="hr-count">${data.total} sessions · ${data.recent} recent</div>
       <div class="hr-bar"><div class="hr-bar-fill" style="width:${pct}%;background:${env.color}"></div></div>
-      <div class="hr-days">${daysLabel}</div>
+      <div class="hr-days">${daysLabel}</div>${goalHtml}
     </div>`;
   }).join('');
 }

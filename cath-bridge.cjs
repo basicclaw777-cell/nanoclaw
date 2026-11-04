@@ -4808,6 +4808,34 @@ app.get('/api/build-actions', (req, res) => {
   ]});
 });
 
+// ── Environment Goals API ────────────────────────────────────────────────────
+const GOALS_FILE = path.join(NANOCLAW, 'environments', 'environment-goals.json');
+
+app.get('/api/environment-goals', (req, res) => {
+  try {
+    const goals = JSON.parse(fs.readFileSync(GOALS_FILE, 'utf8'));
+    res.json(goals);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post('/api/environment-goals/:env', (req, res) => {
+  try {
+    const goals = JSON.parse(fs.readFileSync(GOALS_FILE, 'utf8'));
+    const env = req.params.env;
+    if (!goals[env]) return res.status(404).json({ error: `Unknown environment: ${env}` });
+    const { current, goal, notes } = req.body || {};
+    if (current !== undefined) goals[env].current = Number(current);
+    if (goal) goals[env].goal = goal;
+    if (notes) goals[env].notes = notes;
+    fs.writeFileSync(GOALS_FILE, JSON.stringify(goals, null, 2));
+    res.json({ ok: true, env, updated: goals[env] });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ── Instagram Studio API ─────────────────────────────────────────────────────
 app.get('/instagram-studio', (req, res) => {
   res.set('Cache-Control', 'no-store');
