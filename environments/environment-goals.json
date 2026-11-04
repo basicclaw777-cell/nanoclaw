@@ -10,19 +10,23 @@
     "current": 5,
     "unit": "%",
     "notes": "CRM median = 0 finding. AI follow-up chain: 1st→2nd visit gate. Currently near-zero tracked.",
-    "subgoals": []
+    "subgoals": [
+      "Capture 10+ videos of boxing coaches teaching classes each month",
+      "Post 3 engaging photos/videos per week showcasing the gym",
+      "Share 1-2 scripted updates monthly to highlight the gym's offerings"
+    ]
   },
   "studio": {
     "name": "Studio",
     "icon": "🎨",
     "color": "#9333ea",
     "envRoute": "/env/studio",
-    "goal": "Ship Logan web series pilot episode",
-    "metric": "pilot_completion",
-    "target": 100,
-    "current": 65,
-    "unit": "%",
-    "notes": "50 shots done, 67 keyframes, 63 videos. Need assembly + audio + distribution.",
+    "goal": "Creative production arm — Logan, content, social media, visual output for all environments",
+    "metric": "active_pipelines",
+    "target": 5,
+    "current": 2,
+    "unit": "pipelines",
+    "notes": "Logan web series (65% pilot), Instagram pipeline, BR content production. Reed 10 styles. Photography degree. 3D Logan lab.",
     "subgoals": []
   },
   "money": {

@@ -4879,13 +4879,13 @@ app.post('/api/mission/:env/chat', async (req, res) => {
   missionData.messages.push(userMsg);
 
   const recentChat = missionData.messages.slice(-20);
-  const chatContext = recentChat.map(m => `${m.role === 'user' ? 'Paul' : 'Director'}: ${m.content}`).join('\n\n');
 
   const systemPrompt = `You are the Mission Director for the "${envGoal.name}" environment in Paul's Cathedral system.
 
 Your role: interview Paul about his goals for this environment. Be conversational, specific, and strategic. Ask follow-up questions. Help him refine vague goals into concrete, measurable directions.
 
 CURRENT STATE:
+- Environment: ${envGoal.name}
 - Primary goal: ${envGoal.goal}
 - Progress: ${envGoal.current}/${envGoal.target} ${envGoal.unit} (${Math.round((envGoal.current / envGoal.target) * 100)}%)
 - Notes: ${envGoal.notes}
@@ -4898,26 +4898,31 @@ RULES:
 - After 3+ exchanges, start synthesizing sub-goals from what Paul has said.
 - Keep responses under 150 words. Conversational, not essay.
 - Reference specific Cathedral systems/tools where relevant.
-- If Paul mentions something that should update the primary goal or notes, say so explicitly.
+- If Paul mentions something that belongs in a DIFFERENT environment, note it and steer back to ${envGoal.name}.
+- NEVER write Paul's words or simulate his responses. You only speak as the Director.
 
 When you identify concrete sub-goals from what Paul has actually said (not placeholders), end your response with a line:
 [SUBGOALS: first real sub-goal | second real sub-goal | third real sub-goal]
 CRITICAL: Only include this AFTER Paul has given you enough detail to form real, specific sub-goals. Never use placeholder text like "goal1" or "goal2". If you don't have enough information yet, do NOT include a SUBGOALS line at all — just ask your next question.`;
 
+  const ollamaMessages = [{ role: 'system', content: systemPrompt }];
+  for (const m of recentChat) {
+    ollamaMessages.push({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content });
+  }
+
   try {
-    const ollamaRes = await fetch('http://localhost:11434/api/generate', {
+    const ollamaRes = await fetch('http://localhost:11434/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'hermes3',
-        prompt: chatContext,
-        system: systemPrompt,
+        messages: ollamaMessages,
         stream: false,
         options: { temperature: 0.5, num_predict: 300 }
       })
     });
     const ollamaData = await ollamaRes.json();
-    let response = (ollamaData.response || '').trim();
+    let response = (ollamaData.message?.content || ollamaData.response || '').trim();
 
     let subgoals = missionData.subgoals || [];
     const sgMatch = response.match(/\[SUBGOALS:\s*(.+?)\]/);
