@@ -1,6 +1,23 @@
 # Cathedral Build Log
 > Full build history + system detail, migrated verbatim from CLAUDE.md (182KB) on 2026-06-12. Older history in git. This is the ARCHIVE — append-only; the lean CLAUDE.md is the standing law.
 
+## 2026-11-04 — Build Tracker: Mirror → Compass → Engine
+
+**What:** Live build intelligence dashboard. Layer 1 (Mirror) = session history + activity visualization. Layer 2 (Compass) = hermes3 intelligence panel with 15.7KB Cathedral state context. Layer 3 (Engine) = bounded execution actions from the dashboard.
+
+**Built:**
+- `environments/build-tracker.html` — Full dashboard: stats row, activity constellation (canvas, 7 environment nodes + satellite dots), environment heat rooms (7 cards), 28-day heatmap, project filters, expandable timeline, dormant alerts, intelligence panel (hermes3 auto-analysis + query), action bar with modals (log session, create gap, restart process, commit all).
+- `environments/compass-context.cjs` — Context builder for hermes3. 10 sections: recent sessions, open gaps, build-ready items, environment door status, git activity (14d), PM2 health, SQLite stats, file freshness, vault staging, capability inventory. ~15.7KB per call.
+- `cath-bridge.cjs` — `POST /api/build-intelligence` (hermes3 compass query), `POST /api/build-actions/execute` (5 bounded actions: append-session-log, create-gap, pm2-restart, git-commit, close-gap), `GET /api/build-actions` (action catalog).
+- `environments/env-cathedral.html` — Build Tracker card added to Tools grid + live Recent Activity section.
+- `environments/lobby.html` — Build Tracker utility button below 7 doors.
+
+**Decided:** hermes3 for pattern synthesis (Jev wrong tool — System 1 classifier, not LLM synthesis). Bounded execution over n8n/smolagents (same result, zero new deps). Mirror→Compass→Engine evolution path.
+
+**Next:** Voice interface. Forge/Kathy persona representation. n8n for multi-step autonomous workflows.
+
+---
+
 ## 2026-11-03 — Vault RAG Pipeline + M5 Relay Engine (Anti-Flinch)
 
 **What:** Two new Cathedral tools that use M5's 128GB: vault-wide semantic search over 15K+ Obsidian notes, and a multi-model forensic relay engine with anti-flinch detection. LoRA fine-tuning plan replaced with RAG pipeline (stays fresh, no training cycle needed).

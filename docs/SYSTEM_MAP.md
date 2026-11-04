@@ -398,6 +398,11 @@
 - **Coach Paul (Alter Ego)** · `~/basic-reflex/gym-eyes/coach-paul.py` · CLI · AI Coach Paul with personality, coaching philosophy, drill design. Modes: --evaluate/--philosophy/--create-drill/--ask/REPL · doc: BUILD_LOG 2026-11-03
 - **Gym Eyes Lab** · `~/basic-reflex/gym-eyes/lab/gym-lab.html` · route `/gym-lab` · visual experiments dashboard: film strips, burst mode, client intel, experiment showcase · doc: BUILD_LOG 2026-11-03
 
+## Build Tracker (Mirror → Compass → Engine)
+- **Build Tracker Dashboard** · `~/nanoclaw/environments/build-tracker.html` · route `/build-tracker` · activity constellation, heat rooms, 28-day heatmap, dormant alerts, hermes3 intelligence panel, action bar · doc: BUILD_LOG 2026-11-04
+- **Compass Context** · `~/nanoclaw/environments/compass-context.cjs` · required by cath-bridge · 10-section context builder for hermes3 (sessions, gaps, memory, environments, git, PM2, SQLite, freshness, vault, capabilities) · doc: BUILD_LOG 2026-11-04
+- **Build Intelligence API** · `POST /api/build-intelligence` · hermes3 compass query (Layer 2). `POST /api/build-actions/execute` · 5 bounded actions: append-session-log, create-gap, pm2-restart, git-commit, close-gap (Layer 3). `GET /api/build-actions` · action catalog · doc: BUILD_LOG 2026-11-04
+
 ## Vault RAG + M5 Relay
 - **Vault Embeddings** · `~/nanoclaw/vault-rag/vault-embeddings.py` · CLI · embeds 15K+ vault .md files via nomic-embed-text → vault-vectors.db (SQLite). Incremental, skip unchanged. `--stats` / `--rebuild` · doc: BUILD_LOG 2026-11-03
 - **Vault Search** · `~/nanoclaw/vault-rag/vault-search.py` · CLI + route `/vault-search` · hybrid semantic + FTS5 search over vault. `--ask` (hermes3 RAG), `--deep-ask` (deepseek-r1:70b). API: `/api/vault-search`, `/api/vault-ask`, `/api/vault-stats` · doc: BUILD_LOG 2026-11-03
