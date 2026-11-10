@@ -41,6 +41,11 @@ app.use('/architect-output', express.static(path.join(NANOCLAW, 'architect-outpu
 require('./coaching-os/coaching-api.cjs')(app);
 require('./coaching-os/capture-api.cjs')(app);
 
+// Agent Board — /asks page + /api/asks (what every Claude session needs from Paul)
+require('./agent-board/agent-board-api.cjs')(app);
+// Cathy on the phone — /cathy page + /api/cathy/* (voice server on :8767)
+require('./cathy-phone/cathy-phone-api.cjs')(app);
+
 // ── Neural Bus event emitter ─────────────────────────────────────────────────
 // Fire-and-forget POST to neural-bus on every request (non-blocking)
 const NEURAL_BUS_URL = 'http://127.0.0.1:8078/event';

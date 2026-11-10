@@ -23,7 +23,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STORE = path.join(__dirname, 'looking-glass.json');
 const env = (() => { try { return fs.readFileSync(path.join(__dirname, '.env'), 'utf8'); } catch { return ''; } })();
 const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || env.match(/DEEPSEEK_API_KEY=(.+)/)?.[1]?.trim() || null;
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY || env.match(/ANTHROPIC_API_KEY=(.+)/)?.[1]?.trim() || null;
+const ANTHROPIC_KEY = process.env.DEEPSEEK_API_KEY || env.match(/DEEPSEEK_API_KEY=(.+)/)?.[1]?.trim() || null;
 
 const args = process.argv.slice(2);
 const flag = (f) => { const i = args.indexOf(f); return i >= 0 ? (args[i + 1] ?? true) : null; };
@@ -37,10 +37,10 @@ function saveStore(s) { fs.writeFileSync(STORE, JSON.stringify(s, null, 2)); }
 
 async function callGen(system, prompt) {
   if (ENGINE === 'fable') {
-    if (!ANTHROPIC_KEY) throw new Error('no ANTHROPIC_API_KEY');
-    const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST',
+    if (!ANTHROPIC_KEY) throw new Error('no DEEPSEEK_API_KEY');
+    const r = await fetch('https://api.deepseek.com/anthropic/v1/messages', { method: 'POST',
       headers: { 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-fable-5', max_tokens: 2600, temperature: 0.85, system, messages: [{ role: 'user', content: prompt }] }) });
+      body: JSON.stringify({ model: 'deepseek-chat', max_tokens: 2600, temperature: 0.85, system, messages: [{ role: 'user', content: prompt }] }) });
     const j = await r.json(); if (j.error) throw new Error(j.error.message); return (j.content || []).map(b => b.text || '').join('');
   }
   if (!DEEPSEEK_KEY) throw new Error('no DEEPSEEK_API_KEY');

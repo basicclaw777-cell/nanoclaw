@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Filofax Sketches</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;600;700&family=Caveat:wght@500;700&family=Courier+Prime:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap">
+<style>
+/* Three looks for Cathy's easel + notebook, each a live phone mockup with her real front page. Tap the tabs. */
+:root{--bg:#efece4;--ink:#1d1b16;--soft:#6a655b;--gold:#f7b408}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Barlow,Arial,sans-serif}
+.top{padding:24px 16px 6px;max-width:1200px;margin:0 auto}
+.top h1{font-family:Anton,sans-serif;font-weight:400;font-size:2rem;margin:0;letter-spacing:.02em}
+.top p{margin:6px 0 0;color:var(--soft);max-width:70ch}
+.row{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;padding:20px 16px 40px;max-width:1200px;margin:0 auto}
+.look{display:flex;flex-direction:column;gap:10px;align-items:center;width:min(100%,360px)}
+.look h2{font-family:Anton,sans-serif;font-weight:400;font-size:1.3rem;margin:0;letter-spacing:.03em}
+.look .why{font-size:.9rem;color:var(--soft);text-align:center;margin:0;max-width:34ch}
+.phone{width:100%;height:700px;border-radius:30px;overflow:hidden;position:relative;box-shadow:0 18px 40px rgba(40,30,10,.18),0 0 0 8px #1d1b16}
+.tabcolors{--t0:#f7b408;--t1:#e76f51;--t2:#2a9d8f;--t3:#457b9d;--t4:#8d6cab;--t5:#e9c46a;--t6:#6a994e;--t7:#d1495b;--t8:#577590;--t9:#bc6c25;--t10:#9c8f7a}
+
+/* ── A · CLASSIC FILOFAX: leather spine + rings, cream ruled paper, coloured tabs down the right edge ── */
+.A{background:#5b3a22;display:flex}
+.A .spine{width:30px;background:linear-gradient(90deg,#4a2e1a,#6b4429 60%,#4a2e1a);display:flex;flex-direction:column;justify-content:space-around;align-items:center;padding:60px 0}
+.A .ring{width:22px;height:22px;border-radius:50%;border:4px solid #c9c4b8;background:#3a2414;box-shadow:inset 0 1px 2px #000}
+.A .paper{flex:1;background:#fbf6e9;background-image:repeating-linear-gradient(#fbf6e9 0 31px,#cfdcec 31px 32px);position:relative;padding:22px 16px 20px 18px;overflow-y:auto;border-left:1px solid #e4dccb}
+.A .paper::before{content:"";position:absolute;left:12px;top:0;bottom:0;border-left:1.5px solid #e9a0a0}
+.A .tabs{width:42px;display:flex;flex-direction:column;gap:2px;padding:14px 0;background:#5b3a22}
+.A .tab{flex:1;border:0;border-radius:0 8px 8px 0;writing-mode:vertical-rl;font:700 .58rem Barlow;letter-spacing:.08em;text-transform:uppercase;color:#1d1b16;cursor:pointer;opacity:.75;padding:0;margin-left:-4px}
+.A .tab.on{opacity:1;margin-left:-10px;box-shadow:2px 0 6px rgba(0,0,0,.25)}
+.A h3{font:700 1.25rem 'Libre Baskerville',serif;margin:0 0 2px;line-height:32px}
+.A .sub{font:italic .78rem 'Libre Baskerville',serif;color:#8a7e66;line-height:32px;margin:0}
+.A ul{list-style:none;margin:0;padding:0}
+.A li{font:500 1.25rem/32px Caveat,cursive;color:#23324d}
+.A li::before{content:"— ";color:#b9ad93}
+.A .sheet{background:#fff;border:1px solid #e3dccb;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:12px;margin:8px 0 16px;line-height:1.35}
+.A .sheet b{font:700 .95rem 'Libre Baskerville',serif;display:block;margin-bottom:4px}
+.A .sheet span{font:500 1.1rem Caveat,cursive;color:#23324d}
+
+/* ── B · MOLESKINE SKETCHBOOK: black cover, dotted ivory paper, washi-tape tabs across the top, elastic band ── */
+.B{background:#161514;padding:10px 10px 10px 10px;display:flex;flex-direction:column}
+.B .tapes{display:flex;gap:6px;overflow-x:auto;padding:8px 4px 10px;scrollbar-width:none}
+.B .tape{flex:0 0 auto;border:0;font:700 1rem Caveat,cursive;padding:4px 12px 3px;color:#1d1b16;cursor:pointer;opacity:.6;clip-path:polygon(3% 0,100% 6%,97% 100%,0 94%);transform:rotate(-1.5deg)}
+.B .tape:nth-child(even){transform:rotate(1.5deg)}
+.B .tape.on{opacity:1;transform:rotate(0) scale(1.08)}
+.B .paper{flex:1;background:#f8f4ea;background-image:radial-gradient(#cbc3b1 1.1px,transparent 1.3px);background-size:18px 18px;border-radius:4px 14px 14px 4px;padding:24px 34px 20px 20px;overflow-y:auto;position:relative}
+.B .band{position:absolute;right:16px;top:0;bottom:0;width:9px;background:#161514;border-radius:2px;pointer-events:none}
+.B h3{font:700 2.1rem Caveat,cursive;margin:0;line-height:1}
+.B .sub{font:500 .95rem Caveat,cursive;color:#8b8371;margin:0 0 14px}
+.B ul{margin:0;padding-left:1.1em}
+.B li{font:500 1.3rem/1.25 Caveat,cursive;margin:0 0 10px;color:#22201b}
+.B .card{background:#fffdf7;padding:14px 12px 10px;margin:6px 4px 20px;box-shadow:0 3px 10px rgba(0,0,0,.12);transform:rotate(-1.2deg);position:relative}
+.B .card::before{content:"";position:absolute;top:-9px;left:50%;width:70px;height:18px;margin-left:-35px;background:rgba(247,180,8,.55);transform:rotate(2deg)}
+.B .card b{font:700 1.35rem Caveat,cursive;display:block}
+.B .card span{font:500 1.15rem Caveat,cursive}
+
+/* ── C · OFFICE FILE: manila folders, staggered cut tabs on top, typewriter, rubber stamps, paperclips ── */
+.C{background:#d9d3c4;display:flex;flex-direction:column;padding:14px 10px 10px}
+.C .cuts{display:grid;grid-template-columns:repeat(4,1fr);gap:3px 4px;padding:0 4px}
+.C .cut{border:0;border-radius:7px 7px 0 0;font:700 .62rem 'Courier Prime',monospace;letter-spacing:.03em;text-transform:uppercase;padding:7px 3px 5px;cursor:pointer;color:#1d1b16;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;filter:saturate(.55) brightness(1.08);border-bottom:3px solid transparent}
+.C .cut.on{filter:none;border-bottom-color:#f3e3b5;transform:translateY(2px)}
+.C .folder{flex:1;background:#f3e3b5;border-radius:0 0 10px 10px;padding:18px 16px;overflow-y:auto;box-shadow:inset 0 2px 0 rgba(0,0,0,.06)}
+.C .label{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #1d1b16;padding-bottom:6px;margin-bottom:12px}
+.C h3{font:400 1.35rem 'Special Elite',monospace;margin:0}
+.C .stamp{font:700 .7rem 'Courier Prime',monospace;color:#c0392b;border:2px solid #c0392b;padding:2px 6px;transform:rotate(-6deg);letter-spacing:.1em}
+.C ol{margin:0;padding-left:1.4em}
+.C li{font:400 .95rem/1.45 'Courier Prime',monospace;margin-bottom:10px;color:#1d1b16}
+.C .memo{background:#fffef8;border:1px solid #d8cfb5;padding:14px 12px 10px;margin:4px 0 18px;position:relative;font:400 .9rem/1.45 'Courier Prime',monospace}
+.C .memo b{display:block;font:400 1rem 'Special Elite',monospace;margin-bottom:4px}
+.C .clip{position:absolute;top:-14px;right:22px;width:16px;height:38px;border:2.5px solid #8c8c8c;border-radius:8px}
+.C .meta{font:400 .72rem 'Courier Prime',monospace;color:#7d6f48;margin:-6px 0 12px}
+
+.foot{max-width:1200px;margin:0 auto;padding:0 16px 40px;color:var(--soft);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>FILOFAX SKETCHES</h1>
+  <p>Three looks for Cathy's easel and notebook. Each one is live: her real front page from tonight is inside, and the tabs work. The first tab, "Pinned", holds her loose sheets: pins and build cards. The sample sheet is a mock-up.</p>
+</div>
+<div class="row tabcolors">
+  <div class="look"><h2>A · CLASSIC FILOFAX</h2><p class="why">Leather, rings, ruled paper, tabs down the edge. Business-like and nostalgic.</p><div class="phone A" id="A"></div></div>
+  <div class="look"><h2>B · MOLESKINE SKETCHBOOK</h2><p class="why">Dotted paper, all handwriting, washi tape for tabs. The most creative and personal.</p><div class="phone B" id="B"></div></div>
+  <div class="look"><h2>C · OFFICE FILE</h2><p class="why">Manila folders, cut tabs, typewriter, stamps. The most organised, like a chief of staff's desk.</p><div class="phone C" id="C"></div></div>
+</div>
+<p class="foot">Mix and match is fine: e.g. A's tabs and rings with B's handwriting. The back pages (her dated record) will sit behind the last tab in the real build.</p>
+<script>
+const SECTIONS = [['pinned','Pinned'],['open_threads','Open threads'],['returns','Returns'],['watchlist','Watchlist'],['catches','Catches'],['where_i_was_wrong','Where I was wrong'],
+  ['what_lands','What lands'],['seeds','Seeds'],['held_tensions','Held tensions'],['your_words','Your words'],['taste_drift','Taste drift']];
+const SAMPLE = { title: 'Build card · Filofax easel (sample)', body: 'What: turn the easel into a tabbed notebook.\nWhy: Paul thinks visually; tabs show where everything lives.\nDone looks like: tap a tab, the section opens.' };
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let DATA = { sections: {} }, PINS = [];
+
+function items(k) { return k === 'pinned' ? null : (DATA.sections[k] || []); }
+function pins() { return (PINS.length ? PINS : [SAMPLE]); }
+const color = (i) => `var(--t${i})`;
+
+function renderA(el, cur) {
+  const i = SECTIONS.findIndex(([k]) => k === cur), [k, t] = SECTIONS[i];
+  const list = items(k);
+  el.innerHTML = `<div class="spine">${'<span class="ring"></span>'.repeat(6)}</div>
+    <div class="paper"><h3>${t}</h3><p class="sub">Cathy · ${DATA.updated || ''}</p>
+      ${list ? (list.length ? `<ul>${list.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p class="sub">Empty page.</p>')
+             : pins().map((p) => `<div class="sheet"><b>${esc(p.title)}</b><span>${esc(p.body || (p.items || []).join(' · '))}</span></div>`).join('')}
+    </div>
+    <div class="tabs">${SECTIONS.map(([kk, tt], j) => `<button class="tab${kk === k ? ' on' : ''}" style="background:${color(j)}" data-k="${kk}">${tt.split(' ').slice(-1)[0]}</button>`).join('')}</div>`;
+}
+function renderB(el, cur) {
+  const i = SECTIONS.findIndex(([k]) => k === cur), [k, t] = SECTIONS[i];
+  const list = items(k);
+  el.innerHTML = `<div class="tapes">${SECTIONS.map(([kk, tt], j) => `<button class="tape${kk === k ? ' on' : ''}" style="background:${color(j)}" data-k="${kk}">${tt}</button>`).join('')}</div>
+    <div class="paper"><span class="band"></span><h3>${t}</h3><p class="sub">kept by Cathy</p>
+      ${list ? (list.length ? `<ul>${list.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p class="sub">nothing here yet</p>')
+             : pins().map((p) => `<div class="card"><b>${esc(p.title)}</b><span>${esc(p.body || (p.items || []).join(' · ')).replace(/\n/g, '<br>')}</span></div>`).join('')}
+    </div>`;
+}
+function renderC(el, cur) {
+  const i = SECTIONS.findIndex(([k]) => k === cur), [k, t] = SECTIONS[i];
+  const list = items(k);
+  const stamp = k === 'pinned' ? 'ON DESK' : (list && list.length ? 'OPEN' : 'CLEAR');
+  el.innerHTML = `<div class="cuts">${SECTIONS.map(([kk, tt], j) => `<button class="cut${kk === k ? ' on' : ''}" style="background:${color(j)}" data-k="${kk}">${tt}</button>`).join('')}</div>
+    <div class="folder"><div class="label"><h3>${t}</h3><span class="stamp">${stamp}</span></div>
+      <p class="meta">FILE: CATHY / CHIEF OF STAFF · ${DATA.updated || ''}</p>
+      ${list ? (list.length ? `<ol>${list.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>` : '<p class="meta">No papers in this file.</p>')
+             : pins().map((p) => `<div class="memo"><span class="clip"></span><b>${esc(p.title)}</b>${esc(p.body || (p.items || []).join(' · ')).replace(/\n/g, '<br>')}</div>`).join('')}
+    </div>`;
+}
+const LOOKS = { A: renderA, B: renderB, C: renderC };
+const state = { A: 'open_threads', B: 'open_threads', C: 'open_threads' };
+function draw() { for (const id in LOOKS) LOOKS[id](document.getElementById(id), state[id]); }
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-k]'); if (!b) return;
+  const id = b.closest('.phone').id; state[id] = b.dataset.k; draw();
+});
+fetch('/api/cathy/easel').then((r) => r.json()).then((d) => { DATA = d.front || DATA; PINS = d.pins || []; draw(); }).catch(draw);
+draw();
+</script>
+</body>
+</html>

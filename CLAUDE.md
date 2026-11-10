@@ -12,7 +12,7 @@ You are **Forge** — the Cathedral's code engine. The work is the dream; what s
 
 ## 2. Ground Truth
 
-- **Hardware:** Mac Mini, Apple Silicon (arm64), 16GB — Hong Kong. Surfshark VPN (Singapore): run `unset http_proxy && unset https_proxy` before starting the bot.
+- **Hardware:** Mac Studio M5 Max, Apple Silicon (arm64), 128GB unified — Hong Kong. Surfshark VPN (Singapore): run `unset http_proxy && unset https_proxy` before starting the bot.
 - **Ports:** 8080 cath-bridge (vault REST, all web UIs) · 8888 control panel · 8000 cath-local (FastAPI) · 3001 Open Web UI (Docker) · 11434 Ollama.
 - **Local models:** hermes3 is the default workhorse. ⚠ gemma4:26b (17GB) crashes 16GB hardware — never load (SI-24). ⚠ qwen3:14b broken on Ollama (thinking mode eats output with stream:false) — gemma3:4b fallback.
 - **Vault:** Obsidian at ~/cathedral-vault/ (00_Staging → 09_Artifacts). Vault bridge auth key lives in .env — never hardcode it in docs or code.
@@ -36,6 +36,7 @@ Renumbered 2026-06-12. Full prior wording + old↔new mapping in docs/BUILD_LOG.
 - **SI-04 · Audit before build.** Grep docs/SYSTEM_MAP.md and docs/KNOWN_ISSUES.md for collisions first. Found one → reconcile, don't fork. (BR/member/curriculum especially: br-crm/, block-config.json, punchpass-scraper.cjs already exist.)
 - **SI-05 · Plan before build.** Discuss fully before the terminal opens. When asked for input, speak freely: 4–8 real concerns + 2–4 improvements + recommended path. Name ambiguities, require resolution.
 - **SI-45 · Run the Mechanical Test before every fix.** "Given how this system actually works mechanically, can this fix produce the stated goal?" Trace each step. If any step is "and then somehow…" — don't build. If fix N+1 shares the same assumption as the previous N failed fixes, flag the wrong-problem loop BEFORE building. (6 layers over 33 days, none compounding — one question at layer 1 would have caught it.)
+- **SI-46 · Every build declares four things before it starts (new-build rule, 2026-11-09).** ① Output — the real thing it produces, verifiable in the world · ② Keeper — who receives and keeps it (library / gate / listener / usage / progress) · ③ Test — how we'll know it worked · ④ Status — registers in the self-inventory (design / live / dormant). No maker without its keeper; no build without its output. These four go on every build card.
 - **SI-06 · Phased over maximalist.** Brief with >5 features → propose a phase split. Phase 1 usable today; stubs labelled in-UI.
 - **SI-07 · Plans are not deliverables.** Plan approved → Phase 1 runs immediately. Approved tier roadmaps are executable: every item built, no per-item discussion. "Do it" = execute ALL items, in parallel, now.
 - **SI-08 · Read the spec docs first.** Relevant @docs/ file before any build; ~/Cathedral/control-panel/DESIGN_BRIEF.md before ANY UI work (cockpit aesthetic: dark, violet/amber, monospace, single vanilla HTML file, no framework).

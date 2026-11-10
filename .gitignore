@@ -39,3 +39,9 @@ agents-sdk-docs
 .aider*
 x-cookies.json
 hermes-bridge.sh
+
+# Large generated data — never push to git (state/DBs/logs/transcripts)
+vault-rag/*.db*
+vortex_data/*.db*
+*.log
+transcription/transcripts/

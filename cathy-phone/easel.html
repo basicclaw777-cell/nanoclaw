@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#151413">
+<title>Cathy's Filofax</title>
+<link rel="apple-touch-icon" href="/env/icon-180.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;700&family=Caveat:wght@500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Cathy's Filofax, black Moleskine edition: black cover edge (left), ivory ruled paper with a ribbon bookmark (middle),
+   elastic band, coloured icon tabs down the edge (right).
+   Tab 1 "Pinned" = her loose sheets as taped cards. Tabs 2-11 = the notebook front page. Last tab = the record (back pages). */
+:root{
+  --cover:#151413; --cover-lt:#262422; --band:#0a0909; --ribbon:#9e2a2b;
+  --paper:#f6f0e1; --rule:#d6cfbf; --margin:#e6dccb; --ink:#23324d; --head:#1d1b16; --soft:#8a7e66;
+  --card:#fffdf7; --tape:rgba(247,180,8,.55);
+  --t0:#f7b408;--t1:#e76f51;--t2:#2a9d8f;--t3:#457b9d;--t4:#8d6cab;--t5:#d9b44a;--t6:#6a994e;--t7:#d1495b;--t8:#577590;--t9:#bc6c25;--t10:#9c8f7a;--t11:#7a7468;--t12:#3d3a33;
+  --line:32px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+body{background:var(--cover);font-family:Barlow,Arial,sans-serif;color:var(--head);display:flex;justify-content:center}
+.book{display:flex;width:100%;max-width:620px;height:100dvh;padding-top:env(safe-area-inset-top)}
+@media (min-width:700px){body{background:#d9d4c8;align-items:center}.book{height:calc(100dvh - 48px);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35)}}
+
+/* black cover edge with a stitched bind, and the elastic band before the tabs */
+.spine{width:20px;flex:none;background:linear-gradient(90deg,var(--cover),var(--cover-lt) 70%,#0f0e0d);border-right:1px solid #000;position:relative}
+.spine::after{content:"";position:absolute;right:5px;top:14px;bottom:14px;border-right:1px dashed #3b3835}
+.band{width:9px;flex:none;background:linear-gradient(90deg,var(--band),#2b2927 50%,var(--band));box-shadow:-2px 0 4px rgba(0,0,0,.25)}
+.ribbon{position:absolute;top:0;right:28px;width:11px;height:84px;background:var(--ribbon);clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%);pointer-events:none;box-shadow:0 2px 3px rgba(0,0,0,.2)}
+
+/* paper */
+.paper{flex:1;min-width:0;background:var(--paper);background-image:repeating-linear-gradient(var(--paper) 0 calc(var(--line) - 1px),var(--rule) calc(var(--line) - 1px) var(--line));background-attachment:local;
+  position:relative;padding:8px 14px calc(24px + env(safe-area-inset-bottom)) 22px;overflow-y:auto;border-left:1px solid #e4dccb;-webkit-overflow-scrolling:touch}
+.paper::before{content:"";position:absolute;left:14px;top:0;bottom:0;border-left:1.5px solid var(--margin);pointer-events:none;min-height:100%}
+.nav{display:flex;justify-content:space-between;align-items:center;height:var(--line);padding-right:30px;font:700 .72rem Barlow;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.nav a{color:var(--soft);text-decoration:none;margin-left:12px}
+.nav a:focus-visible,.tab:focus-visible{outline:2px solid var(--t0);outline-offset:2px}
+h1{font:700 1.3rem 'Libre Baskerville',Georgia,serif;margin:0;line-height:calc(var(--line) * 1.5);padding-top:calc(var(--line) * .5)}
+.sub{font:italic .78rem 'Libre Baskerville',Georgia,serif;color:var(--soft);line-height:var(--line);margin:0}
+ul.hand{list-style:none;margin:0;padding:0}
+ul.hand li{font:500 1.28rem/var(--line) Caveat,cursive;color:var(--ink)}
+ul.hand li::before{content:"— ";color:#b9ad93}
+.blank{font:500 1.2rem/var(--line) Caveat,cursive;color:var(--soft);margin:0}
+
+/* taped cards (pins) */
+.cards{display:flex;flex-direction:column;gap:26px;padding:22px 4px 10px}
+.card{background:var(--card);padding:16px 14px 12px;box-shadow:0 3px 10px rgba(0,0,0,.13);position:relative;transform:rotate(-1.1deg)}
+.card:nth-child(even){transform:rotate(.9deg)}
+.card::before{content:"";position:absolute;top:-10px;left:50%;width:76px;height:20px;margin-left:-38px;background:var(--tape);transform:rotate(2deg)}
+.card:nth-child(3n+2)::before{background:rgba(42,157,143,.42)} .card:nth-child(3n)::before{background:rgba(231,111,81,.42)}
+.card h2{font:700 1.4rem/1.15 Caveat,cursive;margin:0 0 2px}
+.card .when{font:italic .7rem 'Libre Baskerville',serif;color:var(--soft);margin-bottom:8px}
+.card .body{font:500 1.18rem/1.3 Caveat,cursive;color:#22201b;white-space:pre-wrap;overflow-wrap:anywhere}
+.card ul{margin:0;padding-left:1.1em;font:500 1.18rem/1.3 Caveat,cursive}
+.card .cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card .cmp div{background:#f6f1e3;padding:8px;font:500 1.08rem/1.25 Caveat,cursive;white-space:pre-wrap;overflow-wrap:anywhere}
+.card .cmp b{display:block;font:700 .7rem Barlow;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:2px}
+.card blockquote{margin:0;border-left:3px solid var(--t0);padding-left:10px;font:italic 1rem/1.5 'Libre Baskerville',serif;white-space:pre-wrap}
+.card .src{margin-top:6px;font:500 1rem Caveat,cursive;color:var(--soft)}
+.card img{max-width:100%;display:block}
+.card .diagram{overflow-x:auto;background:#fff}
+
+/* build cards */
+.build .kicker{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.build .kicker span{font:700 .62rem Barlow;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.stamp{font:700 .62rem Barlow;letter-spacing:.12em;text-transform:uppercase;border:2px solid currentColor;padding:2px 6px;transform:rotate(-4deg);white-space:nowrap}
+.st-draft{color:#8a7e66}.st-tray,.st-forge{color:#457b9d}.st-built{color:#bc6c25}.st-matches{color:#3f7d3a}.st-partial{color:#b8860b}.st-drifted{color:#c0392b}
+.field{margin-top:8px}
+.field b{display:block;font:700 .62rem Barlow;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.field div,.field li{font:500 1.15rem/1.28 Caveat,cursive;color:#22201b;white-space:pre-wrap;overflow-wrap:anywhere}
+.field ul{margin:0;padding-left:1.1em}
+.quote{font:italic .92rem/1.45 'Libre Baskerville',serif;color:#4a453b;border-left:3px solid var(--t0);padding-left:9px}
+.receipt{margin-top:12px;background:#f1ece0;padding:10px;border-top:1px dashed #b9ad93;font:400 .85rem/1.45 ui-monospace,Menlo,monospace;color:#2b2925;overflow-wrap:anywhere}
+.receipt b{font-family:Barlow;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);display:block;margin-top:6px}
+.receipt b:first-child{margin-top:0}
+.receipt a{color:#1d4f7a}
+.check{margin-top:10px;padding:10px;border-radius:4px;background:#fff;border:1.5px solid currentColor}
+.check .v{font:700 .7rem Barlow;letter-spacing:.12em;text-transform:uppercase}
+.check .nt{font:500 1.15rem/1.28 Caveat,cursive;color:#22201b;white-space:pre-wrap}
+.strip{display:flex;gap:12px;overflow-x:auto;padding:14px 4px 6px;scroll-snap-type:x mandatory}
+.polaroid{flex:0 0 132px;scroll-snap-align:start;background:#fff;padding:6px 6px 8px;box-shadow:0 3px 8px rgba(0,0,0,.14);transform:rotate(-1.5deg);text-decoration:none;color:inherit}
+.polaroid:nth-child(even){transform:rotate(1.5deg)}
+.polaroid img{width:100%;height:200px;object-fit:cover;object-position:top;display:block;background:#eee}
+.polaroid span{display:block;font:500 .98rem/1.15 Caveat,cursive;margin-top:5px;color:#22201b;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.polaroid small{font:italic .62rem 'Libre Baskerville',serif;color:var(--soft)}
+.strip-h{font:700 .62rem Barlow;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:12px 0 0}
+.thumbs{display:flex;gap:8px;margin-top:6px}
+.thumbs a{flex:0 0 auto}.thumbs img{height:130px;border:1px solid #d8d0bd;display:block}
+.sendbtn{margin-top:12px;width:100%;font:700 .95rem Barlow;background:#151413;color:#f6f0e1;border:0;border-radius:99px;padding:11px;cursor:pointer}
+.sendbtn:disabled{opacity:.5}
+.waiting{margin-top:10px;font:italic .8rem 'Libre Baskerville',serif;color:var(--soft)}
+
+/* record (back pages) */
+.entry{margin-bottom:var(--line)}
+.entry .at{font:700 .8rem/var(--line) 'Libre Baskerville',serif;color:var(--head)}
+.entry .tx{font:500 1.18rem/var(--line) Caveat,cursive;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* tabs */
+.tabs{width:44px;flex:none;display:flex;flex-direction:column;gap:2px;padding:10px 0 calc(10px + env(safe-area-inset-bottom));background:var(--cover)}
+.tab{flex:1;min-height:0;border:0;border-radius:0 8px 8px 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2px;font:700 .58rem Barlow;letter-spacing:.08em;text-transform:uppercase;color:#1d1b16;cursor:pointer;opacity:.72;padding:0;margin-left:-4px;position:relative;overflow:hidden}
+.tab.on{opacity:1;margin-left:-11px;box-shadow:2px 0 6px rgba(0,0,0,.28)}
+.tab.dark{color:#f3eee2}
+.tab{padding-top:4px}
+.tab .ic{font-size:16px;line-height:1;filter:drop-shadow(0 1px 0 rgba(0,0,0,.15))}
+.tab .ic{position:relative}
+.tab .n{position:absolute;top:-3px;right:-9px;font:700 .55rem/1 Barlow;background:#fbf6e9;color:#1d1b16;border-radius:99px;padding:2px 4px;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tab .lb{writing-mode:vertical-rl;overflow:hidden;min-height:0;letter-spacing:.02em;font-size:.54rem}
+@media (max-height:640px){.tab .lb{display:none}}
+h1 .ic{margin-right:8px}
+</style>
+</head>
+<body>
+<div class="book">
+  <div class="spine" aria-hidden="true"></div>
+  <main class="paper" id="paper">
+    <span class="ribbon" aria-hidden="true"></span>
+    <div class="nav"><span>Cathy's Filofax</span><span><a href="/cathy">Talk</a><a href="/asks">Asks</a></span></div>
+    <div id="page"></div>
+  </main>
+  <div class="band" aria-hidden="true"></div>
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+</div>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'strict' });
+
+// Icons (Paul's picks) so the tabs scan at a glance; the vertical label stays underneath.
+const ICONS = { pinned: '📌', builds: '🔨', open_threads: '🧵', returns: '🪃', watchlist: '👁️', catches: '🧤', where_i_was_wrong: '❌', what_lands: '✅',
+  seeds: '🌱', held_tensions: '✊', your_words: '🔤', taste_drift: '🚗', record: '📓' };
+const TABS = [
+  ['pinned', 'Pinned', 'Pinned', 'Loose sheets Cathy wants you to see'],
+  ['builds', 'Builds', 'Build cards', 'Drafted with Cathy · sent by you · built by Forge · checked by Cathy'],
+  ['open_threads', 'Threads', 'Open threads', 'What we are in the middle of'],
+  ['returns', 'Returns', 'Returns', 'Things you asked her to bring back'],
+  ['watchlist', 'Watch', 'Watchlist', 'Patterns seen once or twice, not named yet'],
+  ['catches', 'Catches', 'Catches', 'What she flagged, and what happened'],
+  ['where_i_was_wrong', 'Wrong', 'Where I was wrong', 'Her mistakes, kept on purpose'],
+  ['what_lands', 'Lands', 'What lands', 'When you light up, and why'],
+  ['seeds', 'Seeds', 'Seeds', 'The what-ifs you dropped in passing'],
+  ['held_tensions', 'Tensions', 'Held tensions', 'Questions kept open on purpose'],
+  ['your_words', 'Words', 'Your words', 'Phrases as you coin them'],
+  ['taste_drift', 'Drift', 'Taste drift', 'Where your taste is moving'],
+  ['record', 'Record', 'The record', 'Back pages: dated, add-only, never rewritten'],
+];
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const when = (iso) => new Date(iso).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+let data = { pins: [], cards: [], front: { sections: {} } }, record = [], sig = '';
+let cur = (location.hash || '').slice(1);
+try { cur = cur || localStorage.getItem('filofax-tab') || ''; } catch {}
+
+function count(k) { return k === 'builds' ? (data.cards || []).filter((c) => c.stage !== 'reviewed').length : k === 'pinned' ? data.pins.length : k === 'record' ? 0 : (data.front.sections[k] || []).length; }
+
+function drawTabs() {
+  $('tabs').innerHTML = TABS.map(([k, short, full], i) =>
+    `<button class="tab${k === cur ? ' on' : ''}${i >= 11 ? ' dark' : ''}" style="background:var(--t${i})" data-k="${k}" aria-label="${full}" aria-current="${k === cur}"><span class="ic" aria-hidden="true">${ICONS[k]}${count(k) ? `<span class="n">${count(k)}</span>` : ''}</span><span class="lb">${short}</span></button>`).join('');
+}
+
+function cardHtml(p) {
+  let inner;
+  if (p.kind === 'list') inner = `<ul>${(p.items || []).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
+  else if (p.kind === 'compare') inner = `<div class="cmp"><div><b>${esc(p.left_title || 'This')}</b>${esc(p.left)}</div><div><b>${esc(p.right_title || 'That')}</b>${esc(p.right)}</div></div>`;
+  else if (p.kind === 'quote') inner = `<blockquote>${esc(p.body)}</blockquote>${p.source ? `<div class="src">${esc(p.source)}</div>` : ''}`;
+  else if (p.kind === 'image') inner = `<img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">${p.body ? `<div class="src">${esc(p.body)}</div>` : ''}`;
+  else if (p.kind === 'diagram') inner = `<div class="diagram" data-src="${esc(p.body)}"></div>`;
+  else inner = `<div class="body">${esc(p.body)}</div>`;
+  return `<article class="card"><h2>${esc(p.title)}</h2><div class="when">${when(p.at)}</div>${inner}</article>`;
+}
+
+const STAGE = { draft: ['Draft', 'st-draft'], 'in tray': ['In Forge\'s tray', 'st-tray'], 'with forge': ['Forge has it', 'st-forge'], built: ['Built · Cathy to check', 'st-built'] };
+function link(w) { return /^(https?:\/\/|\/)[^\s]*$/.test(w) && !w.startsWith('//') ? `<a href="${esc(w)}">${esc(w)}</a>` : esc(w); }
+function buildHtml(c) {
+  const [label, cls] = c.review ? ['Checked · ' + c.review.verdict, 'st-' + c.review.verdict] : STAGE[c.stage] || STAGE.draft;
+  const f = (name, v) => (v ? `<div class="field"><b>${name}</b><div>${esc(v)}</div></div>` : '');
+  return `<article class="card build" data-card="${esc(c.id)}">
+    <div class="kicker"><span>${c.loose ? 'Sent from the phone' : 'Build card'}</span><span class="stamp ${cls}">${esc(label)}</span></div>
+    <h2>${esc(c.title)}</h2><div class="when">${when(c.at)}</div>
+    ${c.loose ? f('You sent', c.what) : f('What', c.what) + f('Why', c.why) + f('Done looks like', c.done_looks_like)
+      + (c.open_questions && c.open_questions.length ? `<div class="field"><b>Open questions</b><ul>${c.open_questions.map((q) => `<li>${esc(q)}</li>`).join('')}</ul></div>` : '')
+      + (c.pauls_words ? `<div class="field"><b>Your words</b><div class="quote">“${esc(c.pauls_words)}”</div></div>` : '')}
+    ${c.stage === 'draft' ? '<button class="sendbtn" type="button" data-send="' + esc(c.id) + '">Send to Forge →</button>' : ''}
+    ${c.stage === 'in tray' || c.stage === 'with forge' ? '<p class="waiting">With Forge. He reads his tray at the start of every session.</p>' : ''}
+    ${c.receipt ? `<div class="receipt"><b>Forge's receipt</b>${esc(c.receipt.built)}${c.receipt.differs ? `<b>Differs from the ask</b>${esc(c.receipt.differs)}` : ''}${c.receipt.where ? `<b>See it</b>${link(c.receipt.where)}` : ''}${(c.receipt.shots || []).length ? `<div class="thumbs">${c.receipt.shots.map((f) => `<a href="/api/cathy/shots/${esc(f)}" target="_blank" rel="noopener"><img src="/api/cathy/shots/${esc(f)}" alt="Screenshot: ${esc(f.includes('phone') ? 'phone' : 'desktop')} view" loading="lazy"></a>`).join('')}</div>` : ''}</div>` : ''}
+    ${c.review ? `<div class="check st-${esc(c.review.verdict)}"><div class="v">Cathy's check: ${esc(c.review.verdict)}</div><div class="nt">${esc(c.review.note)}</div></div>`
+      : c.receipt ? '<p class="waiting">Cathy checks this against your ask next time you talk to her.</p>' : ''}
+  </article>`;
+}
+
+async function drawPage() {
+  const t = TABS.find(([k]) => k === cur);
+  let html = `<h1><span class="ic" aria-hidden="true">${ICONS[cur]}</span>${t[2]}</h1><p class="sub">${t[3]}</p>`;
+  const shots = data.shots || [];
+  if (cur === 'builds' && shots.length) html += `<p class="strip-h">Recently built · tap to see it full size</p><div class="strip">${shots.map((sh) => {
+    const ph = (sh.files || []).find((f) => f.includes('phone')) || (sh.files || [])[0];
+    return `<a class="polaroid" href="/api/cathy/shots/${esc(ph)}" target="_blank" rel="noopener"><img src="/api/cathy/shots/${esc(ph)}" alt="${esc(sh.label)}" loading="lazy"><span>${esc(sh.label || sh.url)}</span><small>${when(sh.at)}</small></a>`; }).join('')}</div>`;
+  if (cur === 'builds') html += (data.cards || []).length ? `<div class="cards">${data.cards.map(buildHtml).join('')}</div>` : '<p class="blank">No build cards yet. When an idea is ready, ask Cathy to make it a build card.</p>';
+  else if (cur === 'pinned') html += data.pins.length ? `<div class="cards">${data.pins.map(cardHtml).join('')}</div>` : '<p class="blank">Nothing pinned. Ask Cathy to show you something.</p>';
+  else if (cur === 'record') html += record.length ? record.map((e) => `<div class="entry"><div class="at">${esc(e.at)}</div><div class="tx">${esc(e.text)}</div></div>`).join('') : '<p class="blank">No entries yet.</p>';
+  else { const items = data.front.sections[cur] || []; html += items.length ? `<ul class="hand">${items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p class="blank">Empty page.</p>'; }
+  $('page').innerHTML = html;
+  for (const el of document.querySelectorAll('.diagram')) {
+    try { const { svg } = await mermaid.render('m' + Math.random().toString(36).slice(2), el.dataset.src); el.innerHTML = svg; }
+    catch { el.innerHTML = `<div class="body">${esc(el.dataset.src)}</div>`; }
+  }
+}
+
+function go(k, scroll) {
+  if (!TABS.some(([x]) => x === k)) return;
+  cur = k; history.replaceState(null, '', '#' + k);
+  try { localStorage.setItem('filofax-tab', k); } catch {}
+  drawTabs(); drawPage(); if (scroll) $('paper').scrollTop = 0;
+}
+
+async function load() {
+  try {
+    const [e, r] = await Promise.all([fetch('/api/cathy/easel', { cache: 'no-store' }), fetch('/api/cathy/record', { cache: 'no-store' })]);
+    if (!e.ok) throw new Error((await e.json()).error);
+    data = await e.json(); record = r.ok ? (await r.json()).entries : [];
+  } catch (err) { $('page').innerHTML = `<p class="blank">${esc(err.message || 'Offline')}</p>`; return; }
+  const s = JSON.stringify([data, record]); if (s === sig) return;
+  const firstLoad = !sig; sig = s;
+  if (!TABS.some(([k]) => k === cur)) cur = data.pins.length ? 'pinned' : 'open_threads';
+  if (firstLoad) go(cur); else { drawTabs(); drawPage(); }
+}
+
+$('page').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-send]'); if (!b) return;
+  b.disabled = true; b.textContent = 'Sending…';
+  try {
+    const r = await fetch('/api/cathy/cards/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: b.dataset.send }) });
+    if (!r.ok) throw new Error((await r.json()).error);
+    sig = ''; await load();
+  } catch (err) { b.disabled = false; b.textContent = 'Send failed. Tap to retry'; }
+});
+$('tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-k]'); if (b) go(b.dataset.k, true); });
+window.addEventListener('hashchange', () => go(location.hash.slice(1), true));
+load(); setInterval(load, 15000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+</script>
+</body>
+</html>

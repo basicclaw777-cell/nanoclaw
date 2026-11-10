@@ -22,10 +22,10 @@ if (!fs.existsSync(RELAY_DIR)) fs.mkdirSync(RELAY_DIR, { recursive: true });
 
 async function callModelA(messages, systemPrompt) {
   // Model A (Inside Voice): Try Claude first, fall back to DeepSeek with lower temperature
-  const claudeKey = process.env.ANTHROPIC_API_KEY;
+  const claudeKey = process.env.DEEPSEEK_API_KEY;
   if (claudeKey) {
     try {
-      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      const resp = await fetch('https://api.deepseek.com/anthropic/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ async function callModelA(messages, systemPrompt) {
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'deepseek-chat',
           max_tokens: 4096,
           system: systemPrompt,
           messages

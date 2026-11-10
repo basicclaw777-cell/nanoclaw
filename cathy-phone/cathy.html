@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Cathy</title>
+<link rel="apple-touch-icon" href="/env/icon-180.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one-screen phone app. Conversation scrolls; talk controls pinned to the bottom. */
+:root{
+  --bg:#f6f5f1; --panel:#fff; --ink:#16140f; --soft:#5d5a52; --faint:#a19d93; --line:#e4e1d8;
+  --gold:#f7b408; --gold-wash:#fff4d6; --live:#d23f2f; --live-wash:#fde8e5;
+  --display:'Anton',Impact,'Arial Narrow',sans-serif; --body:'Barlow','Helvetica Neue',Arial,sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#12110e; --panel:#1c1a16; --ink:#f1eee6; --soft:#b3ada0; --faint:#6f6a60; --line:#2e2b25; --gold-wash:#2c2410; --live:#ff6b5a; --live-wash:#3a1c18; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left));border-bottom:1px solid var(--line)}
+h1{margin:0;font-family:var(--display);font-weight:400;font-size:1.8rem;line-height:1;letter-spacing:.02em}
+.state{font-family:var(--mono);font-size:.7rem;color:var(--soft);letter-spacing:.06em;text-transform:uppercase}
+.nav{display:flex;gap:10px;align-items:center}
+.nav a,.nav button{font:600 .8rem var(--body);color:var(--soft);background:none;border:1px solid var(--line);border-radius:99px;padding:5px 10px;text-decoration:none;cursor:pointer}
+#log{flex:1;overflow-y:auto;padding:16px max(16px,env(safe-area-inset-right)) 16px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:12px}
+.msg{max-width:88%;padding:10px 13px;border-radius:14px;overflow-wrap:anywhere;white-space:pre-wrap}
+.me{align-self:flex-end;background:var(--ink);color:var(--bg);border-bottom-right-radius:4px}
+.her{align-self:flex-start;background:var(--gold-wash);border-bottom-left-radius:4px}
+.her.pending{color:var(--soft);font-style:italic}
+.empty{margin:auto;text-align:center;color:var(--soft);max-width:30ch}
+.empty b{display:block;font-family:var(--display);font-weight:400;font-size:1.5rem;color:var(--ink);margin-bottom:4px}
+footer{border-top:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;gap:10px;
+  padding:12px max(16px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.row{display:flex;gap:8px;align-items:flex-end}
+textarea{flex:1;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 12px;min-height:44px;max-height:140px;resize:none}
+.send{font:700 .95rem var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:12px;padding:0 16px;height:44px;cursor:pointer}
+.send:disabled{opacity:.45}
+.talk{width:100%;height:64px;border-radius:99px;border:0;background:var(--gold);color:#16140f;font:700 1.05rem var(--body);display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
+.talk svg{width:22px;height:22px}
+.talk.rec{background:var(--live);color:#fff}
+@media (prefers-reduced-motion:no-preference){.talk.rec{animation:pulse 1.2s ease-in-out infinite}}
+@keyframes pulse{50%{box-shadow:0 0 0 10px var(--live-wash)}}
+.hint{font-size:.8rem;color:var(--soft);margin:0}
+.wrap{display:flex;flex-direction:column;gap:4px;max-width:88%}
+.wrap.me-w{align-self:flex-end;align-items:flex-end}.wrap.her-w{align-self:flex-start;align-items:flex-start}
+.wrap .msg{max-width:100%}
+.fwd{font:600 .72rem var(--body);color:var(--soft);background:none;border:1px solid var(--line);border-radius:99px;padding:3px 9px;cursor:pointer}
+.fwd.sent{color:var(--ink);border-color:var(--gold);background:var(--gold-wash);cursor:default}
+.note{align-self:center;font-size:.78rem;color:var(--soft);text-align:center;max-width:34ch}
+.tray-n{background:var(--gold);color:#16140f;border-radius:99px;padding:0 6px;margin-left:4px;font-size:.7rem}
+.stop{font:600 .85rem var(--body);background:transparent;border:1px solid var(--line);color:var(--soft);border-radius:99px;padding:6px 12px;cursor:pointer;align-self:center}
+button:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>CATHY</h1><span class="state" id="state">sees everything, builds nothing</span></div>
+  <div class="nav"><button type="button" id="fresh">New talk</button><a href="/easel">Filofax</a><a href="/asks#tray">Tray<span class="tray-n" id="tray-n" hidden></span></a></div>
+</header>
+<main id="log" aria-live="polite">
+  <div class="empty" id="empty"><b>Talk to Cathy</b>She reads the whole Cathedral and answers in her own voice.</div>
+</main>
+<footer>
+  <button class="stop" type="button" id="stop" hidden>Stop talking</button>
+  <button class="talk" type="button" id="talk" hidden>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12h-2Z"/></svg>
+    <span id="talk-label">Hold to talk</span>
+  </button>
+  <div class="row">
+    <textarea id="text" rows="1" placeholder="Type, or tap the keyboard mic" aria-label="Message to Cathy"></textarea>
+    <button class="send" type="button" id="send">Send</button>
+  </div>
+  <p class="hint" id="hint" hidden>Hold-to-talk needs the secure (https) address. Until then, tap the mic on your keyboard.</p>
+</footer>
+<script>
+const $ = (id) => document.getElementById(id);
+const KEY = 'cathy-session';
+let session = null; try { session = localStorage.getItem(KEY); } catch {}
+// 'fresh' = Paul tapped New talk here; don't pull the old talk back in on reload.
+const choseFresh = session === 'fresh'; if (choseFresh) session = null;
+let busy = false;
+
+// ── Audio: one element, unlocked on the first tap so iOS lets later sentences play ──
+const player = new Audio();
+player.preload = 'auto';
+const queue = [];
+let unlocked = false;
+function unlock() {
+  if (unlocked) return; unlocked = true;
+  player.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';
+  player.play().catch(() => {});
+}
+function playNext() {
+  if (!player.paused && player.src && !player.ended && player.currentTime > 0) return;
+  const url = queue.shift();
+  if (!url) { $('stop').hidden = !busy; return; }
+  $('stop').hidden = false;
+  player.src = url;
+  player.play().catch(() => {});
+}
+player.addEventListener('ended', playNext);
+$('stop').addEventListener('click', () => { queue.length = 0; player.pause(); $('stop').hidden = true; });
+
+// ── Conversation ──
+function add(cls, text) {
+  $('empty')?.remove();
+  const el = document.createElement('div');
+  el.className = 'msg ' + cls; el.textContent = text;
+  // Every message gets "→ Forge": Paul's tap is the only way anything reaches Forge's tray.
+  const wrap = document.createElement('div');
+  wrap.className = 'wrap ' + (cls.startsWith('me') ? 'me-w' : 'her-w');
+  const fwd = document.createElement('button');
+  fwd.type = 'button'; fwd.className = 'fwd'; fwd.textContent = '→ Forge';
+  fwd.setAttribute('aria-label', 'Send this message to Forge\'s tray');
+  fwd.hidden = cls.includes('pending');
+  fwd.addEventListener('click', () => sendToForge(el.textContent, cls.startsWith('me') ? 'paul' : 'cathy', fwd));
+  wrap.append(el, fwd); el.fwd = fwd;
+  $('log').appendChild(wrap); $('log').scrollTop = $('log').scrollHeight;
+  return el;
+}
+function note(text) { $('empty')?.remove(); const n = document.createElement('div'); n.className = 'note'; n.textContent = text; $('log').appendChild(n); }
+async function sendToForge(text, speaker, btn) {
+  if (btn.classList.contains('sent') || !text.trim()) return;
+  btn.textContent = 'Sending…';
+  try {
+    const r = await fetch('/api/tray', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, speaker }) });
+    const j = await r.json(); if (!r.ok) throw new Error(j.error);
+    btn.textContent = '✓ In Forge\'s tray'; btn.classList.add('sent'); trayCount(j.waiting);
+  } catch (e) { btn.textContent = '→ Forge (failed, tap again)'; }
+}
+function trayCount(n) { $('tray-n').textContent = n; $('tray-n').hidden = !n; }
+fetch('/api/tray').then((r) => r.json()).then((j) => trayCount((j.items || []).filter((t) => t.status !== 'done').length)).catch(() => {});
+function setState(t) { $('state').textContent = t; }
+
+async function ask(text) {
+  if (busy || !text.trim()) return;
+  busy = true; $('send').disabled = true;
+  add('me', text);
+  const bubble = add('her pending', 'Thinking…');
+  setState('thinking'); let started = false;
+  try {
+    const r = await fetch('/api/cathy/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, sessionId: session }) });
+    if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || 'Cathy is unavailable.'); }
+    const reader = r.body.getReader(); const dec = new TextDecoder(); let buf = '';
+    for (;;) {
+      const { value, done } = await reader.read(); if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const parts = buf.split('\n\n'); buf = parts.pop();
+      for (const p of parts) {
+        if (!p.startsWith('data: ')) continue;
+        const ev = JSON.parse(p.slice(6));
+        if (ev.type === 'looking' && !started) { bubble.textContent = 'Reading the Cathedral…'; setState('reading'); }
+        if (ev.type === 'text') { if (!started) { started = true; bubble.textContent = ''; bubble.classList.remove('pending'); bubble.fwd.hidden = false; setState('speaking'); } bubble.textContent += ev.text; $('log').scrollTop = $('log').scrollHeight; }
+        if (ev.type === 'audio') { queue.push(ev.url); playNext(); }
+        if (ev.type === 'warn') setState(ev.message);
+        if (ev.type === 'done' && ev.sessionId) { session = ev.sessionId; try { localStorage.setItem(KEY, session); } catch {} }
+      }
+    }
+    if (!started) { bubble.textContent = '(no reply)'; }
+    setState('sees everything, builds nothing');
+  } catch (e) { bubble.textContent = e.message; bubble.classList.remove('pending'); setState('error'); }
+  busy = false; $('send').disabled = false; if (!queue.length && player.paused) $('stop').hidden = true;
+}
+
+$('send').addEventListener('click', () => { unlock(); const t = $('text').value; $('text').value = ''; ask(t); });
+$('text').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('send').click(); } });
+$('text').addEventListener('input', (e) => { e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px'; });
+// No ticket on this address (first visit to https, Home Screen app)? Carry on the last talk from any address.
+if (!session && !choseFresh) fetch('/api/cathy/last').then((r) => r.json()).then((j) => {
+  if (j.sessionId && !session) { session = j.sessionId; try { localStorage.setItem(KEY, session); } catch {} note('Carrying on your last talk with Cathy. Tap New talk to start fresh.'); }
+}).catch(() => {});
+$('fresh').addEventListener('click', () => { session = null; try { localStorage.setItem(KEY, 'fresh'); } catch {} $('log').innerHTML = '<div class="empty" id="empty"><b>New conversation</b>Cathy starts fresh.</div>'; });
+
+// ── Hold to talk (needs https or localhost) ──
+const canRecord = window.isSecureContext && navigator.mediaDevices && window.MediaRecorder;
+if (canRecord) $('talk').hidden = false; else $('hint').hidden = false;
+let rec = null, chunks = [], stream = null;
+async function startRec(e) {
+  e.preventDefault(); unlock();
+  if (busy || rec) return;
+  try { stream = stream || await navigator.mediaDevices.getUserMedia({ audio: true }); }
+  catch { setState('microphone blocked'); return; }
+  chunks = []; rec = new MediaRecorder(stream);
+  rec.ondataavailable = (ev) => ev.data.size && chunks.push(ev.data);
+  rec.onstop = async () => {
+    const blob = new Blob(chunks, { type: rec.mimeType || 'audio/mp4' }); rec = null;
+    $('talk').classList.remove('rec'); $('talk-label').textContent = 'Hold to talk';
+    if (blob.size < 2000) { setState('too short — hold while you speak'); return; }
+    setState('listening back…');
+    try {
+      const r = await fetch('/api/cathy/transcribe', { method: 'POST', body: blob });
+      const j = await r.json(); if (!r.ok) throw new Error(j.error);
+      if (j.text) ask(j.text); else setState("didn't catch that");
+    } catch (err) { setState(err.message || 'transcription failed'); }
+  };
+  rec.start(); $('talk').classList.add('rec'); $('talk-label').textContent = 'Listening… release to send';
+  queue.length = 0; player.pause();
+}
+function stopRec(e) { e.preventDefault(); if (rec && rec.state === 'recording') rec.stop(); }
+$('talk').addEventListener('pointerdown', startRec);
+['pointerup', 'pointerleave', 'pointercancel'].forEach((t) => $('talk').addEventListener(t, stopRec));
+</script>
+</body>
+</html>

@@ -36,9 +36,9 @@ const flag = (f) => { const i = args.indexOf(f); return i >= 0 ? (args[i + 1] ??
 const N = Math.min(parseInt(flag('--n'), 10) || 6, 12);
 const MODE = (flag('--mode') || 'design').toString();
 const ENGINE = (flag('--engine') || 'deepseek').toString();  // deepseek | fable
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY
-  || (() => { try { return fs.readFileSync(path.join(__dirname, '.env'), 'utf8').match(/ANTHROPIC_API_KEY=(.+)/)?.[1]?.trim(); } catch { return null; } })();
-const FABLE_MODEL = process.env.FABLE_MODEL || 'claude-fable-5';
+const ANTHROPIC_KEY = process.env.DEEPSEEK_API_KEY
+  || (() => { try { return fs.readFileSync(path.join(__dirname, '.env'), 'utf8').match(/DEEPSEEK_API_KEY=(.+)/)?.[1]?.trim(); } catch { return null; } })();
+const FABLE_MODEL = process.env.FABLE_MODEL || 'deepseek-chat';
 
 // Shared SUBSTRATE schema — the axes the map will resolve. Appended to every return spec.
 const SUBSTRATE = `"substrate":{"verifier_cheapness":<0-10, 10=instant/free truth-check>,"verifier_fidelity":<0-10, 10=the cheap check perfectly matches reality (the sim-to-real gap)>,"search_structure":"continuous|geometric|combinatorial|symbolic|sequential","generation_tractability":<0-10, can AI parameterise+propose candidates>,"fabrication_cost":<0-10, 10=cheap/none to build+test the winner; pure-software=10>,"data_availability":<0-10>,"neglect_density":<0-10, 10=wide open>}`;
@@ -92,7 +92,7 @@ async function callDeepSeek(system, prompt) {
 }
 
 async function callFable(system, prompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('https://api.deepseek.com/anthropic/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
     body: JSON.stringify({ model: FABLE_MODEL, max_tokens: 4000, temperature: 0.7,
@@ -104,7 +104,7 @@ async function callFable(system, prompt) {
 }
 
 async function callGen(system, prompt) {
-  if (ENGINE === 'fable') { if (!ANTHROPIC_KEY) throw new Error('no ANTHROPIC_API_KEY'); return callFable(system, prompt); }
+  if (ENGINE === 'fable') { if (!ANTHROPIC_KEY) throw new Error('no DEEPSEEK_API_KEY'); return callFable(system, prompt); }
   if (!KEY) throw new Error('no DEEPSEEK_API_KEY'); return callDeepSeek(system, prompt);
 }
 
@@ -143,7 +143,7 @@ function load() { try { return JSON.parse(fs.readFileSync(STORE, 'utf8')); } cat
 
 async function main() {
   if (ENGINE === 'deepseek' && !KEY) { console.log('[generative-openings] no DEEPSEEK_API_KEY — fail-safe, nothing run.'); return; }
-  if (ENGINE === 'fable' && !ANTHROPIC_KEY) { console.log('[generative-openings] no ANTHROPIC_API_KEY — fail-safe, nothing run.'); return; }
+  if (ENGINE === 'fable' && !ANTHROPIC_KEY) { console.log('[generative-openings] no DEEPSEEK_API_KEY — fail-safe, nothing run.'); return; }
   if (!SYS[MODE]) { console.log(`unknown mode "${MODE}". use: design | sensing | strategy | optimize`); return; }
   console.log(`[generative-openings] mode=${MODE} · engine=${ENGINE} · hunting ${N}...\n`);
   let raw; try { raw = await callGen(SYS[MODE], userPrompt()); } catch (e) { console.log(`${ENGINE} error:`, e.message); return; }
