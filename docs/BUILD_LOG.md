@@ -4316,3 +4316,10 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 - Block authority = `block-config.json` (10 gates, Block 5 = Rhythm/fear gate); `coaching-engine.js` has a STALE list (Block 5 = "Sparring Entry").
 
 **Files:** gym-eyes-room.html, report-card.html, tag-on-arrival.py, kimi-fire{2}.sh, kimi-coaching-pass.md, kimi-coaching-output.md, kimi-visual-output.md, ROADMAP.md.
+
+**Father-son Gym Eyes pipeline — first real client run**
+- Ran ~/basic-reflex/gym-eyes/father-son/run.sh on Stefan + Matteo (first real footage; pipeline built 8 Nov, never run until now).
+- Shot 3 (spar IMG_1690) → report-card.html: Stefan 134 / Matteo 121 punches.
+- Shot 2 (IMG_1687+1688) → bag-work SPEED DRILLS, not pads. Boxer swapped sides between clips. Gotcha: run.sh uses ONE FIGHTER env for both clips → use FIGHTER=auto (busiest hands) then fs_tools merge with correct labels. Default FIGHTER=left grabbed the bystander (Stefan=2).
+- Speed-drill read: Stefan peak 9.3 vs Matteo 7.7 m/s; Matteo 68 vs 66 punches in best 30s.
+- Also: group-class social overlays (IMG_1815-1820) via pose-overlay.py; Kenny character sheet → Telegram.
