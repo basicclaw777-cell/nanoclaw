@@ -20,6 +20,14 @@ app.use(express.json());
 app.use('/coaching-os', express.static(path.join(NANOCLAW, 'coaching-os')));
 app.use('/br-crm', express.static(path.join(HOME, 'basic-reflex', 'crm')));
 app.use('/course-engine', express.static(path.join(NANOCLAW, 'course-engine')));
+// Gym Eyes: serve HTML + media, never source/config/docs (pipeline code stays off the wire).
+app.use('/gym-eyes', (req, res, next) => {
+  const ext = path.extname(req.path).toLowerCase();
+  if (['.py', '.pyc', '.sh', '.bash', '.md', '.db', '.sqlite', '.sqlite3', '.env', '.plist', '.pt', '.log', '.txt', '.yaml', '.yml', '.toml', '.ini', '.cfg'].includes(ext)) {
+    return res.status(403).end();
+  }
+  next();
+});
 app.use('/gym-eyes', express.static(path.join(HOME, 'basic-reflex', 'gym-eyes')));
 app.use('/property-scout', express.static(path.join(NANOCLAW, 'property-scout')));
 app.use('/harmonic-probe', express.static(path.join(NANOCLAW, 'harmonic-probe')));
@@ -27,6 +35,14 @@ app.use('/channels', express.static(path.join(NANOCLAW, 'channels')));
 app.use('/api/music-studio', require('./music-studio/music-api.cjs'));
 
 // Image gallery — serve basic-reflex and visual-studio images
+// basic-reflex gallery: serve pages/images, never source/config/docs.
+app.use('/basic-reflex', (req, res, next) => {
+  const ext = path.extname(req.path).toLowerCase();
+  if (['.py', '.pyc', '.sh', '.bash', '.md', '.db', '.sqlite', '.sqlite3', '.env', '.plist', '.pt', '.log', '.txt', '.yaml', '.yml', '.toml', '.ini', '.cfg'].includes(ext)) {
+    return res.status(403).end();
+  }
+  next();
+});
 app.use('/basic-reflex', express.static(path.join(HOME, 'basic-reflex'), { maxAge: '1h' }));
 app.use('/visual-studio', express.static(path.join(CATH, 'visual-studio'), { maxAge: '1h' }));
 app.use('/instagram-assets', express.static(path.join(CATH, 'content-studio', 'instagram'), { maxAge: '10m' }));

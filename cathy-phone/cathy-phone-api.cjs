@@ -92,6 +92,163 @@ module.exports = function mount(app) {
   app.get('/round-room', (req, res) => { res.set('Cache-Control', 'no-store'); res.sendFile(path.join(HOME, 'Cathedral', 'cathy', 'round-room.html')); });
   app.get('/shelf', (req, res) => { res.set('Cache-Control', 'no-store'); res.sendFile(path.join(HOME, 'Cathedral', 'cathy', 'living-shelf.html')); });
   app.get('/library', (req, res) => { res.set('Cache-Control', 'no-store'); res.sendFile(path.join(HOME, 'Cathedral', 'cathy', 'display-room.html')); });
+  app.use('/kenny', express.static(path.join(HOME, 'Cathedral', 'cathy', 'kenny-page'), { index: 'index.html' }));
+  app.use('/os', express.static(path.join(HOME, 'Cathedral', 'cathy', 'cathedral-os'), { index: 'index.html' }));
+
+  // ── Cathedral OS API (the workspace runtime) ────────────────────────────
+  const OS_DIR = path.join(HOME, 'Cathedral', 'cathy', 'cathedral-os');
+  const OS_CONTEXT = path.join(OS_DIR, 'working-context.json');
+
+  app.get('/api/os/rooms', (req, res) => {
+    try { res.json(JSON.parse(fs.readFileSync(path.join(OS_DIR, 'rooms.json'), 'utf8'))); }
+    catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  app.get('/api/os/context', (req, res) => {
+    try { res.json(JSON.parse(fs.readFileSync(OS_CONTEXT, 'utf8'))); }
+    catch { res.json({}); }
+  });
+
+  app.put('/api/os/context', express.json(), (req, res) => {
+    try {
+      const tmp = OS_CONTEXT + '.tmp';
+      fs.writeFileSync(tmp, JSON.stringify(req.body || {}, null, 2));
+      fs.renameSync(tmp, OS_CONTEXT);
+      res.json({ ok: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // Cathy: forward to the existing Cathy agent, return text.
+  app.post('/api/os/cathy/message', express.json(), (req, res) => {
+    const text = String((req.body || {}).message || '').trim();
+    if (!text) return res.status(400).json({ error: 'no message' });
+    const MCP = path.join(HOME, 'Cathedral', 'cathy', 'mcp.json');
+    const child = spawn('claude', ['--agent', 'cathy', '-p', text, '--mcp-config', MCP, '--strict-mcp-config'], { cwd: HOME, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '', err = '';
+    child.stdout.on('data', (d) => (out += d));
+    child.stderr.on('data', (d) => (err += d));
+    child.on('close', (code) => res.json({ role: 'assistant', content: out.trim() || ('Cathy stopped (exit ' + code + '): ' + err.trim().slice(0, 200)) }));
+  });
+
+  // Forge: forward to Forge, return text.
+  app.post('/api/os/forge/send', express.json(), (req, res) => {
+    const text = String((req.body || {}).message || '').trim();
+    if (!text) return res.status(400).json({ error: 'no message' });
+    const child = spawn('claude', ['-p', text], { cwd: HOME, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '', err = '';
+    child.stdout.on('data', (d) => (out += d));
+    child.stderr.on('data', (d) => (err += d));
+    child.on('close', (code) => res.json({ accepted: true, output: out.trim(), exit: code, error: err.trim().slice(0, 300) }));
+  });
+
+  // ── Gym Eyes room: pick a video → run the pose-overlay pipeline → overlay clip + telemetry ──
+  const GYM_EYES = path.join(HOME, 'basic-reflex', 'gym-eyes');
+  const GYM_LIB = path.join(HOME, 'iPhone-Archive');
+  const GYM_OUT = path.join(GYM_EYES, 'output');
+  const VIDEO_RE = /\.(mov|mp4|m4v|webm)$/i;
+  const GYM_STYLES = ['social', 'lab', 'minimal', 'blueprint', 'kinetic', 'anatomy'];
+  const gymRuns = new Map();
+
+  app.get('/gym-eyes-room', (req, res) => { res.set('Cache-Control', 'no-store'); res.sendFile(path.join(GYM_EYES, 'gym-eyes-room.html')); });
+  app.use('/gym-eyes-out', express.static(GYM_OUT, { dotfiles: 'deny' }));
+  app.use('/gym-eyes-thumbs', express.static(path.join(GYM_LIB, '_frames'), { dotfiles: 'deny' }));
+
+  app.get('/api/os/gym-eyes/library', (req, res) => {
+    let clsMap = {};
+    try { for (const c of JSON.parse(fs.readFileSync(path.join(GYM_LIB, '_classification.json'), 'utf8'))) if (c.category === 'video' && c.filename) clsMap[c.filename] = c.visual_class || ''; } catch {}
+    let personsMap = {};
+    try {
+      const tdb = require('better-sqlite3')(path.join(HOME, 'nanoclaw', 'transcription', 'transcripts.db'), { readonly: true });
+      for (const r of tdb.prepare("SELECT filename, person_names FROM videos WHERE person_names IS NOT NULL AND person_names != ''").all()) personsMap[r.filename] = r.person_names;
+      tdb.close();
+    } catch {}
+    const vids = [];
+    const walk = (dir, rel, depth) => {
+      if (depth > 2) return;
+      let entries = [];
+      try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+      for (const e of entries) {
+        if (e.name.startsWith('.') || e.name.startsWith('_')) continue;
+        const full = path.join(dir, e.name);
+        const r = rel ? `${rel}/${e.name}` : e.name;
+        if (e.isDirectory()) walk(full, r, depth + 1);
+        else if (VIDEO_RE.test(e.name)) {
+          try {
+            const st = fs.statSync(full);
+            const base = path.basename(e.name, path.extname(e.name));
+            const thumb = fs.existsSync(path.join(GYM_LIB, '_frames', base + '.jpg')) ? '/gym-eyes-thumbs/' + encodeURIComponent(base + '.jpg') : null;
+            vids.push({ name: e.name, rel: r, size: st.size, mtime: st.mtimeMs, cls: clsMap[e.name] || '', persons: personsMap[e.name] || '', thumb });
+          } catch {}
+        }
+      }
+    };
+    walk(GYM_LIB, '', 0);
+    vids.sort((a, b) => b.mtime - a.mtime);
+    const seen = new Set();
+    const deduped = [];
+    for (const v of vids) {
+      if (v.cls === 'corrupt') continue;
+      const key = v.name + ':' + v.size;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      deduped.push(v);
+    }
+    res.json({ dir: GYM_LIB, count: deduped.length, videos: deduped.slice(0, 60) });
+  });
+
+  app.post('/api/os/gym-eyes/run', express.json(), (req, res) => {
+    const rel = String((req.body || {}).video || '').trim();
+    const style = GYM_STYLES.includes((req.body || {}).style) ? req.body.style : 'lab';
+    if (!rel || rel.includes('..') || !VIDEO_RE.test(rel)) return res.status(400).json({ error: 'bad video' });
+    const src = path.resolve(GYM_LIB, rel);
+    if (!src.startsWith(GYM_LIB + path.sep) || !fs.existsSync(src)) return res.status(400).json({ error: 'video not found in library' });
+    const id = crypto.randomBytes(4).toString('hex');
+    const dir = path.join(GYM_OUT, id);
+    fs.mkdirSync(dir, { recursive: true });
+    const outMp4 = path.join(dir, 'overlay.mp4');
+    const logPath = path.join(dir, 'log.txt');
+    const run = { id, status: 'running', video: rel, style, dir, logPath, outMp4, sidecar: outMp4.replace(/\.mp4$/, '.json'), started: Date.now() };
+    gymRuns.set(id, run);
+    const log = fs.createWriteStream(logPath);
+    const child = spawn('python3', [path.join(GYM_EYES, 'pose-overlay.py'), src, outMp4, '--style', style, '--json-sidecar'], { cwd: GYM_EYES });
+    child.stdout.on('data', (d) => log.write(d));
+    child.stderr.on('data', (d) => log.write(d));
+    child.on('close', (code) => {
+      log.end();
+      run.status = code === 0 ? 'done' : 'error';
+      run.exit = code;
+      run.finished = Date.now();
+      run.result = code === 0 ? { clip: `/gym-eyes-out/${id}/overlay.mp4`, sidecar: `/gym-eyes-out/${id}/overlay.json` } : null;
+    });
+    res.json({ runId: id, video: rel, style });
+  });
+
+  app.get('/api/os/gym-eyes/run/:id', (req, res) => {
+    const run = gymRuns.get(req.params.id);
+    if (!run) return res.status(404).json({ error: 'no such run' });
+    let log = '';
+    try { log = fs.readFileSync(run.logPath, 'utf8').slice(-4000); } catch {}
+    res.json({ id: run.id, status: run.status, exit: run.exit, video: run.video, style: run.style, log, result: run.result });
+  });
+
+  // Coach notes — durable, per-video (server-side JSON, not browser localStorage). Stored outside ~/basic-reflex so it isn't web-served.
+  const GYM_NOTES = path.join(HOME, 'Cathedral', 'cathy', 'gym-eyes-notes.json');
+  const readGymNotes = () => { try { return JSON.parse(fs.readFileSync(GYM_NOTES, 'utf8')); } catch { return {}; } };
+  const writeGymNotes = (o) => { fs.mkdirSync(path.dirname(GYM_NOTES), { recursive: true }); fs.writeFileSync(GYM_NOTES + '.tmp', JSON.stringify(o, null, 2)); fs.renameSync(GYM_NOTES + '.tmp', GYM_NOTES); };
+  app.get('/api/os/gym-eyes/notes', (req, res) => {
+    const video = String((req.query || {}).video || '');
+    if (!video) return res.status(400).json({ error: 'no video' });
+    res.json({ video, notes: readGymNotes()[video] || '' });
+  });
+  app.put('/api/os/gym-eyes/notes', express.json(), (req, res) => {
+    const video = String((req.body || {}).video || '');
+    const notes = String((req.body || {}).notes || '').slice(0, 20000);
+    if (!video) return res.status(400).json({ error: 'no video' });
+    const all = readGymNotes();
+    all[video] = notes;
+    writeGymNotes(all);
+    res.json({ ok: true });
+  });
 
   app.post('/api/cathy/transcribe', express.raw({ type: '*/*', limit: '25mb' }), async (req, res) => {
     if (!trusted(req)) return res.status(403).json({ error: 'Only from the M5 or a Tailscale device.' });
