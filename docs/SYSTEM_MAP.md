@@ -465,6 +465,9 @@
 - **Status** · route `/status` · system status
 - **Services** · route `/services` · service registry
 - **Board** · route `/board` · kanban/task board
+- **Cathy on the phone** · route `/cathy` + `/api/cathy/{ask,transcribe,audio}` · `~/nanoclaw/cathy-phone/` · `claude --agent cathy` streamed, each sentence voiced via PM2 `cathy-voice-server` (`~/Cathedral/cathy-voice/voice_server.py`, 127.0.0.1:8767, whisper + MLX chatterbox-turbo cloned voice) · hold-to-talk at `https://mac-studio.tail0a3b2b.ts.net/cathy` (Tailscale Serve, tailnet only) · transcripts `00_Staging/cathy-voice/` · doc: BUILD_LOG 2026-11-07
+- **Cathy v2 (chief of staff)** · tools MCP `~/Cathedral/cathy/cathy-tools.js` (config `mcp.json`; front_page_set / record_add / easel_pin / easel_unpin, fixed files only) · notebook `02_Refined_Gold/cathedral/cathy-front-page.md` + `cathy-observation-log.md` · easel `/easel` · tray `/api/tray` → `~/Cathedral/agent-board/{tray.json,forge-tray.md}`, shown on /asks · Filofax tabs incl. Builds (build cards `cards.json`, reviews `reviews.json`) · receipts `node ~/Cathedral/cathy/receipt.js` · screenshots `~/nanoclaw/cathy-phone/shot.cjs` → `~/Cathedral/cathy/shots/` · v2.1 card_send (voice yes, gate `paul-said.json`) + draw (Flux 2 Klein, `cathy/drawings/`) · v2.2 calendar `~/nanoclaw/cathy-phone/gcal.cjs` → `cathy/calendar.md` (URL in `cathy/gcal.url`, Paul pastes) · tray builds `/builds/` → `~/Cathedral/tray-builds/` · Lobby: Cathy strip (Talk/Filofax/Builds) · doc: BUILD_LOG 2026-11-07, 2026-11-08
+- **Agent Board (Asks)** · route `/asks` + API `/api/asks`, `/api/asks/answer`, `/api/asks/dismiss` · `~/nanoclaw/agent-board/` · every Claude Code session on the M5 and what it needs from Paul (from `claude agents --json` + `~/.claude/jobs/*/state.json`); answer from phone → `claude stop` + `claude --bg --resume`; **The Floor** route `/floor` = same data as stations in the 7 Lobby districts (keyword guess, hand-pins in `~/Cathedral/agent-board/districts.json`, API `/api/asks/district`), titles + last-active from transcript tail (`ai-title`, `last-prompt`, mtime); localhost + Tailscale only · Cathy line: `~/Cathedral/agent-board/cathy-line.js`, PM2 `cathy-board-line` hourly, only on change, cap 6/day · Lobby: top strip · doc: BUILD_LOG 2026-11-07
 - **Map** · route `/map` · system map visualization
 - **Spend** · route `/api/spend` · cost tracking
 
@@ -500,3 +503,6 @@
 - **DM Followup** · `~/Cathedral/agents/dm-followup.js` · conversation followup agent
 - **Global Scout** · `~/Cathedral/property-scout/global-runner.js` · worldwide property scanning
 - **Scout Bridge** · `~/Cathedral/agents/skills-scout-bridge.js` · scout capability bridge
+
+| ComfyUI Video Playbook | `~/Cathedral/artifacts/comfyui-video-playbook.html` | Door: Studio env card (/env/studio). Status: design, nothing applied or tested yet. |
+| Codex art director | `~/Cathedral/art-director/` + `~/.codex/openrouter*.config.toml` | Trial, OpenRouter, $2 test done. Status: live (text critique); OpenAI image gen failing. |
