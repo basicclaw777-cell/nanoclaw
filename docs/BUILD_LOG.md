@@ -4323,3 +4323,10 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 - Shot 2 (IMG_1687+1688) → bag-work SPEED DRILLS, not pads. Boxer swapped sides between clips. Gotcha: run.sh uses ONE FIGHTER env for both clips → use FIGHTER=auto (busiest hands) then fs_tools merge with correct labels. Default FIGHTER=left grabbed the bystander (Stefan=2).
 - Speed-drill read: Stefan peak 9.3 vs Matteo 7.7 m/s; Matteo 68 vs 66 punches in best 30s.
 - Also: group-class social overlays (IMG_1815-1820) via pose-overlay.py; Kenny character sheet → Telegram.
+
+
+## 2026-11-13 — Cathy's persistence layer (Welcome Home + local harvester)
+- **welcome-home.cjs** (`~/Cathedral/cathy/`): regenerates `~/Cathedral/WELCOME-HOME.md` every 30 min (LaunchAgent `com.cathedral.welcome-home`). Deterministic, no LLM, no secrets. Sections: live model/endpoint + OpenRouter spend, local models + service health, drift warnings, open tray, recent sessions, Cathy state. Memory index now points to it first.
+- **harvest-lands.cjs**: nightly 03:30 (LaunchAgent `com.cathedral.cathy-harvest`). hermes3 (local, $0) reads Cathy phone transcripts, proposes what landed with Paul. Every quote must appear verbatim in Paul's turns (mechanical guard). Writes `harvest-proposals.json/.md`; nothing reaches her front page without Paul's yes. 30-call rate limit.
+- **brain-bakeoff-2.cjs** + `brain-bakeoff-2-scorecard.md`: DeepSeek flash vs Haiku 5.5 vs Kimi, 5 text tasks + vision. Haiku 5.5 chosen for Cathy. `cathy-warmth-note.md` is a DRAFT voice note, not live.
+- Found: control panel :8888 and memory browser :7777 are DOWN; SESSION_BRIEF depends on :7777 (stale 54h).
