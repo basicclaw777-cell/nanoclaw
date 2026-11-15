@@ -193,3 +193,12 @@ If OS-level vault search ever "breaks," this is why — intended.
 
 ## PM2 error traces reflect running code, not disk code
 - If a file was edited but the PM2 process wasn't restarted, stack traces point to OLD line numbers/code. Check `ls -la` mtime vs PM2 uptime before debugging current source. Caught on trading-orchestrator.js "config is not defined" — bug was already fixed on disk, error was from stale process.
+
+## 2026-11-07 — Claude CLI spawned from cath-bridge bills the API key, not the subscription
+cath-bridge's environment carries `ANTHROPIC_API_KEY` (for other services). Any `claude` CLI process it spawns picks that key up and fails with "Credit balance is too low" instead of using Paul's subscription. Fix: spawn with a copy of the environment minus `ANTHROPIC_API_KEY` (done in agent-board-api.cjs and cathy-phone-api.cjs). Check any other cath-bridge route that shells out to `claude`.
+
+## 2026-11-07 — PM2 + venv Python on macOS leaves orphans holding the port
+With a venv Python as PM2 interpreter, the real interpreter runs as a child of the framework launcher stub. `pm2 restart` killed the stub; the child survived (PPID 1) and kept the port. Every new start then died with "Address already in use", giving 345 restarts in minutes. Fix in `~/Cathedral/cathy-voice/voice_server.py`: a thread exits when `os.getppid() == 1`. Use the same guard in any PM2-managed Python server that binds a port.
+
+## 2026-11-15 — cath-bridge was reachable via a public ngrok tunnel; trusted() treated tunnel traffic as local
+The Telegram webhook tunnel (`telegram-tunnel`, ngrok http 8080) forwards from 127.0.0.1, so any check of the form "socket address is loopback = trusted" (cathy-phone `trusted()`, requireApiKey's old Host-header bypass) passes for public traffic. Host / X-Forwarded-For are client-controlled and must never be auth. Fix: tunnel stopped + manifest `disabled`; cath-bridge now has a socket-address network gate (loopback + Tailscale only), off-switch BRIDGE_NETGATE=off. If a public path is ever needed again, give it its own listener exposing ONLY that route (e.g. webhook with Telegram secret token), never forward to 8080. Open: rotate hardcoded default API key; /api/os/* ungated for tailnet; wildcard CORS. Also G2 applies: pm2 stop alone is resurrected by manifest-watcher, so the manifest was edited.

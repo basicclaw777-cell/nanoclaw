@@ -14,6 +14,25 @@ const NANOCLAW = __dirname;
 const CATH     = path.join(HOME, 'Cathedral');
 const VAULT    = path.join(HOME, 'cathedral-vault');
 
+// ── Network gate (2026-11-15, security audit) ────────────────────────────────
+// Only the Mac itself and Tailscale devices may reach this bridge. Decided by the
+// connecting socket address ONLY — never by Host or X-Forwarded-For headers, which
+// any client can fake. Off-switch: set BRIDGE_NETGATE=off in .env, then restart.
+function socketIp(req) { return (req.socket.remoteAddress || '').replace(/^::ffff:/, ''); }
+function isLoopbackIp(ip) { return ip === '127.0.0.1' || ip === '::1'; }
+function isTailscaleIp(ip) {
+  const m = ip.match(/^100\.(\d+)\./);
+  if (m && +m[1] >= 64 && +m[1] <= 127) return true;
+  return ip.toLowerCase().startsWith('fd7a:115c:a1e0:'); // Tailscale IPv6
+}
+app.use((req, res, next) => {
+  if (process.env.BRIDGE_NETGATE === 'off') return next();
+  const ip = socketIp(req);
+  if (isLoopbackIp(ip) || isTailscaleIp(ip)) return next();
+  console.warn(`[netgate] refused ${req.method} ${req.path} from ${ip}`);
+  return res.status(403).json({ error: 'forbidden' });
+});
+
 app.use(express.json());
 
 // Static file serving for coaching tools
@@ -620,14 +639,22 @@ function requireApiKey(req, res, next) {
   const key = process.env.CATH_API_KEY;
   // Allow localhost browser access without key (query param or header)
   if (key && req.headers['x-api-key'] !== key && req.query['x-api-key'] !== key) {
-    const host = req.hostname || req.ip || '';
-    const isLocal = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-    // Skip auth for GET requests from localhost (browser access)
+    // Skip auth only for GETs whose SOCKET is the Mac itself (browser access).
+    // Never trust the Host header here: any client can send "Host: localhost".
+    const isLocal = isLoopbackIp(socketIp(req));
     if (!(isLocal && req.method === 'GET')) {
       return res.status(401).json({ error: 'unauthorized' });
     }
   }
   next();
+}
+
+// For routes that run things: the Mac itself is allowed; Tailscale devices need the key.
+function requireKeyUnlessLoopback(req, res, next) {
+  if (isLoopbackIp(socketIp(req))) return next();
+  const key = process.env.CATH_API_KEY;
+  if (key && (req.headers['x-api-key'] === key || req.query['x-api-key'] === key)) return next();
+  return res.status(401).json({ error: 'unauthorized' });
 }
 
 // ── Spawn helper ──────────────────────────────────────────────────────────────
@@ -3898,7 +3925,7 @@ app.get('/api/polymarket/report', (req, res) => {
   } catch (err) { res.status(500).send(err.message); }
 });
 
-app.post('/api/polymarket/execute', (req, res) => {
+app.post('/api/polymarket/execute', requireKeyUnlessLoopback, (req, res) => {
   try {
     const { execFileSync } = require('child_process');
     const dry = req.query.dry === 'true' ? ' --dry' : '';
@@ -4734,7 +4761,7 @@ Rules:
 });
 
 // ── Build Intelligence: Execution Layer (Layer 3) ───────────────────────────
-app.post('/api/build-actions/execute', (req, res) => {
+app.post('/api/build-actions/execute', requireKeyUnlessLoopback, (req, res) => {
   const { action, params } = req.body || {};
   if (!action) return res.status(400).json({ error: 'No action specified' });
 
@@ -5899,7 +5926,7 @@ app.get('/control', (req, res) => {
   res.sendFile(path.join(HOME, 'basic-reflex', 'visuals', 'cathedral-control.html'));
 });
 
-app.post('/control/toggle/:name', async (req, res) => {
+app.post('/control/toggle/:name', requireKeyUnlessLoopback, async (req, res) => {
   const { name } = req.params;
   const { action } = req.body || {};
   try {
@@ -5912,7 +5939,7 @@ app.post('/control/toggle/:name', async (req, res) => {
   }
 });
 
-app.post('/control/run/:script', async (req, res) => {
+app.post('/control/run/:script', requireKeyUnlessLoopback, async (req, res) => {
   const scripts = {
     whisperer: path.join(NANOCLAW, 'looking-glass-whisperer.mjs'),
     bridge: path.join(NANOCLAW, 'cognitive-bridge.mjs'),
