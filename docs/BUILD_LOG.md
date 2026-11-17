@@ -4350,3 +4350,9 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 - (2026-11-15, Forge) Security remediation, Paul-approved in steps: stopped telegram-tunnel (manifest -> disabled); cath-bridge.cjs network gate (loopback + Tailscale only, socket address), socket-based key bypass, requireKeyUnlessLoopback on 4 execute routes; backup cath-bridge.cjs.pre-gate-2026-11-15; macOS firewall on (Paul). Tested Mac 200 / LAN 403 / Tailscale 200 / phone Cathy Chat OK. Open: key rotation, /api/os/*, CORS. See KNOWN_ISSUES 2026-11-15.
 
 - 2026-11-15 eve: OpenRouter key rotated (settings.json + nanoclaw/.env x2), 5 pm2 services restarted with --update-env. Old key not yet revoked; `.env.pre-keyrotate-*` backup excluded from git. Bridge default key `cathedral-mcp-2026` still hardcoded in cathy-router.js, study-lab.js, cathedral-podcast.js.
+
+## 2026-11-17 — Island of One teen seed orders v1+v2 (M4 studio orders, session close)
+- Order v1: 2 images (teen-seed-front, teen-seed-bench), 98 cr charged. Order v2: 2 images (front-clean, bench-upside-down), 88 cr charged. All shipped to Mac Studio island-teen-seed{,v2}/outputs/.
+- No Lobby/room surface changed — no SYSTEM_MAP line (nothing new in ~/nanoclaw or ~/Cathedral). Trigger: pasted M4 terminal order protocol. Budget: caps 200/320 respected. Surface: shown to Paul in session + files on Mac Studio.
+- Charge pattern: GPT Image 2 img2img 16:9 2K quote 42; actual 49 (2 refs) / 44 (1 ref). Ref-count suspect — probe next order.
+- OpenRouter: 60 total, ~1 credit left (2026-11-17). Top-up before Mac Studio CC dies.
