@@ -18,7 +18,7 @@ const TRAY = path.join(HOME, 'Cathedral', 'agent-board', 'tray.json');
 const TRAY_MD = path.join(HOME, 'Cathedral', 'agent-board', 'forge-tray.md');
 const IMG_EXT = /\.(png|jpe?g|gif|webp|svg)$/i;
 // Tools she may use without a prompt. Read-only ones + her own notebook/easel + web eyes. Nothing else exists for her.
-const ALLOWED = ['Read', 'Grep', 'Glob', 'WebSearch', 'WebFetch', 'mcp__cathy__front_page_set', 'mcp__cathy__record_add', 'mcp__cathy__easel_pin', 'mcp__cathy__easel_unpin', 'mcp__cathy__build_card', 'mcp__cathy__builds_to_review', 'mcp__cathy__build_review', 'mcp__cathy__card_send', 'mcp__cathy__draw'].join(',');
+const ALLOWED = ['Read', 'Grep', 'Glob', 'WebSearch', 'WebFetch', 'mcp__cathy__front_page_set', 'mcp__cathy__record_add', 'mcp__cathy__easel_pin', 'mcp__cathy__easel_unpin', 'mcp__cathy__build_card', 'mcp__cathy__builds_to_review', 'mcp__cathy__build_review', 'mcp__cathy__card_send', 'mcp__cathy__draw', 'mcp__cathy__library_lookup'].join(',');
 const CARDS = path.join(CATHY_DIR, 'cards.json');
 const SHOTS = path.join(CATHY_DIR, 'shots');
 const SHOT_NAME = /^[\w-]+\.png$/;
