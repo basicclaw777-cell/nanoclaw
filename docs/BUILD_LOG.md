@@ -4356,3 +4356,10 @@ Next: the_look.md + the_maintenance.md planning pages, seed emitEvent() into exi
 - No Lobby/room surface changed — no SYSTEM_MAP line (nothing new in ~/nanoclaw or ~/Cathedral). Trigger: pasted M4 terminal order protocol. Budget: caps 200/320 respected. Surface: shown to Paul in session + files on Mac Studio.
 - Charge pattern: GPT Image 2 img2img 16:9 2K quote 42; actual 49 (2 refs) / 44 (1 ref). Ref-count suspect — probe next order.
 - OpenRouter: 60 total, ~1 credit left (2026-11-17). Top-up before Mac Studio CC dies.
+
+## 2026-11-18 — Session audit harvest (Jane, Claire, Francis)
+- **Trigger:** Paul dropped 4 WhatsApp export zips in Downloads
+- **Built:** 3 session audits (JSON + HTML artifacts in ~/Cathedral/kit/), session-clients.json registry +10, session-audit-brief.md (automation architecture brief for ChatGPT)
+- **Door:** HTML artifacts opened in browser directly (files, not Lobby routes — no SYSTEM_MAP entry, kit/ is data not a surface)
+- **Budget:** $0 (no external calls; OpenArt MCP down, image skipped)
+- **Next:** Francis 14 untracked weeks → Punchpass check; Francis/Teens rates; automation v1
